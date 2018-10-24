@@ -95,10 +95,14 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.datastore.hbase.filters">org.locationtech.geowave.datastore.hbase.filters</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.api">org.locationtech.geowave.core.store.api</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.hbase.filters">org.locationtech.geowave.datastore.hbase.filters</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.format.stanag4676.image">org.locationtech.geowave.format.stanag4676.image</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -120,8 +124,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.GridCoverage</code></td>
-<td class="colLast"><span class="typeNameLabel">RasterDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.index.PrimaryIndex-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
-      <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">RasterDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.api.Index-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
+      <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -139,8 +143,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/analytic/clustering/DistortionGroupManagement.DistortionEntry.html" title="class in org.locationtech.geowave.analytic.clustering">DistortionGroupManagement.DistortionEntry</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DistortionGroupManagement.DistortionDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/clustering/DistortionGroupManagement.DistortionDataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.index.PrimaryIndex-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
-      <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">DistortionGroupManagement.DistortionDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/clustering/DistortionGroupManagement.DistortionDataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.api.Index-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
+      <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -157,19 +161,35 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="type parameter in DataAdapter">T</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.index.PrimaryIndex-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
-      <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a></code></td>
+<td class="colLast"><span class="typeNameLabel">AbstractDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.api.Index-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
+      <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.index.PrimaryIndex-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
-      <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html" title="type parameter in InternalDataAdapterWrapper">T</a></code></td>
-<td class="colLast"><span class="typeNameLabel">InternalDataAdapterWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.index.PrimaryIndex-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
-      <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">InternalDataAdapterWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.api.Index-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
+      <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.store.api">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="type parameter in DataTypeAdapter">T</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DataTypeAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.api.Index-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
+      <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
+<div class="block">Decode GeoWave persistence payload into the entry</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -187,7 +207,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a></code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseDistributableFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/filters/HBaseDistributableFilter.html#getAdapterEncoding-org.locationtech.geowave.core.store.adapter.DataAdapter-">getAdapterEncoding</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&nbsp;dataAdapter)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">HBaseDistributableFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/filters/HBaseDistributableFilter.html#getAdapterEncoding-org.locationtech.geowave.core.store.api.DataTypeAdapter-">getAdapterEncoding</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&nbsp;dataAdapter)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -205,8 +225,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/format/stanag4676/image/ImageChip.html" title="class in org.locationtech.geowave.format.stanag4676.image">ImageChip</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ImageChipDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/stanag4676/image/ImageChipDataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.index.PrimaryIndex-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
-      <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ImageChipDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/stanag4676/image/ImageChipDataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.api.Index-">decode</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
+      <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

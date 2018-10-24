@@ -136,8 +136,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html#KafkaIngestRunData-java.util.List-org.locationtech.geowave.core.store.DataStore-">KafkaIngestRunData</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters,
-                  <a href="../../../../../../org/locationtech/geowave/core/store/DataStore.html" title="interface in org.locationtech.geowave.core.store">DataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html#KafkaIngestRunData-java.util.List-org.locationtech.geowave.core.store.api.DataStore-">KafkaIngestRunData</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&gt;&nbsp;adapters,
+                  <a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -163,13 +163,13 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html#flush--">flush</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html#getDataAdapter-org.locationtech.geowave.core.ingest.GeoWaveData-">getDataAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;data)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html#getDataAdapter-org.locationtech.geowave.core.store.ingest.GeoWaveData-">getDataAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="interface in org.locationtech.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html#getIndexWriter-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex...-">getIndexWriter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-              <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>...&nbsp;requiredIndices)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html#getIndexWriter-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index...-">getIndexWriter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
+              <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;requiredIndices)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -193,14 +193,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="KafkaIngestRunData-java.util.List-org.locationtech.geowave.core.store.DataStore-">
+<a name="KafkaIngestRunData-java.util.List-org.locationtech.geowave.core.store.api.DataStore-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>KafkaIngestRunData</h4>
-<pre>public&nbsp;KafkaIngestRunData(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters,
-                          <a href="../../../../../../org/locationtech/geowave/core/store/DataStore.html" title="interface in org.locationtech.geowave.core.store">DataStore</a>&nbsp;dataStore)</pre>
+<pre>public&nbsp;KafkaIngestRunData(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&gt;&nbsp;adapters,
+                          <a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore)</pre>
 </li>
 </ul>
 </li>
@@ -211,24 +211,24 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getDataAdapter-org.locationtech.geowave.core.ingest.GeoWaveData-">
+<a name="getDataAdapter-org.locationtech.geowave.core.store.ingest.GeoWaveData-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataAdapter</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&nbsp;getDataAdapter(<a href="../../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;data)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;getDataAdapter(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;data)</pre>
 </li>
 </ul>
-<a name="getIndexWriter-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex...-">
+<a name="getIndexWriter-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndexWriter</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="interface in org.locationtech.geowave.core.store">IndexWriter</a>&nbsp;getIndexWriter(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                                  <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>...&nbsp;requiredIndices)
-                           throws <a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;getIndexWriter(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
+                             <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;requiredIndices)
+                      throws <a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></code></dd>

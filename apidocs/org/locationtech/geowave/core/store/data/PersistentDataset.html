@@ -140,11 +140,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#PersistentDataset--">PersistentDataset</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#PersistentDataset-org.locationtech.geowave.core.index.ByteArrayId-T-">PersistentDataset</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
-                 <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#PersistentDataset-java.util.Map-">PersistentDataset</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;fieldIdToValueMap)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#PersistentDataset-java.util.Map-">PersistentDataset</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;fieldIdToValueMap)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#PersistentDataset-java.lang.String-T-">PersistentDataset</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
+                 <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -163,25 +163,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#addValue-org.locationtech.geowave.core.index.ByteArrayId-T-">addValue</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#addValue-java.lang.String-T-">addValue</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
         <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</code>
 <div class="block">Add the field ID/value pair to this data set.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#addValues-java.util.Map-">addValues</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;values)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#addValues-java.util.Map-">addValues</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;values)</code>
 <div class="block">Add several values to the data set.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#getValue-org.locationtech.geowave.core.index.ByteArrayId-">getValue</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#getValue-java.lang.String-">getValue</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Given a field ID, get the associated value</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html#getValues--">getValues</a></span>()</code>
 <div class="block">Get all of the values from this persistent data set</div>
 </td>
@@ -217,15 +217,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;PersistentDataset()</pre>
 </li>
 </ul>
-<a name="PersistentDataset-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Object-">
+<a name="PersistentDataset-java.lang.String-java.lang.Object-">
 <!--   -->
-</a><a name="PersistentDataset-org.locationtech.geowave.core.index.ByteArrayId-T-">
+</a><a name="PersistentDataset-java.lang.String-T-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>PersistentDataset</h4>
-<pre>public&nbsp;PersistentDataset(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+<pre>public&nbsp;PersistentDataset(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                          <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</pre>
 </li>
 </ul>
@@ -235,7 +235,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PersistentDataset</h4>
-<pre>public&nbsp;PersistentDataset(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;fieldIdToValueMap)</pre>
+<pre>public&nbsp;PersistentDataset(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;fieldIdToValueMap)</pre>
 </li>
 </ul>
 </li>
@@ -246,15 +246,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="addValue-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Object-">
+<a name="addValue-java.lang.String-java.lang.Object-">
 <!--   -->
-</a><a name="addValue-org.locationtech.geowave.core.index.ByteArrayId-T-">
+</a><a name="addValue-java.lang.String-T-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addValue</h4>
-<pre>public&nbsp;void&nbsp;addValue(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+<pre>public&nbsp;void&nbsp;addValue(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                      <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</pre>
 <div class="block">Add the field ID/value pair to this data set. Do not overwrite.</div>
 <dl>
@@ -269,21 +269,21 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addValues</h4>
-<pre>public&nbsp;void&nbsp;addValues(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;values)</pre>
+<pre>public&nbsp;void&nbsp;addValues(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;values)</pre>
 <div class="block">Add several values to the data set.</div>
 </li>
 </ul>
-<a name="getValue-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getValue-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getValue</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;getValue(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;getValue(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 <div class="block">Given a field ID, get the associated value</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fieldId</code> - the field ID</dd>
+<dd><code>fieldName</code> - the field ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the stored field value, null if this does not contain a value for
          the ID</dd>
@@ -296,7 +296,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getValues</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;getValues()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;getValues()</pre>
 <div class="block">Get all of the values from this persistent data set</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

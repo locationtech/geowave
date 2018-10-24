@@ -218,7 +218,7 @@ extends org.apache.hadoop.hbase.filter.FilterBase</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/filters/HBaseDistributableFilter.html#decodeRow-org.locationtech.geowave.core.store.adapter.DataAdapter-">decodeRow</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&nbsp;dataAdapter)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/filters/HBaseDistributableFilter.html#decodeRow-org.locationtech.geowave.core.store.api.DataTypeAdapter-">decodeRow</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&nbsp;dataAdapter)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
@@ -238,7 +238,7 @@ extends org.apache.hadoop.hbase.filter.FilterBase</pre>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/filters/HBaseDistributableFilter.html#getAdapterEncoding-org.locationtech.geowave.core.store.adapter.DataAdapter-">getAdapterEncoding</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&nbsp;dataAdapter)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/filters/HBaseDistributableFilter.html#getAdapterEncoding-org.locationtech.geowave.core.store.api.DataTypeAdapter-">getAdapterEncoding</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&nbsp;dataAdapter)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -268,7 +268,7 @@ extends org.apache.hadoop.hbase.filter.FilterBase</pre>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/filters/HBaseDistributableFilter.html#init-java.util.List-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String:A-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a>&gt;&nbsp;filterList,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/filters/HBaseDistributableFilter.html#init-java.util.List-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String:A-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&gt;&nbsp;filterList,
     <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;visList)</code>&nbsp;</td>
 </tr>
@@ -404,7 +404,7 @@ extends org.apache.hadoop.hbase.filter.FilterBase</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre>public&nbsp;boolean&nbsp;init(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a>&gt;&nbsp;filterList,
+<pre>public&nbsp;boolean&nbsp;init(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&gt;&nbsp;filterList,
                     <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;visList)</pre>
 </li>
@@ -505,22 +505,22 @@ extends org.apache.hadoop.hbase.filter.FilterBase</pre>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;getPersistenceEncoding()</pre>
 </li>
 </ul>
-<a name="getAdapterEncoding-org.locationtech.geowave.core.store.adapter.DataAdapter-">
+<a name="getAdapterEncoding-org.locationtech.geowave.core.store.api.DataTypeAdapter-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdapterEncoding</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;getAdapterEncoding(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&nbsp;dataAdapter)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;getAdapterEncoding(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&nbsp;dataAdapter)</pre>
 </li>
 </ul>
-<a name="decodeRow-org.locationtech.geowave.core.store.adapter.DataAdapter-">
+<a name="decodeRow-org.locationtech.geowave.core.store.api.DataTypeAdapter-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>decodeRow</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;decodeRow(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&nbsp;dataAdapter)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;decodeRow(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&nbsp;dataAdapter)</pre>
 </li>
 </ul>
 <a name="filterInternal-org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding-">

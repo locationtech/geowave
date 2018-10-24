@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/DataStatisticsAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html" target="_top">Frames</a></li>
@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">CommonIndexAggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a>&gt;</dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">CommonIndexAggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">CountAggregation</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">CommonIndexAggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a>&gt;</pre>
+implements <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">CommonIndexAggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;</pre>
 </li>
 </ul>
 </div>
@@ -177,7 +177,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a></code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#getResult--">getResult</a></span>()</code>
 <div class="block">Get the current result of the aggregation.</div>
 </td>
@@ -187,19 +187,38 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#isSet--">isSet</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#merge-java.lang.Long-java.lang.Long-">merge</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;result1,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;result2)</code>
+<div class="block">this is responsible for reducing 2 results to a single result by</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#resultFromBinary-byte:A-">resultFromBinary</a></span>(byte[]&nbsp;binary)</code>
+<div class="block">This is responsible for reading the result from binary</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#resultToBinary-java.lang.Long-">resultToBinary</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;result)</code>
+<div class="block">This is responsible for writing the result to binary</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#setParameters-org.locationtech.geowave.core.index.persist.Persistable-">setParameters</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;parameters)</code>
 <div class="block">Sets the parameters based on what has been persisted</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission
  or storage.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -271,11 +290,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <li class="blockList">
 <h4>aggregate</h4>
 <pre>public&nbsp;void&nbsp;aggregate(<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;entry)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#aggregate-T-">Aggregation</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#aggregate-T-">Aggregation</a></code></span></div>
 <div class="block">Update the aggregation result using the new entry provided</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#aggregate-T-">aggregate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#aggregate-T-">aggregate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entry</code> - the new entry to compute an updated aggregation result on</dd>
 </dl>
@@ -288,12 +307,12 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <li class="blockList">
 <h4>getParameters</h4>
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;getParameters()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#getParameters--">Aggregation</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getParameters--">Aggregation</a></code></span></div>
 <div class="block">Returns a persistable object for any parameters that must be persisted to
  properly compute the aggregation</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#getParameters--">getParameters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getParameters--">getParameters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A persistable object for any parameters that must be persisted to
          properly compute the aggregation</dd>
@@ -306,15 +325,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <ul class="blockList">
 <li class="blockList">
 <h4>getResult</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a>&nbsp;getResult()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#getResult--">Aggregation</a></code></span></div>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;getResult()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getResult--">Aggregation</a></code></span></div>
 <div class="block">Get the current result of the aggregation. This must be mergeable and it
  is the responsibility of the caller to merge separate results if desired.
  It is the responsibility of the aggregation to start with a new instance
  of the result at the beginning of any aggregation.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#getResult--">getResult</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getResult--">getResult</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the current result of the aggregation</dd>
 </dl>
@@ -327,11 +346,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <li class="blockList">
 <h4>setParameters</h4>
 <pre>public&nbsp;void&nbsp;setParameters(<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;parameters)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#setParameters-P-">Aggregation</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#setParameters-P-">Aggregation</a></code></span></div>
 <div class="block">Sets the parameters based on what has been persisted</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#setParameters-P-">setParameters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#setParameters-P-">setParameters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>parameters</code> - the persisted parameters for this aggregation function</dd>
 </dl>
@@ -344,11 +363,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <li class="blockList">
 <h4>clearResult</h4>
 <pre>public&nbsp;void&nbsp;clearResult()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#clearResult--">Aggregation</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#clearResult--">Aggregation</a></code></span></div>
 <div class="block">this will be called if the result should be reset to its default value</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#clearResult--">clearResult</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#clearResult--">clearResult</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -374,7 +393,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <a name="fromBinary-byte:A-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>fromBinary</h4>
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
@@ -383,6 +402,61 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="merge-java.lang.Long-java.lang.Long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>merge</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;merge(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;result1,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;result2)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#merge-R-R-">Aggregation</a></code></span></div>
+<div class="block">this is responsible for reducing 2 results to a single result by</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#merge-R-R-">merge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+</dl>
+</li>
+</ul>
+<a name="resultToBinary-java.lang.Long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>resultToBinary</h4>
+<pre>public&nbsp;byte[]&nbsp;resultToBinary(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;result)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#resultToBinary-R-">Aggregation</a></code></span></div>
+<div class="block">This is responsible for writing the result to binary</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#resultToBinary-R-">resultToBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>result</code> - the result value</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the binary representing this value</dd>
+</dl>
+</li>
+</ul>
+<a name="resultFromBinary-byte:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>resultFromBinary</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;resultFromBinary(byte[]&nbsp;binary)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#resultFromBinary-byte:A-">Aggregation</a></code></span></div>
+<div class="block">This is responsible for reading the result from binary</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#resultFromBinary-byte:A-">resultFromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>binary</code> - the binary representing this result</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the result value</dd>
 </dl>
 </li>
 </ul>
@@ -415,7 +489,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/DataStatisticsAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html" target="_top">Frames</a></li>

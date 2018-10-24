@@ -149,9 +149,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/entiti
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryTransformer.html#NativeEntryTransformer-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.filter.QueryFilter-org.locationtech.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-">NativeEntryTransformer</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
-                      <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                      <a href="../../../../../../org/locationtech/geowave/core/store/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryTransformer.html#NativeEntryTransformer-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-">NativeEntryTransformer</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                      <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                      <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;clientFilter,
                       <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryTransformer.html" title="type parameter in NativeEntryTransformer">T</a>,? extends <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scanCallback,
                       byte[]&nbsp;fieldSubsetBitmask,
                       double[]&nbsp;maxResolutionSubsamplingPerDimension,
@@ -212,15 +212,15 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/entiti
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="NativeEntryTransformer-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.filter.QueryFilter-org.locationtech.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-">
+<a name="NativeEntryTransformer-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>NativeEntryTransformer</h4>
 <pre>public&nbsp;NativeEntryTransformer(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
-                              <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                              <a href="../../../../../../org/locationtech/geowave/core/store/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
+                              <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                              <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;clientFilter,
                               <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryTransformer.html" title="type parameter in NativeEntryTransformer">T</a>,? extends <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scanCallback,
                               byte[]&nbsp;fieldSubsetBitmask,
                               double[]&nbsp;maxResolutionSubsamplingPerDimension,

@@ -190,7 +190,7 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/twitter/TwitterIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">newPluginInstance</a></span>(<a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/twitter/TwitterIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -198,7 +198,7 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.adapter.vector.ingest.<a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestFormat</a></h3>
-<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createAvroFormatPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createAvroFormatPlugin</a>, <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createIngestFromHdfsPlugin</a>, <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createLocalFileIngestPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createLocalFileIngestPlugin</a>, <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createOptionsInstances--">createOptionsInstances</a>, <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#internalGetIngestFormatOptionProviders--">internalGetIngestFormatOptionProviders</a></code></li>
+<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createAvroFormatPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createAvroFormatPlugin</a>, <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createIngestFromHdfsPlugin</a>, <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createLocalFileIngestPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createLocalFileIngestPlugin</a>, <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createOptionsInstances--">createOptionsInstances</a>, <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#internalGetIngestFormatOptionProviders--">internalGetIngestFormatOptionProviders</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -238,16 +238,16 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="newPluginInstance-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">
+<a name="newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>newPluginInstance</h4>
-<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;&nbsp;newPluginInstance(<a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</pre>
+<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;&nbsp;newPluginInstance(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">newPluginInstance</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestFormat</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestFormat</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

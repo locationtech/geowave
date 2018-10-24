@@ -155,8 +155,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getGeoWaveOutputKey--">getGeoWaveOutputKey</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getIndexId--">getIndexId</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getIndexName--">getIndexName</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected org.opengis.coverage.grid.GridCoverage</code></td>
@@ -164,16 +164,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getNewDataId-org.opengis.coverage.grid.GridCoverage-">getNewDataId</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;coverage)</code>&nbsp;</td>
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getNewAdapterId--">getNewAdapterId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>short</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getNewInternalAdapterId--">getNewInternalAdapterId</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getNewDataId-org.opengis.coverage.grid.GridCoverage-">getNewDataId</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;coverage)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#isOriginalCoverage-short-">isOriginalCoverage</a></span>(short&nbsp;internalAdapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#isOriginalCoverage-short-">isOriginalCoverage</a></span>(short&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -249,13 +249,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="getNewInternalAdapterId--">
+<a name="getNewAdapterId--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getNewInternalAdapterId</h4>
-<pre>public&nbsp;short&nbsp;getNewInternalAdapterId()</pre>
+<h4>getNewAdapterId</h4>
+<pre>public&nbsp;short&nbsp;getNewAdapterId()</pre>
 </li>
 </ul>
 <a name="getNewDataId-org.opengis.coverage.grid.GridCoverage-">
@@ -264,16 +264,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getNewDataId</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getNewDataId(org.opengis.coverage.grid.GridCoverage&nbsp;coverage)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getNewDataId(org.opengis.coverage.grid.GridCoverage&nbsp;coverage)</pre>
 </li>
 </ul>
-<a name="getIndexId--">
+<a name="getIndexName--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getIndexId</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getIndexId()</pre>
+<h4>getIndexName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getIndexName()</pre>
 </li>
 </ul>
 <a name="isOriginalCoverage-short-">
@@ -282,7 +282,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>isOriginalCoverage</h4>
-<pre>public&nbsp;boolean&nbsp;isOriginalCoverage(short&nbsp;internalAdapterId)</pre>
+<pre>public&nbsp;boolean&nbsp;isOriginalCoverage(short&nbsp;adapterId)</pre>
 </li>
 </ul>
 </li>

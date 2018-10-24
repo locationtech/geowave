@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureStatistic.html" title="interface in org.locationtech.geowave.adapter.vector.stats"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html" title="interface in org.locationtech.geowave.adapter.vector.stats"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.FeatureNumericRangeConfig.html" target="_top">Frames</a></li>
@@ -120,6 +120,7 @@ var activeTableTab = "activeTableTab";
 <pre>public static class <span class="typeNameLabel">FeatureNumericRangeStatistics.FeatureNumericRangeConfig</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html" title="interface in org.locationtech.geowave.adapter.vector.stats">StatsConfig</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</pre>
+<div class="block">Convert Feature Numeric Range statistics to a JSON object</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../../serialized-form.html#org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics.FeatureNumericRangeConfig">Serialized Form</a></dd>
@@ -160,8 +161,8 @@ implements <a href="../../../../../../org/locationtech/geowave/adapter/vector/st
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.FeatureNumericRangeConfig.html#create-java.lang.Short-java.lang.String-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.FeatureNumericRangeConfig.html#create-java.lang.Short-java.lang.String-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;adapterId,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -222,8 +223,8 @@ implements <a href="../../../../../../org/locationtech/geowave/adapter/vector/st
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;create(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
-                                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;&nbsp;create(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;adapterId,
+                                                                                                                                                                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html#create-java.lang.Short-java.lang.String-">create</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html" title="interface in org.locationtech.geowave.adapter.vector.stats">StatsConfig</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
@@ -293,7 +294,7 @@ implements <a href="../../../../../../org/locationtech/geowave/adapter/vector/st
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureStatistic.html" title="interface in org.locationtech.geowave.adapter.vector.stats"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html" title="interface in org.locationtech.geowave.adapter.vector.stats"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.FeatureNumericRangeConfig.html" target="_top">Frames</a></li>

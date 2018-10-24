@@ -124,7 +124,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">MemoryDataStoreOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#createDeleter-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String...-">createDeleter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">MemoryDataStoreOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#createDeleter-java.lang.String-java.lang.String...-">createDeleter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -141,8 +141,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/operations/QueryAndDeleteByRow.html#QueryAndDeleteByRow-org.locationtech.geowave.core.store.operations.RowDeleter-org.locationtech.geowave.core.store.operations.Reader-">QueryAndDeleteByRow</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a>&nbsp;rowDeleter,
-                   <a href="../../../../../../../org/locationtech/geowave/core/store/operations/Reader.html" title="interface in org.locationtech.geowave.core.store.operations">Reader</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/operations/QueryAndDeleteByRow.html" title="type parameter in QueryAndDeleteByRow">T</a>&gt;&nbsp;reader)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/operations/QueryAndDeleteByRow.html#QueryAndDeleteByRow-org.locationtech.geowave.core.store.operations.RowDeleter-org.locationtech.geowave.core.store.operations.RowReader-">QueryAndDeleteByRow</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a>&nbsp;rowDeleter,
+                   <a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/operations/QueryAndDeleteByRow.html" title="type parameter in QueryAndDeleteByRow">T</a>&gt;&nbsp;reader)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -173,7 +173,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#createDeleter-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String...-">createDeleter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#createDeleter-java.lang.String-java.lang.String...-">createDeleter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -205,7 +205,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CassandraOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/cassandra/operations/CassandraOperations.html#createDeleter-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String...-">createDeleter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">CassandraOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/cassandra/operations/CassandraOperations.html#createDeleter-java.lang.String-java.lang.String...-">createDeleter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -237,7 +237,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DynamoDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#createDeleter-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String...-">createDeleter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">DynamoDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#createDeleter-java.lang.String-java.lang.String...-">createDeleter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -269,7 +269,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#createDeleter-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String...-">createDeleter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#createDeleter-java.lang.String-java.lang.String...-">createDeleter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </tbody>

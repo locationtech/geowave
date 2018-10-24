@@ -158,10 +158,10 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Nati
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/MergingEntryIterator.html#MergingEntryIterator-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.index.PrimaryIndex-java.util.Iterator-org.locationtech.geowave.core.store.filter.QueryFilter-org.locationtech.geowave.core.store.callback.ScanCallback-java.util.Map-double:A-">MergingEntryIterator</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
-                    <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/MergingEntryIterator.html#MergingEntryIterator-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.api.Index-java.util.Iterator-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.callback.ScanCallback-java.util.Map-double:A-">MergingEntryIterator</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                    <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scannerIt,
-                    <a href="../../../../../../org/locationtech/geowave/core/store/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
+                    <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;clientFilter,
                     <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/MergingEntryIterator.html" title="type parameter in MergingEntryIterator">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scanCallback,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter</a>&gt;&nbsp;mergingAdapters,
                     double[]&nbsp;maxResolutionSubsamplingPerDimension)</code>&nbsp;</td>
@@ -199,7 +199,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Nati
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.util.<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="class in org.locationtech.geowave.core.store.util">NativeEntryIteratorWrapper</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#decodeRow-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.filter.QueryFilter-org.locationtech.geowave.core.store.index.PrimaryIndex-">decodeRow</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#decodeRow-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.api.Index-">decodeRow</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.util.EntryIteratorWrapper">
@@ -236,16 +236,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Nati
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="MergingEntryIterator-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.index.PrimaryIndex-java.util.Iterator-org.locationtech.geowave.core.store.filter.QueryFilter-org.locationtech.geowave.core.store.callback.ScanCallback-java.util.Map-double:A-">
+<a name="MergingEntryIterator-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.api.Index-java.util.Iterator-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.callback.ScanCallback-java.util.Map-double:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MergingEntryIterator</h4>
 <pre>public&nbsp;MergingEntryIterator(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
-                            <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                            <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scannerIt,
-                            <a href="../../../../../../org/locationtech/geowave/core/store/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
+                            <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;clientFilter,
                             <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/MergingEntryIterator.html" title="type parameter in MergingEntryIterator">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scanCallback,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter</a>&gt;&nbsp;mergingAdapters,
                             double[]&nbsp;maxResolutionSubsamplingPerDimension)</pre>

@@ -179,9 +179,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/flatten/BitmaskUtils.html#generateFieldSubsetBitmask-org.locationtech.geowave.core.store.index.CommonIndexModel-java.util.List-org.locationtech.geowave.core.store.adapter.DataAdapter-">generateFieldSubsetBitmask</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;fieldIds,
-                          <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/flatten/BitmaskUtils.html#generateFieldSubsetBitmask-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String:A-org.locationtech.geowave.core.store.api.DataTypeAdapter-">generateFieldSubsetBitmask</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;fieldNames,
+                          <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds)</code>
 <div class="block">Generates a field subset bitmask for the given index, adapter, and fields</div>
 </td>
 </tr>
@@ -334,15 +334,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="generateFieldSubsetBitmask-org.locationtech.geowave.core.store.index.CommonIndexModel-java.util.List-org.locationtech.geowave.core.store.adapter.DataAdapter-">
+<a name="generateFieldSubsetBitmask-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String:A-org.locationtech.geowave.core.store.api.DataTypeAdapter-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>generateFieldSubsetBitmask</h4>
 <pre>public static&nbsp;byte[]&nbsp;generateFieldSubsetBitmask(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;fieldIds,
-                                                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds)</pre>
+                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;fieldNames,
+                                                <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds)</pre>
 <div class="block">Generates a field subset bitmask for the given index, adapter, and fields</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

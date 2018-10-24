@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":6,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":6,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics</a>&lt;T&gt;</li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics</a>&lt;T,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics&lt;T&gt;</li>
@@ -114,16 +114,16 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;T&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;</dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;T,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;</dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureNumericRangeStatistics</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">TimeRangeDataStatistics</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureNumericRangeStatistics</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public abstract class <span class="typeNameLabel">NumericRangeDataStatistics&lt;T&gt;</span>
-extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;T&gt;</pre>
+extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;T,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</pre>
 </li>
 </ul>
 </div>
@@ -141,7 +141,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.adapter.statistics.<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#internalDataAdapterId">internalDataAdapterId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#statisticsId">statisticsId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#STATS_ID_SEPARATOR">STATS_ID_SEPARATOR</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#STATS_SEPARATOR">STATS_SEPARATOR</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#visibility">visibility</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#adapterId">adapterId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#extendedId">extendedId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#statisticsType">statisticsType</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#visibility">visibility</a></code></li>
 </ul>
 </li>
 </ul>
@@ -163,8 +163,9 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#NumericRangeDataStatistics-java.lang.Short-org.locationtech.geowave.core.index.ByteArrayId-">NumericRangeDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
-                          <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#NumericRangeDataStatistics-java.lang.Short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String-">NumericRangeDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
+                          <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;&nbsp;type,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -212,27 +213,33 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#getRange-T-">getRange</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="type parameter in NumericRangeDataStatistics">T</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#getResult--">getResult</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#isSet--">isSet</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#resultsName--">resultsName</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#resultsValue--">resultsValue</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission
  or storage.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>net.sf.json.JSONObject</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#toJSONObject-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">toJSONObject</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;store)</code>
-<div class="block">Convert Feature Numeric Range statistics to a JSON object</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -242,7 +249,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.adapter.statistics.<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-byte:A-">binaryBuffer</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-int-">binaryBuffer</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#composeId-java.lang.String-java.lang.String-">composeId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#decomposeNameFromId-org.locationtech.geowave.core.index.ByteArrayId-">decomposeNameFromId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#duplicate--">duplicate</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getInternalDataAdapterId--">getInternalDataAdapterId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getStatisticsId--">getStatisticsId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getVisibility--">getVisibility</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setInternalDataAdapterId-short-">setInternalDataAdapterId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setStatisticsId-org.locationtech.geowave.core.index.ByteArrayId-">setStatisticsId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setVisibility-byte:A-">setVisibility</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-byte:A-">binaryBuffer</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-int-">binaryBuffer</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#duplicate--">duplicate</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getAdapterId--">getAdapterId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getExtendedId--">getExtendedId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getType--">getType</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getVisibility--">getVisibility</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setAdapterId-short-">setAdapterId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setExtendedId-java.lang.String-">setExtendedId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setType-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-">setType</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setVisibility-byte:A-">setVisibility</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#toJSONObject-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">toJSONObject</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -250,6 +257,13 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.adapter.statistics.<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#reduce-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">reduce</a></code></li>
 </ul>
 </li>
 </ul>
@@ -274,14 +288,15 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <pre>protected&nbsp;NumericRangeDataStatistics()</pre>
 </li>
 </ul>
-<a name="NumericRangeDataStatistics-java.lang.Short-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="NumericRangeDataStatistics-java.lang.Short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>NumericRangeDataStatistics</h4>
 <pre>public&nbsp;NumericRangeDataStatistics(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
-                                  <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
+                                  <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;&nbsp;type,
+                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 </li>
 </ul>
 </li>
@@ -405,27 +420,43 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;toString()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#toString--">toString</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="type parameter in NumericRangeDataStatistics">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#toString--">toString</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="type parameter in NumericRangeDataStatistics">T</a>,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
-<a name="toJSONObject-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">
+<a name="resultsName--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>resultsName</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;resultsName()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#resultsName--">resultsName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="type parameter in NumericRangeDataStatistics">T</a>,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="resultsValue--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>resultsValue</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;resultsValue()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#resultsValue--">resultsValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="type parameter in NumericRangeDataStatistics">T</a>,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getResult--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>toJSONObject</h4>
-<pre>public&nbsp;net.sf.json.JSONObject&nbsp;toJSONObject(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;store)
-                                    throws net.sf.json.JSONException</pre>
-<div class="block">Convert Feature Numeric Range statistics to a JSON object</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html#toJSONObject-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">toJSONObject</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="type parameter in NumericRangeDataStatistics">T</a>&gt;</code></dd>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#toJSONObject-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">toJSONObject</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="type parameter in NumericRangeDataStatistics">T</a>&gt;</code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>net.sf.json.JSONException</code></dd>
-</dl>
+<h4>getResult</h4>
+<pre>public&nbsp;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;getResult()</pre>
 </li>
 </ul>
 </li>

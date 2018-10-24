@@ -153,22 +153,23 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#deleteEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">deleteEntry</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
-           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
-           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
-           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#deleteEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">deleteEntry</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;secondaryIndexName,
+           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;indexedAttributeValue,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
+           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
            <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>...&nbsp;originalFields)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#deleteJoinEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-">deleteJoinEntry</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
-               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
-               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
-               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexPartitionKey,
-               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexSortKey,
-               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;attributeVisibility)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#deleteJoinEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">deleteJoinEntry</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;secondaryIndexName,
+               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;indexedAttributeValue,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;primaryIndexName,
+               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryIndexPartitionKey,
+               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryIndexSortKey,
+               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;attributeVisibility)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -176,11 +177,11 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;T&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#query-org.locationtech.geowave.core.store.index.SecondaryIndex-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.query.DistributableQuery-java.lang.String...-">query</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndex</a>&lt;T&gt;&nbsp;secondaryIndex,
-     <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#query-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-java.lang.String-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-java.lang.String...-">query</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexImpl.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndexImpl</a>&lt;T&gt;&nbsp;secondaryIndex,
+     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
      <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;T&gt;&nbsp;adapter,
-     <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;primaryIndex,
-     <a href="../../../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+     <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;primaryIndex,
+     <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;query,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Execute a query against the given secondary index</div>
 </td>
@@ -191,17 +192,17 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#setDataStore-org.locationtech.geowave.core.store.DataStore-">setDataStore</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/DataStore.html" title="interface in org.locationtech.geowave.core.store">DataStore</a>&nbsp;dataStore)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#setDataStore-org.locationtech.geowave.core.store.api.DataStore-">setDataStore</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore)</code>
 <div class="block">Set the reference to the primary data store</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#storeEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">storeEntry</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
-          <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
-          <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-          <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
-          <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#storeEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">storeEntry</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;secondaryIndexName,
+          <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;indexedAttributeValue,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
+          <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
           <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>...&nbsp;originalFields)</code>
 <div class="block">Stores a secondary index entry that will not require a join against the
  primary index upon lookup.</div>
@@ -209,14 +210,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#storeJoinEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-">storeJoinEntry</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
-              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
-              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
-              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
-              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexPartitionKey,
-              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexSortKey,
-              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;attributeVisibility)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#storeJoinEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">storeJoinEntry</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;secondaryIndexName,
+              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;indexedAttributeValue,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;primaryIndexName,
+              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryIndexPartitionKey,
+              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryIndexSortKey,
+              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;attributeVisibility)</code>
 <div class="block">Stores a secondary index entry that will require a join against the
  primary index upon lookup.</div>
 </td>
@@ -260,120 +261,121 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="setDataStore-org.locationtech.geowave.core.store.DataStore-">
+<a name="setDataStore-org.locationtech.geowave.core.store.api.DataStore-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setDataStore</h4>
-<pre>public&nbsp;void&nbsp;setDataStore(<a href="../../../../../../org/locationtech/geowave/core/store/DataStore.html" title="interface in org.locationtech.geowave.core.store">DataStore</a>&nbsp;dataStore)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#setDataStore-org.locationtech.geowave.core.store.DataStore-">SecondaryIndexDataStore</a></code></span></div>
+<pre>public&nbsp;void&nbsp;setDataStore(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#setDataStore-org.locationtech.geowave.core.store.api.DataStore-">SecondaryIndexDataStore</a></code></span></div>
 <div class="block">Set the reference to the primary data store</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#setDataStore-org.locationtech.geowave.core.store.DataStore-">setDataStore</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#setDataStore-org.locationtech.geowave.core.store.api.DataStore-">setDataStore</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="storeJoinEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>storeJoinEntry</h4>
-<pre>public&nbsp;void&nbsp;storeJoinEntry(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
-                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
-                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
-                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
-                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexPartitionKey,
-                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexSortKey,
-                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;attributeVisibility)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#storeJoinEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-">SecondaryIndexDataStore</a></code></span></div>
-<div class="block">Stores a secondary index entry that will require a join against the
- primary index upon lookup.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#storeJoinEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-">storeJoinEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="storeEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>storeEntry</h4>
-<pre>public&nbsp;void&nbsp;storeEntry(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
-                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
-                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
-                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                       <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>...&nbsp;originalFields)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#storeEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">SecondaryIndexDataStore</a></code></span></div>
-<div class="block">Stores a secondary index entry that will not require a join against the
- primary index upon lookup.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#storeEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">storeEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="query-org.locationtech.geowave.core.store.index.SecondaryIndex-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.query.DistributableQuery-java.lang.String...-">
+<a name="query-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-java.lang.String-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>query</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndex</a>&lt;T&gt;&nbsp;secondaryIndex,
-                                      <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexImpl.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndexImpl</a>&lt;T&gt;&nbsp;secondaryIndex,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
                                       <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                                      <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;primaryIndex,
-                                      <a href="../../../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+                                      <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;primaryIndex,
+                                      <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;query,
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#query-org.locationtech.geowave.core.store.index.SecondaryIndex-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.query.DistributableQuery-java.lang.String...-">SecondaryIndexDataStore</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#query-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-java.lang.String-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-java.lang.String...-">SecondaryIndexDataStore</a></code></span></div>
 <div class="block">Execute a query against the given secondary index</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#query-org.locationtech.geowave.core.store.index.SecondaryIndex-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.query.DistributableQuery-java.lang.String...-">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#query-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-java.lang.String-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-java.lang.String...-">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 </dl>
 </li>
 </ul>
-<a name="deleteJoinEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="storeJoinEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>storeJoinEntry</h4>
+<pre>public&nbsp;void&nbsp;storeJoinEntry(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;secondaryIndexName,
+                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;indexedAttributeValue,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;primaryIndexName,
+                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryIndexPartitionKey,
+                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryIndexSortKey,
+                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;attributeVisibility)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#storeJoinEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">SecondaryIndexDataStore</a></code></span></div>
+<div class="block">Stores a secondary index entry that will require a join against the
+ primary index upon lookup.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#storeJoinEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">storeJoinEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="storeEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>storeEntry</h4>
+<pre>public&nbsp;void&nbsp;storeEntry(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;secondaryIndexName,
+                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;indexedAttributeValue,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
+                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
+                       <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>...&nbsp;originalFields)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#storeEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">SecondaryIndexDataStore</a></code></span></div>
+<div class="block">Stores a secondary index entry that will not require a join against the
+ primary index upon lookup.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#storeEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">storeEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="deleteJoinEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>deleteJoinEntry</h4>
-<pre>public&nbsp;void&nbsp;deleteJoinEntry(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
-                            <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
-                            <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                            <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
-                            <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexPartitionKey,
-                            <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexSortKey,
-                            <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;attributeVisibility)</pre>
+<pre>public&nbsp;void&nbsp;deleteJoinEntry(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;secondaryIndexName,
+                            <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;indexedAttributeValue,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;primaryIndexName,
+                            <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryIndexPartitionKey,
+                            <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryIndexSortKey,
+                            <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;attributeVisibility)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#deleteJoinEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-">deleteJoinEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#deleteJoinEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">deleteJoinEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="deleteEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">
+<a name="deleteEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>deleteEntry</h4>
-<pre>public&nbsp;void&nbsp;deleteEntry(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
-                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
-                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
-                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
+<pre>public&nbsp;void&nbsp;deleteEntry(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;secondaryIndexName,
+                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;indexedAttributeValue,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
+                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
                         <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>...&nbsp;originalFields)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#deleteEntry-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">deleteEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html#deleteEntry-java.lang.String-org.locationtech.geowave.core.index.ByteArray-java.lang.String-java.lang.String-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.entities.GeoWaveValue...-">deleteEntry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></dd>
 </dl>
 </li>
 </ul>

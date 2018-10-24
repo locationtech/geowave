@@ -43,8 +43,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/package-tree.html">Prev</a></li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/package-tree.html">Next</a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/field/package-tree.html">Prev</a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/package-tree.html">Next</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/geotime/store/query/package-tree.html" target="_top">Frames</a></li>
@@ -81,7 +81,16 @@
 <ul>
 <li type="circle">java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang"><span class="typeNameLink">Object</span></a>
 <ul>
-<li type="circle">org.locationtech.geowave.core.store.query.<a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query"><span class="typeNameLink">BasicQuery</span></a> (implements org.locationtech.geowave.core.store.query.<a href="../../../../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>)
+<li type="circle">org.locationtech.geowave.core.store.query.<a href="../../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.query"><span class="typeNameLink">BaseQueryBuilderImpl</span></a>&lt;T,Q,R&gt; (implements org.locationtech.geowave.core.store.query.<a href="../../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.query">BaseQueryBuilder</a>&lt;T,Q,R&gt;)
+<ul>
+<li type="circle">org.locationtech.geowave.core.store.query.<a href="../../../../../../../org/locationtech/geowave/core/store/query/QueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.query"><span class="typeNameLink">QueryBuilderImpl</span></a>&lt;T,R&gt; (implements org.locationtech.geowave.core.store.api.<a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">QueryBuilder</a>&lt;T,R&gt;)
+<ul>
+<li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/VectorQueryBuilderImpl.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">VectorQueryBuilderImpl</span></a> (implements org.locationtech.geowave.core.geotime.store.query.api.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorQueryBuilder</a>)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li type="circle">org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints"><span class="typeNameLink">BasicQuery</span></a> (implements org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>)
 <ul>
 <li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">SpatialQuery</span></a>
 <ul>
@@ -92,12 +101,24 @@
 <li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">TemporalQuery</span></a></li>
 </ul>
 </li>
+<li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitCQLQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">ExplicitCQLQuery</span></a> (implements org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>, org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/TypeConstraintQuery.html" title="interface in org.locationtech.geowave.core.store.query.constraints">TypeConstraintQuery</a>)</li>
+<li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/OptimalCQLQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">OptimalCQLQuery</span></a> (implements org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/AdapterAndIndexBasedQueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">AdapterAndIndexBasedQueryConstraints</a>, org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>)</li>
+<li type="circle">org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html" title="class in org.locationtech.geowave.core.store.query.constraints"><span class="typeNameLink">QueryConstraintsFactoryImpl</span></a> (implements org.locationtech.geowave.core.store.api.<a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html" title="interface in org.locationtech.geowave.core.store.api">QueryConstraintsFactory</a>)
+<ul>
+<li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/VectorQueryConstraintsFactoryImpl.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">VectorQueryConstraintsFactoryImpl</span></a> (implements org.locationtech.geowave.core.geotime.store.query.api.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorQueryConstraintsFactory.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorQueryConstraintsFactory</a>)</li>
+</ul>
+</li>
 <li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ScaledTemporalRange.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">ScaledTemporalRange</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)</li>
+<li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalConstraintsBuilderImpl.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">SpatialTemporalConstraintsBuilderImpl</span></a> (implements org.locationtech.geowave.core.geotime.store.query.api.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/SpatialTemporalConstraintsBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">SpatialTemporalConstraintsBuilder</a>)</li>
 <li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">TemporalConstraints</span></a></li>
 <li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">TemporalConstraintsSet</span></a></li>
 <li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalRange.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">TemporalRange</span></a></li>
 </ul>
 </li>
+</ul>
+<h2 title="Interface Hierarchy">Interface Hierarchy</h2>
+<ul>
+<li type="circle">org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/BaseVectorQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">BaseVectorQueryBuilder</span></a>&lt;T,Q,R&gt;</li>
 </ul>
 </div>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
@@ -121,8 +142,8 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/package-tree.html">Prev</a></li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/package-tree.html">Next</a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/field/package-tree.html">Prev</a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/package-tree.html">Next</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/geotime/store/query/package-tree.html" target="_top">Frames</a></li>

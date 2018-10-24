@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html" title="class in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html" title="class in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -159,8 +159,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#LocalIngestRunData-java.util.List-org.locationtech.geowave.core.store.DataStore-">LocalIngestRunData</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters,
-                  <a href="../../../../../../org/locationtech/geowave/core/store/DataStore.html" title="interface in org.locationtech.geowave.core.store">DataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#LocalIngestRunData-java.util.List-org.locationtech.geowave.core.store.api.DataStore-">LocalIngestRunData</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&gt;&nbsp;adapters,
+                  <a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -179,27 +179,27 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#addAdapter-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-">addAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#addAdapter-org.locationtech.geowave.core.store.api.DataTypeAdapter-">addAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#close--">close</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#getDataAdapter-org.locationtech.geowave.core.ingest.GeoWaveData-">getDataAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;data)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#getDataAdapter-org.locationtech.geowave.core.store.ingest.GeoWaveData-">getDataAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="interface in org.locationtech.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#getIndexWriter-org.locationtech.geowave.core.index.ByteArrayId-java.util.List-">getIndexWriter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;indices)</code>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#getIndexWriter-java.lang.String-java.util.List-">getIndexWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;indices)</code>
 <div class="block">Return an index writer from the pool.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#releaseIndexWriter-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.IndexWriter-">releaseIndexWriter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                  <a href="../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="interface in org.locationtech.geowave.core.store">IndexWriter</a>&nbsp;writer)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#releaseIndexWriter-java.lang.String-org.locationtech.geowave.core.store.api.Writer-">releaseIndexWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                  <a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer)</code>
 <div class="block">Return the index writer to the pool</div>
 </td>
 </tr>
@@ -225,14 +225,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="LocalIngestRunData-java.util.List-org.locationtech.geowave.core.store.DataStore-">
+<a name="LocalIngestRunData-java.util.List-org.locationtech.geowave.core.store.api.DataStore-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LocalIngestRunData</h4>
-<pre>public&nbsp;LocalIngestRunData(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&gt;&nbsp;adapters,
-                          <a href="../../../../../../org/locationtech/geowave/core/store/DataStore.html" title="interface in org.locationtech.geowave.core.store">DataStore</a>&nbsp;dataStore)</pre>
+<pre>public&nbsp;LocalIngestRunData(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&gt;&nbsp;adapters,
+                          <a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore)</pre>
 </li>
 </ul>
 </li>
@@ -243,33 +243,33 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getDataAdapter-org.locationtech.geowave.core.ingest.GeoWaveData-">
+<a name="getDataAdapter-org.locationtech.geowave.core.store.ingest.GeoWaveData-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataAdapter</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&nbsp;getDataAdapter(<a href="../../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;data)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;getDataAdapter(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;data)</pre>
 </li>
 </ul>
-<a name="addAdapter-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-">
+<a name="addAdapter-org.locationtech.geowave.core.store.api.DataTypeAdapter-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addAdapter</h4>
-<pre>public&nbsp;void&nbsp;addAdapter(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
+<pre>public&nbsp;void&nbsp;addAdapter(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
 </li>
 </ul>
-<a name="getIndexWriter-org.locationtech.geowave.core.index.ByteArrayId-java.util.List-">
+<a name="getIndexWriter-java.lang.String-java.util.List-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndexWriter</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="interface in org.locationtech.geowave.core.store">IndexWriter</a>&nbsp;getIndexWriter(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;indices)
-                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;getIndexWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;indices)
+                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <div class="block">Return an index writer from the pool. The pool will create a new one The
  pool will not be cleaned up until the end. (No items will be cleaned up
  until the end)</div>
@@ -282,14 +282,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 </dl>
 </li>
 </ul>
-<a name="releaseIndexWriter-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.IndexWriter-">
+<a name="releaseIndexWriter-java.lang.String-org.locationtech.geowave.core.store.api.Writer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>releaseIndexWriter</h4>
-<pre>public&nbsp;void&nbsp;releaseIndexWriter(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                               <a href="../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="interface in org.locationtech.geowave.core.store">IndexWriter</a>&nbsp;writer)
+<pre>public&nbsp;void&nbsp;releaseIndexWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                               <a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer)
                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <div class="block">Return the index writer to the pool</div>
 <dl>
@@ -347,7 +347,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html" title="class in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html" title="class in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

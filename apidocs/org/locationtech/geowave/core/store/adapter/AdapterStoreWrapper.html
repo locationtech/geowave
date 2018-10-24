@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DimensionMatchingIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/adapter/AdapterStoreWrapper.html" target="_top">Frames</a></li>
@@ -157,7 +157,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStoreWrapper.html#adapterExists-java.lang.Short-">adapterExists</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStoreWrapper.html#adapterExists-java.lang.Short-">adapterExists</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;adapterId)</code>
 <div class="block">Check for the existence of the adapter with the given unique ID</div>
 </td>
 </tr>
@@ -169,7 +169,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStoreWrapper.html#getAdapter-java.lang.Short-">getAdapter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStoreWrapper.html#getAdapter-java.lang.Short-">getAdapter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;adapterId)</code>
 <div class="block">Get an adapter from the store by its unique ID</div>
 </td>
 </tr>
@@ -250,12 +250,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdapter</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;getAdapter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;getAdapter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;adapterId)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html#getAdapter-K-">AdapterStore</a></code></span></div>
 <div class="block">Get an adapter from the store by its unique ID</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html#getAdapter-K-">getAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterStore</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>adapterId</code> - the unique adapter ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the adapter, null if it doesn't exist</dd>
 </dl>
@@ -267,12 +269,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <ul class="blockList">
 <li class="blockList">
 <h4>adapterExists</h4>
-<pre>public&nbsp;boolean&nbsp;adapterExists(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId)</pre>
+<pre>public&nbsp;boolean&nbsp;adapterExists(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;adapterId)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html#adapterExists-K-">AdapterStore</a></code></span></div>
 <div class="block">Check for the existence of the adapter with the given unique ID</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html#adapterExists-K-">adapterExists</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterStore</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>adapterId</code> - the unique ID to look up</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a boolean flag indicating whether the adapter exists</dd>
 </dl>
@@ -352,7 +356,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DimensionMatchingIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/adapter/AdapterStoreWrapper.html" target="_top">Frames</a></li>

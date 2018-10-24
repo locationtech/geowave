@@ -158,12 +158,12 @@ extends <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduc
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/compare/ComparisonStatsJobRunner.html#ComparisonStatsJobRunner-org.locationtech.geowave.analytic.mapreduce.kde.compare.ComparisonCommandLineOptions-org.locationtech.geowave.analytic.mapreduce.kde.KDECommandLineOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.io.File-org.locationtech.geowave.core.store.index.PrimaryIndex-">ComparisonStatsJobRunner</a></span>(<a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/compare/ComparisonCommandLineOptions.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde.compare">ComparisonCommandLineOptions</a>&nbsp;inputOptions,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/compare/ComparisonStatsJobRunner.html#ComparisonStatsJobRunner-org.locationtech.geowave.analytic.mapreduce.kde.compare.ComparisonCommandLineOptions-org.locationtech.geowave.analytic.mapreduce.kde.KDECommandLineOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.io.File-org.locationtech.geowave.core.store.api.Index-">ComparisonStatsJobRunner</a></span>(<a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/compare/ComparisonCommandLineOptions.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde.compare">ComparisonCommandLineOptions</a>&nbsp;inputOptions,
                         <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a>&nbsp;kdeCommandLineOptions,
                         <a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputDataStoreOptions,
                         <a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputDataStoreOptions,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
-                        <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;outputIndex)</code>&nbsp;</td>
+                        <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;outputIndex)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -241,11 +241,11 @@ extends <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduc
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/compare/ComparisonStatsJobRunner.html#setupJob2Output-org.apache.hadoop.conf.Configuration-org.apache.hadoop.mapreduce.Job-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-">setupJob2Output</a></span>(org.apache.hadoop.conf.Configuration&nbsp;conf,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/compare/ComparisonStatsJobRunner.html#setupJob2Output-org.apache.hadoop.conf.Configuration-org.apache.hadoop.mapreduce.Job-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.Index-">setupJob2Output</a></span>(org.apache.hadoop.conf.Configuration&nbsp;conf,
                org.apache.hadoop.mapreduce.Job&nbsp;statsReducer,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statsNamespace,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
-               <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+               <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -253,7 +253,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduc
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.analytic.mapreduce.kde.<a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">KDEJobRunner</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#addJobClasspathDependencies-org.apache.hadoop.mapreduce.Job-org.apache.hadoop.conf.Configuration-">addJobClasspathDependencies</a>, <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#run-java.lang.String:A-">run</a>, <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#runJob--">runJob</a>, <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#setup-org.apache.hadoop.mapreduce.Job-java.lang.String-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-">setup</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#addJobClasspathDependencies-org.apache.hadoop.mapreduce.Job-org.apache.hadoop.conf.Configuration-">addJobClasspathDependencies</a>, <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#run-java.lang.String:A-">run</a>, <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#runJob--">runJob</a>, <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#setup-org.apache.hadoop.mapreduce.Job-java.lang.String-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">setup</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.apache.hadoop.conf.Configured">
@@ -290,7 +290,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduc
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="ComparisonStatsJobRunner-org.locationtech.geowave.analytic.mapreduce.kde.compare.ComparisonCommandLineOptions-org.locationtech.geowave.analytic.mapreduce.kde.KDECommandLineOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.io.File-org.locationtech.geowave.core.store.index.PrimaryIndex-">
+<a name="ComparisonStatsJobRunner-org.locationtech.geowave.analytic.mapreduce.kde.compare.ComparisonCommandLineOptions-org.locationtech.geowave.analytic.mapreduce.kde.KDECommandLineOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.io.File-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -301,7 +301,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduc
                                 <a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputDataStoreOptions,
                                 <a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputDataStoreOptions,
                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
-                                <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;outputIndex)</pre>
+                                <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;outputIndex)</pre>
 </li>
 </ul>
 </li>
@@ -504,7 +504,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduc
 </dl>
 </li>
 </ul>
-<a name="setupJob2Output-org.apache.hadoop.conf.Configuration-org.apache.hadoop.mapreduce.Job-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-">
+<a name="setupJob2Output-org.apache.hadoop.conf.Configuration-org.apache.hadoop.mapreduce.Job-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -514,11 +514,11 @@ extends <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduc
                                org.apache.hadoop.mapreduce.Job&nbsp;statsReducer,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statsNamespace,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
-                               <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)
+                               <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)
                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#setupJob2Output-org.apache.hadoop.conf.Configuration-org.apache.hadoop.mapreduce.Job-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-">setupJob2Output</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">KDEJobRunner</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#setupJob2Output-org.apache.hadoop.conf.Configuration-org.apache.hadoop.mapreduce.Job-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.Index-">setupJob2Output</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">KDEJobRunner</a></code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>

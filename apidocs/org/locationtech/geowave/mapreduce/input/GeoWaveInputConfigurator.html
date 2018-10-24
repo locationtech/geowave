@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -195,53 +195,75 @@ extends <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfig
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getCommonQueryOptions-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getCommonQueryOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                     org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/query/options/DataTypeQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">DataTypeQueryOptions</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getDataTypeQueryOptions-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getDataTypeQueryOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                       org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getIndex-java.lang.Class-org.apache.hadoop.conf.Configuration-">getIndex</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
         org.apache.hadoop.conf.Configuration&nbsp;config)</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">IndexQueryOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getIndexQueryOptions-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getIndexQueryOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                    org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getMaximumSplitCount-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getMaximumSplitCount</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                     org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getMinimumSplitCount-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getMinimumSplitCount</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                     org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getQuery-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-        org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getQueryCosntraints-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getQueryCosntraints</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                   org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/query/QueryOptions.html" title="class in org.locationtech.geowave.core.store.query">QueryOptions</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#getQueryOptions-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getQueryOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-               org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#setCommonQueryOptions-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.options.CommonQueryOptions-">setCommonQueryOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                     org.apache.hadoop.conf.Configuration&nbsp;config,
+                     <a href="../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a>&nbsp;queryOptions)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#setDataTypeQueryOptions-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions-">setDataTypeQueryOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                       org.apache.hadoop.conf.Configuration&nbsp;config,
+                       <a href="../../../../../org/locationtech/geowave/core/store/query/options/DataTypeQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">DataTypeQueryOptions</a>&lt;?&gt;&nbsp;queryOptions)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#setIndexQueryOptions-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.options.IndexQueryOptions-">setIndexQueryOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                    org.apache.hadoop.conf.Configuration&nbsp;config,
+                    <a href="../../../../../org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">IndexQueryOptions</a>&nbsp;queryOptions)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#setMaximumSplitCount-java.lang.Class-org.apache.hadoop.conf.Configuration-java.lang.Integer-">setMaximumSplitCount</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                     org.apache.hadoop.conf.Configuration&nbsp;config,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxSplits)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#setMinimumSplitCount-java.lang.Class-org.apache.hadoop.conf.Configuration-java.lang.Integer-">setMinimumSplitCount</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
                     org.apache.hadoop.conf.Configuration&nbsp;config,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;minSplits)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#setQuery-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.DistributableQuery-">setQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-        org.apache.hadoop.conf.Configuration&nbsp;config,
-        <a href="../../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&nbsp;query)</code>&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#setQueryOptions-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.QueryOptions-">setQueryOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-               org.apache.hadoop.conf.Configuration&nbsp;config,
-               <a href="../../../../../org/locationtech/geowave/core/store/query/QueryOptions.html" title="class in org.locationtech.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputConfigurator.html#setQueryConstraints-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-">setQueryConstraints</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                   org.apache.hadoop.conf.Configuration&nbsp;config,
+                   <a href="../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;query)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -249,7 +271,7 @@ extends <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfig
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.mapreduce.<a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html" title="class in org.locationtech.geowave.mapreduce">GeoWaveConfiguratorBase</a></h3>
-<code><a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#addAdapterToIndexMapping-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.AdapterToIndexMapping-">addAdapterToIndexMapping</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#addDataAdapter-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.adapter.DataAdapter-">addDataAdapter</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#addIndex-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.index.PrimaryIndex-">addIndex</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#addInternalAdapterId-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.index.ByteArrayId-short-">addInternalAdapterId</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#enumToConfKey-java.lang.Class-java.lang.Enum-">enumToConfKey</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#enumToConfKey-java.lang.Class-java.lang.Enum-java.lang.String-">enumToConfKey</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getAdapterId-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-short-">getAdapterId</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getAdapterToIndexMapping-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-short-">getAdapterToIndexMapping</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getConfiguration-org.apache.hadoop.mapreduce.JobContext-">getConfiguration</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataAdapter-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-org.locationtech.geowave.core.index.ByteArrayId-">getDataAdapter</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataAdapters-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getDataAdapters</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStatisticsStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getDataStatisticsStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getDataStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getIndex-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-org.locationtech.geowave.core.index.ByteArrayId-">getIndex</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getIndices-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getIndices</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getInstance-java.lang.Class-java.lang.Enum-org.apache.hadoop.mapreduce.JobContext-java.lang.Class-">getInstance</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getInstance-java.lang.Class-java.lang.Enum-org.apache.hadoop.mapreduce.JobContext-java.lang.Class-java.lang.Class-">getInstance</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getInternalAdapterId-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-org.locationtech.geowave.core.index.ByteArrayId-">getInternalAdapterId</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextAdapterIndexMappingStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getJobContextAdapterIndexMappingStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextAdapterStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getJobContextAdapterStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextIndexStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getJobContextIndexStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextInternalAdapterStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getJobContextInternalAdapterStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getStoreOptions-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getStoreOptions</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getStoreOptionsMap-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getStoreOptionsMap</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#removeDataAdapter-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.index.ByteArrayId-">removeDataAdapter</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#setRemoteInvocationParams-java.lang.String-java.lang.String-org.apache.hadoop.conf.Configuration-">setRemoteInvocationParams</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#setStoreOptionsMap-java.lang.Class-org.apache.hadoop.conf.Configuration-java.util.Map-">setStoreOptionsMap</a></code></li>
+<code><a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#addAdapterToIndexMapping-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.AdapterToIndexMapping-">addAdapterToIndexMapping</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#addDataAdapter-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.api.DataTypeAdapter-">addDataAdapter</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#addIndex-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.api.Index-">addIndex</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#addTypeName-java.lang.Class-org.apache.hadoop.conf.Configuration-java.lang.String-short-">addTypeName</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#enumToConfKey-java.lang.Class-java.lang.Enum-">enumToConfKey</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#enumToConfKey-java.lang.Class-java.lang.Enum-java.lang.String-">enumToConfKey</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getAdapterId-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-java.lang.String-">getAdapterId</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getAdapterToIndexMapping-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-short-">getAdapterToIndexMapping</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getConfiguration-org.apache.hadoop.mapreduce.JobContext-">getConfiguration</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataAdapter-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-java.lang.String-">getDataAdapter</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataAdapters-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getDataAdapters</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStatisticsStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getDataStatisticsStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getDataStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getDataStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getIndex-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-java.lang.String-">getIndex</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getIndices-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getIndices</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getInstance-java.lang.Class-java.lang.Enum-org.apache.hadoop.mapreduce.JobContext-java.lang.Class-">getInstance</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getInstance-java.lang.Class-java.lang.Enum-org.apache.hadoop.mapreduce.JobContext-java.lang.Class-java.lang.Class-">getInstance</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextAdapterIndexMappingStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getJobContextAdapterIndexMappingStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextAdapterStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getJobContextAdapterStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextIndexStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getJobContextIndexStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getJobContextInternalAdapterStore-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getJobContextInternalAdapterStore</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getStoreOptions-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getStoreOptions</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getStoreOptionsMap-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">getStoreOptionsMap</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#getTypeName-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-short-">getTypeName</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#removeDataAdapter-java.lang.Class-org.apache.hadoop.conf.Configuration-java.lang.String-">removeDataAdapter</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#setRemoteInvocationParams-java.lang.String-java.lang.String-org.apache.hadoop.conf.Configuration-">setRemoteInvocationParams</a>, <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html#setStoreOptionsMap-java.lang.Class-org.apache.hadoop.conf.Configuration-java.util.Map-">setStoreOptionsMap</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -295,50 +317,92 @@ extends <a href="../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfig
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndex</h4>
-<pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;getIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-                                    org.apache.hadoop.conf.Configuration&nbsp;config)</pre>
+<pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;getIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                             org.apache.hadoop.conf.Configuration&nbsp;config)</pre>
 </li>
 </ul>
-<a name="getQuery-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">
+<a name="getQueryCosntraints-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getQuery</h4>
-<pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&nbsp;getQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-                                          org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
+<h4>getQueryCosntraints</h4>
+<pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;getQueryCosntraints(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                                                   org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
 </li>
 </ul>
-<a name="setQuery-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.DistributableQuery-">
+<a name="setQueryConstraints-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setQuery</h4>
-<pre>public static&nbsp;void&nbsp;setQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-                            org.apache.hadoop.conf.Configuration&nbsp;config,
-                            <a href="../../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&nbsp;query)</pre>
+<h4>setQueryConstraints</h4>
+<pre>public static&nbsp;void&nbsp;setQueryConstraints(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                                       org.apache.hadoop.conf.Configuration&nbsp;config,
+                                       <a href="../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;query)</pre>
 </li>
 </ul>
-<a name="getQueryOptions-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">
+<a name="getIndexQueryOptions-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getQueryOptions</h4>
-<pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/query/QueryOptions.html" title="class in org.locationtech.geowave.core.store.query">QueryOptions</a>&nbsp;getQueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-                                           org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
+<h4>getIndexQueryOptions</h4>
+<pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">IndexQueryOptions</a>&nbsp;getIndexQueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                                                     org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
 </li>
 </ul>
-<a name="setQueryOptions-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.QueryOptions-">
+<a name="setIndexQueryOptions-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.options.IndexQueryOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setQueryOptions</h4>
-<pre>public static&nbsp;void&nbsp;setQueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
-                                   org.apache.hadoop.conf.Configuration&nbsp;config,
-                                   <a href="../../../../../org/locationtech/geowave/core/store/query/QueryOptions.html" title="class in org.locationtech.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions)</pre>
+<h4>setIndexQueryOptions</h4>
+<pre>public static&nbsp;void&nbsp;setIndexQueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                                        org.apache.hadoop.conf.Configuration&nbsp;config,
+                                        <a href="../../../../../org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">IndexQueryOptions</a>&nbsp;queryOptions)</pre>
+</li>
+</ul>
+<a name="getDataTypeQueryOptions-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataTypeQueryOptions</h4>
+<pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/query/options/DataTypeQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">DataTypeQueryOptions</a>&lt;?&gt;&nbsp;getDataTypeQueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                                                              org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
+</li>
+</ul>
+<a name="setDataTypeQueryOptions-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDataTypeQueryOptions</h4>
+<pre>public static&nbsp;void&nbsp;setDataTypeQueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                                           org.apache.hadoop.conf.Configuration&nbsp;config,
+                                           <a href="../../../../../org/locationtech/geowave/core/store/query/options/DataTypeQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">DataTypeQueryOptions</a>&lt;?&gt;&nbsp;queryOptions)</pre>
+</li>
+</ul>
+<a name="getCommonQueryOptions-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCommonQueryOptions</h4>
+<pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a>&nbsp;getCommonQueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                                                       org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
+</li>
+</ul>
+<a name="setCommonQueryOptions-java.lang.Class-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.query.options.CommonQueryOptions-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCommonQueryOptions</h4>
+<pre>public static&nbsp;void&nbsp;setCommonQueryOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;implementingClass,
+                                         org.apache.hadoop.conf.Configuration&nbsp;config,
+                                         <a href="../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a>&nbsp;queryOptions)</pre>
 </li>
 </ul>
 <a name="getMinimumSplitCount-java.lang.Class-org.apache.hadoop.mapreduce.JobContext-">

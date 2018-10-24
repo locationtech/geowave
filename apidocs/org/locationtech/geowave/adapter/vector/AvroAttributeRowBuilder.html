@@ -157,20 +157,20 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/adapter/N
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeature</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/AvroAttributeRowBuilder.html#buildRow-org.locationtech.geowave.core.index.ByteArrayId-">buildRow</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/AvroAttributeRowBuilder.html#buildRow-org.locationtech.geowave.core.index.ByteArray-">buildRow</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</code>
 <div class="block">Create a row with the previously set fields</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/AvroAttributeRowBuilder.html#setField-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Object-">setField</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/AvroAttributeRowBuilder.html#setField-java.lang.String-java.lang.Object-">setField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fieldValue)</code>
-<div class="block">Set a field ID/value pair</div>
+<div class="block">Set a field name/value pair</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/AvroAttributeRowBuilder.html#setFields-java.util.Map-">setFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/AvroAttributeRowBuilder.html#setFields-java.util.Map-">setFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -211,18 +211,18 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/adapter/N
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="buildRow-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="buildRow-org.locationtech.geowave.core.index.ByteArray-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>buildRow</h4>
-<pre>public&nbsp;org.opengis.feature.simple.SimpleFeature&nbsp;buildRow(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#buildRow-org.locationtech.geowave.core.index.ByteArrayId-">NativeFieldHandler.RowBuilder</a></code></span></div>
+<pre>public&nbsp;org.opengis.feature.simple.SimpleFeature&nbsp;buildRow(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#buildRow-org.locationtech.geowave.core.index.ByteArray-">NativeFieldHandler.RowBuilder</a></code></span></div>
 <div class="block">Create a row with the previously set fields</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#buildRow-org.locationtech.geowave.core.index.ByteArrayId-">buildRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#buildRow-org.locationtech.geowave.core.index.ByteArray-">buildRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dataId</code> - the unique data ID for the row</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -230,19 +230,19 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/adapter/N
 </dl>
 </li>
 </ul>
-<a name="setField-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Object-">
+<a name="setField-java.lang.String-java.lang.Object-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setField</h4>
-<pre>public&nbsp;void&nbsp;setField(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+<pre>public&nbsp;void&nbsp;setField(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fieldValue)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#setField-org.locationtech.geowave.core.index.ByteArrayId-FieldType-">NativeFieldHandler.RowBuilder</a></code></span></div>
-<div class="block">Set a field ID/value pair</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#setField-java.lang.String-FieldType-">NativeFieldHandler.RowBuilder</a></code></span></div>
+<div class="block">Set a field name/value pair</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#setField-org.locationtech.geowave.core.index.ByteArrayId-FieldType-">setField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#setField-java.lang.String-FieldType-">setField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
 <dd><code>fieldValue</code> - the field ID/value pair</dd>
 </dl>
 </li>
@@ -253,7 +253,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/adapter/N
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setFields</h4>
-<pre>public&nbsp;void&nbsp;setFields(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</pre>
+<pre>public&nbsp;void&nbsp;setFields(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#setFields-java.util.Map-">setFields</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>

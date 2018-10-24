@@ -93,7 +93,7 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">org.locationtech.geowave.core.store.adapter.statistics</div>
-<h2 title="Interface DataStatisticsSet" class="title">Interface DataStatisticsSet&lt;T&gt;</h2>
+<h2 title="Interface DataStatisticsSet" class="title">Interface DataStatisticsSet&lt;T,R,S,SB extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;S,SB&gt;,RB extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,RB&gt;&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -101,7 +101,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;T&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;T,R,RB&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -109,8 +109,8 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="typeNameLabel">DataStatisticsSet&lt;T&gt;</span>
-extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;T&gt;</pre>
+<pre>public interface <span class="typeNameLabel">DataStatisticsSet&lt;T,R,S,SB extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;S,SB&gt;,RB extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,RB&gt;&gt;</span>
+extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;T,R,RB&gt;</pre>
 </li>
 </ul>
 </div>
@@ -130,16 +130,16 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="type parameter in DataStatisticsSet">T</a>&gt;[]</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="type parameter in DataStatisticsSet">T</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="type parameter in DataStatisticsSet">S</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="type parameter in DataStatisticsSet">SB</a>&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html#getStatisticsSet--">getStatisticsSet</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.adapter.statistics.DataStatistics">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.adapter.statistics.<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html#getInternalDataAdapterId--">getInternalDataAdapterId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html#getStatisticsId--">getStatisticsId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html#getVisibility--">getVisibility</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html#setInternalDataAdapterId-short-">setInternalDataAdapterId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html#setStatisticsId-org.locationtech.geowave.core.index.ByteArrayId-">setStatisticsId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html#setVisibility-byte:A-">setVisibility</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html#toJSONObject-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">toJSONObject</a></code></li>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.adapter.statistics.<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#duplicate--">duplicate</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#getAdapterId--">getAdapterId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#getExtendedId--">getExtendedId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#getResult--">getResult</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#getType--">getType</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#getVisibility--">getVisibility</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#reduce-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">reduce</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#setAdapterId-short-">setAdapterId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#setExtendedId-java.lang.String-">setExtendedId</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#setType-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-">setType</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#setVisibility-byte:A-">setVisibility</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#toJSONObject-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">toJSONObject</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.index.Mergeable">
@@ -182,7 +182,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getStatisticsSet</h4>
-<pre><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="type parameter in DataStatisticsSet">T</a>&gt;[]&nbsp;getStatisticsSet()</pre>
+<pre><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="type parameter in DataStatisticsSet">T</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="type parameter in DataStatisticsSet">S</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="type parameter in DataStatisticsSet">SB</a>&gt;[]&nbsp;getStatisticsSet()</pre>
 </li>
 </ul>
 </li>

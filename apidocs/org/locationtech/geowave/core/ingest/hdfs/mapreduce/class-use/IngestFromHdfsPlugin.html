@@ -165,7 +165,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractSimpleFeatureIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">AbstractSimpleFeatureIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -215,7 +215,7 @@
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions,
                        <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
                        org.apache.hadoop.fs.Path&nbsp;inputFile,
-                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatPluginName,
                        <a href="../../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;?,?&gt;&nbsp;parentPlugin,
                        <a href="../../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="type parameter in AbstractMapReduceIngest">T</a>&nbsp;ingestPlugin)</code>&nbsp;</td>
 </tr>
@@ -224,7 +224,7 @@
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions,
                          <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
                          org.apache.hadoop.fs.Path&nbsp;inputFile,
-                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatPluginName,
                          <a href="../../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;?,?&gt;&nbsp;plugin,
                          <a href="../../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;?,?&gt;&nbsp;mapperIngest)</code>&nbsp;</td>
 </tr>
@@ -288,7 +288,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">I</a>,<a href="../../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">O</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">IngestFormatPluginProviderSpi.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>
+<td class="colLast"><span class="typeNameLabel">IngestFormatPluginProviderSpi.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>
 <div class="block">This plugin will be used by the ingestion framework to read data from
  HDFS in the form of the intermediate data format, and translate the
  intermediate data into the data entries that will be written in GeoWave.</div>
@@ -367,7 +367,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoToolsRasterDataStoreIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoToolsRasterDataStoreIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -385,7 +385,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoToolsVectorDataStoreIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoToolsVectorDataStoreIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -437,7 +437,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">Stanag4676IngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">Stanag4676IngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

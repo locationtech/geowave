@@ -140,7 +140,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryIndexStore.html#MemoryIndexStore--">MemoryIndexStore</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryIndexStore.html#MemoryIndexStore-org.locationtech.geowave.core.store.index.PrimaryIndex:A-">MemoryIndexStore</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;initialIndices)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryIndexStore.html#MemoryIndexStore-org.locationtech.geowave.core.store.api.Index:A-">MemoryIndexStore</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;initialIndices)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -159,19 +159,19 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryIndexStore.html#addIndex-org.locationtech.geowave.core.store.index.Index-">addIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryIndexStore.html#addIndex-org.locationtech.geowave.core.store.api.Index-">addIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryIndexStore.html#getIndex-org.locationtech.geowave.core.index.ByteArrayId-">getIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryIndexStore.html#getIndex-java.lang.String-">getIndex</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryIndexStore.html#getIndices--">getIndices</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryIndexStore.html#indexExists-org.locationtech.geowave.core.index.ByteArrayId-">indexExists</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryIndexStore.html#indexExists-java.lang.String-">indexExists</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -208,13 +208,13 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <pre>public&nbsp;MemoryIndexStore()</pre>
 </li>
 </ul>
-<a name="MemoryIndexStore-org.locationtech.geowave.core.store.index.PrimaryIndex:A-">
+<a name="MemoryIndexStore-org.locationtech.geowave.core.store.api.Index:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MemoryIndexStore</h4>
-<pre>public&nbsp;MemoryIndexStore(<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;initialIndices)</pre>
+<pre>public&nbsp;MemoryIndexStore(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;initialIndices)</pre>
 </li>
 </ul>
 </li>
@@ -225,42 +225,42 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="addIndex-org.locationtech.geowave.core.store.index.Index-">
+<a name="addIndex-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addIndex</h4>
-<pre>public&nbsp;void&nbsp;addIndex(<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</pre>
+<pre>public&nbsp;void&nbsp;addIndex(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#addIndex-org.locationtech.geowave.core.store.index.Index-">addIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#addIndex-org.locationtech.geowave.core.store.api.Index-">addIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="getIndex-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getIndex-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndex</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;getIndex(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;getIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#getIndex-org.locationtech.geowave.core.index.ByteArrayId-">getIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#getIndex-java.lang.String-">getIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="indexExists-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="indexExists-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>indexExists</h4>
-<pre>public&nbsp;boolean&nbsp;indexExists(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+<pre>public&nbsp;boolean&nbsp;indexExists(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#indexExists-org.locationtech.geowave.core.index.ByteArrayId-">indexExists</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#indexExists-java.lang.String-">indexExists</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -270,7 +270,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndices</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;getIndices()</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;getIndices()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#getIndices--">getIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a></code></dd>

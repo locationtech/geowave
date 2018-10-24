@@ -83,7 +83,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store">org.locationtech.geowave.core.store</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.api">org.locationtech.geowave.core.store.api</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -111,12 +111,12 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
-<li class="blockList"><a name="org.locationtech.geowave.core.store">
+<li class="blockList"><a name="org.locationtech.geowave.core.store.api">
 <!--   -->
 </a>
-<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/package-summary.html">org.locationtech.geowave.core.store</a></h3>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/package-summary.html">org.locationtech.geowave.core.store</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -124,8 +124,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/IndexWriter.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&nbsp;entry,
-     <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">Writer.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="type parameter in Writer">T</a>&nbsp;entry,
+     <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="type parameter in Writer">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>
+<div class="block">write the entry using visibilities determined by the
+ fieldVisibilityyWriter</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -143,16 +146,16 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">BaseDataStoreUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStoreUtils.html#getGeoWaveRows-T-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.data.VisibilityWriter-">getGeoWaveRows</a></span>(T&nbsp;entry,
+<td class="colLast"><span class="typeNameLabel">BaseDataStoreUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStoreUtils.html#getGeoWaveRows-T-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.data.VisibilityWriter-">getGeoWaveRows</a></span>(T&nbsp;entry,
               <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;T&gt;&nbsp;adapter,
-              <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+              <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
               <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static &lt;T&gt;&nbsp;org.locationtech.geowave.core.store.base.IntermediaryWriteEntryInfo</code></td>
-<td class="colLast"><span class="typeNameLabel">BaseDataStoreUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStoreUtils.html#getWriteInfo-T-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.data.VisibilityWriter-">getWriteInfo</a></span>(T&nbsp;entry,
+<td class="colLast"><span class="typeNameLabel">BaseDataStoreUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStoreUtils.html#getWriteInfo-T-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.data.VisibilityWriter-">getWriteInfo</a></span>(T&nbsp;entry,
             <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;T&gt;&nbsp;adapter,
-            <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+            <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
             <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -213,8 +216,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html#AccumuloKeyValuePairGenerator-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.data.VisibilityWriter-">AccumuloKeyValuePairGenerator</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;adapter,
-                             <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html#AccumuloKeyValuePairGenerator-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.data.VisibilityWriter-">AccumuloKeyValuePairGenerator</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;adapter,
+                             <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                              <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -231,8 +234,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/util/HBaseCellGenerator.html#HBaseCellGenerator-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.data.VisibilityWriter-">HBaseCellGenerator</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/hbase/util/HBaseCellGenerator.html" title="type parameter in HBaseCellGenerator">T</a>&gt;&nbsp;adapter,
-                  <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/util/HBaseCellGenerator.html#HBaseCellGenerator-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.data.VisibilityWriter-">HBaseCellGenerator</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/hbase/util/HBaseCellGenerator.html" title="type parameter in HBaseCellGenerator">T</a>&gt;&nbsp;adapter,
+                  <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                   <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/hbase/util/HBaseCellGenerator.html" title="type parameter in HBaseCellGenerator">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
 </tr>
 </tbody>

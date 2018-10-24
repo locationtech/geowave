@@ -106,7 +106,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -115,7 +115,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">IngestWithReducer&lt;I,K extends org.apache.hadoop.io.WritableComparable&lt;?&gt;,V extends org.apache.hadoop.io.Writable,O&gt;</span>
-extends <a href="../../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
+extends <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
 <div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion
  with a mapper to aggregate key value pairs and a reducer to ingest data into
  GeoWave. The implementation will be directly persisted to the job
@@ -140,9 +140,9 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/ingest/DataA
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">O</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html#toGeoWaveData-K-java.util.Collection-java.lang.String-java.lang.Iterable-">toGeoWaveData</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>&nbsp;key,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">O</a>&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html#toGeoWaveData-K-java.lang.String:A-java.lang.String-java.lang.Iterable-">toGeoWaveData</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>&nbsp;key,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">V</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
@@ -152,11 +152,11 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/ingest/DataA
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.ingest.DataAdapterProvider">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.ingest.DataAdapterProvider">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.ingest.<a href="../../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.ingest">DataAdapterProvider</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html#getDataAdapters-java.lang.String-">getDataAdapters</a>, <a href="../../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html#getSupportedIndexableTypes--">getSupportedIndexableTypes</a></code></li>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.ingest.<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html#getDataAdapters-java.lang.String-">getDataAdapters</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html#getSupportedIndexableTypes--">getSupportedIndexableTypes</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.index.persist.Persistable">
@@ -190,16 +190,16 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/ingest/DataA
 <pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/KeyValueData.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">KeyValueData</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">V</a>&gt;&gt;&nbsp;toIntermediateMapReduceData(<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">I</a>&nbsp;input)</pre>
 </li>
 </ul>
-<a name="toGeoWaveData-org.apache.hadoop.io.WritableComparable-java.util.Collection-java.lang.String-java.lang.Iterable-">
+<a name="toGeoWaveData-org.apache.hadoop.io.WritableComparable-java.lang.String:A-java.lang.String-java.lang.Iterable-">
 <!--   -->
-</a><a name="toGeoWaveData-K-java.util.Collection-java.lang.String-java.lang.Iterable-">
+</a><a name="toGeoWaveData-K-java.lang.String:A-java.lang.String-java.lang.Iterable-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toGeoWaveData</h4>
-<pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">O</a>&gt;&gt;&nbsp;toGeoWaveData(<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>&nbsp;key,
-                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
+<pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">O</a>&gt;&gt;&nbsp;toGeoWaveData(<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>&nbsp;key,
+                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">V</a>&gt;&nbsp;values)</pre>
 </li>

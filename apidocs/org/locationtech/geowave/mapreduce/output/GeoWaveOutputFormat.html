@@ -196,13 +196,13 @@ extends org.apache.hadoop.mapreduce.OutputFormat&lt;<a href="../../../../../org/
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputFormat.html#addDataAdapter-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.adapter.DataAdapter-">addDataAdapter</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
-              <a href="../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputFormat.html#addDataAdapter-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.api.DataTypeAdapter-">addDataAdapter</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+              <a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputFormat.html#addIndex-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.index.PrimaryIndex-">addIndex</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
-        <a href="../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputFormat.html#addIndex-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.api.Index-">addIndex</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+        <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -344,24 +344,24 @@ extends org.apache.hadoop.mapreduce.OutputFormat&lt;<a href="../../../../../org/
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;storeConfigOptions)</pre>
 </li>
 </ul>
-<a name="addIndex-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.index.PrimaryIndex-">
+<a name="addIndex-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addIndex</h4>
 <pre>public static&nbsp;void&nbsp;addIndex(org.apache.hadoop.conf.Configuration&nbsp;config,
-                            <a href="../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+                            <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 </li>
 </ul>
-<a name="addDataAdapter-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.adapter.DataAdapter-">
+<a name="addDataAdapter-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.api.DataTypeAdapter-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addDataAdapter</h4>
 <pre>public static&nbsp;void&nbsp;addDataAdapter(org.apache.hadoop.conf.Configuration&nbsp;config,
-                                  <a href="../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
+                                  <a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
 </li>
 </ul>
 <a name="getJobContextIndexStore-org.apache.hadoop.mapreduce.JobContext-">

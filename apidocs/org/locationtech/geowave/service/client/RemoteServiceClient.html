@@ -154,14 +154,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#calcStat-java.lang.String-java.lang.String-java.lang.String-">calcStat</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statId)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#calcStat-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.Boolean-">calcStat</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statId,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statType,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorizations,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;jsonFormatFlag)</code>&nbsp;</td>
 </tr>
@@ -171,22 +171,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#listAdapter-java.lang.String-">listAdapter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#listIndices-java.lang.String-">listIndices</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#listIndex-java.lang.String-">listIndex</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#listStats-java.lang.String-">listStats</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#listStats-java.lang.String-">listStats</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#listStats-java.lang.String-java.lang.String-java.lang.String-java.lang.Boolean-">listStats</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorizations,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;jsonFormatFlag)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#listStats-java.lang.String-java.lang.String-java.lang.String-java.lang.Boolean-">listStats</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
-         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorizations,
-         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;jsonFormatFlag)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#listTypes-java.lang.String-">listTypes</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
@@ -195,28 +195,28 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#recalcStats-java.lang.String-java.lang.String-java.lang.String-java.lang.Boolean-">recalcStats</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorizations,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;jsonFormatFlag)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#removeAdapter-java.lang.String-java.lang.String-">removeAdapter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#removeStat-java.lang.String-java.lang.String-java.lang.String-">removeStat</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statType)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#removeStat-java.lang.String-java.lang.String-java.lang.String-">removeStat</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#removeStat-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.Boolean-">removeStat</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statType,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorizations,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;jsonFormatFlag)</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#removeStat-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.Boolean-">removeStat</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statId,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorizations,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;jsonFormatFlag)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/RemoteServiceClient.html#removeType-java.lang.String-java.lang.String-">removeType</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
@@ -272,22 +272,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="listAdapter-java.lang.String-">
+<a name="listTypes-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>listAdapter</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;listAdapter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</pre>
+<h4>listTypes</h4>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;listTypes(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</pre>
 </li>
 </ul>
-<a name="listIndex-java.lang.String-">
+<a name="listIndices-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>listIndex</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;listIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</pre>
+<h4>listIndices</h4>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;listIndices(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</pre>
 </li>
 </ul>
 <a name="version-java.lang.String-">
@@ -315,7 +315,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>listStats</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;listStats(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
+                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorizations,
                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;jsonFormatFlag)</pre>
 </li>
@@ -327,7 +327,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>calcStat</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;calcStat(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
+                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statId)</pre>
 </li>
 </ul>
@@ -338,8 +338,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>calcStat</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;calcStat(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
-                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statId,
+                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statType,
                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorizations,
                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;jsonFormatFlag)</pre>
 </li>
@@ -369,19 +369,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>recalcStats</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;recalcStats(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
+                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorizations,
                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;jsonFormatFlag)</pre>
 </li>
 </ul>
-<a name="removeAdapter-java.lang.String-java.lang.String-">
+<a name="removeType-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>removeAdapter</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeAdapter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId)</pre>
+<h4>removeType</h4>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeType(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
+                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
 </li>
 </ul>
 <a name="removeStat-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.Boolean-">
@@ -391,8 +391,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>removeStat</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeStat(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
-                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statId,
+                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statType,
                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorizations,
                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;jsonFormatFlag)</pre>
 </li>
@@ -404,8 +404,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>removeStat</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeStat(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name,
-                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
-                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statId)</pre>
+                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;statType)</pre>
 </li>
 </ul>
 </li>

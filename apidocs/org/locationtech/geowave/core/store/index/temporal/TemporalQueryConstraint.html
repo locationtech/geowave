@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html" title="interface in org.locationtech.geowave.core.index">QueryConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html" title="interface in org.locationtech.geowave.core.index">IndexConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a></dd>
 </dl>
 <hr>
 <br>
@@ -141,8 +141,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#end">end</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#fieldId">fieldId</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#fieldName">fieldName</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
@@ -171,12 +171,12 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#TemporalQueryConstraint-org.locationtech.geowave.core.index.ByteArrayId-java.util.Date-java.util.Date-">TemporalQueryConstraint</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#TemporalQueryConstraint-java.lang.String-java.util.Date-java.util.Date-">TemporalQueryConstraint</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;start,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;end)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#TemporalQueryConstraint-org.locationtech.geowave.core.index.ByteArrayId-java.util.Date-java.util.Date-boolean-boolean-">TemporalQueryConstraint</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#TemporalQueryConstraint-java.lang.String-java.util.Date-java.util.Date-boolean-boolean-">TemporalQueryConstraint</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;start,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;end,
                        boolean&nbsp;inclusiveLow,
@@ -202,11 +202,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#getDimensionCount--">getDimensionCount</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#getFieldId--">getFieldId</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#getFieldName--">getFieldName</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/temporal/TemporalQueryConstraint.html#getFilter--">getFilter</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -255,13 +255,13 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="fieldId">
+<a name="fieldName">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>fieldId</h4>
-<pre>protected final&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a> fieldId</pre>
+<h4>fieldName</h4>
+<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> fieldName</pre>
 </li>
 </ul>
 <a name="start">
@@ -308,24 +308,24 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="TemporalQueryConstraint-org.locationtech.geowave.core.index.ByteArrayId-java.util.Date-java.util.Date-">
+<a name="TemporalQueryConstraint-java.lang.String-java.util.Date-java.util.Date-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>TemporalQueryConstraint</h4>
-<pre>public&nbsp;TemporalQueryConstraint(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+<pre>public&nbsp;TemporalQueryConstraint(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;start,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;end)</pre>
 </li>
 </ul>
-<a name="TemporalQueryConstraint-org.locationtech.geowave.core.index.ByteArrayId-java.util.Date-java.util.Date-boolean-boolean-">
+<a name="TemporalQueryConstraint-java.lang.String-java.util.Date-java.util.Date-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>TemporalQueryConstraint</h4>
-<pre>public&nbsp;TemporalQueryConstraint(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+<pre>public&nbsp;TemporalQueryConstraint(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;start,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;end,
                                boolean&nbsp;inclusiveLow,
@@ -340,16 +340,16 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getFieldId--">
+<a name="getFieldName--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getFieldId</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getFieldId()</pre>
+<h4>getFieldName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFieldName()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html#getFieldId--">getFieldId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html#getFieldName--">getFieldName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -362,7 +362,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <pre>public&nbsp;int&nbsp;getDimensionCount()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html#getDimensionCount--">getDimensionCount</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html" title="interface in org.locationtech.geowave.core.index">QueryConstraints</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html#getDimensionCount--">getDimensionCount</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html" title="interface in org.locationtech.geowave.core.index">IndexConstraints</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -373,11 +373,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <li class="blockList">
 <h4>isEmpty</h4>
 <pre>public&nbsp;boolean&nbsp;isEmpty()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html#isEmpty--">QueryConstraints</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html#isEmpty--">IndexConstraints</a></code></span></div>
 <div class="block">Unconstrained?</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html#isEmpty--">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html" title="interface in org.locationtech.geowave.core.index">QueryConstraints</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html#isEmpty--">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html" title="interface in org.locationtech.geowave.core.index">IndexConstraints</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>return if unconstrained on a dimension</dd>
 </dl>
@@ -389,7 +389,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <ul class="blockList">
 <li class="blockList">
 <h4>getFilter</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a>&nbsp;getFilter()</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;getFilter()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html#getFilter--">getFilter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a></code></dd>

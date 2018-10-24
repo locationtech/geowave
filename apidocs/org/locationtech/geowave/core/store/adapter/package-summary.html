@@ -90,36 +90,33 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterStore</a>&lt;K,V extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterStore</a>&lt;K,V extends <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&gt;</td>
 <td class="colLast">
 <div class="block">This is responsible for persisting data adapters (either in memory or to disk
  depending on the implementation).</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;</td>
-<td class="colLast">
-<div class="block">This interface should be implemented by any custom data type that must be
- stored in the Accumulo index.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DimensionMatchingIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">DimensionMatchingIndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</td>
 <td class="colLast">
 <div class="block">This is internally useful for the AbstractDataAdapter to match field handlers
  with dimensions by field ID.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexDependentDataAdapter</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</td>
 <td class="colLast">
 <div class="block">This is used by the AbstractDataAdapter to translate between native values
  and persistence encoded values.</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InitializeWithIndicesDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InitializeWithIndicesDataAdapter</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></td>
@@ -168,13 +165,6 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">TransientAdapterStore</a></td>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;</td>
-<td class="colLast">
-<div class="block">This extends the basic DataAdapter interface to be able to ingest data in
- addition to query for it.</div>
-</td>
 </tr>
 </tbody>
 </table>

@@ -161,11 +161,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#CUSTOM_CRSCODE">CUSTOM_CRSCODE</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#DEFAULT_SPATIAL_INDEX">DEFAULT_SPATIAL_INDEX</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#DEFAULT_SPATIAL_TEMPORAL_INDEX">DEFAULT_SPATIAL_TEMPORAL_INDEX</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -277,7 +277,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#createCustomCRSPrimaryIndex--">createCustomCRSPrimaryIndex</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
@@ -285,7 +285,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#deleteAll-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">deleteAll</a></span>(<a href="../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;dataStore)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code>protected static <a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a></code></td>
+<td class="colFirst"><code>protected static <a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#featureToQuery-org.opengis.feature.simple.SimpleFeature-">featureToQuery</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;savedFilter)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
@@ -355,7 +355,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#resourceToFeature-java.net.URL-">resourceToFeature</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;filterResource)</code>&nbsp;</td>
 </tr>
 <tr id="i21" class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#resourceToQuery-java.net.URL-">resourceToQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;filterResource)</code>&nbsp;</td>
 </tr>
 <tr id="i22" class="altColor">
@@ -537,7 +537,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>DEFAULT_SPATIAL_INDEX</h4>
-<pre>public static final&nbsp;<a href="../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a> DEFAULT_SPATIAL_INDEX</pre>
+<pre>public static final&nbsp;<a href="../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a> DEFAULT_SPATIAL_INDEX</pre>
 </li>
 </ul>
 <a name="DEFAULT_SPATIAL_TEMPORAL_INDEX">
@@ -546,7 +546,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>DEFAULT_SPATIAL_TEMPORAL_INDEX</h4>
-<pre>public static final&nbsp;<a href="../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a> DEFAULT_SPATIAL_TEMPORAL_INDEX</pre>
+<pre>public static final&nbsp;<a href="../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a> DEFAULT_SPATIAL_TEMPORAL_INDEX</pre>
 </li>
 </ul>
 <a name="CUSTOM_CRSCODE">
@@ -637,7 +637,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>createCustomCRSPrimaryIndex</h4>
-<pre>public static&nbsp;<a href="../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;createCustomCRSPrimaryIndex()</pre>
+<pre>public static&nbsp;<a href="../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;createCustomCRSPrimaryIndex()</pre>
 </li>
 </ul>
 <a name="isYarn--">
@@ -857,8 +857,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>resourceToQuery</h4>
-<pre>public static&nbsp;<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&nbsp;resourceToQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;filterResource)
-                                          throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<pre>public static&nbsp;<a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;resourceToQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;filterResource)
+                                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
@@ -885,7 +885,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>featureToQuery</h4>
-<pre>protected static&nbsp;<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&nbsp;featureToQuery(org.opengis.feature.simple.SimpleFeature&nbsp;savedFilter)</pre>
+<pre>protected static&nbsp;<a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;featureToQuery(org.opengis.feature.simple.SimpleFeature&nbsp;savedFilter)</pre>
 </li>
 </ul>
 <a name="replaceParameters-java.util.Map-java.io.File-">

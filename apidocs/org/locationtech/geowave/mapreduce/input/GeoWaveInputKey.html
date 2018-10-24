@@ -163,17 +163,17 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#GeoWaveInputKey--">GeoWaveInputKey</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#GeoWaveInputKey-org.locationtech.geowave.core.store.entities.GeoWaveKey-org.locationtech.geowave.core.index.ByteArrayId-">GeoWaveInputKey</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveKey.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key,
-               <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#GeoWaveInputKey-org.locationtech.geowave.core.store.entities.GeoWaveKey-java.lang.String-">GeoWaveInputKey</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveKey.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#GeoWaveInputKey-short-org.locationtech.geowave.core.index.ByteArrayId-">GeoWaveInputKey</a></span>(short&nbsp;internalAdapterId,
-               <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#GeoWaveInputKey-short-org.locationtech.geowave.core.index.ByteArray-">GeoWaveInputKey</a></span>(short&nbsp;internalAdapterId,
+               <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#GeoWaveInputKey-short-org.locationtech.geowave.core.store.entities.GeoWaveKey-org.locationtech.geowave.core.index.ByteArrayId-">GeoWaveInputKey</a></span>(short&nbsp;internalAdapterId,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#GeoWaveInputKey-short-org.locationtech.geowave.core.store.entities.GeoWaveKey-java.lang.String-">GeoWaveInputKey</a></span>(short&nbsp;internalAdapterId,
                <a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveKey.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key,
-               <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -199,7 +199,7 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#getDataId--">getDataId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -212,7 +212,7 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;byte[],byte[]&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#getPartitionAndSortKey-org.locationtech.geowave.core.store.index.PrimaryIndex-">getPartitionAndSortKey</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#getPartitionAndSortKey-org.locationtech.geowave.core.store.api.Index-">getPartitionAndSortKey</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -224,7 +224,7 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#setDataId-org.locationtech.geowave.core.index.ByteArrayId-">setDataId</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html#setDataId-org.locationtech.geowave.core.index.ByteArray-">setDataId</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -286,27 +286,27 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <pre>public&nbsp;GeoWaveInputKey()</pre>
 </li>
 </ul>
-<a name="GeoWaveInputKey-org.locationtech.geowave.core.store.entities.GeoWaveKey-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="GeoWaveInputKey-org.locationtech.geowave.core.store.entities.GeoWaveKey-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>GeoWaveInputKey</h4>
 <pre>public&nbsp;GeoWaveInputKey(<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveKey.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key,
-                       <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 </li>
 </ul>
-<a name="GeoWaveInputKey-short-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="GeoWaveInputKey-short-org.locationtech.geowave.core.index.ByteArray-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>GeoWaveInputKey</h4>
 <pre>public&nbsp;GeoWaveInputKey(short&nbsp;internalAdapterId,
-                       <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</pre>
+                       <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</pre>
 </li>
 </ul>
-<a name="GeoWaveInputKey-short-org.locationtech.geowave.core.store.entities.GeoWaveKey-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="GeoWaveInputKey-short-org.locationtech.geowave.core.store.entities.GeoWaveKey-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -314,7 +314,7 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <h4>GeoWaveInputKey</h4>
 <pre>public&nbsp;GeoWaveInputKey(short&nbsp;internalAdapterId,
                        <a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveKey.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key,
-                       <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 </li>
 </ul>
 </li>
@@ -325,13 +325,13 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getPartitionAndSortKey-org.locationtech.geowave.core.store.index.PrimaryIndex-">
+<a name="getPartitionAndSortKey-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getPartitionAndSortKey</h4>
-<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;byte[],byte[]&gt;&nbsp;getPartitionAndSortKey(<a href="../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;byte[],byte[]&gt;&nbsp;getPartitionAndSortKey(<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 </li>
 </ul>
 <a name="getGeoWaveKey--">
@@ -370,13 +370,13 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <pre>public&nbsp;void&nbsp;setInternalAdapterId(short&nbsp;internalAdapterId)</pre>
 </li>
 </ul>
-<a name="setDataId-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="setDataId-org.locationtech.geowave.core.index.ByteArray-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setDataId</h4>
-<pre>public&nbsp;void&nbsp;setDataId(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</pre>
+<pre>public&nbsp;void&nbsp;setDataId(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</pre>
 </li>
 </ul>
 <a name="getDataId--">
@@ -385,7 +385,7 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataId</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getDataId()</pre>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getDataId()</pre>
 </li>
 </ul>
 <a name="compareTo-org.locationtech.geowave.mapreduce.input.GeoWaveInputKey-">

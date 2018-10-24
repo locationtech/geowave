@@ -135,15 +135,7 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.query.aggregate">org.locationtech.geowave.core.store.query.aggregate</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.accumulo">org.locationtech.geowave.datastore.accumulo</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.datastore.hbase.operations">org.locationtech.geowave.datastore.hbase.operations</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -228,8 +220,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a></code></td>
-<td class="colLast"><span class="typeNameLabel">RasterTileRowTransform.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/merge/RasterTileRowTransform.html#getRowAsMergeableObject-short-org.locationtech.geowave.core.index.ByteArrayId-byte:A-">getRowAsMergeableObject</a></span>(short&nbsp;internalAdapterId,
-                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+<td class="colLast"><span class="typeNameLabel">RasterTileRowTransform.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/merge/RasterTileRowTransform.html#getRowAsMergeableObject-short-org.locationtech.geowave.core.index.ByteArray-byte:A-">getRowAsMergeableObject</a></span>(short&nbsp;internalAdapterId,
+                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;fieldId,
                        byte[]&nbsp;rowValueBinary)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -365,42 +357,34 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureBoundingBoxStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureBoundingBoxStatistics</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureCountMinSketchStatistics</a></span></code>
 <div class="block">Maintains an estimate of how may of each attribute value occurs in a set of
  data.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureFixedBinNumericStatistics</a></span></code>
 <div class="block">Fixed number of bins for a histogram.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureHyperLogLogStatistics</a></span></code>
 <div class="block">Hyperloglog provides an estimated cardinality of the number of unique values
  for an attribute.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureNumericHistogramStatistics</a></span></code>
 <div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a
  numeric attribute.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureNumericRangeStatistics</a></span></code>&nbsp;</td>
-</tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureTimeRangeStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureTimeRangeStatistics</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureNumericRangeStatistics</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -443,6 +427,14 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/FeatureBoundingBoxStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">FeatureBoundingBoxStatistics</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/FeatureTimeRangeStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">FeatureTimeRangeStatistics</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">TimeRangeDataStatistics</a>&lt;T&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
@@ -457,6 +449,10 @@
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">BoundingBoxDataStatistics.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">TimeRangeDataStatistics.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -608,11 +604,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;T&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsSet</a>&lt;T,R,S,SB extends <a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;S,SB&gt;,RB extends <a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,RB&gt;&gt;</span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsSet</a>&lt;T&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;T,R,B extends <a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,B&gt;&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -625,7 +621,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;T&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;T,R,B extends <a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,B&gt;&gt;</span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
@@ -784,54 +780,6 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="org.locationtech.geowave.core.store.query.aggregate">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a> in <a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/package-summary.html">org.locationtech.geowave.core.store.query.aggregate</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/package-summary.html">org.locationtech.geowave.core.store.query.aggregate</a> with type parameters of type <a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Interface and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>interface&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R extends <a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>,T&gt;</span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>interface&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">CommonIndexAggregation</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R extends <a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&gt;</span></code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/package-summary.html">org.locationtech.geowave.core.store.query.aggregate</a> that implement <a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountResult</a></span></code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/package-summary.html">org.locationtech.geowave.core.store.query.aggregate</a> with parameters of type <a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">CountResult.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountResult.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&nbsp;result)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="org.locationtech.geowave.datastore.accumulo">
 <!--   -->
 </a>
@@ -887,24 +835,6 @@
 <tr class="rowColor">
 <td class="colFirst"><code>protected byte[]</code></td>
 <td class="colLast"><span class="typeNameLabel">MergingCombiner.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/MergingCombiner.html#getBinary-org.locationtech.geowave.core.index.Mergeable-">getBinary</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&nbsp;mergeable)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="org.locationtech.geowave.datastore.hbase.operations">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a> in <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/package-summary.html">org.locationtech.geowave.datastore.hbase.operations</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/package-summary.html">org.locationtech.geowave.datastore.hbase.operations</a> that return <a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a></code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#aggregateServerSide-org.locationtech.geowave.core.store.operations.ReaderParams-">aggregateServerSide</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

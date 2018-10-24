@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../org/locationtech/geowave/core/index/QueryConstraints.html" title="interface in org.locationtech.geowave.core.index"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html" title="class in org.locationtech.geowave.core.index"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../org/locationtech/geowave/core/index/SinglePartitionInsertionIds.html" title="class in org.locationtech.geowave.core.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -141,10 +141,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/QueryRanges.html#QueryRanges-java.util.List-">QueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a>&gt;&nbsp;queryRangesList)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/QueryRanges.html#QueryRanges-java.util.Set-">QueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;partitionKeys)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/QueryRanges.html#QueryRanges-java.util.Set-">QueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;partitionKeys)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/QueryRanges.html#QueryRanges-java.util.Set-org.locationtech.geowave.core.index.QueryRanges-">QueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;partitionKeys,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/QueryRanges.html#QueryRanges-java.util.Set-org.locationtech.geowave.core.index.QueryRanges-">QueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;partitionKeys,
            <a href="../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a>&nbsp;queryRanges)</code>&nbsp;</td>
 </tr>
 </table>
@@ -211,7 +211,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>QueryRanges</h4>
-<pre>public&nbsp;QueryRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;partitionKeys,
+<pre>public&nbsp;QueryRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;partitionKeys,
                    <a href="../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a>&nbsp;queryRanges)</pre>
 </li>
 </ul>
@@ -248,7 +248,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>QueryRanges</h4>
-<pre>public&nbsp;QueryRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;partitionKeys)</pre>
+<pre>public&nbsp;QueryRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;partitionKeys)</pre>
 </li>
 </ul>
 </li>
@@ -314,7 +314,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../org/locationtech/geowave/core/index/QueryConstraints.html" title="interface in org.locationtech.geowave.core.index"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html" title="class in org.locationtech.geowave.core.index"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../org/locationtech/geowave/core/index/SinglePartitionInsertionIds.html" title="class in org.locationtech.geowave.core.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

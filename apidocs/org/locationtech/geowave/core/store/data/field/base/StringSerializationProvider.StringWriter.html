@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;, <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,byte[]&gt;, <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;, <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -159,14 +159,6 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/base/StringSerializationProvider.StringWriter.html#getVisibility-java.lang.Object-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String-">getVisibility</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;rowValue,
-             <a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldValue)</code>
-<div class="block">Determine visibility on a per field basis.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/base/StringSerializationProvider.StringWriter.html#writeField-java.lang.String-">writeField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldValue)</code>
 <div class="block">Serializes the entry into binary data that will be stored as the value
  for the row</div>
@@ -179,6 +171,20 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.data.field.FieldWriter">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.data.field.<a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a></h3>
+<code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html#apply-FieldType-">apply</a>, <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html#getVisibility-RowType-java.lang.String-FieldType-">getVisibility</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.java.util.function.Function">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;java.util.function.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">Function</a></h3>
+<code>andThen, compose, identity</code></li>
 </ul>
 </li>
 </ul>
@@ -214,7 +220,7 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <a name="writeField-java.lang.String-">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>writeField</h4>
 <pre>public&nbsp;byte[]&nbsp;writeField(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldValue)</pre>
@@ -228,29 +234,6 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <dd><code>fieldValue</code> - The data object to serialize</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The binary serialization of the data object</dd>
-</dl>
-</li>
-</ul>
-<a name="getVisibility-java.lang.Object-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getVisibility</h4>
-<pre>public&nbsp;byte[]&nbsp;getVisibility(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;rowValue,
-                            <a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldValue)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html#getVisibility-RowType-org.locationtech.geowave.core.index.ByteArrayId-FieldType-">FieldVisibilityHandler</a></code></span></div>
-<div class="block">Determine visibility on a per field basis.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html#getVisibility-RowType-org.locationtech.geowave.core.index.ByteArrayId-FieldType-">getVisibility</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rowValue</code> - The value for the full row.</dd>
-<dd><code>fieldId</code> - The ID of the field for which to determine visibility</dd>
-<dd><code>fieldValue</code> - The value of the field to determine visibility</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The visibility for a field</dd>
 </dl>
 </li>
 </ul>

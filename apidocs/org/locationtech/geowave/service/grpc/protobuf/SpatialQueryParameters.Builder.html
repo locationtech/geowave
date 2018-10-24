@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,7 +185,7 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#clearGeometry--">clearGeometry</a></span>()</code>
 <div class="block">
-ISO 19107 Geometry text definition</div>
+ISO 19107 Geometry binary definition (WKB)</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -227,94 +227,80 @@ ISO 19107 Geometry text definition</div>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#getDescriptorForType--">getDescriptorForType</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#getGeometry--">getGeometry</a></span>()</code>
 <div class="block">
-ISO 19107 Geometry text definition</div>
+ISO 19107 Geometry binary definition (WKB)</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
-<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#getGeometryBytes--">getGeometryBytes</a></span>()</code>
-<div class="block">
-ISO 19107 Geometry text definition</div>
-</td>
-</tr>
-<tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#hasBaseParams--">hasBaseParams</a></span>()</code>
 <div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#internalGetFieldAccessorTable--">internalGetFieldAccessorTable</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#isInitialized--">isInitialized</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#mergeBaseParams-org.locationtech.geowave.service.grpc.protobuf.VectorStoreParameters-">mergeBaseParams</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VectorStoreParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">VectorStoreParameters</a>&nbsp;value)</code>
 <div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#mergeFrom-com.google.protobuf.CodedInputStream-com.google.protobuf.ExtensionRegistryLite-">mergeFrom</a></span>(com.google.protobuf.CodedInputStream&nbsp;input,
          com.google.protobuf.ExtensionRegistryLite&nbsp;extensionRegistry)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#mergeFrom-com.google.protobuf.Message-">mergeFrom</a></span>(com.google.protobuf.Message&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#mergeFrom-org.locationtech.geowave.service.grpc.protobuf.SpatialQueryParameters-">mergeFrom</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters</a>&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#mergeUnknownFields-com.google.protobuf.UnknownFieldSet-">mergeUnknownFields</a></span>(com.google.protobuf.UnknownFieldSet&nbsp;unknownFields)</code>&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#setBaseParams-org.locationtech.geowave.service.grpc.protobuf.VectorStoreParameters.Builder-">setBaseParams</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VectorStoreParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">VectorStoreParameters.Builder</a>&nbsp;builderForValue)</code>
 <div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#setBaseParams-org.locationtech.geowave.service.grpc.protobuf.VectorStoreParameters-">setBaseParams</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VectorStoreParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">VectorStoreParameters</a>&nbsp;value)</code>
 <div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#setField-com.google.protobuf.Descriptors.FieldDescriptor-java.lang.Object-">setField</a></span>(com.google.protobuf.Descriptors.FieldDescriptor&nbsp;field,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
+<tr id="i27" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#setGeometry-com.google.protobuf.ByteString-">setGeometry</a></span>(com.google.protobuf.ByteString&nbsp;value)</code>
+<div class="block">
+ISO 19107 Geometry binary definition (WKB)</div>
+</td>
+</tr>
 <tr id="i28" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#setGeometry-java.lang.String-">setGeometry</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
-<div class="block">
-ISO 19107 Geometry text definition</div>
-</td>
-</tr>
-<tr id="i29" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#setGeometryBytes-com.google.protobuf.ByteString-">setGeometryBytes</a></span>(com.google.protobuf.ByteString&nbsp;value)</code>
-<div class="block">
-ISO 19107 Geometry text definition</div>
-</td>
-</tr>
-<tr id="i30" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#setRepeatedField-com.google.protobuf.Descriptors.FieldDescriptor-int-java.lang.Object-">setRepeatedField</a></span>(com.google.protobuf.Descriptors.FieldDescriptor&nbsp;field,
                 int&nbsp;index,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html#setUnknownFields-com.google.protobuf.UnknownFieldSet-">setUnknownFields</a></span>(com.google.protobuf.UnknownFieldSet&nbsp;unknownFields)</code>&nbsp;</td>
 </tr>
@@ -730,48 +716,30 @@ ISO 19107 Geometry text definition</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>getGeometry</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getGeometry()</pre>
+<pre>public&nbsp;com.google.protobuf.ByteString&nbsp;getGeometry()</pre>
 <div class="block"><pre>
-ISO 19107 Geometry text definition
+ISO 19107 Geometry binary definition (WKB)
  </pre>
 
- <code>string geometry = 2;</code></div>
+ <code>bytes geometry = 2;</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParametersOrBuilder.html#getGeometry--">getGeometry</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParametersOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParametersOrBuilder</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="getGeometryBytes--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getGeometryBytes</h4>
-<pre>public&nbsp;com.google.protobuf.ByteString&nbsp;getGeometryBytes()</pre>
-<div class="block"><pre>
-ISO 19107 Geometry text definition
- </pre>
-
- <code>string geometry = 2;</code></div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParametersOrBuilder.html#getGeometryBytes--">getGeometryBytes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParametersOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParametersOrBuilder</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="setGeometry-java.lang.String-">
+<a name="setGeometry-com.google.protobuf.ByteString-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setGeometry</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a>&nbsp;setGeometry(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a>&nbsp;setGeometry(com.google.protobuf.ByteString&nbsp;value)</pre>
 <div class="block"><pre>
-ISO 19107 Geometry text definition
+ISO 19107 Geometry binary definition (WKB)
  </pre>
 
- <code>string geometry = 2;</code></div>
+ <code>bytes geometry = 2;</code></div>
 </li>
 </ul>
 <a name="clearGeometry--">
@@ -782,24 +750,10 @@ ISO 19107 Geometry text definition
 <h4>clearGeometry</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a>&nbsp;clearGeometry()</pre>
 <div class="block"><pre>
-ISO 19107 Geometry text definition
+ISO 19107 Geometry binary definition (WKB)
  </pre>
 
- <code>string geometry = 2;</code></div>
-</li>
-</ul>
-<a name="setGeometryBytes-com.google.protobuf.ByteString-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setGeometryBytes</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialQueryParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialQueryParameters.Builder</a>&nbsp;setGeometryBytes(com.google.protobuf.ByteString&nbsp;value)</pre>
-<div class="block"><pre>
-ISO 19107 Geometry text definition
- </pre>
-
- <code>string geometry = 2;</code></div>
+ <code>bytes geometry = 2;</code></div>
 </li>
 </ul>
 <a name="setUnknownFields-com.google.protobuf.UnknownFieldSet-">

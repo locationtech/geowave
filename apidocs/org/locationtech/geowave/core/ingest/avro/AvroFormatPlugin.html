@@ -106,7 +106,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroPluginBase</a>&lt;I&gt;, <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroSchemaProvider</a>, <a href="../../../../../../org/locationtech/geowave/core/ingest/index/IndexProvider.html" title="interface in org.locationtech.geowave.core.ingest.index">IndexProvider</a>, <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalPluginBase</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroPluginBase</a>&lt;I&gt;, <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroSchemaProvider</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -115,7 +115,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">AvroFormatPlugin&lt;I,O&gt;</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroPluginBase</a>&lt;I&gt;, <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalPluginBase</a>, <a href="../../../../../../org/locationtech/geowave/core/ingest/index/IndexProvider.html" title="interface in org.locationtech.geowave.core.ingest.index">IndexProvider</a></pre>
+extends <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroPluginBase</a>&lt;I&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a></pre>
 <div class="block">This is the main plugin interface for reading from a local file system, and
  formatting intermediate data (for example, to HDFS or to Kafka for further
  processing or ingest) from any file that is supported to Avro.</div>
@@ -138,7 +138,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/Avr
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="type parameter in AvroFormatPlugin">I</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="type parameter in AvroFormatPlugin">O</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="type parameter in AvroFormatPlugin">I</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="type parameter in AvroFormatPlugin">O</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html#getIngestWithAvroPlugin--">getIngestWithAvroPlugin</a></span>()</code>
 <div class="block">An implementation of ingestion that ingests Avro Java objects into
  GeoWave</div>
@@ -160,18 +160,18 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/Avr
 <code><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html#getAvroSchema--">getAvroSchema</a></code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.ingest.local.LocalPluginBase">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.ingest.LocalPluginBase">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.ingest.local.<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalPluginBase</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginBase.html#getFileExtensionFilters--">getFileExtensionFilters</a>, <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginBase.html#init-java.net.URL-">init</a>, <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.net.URL-">supportsFile</a></code></li>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html#getFileExtensionFilters--">getFileExtensionFilters</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html#init-java.net.URL-">init</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html#supportsFile-java.net.URL-">supportsFile</a></code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.ingest.index.IndexProvider">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.ingest.IndexProvider">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.ingest.index.<a href="../../../../../../org/locationtech/geowave/core/ingest/index/IndexProvider.html" title="interface in org.locationtech.geowave.core.ingest.index">IndexProvider</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/ingest/index/IndexProvider.html#getRequiredIndices--">getRequiredIndices</a></code></li>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html#getRequiredIndices--">getRequiredIndices</a></code></li>
 </ul>
 </li>
 </ul>
@@ -193,7 +193,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/Avr
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getIngestWithAvroPlugin</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="type parameter in AvroFormatPlugin">I</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="type parameter in AvroFormatPlugin">O</a>&gt;&nbsp;getIngestWithAvroPlugin()</pre>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="type parameter in AvroFormatPlugin">I</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="type parameter in AvroFormatPlugin">O</a>&gt;&nbsp;getIngestWithAvroPlugin()</pre>
 <div class="block">An implementation of ingestion that ingests Avro Java objects into
  GeoWave</div>
 <dl>

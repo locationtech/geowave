@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":9,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":9,"i31":10,"i32":10,"i33":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":9,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":9,"i30":10,"i31":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexDependentDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterTile.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterTile</a>&lt;?&gt;&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html" title="interface in org.locationtech.geowave.core.store.data">DataReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="interface in org.locationtech.geowave.core.store.data">DataWriter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../org/locationtech/geowave/mapreduce/HadoopDataAdapter.html" title="interface in org.locationtech.geowave.mapreduce">HadoopDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/GridCoverageWritable.html" title="class in org.locationtech.geowave.adapter.raster.adapter">GridCoverageWritable</a>&gt;</dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexDependentDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterTile.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterTile</a>&lt;?&gt;&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html" title="interface in org.locationtech.geowave.core.store.data">DataReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="interface in org.locationtech.geowave.core.store.data">DataWriter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../org/locationtech/geowave/mapreduce/HadoopDataAdapter.html" title="interface in org.locationtech.geowave.mapreduce">HadoopDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/GridCoverageWritable.html" title="class in org.locationtech.geowave.adapter.raster.adapter">GridCoverageWritable</a>&gt;</dd>
 </dl>
 <hr>
 <br>
@@ -285,12 +285,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#convertToIndex-org.locationtech.geowave.core.store.index.PrimaryIndex-org.opengis.coverage.grid.GridCoverage-">convertToIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#convertToIndex-org.locationtech.geowave.core.store.api.Index-org.opengis.coverage.grid.GridCoverage-">convertToIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
               org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#createDataStatistics-org.locationtech.geowave.core.index.ByteArrayId-">createDataStatistics</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsType)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage,?,?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#createDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">createDataStatistics</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in org.locationtech.geowave.mapreduce">HadoopWritableSerializer</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/GridCoverageWritable.html" title="class in org.locationtech.geowave.adapter.raster.adapter">GridCoverageWritable</a>&gt;</code></td>
@@ -298,13 +298,17 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.GridCoverage</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.index.PrimaryIndex-">decode</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
-      <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.api.Index-">decode</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
+      <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
+<div class="block">Decode GeoWave persistence payload into the entry</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">AdapterPersistenceEncoding</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#encode-org.opengis.coverage.grid.GridCoverage-org.locationtech.geowave.core.store.index.CommonIndexModel-">encode</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;entry,
-      <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</code>&nbsp;</td>
+      <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</code>
+<div class="block">Encode the entry into the GeoWave persistence encoding payload</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -313,128 +317,126 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getAdapterId--">getAdapterId</a></span>()</code>
-<div class="block">Return the adapter ID</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ColorModel.html?is-external=true" title="class or interface in java.awt.image">ColorModel</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getColorModel--">getColorModel</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected static byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getColorModelBinary-java.awt.image.ColorModel-">getColorModelBinary</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ColorModel.html?is-external=true" title="class or interface in java.awt.image">ColorModel</a>&nbsp;colorModel)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getConfiguredOptions-short-">getConfiguredOptions</a></span>(short&nbsp;internalAdapterId)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.GridCoverage</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getCoverageFromRasterTile-org.locationtech.geowave.adapter.raster.adapter.RasterTile-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.index.PrimaryIndex-">getCoverageFromRasterTile</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterTile.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
-                         <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
-                         <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;sortKey,
-                         <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getCoverageFromRasterTile-org.locationtech.geowave.adapter.raster.adapter.RasterTile-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.api.Index-">getCoverageFromRasterTile</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterTile.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
+                         <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
+                         <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey,
+                         <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getCoverageName--">getCoverageName</a></span>()</code>&nbsp;</td>
 </tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getDataId-org.opengis.coverage.grid.GridCoverage-">getDataId</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</code>
+<div class="block">Get a data ID for the entry</div>
+</td>
+</tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getDataId-org.opengis.coverage.grid.GridCoverage-">getDataId</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getFieldNameForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">getFieldNameForPosition</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                       int&nbsp;position)</code>
+<div class="block">Get the field name for the position</div>
+</td>
 </tr>
 <tr id="i13" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getFieldIdForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">getFieldIdForPosition</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
-                     int&nbsp;position)</code>&nbsp;</td>
-</tr>
-<tr id="i14" class="altColor">
 <td class="colFirst"><code>javax.media.jai.Interpolation</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getInterpolation--">getInterpolation</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getMetadata--">getMetadata</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>protected static byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getNoDataBinary-double:A:A-">getNoDataBinary</a></span>(double[][]&nbsp;noDataValuesPerBand)</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getNoDataValuesPerBand--">getNoDataValuesPerBand</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getOptions-short-java.util.Map-">getOptions</a></span>(short&nbsp;internalAdapterId,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;existingOptions)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.index.ByteArrayId-">getPositionOfOrderedField</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
-                         <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">getPositionOfOrderedField</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
+<div class="block">for efficiency we assume fields have some pre-defined ordering.</div>
+</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/Raster.html?is-external=true" title="class or interface in java.awt.image">Raster</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getRaster-org.opengis.coverage.grid.GridCoverage-">getRaster</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</code>&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/ClientMergeableRasterTile.html" title="class in org.locationtech.geowave.adapter.raster.adapter">ClientMergeableRasterTile</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getRasterTileFromCoverage-org.opengis.coverage.grid.GridCoverage-">getRasterTileFromCoverage</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getReader-java.lang.String-">getReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Get a reader for an individual field.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/SampleModel.html?is-external=true" title="class or interface in java.awt.image">SampleModel</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getSampleModel--">getSampleModel</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getSupportedStatisticsTypes--">getSupportedStatisticsTypes</a></span>()</code>&nbsp;</td>
+<tr id="i23" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getSupportedStatistics--">getSupportedStatistics</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getTileSize--">getTileSize</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterTile.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterTile</a>&lt;?&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getTransform--">getTransform</a></span>()</code>&nbsp;</td>
 </tr>
+<tr id="i26" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getTypeName--">getTypeName</a></span>()</code>
+<div class="block">Return the data adapter's type name.</div>
+</td>
+</tr>
 <tr id="i27" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/EntryVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.adapter.DataAdapter-org.locationtech.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-                    <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;adapter,
-                    <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">getVisibilityHandler</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                    <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;adapter,
+                    <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getWriter-org.locationtech.geowave.core.index.ByteArrayId-">getWriter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getWriter-java.lang.String-">getWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Get a writer for an individual field given the ID.</div>
 </td>
 </tr>
 <tr id="i29" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#init-org.locationtech.geowave.core.store.index.PrimaryIndex...-">init</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)</code>&nbsp;</td>
-</tr>
-<tr id="i30" class="altColor">
 <td class="colFirst"><code>protected static byte</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#interpolationToByte-javax.media.jai.Interpolation-">interpolationToByte</a></span>(javax.media.jai.Interpolation&nbsp;interpolation)</code>&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#isEqualizeHistogram--">isEqualizeHistogram</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i32" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#isSupported-org.opengis.coverage.grid.GridCoverage-">isSupported</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</code>&nbsp;</td>
-</tr>
-<tr id="i33" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission
@@ -686,47 +688,36 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="convertToIndex-org.locationtech.geowave.core.store.index.PrimaryIndex-org.opengis.coverage.grid.GridCoverage-">
+<a name="convertToIndex-org.locationtech.geowave.core.store.api.Index-org.opengis.coverage.grid.GridCoverage-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>convertToIndex</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;convertToIndex(<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;convertToIndex(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                                                                        org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexDependentDataAdapter.html#convertToIndex-org.locationtech.geowave.core.store.index.PrimaryIndex-T-">convertToIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexDependentDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexDependentDataAdapter.html#convertToIndex-org.locationtech.geowave.core.store.api.Index-T-">convertToIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexDependentDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 </dl>
 </li>
 </ul>
-<a name="getAdapterId--">
+<a name="getTypeName--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getAdapterId</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getAdapterId()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html#getAdapterId--">DataAdapter</a></code></span></div>
-<div class="block">Return the adapter ID</div>
+<h4>getTypeName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getTypeName()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getTypeName--">DataTypeAdapter</a></code></span></div>
+<div class="block">Return the data adapter's type name. This also must be unique within a
+ datastore.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html#getAdapterId--">getAdapterId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getTypeName--">getTypeName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a unique identifier for this adapter</dd>
-</dl>
-</li>
-</ul>
-<a name="isSupported-org.opengis.coverage.grid.GridCoverage-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isSupported</h4>
-<pre>public&nbsp;boolean&nbsp;isSupported(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html#isSupported-T-">isSupported</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd>the type name which serves as a unique identifier for this
+         adapter</dd>
 </dl>
 </li>
 </ul>
@@ -736,37 +727,50 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataId</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getDataId(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getDataId(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getDataId-T-">DataTypeAdapter</a></code></span></div>
+<div class="block">Get a data ID for the entry</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html#getDataId-T-">getDataId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getDataId-T-">getDataId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entry</code> - the entry</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the data ID</dd>
 </dl>
 </li>
 </ul>
-<a name="decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.index.PrimaryIndex-">
+<a name="decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>decode</h4>
 <pre>public&nbsp;org.opengis.coverage.grid.GridCoverage&nbsp;decode(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;data,
-                                                     <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+                                                     <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.api.Index-">DataTypeAdapter</a></code></span></div>
+<div class="block">Decode GeoWave persistence payload into the entry</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.index.PrimaryIndex-">decode</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#decode-org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding-org.locationtech.geowave.core.store.api.Index-">decode</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>data</code> - the persistence payload</dd>
+<dd><code>index</code> - the index this is coming from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the entry</dd>
 </dl>
 </li>
 </ul>
-<a name="getCoverageFromRasterTile-org.locationtech.geowave.adapter.raster.adapter.RasterTile-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.store.index.PrimaryIndex-">
+<a name="getCoverageFromRasterTile-org.locationtech.geowave.adapter.raster.adapter.RasterTile-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getCoverageFromRasterTile</h4>
 <pre>public&nbsp;org.opengis.coverage.grid.GridCoverage&nbsp;getCoverageFromRasterTile(<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterTile.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
-                                                                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
-                                                                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;sortKey,
-                                                                        <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+                                                                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
+                                                                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey,
+                                                                        <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 </li>
 </ul>
 <a name="getRasterTileFromCoverage-org.opengis.coverage.grid.GridCoverage-">
@@ -795,28 +799,35 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <h4>encode</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">AdapterPersistenceEncoding</a>&nbsp;encode(org.opengis.coverage.grid.GridCoverage&nbsp;entry,
                                          <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#encode-T-org.locationtech.geowave.core.store.index.CommonIndexModel-">DataTypeAdapter</a></code></span></div>
+<div class="block">Encode the entry into the GeoWave persistence encoding payload</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html#encode-T-org.locationtech.geowave.core.store.index.CommonIndexModel-">encode</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#encode-T-org.locationtech.geowave.core.store.index.CommonIndexModel-">encode</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entry</code> - the entry</dd>
+<dd><code>indexModel</code> - the index model this is going into</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the persistence encoding payload representing this entry</dd>
 </dl>
 </li>
 </ul>
-<a name="getReader-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getReader-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getReader</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getReader(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">DataReader</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html#getReader-java.lang.String-">DataReader</a></code></span></div>
 <div class="block">Get a reader for an individual field.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html" title="interface in org.locationtech.geowave.core.store.data">DataReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html#getReader-java.lang.String-">getReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html" title="interface in org.locationtech.geowave.core.store.data">DataReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fieldId</code> - the ID of the field</dd>
+<dd><code>fieldName</code> - the ID of the field</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the FieldReader for the given ID</dd>
+<dd>the FieldReader for the given field Name (ID)</dd>
 </dl>
 </li>
 </ul>
@@ -881,48 +892,48 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 </dl>
 </li>
 </ul>
-<a name="getWriter-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getWriter-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getWriter</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getWriter(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html#getWriter-org.locationtech.geowave.core.index.ByteArrayId-">DataWriter</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html#getWriter-java.lang.String-">DataWriter</a></code></span></div>
 <div class="block">Get a writer for an individual field given the ID.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html#getWriter-org.locationtech.geowave.core.index.ByteArrayId-">getWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="interface in org.locationtech.geowave.core.store.data">DataWriter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html#getWriter-java.lang.String-">getWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="interface in org.locationtech.geowave.core.store.data">DataWriter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fieldId</code> - the unique field ID</dd>
+<dd><code>fieldName</code> - the unique field ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the writer for the given field</dd>
 </dl>
 </li>
 </ul>
-<a name="getSupportedStatisticsTypes--">
+<a name="getSupportedStatistics--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSupportedStatisticsTypes</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>[]&nbsp;getSupportedStatisticsTypes()</pre>
+<h4>getSupportedStatistics</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>[]&nbsp;getSupportedStatistics()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#getSupportedStatisticsTypes--">getSupportedStatisticsTypes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#getSupportedStatistics--">getSupportedStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 </dl>
 </li>
 </ul>
-<a name="createDataStatistics-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="createDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createDataStatistics</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;createDataStatistics(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsType)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage,?,?&gt;&nbsp;createDataStatistics(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#createDataStatistics-org.locationtech.geowave.core.index.ByteArrayId-">createDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#createDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">createDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -1047,59 +1058,63 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 </dl>
 </li>
 </ul>
-<a name="getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getPositionOfOrderedField</h4>
 <pre>public&nbsp;int&nbsp;getPositionOfOrderedField(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
-                                     <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">DataTypeAdapter</a></code></span></div>
+<div class="block">for efficiency we assume fields have some pre-defined ordering. If the
+ field belongs in the common index model it should be one of the first n
+ positions where n is the number of fields in the common index model.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.index.ByteArrayId-">getPositionOfOrderedField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">getPositionOfOrderedField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>model</code> - the index model</dd>
+<dd><code>fieldName</code> - the field name</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the position</dd>
 </dl>
 </li>
 </ul>
-<a name="getFieldIdForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">
+<a name="getFieldNameForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getFieldIdForPosition</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getFieldIdForPosition(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
-                                         int&nbsp;position)</pre>
+<h4>getFieldNameForPosition</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFieldNameForPosition(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                                      int&nbsp;position)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getFieldNameForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">DataTypeAdapter</a></code></span></div>
+<div class="block">Get the field name for the position</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html#getFieldIdForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">getFieldIdForPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getFieldNameForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">getFieldNameForPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>model</code> - the index model</dd>
+<dd><code>position</code> - the position</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the field name, if its part of the common index model, it should
+         be the common field name</dd>
 </dl>
 </li>
 </ul>
-<a name="init-org.locationtech.geowave.core.store.index.PrimaryIndex...-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>init</h4>
-<pre>public&nbsp;void&nbsp;init(<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html#init-org.locationtech.geowave.core.store.index.PrimaryIndex...-">init</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
-</dl>
-</li>
-</ul>
-<a name="getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.adapter.DataAdapter-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getVisibilityHandler</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/EntryVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;getVisibilityHandler(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-                                                                                           <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;adapter,
-                                                                                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
+                                                                                           <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;adapter,
+                                                                                           <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.adapter.DataAdapter-org.locationtech.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">getVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 </dl>
 </li>
 </ul>

@@ -93,7 +93,7 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">org.locationtech.geowave.core.store.adapter</div>
-<h2 title="Interface AdapterStore" class="title">Interface AdapterStore&lt;K,V extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</h2>
+<h2 title="Interface AdapterStore" class="title">Interface AdapterStore&lt;K,V extends <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="typeNameLabel">AdapterStore&lt;K,V extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</span></pre>
+<pre>public interface <span class="typeNameLabel">AdapterStore&lt;K,V extends <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&gt;</span></pre>
 <div class="block">This is responsible for persisting data adapters (either in memory or to disk
  depending on the implementation).</div>
 </li>
@@ -132,7 +132,7 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html#adapterExists-K-">adapterExists</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">K</a>&nbsp;internalAdapterId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html#adapterExists-K-">adapterExists</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">K</a>&nbsp;adapterId)</code>
 <div class="block">Check for the existence of the adapter with the given unique ID</div>
 </td>
 </tr>
@@ -144,7 +144,7 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">V</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html#getAdapter-K-">getAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">K</a>&nbsp;internalAdapterId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html#getAdapter-K-">getAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">K</a>&nbsp;adapterId)</code>
 <div class="block">Get an adapter from the store by its unique ID</div>
 </td>
 </tr>
@@ -177,7 +177,7 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="addAdapter-org.locationtech.geowave.core.store.adapter.DataAdapter-">
+<a name="addAdapter-org.locationtech.geowave.core.store.api.DataTypeAdapter-">
 <!--   -->
 </a><a name="addAdapter-V-">
 <!--   -->
@@ -201,7 +201,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdapter</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">V</a>&nbsp;getAdapter(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">K</a>&nbsp;internalAdapterId)</pre>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">V</a>&nbsp;getAdapter(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">K</a>&nbsp;adapterId)</pre>
 <div class="block">Get an adapter from the store by its unique ID</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -219,7 +219,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>adapterExists</h4>
-<pre>boolean&nbsp;adapterExists(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">K</a>&nbsp;internalAdapterId)</pre>
+<pre>boolean&nbsp;adapterExists(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="type parameter in AdapterStore">K</a>&nbsp;adapterId)</pre>
 <div class="block">Check for the existence of the adapter with the given unique ID</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

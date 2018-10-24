@@ -210,16 +210,16 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#createIndex-org.locationtech.geowave.core.geotime.ingest.SpatialOptions-">createIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&nbsp;options)</code>
+<div class="block">This will return the primary index that match the options</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#createOptions--">createOptions</a></span>()</code>
 <div class="block">These are options specific to the type of index being exposed by this SPI
  plugin.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#createPrimaryIndex-org.locationtech.geowave.core.geotime.ingest.SpatialOptions-">createPrimaryIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&nbsp;options)</code>
-<div class="block">This will return the primary index that match the options</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -257,11 +257,11 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#isSpatial-org.locationtech.geowave.core.index.NumericIndexStrategy-">isSpatial</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#isSpatial-org.locationtech.geowave.core.store.api.Index-">isSpatial</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#isSpatial-org.locationtech.geowave.core.store.index.PrimaryIndex-">isSpatial</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#isSpatial-org.locationtech.geowave.core.index.NumericIndexStrategy-">isSpatial</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -451,18 +451,18 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 </dl>
 </li>
 </ul>
-<a name="createPrimaryIndex-org.locationtech.geowave.core.geotime.ingest.SpatialOptions-">
+<a name="createIndex-org.locationtech.geowave.core.geotime.ingest.SpatialOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>createPrimaryIndex</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;createPrimaryIndex(<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&nbsp;options)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createPrimaryIndex-T-">DimensionalityTypeProviderSpi</a></code></span></div>
+<h4>createIndex</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;createIndex(<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&nbsp;options)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createIndex-T-">DimensionalityTypeProviderSpi</a></code></span></div>
 <div class="block">This will return the primary index that match the options</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createPrimaryIndex-T-">createPrimaryIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in org.locationtech.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createIndex-T-">createIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in org.locationtech.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the primary index</dd>
 </dl>
@@ -495,13 +495,13 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 </dl>
 </li>
 </ul>
-<a name="isSpatial-org.locationtech.geowave.core.store.index.PrimaryIndex-">
+<a name="isSpatial-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>isSpatial</h4>
-<pre>public static&nbsp;boolean&nbsp;isSpatial(<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+<pre>public static&nbsp;boolean&nbsp;isSpatial(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 </li>
 </ul>
 <a name="isSpatial-org.locationtech.geowave.core.index.NumericIndexStrategy-">

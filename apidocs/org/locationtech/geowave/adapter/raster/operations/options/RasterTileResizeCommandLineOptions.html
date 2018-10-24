@@ -139,7 +139,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort,
                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jobTrackerOrResourceManHostPort,
                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;outputTileSize,
-                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId)</code>&nbsp;</td>
+                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -162,7 +162,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html#getIndexId--">getIndexId</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html#getIndexName--">getIndexName</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
@@ -194,7 +194,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html#setIndexId-java.lang.String-">setIndexId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html#setIndexName-java.lang.String-">setIndexName</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -264,7 +264,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort,
                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jobTrackerOrResourceManHostPort,
                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;outputTileSize,
-                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId)</pre>
+                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 </li>
 </ul>
 </li>
@@ -338,13 +338,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;getOutputTileSize()</pre>
 </li>
 </ul>
-<a name="getIndexId--">
+<a name="getIndexName--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getIndexId</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getIndexId()</pre>
+<h4>getIndexName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getIndexName()</pre>
 </li>
 </ul>
 <a name="setInputCoverageName-java.lang.String-">
@@ -410,13 +410,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;void&nbsp;setOutputTileSize(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;outputTileSize)</pre>
 </li>
 </ul>
-<a name="setIndexId-java.lang.String-">
+<a name="setIndexName-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>setIndexId</h4>
-<pre>public&nbsp;void&nbsp;setIndexId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId)</pre>
+<h4>setIndexName</h4>
+<pre>public&nbsp;void&nbsp;setIndexName(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 </li>
 </ul>
 </li>

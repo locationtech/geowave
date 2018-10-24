@@ -83,39 +83,39 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.adapter.raster.adapter">org.locationtech.geowave.adapter.raster.adapter</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.index">org.locationtech.geowave.core.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.index.sfc.tiered">org.locationtech.geowave.core.index.sfc.tiered</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.index.sfc.xz">org.locationtech.geowave.core.index.sfc.xz</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.index.simple">org.locationtech.geowave.core.index.simple</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.index">org.locationtech.geowave.core.store.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.index.numeric">org.locationtech.geowave.core.store.index.numeric</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.index.temporal">org.locationtech.geowave.core.store.index.temporal</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.index.text">org.locationtech.geowave.core.store.index.text</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.util">org.locationtech.geowave.core.store.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -123,28 +123,6 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
-<li class="blockList"><a name="org.locationtech.geowave.adapter.raster.adapter">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a> in <a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/package-summary.html">org.locationtech.geowave.adapter.raster.adapter</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/package-summary.html">org.locationtech.geowave.adapter.raster.adapter</a> that implement <a href="../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/CompoundHierarchicalIndexStrategyWrapper.html" title="class in org.locationtech.geowave.adapter.raster.adapter">CompoundHierarchicalIndexStrategyWrapper</a></span></code>
-<div class="block">This class wraps the first occurrence of a hierarchical index within a
- compound index such that sub strategies within the hierarchy are replaced
- maintaining the rest of the structure of the compound index</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="org.locationtech.geowave.core.index">
 <!--   -->
 </a>
@@ -318,8 +296,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="type parameter in Index">QueryRangeType</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="type parameter in Index">EntryRangeType</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">Index.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="type parameter in SecondaryIndex">QueryRangeType</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="type parameter in SecondaryIndex">EntryRangeType</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SecondaryIndex.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -330,8 +308,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html#IndexMetaDataSet-short-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.SortedIndexStrategy-">IndexMetaDataSet</a></span>(short&nbsp;internalDataAdapterId,
-                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html#IndexMetaDataSet-short-java.lang.String-org.locationtech.geowave.core.index.SortedIndexStrategy-">IndexMetaDataSet</a></span>(short&nbsp;internalDataAdapterId,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
                 <a href="../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;?,?&gt;&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -387,6 +365,28 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/text/TextIndexStrategy.html" title="class in org.locationtech.geowave.core.store.index.text">TextIndexStrategy</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.store.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a> in <a href="../../../../../../org/locationtech/geowave/core/store/util/package-summary.html">org.locationtech.geowave.core.store.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/core/store/util/package-summary.html">org.locationtech.geowave.core.store.util</a> that implement <a href="../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/CompoundHierarchicalIndexStrategyWrapper.html" title="class in org.locationtech.geowave.core.store.util">CompoundHierarchicalIndexStrategyWrapper</a></span></code>
+<div class="block">This class wraps the first occurrence of a hierarchical index within a
+ compound index such that sub strategies within the hierarchy are replaced
+ maintaining the rest of the structure of the compound index</div>
+</td>
 </tr>
 </tbody>
 </table>

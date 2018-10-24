@@ -148,19 +148,19 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static long</code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#getEntries-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-">getEntries</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a>&nbsp;dataStore,
+<td class="colLast"><span class="typeNameLabel">AccumuloUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#getEntries-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-">getEntries</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a>&nbsp;dataStore,
           org.apache.accumulo.core.client.Connector&nbsp;connector,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-          <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>
+          <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
 <div class="block">* Get number of entries per index.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByQuantile-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-int-">setSplitsByQuantile</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a>&nbsp;dataStore,
+<td class="colLast"><span class="typeNameLabel">AccumuloUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByQuantile-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-int-">setSplitsByQuantile</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a>&nbsp;dataStore,
                    org.apache.accumulo.core.client.Connector&nbsp;connector,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                   <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                   <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                    int&nbsp;quantile)</code>
 <div class="block">Set splits on a table based on quantile distribution and fixed number of
  splits</div>

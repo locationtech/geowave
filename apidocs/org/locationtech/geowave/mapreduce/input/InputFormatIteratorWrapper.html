@@ -144,11 +144,11 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#InputFormatIteratorWrapper-org.locationtech.geowave.core.store.operations.Reader-org.locationtech.geowave.core.store.filter.QueryFilter-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.index.PrimaryIndex-boolean-">InputFormatIteratorWrapper</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/operations/Reader.html" title="interface in org.locationtech.geowave.core.store.operations">Reader</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
-                          <a href="../../../../../org/locationtech/geowave/core/store/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">QueryFilter</a>&nbsp;queryFilter,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#InputFormatIteratorWrapper-org.locationtech.geowave.core.store.operations.RowReader-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.api.Index-boolean-">InputFormatIteratorWrapper</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
+                          <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;queryFilter,
                           <a href="../../../../../org/locationtech/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore,
                           <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
-                          <a href="../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                          <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                           boolean&nbsp;isOutputWritable)</code>&nbsp;</td>
 </tr>
 </table>
@@ -207,17 +207,17 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="InputFormatIteratorWrapper-org.locationtech.geowave.core.store.operations.Reader-org.locationtech.geowave.core.store.filter.QueryFilter-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.index.PrimaryIndex-boolean-">
+<a name="InputFormatIteratorWrapper-org.locationtech.geowave.core.store.operations.RowReader-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.api.Index-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>InputFormatIteratorWrapper</h4>
-<pre>public&nbsp;InputFormatIteratorWrapper(<a href="../../../../../org/locationtech/geowave/core/store/operations/Reader.html" title="interface in org.locationtech.geowave.core.store.operations">Reader</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
-                                  <a href="../../../../../org/locationtech/geowave/core/store/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">QueryFilter</a>&nbsp;queryFilter,
+<pre>public&nbsp;InputFormatIteratorWrapper(<a href="../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
+                                  <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;queryFilter,
                                   <a href="../../../../../org/locationtech/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore,
                                   <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
-                                  <a href="../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                  <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                                   boolean&nbsp;isOutputWritable)</pre>
 </li>
 </ul>

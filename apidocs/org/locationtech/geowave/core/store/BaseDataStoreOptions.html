@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -148,27 +148,15 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#createTable">createTable</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#enableBlockCache">enableBlockCache</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#enableServerSideLibrary">enableServerSideLibrary</a></span></code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#persistAdapter">persistAdapter</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#enableServerSideLibrary">enableServerSideLibrary</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#persistDataStatistics">persistDataStatistics</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#persistIndex">persistIndex</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -220,57 +208,33 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isCreateTable--">isCreateTable</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isEnableBlockCache--">isEnableBlockCache</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isEnableBlockCache--">isEnableBlockCache</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isPersistDataStatistics--">isPersistDataStatistics</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isPersistAdapter--">isPersistAdapter</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isPersistDataStatistics--">isPersistDataStatistics</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isPersistIndex--">isPersistIndex</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setAggregationMaxRangeDecomposition-int-">setAggregationMaxRangeDecomposition</a></span>(int&nbsp;aggregationMaxRangeDecomposition)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setCreateTable-boolean-">setCreateTable</a></span>(boolean&nbsp;createTable)</code>&nbsp;</td>
-</tr>
-<tr id="i12" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setEnableBlockCache-boolean-">setEnableBlockCache</a></span>(boolean&nbsp;enableBlockCache)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setMaxRangeDecomposition-int-">setMaxRangeDecomposition</a></span>(int&nbsp;maxRangeDecomposition)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setPersistAdapter-boolean-">setPersistAdapter</a></span>(boolean&nbsp;persistAdapter)</code>&nbsp;</td>
-</tr>
-<tr id="i15" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setPersistDataStatistics-boolean-">setPersistDataStatistics</a></span>(boolean&nbsp;persistDataStatistics)</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setPersistIndex-boolean-">setPersistIndex</a></span>(boolean&nbsp;persistIndex)</code>&nbsp;</td>
-</tr>
-<tr id="i17" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setServerSideLibraryEnabled-boolean-">setServerSideLibraryEnabled</a></span>(boolean&nbsp;enableServerSideLibrary)</code>&nbsp;</td>
 </tr>
@@ -296,24 +260,6 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="persistAdapter">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>persistAdapter</h4>
-<pre>protected&nbsp;boolean persistAdapter</pre>
-</li>
-</ul>
-<a name="persistIndex">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>persistIndex</h4>
-<pre>protected&nbsp;boolean persistIndex</pre>
-</li>
-</ul>
 <a name="persistDataStatistics">
 <!--   -->
 </a>
@@ -321,15 +267,6 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 <li class="blockList">
 <h4>persistDataStatistics</h4>
 <pre>protected&nbsp;boolean persistDataStatistics</pre>
-</li>
-</ul>
-<a name="createTable">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createTable</h4>
-<pre>protected&nbsp;boolean createTable</pre>
 </li>
 </ul>
 <a name="enableBlockCache">
@@ -413,72 +350,6 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 <li class="blockList">
 <h4>setPersistDataStatistics</h4>
 <pre>public&nbsp;void&nbsp;setPersistDataStatistics(boolean&nbsp;persistDataStatistics)</pre>
-</li>
-</ul>
-<a name="isPersistAdapter--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isPersistAdapter</h4>
-<pre>public&nbsp;boolean&nbsp;isPersistAdapter()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html#isPersistAdapter--">isPersistAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="setPersistAdapter-boolean-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPersistAdapter</h4>
-<pre>public&nbsp;void&nbsp;setPersistAdapter(boolean&nbsp;persistAdapter)</pre>
-</li>
-</ul>
-<a name="isPersistIndex--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isPersistIndex</h4>
-<pre>public&nbsp;boolean&nbsp;isPersistIndex()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html#isPersistIndex--">isPersistIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="setPersistIndex-boolean-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPersistIndex</h4>
-<pre>public&nbsp;void&nbsp;setPersistIndex(boolean&nbsp;persistIndex)</pre>
-</li>
-</ul>
-<a name="isCreateTable--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isCreateTable</h4>
-<pre>public&nbsp;boolean&nbsp;isCreateTable()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html#isCreateTable--">isCreateTable</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="setCreateTable-boolean-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setCreateTable</h4>
-<pre>public&nbsp;void&nbsp;setCreateTable(boolean&nbsp;createTable)</pre>
 </li>
 </ul>
 <a name="isEnableBlockCache--">

@@ -205,7 +205,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/nn/NNProcessor.html#partitioner">partitioner</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/nn/NNProcessor.html#startingPoint">startingPoint</a></span></code>
 <div class="block">Run State</div>
 </td>
@@ -252,7 +252,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/nn/NNProcessor.html#add-org.locationtech.geowave.core.index.ByteArrayId-boolean-PARTITION_VALUE-">add</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/nn/NNProcessor.html#add-org.locationtech.geowave.core.index.ByteArray-boolean-PARTITION_VALUE-">add</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;id,
    boolean&nbsp;isPrimary,
    <a href="../../../../../org/locationtech/geowave/analytic/nn/NNProcessor.html" title="type parameter in NNProcessor">PARTITION_VALUE</a>&nbsp;partitionValue)</code>&nbsp;</td>
 </tr>
@@ -267,7 +267,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/nn/NNProcessor.html#remove-org.locationtech.geowave.core.index.ByteArrayId-">remove</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/nn/NNProcessor.html#remove-org.locationtech.geowave.core.index.ByteArray-">remove</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;id)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -376,7 +376,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>startingPoint</h4>
-<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a> startingPoint</pre>
+<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a> startingPoint</pre>
 <div class="block">Run State</div>
 </li>
 </ul>
@@ -418,24 +418,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="remove-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="remove-org.locationtech.geowave.core.index.ByteArray-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;void&nbsp;remove(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id)</pre>
+<pre>public&nbsp;void&nbsp;remove(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;id)</pre>
 </li>
 </ul>
-<a name="add-org.locationtech.geowave.core.index.ByteArrayId-boolean-java.lang.Object-">
+<a name="add-org.locationtech.geowave.core.index.ByteArray-boolean-java.lang.Object-">
 <!--   -->
-</a><a name="add-org.locationtech.geowave.core.index.ByteArrayId-boolean-PARTITION_VALUE-">
+</a><a name="add-org.locationtech.geowave.core.index.ByteArray-boolean-PARTITION_VALUE-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;void&nbsp;add(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+<pre>public&nbsp;void&nbsp;add(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;id,
                 boolean&nbsp;isPrimary,
                 <a href="../../../../../org/locationtech/geowave/analytic/nn/NNProcessor.html" title="type parameter in NNProcessor">PARTITION_VALUE</a>&nbsp;partitionValue)
          throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>

@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapper.html" title="class in org.locationtech.geowave.core.geotime.store.dimension"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperWriter.html" title="class in org.locationtech.geowave.core.geotime.store.dimension"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LongitudeField.html" title="class in org.locationtech.geowave.core.geotime.store.dimension"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -161,15 +161,15 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-boolean-">LatitudeField</a></span>(boolean&nbsp;useHalfRange)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-boolean-org.locationtech.geowave.core.index.ByteArrayId-">LatitudeField</a></span>(boolean&nbsp;useHalfRange,
-             <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-boolean-java.lang.String-">LatitudeField</a></span>(boolean&nbsp;useHalfRange,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-org.locationtech.geowave.core.index.ByteArrayId-">LatitudeField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-java.lang.String-">LatitudeField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;baseDefinition,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-org.locationtech.geowave.core.index.ByteArrayId-">LatitudeField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;baseDefinition,
-             <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-java.lang.String-">LatitudeField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -198,7 +198,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.geotime.store.dimension.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">SpatialField</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#denormalize-double-">denormalize</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#equals-java.lang.Object-">equals</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getBaseDefinition--">getBaseDefinition</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getBounds--">getBounds</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getFieldId--">getFieldId</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getFixedBinIdSize--">getFixedBinIdSize</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getFullRange--">getFullRange</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getRange--">getRange</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getReader--">getReader</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getWriter--">getWriter</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#hashCode--">hashCode</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#normalize-double-">normalize</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#toBinary--">toBinary</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#denormalize-double-">denormalize</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#equals-java.lang.Object-">equals</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getBaseDefinition--">getBaseDefinition</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getBounds--">getBounds</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getFieldName--">getFieldName</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getFixedBinIdSize--">getFixedBinIdSize</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getFullRange--">getFullRange</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getRange--">getRange</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getReader--">getReader</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getWriter--">getWriter</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#hashCode--">hashCode</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#normalize-double-">normalize</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#toBinary--">toBinary</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -239,33 +239,33 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>public&nbsp;LatitudeField(boolean&nbsp;useHalfRange)</pre>
 </li>
 </ul>
-<a name="LatitudeField-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="LatitudeField-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>LatitudeField</h4>
-<pre>public&nbsp;LatitudeField(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+<pre>public&nbsp;LatitudeField(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 </li>
 </ul>
-<a name="LatitudeField-boolean-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="LatitudeField-boolean-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>LatitudeField</h4>
 <pre>public&nbsp;LatitudeField(boolean&nbsp;useHalfRange,
-                     <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 </li>
 </ul>
-<a name="LatitudeField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="LatitudeField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LatitudeField</h4>
 <pre>public&nbsp;LatitudeField(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;baseDefinition,
-                     <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 </li>
 </ul>
 </li>
@@ -321,7 +321,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapper.html" title="class in org.locationtech.geowave.core.geotime.store.dimension"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperWriter.html" title="class in org.locationtech.geowave.core.geotime.store.dimension"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LongitudeField.html" title="class in org.locationtech.geowave.core.geotime.store.dimension"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

@@ -202,13 +202,13 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/BasicIndexModel.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/BasicIndexModel.html#getReader-java.lang.String-">getReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Get a reader for an individual field.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/BasicIndexModel.html#getWriter-org.locationtech.geowave.core.index.ByteArrayId-">getWriter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/BasicIndexModel.html#getWriter-java.lang.String-">getWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Get a writer for an individual field given the ID.</div>
 </td>
 </tr>
@@ -301,41 +301,41 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <pre>public&nbsp;void&nbsp;init(<a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;dimensions)</pre>
 </li>
 </ul>
-<a name="getWriter-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getWriter-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getWriter</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;getWriter(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html#getWriter-org.locationtech.geowave.core.index.ByteArrayId-">DataWriter</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;getWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html#getWriter-java.lang.String-">DataWriter</a></code></span></div>
 <div class="block">Get a writer for an individual field given the ID.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html#getWriter-org.locationtech.geowave.core.index.ByteArrayId-">getWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="interface in org.locationtech.geowave.core.store.data">DataWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html#getWriter-java.lang.String-">getWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="interface in org.locationtech.geowave.core.store.data">DataWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fieldId</code> - the unique field ID</dd>
+<dd><code>fieldName</code> - the unique field ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the writer for the given field</dd>
 </dl>
 </li>
 </ul>
-<a name="getReader-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getReader-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getReader</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;getReader(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">DataReader</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;getReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html#getReader-java.lang.String-">DataReader</a></code></span></div>
 <div class="block">Get a reader for an individual field.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html" title="interface in org.locationtech.geowave.core.store.data">DataReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html#getReader-java.lang.String-">getReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html" title="interface in org.locationtech.geowave.core.store.data">DataReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fieldId</code> - the ID of the field</dd>
+<dd><code>fieldName</code> - the ID of the field</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the FieldReader for the given ID</dd>
+<dd>the FieldReader for the given field Name (ID)</dd>
 </dl>
 </li>
 </ul>

@@ -139,7 +139,7 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/nn/Neigh
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterNeighborList.ClusterNeighborListFactory.html#ClusterNeighborListFactory-org.locationtech.geowave.analytic.nn.NeighborListFactory-java.util.Map-">ClusterNeighborListFactory</a></span>(<a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborListFactory.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborListFactory</a>&lt;<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&nbsp;factory,
-                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in org.locationtech.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;&nbsp;index)</code>&nbsp;</td>
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in org.locationtech.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -158,11 +158,11 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/nn/Neigh
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborList</a>&lt;<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterNeighborList.ClusterNeighborListFactory.html#buildNeighborList-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.analytic.mapreduce.dbscan.ClusterItem-">buildNeighborList</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;centerId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterNeighborList.ClusterNeighborListFactory.html#buildNeighborList-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.analytic.mapreduce.dbscan.ClusterItem-">buildNeighborList</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;centerId,
                  <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;center)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in org.locationtech.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in org.locationtech.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterNeighborList.ClusterNeighborListFactory.html#getIndex--">getIndex</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
@@ -194,7 +194,7 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/nn/Neigh
 <li class="blockList">
 <h4>ClusterNeighborListFactory</h4>
 <pre>public&nbsp;ClusterNeighborListFactory(<a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborListFactory.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborListFactory</a>&lt;<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&nbsp;factory,
-                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in org.locationtech.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;&nbsp;index)</pre>
+                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in org.locationtech.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;&nbsp;index)</pre>
 </li>
 </ul>
 </li>
@@ -211,20 +211,20 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/nn/Neigh
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndex</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in org.locationtech.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;&nbsp;getIndex()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in org.locationtech.geowave.analytic.mapreduce.dbscan">Cluster</a>&gt;&nbsp;getIndex()</pre>
 </li>
 </ul>
-<a name="buildNeighborList-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.analytic.mapreduce.dbscan.ClusterItem-">
+<a name="buildNeighborList-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.analytic.mapreduce.dbscan.ClusterItem-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>buildNeighborList</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborList</a>&lt;<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&nbsp;buildNeighborList(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;centerId,
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborList</a>&lt;<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;&nbsp;buildNeighborList(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;centerId,
                                                    <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;center)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborListFactory.html#buildNeighborList-org.locationtech.geowave.core.index.ByteArrayId-NNTYPE-">buildNeighborList</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborListFactory.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborListFactory</a>&lt;<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborListFactory.html#buildNeighborList-org.locationtech.geowave.core.index.ByteArray-NNTYPE-">buildNeighborList</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborListFactory.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborListFactory</a>&lt;<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -129,8 +129,35 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#BaseQueryOptions-org.locationtech.geowave.core.store.query.QueryOptions-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">BaseQueryOptions</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/query/QueryOptions.html" title="class in org.locationtech.geowave.core.store.query">QueryOptions</a>&nbsp;options,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#BaseQueryOptions-org.locationtech.geowave.core.store.api.AggregationQuery-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">BaseQueryOptions</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/AggregationQuery.html" title="class in org.locationtech.geowave.core.store.api">AggregationQuery</a>&lt;?,?,?&gt;&nbsp;query,
+                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                 <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#BaseQueryOptions-org.locationtech.geowave.core.store.query.options.CommonQueryOptions-org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions-org.locationtech.geowave.core.store.query.options.IndexQueryOptions-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">BaseQueryOptions</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a>&nbsp;commonOptions,
+                <a href="../../../../../../org/locationtech/geowave/core/store/query/options/DataTypeQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">DataTypeQueryOptions</a>&lt;?&gt;&nbsp;typeOptions,
+                <a href="../../../../../../org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">IndexQueryOptions</a>&nbsp;indexOptions,
+                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#BaseQueryOptions-org.locationtech.geowave.core.store.query.options.CommonQueryOptions-org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions-org.locationtech.geowave.core.store.query.options.IndexQueryOptions-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.callback.ScanCallback-">BaseQueryOptions</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a>&nbsp;commonOptions,
+                <a href="../../../../../../org/locationtech/geowave/core/store/query/options/DataTypeQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">DataTypeQueryOptions</a>&lt;?&gt;&nbsp;typeOptions,
+                <a href="../../../../../../org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">IndexQueryOptions</a>&nbsp;indexOptions,
+                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
+                <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;?,?&gt;&nbsp;scanCallback)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#BaseQueryOptions-org.locationtech.geowave.core.store.api.Query-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">BaseQueryOptions</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;?&gt;&nbsp;query,
+                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#BaseQueryOptions-org.locationtech.geowave.core.store.api.Query-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.callback.ScanCallback-">BaseQueryOptions</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;?&gt;&nbsp;query,
+                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
+                <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;?,?&gt;&nbsp;scanCallback)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -148,11 +175,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;</code></td>
+<td class="colFirst"><code>short[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getAdapterIds--">getAdapterIds</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;</code></td>
+<td class="colFirst"><code>short[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getAdapterIds-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">getAdapterIds</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -160,7 +187,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getAdaptersArray-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-">getAdaptersArray</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&gt;&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getAdaptersWithMinimalSetOfIndices-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-org.locationtech.geowave.core.store.index.IndexStore-">getAdaptersWithMinimalSetOfIndices</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                                   <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
                                   <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)</code>
@@ -168,7 +195,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;?,?,?&gt;&gt;</code></td>
+<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,?&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getAggregation--">getAggregation</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -176,11 +203,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getAuthorizations--">getAuthorizations</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;</code></td>
+<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[],<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getFieldIdsAdapterPair--">getFieldIdsAdapterPair</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&gt;&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getIndicesForAdapters-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-org.locationtech.geowave.core.store.index.IndexStore-">getIndicesForAdapters</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                      <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
                      <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)</code>
@@ -204,46 +231,54 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getScanCallback--">getScanCallback</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getValidInternalAdapterIds-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-">getValidInternalAdapterIds</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;adapterStore,
-                          <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore)</code>&nbsp;</td>
+<td class="colFirst"><code>double[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getTargetResolutionPerDimensionForHierarchicalIndex--">getTargetResolutionPerDimensionForHierarchicalIndex</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
+<td class="colFirst"><code>short[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getValidAdapterIds-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-">getValidAdapterIds</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;adapterStore,
+                  <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore)</code>&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#isAllAdapters--">isAllAdapters</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setAggregation-org.locationtech.geowave.core.store.query.aggregate.Aggregation-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-">setAggregation</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;?,?,?&gt;&nbsp;aggregation,
-              <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
-</tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setAuthorizations-java.lang.String:A-">setAuthorizations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setAdapterId-java.lang.Short-">setAdapterId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setInternalAdapterId-short-">setInternalAdapterId</a></span>(short&nbsp;internalAdapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setAggregation-org.locationtech.geowave.core.store.api.Aggregation-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-">setAggregation</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,?&gt;&nbsp;aggregation,
+              <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 <tr id="i17" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setAuthorizations-java.lang.String:A-">setAuthorizations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setLimit-java.lang.Integer-">setLimit</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</code>
 <div class="block">a value <= 0 or null indicates no limits</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setMaxRangeDecomposition-java.lang.Integer-">setMaxRangeDecomposition</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxRangeDecomposition)</code>
 <div class="block">a value of null indicates to use the data store configured default</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setMaxResolutionSubsamplingPerDimension-double:A-">setMaxResolutionSubsamplingPerDimension</a></span>(double[]&nbsp;maxResolutionSubsamplingPerDimension)</code>&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setScanCallback-org.locationtech.geowave.core.store.callback.ScanCallback-">setScanCallback</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;?,?&gt;&nbsp;scanCallback)</code>&nbsp;</td>
+</tr>
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#setTargetResolutionPerDimensionForHierarchicalIndex-double:A-">setTargetResolutionPerDimensionForHierarchicalIndex</a></span>(double[]&nbsp;targetResolutionPerDimensionForHierarchicalIndex)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -267,14 +302,65 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="BaseQueryOptions-org.locationtech.geowave.core.store.query.QueryOptions-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">
+<a name="BaseQueryOptions-org.locationtech.geowave.core.store.api.Query-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BaseQueryOptions</h4>
+<pre>public&nbsp;BaseQueryOptions(<a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;?&gt;&nbsp;query,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</pre>
+</li>
+</ul>
+<a name="BaseQueryOptions-org.locationtech.geowave.core.store.api.AggregationQuery-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BaseQueryOptions</h4>
+<pre>public&nbsp;BaseQueryOptions(<a href="../../../../../../org/locationtech/geowave/core/store/api/AggregationQuery.html" title="class in org.locationtech.geowave.core.store.api">AggregationQuery</a>&lt;?,?,?&gt;&nbsp;query,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</pre>
+</li>
+</ul>
+<a name="BaseQueryOptions-org.locationtech.geowave.core.store.api.Query-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.callback.ScanCallback-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BaseQueryOptions</h4>
+<pre>public&nbsp;BaseQueryOptions(<a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;?&gt;&nbsp;query,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;?,?&gt;&nbsp;scanCallback)</pre>
+</li>
+</ul>
+<a name="BaseQueryOptions-org.locationtech.geowave.core.store.query.options.CommonQueryOptions-org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions-org.locationtech.geowave.core.store.query.options.IndexQueryOptions-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BaseQueryOptions</h4>
+<pre>public&nbsp;BaseQueryOptions(<a href="../../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a>&nbsp;commonOptions,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/query/options/DataTypeQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">DataTypeQueryOptions</a>&lt;?&gt;&nbsp;typeOptions,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">IndexQueryOptions</a>&nbsp;indexOptions,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</pre>
+</li>
+</ul>
+<a name="BaseQueryOptions-org.locationtech.geowave.core.store.query.options.CommonQueryOptions-org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions-org.locationtech.geowave.core.store.query.options.IndexQueryOptions-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.callback.ScanCallback-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BaseQueryOptions</h4>
-<pre>public&nbsp;BaseQueryOptions(<a href="../../../../../../org/locationtech/geowave/core/store/query/QueryOptions.html" title="class in org.locationtech.geowave.core.store.query">QueryOptions</a>&nbsp;options,
-                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</pre>
+<pre>public&nbsp;BaseQueryOptions(<a href="../../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a>&nbsp;commonOptions,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/query/options/DataTypeQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">DataTypeQueryOptions</a>&lt;?&gt;&nbsp;typeOptions,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">IndexQueryOptions</a>&nbsp;indexOptions,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;?,?&gt;&nbsp;scanCallback)</pre>
 </li>
 </ul>
 </li>
@@ -300,10 +386,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndicesForAdapters</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&gt;&gt;&nbsp;getIndicesForAdapters(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
-                                                                                                                  <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
-                                                                                                                  <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)
-                                                                                                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&gt;&gt;&nbsp;getIndicesForAdapters(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                                                                                                           <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
+                                                                                                           <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)
+                                                                                                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block">Return the set of adapter/index associations. If the adapters are not
  provided, then look up all of them. If the index is not provided, then
  look up all of them.
@@ -336,13 +422,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="setInternalAdapterId-short-">
+<a name="setAdapterId-java.lang.Short-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setInternalAdapterId</h4>
-<pre>public&nbsp;void&nbsp;setInternalAdapterId(short&nbsp;internalAdapterId)</pre>
+<h4>setAdapterId</h4>
+<pre>public&nbsp;void&nbsp;setAdapterId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;adapterId)</pre>
 </li>
 </ul>
 <a name="getAdapterIds--">
@@ -351,7 +437,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdapterIds</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;&nbsp;getAdapterIds()</pre>
+<pre>public&nbsp;short[]&nbsp;getAdapterIds()</pre>
 </li>
 </ul>
 <a name="getScanCallback--">
@@ -454,6 +540,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;void&nbsp;setAuthorizations(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</pre>
 </li>
 </ul>
+<a name="getTargetResolutionPerDimensionForHierarchicalIndex--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTargetResolutionPerDimensionForHierarchicalIndex</h4>
+<pre>public&nbsp;double[]&nbsp;getTargetResolutionPerDimensionForHierarchicalIndex()</pre>
+</li>
+</ul>
+<a name="setTargetResolutionPerDimensionForHierarchicalIndex-double:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTargetResolutionPerDimensionForHierarchicalIndex</h4>
+<pre>public&nbsp;void&nbsp;setTargetResolutionPerDimensionForHierarchicalIndex(double[]&nbsp;targetResolutionPerDimensionForHierarchicalIndex)</pre>
+</li>
+</ul>
 <a name="setMaxResolutionSubsamplingPerDimension-double:A-">
 <!--   -->
 </a>
@@ -478,16 +582,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getAggregation</h4>
-<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;?,?,?&gt;&gt;&nbsp;getAggregation()</pre>
+<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,?&gt;&gt;&nbsp;getAggregation()</pre>
 </li>
 </ul>
-<a name="setAggregation-org.locationtech.geowave.core.store.query.aggregate.Aggregation-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-">
+<a name="setAggregation-org.locationtech.geowave.core.store.api.Aggregation-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setAggregation</h4>
-<pre>public&nbsp;void&nbsp;setAggregation(<a href="../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;?,?,?&gt;&nbsp;aggregation,
+<pre>public&nbsp;void&nbsp;setAggregation(<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,?&gt;&nbsp;aggregation,
                            <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
 </li>
 </ul>
@@ -497,10 +601,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdaptersWithMinimalSetOfIndices</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&gt;&gt;&nbsp;getAdaptersWithMinimalSetOfIndices(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
-                                                                                                                               <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
-                                                                                                                               <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)
-                                                                                                                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&gt;&gt;&nbsp;getAdaptersWithMinimalSetOfIndices(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                                                                                                                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
+                                                                                                                        <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)
+                                                                                                                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block">Return a set list adapter/index associations. If the adapters are not
  provided, then look up all of them. If the index is not provided, then
  look up all of them. The full set of adapter/index associations is
@@ -527,7 +631,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getFieldIdsAdapterPair</h4>
-<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;getFieldIdsAdapterPair()</pre>
+<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[],<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;getFieldIdsAdapterPair()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a paring of fieldIds and their associated data adapter >>>>>>>
@@ -535,15 +639,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="getValidInternalAdapterIds-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-">
+<a name="getValidAdapterIds-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getValidInternalAdapterIds</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;&nbsp;getValidInternalAdapterIds(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;adapterStore,
-                                             <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore)
-                                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<h4>getValidAdapterIds</h4>
+<pre>public&nbsp;short[]&nbsp;getValidAdapterIds(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;adapterStore,
+                                  <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore)
+                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
@@ -556,7 +660,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getAdapterIds</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;&nbsp;getAdapterIds(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;adapterStore)</pre>
+<pre>public&nbsp;short[]&nbsp;getAdapterIds(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;adapterStore)</pre>
 </li>
 </ul>
 </li>

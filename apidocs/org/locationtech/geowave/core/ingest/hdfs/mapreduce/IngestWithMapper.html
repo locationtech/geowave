@@ -100,7 +100,7 @@
 </dl>
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.ingest">IngestPluginBase</a>&lt;I,O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;I,O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -109,7 +109,7 @@
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">IngestWithMapper&lt;I,O&gt;</span>
-extends <a href="../../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.ingest">IngestPluginBase</a>&lt;I,O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
+extends <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;I,O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
 <div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion
  within a mapper only. The implementation will be directly persisted to a
  mapper and called to produce GeoWaveData to be written.</div>
@@ -126,18 +126,18 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/ingest/Inges
 </a>
 <h3>Method Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.ingest.IngestPluginBase">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.ingest.IngestPluginBase">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.ingest.<a href="../../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.ingest">IngestPluginBase</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData-I-java.util.Collection-java.lang.String-">toGeoWaveData</a></code></li>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.ingest.<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html#toGeoWaveData-I-java.lang.String:A-java.lang.String-">toGeoWaveData</a></code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.ingest.DataAdapterProvider">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.ingest.DataAdapterProvider">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.ingest.<a href="../../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.ingest">DataAdapterProvider</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html#getDataAdapters-java.lang.String-">getDataAdapters</a>, <a href="../../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html#getSupportedIndexableTypes--">getSupportedIndexableTypes</a></code></li>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.ingest.<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html#getDataAdapters-java.lang.String-">getDataAdapters</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html#getSupportedIndexableTypes--">getSupportedIndexableTypes</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.index.persist.Persistable">

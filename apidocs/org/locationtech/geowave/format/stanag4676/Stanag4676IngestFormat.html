@@ -153,7 +153,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/ingest/spi/Inge
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createAvroFormatPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createAvroFormatPlugin</a></span>(<a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createAvroFormatPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createAvroFormatPlugin</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>
 <div class="block">This plugin will be used by the ingestion framework to stage intermediate
  data from a local filesystem (for example to HDFS for map reduce ingest
  or to kafka for kafka ingest).</div>
@@ -161,22 +161,22 @@ implements <a href="../../../../../org/locationtech/geowave/core/ingest/spi/Inge
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>
 <div class="block">This plugin will be used by the ingestion framework to read data from
  HDFS in the form of the intermediate data format, and translate the
  intermediate data into the data entries that will be written in GeoWave.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createLocalFileIngestPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createLocalFileIngestPlugin</a></span>(<a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createLocalFileIngestPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createLocalFileIngestPlugin</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>
 <div class="block">This plugin will be used by the ingestion framework to read data from a
  local file system, and translate supported files into the data entries
  that will be written directly in GeoWave.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a></code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createOptionsInstances--">createOptionsInstances</a></span>()</code>
 <div class="block">This is a means for a plugin to provide custom command-line options.</div>
 </td>
@@ -235,21 +235,21 @@ implements <a href="../../../../../org/locationtech/geowave/core/ingest/spi/Inge
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createAvroFormatPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">
+<a name="createAvroFormatPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createAvroFormatPlugin</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;createAvroFormatPlugin(<a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;createAvroFormatPlugin(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)
                                                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang">UnsupportedOperationException</a></pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createAvroFormatPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">IngestFormatPluginProviderSpi</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createAvroFormatPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">IngestFormatPluginProviderSpi</a></code></span></div>
 <div class="block">This plugin will be used by the ingestion framework to stage intermediate
  data from a local filesystem (for example to HDFS for map reduce ingest
  or to kafka for kafka ingest).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createAvroFormatPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createAvroFormatPlugin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createAvroFormatPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createAvroFormatPlugin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The plugin for staging to avro if it is supported</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -258,21 +258,21 @@ implements <a href="../../../../../org/locationtech/geowave/core/ingest/spi/Inge
 </dl>
 </li>
 </ul>
-<a name="createIngestFromHdfsPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">
+<a name="createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createIngestFromHdfsPlugin</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;createIngestFromHdfsPlugin(<a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;createIngestFromHdfsPlugin(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)
                                                                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang">UnsupportedOperationException</a></pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">IngestFormatPluginProviderSpi</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">IngestFormatPluginProviderSpi</a></code></span></div>
 <div class="block">This plugin will be used by the ingestion framework to read data from
  HDFS in the form of the intermediate data format, and translate the
  intermediate data into the data entries that will be written in GeoWave.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createIngestFromHdfsPlugin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createIngestFromHdfsPlugin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The plugin for ingesting data from HDFS</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -280,21 +280,21 @@ implements <a href="../../../../../org/locationtech/geowave/core/ingest/spi/Inge
 </dl>
 </li>
 </ul>
-<a name="createLocalFileIngestPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">
+<a name="createLocalFileIngestPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createLocalFileIngestPlugin</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;createLocalFileIngestPlugin(<a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;createLocalFileIngestPlugin(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)
                                                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang">UnsupportedOperationException</a></pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createLocalFileIngestPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">IngestFormatPluginProviderSpi</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createLocalFileIngestPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">IngestFormatPluginProviderSpi</a></code></span></div>
 <div class="block">This plugin will be used by the ingestion framework to read data from a
  local file system, and translate supported files into the data entries
  that will be written directly in GeoWave.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createLocalFileIngestPlugin-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">createLocalFileIngestPlugin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createLocalFileIngestPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createLocalFileIngestPlugin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The plugin for ingesting data from a local file system directly
          into GeoWave</dd>
@@ -350,7 +350,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/ingest/spi/Inge
 <ul class="blockListLast">
 <li class="blockList">
 <h4>createOptionsInstances</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;createOptionsInstances()</pre>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;createOptionsInstances()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createOptionsInstances--">IngestFormatPluginProviderSpi</a></code></span></div>
 <div class="block">This is a means for a plugin to provide custom command-line options. If
  this is null, there will be no custom options added.</div>

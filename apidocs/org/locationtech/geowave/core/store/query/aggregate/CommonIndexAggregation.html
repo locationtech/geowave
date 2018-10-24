@@ -43,7 +43,7 @@
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -87,7 +87,7 @@
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">org.locationtech.geowave.core.store.query.aggregate</div>
-<h2 title="Interface CommonIndexAggregation" class="title">Interface CommonIndexAggregation&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R extends <a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&gt;</h2>
+<h2 title="Interface CommonIndexAggregation" class="title">Interface CommonIndexAggregation&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -95,16 +95,16 @@
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;P,R,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;P,R,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountAggregation</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/CommonIndexBoundingBoxAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">CommonIndexBoundingBoxAggregation</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/CommonIndexTimeRangeAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">CommonIndexTimeRangeAggregation</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountAggregation</a></dd>
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="typeNameLabel">CommonIndexAggregation&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R extends <a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&gt;</span>
-extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a>&lt;P,R,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</pre>
+<pre>public interface <span class="typeNameLabel">CommonIndexAggregation&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R&gt;</span>
+extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;P,R,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</pre>
 </li>
 </ul>
 </div>
@@ -118,11 +118,11 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 </a>
 <h3>Method Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.query.aggregate.Aggregation">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.api.Aggregation">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.query.aggregate.<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">Aggregation</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#aggregate-T-">aggregate</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#clearResult--">clearResult</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#getParameters--">getParameters</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#getResult--">getResult</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html#setParameters-P-">setParameters</a></code></li>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#aggregate-T-">aggregate</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#clearResult--">clearResult</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getParameters--">getParameters</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getResult--">getResult</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#merge-R-R-">merge</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#resultFromBinary-byte:A-">resultFromBinary</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#resultToBinary-R-">resultToBinary</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#setParameters-P-">setParameters</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.index.persist.Persistable">
@@ -159,7 +159,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/Aggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

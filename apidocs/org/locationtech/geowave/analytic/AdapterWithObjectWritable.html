@@ -153,10 +153,10 @@ implements org.apache.hadoop.io.Writable</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/AdapterWithObjectWritable.html#fillWritableWithAdapter-org.locationtech.geowave.mapreduce.HadoopWritableSerializationTool-org.locationtech.geowave.analytic.AdapterWithObjectWritable-short-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Object-">fillWritableWithAdapter</a></span>(<a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html" title="class in org.locationtech.geowave.mapreduce">HadoopWritableSerializationTool</a>&nbsp;serializationTool,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/AdapterWithObjectWritable.html#fillWritableWithAdapter-org.locationtech.geowave.mapreduce.HadoopWritableSerializationTool-org.locationtech.geowave.analytic.AdapterWithObjectWritable-short-org.locationtech.geowave.core.index.ByteArray-java.lang.Object-">fillWritableWithAdapter</a></span>(<a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html" title="class in org.locationtech.geowave.mapreduce">HadoopWritableSerializationTool</a>&nbsp;serializationTool,
                        <a href="../../../../org/locationtech/geowave/analytic/AdapterWithObjectWritable.html" title="class in org.locationtech.geowave.analytic">AdapterWithObjectWritable</a>&nbsp;writableToFill,
                        short&nbsp;internalAdapterId,
-                       <a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
+                       <a href="../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -165,7 +165,7 @@ implements org.apache.hadoop.io.Writable</pre>
                        <a href="../../../../org/locationtech/geowave/analytic/AdapterWithObjectWritable.html" title="class in org.locationtech.geowave.analytic">AdapterWithObjectWritable</a>&nbsp;writableToExtract)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colFirst"><code><a href="../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/AdapterWithObjectWritable.html#getDataId--">getDataId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -182,7 +182,7 @@ implements org.apache.hadoop.io.Writable</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/AdapterWithObjectWritable.html#setDataId-org.locationtech.geowave.core.index.ByteArrayId-">setDataId</a></span>(<a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/AdapterWithObjectWritable.html#setDataId-org.locationtech.geowave.core.index.ByteArray-">setDataId</a></span>(<a href="../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -294,16 +294,16 @@ implements org.apache.hadoop.io.Writable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataId</h4>
-<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getDataId()</pre>
+<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getDataId()</pre>
 </li>
 </ul>
-<a name="setDataId-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="setDataId-org.locationtech.geowave.core.index.ByteArray-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setDataId</h4>
-<pre>public&nbsp;void&nbsp;setDataId(<a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</pre>
+<pre>public&nbsp;void&nbsp;setDataId(<a href="../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</pre>
 </li>
 </ul>
 <a name="readFields-java.io.DataInput-">
@@ -338,7 +338,7 @@ implements org.apache.hadoop.io.Writable</pre>
 </dl>
 </li>
 </ul>
-<a name="fillWritableWithAdapter-org.locationtech.geowave.mapreduce.HadoopWritableSerializationTool-org.locationtech.geowave.analytic.AdapterWithObjectWritable-short-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Object-">
+<a name="fillWritableWithAdapter-org.locationtech.geowave.mapreduce.HadoopWritableSerializationTool-org.locationtech.geowave.analytic.AdapterWithObjectWritable-short-org.locationtech.geowave.core.index.ByteArray-java.lang.Object-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -347,7 +347,7 @@ implements org.apache.hadoop.io.Writable</pre>
 <pre>public static&nbsp;void&nbsp;fillWritableWithAdapter(<a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html" title="class in org.locationtech.geowave.mapreduce">HadoopWritableSerializationTool</a>&nbsp;serializationTool,
                                            <a href="../../../../org/locationtech/geowave/analytic/AdapterWithObjectWritable.html" title="class in org.locationtech.geowave.analytic">AdapterWithObjectWritable</a>&nbsp;writableToFill,
                                            short&nbsp;internalAdapterId,
-                                           <a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
+                                           <a href="../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;entry)</pre>
 </li>
 </ul>

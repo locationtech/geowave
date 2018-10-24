@@ -87,18 +87,22 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.bigtable.operations.config">org.locationtech.geowave.datastore.bigtable.operations.config</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.cassandra.operations">org.locationtech.geowave.datastore.cassandra.operations</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.cassandra.operations.config">org.locationtech.geowave.datastore.cassandra.operations.config</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.dynamodb">org.locationtech.geowave.datastore.dynamodb</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.hbase.cli.config">org.locationtech.geowave.datastore.hbase.cli.config</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -123,6 +127,26 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a></span></code>
 <div class="block">This class can be used to modify the behavior of the Accumulo Data Store.</div>
 </td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.bigtable.operations.config">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a> in <a href="../../../../../../org/locationtech/geowave/datastore/bigtable/operations/config/package-summary.html">org.locationtech.geowave.datastore.bigtable.operations.config</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../org/locationtech/geowave/datastore/bigtable/operations/config/package-summary.html">org.locationtech.geowave.datastore.bigtable.operations.config</a> with parameters of type <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/bigtable/operations/config/BigTableOptions.html#BigTableOptions-int-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.BaseDataStoreOptions-">BigTableOptions</a></span>(int&nbsp;scanCacheSize,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;projectId,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instanceId,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwNamespace,
+               <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a>&nbsp;additionalOptions)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -177,6 +201,25 @@
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a></code></td>
 <td class="colLast"><span class="typeNameLabel">DynamoDBOptions.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#baseOptions">baseOptions</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/package-summary.html">org.locationtech.geowave.datastore.dynamodb</a> with parameters of type <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#DynamoDBOptions-java.lang.String-com.amazonaws.regions.Regions-long-long-int-com.amazonaws.Protocol-boolean-java.lang.String-org.locationtech.geowave.core.store.BaseDataStoreOptions-">DynamoDBOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endpoint,
+               com.amazonaws.regions.Regions&nbsp;region,
+               long&nbsp;writeCapacity,
+               long&nbsp;readCapacity,
+               int&nbsp;maxConnections,
+               com.amazonaws.Protocol&nbsp;protocol,
+               boolean&nbsp;enableCacheResponseMetadata,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwNamespace,
+               <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a>&nbsp;baseOptions)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

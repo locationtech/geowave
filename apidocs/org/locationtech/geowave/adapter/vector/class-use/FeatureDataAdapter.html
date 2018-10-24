@@ -142,9 +142,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">FeatureDataAdapter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">FeatureDataUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/FeatureDataUtils.html#cloneFeatureDataAdapter-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-">cloneFeatureDataAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
-                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;originalAdapterId,
-                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;newAdapterId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">FeatureDataUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/FeatureDataUtils.html#cloneFeatureDataAdapter-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.lang.String-java.lang.String-">cloneFeatureDataAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;originalTypeName,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;newTypeName)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -210,16 +210,16 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="typeNameLabel">RDDUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/RDDUtils.html#writeRDDToGeoWave-org.apache.spark.SparkContext-org.locationtech.geowave.core.store.index.PrimaryIndex:A-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.adapter.vector.FeatureDataAdapter-org.locationtech.geowave.analytic.spark.GeoWaveRDD-">writeRDDToGeoWave</a></span>(org.apache.spark.SparkContext&nbsp;sc,
-                 <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;indices,
+<td class="colLast"><span class="typeNameLabel">RDDUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/RDDUtils.html#writeRDDToGeoWave-org.apache.spark.SparkContext-org.locationtech.geowave.core.store.api.Index:A-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.adapter.vector.FeatureDataAdapter-org.locationtech.geowave.analytic.spark.GeoWaveRDD-">writeRDDToGeoWave</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                 <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;indices,
                  <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
                  <a href="../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter,
                  <a href="../../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRDD.html" title="class in org.locationtech.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;inputRDD)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><span class="typeNameLabel">RDDUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/RDDUtils.html#writeRDDToGeoWave-org.apache.spark.SparkContext-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.adapter.vector.FeatureDataAdapter-org.locationtech.geowave.analytic.spark.GeoWaveRDD-">writeRDDToGeoWave</a></span>(org.apache.spark.SparkContext&nbsp;sc,
-                 <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colLast"><span class="typeNameLabel">RDDUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/RDDUtils.html#writeRDDToGeoWave-org.apache.spark.SparkContext-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.adapter.vector.FeatureDataAdapter-org.locationtech.geowave.analytic.spark.GeoWaveRDD-">writeRDDToGeoWave</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                 <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                  <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
                  <a href="../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter,
                  <a href="../../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRDD.html" title="class in org.locationtech.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;inputRDD)</code>

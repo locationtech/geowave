@@ -134,8 +134,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/adapter/s
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html#DataStoreStatisticsProvider-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-boolean-">DataStoreStatisticsProvider</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;adapter,
-                           <a href="../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html#DataStoreStatisticsProvider-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-boolean-">DataStoreStatisticsProvider</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;adapter,
+                           <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                            boolean&nbsp;includeAdapterStats)</code>&nbsp;</td>
 </tr>
 </table>
@@ -154,18 +154,18 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/adapter/s
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html#createDataStatistics-org.locationtech.geowave.core.index.ByteArrayId-">createDataStatistics</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsType)</code>&nbsp;</td>
+<td class="colFirst"><code>&lt;R,B extends <a href="../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,B&gt;&gt;<br><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>,R,B&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html#createDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">createDataStatistics</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html#getSupportedStatisticsTypes--">getSupportedStatisticsTypes</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html#getSupportedStatistics--">getSupportedStatistics</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/EntryVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store">EntryVisibilityHandler</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.adapter.DataAdapter-org.locationtech.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-                    <a href="../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;adapter,
-                    <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">getVisibilityHandler</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                    <a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;adapter,
+                    <a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -189,14 +189,14 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/adapter/s
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="DataStoreStatisticsProvider-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-boolean-">
+<a name="DataStoreStatisticsProvider-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DataStoreStatisticsProvider</h4>
 <pre>public&nbsp;DataStoreStatisticsProvider(<a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;adapter,
-                                   <a href="../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                   <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                                    boolean&nbsp;includeAdapterStats)</pre>
 </li>
 </ul>
@@ -208,44 +208,44 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/adapter/s
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getSupportedStatisticsTypes--">
+<a name="getSupportedStatistics--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSupportedStatisticsTypes</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>[]&nbsp;getSupportedStatisticsTypes()</pre>
+<h4>getSupportedStatistics</h4>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>[]&nbsp;getSupportedStatistics()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#getSupportedStatisticsTypes--">getSupportedStatisticsTypes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#getSupportedStatistics--">getSupportedStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
-<a name="createDataStatistics-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="createDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createDataStatistics</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;createDataStatistics(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsType)</pre>
+<pre>public&nbsp;&lt;R,B extends <a href="../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,B&gt;&gt;&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>,R,B&gt;&nbsp;createDataStatistics(<a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#createDataStatistics-org.locationtech.geowave.core.index.ByteArrayId-">createDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#createDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">createDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
-<a name="getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.adapter.DataAdapter-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getVisibilityHandler</h4>
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/EntryVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store">EntryVisibilityHandler</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;getVisibilityHandler(<a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-                                                      <a href="../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;adapter,
-                                                      <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
+                                                      <a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;&nbsp;adapter,
+                                                      <a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.adapter.DataAdapter-org.locationtech.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">getVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="type parameter in DataStoreStatisticsProvider">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

@@ -75,31 +75,6 @@
 <div class="contentContainer">
 <ul class="blockList">
 <li class="blockList">
-<table class="typeSummary" border="0" cellpadding="3" cellspacing="0" summary="Interface Summary table, listing interfaces, and an explanation">
-<caption><span>Interface Summary</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Interface</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;O&gt;</td>
-<td class="colLast">
-<div class="block">This is the primary plugin for directly ingesting data to GeoWave from local
- files.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalPluginBase</a></td>
-<td class="colLast">
-<div class="block">This is a base interface for any plugin that reads files from a local file
- system.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList">
 <table class="typeSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary table, listing classes, and an explanation">
 <caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -108,7 +83,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalPluginBase</a>,R&gt;</td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>,R&gt;</td>
 <td class="colLast">
 <div class="block">This class can be sub-classed to handle recursing over a local directory
  structure and passing along the plugin specific handling of any supported
@@ -148,13 +123,13 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginFileVisitor.html" title="class in org.locationtech.geowave.core.ingest.local">LocalPluginFileVisitor</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalPluginBase</a>,R&gt;</td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginFileVisitor.html" title="class in org.locationtech.geowave.core.ingest.local">LocalPluginFileVisitor</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>,R&gt;</td>
 <td class="colLast">
 <div class="block">This class is used by any local file driver to recurse a directory of files.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginFileVisitor.PluginVisitor.html" title="class in org.locationtech.geowave.core.ingest.local">LocalPluginFileVisitor.PluginVisitor</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalPluginBase</a>&gt;</td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginFileVisitor.PluginVisitor.html" title="class in org.locationtech.geowave.core.ingest.local">LocalPluginFileVisitor.PluginVisitor</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>

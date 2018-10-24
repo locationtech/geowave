@@ -164,17 +164,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#fromWritable-org.locationtech.geowave.core.index.ByteArrayId-org.apache.hadoop.io.ObjectWritable-">fromWritable</a></span>(<a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterID,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#fromWritable-short-org.apache.hadoop.io.ObjectWritable-">fromWritable</a></span>(short&nbsp;adapterId,
             org.apache.hadoop.io.ObjectWritable&nbsp;writable)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#fromWritable-short-org.apache.hadoop.io.ObjectWritable-">fromWritable</a></span>(short&nbsp;internalAdapterId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#fromWritable-java.lang.String-org.apache.hadoop.io.ObjectWritable-">fromWritable</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
             org.apache.hadoop.io.ObjectWritable&nbsp;writable)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#getAdapter-org.locationtech.geowave.core.index.ByteArrayId-">getAdapter</a></span>(<a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#getAdapter-java.lang.String-">getAdapter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../org/locationtech/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">TransientAdapterStore</a></code></td>
@@ -182,19 +182,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in org.locationtech.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#getHadoopWritableSerializerForAdapter-org.locationtech.geowave.core.index.ByteArrayId-">getHadoopWritableSerializerForAdapter</a></span>(<a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#getHadoopWritableSerializerForAdapter-short-">getHadoopWritableSerializerForAdapter</a></span>(short&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in org.locationtech.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#getHadoopWritableSerializerForAdapter-short-">getHadoopWritableSerializerForAdapter</a></span>(short&nbsp;internalAdapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#getHadoopWritableSerializerForAdapter-java.lang.String-">getHadoopWritableSerializerForAdapter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#getInternalAdapter-short-">getInternalAdapter</a></span>(short&nbsp;internalAdapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#getInternalAdapter-short-">getInternalAdapter</a></span>(short&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>org.apache.hadoop.io.ObjectWritable</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#toWritable-short-java.lang.Object-">toWritable</a></span>(short&nbsp;internalAdapterId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html#toWritable-short-java.lang.Object-">toWritable</a></span>(short&nbsp;adapterId,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
 </table>
@@ -261,16 +261,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getInternalAdapter</h4>
-<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;getInternalAdapter(short&nbsp;internalAdapterId)</pre>
+<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;getInternalAdapter(short&nbsp;adapterId)</pre>
 </li>
 </ul>
-<a name="getAdapter-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getAdapter-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdapter</h4>
-<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;getAdapter(<a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
+<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;getAdapter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
 </li>
 </ul>
 <a name="getHadoopWritableSerializerForAdapter-short-">
@@ -279,16 +279,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getHadoopWritableSerializerForAdapter</h4>
-<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in org.locationtech.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;&nbsp;getHadoopWritableSerializerForAdapter(short&nbsp;internalAdapterId)</pre>
+<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in org.locationtech.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;&nbsp;getHadoopWritableSerializerForAdapter(short&nbsp;adapterId)</pre>
 </li>
 </ul>
-<a name="getHadoopWritableSerializerForAdapter-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getHadoopWritableSerializerForAdapter-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getHadoopWritableSerializerForAdapter</h4>
-<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in org.locationtech.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;&nbsp;getHadoopWritableSerializerForAdapter(<a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
+<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in org.locationtech.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;&nbsp;getHadoopWritableSerializerForAdapter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
 </li>
 </ul>
 <a name="toWritable-short-java.lang.Object-">
@@ -297,17 +297,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>toWritable</h4>
-<pre>public&nbsp;org.apache.hadoop.io.ObjectWritable&nbsp;toWritable(short&nbsp;internalAdapterId,
+<pre>public&nbsp;org.apache.hadoop.io.ObjectWritable&nbsp;toWritable(short&nbsp;adapterId,
                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;entry)</pre>
 </li>
 </ul>
-<a name="fromWritable-org.locationtech.geowave.core.index.ByteArrayId-org.apache.hadoop.io.ObjectWritable-">
+<a name="fromWritable-java.lang.String-org.apache.hadoop.io.ObjectWritable-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>fromWritable</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fromWritable(<a href="../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterID,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fromWritable(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                            org.apache.hadoop.io.ObjectWritable&nbsp;writable)</pre>
 </li>
 </ul>
@@ -317,7 +317,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>fromWritable</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fromWritable(short&nbsp;internalAdapterId,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fromWritable(short&nbsp;adapterId,
                            org.apache.hadoop.io.ObjectWritable&nbsp;writable)</pre>
 </li>
 </ul>

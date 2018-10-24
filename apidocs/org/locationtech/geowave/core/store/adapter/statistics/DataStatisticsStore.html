@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -127,56 +127,91 @@ var activeTableTab = "activeTableTab";
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getAllDataStatistics-java.lang.String...-">getAllDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Get all data statistics from the store</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String...-">getDataStatistics</a></span>(short&nbsp;internalAdapterId,
-                 <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId,
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></span>(short&nbsp;adapterId,
+                 <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Get statistics by adapter ID and the statistics ID (which will define a
  unique statistic)</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-java.lang.String...-">getDataStatistics</a></span>(short&nbsp;internalAdapterId,
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-java.lang.String...-">getDataStatistics</a></span>(short&nbsp;adapterId,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Get all data statistics from the store by a data adapter ID</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></span>(short&nbsp;adapterId,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
+                 <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
+ unique statistic)</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
+<div class="block">Get all data statistics from the store by statistics type</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
+                 <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
+<div class="block">Get all data statistics from the store by statistics type and extended ID
+ prefix</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#incorporateStatistics-org.locationtech.geowave.core.store.adapter.statistics.DataStatistics-">incorporateStatistics</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;statistics)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#incorporateStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">incorporateStatistics</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;statistics)</code>
 <div class="block">Add the statistics to the store, overwriting existing data statistics
  with the aggregation of these statistics and the existing statistics</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeAll--">removeAll</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeAllStatistics-short-java.lang.String...-">removeAllStatistics</a></span>(short&nbsp;internalAdapterId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeAllStatistics-short-java.lang.String...-">removeAllStatistics</a></span>(short&nbsp;adapterId,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Remove all statistics with a given adapter ID from the store</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeStatistics-short-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String...-">removeStatistics</a></span>(short&nbsp;internalAdapterId,
-                <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeStatistics-short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">removeStatistics</a></span>(short&nbsp;adapterId,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Remove a statistic from the store</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeStatistics-short-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">removeStatistics</a></span>(short&nbsp;adapterId,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
+<div class="block">Remove a statistic from the store</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#setStatistics-org.locationtech.geowave.core.store.adapter.statistics.DataStatistics-">setStatistics</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;statistics)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#setStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">setStatistics</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;statistics)</code>
 <div class="block">This will write the statistics to the underlying store.</div>
 </td>
 </tr>
@@ -195,13 +230,13 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="setStatistics-org.locationtech.geowave.core.store.adapter.statistics.DataStatistics-">
+<a name="setStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setStatistics</h4>
-<pre>void&nbsp;setStatistics(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;statistics)</pre>
+<pre>void&nbsp;setStatistics(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;statistics)</pre>
 <div class="block">This will write the statistics to the underlying store. Note that this
  will overwrite whatever the current persisted statistics are with the
  given statistics ID and data adapter ID. Use incorporateStatistics to
@@ -212,13 +247,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="incorporateStatistics-org.locationtech.geowave.core.store.adapter.statistics.DataStatistics-">
+<a name="incorporateStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>incorporateStatistics</h4>
-<pre>void&nbsp;incorporateStatistics(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;statistics)</pre>
+<pre>void&nbsp;incorporateStatistics(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;statistics)</pre>
 <div class="block">Add the statistics to the store, overwriting existing data statistics
  with the aggregation of these statistics and the existing statistics</div>
 <dl>
@@ -233,12 +268,46 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataStatistics</h4>
-<pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&gt;&nbsp;getDataStatistics(short&nbsp;internalAdapterId,
-                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+<pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;&nbsp;getDataStatistics(short&nbsp;adapterId,
+                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 <div class="block">Get all data statistics from the store by a data adapter ID</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapterId</code> - the data adapter ID</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the list of statistics for the given adapter, empty if it doesn't
+         exist</dd>
+</dl>
+</li>
+</ul>
+<a name="getDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataStatistics</h4>
+<pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;&nbsp;getDataStatistics(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
+                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+<div class="block">Get all data statistics from the store by statistics type</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the list of statistics for the given adapter, empty if it doesn't
+         exist</dd>
+</dl>
+</li>
+</ul>
+<a name="getDataStatistics-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataStatistics</h4>
+<pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;&nbsp;getDataStatistics(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
+                                                                   <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
+                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+<div class="block">Get all data statistics from the store by statistics type and extended ID
+ prefix</div>
+<dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the list of statistics for the given adapter, empty if it doesn't
          exist</dd>
@@ -251,7 +320,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getAllDataStatistics</h4>
-<pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&gt;&nbsp;getAllDataStatistics(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+<pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;&nbsp;getAllDataStatistics(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 <div class="block">Get all data statistics from the store</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -259,15 +328,15 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="getDataStatistics-short-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String...-">
+<a name="getDataStatistics-short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataStatistics</h4>
-<pre><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;getDataStatistics(short&nbsp;internalAdapterId,
-                                    <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId,
-                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+<pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;&nbsp;getDataStatistics(short&nbsp;adapterId,
+                                                                   <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
+                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 <div class="block">Get statistics by adapter ID and the statistics ID (which will define a
  unique statistic)</div>
 <dl>
@@ -279,14 +348,56 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="removeStatistics-short-org.locationtech.geowave.core.index.ByteArrayId-java.lang.String...-">
+<a name="getDataStatistics-short-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataStatistics</h4>
+<pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;&nbsp;getDataStatistics(short&nbsp;adapterId,
+                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
+                                                                   <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
+                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
+ unique statistic)</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>adapterId</code> - The adapter ID for the requested statistics</dd>
+<dd><code>statisticsId</code> - the statistics ID for the requested statistics</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the persisted statistics value</dd>
+</dl>
+</li>
+</ul>
+<a name="removeStatistics-short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>removeStatistics</h4>
-<pre>boolean&nbsp;removeStatistics(short&nbsp;internalAdapterId,
-                         <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId,
+<pre>boolean&nbsp;removeStatistics(short&nbsp;adapterId,
+                         <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+<div class="block">Remove a statistic from the store</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>adapterId</code> - </dd>
+<dd><code>statisticsId</code> - </dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a flag indicating whether a statistic had existed with the given
+         IDs and was successfully deleted.</dd>
+</dl>
+</li>
+</ul>
+<a name="removeStatistics-short-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeStatistics</h4>
+<pre>boolean&nbsp;removeStatistics(short&nbsp;adapterId,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
+                         <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 <div class="block">Remove a statistic from the store</div>
 <dl>
@@ -305,7 +416,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAllStatistics</h4>
-<pre>void&nbsp;removeAllStatistics(short&nbsp;internalAdapterId,
+<pre>void&nbsp;removeAllStatistics(short&nbsp;adapterId,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 <div class="block">Remove all statistics with a given adapter ID from the store</div>
 <dl>

@@ -181,7 +181,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#byteArrayRangeToAccumuloRange-org.locationtech.geowave.core.index.ByteArrayRange-">byteArrayRangeToAccumuloRange</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&nbsp;byteArrayRange)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</code></td>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#getDataAdapters-org.apache.accumulo.core.client.Connector-java.lang.String-">getDataAdapters</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>
 <div class="block">Get list of data adapters associated with the given namespace</div>
@@ -189,15 +189,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#getEntries-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-">getEntries</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a>&nbsp;dataStore,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#getEntries-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-">getEntries</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a>&nbsp;dataStore,
           org.apache.accumulo.core.client.Connector&nbsp;connector,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-          <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>
+          <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
 <div class="block">* Get number of entries per index.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#getIndices-org.apache.accumulo.core.client.Connector-java.lang.String-">getIndices</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>
 <div class="block">Get list of indices associated with the given namespace</div>
@@ -216,36 +216,36 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#isLocalityGroupSet-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.adapter.DataAdapter-">isLocalityGroupSet</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#isLocalityGroupSet-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.api.DataTypeAdapter-">isLocalityGroupSet</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                  <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                  <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>
+                  <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                  <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter)</code>
 <div class="block">Check if locality group is set.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setLocalityGroup-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.adapter.DataAdapter-">setLocalityGroup</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setLocalityGroup-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-">setLocalityGroup</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>
+                <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>
 <div class="block">Set locality group.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByNumRows-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-long-">setSplitsByNumRows</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByNumRows-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-long-">setSplitsByNumRows</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                  <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                  <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                   long&nbsp;numberRows)</code>
 <div class="block">Set splits on table based on fixed number of rows per split.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByNumSplits-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-int-">setSplitsByNumSplits</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByNumSplits-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-int-">setSplitsByNumSplits</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                    <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                    <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                     int&nbsp;numSplits)</code>
 <div class="block">Set splits on table based on equal interval distribution and fixed number
  of splits.</div>
@@ -253,10 +253,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByQuantile-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-int-">setSplitsByQuantile</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a>&nbsp;dataStore,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByQuantile-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-int-">setSplitsByQuantile</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a>&nbsp;dataStore,
                    org.apache.accumulo.core.client.Connector&nbsp;connector,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                   <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                   <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                    int&nbsp;quantile)</code>
 <div class="block">Set splits on a table based on quantile distribution and fixed number of
  splits</div>
@@ -264,9 +264,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByRandomPartitions-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-int-">setSplitsByRandomPartitions</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/util/AccumuloUtils.html#setSplitsByRandomPartitions-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-int-">setSplitsByRandomPartitions</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                           <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                           <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                            int&nbsp;randomPartitions)</code>
 <div class="block">Set splits on a table based on a partition ID</div>
 </td>
@@ -384,8 +384,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataAdapters</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;getDataAdapters(org.apache.accumulo.core.client.Connector&nbsp;connector,
-                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&gt;&nbsp;getDataAdapters(org.apache.accumulo.core.client.Connector&nbsp;connector,
+                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
 <div class="block">Get list of data adapters associated with the given namespace</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -400,8 +400,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndices</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;getIndices(org.apache.accumulo.core.client.Connector&nbsp;connector,
-                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;getIndices(org.apache.accumulo.core.client.Connector&nbsp;connector,
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
 <div class="block">Get list of indices associated with the given namespace</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -410,7 +410,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="setSplitsByRandomPartitions-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-int-">
+<a name="setSplitsByRandomPartitions-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-int-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -418,7 +418,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>setSplitsByRandomPartitions</h4>
 <pre>public static&nbsp;void&nbsp;setSplitsByRandomPartitions(org.apache.accumulo.core.client.Connector&nbsp;connector,
                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                                               <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                               <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                                                int&nbsp;randomPartitions)
                                         throws org.apache.accumulo.core.client.AccumuloException,
                                                org.apache.accumulo.core.client.AccumuloSecurityException,
@@ -438,7 +438,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="setSplitsByQuantile-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-int-">
+<a name="setSplitsByQuantile-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-int-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -447,7 +447,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;void&nbsp;setSplitsByQuantile(<a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a>&nbsp;dataStore,
                                        org.apache.accumulo.core.client.Connector&nbsp;connector,
                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                                       <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                       <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                                        int&nbsp;quantile)
                                 throws org.apache.accumulo.core.client.AccumuloException,
                                        org.apache.accumulo.core.client.AccumuloSecurityException,
@@ -468,7 +468,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="setSplitsByNumSplits-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-int-">
+<a name="setSplitsByNumSplits-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-int-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -476,7 +476,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>setSplitsByNumSplits</h4>
 <pre>public static&nbsp;void&nbsp;setSplitsByNumSplits(org.apache.accumulo.core.client.Connector&nbsp;connector,
                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                                        <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                        <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                                         int&nbsp;numSplits)
                                  throws org.apache.accumulo.core.client.AccumuloException,
                                         org.apache.accumulo.core.client.AccumuloSecurityException,
@@ -497,7 +497,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="setSplitsByNumRows-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-long-">
+<a name="setSplitsByNumRows-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-long-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -505,7 +505,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>setSplitsByNumRows</h4>
 <pre>public static&nbsp;void&nbsp;setSplitsByNumRows(org.apache.accumulo.core.client.Connector&nbsp;connector,
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                                      <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                      <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                                       long&nbsp;numberRows)
                                throws org.apache.accumulo.core.client.AccumuloException,
                                       org.apache.accumulo.core.client.AccumuloSecurityException,
@@ -525,7 +525,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="isLocalityGroupSet-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.adapter.DataAdapter-">
+<a name="isLocalityGroupSet-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.api.DataTypeAdapter-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -533,8 +533,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>isLocalityGroupSet</h4>
 <pre>public static&nbsp;boolean&nbsp;isLocalityGroupSet(org.apache.accumulo.core.client.Connector&nbsp;connector,
                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                                         <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                                         <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)
+                                         <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                                         <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter)
                                   throws org.apache.accumulo.core.client.AccumuloException,
                                          org.apache.accumulo.core.client.AccumuloSecurityException,
                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
@@ -554,7 +554,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="setLocalityGroup-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-org.locationtech.geowave.core.store.adapter.DataAdapter-">
+<a name="setLocalityGroup-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -562,8 +562,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>setLocalityGroup</h4>
 <pre>public static&nbsp;void&nbsp;setLocalityGroup(org.apache.accumulo.core.client.Connector&nbsp;connector,
                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                                    <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                                    <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)
+                                    <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                                    <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter)
                              throws org.apache.accumulo.core.client.AccumuloException,
                                     org.apache.accumulo.core.client.AccumuloSecurityException,
                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
@@ -582,7 +582,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="getEntries-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.index.PrimaryIndex-">
+<a name="getEntries-org.locationtech.geowave.core.store.base.BaseDataStore-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -591,7 +591,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;long&nbsp;getEntries(<a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a>&nbsp;dataStore,
                               org.apache.accumulo.core.client.Connector&nbsp;connector,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                              <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)
+                              <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)
                        throws org.apache.accumulo.core.client.AccumuloException,
                               org.apache.accumulo.core.client.AccumuloSecurityException,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>

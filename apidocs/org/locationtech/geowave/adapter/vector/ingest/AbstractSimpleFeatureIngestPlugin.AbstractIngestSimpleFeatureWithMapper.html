@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;I,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.ingest">IngestPluginBase</a>&lt;I,org.opengis.feature.simple.SimpleFeature&gt;</dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;I,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;I,org.opengis.feature.simple.SimpleFeature&gt;</dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -185,7 +185,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;[]</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html#getDataAdapters-java.lang.String-">getDataAdapters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>
 <div class="block">Get all writable adapters used by this plugin</div>
 </td>
@@ -205,9 +205,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html#toGeoWaveData-I-java.util.Collection-java.lang.String-">toGeoWaveData</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html" title="type parameter in AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper">I</a>&nbsp;input,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html#toGeoWaveData-I-java.lang.String:A-java.lang.String-">toGeoWaveData</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html" title="type parameter in AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper">I</a>&nbsp;input,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>
 <div class="block">Convert from an expected input format to a data format that can be
  directly ingested into GeoWave</div>
@@ -275,12 +275,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataAdapters</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;[]&nbsp;getDataAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html#getDataAdapters-java.lang.String-">DataAdapterProvider</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;[]&nbsp;getDataAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html#getDataAdapters-java.lang.String-">DataAdapterProvider</a></code></span></div>
 <div class="block">Get all writable adapters used by this plugin</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html#getDataAdapters-java.lang.String-">getDataAdapters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html#getDataAdapters-java.lang.String-">getDataAdapters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>globalVisibility</code> - If on the command-line the user specifies a global visibility
             to write to the visibility column in GeoWave, it is passed
@@ -291,24 +291,24 @@ implements <a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/
 </dl>
 </li>
 </ul>
-<a name="toGeoWaveData-java.lang.Object-java.util.Collection-java.lang.String-">
+<a name="toGeoWaveData-java.lang.Object-java.lang.String:A-java.lang.String-">
 <!--   -->
-</a><a name="toGeoWaveData-I-java.util.Collection-java.lang.String-">
+</a><a name="toGeoWaveData-I-java.lang.String:A-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toGeoWaveData</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;toGeoWaveData(<a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html" title="type parameter in AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper">I</a>&nbsp;input,
-                                                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;toGeoWaveData(<a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html" title="type parameter in AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper">I</a>&nbsp;input,
+                                                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                                                                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData-I-java.util.Collection-java.lang.String-">IngestPluginBase</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html#toGeoWaveData-I-java.lang.String:A-java.lang.String-">IngestPluginBase</a></code></span></div>
 <div class="block">Convert from an expected input format to a data format that can be
  directly ingested into GeoWave</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData-I-java.util.Collection-java.lang.String-">toGeoWaveData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html" title="type parameter in AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dd><code>primaryIndexIds</code> - The set of index IDs specified via a commandline argument
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html#toGeoWaveData-I-java.lang.String:A-java.lang.String-">toGeoWaveData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html" title="type parameter in AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code>indexNames</code> - The set of index IDs specified via a commandline argument
             (this is typically either the default spatial index or default
             spatial-temporal index)</dd>
 <dd><code>globalVisibility</code> - If on the command-line the user specifies a global visibility
@@ -362,12 +362,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/
 <li class="blockList">
 <h4>getSupportedIndexableTypes</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;[]&nbsp;getSupportedIndexableTypes()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html#getSupportedIndexableTypes--">DataAdapterProvider</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html#getSupportedIndexableTypes--">DataAdapterProvider</a></code></span></div>
 <div class="block">return a set of classes that can be indexed by this data adapter
  provider, used for compatibility checking with an index provider</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html#getSupportedIndexableTypes--">getSupportedIndexableTypes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html#getSupportedIndexableTypes--">getSupportedIndexableTypes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the classes that are indexable by this adapter provider</dd>
 </dl>

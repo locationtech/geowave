@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/IngestTask.html" title="class in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html" target="_top">Frames</a></li>
@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&gt;</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.core.ingest.local.LocalFileIngestDriver</li>
@@ -115,7 +115,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">LocalFileIngestDriver</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&gt;</pre>
+extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&gt;</pre>
 <div class="block">This extends the local file driver to directly ingest data into GeoWave
  utilizing the LocalFileIngestPlugin's that are discovered by the system.</div>
 </li>
@@ -153,7 +153,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html#ingestOptions">ingestOptions</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&gt;</code></td>
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html#ingestPlugins">ingestPlugins</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -188,7 +188,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html#LocalFileIngestDriver-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.util.List-java.util.Map-org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions-org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions-int-">LocalFileIngestDriver</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions,
-                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&gt;&nbsp;ingestPlugins,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&gt;&nbsp;ingestPlugins,
                      <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
                      <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;inputOptions,
                      int&nbsp;threads)</code>&nbsp;</td>
@@ -210,28 +210,28 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html#processFile-java.net.URL-java.lang.String-org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-">processFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html#processFile-java.net.URL-java.lang.String-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-">processFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-           <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
+           <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
            <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html#processFileMultiThreaded-java.net.URL-java.lang.String-org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">processFileMultiThreaded</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html#processFileMultiThreaded-java.net.URL-java.lang.String-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">processFileMultiThreaded</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-                        <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
                         <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData,
-                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;specifiedPrimaryIndexes,
-                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;requiredIndexMap)</code>&nbsp;</td>
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;specifiedPrimaryIndexes,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;requiredIndexMap)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html#processFileSingleThreaded-java.net.URL-java.lang.String-org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">processFileSingleThreaded</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html#processFileSingleThreaded-java.net.URL-java.lang.String-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">processFileSingleThreaded</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-                         <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
+                         <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
                          <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData,
-                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;specifiedPrimaryIndexes,
-                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;requiredIndexMap)</code>&nbsp;</td>
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;specifiedPrimaryIndexes,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;requiredIndexMap)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -326,7 +326,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <ul class="blockList">
 <li class="blockList">
 <h4>ingestPlugins</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&gt; ingestPlugins</pre>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&gt; ingestPlugins</pre>
 </li>
 </ul>
 <a name="threads">
@@ -363,7 +363,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <h4>LocalFileIngestDriver</h4>
 <pre>public&nbsp;LocalFileIngestDriver(<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&gt;&nbsp;ingestPlugins,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&gt;&nbsp;ingestPlugins,
                              <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
                              <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;inputOptions,
                              int&nbsp;threads)</pre>
@@ -409,7 +409,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
  seconds.</div>
 </li>
 </ul>
-<a name="processFile-java.net.URL-java.lang.String-org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-">
+<a name="processFile-java.net.URL-java.lang.String-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -417,18 +417,18 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <h4>processFile</h4>
 <pre>public&nbsp;void&nbsp;processFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-                        <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
                         <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData)
                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html#processFile-java.net.URL-java.lang.String-P-R-">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html#processFile-java.net.URL-java.lang.String-P-R-">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&gt;</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="processFileSingleThreaded-java.net.URL-java.lang.String-org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">
+<a name="processFileSingleThreaded-java.net.URL-java.lang.String-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -436,10 +436,10 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <h4>processFileSingleThreaded</h4>
 <pre>public&nbsp;void&nbsp;processFileSingleThreaded(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-                                      <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
+                                      <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
                                       <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData,
-                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;specifiedPrimaryIndexes,
-                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;requiredIndexMap)
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;specifiedPrimaryIndexes,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;requiredIndexMap)
                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -447,7 +447,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 </dl>
 </li>
 </ul>
-<a name="processFileMultiThreaded-java.net.URL-java.lang.String-org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">
+<a name="processFileMultiThreaded-java.net.URL-java.lang.String-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-org.locationtech.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -455,10 +455,10 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <h4>processFileMultiThreaded</h4>
 <pre>public&nbsp;void&nbsp;processFileMultiThreaded(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-                                     <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
+                                     <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
                                      <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData,
-                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;specifiedPrimaryIndexes,
-                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;requiredIndexMap)
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;specifiedPrimaryIndexes,
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;requiredIndexMap)
                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -495,7 +495,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/IngestTask.html" title="class in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html" target="_top">Frames</a></li>

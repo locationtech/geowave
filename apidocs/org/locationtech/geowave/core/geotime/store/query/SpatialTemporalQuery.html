@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9};
+var methods = {"i0":9,"i1":9,"i2":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalConstraintsBuilderImpl.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -74,8 +74,8 @@ var activeTableTab = "activeTableTab";
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.BasicQuery">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.query.BasicQuery">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query">org.locationtech.geowave.core.store.query.BasicQuery</a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">org.locationtech.geowave.core.store.query.constraints.BasicQuery</a></li>
 <li>
 <ul class="inheritance">
 <li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">org.locationtech.geowave.core.geotime.store.query.SpatialQuery</a></li>
@@ -119,7 +119,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/Query.html" title="interface in org.locationtech.geowave.core.store.query">Query</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></dd>
 </dl>
 <hr>
 <br>
@@ -141,11 +141,11 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 </a>
 <h3>Nested Class Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.BasicQuery">
+<li class="blockList"><a name="nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">
 <!--   -->
 </a>
-<h3>Nested classes/interfaces inherited from class&nbsp;org.locationtech.geowave.core.store.query.<a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.ConstraintData</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.Constraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.ConstraintSet</a></code></li>
+<h3>Nested classes/interfaces inherited from class&nbsp;org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintData</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a></code></li>
 </ul>
 </li>
 </ul>
@@ -156,11 +156,11 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 </a>
 <h3>Field Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.query.BasicQuery">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.query.<a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#exact">exact</a></code></li>
+<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#exact">exact</a></code></li>
 </ul>
 </li>
 </ul>
@@ -184,10 +184,10 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-java.util.Date-java.util.Date-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;startTime,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-java.util.Date-java.util.Date-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;startTime,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;endTime,
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
-                    <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
+                    <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
 <div class="block">If more then on polygon is supplied in the geometry, then the range of
  time is partnered with each polygon constraint.</div>
 </td>
@@ -199,18 +199,24 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-org.threeten.extra.Interval:A-com.vividsolutions.jts.geom.Geometry-java.lang.String-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(org.threeten.extra.Interval[]&nbsp;intervals,
+                    com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode,
+                    <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
-                    <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
+                    <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
 <div class="block">Applies the set of temporal constraints to the boundaries of the provided
  polygon.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-java.lang.String-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode)</code>&nbsp;</td>
@@ -231,12 +237,17 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.Constraints</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#createConstraints-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-boolean-">createConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;temporalConstraints,
+<td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#createConstraints-org.threeten.extra.Interval:A-boolean-">createConstraints</a></span>(org.threeten.extra.Interval[]&nbsp;intervals,
                  boolean&nbsp;isDefault)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.ConstraintSet</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#createConstraints-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-boolean-">createConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;temporalConstraints,
+                 boolean&nbsp;isDefault)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#createConstraints-org.locationtech.geowave.core.geotime.store.query.TemporalRange-boolean-">createConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalRange.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalRange</a>&nbsp;temporalRange,
                  boolean&nbsp;isDefault)</code>&nbsp;</td>
 </tr>
@@ -246,14 +257,14 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">SpatialQuery</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.index.PrimaryIndex-">createQueryFilter</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#getIndexConstraints-org.locationtech.geowave.core.store.index.PrimaryIndex-">getIndexConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#getQueryGeometry--">getQueryGeometry</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#toBinary--">toBinary</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.api.Index-">createQueryFilter</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#getIndexConstraints-org.locationtech.geowave.core.store.api.Index-">getIndexConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#getQueryGeometry--">getQueryGeometry</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#toBinary--">toBinary</a></code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.query.BasicQuery">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.query.<a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#createFilters-org.locationtech.geowave.core.store.index.PrimaryIndex-">createFilters</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#getSecondaryIndexConstraints-org.locationtech.geowave.core.store.index.SecondaryIndex-">getSecondaryIndexConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#getSecondaryIndexQueryConstraints-org.locationtech.geowave.core.store.index.SecondaryIndex-">getSecondaryIndexQueryConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#getSecondaryQueryFilter-org.locationtech.geowave.core.store.index.SecondaryIndex-">getSecondaryQueryFilter</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#isExact--">isExact</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#secondaryIndexSupports-org.locationtech.geowave.core.store.index.SecondaryIndex-">secondaryIndexSupports</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#setExact-boolean-">setExact</a></code></li>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#createFilters-org.locationtech.geowave.core.store.api.Index-">createFilters</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#getSecondaryIndexConstraints-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">getSecondaryIndexConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#getSecondaryIndexQueryConstraints-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">getSecondaryIndexQueryConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#getSecondaryQueryFilter-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">getSecondaryQueryFilter</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#isExact--">isExact</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#secondaryIndexSupports-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">secondaryIndexSupports</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#setExact-boolean-">setExact</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -329,7 +340,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode)</pre>
 </li>
 </ul>
-<a name="SpatialTemporalQuery-java.util.Date-java.util.Date-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">
+<a name="SpatialTemporalQuery-java.util.Date-java.util.Date-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -338,7 +349,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>public&nbsp;SpatialTemporalQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;startTime,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;endTime,
                             com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
-                            <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
+                            <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
 <div class="block">If more then on polygon is supplied in the geometry, then the range of
  time is partnered with each polygon constraint. Note: By default we are
  using same compareOp for 1D Time filtering as the compareOp of the
@@ -352,7 +363,19 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 </dl>
 </li>
 </ul>
-<a name="SpatialTemporalQuery-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">
+<a name="SpatialTemporalQuery-org.threeten.extra.Interval:A-com.vividsolutions.jts.geom.Geometry-java.lang.String-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SpatialTemporalQuery</h4>
+<pre>public&nbsp;SpatialTemporalQuery(org.threeten.extra.Interval[]&nbsp;intervals,
+                            com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode,
+                            <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
+</li>
+</ul>
+<a name="SpatialTemporalQuery-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -360,7 +383,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <h4>SpatialTemporalQuery</h4>
 <pre>public&nbsp;SpatialTemporalQuery(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                             com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
-                            <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
+                            <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
 <div class="block">Applies the set of temporal constraints to the boundaries of the provided
  polygon. If a multi-polygon is provided, then all matching combinations
  between temporal ranges and polygons are explored.</div>
@@ -386,17 +409,27 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <ul class="blockList">
 <li class="blockList">
 <h4>createConstraints</h4>
-<pre>public static&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.ConstraintSet</a>&nbsp;createConstraints(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalRange.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalRange</a>&nbsp;temporalRange,
+<pre>public static&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a>&nbsp;createConstraints(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalRange.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalRange</a>&nbsp;temporalRange,
                                                          boolean&nbsp;isDefault)</pre>
 </li>
 </ul>
 <a name="createConstraints-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-boolean-">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createConstraints</h4>
+<pre>public static&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;createConstraints(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;temporalConstraints,
+                                                       boolean&nbsp;isDefault)</pre>
+</li>
+</ul>
+<a name="createConstraints-org.threeten.extra.Interval:A-boolean-">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>createConstraints</h4>
-<pre>public static&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.Constraints</a>&nbsp;createConstraints(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;temporalConstraints,
+<pre>public static&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;createConstraints(org.threeten.extra.Interval[]&nbsp;intervals,
                                                        boolean&nbsp;isDefault)</pre>
 </li>
 </ul>
@@ -428,7 +461,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalConstraintsBuilderImpl.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -453,8 +486,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.BasicQuery">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.query.BasicQuery">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

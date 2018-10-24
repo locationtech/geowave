@@ -169,7 +169,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RasterDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">RasterDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html#getReader-java.lang.String-">getReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -200,13 +200,13 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">FeatureDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><span class="typeNameLabel">FeatureDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#getReader-java.lang.String-">getReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Get a reader for an individual field.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AvroFeatureDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/AvroFeatureDataAdapter.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">AvroFeatureDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/AvroFeatureDataAdapter.html#getReader-java.lang.String-">getReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -242,7 +242,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DistortionGroupManagement.DistortionDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/analytic/clustering/DistortionGroupManagement.DistortionDataAdapter.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">DistortionGroupManagement.DistortionDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/analytic/clustering/DistortionGroupManagement.DistortionDataAdapter.html#getReader-java.lang.String-">getReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldId)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -298,17 +298,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryAdapter.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">GeometryAdapter</a></span></code>
-<div class="block">This adapter can be used for reading and writing Geometry fields within
- GeoWave.</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperReader.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">GeometryWrapperReader</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/TimeAdapter.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">TimeAdapter</a></span></code>
-<div class="block">This adapter can be used for reading and writing Time fields within GeoWave
- and enables a temporal field definition.</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/TimeReader.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">TimeReader</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -410,7 +404,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">InternalDataAdapterWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">InternalDataAdapterWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html#getReader-java.lang.String-">getReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -428,7 +422,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/data/DataReader.html" title="type parameter in DataReader">FieldType</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DataReader.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/data/DataReader.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><span class="typeNameLabel">DataReader.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/data/DataReader.html#getReader-java.lang.String-">getReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Get a reader for an individual field.</div>
 </td>
 </tr>
@@ -669,7 +663,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayAdapter.html" title="class in org.locationtech.geowave.core.store.dimension">ArrayAdapter</a>&lt;T&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayWrapperReader.html" title="class in org.locationtech.geowave.core.store.dimension">ArrayWrapperReader</a>&lt;T&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -681,8 +675,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayAdapter.html" title="type parameter in ArrayAdapter">T</a>[]&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">ArrayAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayAdapter.html#reader">reader</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayWrapperReader.html" title="type parameter in ArrayWrapperReader">T</a>[]&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ArrayWrapperReader.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayWrapperReader.html#reader">reader</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -720,7 +714,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BasicIndexModel.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/index/BasicIndexModel.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">BasicIndexModel.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/index/BasicIndexModel.html#getReader-java.lang.String-">getReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -738,7 +732,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">ImageChipDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/format/stanag4676/image/ImageChipDataAdapter.html#getReader-org.locationtech.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ImageChipDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/format/stanag4676/image/ImageChipDataAdapter.html#getReader-java.lang.String-">getReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldId)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

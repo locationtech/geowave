@@ -109,13 +109,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  features PER GROUP. Outputs the samples in SimpleFeatures. Sampling is
  achieved by picking the top ranked input objects. Rank is determined by a
  sample function implementing <a href="../../../../../../org/locationtech/geowave/analytic/sample/function/SamplingRankFunction.html" title="interface in org.locationtech.geowave.analytic.sample.function"><code>SamplingRankFunction</code></a>.
- 
+
  The input features should have a groupID set if they intend to be sampled by
  group.
- 
+
  Keys are partitioned by the group ID in an attempt to process each group in a
  separate reducer.
- 
+
  Sampled features are written to as a new SimpleFeature to a data store. The
  SimpleFeature contains attributes:</div>
 </li>

@@ -224,10 +224,10 @@ extends org.apache.accumulo.core.iterators.user.TransformingIterator</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/AttributeSubsettingIterator.html#setFieldIds-org.apache.accumulo.core.client.IteratorSetting-org.locationtech.geowave.core.store.adapter.DataAdapter-java.util.List-org.locationtech.geowave.core.store.index.CommonIndexModel-">setFieldIds</a></span>(org.apache.accumulo.core.client.IteratorSetting&nbsp;setting,
-           <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
-           <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/AttributeSubsettingIterator.html#setFieldNames-org.apache.accumulo.core.client.IteratorSetting-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.String:A-org.locationtech.geowave.core.store.index.CommonIndexModel-">setFieldNames</a></span>(org.apache.accumulo.core.client.IteratorSetting&nbsp;setting,
+             <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;fieldNames,
+             <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</code>
 <div class="block">Sets the desired subset of fields to keep</div>
 </td>
 </tr>
@@ -392,16 +392,16 @@ extends org.apache.accumulo.core.iterators.user.TransformingIterator</pre>
 </dl>
 </li>
 </ul>
-<a name="setFieldIds-org.apache.accumulo.core.client.IteratorSetting-org.locationtech.geowave.core.store.adapter.DataAdapter-java.util.List-org.locationtech.geowave.core.store.index.CommonIndexModel-">
+<a name="setFieldNames-org.apache.accumulo.core.client.IteratorSetting-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.String:A-org.locationtech.geowave.core.store.index.CommonIndexModel-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>setFieldIds</h4>
-<pre>public static&nbsp;void&nbsp;setFieldIds(org.apache.accumulo.core.client.IteratorSetting&nbsp;setting,
-                               <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds,
-                               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
-                               <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</pre>
+<h4>setFieldNames</h4>
+<pre>public static&nbsp;void&nbsp;setFieldNames(org.apache.accumulo.core.client.IteratorSetting&nbsp;setting,
+                                 <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds,
+                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;fieldNames,
+                                 <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</pre>
 <div class="block">Sets the desired subset of fields to keep</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

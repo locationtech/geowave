@@ -257,7 +257,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractSimpleFeatureIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#newAdapter-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-">newAdapter</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
           <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>&nbsp;</td>
 </tr>
@@ -359,17 +359,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryAdapter.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">GeometryAdapter</a></span></code>
-<div class="block">This adapter can be used for reading and writing Geometry fields within
- GeoWave.</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperWriter.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">GeometryWrapperWriter</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/TimeAdapter.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">TimeAdapter</a></span></code>
-<div class="block">This adapter can be used for reading and writing Time fields within GeoWave
- and enables a temporal field definition.</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/TimeWriter.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">TimeWriter</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -463,7 +457,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="type parameter in VisibilityWriter">RowType</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">VisibilityWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html#getFieldVisibilityHandler-org.locationtech.geowave.core.index.ByteArrayId-">getFieldVisibilityHandler</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><span class="typeNameLabel">VisibilityWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html#getFieldVisibilityHandler-java.lang.String-">getFieldVisibilityHandler</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Get a writer for an individual field given the ID</div>
 </td>
 </tr>
@@ -655,7 +649,7 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/data/visibility/UniformVisibilityWriter.html" title="type parameter in UniformVisibilityWriter">RowType</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">UniformVisibilityWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/data/visibility/UniformVisibilityWriter.html#getFieldVisibilityHandler-org.locationtech.geowave.core.index.ByteArrayId-">getFieldVisibilityHandler</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">UniformVisibilityWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/data/visibility/UniformVisibilityWriter.html#getFieldVisibilityHandler-java.lang.String-">getFieldVisibilityHandler</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -701,7 +695,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayAdapter.html" title="class in org.locationtech.geowave.core.store.dimension">ArrayAdapter</a>&lt;T&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayWrapperWriter.html" title="class in org.locationtech.geowave.core.store.dimension">ArrayWrapperWriter</a>&lt;T&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

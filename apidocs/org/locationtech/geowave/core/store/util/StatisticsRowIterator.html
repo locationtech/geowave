@@ -172,7 +172,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/Closea
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/StatisticsRowIterator.html#close--">close</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/StatisticsRowIterator.html#entryToValue-org.locationtech.geowave.core.store.entities.GeoWaveMetadata-">entryToValue</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -185,7 +185,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/Closea
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/StatisticsRowIterator.html#statsToMetadata-org.locationtech.geowave.core.store.adapter.statistics.DataStatistics-">statsToMetadata</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;stats)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/StatisticsRowIterator.html#statsToMetadata-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">statsToMetadata</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;stats)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -266,16 +266,16 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/Closea
 <ul class="blockList">
 <li class="blockList">
 <h4>entryToValue</h4>
-<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;entryToValue(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&nbsp;entry)</pre>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;entryToValue(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&nbsp;entry)</pre>
 </li>
 </ul>
-<a name="statsToMetadata-org.locationtech.geowave.core.store.adapter.statistics.DataStatistics-">
+<a name="statsToMetadata-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>statsToMetadata</h4>
-<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&nbsp;statsToMetadata(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;?&gt;&nbsp;stats)</pre>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&nbsp;statsToMetadata(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;stats)</pre>
 </li>
 </ul>
 <a name="close--">
@@ -284,15 +284,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/Closea
 <ul class="blockListLast">
 <li class="blockList">
 <h4>close</h4>
-<pre>public&nbsp;void&nbsp;close()
-           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<pre>public&nbsp;void&nbsp;close()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true#close--" title="class or interface in java.io">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close--" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html#close--">close</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

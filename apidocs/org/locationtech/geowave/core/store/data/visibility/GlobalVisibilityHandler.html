@@ -161,8 +161,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html#getVisibility-RowType-org.locationtech.geowave.core.index.ByteArrayId-FieldType-">getVisibility</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html" title="type parameter in GlobalVisibilityHandler">RowType</a>&nbsp;rowValue,
-             <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html#getVisibility-RowType-java.lang.String-FieldType-">getVisibility</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html" title="type parameter in GlobalVisibilityHandler">RowType</a>&nbsp;rowValue,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
              <a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html" title="type parameter in GlobalVisibilityHandler">FieldType</a>&nbsp;fieldValue)</code>
 <div class="block">Determine visibility on a per field basis.</div>
 </td>
@@ -206,25 +206,25 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getVisibility-java.lang.Object-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Object-">
+<a name="getVisibility-java.lang.Object-java.lang.String-java.lang.Object-">
 <!--   -->
-</a><a name="getVisibility-RowType-org.locationtech.geowave.core.index.ByteArrayId-FieldType-">
+</a><a name="getVisibility-RowType-java.lang.String-FieldType-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getVisibility</h4>
 <pre>public&nbsp;byte[]&nbsp;getVisibility(<a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html" title="type parameter in GlobalVisibilityHandler">RowType</a>&nbsp;rowValue,
-                            <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                             <a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html" title="type parameter in GlobalVisibilityHandler">FieldType</a>&nbsp;fieldValue)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html#getVisibility-RowType-org.locationtech.geowave.core.index.ByteArrayId-FieldType-">FieldVisibilityHandler</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html#getVisibility-RowType-java.lang.String-FieldType-">FieldVisibilityHandler</a></code></span></div>
 <div class="block">Determine visibility on a per field basis.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html#getVisibility-RowType-org.locationtech.geowave.core.index.ByteArrayId-FieldType-">getVisibility</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html" title="type parameter in GlobalVisibilityHandler">RowType</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html" title="type parameter in GlobalVisibilityHandler">FieldType</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html#getVisibility-RowType-java.lang.String-FieldType-">getVisibility</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html" title="type parameter in GlobalVisibilityHandler">RowType</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html" title="type parameter in GlobalVisibilityHandler">FieldType</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rowValue</code> - The value for the full row.</dd>
-<dd><code>fieldId</code> - The ID of the field for which to determine visibility</dd>
+<dd><code>fieldName</code> - The ID of the field for which to determine visibility</dd>
 <dd><code>fieldValue</code> - The value of the field to determine visibility</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The visibility for a field</dd>

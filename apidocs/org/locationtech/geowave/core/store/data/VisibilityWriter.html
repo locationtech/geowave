@@ -102,7 +102,6 @@ var activeTableTab = "activeTableTab";
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
 <dd><code>RowType</code> - The binding class of this row</dd>
-<dd><code>FieldType</code> - The binding class of this field</dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -132,7 +131,7 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="type parameter in VisibilityWriter">RowType</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html#getFieldVisibilityHandler-org.locationtech.geowave.core.index.ByteArrayId-">getFieldVisibilityHandler</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html#getFieldVisibilityHandler-java.lang.String-">getFieldVisibilityHandler</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Get a writer for an individual field given the ID</div>
 </td>
 </tr>
@@ -151,17 +150,17 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getFieldVisibilityHandler-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getFieldVisibilityHandler-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getFieldVisibilityHandler</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="type parameter in VisibilityWriter">RowType</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getFieldVisibilityHandler(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="type parameter in VisibilityWriter">RowType</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getFieldVisibilityHandler(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 <div class="block">Get a writer for an individual field given the ID</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fieldId</code> - the unique field ID</dd>
+<dd><code>fieldName</code> - the unique field identifier</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the writer for the given field</dd>
 </dl>

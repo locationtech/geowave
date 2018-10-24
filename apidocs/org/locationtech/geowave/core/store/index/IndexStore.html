@@ -126,19 +126,19 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#addIndex-org.locationtech.geowave.core.store.index.Index-">addIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#addIndex-org.locationtech.geowave.core.store.api.Index-">addIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#getIndex-org.locationtech.geowave.core.index.ByteArrayId-">getIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#getIndex-java.lang.String-">getIndex</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#getIndices--">getIndices</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#indexExists-org.locationtech.geowave.core.index.ByteArrayId-">indexExists</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html#indexExists-java.lang.String-">indexExists</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -159,31 +159,31 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="addIndex-org.locationtech.geowave.core.store.index.Index-">
+<a name="addIndex-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addIndex</h4>
-<pre>void&nbsp;addIndex(<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</pre>
+<pre>void&nbsp;addIndex(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 </li>
 </ul>
-<a name="getIndex-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getIndex-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndex</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;getIndex(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;getIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 </li>
 </ul>
-<a name="indexExists-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="indexExists-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>indexExists</h4>
-<pre>boolean&nbsp;indexExists(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+<pre>boolean&nbsp;indexExists(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 </li>
 </ul>
 <a name="getIndices--">
@@ -192,7 +192,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndices</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;getIndices()</pre>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;getIndices()</pre>
 </li>
 </ul>
 <a name="removeAll--">

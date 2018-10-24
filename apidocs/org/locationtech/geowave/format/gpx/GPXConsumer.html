@@ -109,20 +109,20 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;, <a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;, <a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">GPXConsumer</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</pre>
+implements <a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</pre>
 <div class="block">Consumes a GPX file. The consumer is an iterator, parsing the input stream
  and returning results as the stream is parsed. Data is emitted for each
  element at the 'end' tag.
- 
+
  Caution: Developers should maintain the cohesiveness of attribute names
  associated with each feature type defined in <a href="../../../../../org/locationtech/geowave/format/gpx/GpxUtils.html" title="class in org.locationtech.geowave.format.gpx"><code>GpxUtils</code></a>.
- 
+
  Route way points and way points are treated similarly except way points do
  not include the parent ID information in their ID. The assumption is that the
  name, lat and lon attributes are globally unique. In contrast, Route way
@@ -162,32 +162,16 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected static <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#pointKey">pointKey</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected static org.opengis.feature.simple.SimpleFeatureType</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#pointType">pointType</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#routeKey">routeKey</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static org.opengis.feature.simple.SimpleFeatureType</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#routeType">routeType</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected static <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#trackKey">trackKey</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected static org.opengis.feature.simple.SimpleFeatureType</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#trackType">trackType</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#waypointKey">waypointKey</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static org.opengis.feature.simple.SimpleFeatureType</code></td>
@@ -208,8 +192,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#GPXConsumer-java.io.InputStream-java.util.Collection-java.lang.String-java.util.Map-boolean-java.lang.String-double-">GPXConsumer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;fileStream,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#GPXConsumer-java.io.InputStream-java.lang.String:A-java.lang.String-java.util.Map-boolean-java.lang.String-double-">GPXConsumer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;fileStream,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputID,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;&nbsp;additionalData,
            boolean&nbsp;uniqueWayPoints,
@@ -240,7 +224,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#hasNext--">hasNext</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GPXConsumer.html#next--">next</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -306,46 +290,10 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <a name="routeType">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>routeType</h4>
 <pre>protected static final&nbsp;org.opengis.feature.simple.SimpleFeatureType routeType</pre>
-</li>
-</ul>
-<a name="pointKey">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>pointKey</h4>
-<pre>protected static final&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a> pointKey</pre>
-</li>
-</ul>
-<a name="waypointKey">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>waypointKey</h4>
-<pre>protected static final&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a> waypointKey</pre>
-</li>
-</ul>
-<a name="trackKey">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>trackKey</h4>
-<pre>protected static final&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a> trackKey</pre>
-</li>
-</ul>
-<a name="routeKey">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>routeKey</h4>
-<pre>protected static final&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a> routeKey</pre>
 </li>
 </ul>
 </li>
@@ -356,14 +304,14 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GPXConsumer-java.io.InputStream-java.util.Collection-java.lang.String-java.util.Map-boolean-java.lang.String-double-">
+<a name="GPXConsumer-java.io.InputStream-java.lang.String:A-java.lang.String-java.util.Map-boolean-java.lang.String-double-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GPXConsumer</h4>
 <pre>public&nbsp;GPXConsumer(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;fileStream,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputID,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;&nbsp;additionalData,
                    boolean&nbsp;uniqueWayPoints,
@@ -401,7 +349,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <pre>public&nbsp;boolean&nbsp;hasNext()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -411,10 +359,10 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;next()</pre>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;next()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -427,7 +375,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <pre>public&nbsp;void&nbsp;remove()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#remove--" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#remove--" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -437,15 +385,14 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <ul class="blockListLast">
 <li class="blockList">
 <h4>close</h4>
-<pre>public&nbsp;void&nbsp;close()
-           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<pre>public&nbsp;void&nbsp;close()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true#close--" title="class or interface in java.io">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close--" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html#close--">close</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>

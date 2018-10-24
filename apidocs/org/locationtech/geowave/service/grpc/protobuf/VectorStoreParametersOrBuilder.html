@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -130,15 +130,15 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VectorStoreParametersOrBuilder.html#getAdapterId--">getAdapterId</a></span>()</code>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VectorStoreParametersOrBuilder.html#getIndexName--">getIndexName</a></span>()</code>
 <div class="block">
  optional</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VectorStoreParametersOrBuilder.html#getIndexId--">getIndexId</a></span>()</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VectorStoreParametersOrBuilder.html#getIndexNameBytes--">getIndexNameBytes</a></span>()</code>
 <div class="block">
  optional</div>
 </td>
@@ -155,6 +155,20 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VectorStoreParametersOrBuilder.html#getStoreNameBytes--">getStoreNameBytes</a></span>()</code>
 <div class="block">
  required</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VectorStoreParametersOrBuilder.html#getTypeName--">getTypeName</a></span>()</code>
+<div class="block">
+ optional</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VectorStoreParametersOrBuilder.html#getTypeNameBytes--">getTypeNameBytes</a></span>()</code>
+<div class="block">
+ optional</div>
 </td>
 </tr>
 </table>
@@ -214,32 +228,60 @@ extends com.google.protobuf.MessageOrBuilder</pre>
  <code>string storeName = 1;</code></div>
 </li>
 </ul>
-<a name="getIndexId--">
+<a name="getIndexName--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getIndexId</h4>
-<pre>com.google.protobuf.ByteString&nbsp;getIndexId()</pre>
+<h4>getIndexName</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getIndexName()</pre>
 <div class="block"><pre>
  optional       
  </pre>
 
- <code>bytes indexId = 2;</code></div>
+ <code>string indexName = 2;</code></div>
 </li>
 </ul>
-<a name="getAdapterId--">
+<a name="getIndexNameBytes--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
-<h4>getAdapterId</h4>
-<pre>com.google.protobuf.ByteString&nbsp;getAdapterId()</pre>
+<h4>getIndexNameBytes</h4>
+<pre>com.google.protobuf.ByteString&nbsp;getIndexNameBytes()</pre>
+<div class="block"><pre>
+ optional       
+ </pre>
+
+ <code>string indexName = 2;</code></div>
+</li>
+</ul>
+<a name="getTypeName--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTypeName</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getTypeName()</pre>
 <div class="block"><pre>
  optional
  </pre>
 
- <code>bytes adapterId = 3;</code></div>
+ <code>string typeName = 3;</code></div>
+</li>
+</ul>
+<a name="getTypeNameBytes--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getTypeNameBytes</h4>
+<pre>com.google.protobuf.ByteString&nbsp;getTypeNameBytes()</pre>
+<div class="block"><pre>
+ optional
+ </pre>
+
+ <code>string typeName = 3;</code></div>
 </li>
 </ul>
 </li>

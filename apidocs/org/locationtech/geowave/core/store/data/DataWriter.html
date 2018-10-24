@@ -106,7 +106,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Subinterfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexDependentDataAdapter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter</a>&lt;T,M&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;</dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/mapreduce/HadoopDataAdapter.html" title="interface in org.locationtech.geowave.mapreduce">HadoopDataAdapter</a>&lt;T,W&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexDependentDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexDependentDataAdapter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InitializeWithIndicesDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InitializeWithIndicesDataAdapter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter</a>&lt;T,M&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;T&gt;</dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -136,7 +136,7 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="type parameter in DataWriter">RowType</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="type parameter in DataWriter">FieldType</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html#getWriter-org.locationtech.geowave.core.index.ByteArrayId-">getWriter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html#getWriter-java.lang.String-">getWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Get a writer for an individual field given the ID.</div>
 </td>
 </tr>
@@ -155,17 +155,17 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getWriter-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getWriter-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getWriter</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="type parameter in DataWriter">RowType</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="type parameter in DataWriter">FieldType</a>&gt;&nbsp;getWriter(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="type parameter in DataWriter">RowType</a>,<a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="type parameter in DataWriter">FieldType</a>&gt;&nbsp;getWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 <div class="block">Get a writer for an individual field given the ID.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fieldId</code> - the unique field ID</dd>
+<dd><code>fieldName</code> - the unique field ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the writer for the given field</dd>
 </dl>

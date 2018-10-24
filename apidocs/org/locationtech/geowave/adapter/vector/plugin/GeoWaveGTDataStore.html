@@ -151,7 +151,7 @@ extends org.geotools.data.store.ContentDataStore</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#dataStatisticsStore">dataStatisticsStore</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/DataStore.html" title="interface in org.locationtech.geowave.core.store">DataStore</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#dataStore">dataStore</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -230,7 +230,7 @@ extends org.geotools.data.store.ContentDataStore</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getDataStatisticsStore--">getDataStatisticsStore</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/DataStore.html" title="interface in org.locationtech.geowave.core.store">DataStore</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getDataStore--">getDataStore</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -264,8 +264,8 @@ extends org.geotools.data.store.ContentDataStore</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getIndexStore--">getIndexStore</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getIndicesForAdapter-org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter-boolean-">getIndicesForAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getIndicesForAdapter-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-boolean-">getIndicesForAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
                     boolean&nbsp;spatialOnly)</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
@@ -284,8 +284,8 @@ extends org.geotools.data.store.ContentDataStore</pre>
 </td>
 </tr>
 <tr id="i18" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getPreferredIndices-org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter-">getPreferredIndices</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getPreferredIndices-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-">getPreferredIndices</a></span>(<a href="../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -366,7 +366,7 @@ extends org.geotools.data.store.ContentDataStore</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>dataStore</h4>
-<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/DataStore.html" title="interface in org.locationtech.geowave.core.store">DataStore</a> dataStore</pre>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a> dataStore</pre>
 </li>
 </ul>
 <a name="dataStoreOptions">
@@ -450,7 +450,7 @@ extends org.geotools.data.store.ContentDataStore</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataStore</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/DataStore.html" title="interface in org.locationtech.geowave.core.store">DataStore</a>&nbsp;getDataStore()</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;getDataStore()</pre>
 </li>
 </ul>
 <a name="getDataStoreOptions--">
@@ -498,14 +498,14 @@ extends org.geotools.data.store.ContentDataStore</pre>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;getDataStatisticsStore()</pre>
 </li>
 </ul>
-<a name="getIndicesForAdapter-org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter-boolean-">
+<a name="getIndicesForAdapter-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndicesForAdapter</h4>
-<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;getIndicesForAdapter(<a href="../../../../../../org/locationtech/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
-                                              boolean&nbsp;spatialOnly)</pre>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;getIndicesForAdapter(<a href="../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+                                       boolean&nbsp;spatialOnly)</pre>
 </li>
 </ul>
 <a name="createSchema-org.opengis.feature.simple.SimpleFeatureType-">
@@ -685,13 +685,13 @@ extends org.geotools.data.store.ContentDataStore</pre>
 </dl>
 </li>
 </ul>
-<a name="getPreferredIndices-org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter-">
+<a name="getPreferredIndices-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getPreferredIndices</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;getPreferredIndices(<a href="../../../../../../org/locationtech/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;getPreferredIndices(<a href="../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</pre>
 </li>
 </ul>
 </li>

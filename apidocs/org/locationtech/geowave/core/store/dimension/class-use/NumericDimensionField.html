@@ -91,11 +91,11 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.filter">org.locationtech.geowave.core.geotime.store.filter</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query">org.locationtech.geowave.core.geotime.store.query</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query">org.locationtech.geowave.core.geotime.store.query</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query.filter">org.locationtech.geowave.core.geotime.store.query.filter</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -107,15 +107,15 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.filter">org.locationtech.geowave.core.store.filter</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.index">org.locationtech.geowave.core.store.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.query.constraints">org.locationtech.geowave.core.store.query.constraints</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.query">org.locationtech.geowave.core.store.query</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.query.filter">org.locationtech.geowave.core.store.query.filter</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -248,48 +248,6 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="org.locationtech.geowave.core.geotime.store.filter">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a> in <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/package-summary.html">org.locationtech.geowave.core.geotime.store.filter</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/package-summary.html">org.locationtech.geowave.core.geotime.store.filter</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">SpatialQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/SpatialQueryFilter.html#isSpatial-org.locationtech.geowave.core.store.dimension.NumericDimensionField-">isSpatial</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;&nbsp;d)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/package-summary.html">org.locationtech.geowave.core.geotime.store.filter</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/SpatialQueryFilter.html#SpatialQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-org.locationtech.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation-">SpatialQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
-                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionDefinitions,
-                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionDefinitions,
-                  com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
-                  <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
-                  <a href="../../../../../../../org/locationtech/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/SpatialQueryFilter.html#SpatialQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-org.locationtech.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation-">SpatialQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
-                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionDefinitions,
-                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionDefinitions,
-                  com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
-                  <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
-                  <a href="../../../../../../../org/locationtech/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="org.locationtech.geowave.core.geotime.store.query">
 <!--   -->
 </a>
@@ -302,32 +260,74 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SpatialQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.index.PrimaryIndex-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.api.Index-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionFields,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionDefinitions,
-                 <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+                 <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SpatialQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.index.PrimaryIndex-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.api.Index-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionFields,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionDefinitions,
-                 <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+                 <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IndexOnlySpatialQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/IndexOnlySpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.index.PrimaryIndex-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></code></td>
+<td class="colLast"><span class="typeNameLabel">IndexOnlySpatialQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/IndexOnlySpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.api.Index-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionFields,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionDefinitions,
-                 <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+                 <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IndexOnlySpatialQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/IndexOnlySpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.index.PrimaryIndex-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></code></td>
+<td class="colLast"><span class="typeNameLabel">IndexOnlySpatialQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/IndexOnlySpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.api.Index-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionFields,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionDefinitions,
-                 <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+                 <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.geotime.store.query.filter">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a> in <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/package-summary.html">org.locationtech.geowave.core.geotime.store.query.filter</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/package-summary.html">org.locationtech.geowave.core.geotime.store.query.filter</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.html#isSpatial-org.locationtech.geowave.core.store.dimension.NumericDimensionField-">isSpatial</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;&nbsp;d)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/package-summary.html">org.locationtech.geowave.core.geotime.store.query.filter</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.html#SpatialQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">SpatialQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionDefinitions,
+                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionDefinitions,
+                  com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                  <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
+                  <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.html#SpatialQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">SpatialQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
+                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionDefinitions,
+                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionDefinitions,
+                  com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                  <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
+                  <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -410,41 +410,6 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="org.locationtech.geowave.core.store.filter">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/filter/package-summary.html">org.locationtech.geowave.core.store.filter</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
-<caption><span>Fields in <a href="../../../../../../../org/locationtech/geowave/core/store/filter/package-summary.html">org.locationtech.geowave.core.store.filter</a> declared as <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]</code></td>
-<td class="colLast"><span class="typeNameLabel">BasicQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/filter/BasicQueryFilter.html#dimensionFields">dimensionFields</a></span></code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/core/store/filter/package-summary.html">org.locationtech.geowave.core.store.filter</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/filter/BasicQueryFilter.html#BasicQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-">BasicQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
-                <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/filter/BasicQueryFilter.html#BasicQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation-">BasicQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
-                <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields,
-                <a href="../../../../../../../org/locationtech/geowave/core/store/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="org.locationtech.geowave.core.store.index">
 <!--   -->
 </a>
@@ -509,30 +474,65 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="org.locationtech.geowave.core.store.query">
+<li class="blockList"><a name="org.locationtech.geowave.core.store.query.constraints">
 <!--   -->
 </a>
-<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/query/package-summary.html">org.locationtech.geowave.core.store.query</a></h3>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/query/package-summary.html">org.locationtech.geowave.core.store.query</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">BasicQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.index.PrimaryIndex-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BasicQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.api.Index-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionFields,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionFields,
-                 <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+                 <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">BasicQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.index.PrimaryIndex-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BasicQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.api.Index-">createQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;orderedConstrainedDimensionFields,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;unconstrainedDimensionFields,
-                 <a href="../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+                 <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.store.query.filter">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/package-summary.html">org.locationtech.geowave.core.store.query.filter</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/package-summary.html">org.locationtech.geowave.core.store.query.filter</a> declared as <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]</code></td>
+<td class="colLast"><span class="typeNameLabel">BasicQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.html#dimensionFields">dimensionFields</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/package-summary.html">org.locationtech.geowave.core.store.query.filter</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.html#BasicQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-">BasicQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.html#BasicQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">BasicQueryFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;constraints,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;?&gt;[]&nbsp;dimensionFields,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

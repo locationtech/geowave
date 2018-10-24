@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">QueryFilter</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">NumberRangeFilter</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a></pre>
+implements <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></pre>
 </li>
 </ul>
 </div>
@@ -135,8 +135,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/fil
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumberRangeFilter.html#fieldId">fieldId</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumberRangeFilter.html#fieldName">fieldName</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
@@ -172,7 +172,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/fil
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumberRangeFilter.html#NumberRangeFilter--">NumberRangeFilter</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumberRangeFilter.html#NumberRangeFilter-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Number-java.lang.Number-boolean-boolean-">NumberRangeFilter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumberRangeFilter.html#NumberRangeFilter-java.lang.String-java.lang.Number-java.lang.Number-boolean-boolean-">NumberRangeFilter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;lowerValue,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;upperValue,
                  boolean&nbsp;inclusiveLow,
@@ -205,8 +205,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/fil
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumberRangeFilter.html#getFieldId--">getFieldId</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumberRangeFilter.html#getFieldName--">getFieldName</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a></code></td>
@@ -253,13 +253,13 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/fil
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="fieldId">
+<a name="fieldName">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>fieldId</h4>
-<pre>protected&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a> fieldId</pre>
+<h4>fieldName</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> fieldName</pre>
 </li>
 </ul>
 <a name="lowerValue">
@@ -315,13 +315,13 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/fil
 <pre>public&nbsp;NumberRangeFilter()</pre>
 </li>
 </ul>
-<a name="NumberRangeFilter-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Number-java.lang.Number-boolean-boolean-">
+<a name="NumberRangeFilter-java.lang.String-java.lang.Number-java.lang.Number-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>NumberRangeFilter</h4>
-<pre>public&nbsp;NumberRangeFilter(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+<pre>public&nbsp;NumberRangeFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;lowerValue,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;upperValue,
                          boolean&nbsp;inclusiveLow,
@@ -336,13 +336,13 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/fil
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getFieldId--">
+<a name="getFieldName--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getFieldId</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getFieldId()</pre>
+<h4>getFieldName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFieldName()</pre>
 </li>
 </ul>
 <a name="getLowerValue--">
@@ -391,7 +391,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/fil
                       <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/filter/QueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">QueryFilter</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></code></dd>
 </dl>
 </li>
 </ul>

@@ -182,11 +182,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/cli/api/P
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/operations/options/IngestFormatPluginOptions.html#createHdfsIngestPlugins--">createHdfsIngestPlugins</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/operations/options/IngestFormatPluginOptions.html#createLocalIngestPlugins--">createLocalIngestPlugins</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/operations/options/IngestFormatPluginOptions.html#getOptions--">getOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
@@ -207,7 +207,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/cli/api/P
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/operations/options/IngestFormatPluginOptions.html#setOptions-java.util.HashMap-">setOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&gt;&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/operations/options/IngestFormatPluginOptions.html#setOptions-java.util.HashMap-">setOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&gt;&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -306,7 +306,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/cli/api/P
 <ul class="blockList">
 <li class="blockList">
 <h4>createLocalIngestPlugins</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&gt;&nbsp;createLocalIngestPlugins()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&gt;&nbsp;createLocalIngestPlugins()</pre>
 </li>
 </ul>
 <a name="createHdfsIngestPlugins--">
@@ -351,7 +351,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/cli/api/P
 <ul class="blockList">
 <li class="blockList">
 <h4>getOptions</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&gt;&nbsp;getOptions()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&gt;&nbsp;getOptions()</pre>
 </li>
 </ul>
 <a name="setOptions-java.util.HashMap-">
@@ -360,7 +360,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/cli/api/P
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setOptions</h4>
-<pre>public&nbsp;void&nbsp;setOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&gt;&nbsp;options)</pre>
+<pre>public&nbsp;void&nbsp;setOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&gt;&nbsp;options)</pre>
 </li>
 </ul>
 </li>

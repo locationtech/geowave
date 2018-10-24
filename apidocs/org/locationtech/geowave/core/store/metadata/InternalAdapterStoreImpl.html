@@ -146,7 +146,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected com.google.common.collect.BiMap&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;</code></td>
+<td class="colFirst"><code>protected com.google.common.collect.BiMap&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#cache">cache</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -183,46 +183,46 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>short</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#addAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">addAdapterId</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#addTypeName-java.lang.String-">addTypeName</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
 <div class="block">If an adapter is already associated with an internal Adapter returns
  false.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#getAdapterId-short-">getAdapterId</a></span>(short&nbsp;internalAdapterId)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#getAdapterId-java.lang.String-">getAdapterId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colFirst"><code>short[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#getAdapterIds--">getAdapterIds</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static short</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#getInitialInternalAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">getInitialInternalAdapterId</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#getInitialAdapterId-java.lang.String-">getInitialAdapterId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#getInternalAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">getInternalAdapterId</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#getTypeName-short-">getTypeName</a></span>(short&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#getInternalAdapterIds--">getInternalAdapterIds</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#getTypeNames--">getTypeNames</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#internalGetInternalAdapterId-org.locationtech.geowave.core.index.ByteArrayId-boolean-">internalGetInternalAdapterId</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                            boolean&nbsp;warnIfNotExist)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#internalGetAdapterId-java.lang.String-boolean-">internalGetAdapterId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                    boolean&nbsp;warnIfNotExist)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#remove-org.locationtech.geowave.core.index.ByteArrayId-">remove</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>
-<div class="block">Adapter Id to Internal Adapter Id mappings are maintain without regard to
- visibility constraints.</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#remove-short-">remove</a></span>(short&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#remove-short-">remove</a></span>(short&nbsp;internalAdapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/InternalAdapterStoreImpl.html#remove-java.lang.String-">remove</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
+<div class="block">Adapter Id to Internal Adapter Id mappings are maintain without regard to
+ visibility constraints.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -256,7 +256,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>cache</h4>
-<pre>protected final&nbsp;com.google.common.collect.BiMap&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt; cache</pre>
+<pre>protected final&nbsp;com.google.common.collect.BiMap&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt; cache</pre>
 </li>
 </ul>
 </li>
@@ -284,84 +284,82 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getAdapterId-short-">
+<a name="getTypeName-short-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTypeName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getTypeName(short&nbsp;adapterId)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#getTypeName-short-">getTypeName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getAdapterId-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdapterId</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getAdapterId(short&nbsp;internalAdapterId)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;getAdapterId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#getAdapterId-short-">getAdapterId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#getAdapterId-java.lang.String-">getAdapterId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="getInternalAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="internalGetAdapterId-java.lang.String-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getInternalAdapterId</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;getInternalAdapterId(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#getInternalAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">getInternalAdapterId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
-</dl>
+<h4>internalGetAdapterId</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalGetAdapterId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                  boolean&nbsp;warnIfNotExist)</pre>
 </li>
 </ul>
-<a name="internalGetInternalAdapterId-org.locationtech.geowave.core.index.ByteArrayId-boolean-">
+<a name="getInitialAdapterId-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>internalGetInternalAdapterId</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalGetInternalAdapterId(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                                          boolean&nbsp;warnIfNotExist)</pre>
+<h4>getInitialAdapterId</h4>
+<pre>public static&nbsp;short&nbsp;getInitialAdapterId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
 </li>
 </ul>
-<a name="getInitialInternalAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="addTypeName-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getInitialInternalAdapterId</h4>
-<pre>public static&nbsp;short&nbsp;getInitialInternalAdapterId(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
-</li>
-</ul>
-<a name="addAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>addAdapterId</h4>
-<pre>public&nbsp;short&nbsp;addAdapterId(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#addAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">InternalAdapterStore</a></code></span></div>
+<h4>addTypeName</h4>
+<pre>public&nbsp;short&nbsp;addTypeName(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#addTypeName-java.lang.String-">InternalAdapterStore</a></code></span></div>
 <div class="block">If an adapter is already associated with an internal Adapter returns
  false. Adapter can only be associated with internal adapter once.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#addAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">addAdapterId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>adapterId</code> - the adapter</dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#addTypeName-java.lang.String-">addTypeName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the internal ID</dd>
 </dl>
 </li>
 </ul>
-<a name="remove-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="remove-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;boolean&nbsp;remove(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#remove-org.locationtech.geowave.core.index.ByteArrayId-">InternalAdapterStore</a></code></span></div>
+<pre>public&nbsp;boolean&nbsp;remove(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#remove-java.lang.String-">InternalAdapterStore</a></code></span></div>
 <div class="block">Adapter Id to Internal Adapter Id mappings are maintain without regard to
  visibility constraints.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#remove-org.locationtech.geowave.core.index.ByteArrayId-">remove</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#remove-java.lang.String-">remove</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -384,36 +382,36 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;boolean&nbsp;remove(short&nbsp;internalAdapterId)</pre>
+<pre>public&nbsp;boolean&nbsp;remove(short&nbsp;adapterId)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#remove-short-">remove</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="getAdapterIds--">
+<a name="getTypeNames--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getAdapterIds</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getAdapterIds()</pre>
+<h4>getTypeNames</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;getTypeNames()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#getAdapterIds--">getAdapterIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#getTypeNames--">getTypeNames</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="getInternalAdapterIds--">
+<a name="getAdapterIds--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getInternalAdapterIds</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;&nbsp;getInternalAdapterIds()</pre>
+<h4>getAdapterIds</h4>
+<pre>public&nbsp;short[]&nbsp;getAdapterIds()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#getInternalAdapterIds--">getInternalAdapterIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#getAdapterIds--">getAdapterIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></dd>
 </dl>
 </li>
 </ul>

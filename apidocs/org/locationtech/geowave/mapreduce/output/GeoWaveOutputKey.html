@@ -142,8 +142,8 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#adapterId">adapterId</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#typeName">typeName</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -166,18 +166,22 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#GeoWaveOutputKey-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-">GeoWaveOutputKey</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#GeoWaveOutputKey-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.String:A-">GeoWaveOutputKey</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;adapter,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#GeoWaveOutputKey-org.locationtech.geowave.core.index.ByteArrayId-java.util.Collection-">GeoWaveOutputKey</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;indexIds)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#GeoWaveOutputKey-org.locationtech.geowave.core.store.ingest.GeoWaveData-">GeoWaveOutputKey</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;data)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#GeoWaveOutputKey-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-java.util.Collection-">GeoWaveOutputKey</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;adapter,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;indexIds)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#GeoWaveOutputKey-java.lang.String-java.lang.String-">GeoWaveOutputKey</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#GeoWaveOutputKey-java.lang.String-java.lang.String:A-">GeoWaveOutputKey</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -203,16 +207,16 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#getAdapter-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-">getAdapter</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterCache)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#getAdapterId--">getAdapterId</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#getIndexNames--">getIndexNames</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#getIndexIds--">getIndexIds</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#getTypeName--">getTypeName</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
@@ -224,7 +228,7 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#setAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">setAdapterId</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html#setTypeName-java.lang.String-">setTypeName</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -252,13 +256,13 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="adapterId">
+<a name="typeName">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>adapterId</h4>
-<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a> adapterId</pre>
+<h4>typeName</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> typeName</pre>
 </li>
 </ul>
 </li>
@@ -278,34 +282,43 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <pre>protected&nbsp;GeoWaveOutputKey()</pre>
 </li>
 </ul>
-<a name="GeoWaveOutputKey-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="GeoWaveOutputKey-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>GeoWaveOutputKey</h4>
-<pre>public&nbsp;GeoWaveOutputKey(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                        <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+<pre>public&nbsp;GeoWaveOutputKey(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 </li>
 </ul>
-<a name="GeoWaveOutputKey-org.locationtech.geowave.core.index.ByteArrayId-java.util.Collection-">
+<a name="GeoWaveOutputKey-java.lang.String-java.lang.String:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>GeoWaveOutputKey</h4>
-<pre>public&nbsp;GeoWaveOutputKey(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;indexIds)</pre>
+<pre>public&nbsp;GeoWaveOutputKey(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames)</pre>
 </li>
 </ul>
-<a name="GeoWaveOutputKey-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-java.util.Collection-">
+<a name="GeoWaveOutputKey-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.String:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GeoWaveOutputKey</h4>
+<pre>public&nbsp;GeoWaveOutputKey(<a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;adapter,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames)</pre>
+</li>
+</ul>
+<a name="GeoWaveOutputKey-org.locationtech.geowave.core.store.ingest.GeoWaveData-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeoWaveOutputKey</h4>
-<pre>public&nbsp;GeoWaveOutputKey(<a href="../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;adapter,
-                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;indexIds)</pre>
+<pre>public&nbsp;GeoWaveOutputKey(<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;data)</pre>
 </li>
 </ul>
 </li>
@@ -316,31 +329,31 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getAdapterId--">
+<a name="getTypeName--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getAdapterId</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getAdapterId()</pre>
+<h4>getTypeName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getTypeName()</pre>
 </li>
 </ul>
-<a name="setAdapterId-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="setTypeName-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setAdapterId</h4>
-<pre>public&nbsp;void&nbsp;setAdapterId(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
+<h4>setTypeName</h4>
+<pre>public&nbsp;void&nbsp;setTypeName(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
 </li>
 </ul>
-<a name="getIndexIds--">
+<a name="getIndexNames--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getIndexIds</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getIndexIds()</pre>
+<h4>getIndexNames</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;getIndexNames()</pre>
 </li>
 </ul>
 <a name="getAdapter-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-">
@@ -349,20 +362,7 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdapter</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;getAdapter(<a href="../../../../../org/locationtech/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterCache)</pre>
-</li>
-</ul>
-<a name="compareTo-org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>compareTo</h4>
-<pre>public&nbsp;int&nbsp;compareTo(<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in org.locationtech.geowave.mapreduce.output">GeoWaveOutputKey</a>&nbsp;o)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true#compareTo-T-" title="class or interface in java.lang">compareTo</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang">Comparable</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in org.locationtech.geowave.mapreduce.output">GeoWaveOutputKey</a>&gt;</code></dd>
-</dl>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="type parameter in GeoWaveOutputKey">T</a>&gt;&nbsp;getAdapter(<a href="../../../../../org/locationtech/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterCache)</pre>
 </li>
 </ul>
 <a name="hashCode--">
@@ -388,6 +388,19 @@ implements org.apache.hadoop.io.WritableComparable&lt;<a href="../../../../../or
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="compareTo-org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>compareTo</h4>
+<pre>public&nbsp;int&nbsp;compareTo(<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in org.locationtech.geowave.mapreduce.output">GeoWaveOutputKey</a>&nbsp;o)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true#compareTo-T-" title="class or interface in java.lang">compareTo</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang">Comparable</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in org.locationtech.geowave.mapreduce.output">GeoWaveOutputKey</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

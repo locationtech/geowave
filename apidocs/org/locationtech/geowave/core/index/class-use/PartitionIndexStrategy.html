@@ -83,23 +83,23 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.adapter.raster.adapter">org.locationtech.geowave.adapter.raster.adapter</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.index">org.locationtech.geowave.core.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.index.sfc.tiered">org.locationtech.geowave.core.index.sfc.tiered</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.index.sfc.xz">org.locationtech.geowave.core.index.sfc.xz</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.index.simple">org.locationtech.geowave.core.index.simple</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.util">org.locationtech.geowave.core.store.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -107,28 +107,6 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
-<li class="blockList"><a name="org.locationtech.geowave.adapter.raster.adapter">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">PartitionIndexStrategy</a> in <a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/package-summary.html">org.locationtech.geowave.adapter.raster.adapter</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/package-summary.html">org.locationtech.geowave.adapter.raster.adapter</a> that implement <a href="../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">PartitionIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/CompoundHierarchicalIndexStrategyWrapper.html" title="class in org.locationtech.geowave.adapter.raster.adapter">CompoundHierarchicalIndexStrategyWrapper</a></span></code>
-<div class="block">This class wraps the first occurrence of a hierarchical index within a
- compound index such that sub strategies within the hierarchy are replaced
- maintaining the rest of the structure of the compound index</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="org.locationtech.geowave.core.index">
 <!--   -->
 </a>
@@ -312,6 +290,28 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleShortIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleShortIndexStrategy</a></span></code>
 <div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of
  signed short values.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.store.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">PartitionIndexStrategy</a> in <a href="../../../../../../org/locationtech/geowave/core/store/util/package-summary.html">org.locationtech.geowave.core.store.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/core/store/util/package-summary.html">org.locationtech.geowave.core.store.util</a> that implement <a href="../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">PartitionIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/CompoundHierarchicalIndexStrategyWrapper.html" title="class in org.locationtech.geowave.core.store.util">CompoundHierarchicalIndexStrategyWrapper</a></span></code>
+<div class="block">This class wraps the first occurrence of a hierarchical index within a
+ compound index such that sub strategies within the hierarchy are replaced
+ maintaining the rest of the structure of the compound index</div>
 </td>
 </tr>
 </tbody>

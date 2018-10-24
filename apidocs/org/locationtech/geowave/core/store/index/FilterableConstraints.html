@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/index/FieldIndexStrategy.html" title="interface in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html" title="class in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/index/FilterableConstraints.html" target="_top">Frames</a></li>
@@ -101,7 +101,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html" title="interface in org.locationtech.geowave.core.index">QueryConstraints</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html" title="interface in org.locationtech.geowave.core.index">IndexConstraints</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -110,7 +110,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">FilterableConstraints</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html" title="interface in org.locationtech.geowave.core.index">QueryConstraints</a></pre>
+extends <a href="../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html" title="interface in org.locationtech.geowave.core.index">IndexConstraints</a></pre>
 </li>
 </ul>
 </div>
@@ -130,11 +130,11 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/QueryCons
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html#getFieldId--">getFieldId</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html#getFieldName--">getFieldName</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html#getFilter--">getFilter</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -147,11 +147,11 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/QueryCons
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.index.QueryConstraints">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.index.IndexConstraints">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.index.<a href="../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html" title="interface in org.locationtech.geowave.core.index">QueryConstraints</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html#getDimensionCount--">getDimensionCount</a>, <a href="../../../../../../org/locationtech/geowave/core/index/QueryConstraints.html#isEmpty--">isEmpty</a></code></li>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.index.<a href="../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html" title="interface in org.locationtech.geowave.core.index">IndexConstraints</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html#getDimensionCount--">getDimensionCount</a>, <a href="../../../../../../org/locationtech/geowave/core/index/IndexConstraints.html#isEmpty--">isEmpty</a></code></li>
 </ul>
 </li>
 </ul>
@@ -167,13 +167,13 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/QueryCons
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getFieldId--">
+<a name="getFieldName--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getFieldId</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getFieldId()</pre>
+<h4>getFieldName</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFieldName()</pre>
 </li>
 </ul>
 <a name="getFilter--">
@@ -182,7 +182,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/QueryCons
 <ul class="blockList">
 <li class="blockList">
 <h4>getFilter</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in org.locationtech.geowave.core.store.filter">DistributableQueryFilter</a>&nbsp;getFilter()</pre>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;getFilter()</pre>
 </li>
 </ul>
 <a name="intersect-org.locationtech.geowave.core.store.index.FilterableConstraints-">
@@ -232,7 +232,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/QueryCons
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/index/FieldIndexStrategy.html" title="interface in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html" title="class in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/index/FilterableConstraints.html" target="_top">Frames</a></li>

@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/index/NullIndex.html" title="class in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="class in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="interface in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/index/PrimaryIndex.html" target="_top">Frames</a></li>
@@ -109,17 +109,17 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/store/index/CustomIdIndex.html" title="class in org.locationtech.geowave.core.store.index">CustomIdIndex</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/NullIndex.html" title="class in org.locationtech.geowave.core.store.index">NullIndex</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/store/index/CustomNameIndex.html" title="class in org.locationtech.geowave.core.store.index">CustomNameIndex</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/NullIndex.html" title="class in org.locationtech.geowave.core.store.index">NullIndex</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">PrimaryIndex</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</pre>
+implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></pre>
 <div class="block">This class fully describes everything necessary to index data within GeoWave.
  The key components are the indexing strategy and the common index model.</div>
 </li>
@@ -195,16 +195,24 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getId--">getId</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getIndexModel--">getIndexModel</a></span>()</code>
+<div class="block">The common index model allows for easily searching certain fields across
+ all types within an index.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getIndexModel--">getIndexModel</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>
+<div class="block">get the index strategy which maps real-world values to insertion keys and
+ query ranges for efficient range scans within a key-value store.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getName--">getName</a></span>()</code>
+<div class="block">get the name of the index</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
@@ -299,9 +307,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <li class="blockList">
 <h4>getIndexStrategy</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;getIndexStrategy()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getIndexStrategy--">Index</a></code></span></div>
+<div class="block">get the index strategy which maps real-world values to insertion keys and
+ query ranges for efficient range scans within a key-value store.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html#getIndexStrategy--">getIndexStrategy</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getIndexStrategy--">getIndexStrategy</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the numeric index strategy</dd>
 </dl>
 </li>
 </ul>
@@ -312,18 +325,33 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <li class="blockList">
 <h4>getIndexModel</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;getIndexModel()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getIndexModel--">Index</a></code></span></div>
+<div class="block">The common index model allows for easily searching certain fields across
+ all types within an index. For example, if geometry is a common index
+ field, one could ubiquitously search all types within this index
+ spatially. This could apply to any field type desired.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getIndexModel--">getIndexModel</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the common index model</dd>
+</dl>
 </li>
 </ul>
-<a name="getId--">
+<a name="getName--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getId</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getId()</pre>
+<h4>getName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getName()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getName--">Index</a></code></span></div>
+<div class="block">get the name of the index</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html#getId--">getId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getName--">getName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the name of the index (should be unique per data store)</dd>
 </dl>
 </li>
 </ul>
@@ -416,7 +444,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/index/NullIndex.html" title="class in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="class in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="interface in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/index/PrimaryIndex.html" target="_top">Frames</a></li>

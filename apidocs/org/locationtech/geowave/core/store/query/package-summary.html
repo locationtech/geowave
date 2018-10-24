@@ -83,25 +83,9 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/AdapterQuery.html" title="interface in org.locationtech.geowave.core.store.query">AdapterQuery</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/CoordinateRangeUtils.RangeCache.html" title="interface in org.locationtech.geowave.core.store.query">CoordinateRangeUtils.RangeCache</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a></td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.query">BaseQueryBuilder</a>&lt;T,Q extends <a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQuery.html" title="class in org.locationtech.geowave.core.store.query">BaseQuery</a>&lt;T,?&gt;,R extends <a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.query">BaseQueryBuilder</a>&lt;T,Q,R&gt;&gt;</td>
 <td class="colLast">
-<div class="block">This interface fully describes a query and is persistable so that it can be
- distributed if necessary (particularly useful for using a query as mapreduce
- input)</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/Query.html" title="interface in org.locationtech.geowave.core.store.query">Query</a></td>
-<td class="colLast">
-<div class="block">This interface fully describes a query</div>
+<div class="block">A base class for building queries</div>
 </td>
 </tr>
 </tbody>
@@ -116,68 +100,16 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery</a></td>
-<td class="colLast">
-<div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions
- that match the Constraints passed into the constructor
-
- NOTE: query to an index that requires a constraint and the constraint is
- missing within the query equates to an unconstrained index scan.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.ConstraintData</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.Constraints</a></td>
-<td class="colLast">
-<div class="block">A list of Constraint Sets.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.ConstraintSet</a></td>
-<td class="colLast">
-<div class="block">A set of constraints, one range per dimension</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/CoordinateRangeQuery.html" title="class in org.locationtech.geowave.core.store.query">CoordinateRangeQuery</a></td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQuery.html" title="class in org.locationtech.geowave.core.store.query">BaseQuery</a>&lt;T,O extends <a href="../../../../../../org/locationtech/geowave/core/store/query/options/DataTypeQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">DataTypeQueryOptions</a>&lt;T&gt;&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/CoordinateRangeQueryFilter.html" title="class in org.locationtech.geowave.core.store.query">CoordinateRangeQueryFilter</a></td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.query">BaseQueryBuilderImpl</a>&lt;T,Q extends <a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQuery.html" title="class in org.locationtech.geowave.core.store.query">BaseQuery</a>&lt;T,?&gt;,R extends <a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.query">BaseQueryBuilder</a>&lt;T,Q,R&gt;&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/CoordinateRangeUtils.html" title="class in org.locationtech.geowave.core.store.query">CoordinateRangeUtils</a></td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/QueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.query">QueryBuilderImpl</a>&lt;T,R extends <a href="../../../../../../org/locationtech/geowave/core/store/api/QueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">QueryBuilder</a>&lt;T,R&gt;&gt;</td>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/CoordinateRangeUtils.RangeLookupFactory.html" title="class in org.locationtech.geowave.core.store.query">CoordinateRangeUtils.RangeLookupFactory</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/DataIdQuery.html" title="class in org.locationtech.geowave.core.store.query">DataIdQuery</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/EverythingQuery.html" title="class in org.locationtech.geowave.core.store.query">EverythingQuery</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/InsertionIdQuery.html" title="class in org.locationtech.geowave.core.store.query">InsertionIdQuery</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/PrefixIdQuery.html" title="class in org.locationtech.geowave.core.store.query">PrefixIdQuery</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/query/QueryOptions.html" title="class in org.locationtech.geowave.core.store.query">QueryOptions</a></td>
-<td class="colLast">
-<div class="block">Directs a query to restrict searches to specific adapters, indices, etc..</div>
-</td>
 </tr>
 </tbody>
 </table>

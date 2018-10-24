@@ -147,7 +147,7 @@ implements org.apache.hadoop.io.Writable</pre>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected </code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveInputSplit.html#GeoWaveInputSplit-java.util.Map-java.lang.String:A-">GeoWaveInputSplit</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html" title="class in org.locationtech.geowave.mapreduce.splits">SplitInfo</a>&gt;&nbsp;splitInfo,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveInputSplit.html#GeoWaveInputSplit-java.util.Map-java.lang.String:A-">GeoWaveInputSplit</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html" title="class in org.locationtech.geowave.mapreduce.splits">SplitInfo</a>&gt;&nbsp;splitInfo,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;locations)</code>&nbsp;</td>
 </tr>
 </table>
@@ -166,12 +166,12 @@ implements org.apache.hadoop.io.Writable</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveInputSplit.html#getIndexIds--">getIndexIds</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveInputSplit.html#getIndexNames--">getIndexNames</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html" title="class in org.locationtech.geowave.mapreduce.splits">SplitInfo</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveInputSplit.html#getInfo-org.locationtech.geowave.core.index.ByteArrayId-">getInfo</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveInputSplit.html#getInfo-java.lang.String-">getInfo</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>long</code></td>
@@ -236,7 +236,7 @@ implements org.apache.hadoop.io.Writable</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeoWaveInputSplit</h4>
-<pre>protected&nbsp;GeoWaveInputSplit(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html" title="class in org.locationtech.geowave.mapreduce.splits">SplitInfo</a>&gt;&nbsp;splitInfo,
+<pre>protected&nbsp;GeoWaveInputSplit(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html" title="class in org.locationtech.geowave.mapreduce.splits">SplitInfo</a>&gt;&nbsp;splitInfo,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;locations)</pre>
 </li>
 </ul>
@@ -248,22 +248,22 @@ implements org.apache.hadoop.io.Writable</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getIndexIds--">
+<a name="getIndexNames--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getIndexIds</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getIndexIds()</pre>
+<h4>getIndexNames</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getIndexNames()</pre>
 </li>
 </ul>
-<a name="getInfo-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getInfo-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getInfo</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html" title="class in org.locationtech.geowave.mapreduce.splits">SplitInfo</a>&nbsp;getInfo(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html" title="class in org.locationtech.geowave.mapreduce.splits">SplitInfo</a>&nbsp;getInfo(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 </li>
 </ul>
 <a name="getLength--">

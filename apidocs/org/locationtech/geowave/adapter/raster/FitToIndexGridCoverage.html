@@ -134,9 +134,9 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/raster/FitToIndexGridCoverage.html#FitToIndexGridCoverage-org.opengis.coverage.grid.GridCoverage-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.adapter.raster.Resolution-org.opengis.geometry.Envelope-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-java.util.Map-">FitToIndexGridCoverage</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
-                      <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
-                      <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;sortKey,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/raster/FitToIndexGridCoverage.html#FitToIndexGridCoverage-org.opengis.coverage.grid.GridCoverage-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.adapter.raster.Resolution-org.opengis.geometry.Envelope-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-java.util.Map-">FitToIndexGridCoverage</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
+                      <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
+                      <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey,
                       <a href="../../../../../org/locationtech/geowave/adapter/raster/Resolution.html" title="class in org.locationtech.geowave.adapter.raster">Resolution</a>&nbsp;resolution,
                       org.opengis.geometry.Envelope&nbsp;originalEnvelope,
                       com.vividsolutions.jts.geom.Geometry&nbsp;footprintWorldGeometry,
@@ -241,7 +241,7 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/raster/FitToIndexGridCoverage.html#getOverviewGridGeometry-int-">getOverviewGridGeometry</a></span>(int&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i19" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/raster/FitToIndexGridCoverage.html#getPartitionKey--">getPartitionKey</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i20" class="altColor">
@@ -270,7 +270,7 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/raster/FitToIndexGridCoverage.html#getSampleDimension-int-">getSampleDimension</a></span>(int&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i26" class="altColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/raster/FitToIndexGridCoverage.html#getSortKey--">getSortKey</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i27" class="rowColor">
@@ -303,15 +303,15 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="FitToIndexGridCoverage-org.opengis.coverage.grid.GridCoverage-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.adapter.raster.Resolution-org.opengis.geometry.Envelope-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-java.util.Map-">
+<a name="FitToIndexGridCoverage-org.opengis.coverage.grid.GridCoverage-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.adapter.raster.Resolution-org.opengis.geometry.Envelope-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-java.util.Map-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FitToIndexGridCoverage</h4>
 <pre>public&nbsp;FitToIndexGridCoverage(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
-                              <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
-                              <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;sortKey,
+                              <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
+                              <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey,
                               <a href="../../../../../org/locationtech/geowave/adapter/raster/Resolution.html" title="class in org.locationtech.geowave.adapter.raster">Resolution</a>&nbsp;resolution,
                               org.opengis.geometry.Envelope&nbsp;originalEnvelope,
                               com.vividsolutions.jts.geom.Geometry&nbsp;footprintWorldGeometry,
@@ -360,7 +360,7 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getPartitionKey</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getPartitionKey()</pre>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getPartitionKey()</pre>
 </li>
 </ul>
 <a name="getSortKey--">
@@ -369,7 +369,7 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getSortKey</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;getSortKey()</pre>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getSortKey()</pre>
 </li>
 </ul>
 <a name="getResolution--">

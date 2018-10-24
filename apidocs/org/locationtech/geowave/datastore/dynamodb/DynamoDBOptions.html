@@ -174,7 +174,7 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/StoreFactory
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.<a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html" title="class in org.locationtech.geowave.core.store">StoreFactoryOptions</a></h3>
-<code><a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#GEOWAVE_NAMESPACE_DESCRIPTION">GEOWAVE_NAMESPACE_DESCRIPTION</a>, <a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#GEOWAVE_NAMESPACE_OPTION">GEOWAVE_NAMESPACE_OPTION</a></code></li>
+<code><a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#GEOWAVE_NAMESPACE_DESCRIPTION">GEOWAVE_NAMESPACE_DESCRIPTION</a>, <a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#GEOWAVE_NAMESPACE_OPTION">GEOWAVE_NAMESPACE_OPTION</a>, <a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#geowaveNamespace">geowaveNamespace</a></code></li>
 </ul>
 </li>
 </ul>
@@ -191,6 +191,17 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/StoreFactory
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#DynamoDBOptions--">DynamoDBOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#DynamoDBOptions-java.lang.String-com.amazonaws.regions.Regions-long-long-int-com.amazonaws.Protocol-boolean-java.lang.String-org.locationtech.geowave.core.store.BaseDataStoreOptions-">DynamoDBOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endpoint,
+               com.amazonaws.regions.Regions&nbsp;region,
+               long&nbsp;writeCapacity,
+               long&nbsp;readCapacity,
+               int&nbsp;maxConnections,
+               com.amazonaws.Protocol&nbsp;protocol,
+               boolean&nbsp;enableCacheResponseMetadata,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwNamespace,
+               <a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a>&nbsp;baseOptions)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -368,10 +379,27 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/StoreFactory
 <a name="DynamoDBOptions--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>DynamoDBOptions</h4>
 <pre>public&nbsp;DynamoDBOptions()</pre>
+</li>
+</ul>
+<a name="DynamoDBOptions-java.lang.String-com.amazonaws.regions.Regions-long-long-int-com.amazonaws.Protocol-boolean-java.lang.String-org.locationtech.geowave.core.store.BaseDataStoreOptions-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>DynamoDBOptions</h4>
+<pre>public&nbsp;DynamoDBOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endpoint,
+                       com.amazonaws.regions.Regions&nbsp;region,
+                       long&nbsp;writeCapacity,
+                       long&nbsp;readCapacity,
+                       int&nbsp;maxConnections,
+                       com.amazonaws.Protocol&nbsp;protocol,
+                       boolean&nbsp;enableCacheResponseMetadata,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwNamespace,
+                       <a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a>&nbsp;baseOptions)</pre>
 </li>
 </ul>
 </li>

@@ -93,7 +93,7 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">org.locationtech.geowave.core.index</div>
-<h2 title="Interface PartitionIndexStrategy" class="title">Interface PartitionIndexStrategy&lt;QueryRangeType extends <a href="../../../../../org/locationtech/geowave/core/index/QueryConstraints.html" title="interface in org.locationtech.geowave.core.index">QueryConstraints</a>,EntryRangeType&gt;</h2>
+<h2 title="Interface PartitionIndexStrategy" class="title">Interface PartitionIndexStrategy&lt;QueryRangeType extends <a href="../../../../../org/locationtech/geowave/core/index/IndexConstraints.html" title="interface in org.locationtech.geowave.core.index">IndexConstraints</a>,EntryRangeType&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -109,11 +109,11 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../org/locationtech/geowave/adapter/raster/adapter/CompoundHierarchicalIndexStrategyWrapper.html" title="class in org.locationtech.geowave.adapter.raster.adapter">CompoundHierarchicalIndexStrategyWrapper</a>, <a href="../../../../../org/locationtech/geowave/core/index/CompoundIndexStrategy.html" title="class in org.locationtech.geowave.core.index">CompoundIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/HashKeyIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">HashKeyIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html" title="class in org.locationtech.geowave.core.index">NullNumericIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategyWrapper.html" title="class in org.locationtech.geowave.core.index">NumericIndexStrategyWrapper</a>, <a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html" title="class in org.locationtech.geowave.core.index">PartitionIndexStrategyWrapper</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/RoundRobinKeyIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">RoundRobinKeyIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/SimpleIntegerIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleIntegerIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/SimpleLongIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleLongIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleNumericIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/SimpleShortIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleShortIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/sfc/tiered/SingleTierSubStrategy.html" title="class in org.locationtech.geowave.core.index.sfc.tiered">SingleTierSubStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html" title="class in org.locationtech.geowave.core.index.sfc.tiered">TieredSFCIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/sfc/xz/XZHierarchicalIndexStrategy.html" title="class in org.locationtech.geowave.core.index.sfc.xz">XZHierarchicalIndexStrategy</a></dd>
+<dd><a href="../../../../../org/locationtech/geowave/core/store/util/CompoundHierarchicalIndexStrategyWrapper.html" title="class in org.locationtech.geowave.core.store.util">CompoundHierarchicalIndexStrategyWrapper</a>, <a href="../../../../../org/locationtech/geowave/core/index/CompoundIndexStrategy.html" title="class in org.locationtech.geowave.core.index">CompoundIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/HashKeyIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">HashKeyIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html" title="class in org.locationtech.geowave.core.index">NullNumericIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategyWrapper.html" title="class in org.locationtech.geowave.core.index">NumericIndexStrategyWrapper</a>, <a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html" title="class in org.locationtech.geowave.core.index">PartitionIndexStrategyWrapper</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/RoundRobinKeyIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">RoundRobinKeyIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/SimpleIntegerIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleIntegerIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/SimpleLongIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleLongIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleNumericIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/simple/SimpleShortIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleShortIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/sfc/tiered/SingleTierSubStrategy.html" title="class in org.locationtech.geowave.core.index.sfc.tiered">SingleTierSubStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html" title="class in org.locationtech.geowave.core.index.sfc.tiered">TieredSFCIndexStrategy</a>, <a href="../../../../../org/locationtech/geowave/core/index/sfc/xz/XZHierarchicalIndexStrategy.html" title="class in org.locationtech.geowave.core.index.sfc.xz">XZHierarchicalIndexStrategy</a></dd>
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="typeNameLabel">PartitionIndexStrategy&lt;QueryRangeType extends <a href="../../../../../org/locationtech/geowave/core/index/QueryConstraints.html" title="interface in org.locationtech.geowave.core.index">QueryConstraints</a>,EntryRangeType&gt;</span>
+<pre>public interface <span class="typeNameLabel">PartitionIndexStrategy&lt;QueryRangeType extends <a href="../../../../../org/locationtech/geowave/core/index/IndexConstraints.html" title="interface in org.locationtech.geowave.core.index">IndexConstraints</a>,EntryRangeType&gt;</span>
 extends <a href="../../../../../org/locationtech/geowave/core/index/IndexStrategy.html" title="interface in org.locationtech.geowave.core.index">IndexStrategy</a></pre>
 </li>
 </ul>
@@ -134,7 +134,7 @@ extends <a href="../../../../../org/locationtech/geowave/core/index/IndexStrateg
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html#getInsertionPartitionKeys-EntryRangeType-">getInsertionPartitionKeys</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="type parameter in PartitionIndexStrategy">EntryRangeType</a>&nbsp;insertionData)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -144,11 +144,11 @@ extends <a href="../../../../../org/locationtech/geowave/core/index/IndexStrateg
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html#getPredefinedSplits--">getPredefinedSplits</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html#getQueryPartitionKeys-QueryRangeType-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryPartitionKeys</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="type parameter in PartitionIndexStrategy">QueryRangeType</a>&nbsp;queryData,
                      <a href="../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
@@ -189,10 +189,10 @@ extends <a href="../../../../../org/locationtech/geowave/core/index/IndexStrateg
 <ul class="blockList">
 <li class="blockList">
 <h4>getInsertionPartitionKeys</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getInsertionPartitionKeys(<a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="type parameter in PartitionIndexStrategy">EntryRangeType</a>&nbsp;insertionData)</pre>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;getInsertionPartitionKeys(<a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="type parameter in PartitionIndexStrategy">EntryRangeType</a>&nbsp;insertionData)</pre>
 </li>
 </ul>
-<a name="getQueryPartitionKeys-org.locationtech.geowave.core.index.QueryConstraints-org.locationtech.geowave.core.index.IndexMetaData:A-">
+<a name="getQueryPartitionKeys-org.locationtech.geowave.core.index.IndexConstraints-org.locationtech.geowave.core.index.IndexMetaData:A-">
 <!--   -->
 </a><a name="getQueryPartitionKeys-QueryRangeType-org.locationtech.geowave.core.index.IndexMetaData...-">
 <!--   -->
@@ -200,8 +200,8 @@ extends <a href="../../../../../org/locationtech/geowave/core/index/IndexStrateg
 <ul class="blockList">
 <li class="blockList">
 <h4>getQueryPartitionKeys</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getQueryPartitionKeys(<a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="type parameter in PartitionIndexStrategy">QueryRangeType</a>&nbsp;queryData,
-                                       <a href="../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</pre>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;getQueryPartitionKeys(<a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="type parameter in PartitionIndexStrategy">QueryRangeType</a>&nbsp;queryData,
+                                     <a href="../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</pre>
 </li>
 </ul>
 <a name="getPartitionKeyLength--">
@@ -225,7 +225,7 @@ extends <a href="../../../../../org/locationtech/geowave/core/index/IndexStrateg
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getPredefinedSplits</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getPredefinedSplits()</pre>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;getPredefinedSplits()</pre>
 </li>
 </ul>
 </li>

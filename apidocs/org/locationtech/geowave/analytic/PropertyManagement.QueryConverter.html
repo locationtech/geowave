@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyGroup.html" title="interface in org.locationtech.geowave.analytic"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.QueryOptionsConverter.html" title="class in org.locationtech.geowave.analytic"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../org/locationtech/geowave/analytic/ScopedJobConfiguration.html" title="class in org.locationtech.geowave.analytic"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?org/locationtech/geowave/analytic/PropertyManagement.QueryConverter.html" target="_top">Frames</a></li>
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&gt;</dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -119,7 +119,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public static class <span class="typeNameLabel">PropertyManagement.QueryConverter</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&gt;</pre>
+implements <a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&gt;</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../serialized-form.html#org.locationtech.geowave.analytic.PropertyManagement.QueryConverter">Serialized Form</a></dd>
@@ -160,15 +160,15 @@ implements <a href="../../../../org/locationtech/geowave/analytic/PropertyManage
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.QueryConverter.html#baseClass--">baseClass</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.QueryConverter.html#convert-org.locationtech.geowave.core.store.query.DistributableQuery-">convert</a></span>(<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&nbsp;ob)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.QueryConverter.html#convert-org.locationtech.geowave.core.store.api.Query-">convert</a></span>(<a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&nbsp;ob)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a></code></td>
+<td class="colFirst"><code><a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.QueryConverter.html#convert-java.io.Serializable-">convert</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;ob)</code>&nbsp;</td>
 </tr>
 </table>
@@ -210,16 +210,16 @@ implements <a href="../../../../org/locationtech/geowave/analytic/PropertyManage
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="convert-org.locationtech.geowave.core.store.query.DistributableQuery-">
+<a name="convert-org.locationtech.geowave.core.store.api.Query-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>convert</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;convert(<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&nbsp;ob)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;convert(<a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&nbsp;ob)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html#convert-T-">convert</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&gt;</code></dd>
+<dd><code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html#convert-T-">convert</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -229,11 +229,11 @@ implements <a href="../../../../org/locationtech/geowave/analytic/PropertyManage
 <ul class="blockList">
 <li class="blockList">
 <h4>convert</h4>
-<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&nbsp;convert(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;ob)
-                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<pre>public&nbsp;<a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&nbsp;convert(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;ob)
+              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html#convert-java.io.Serializable-">convert</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&gt;</code></dd>
+<dd><code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html#convert-java.io.Serializable-">convert</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&gt;</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>
@@ -245,10 +245,10 @@ implements <a href="../../../../org/locationtech/geowave/analytic/PropertyManage
 <ul class="blockListLast">
 <li class="blockList">
 <h4>baseClass</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&gt;&nbsp;baseClass()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&gt;&nbsp;baseClass()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html#baseClass--">baseClass</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html" title="interface in org.locationtech.geowave.core.store.query">DistributableQuery</a>&gt;</code></dd>
+<dd><code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html#baseClass--">baseClass</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;<a href="../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -281,7 +281,7 @@ implements <a href="../../../../org/locationtech/geowave/analytic/PropertyManage
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyGroup.html" title="interface in org.locationtech.geowave.analytic"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.QueryOptionsConverter.html" title="class in org.locationtech.geowave.analytic"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../org/locationtech/geowave/analytic/ScopedJobConfiguration.html" title="class in org.locationtech.geowave.analytic"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?org/locationtech/geowave/analytic/PropertyManagement.QueryConverter.html" target="_top">Frames</a></li>

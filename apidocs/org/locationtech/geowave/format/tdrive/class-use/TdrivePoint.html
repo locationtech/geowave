@@ -116,7 +116,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../org/locationtech/geowave/format/tdrive/TdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">TdrivePoint</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../org/locationtech/geowave/format/tdrive/TdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">TdrivePoint</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">TdriveIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestPlugin.html#getIngestWithAvroPlugin--">getIngestWithAvroPlugin</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -129,7 +129,7 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../org/locationtech/geowave/format/tdrive/TdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">TdrivePoint</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">TdriveIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider-">newPluginInstance</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatOptionProvider</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">TdriveIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/format/tdrive/TdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">TdrivePoint</a>&gt;</code></td>
@@ -152,9 +152,9 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">TdriveIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.format.tdrive.TdrivePoint-java.util.Collection-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/format/tdrive/TdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">TdrivePoint</a>&nbsp;tdrivePoint,
-                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">TdriveIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.format.tdrive.TdrivePoint-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/format/tdrive/TdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">TdrivePoint</a>&nbsp;tdrivePoint,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
 </tbody>

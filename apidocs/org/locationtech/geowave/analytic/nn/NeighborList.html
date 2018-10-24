@@ -101,7 +101,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,NNTYPE&gt;&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,NNTYPE&gt;&gt;</dd>
 </dl>
 <dl>
 <dt>All Known Subinterfaces:</dt>
@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">NeighborList&lt;NNTYPE&gt;</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,NNTYPE&gt;&gt;</pre>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,NNTYPE&gt;&gt;</pre>
 </li>
 </ul>
 </div>
@@ -154,8 +154,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.htm
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html#add-org.locationtech.geowave.analytic.nn.DistanceProfile-org.locationtech.geowave.core.index.ByteArrayId-NNTYPE-">add</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/nn/DistanceProfile.html" title="class in org.locationtech.geowave.analytic.nn">DistanceProfile</a>&lt;?&gt;&nbsp;distanceProfile,
-   <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html#add-org.locationtech.geowave.analytic.nn.DistanceProfile-org.locationtech.geowave.core.index.ByteArray-NNTYPE-">add</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/nn/DistanceProfile.html" title="class in org.locationtech.geowave.analytic.nn">DistanceProfile</a>&lt;?&gt;&nbsp;distanceProfile,
+   <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;id,
    <a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="type parameter in NeighborList">NNTYPE</a>&nbsp;value)</code>
 <div class="block">May be called prior to init() when discovered by entry itself.</div>
 </td>
@@ -168,7 +168,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.htm
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.InferType.html" title="enum in org.locationtech.geowave.analytic.nn">NeighborList.InferType</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html#infer-org.locationtech.geowave.core.index.ByteArrayId-NNTYPE-">infer</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html#infer-org.locationtech.geowave.core.index.ByteArray-NNTYPE-">infer</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;id,
      <a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="type parameter in NeighborList">NNTYPE</a>&nbsp;value)</code>
 <div class="block">See if the entries relationships have already been inferred</div>
 </td>
@@ -203,16 +203,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.htm
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="add-org.locationtech.geowave.analytic.nn.DistanceProfile-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Object-">
+<a name="add-org.locationtech.geowave.analytic.nn.DistanceProfile-org.locationtech.geowave.core.index.ByteArray-java.lang.Object-">
 <!--   -->
-</a><a name="add-org.locationtech.geowave.analytic.nn.DistanceProfile-org.locationtech.geowave.core.index.ByteArrayId-NNTYPE-">
+</a><a name="add-org.locationtech.geowave.analytic.nn.DistanceProfile-org.locationtech.geowave.core.index.ByteArray-NNTYPE-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
 <pre>boolean&nbsp;add(<a href="../../../../../org/locationtech/geowave/analytic/nn/DistanceProfile.html" title="class in org.locationtech.geowave.analytic.nn">DistanceProfile</a>&lt;?&gt;&nbsp;distanceProfile,
-            <a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+            <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;id,
             <a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="type parameter in NeighborList">NNTYPE</a>&nbsp;value)</pre>
 <div class="block">May be called prior to init() when discovered by entry itself.</div>
 <dl>
@@ -222,15 +222,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.htm
 </dl>
 </li>
 </ul>
-<a name="infer-org.locationtech.geowave.core.index.ByteArrayId-java.lang.Object-">
+<a name="infer-org.locationtech.geowave.core.index.ByteArray-java.lang.Object-">
 <!--   -->
-</a><a name="infer-org.locationtech.geowave.core.index.ByteArrayId-NNTYPE-">
+</a><a name="infer-org.locationtech.geowave.core.index.ByteArray-NNTYPE-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>infer</h4>
-<pre><a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.InferType.html" title="enum in org.locationtech.geowave.analytic.nn">NeighborList.InferType</a>&nbsp;infer(<a href="../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;id,
+<pre><a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.InferType.html" title="enum in org.locationtech.geowave.analytic.nn">NeighborList.InferType</a>&nbsp;infer(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;id,
                              <a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="type parameter in NeighborList">NNTYPE</a>&nbsp;value)</pre>
 <div class="block">See if the entries relationships have already been inferred</div>
 <dl>

@@ -133,7 +133,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/StoreF
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.<a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html" title="class in org.locationtech.geowave.core.store">StoreFactoryOptions</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#GEOWAVE_NAMESPACE_DESCRIPTION">GEOWAVE_NAMESPACE_DESCRIPTION</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#GEOWAVE_NAMESPACE_OPTION">GEOWAVE_NAMESPACE_OPTION</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#GEOWAVE_NAMESPACE_DESCRIPTION">GEOWAVE_NAMESPACE_DESCRIPTION</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#GEOWAVE_NAMESPACE_OPTION">GEOWAVE_NAMESPACE_OPTION</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#geowaveNamespace">geowaveNamespace</a></code></li>
 </ul>
 </li>
 </ul>
@@ -150,6 +150,11 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/StoreF
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/cassandra/operations/config/CassandraRequiredOptions.html#CassandraRequiredOptions--">CassandraRequiredOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/cassandra/operations/config/CassandraRequiredOptions.html#CassandraRequiredOptions-java.lang.String-java.lang.String-org.locationtech.geowave.datastore.cassandra.operations.config.CassandraOptions-">CassandraRequiredOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;contactPoints,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwNamespace,
+                        <a href="../../../../../../../org/locationtech/geowave/datastore/cassandra/operations/config/CassandraOptions.html" title="class in org.locationtech.geowave.datastore.cassandra.operations.config">CassandraOptions</a>&nbsp;additionalOptions)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -214,10 +219,21 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/StoreF
 <a name="CassandraRequiredOptions--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>CassandraRequiredOptions</h4>
 <pre>public&nbsp;CassandraRequiredOptions()</pre>
+</li>
+</ul>
+<a name="CassandraRequiredOptions-java.lang.String-java.lang.String-org.locationtech.geowave.datastore.cassandra.operations.config.CassandraOptions-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>CassandraRequiredOptions</h4>
+<pre>public&nbsp;CassandraRequiredOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;contactPoints,
+                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwNamespace,
+                                <a href="../../../../../../../org/locationtech/geowave/datastore/cassandra/operations/config/CassandraOptions.html" title="class in org.locationtech.geowave.datastore.cassandra.operations.config">CassandraOptions</a>&nbsp;additionalOptions)</pre>
 </li>
 </ul>
 </li>

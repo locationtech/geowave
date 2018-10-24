@@ -130,14 +130,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#StatsManager-org.locationtech.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-">StatsManager</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#StatsManager-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.opengis.feature.simple.SimpleFeatureType-">StatsManager</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
             org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType)</code>
 <div class="block">Constructor - Creates a StatsManager that supports the specified adapter
  with a persisted SimpleFeatureType</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#StatsManager-org.locationtech.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-org.opengis.feature.simple.SimpleFeatureType-org.opengis.referencing.operation.MathTransform-">StatsManager</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#StatsManager-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.opengis.feature.simple.SimpleFeatureType-org.opengis.feature.simple.SimpleFeatureType-org.opengis.referencing.operation.MathTransform-">StatsManager</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
             org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType,
             org.opengis.feature.simple.SimpleFeatureType&nbsp;reprojectedType,
             org.opengis.referencing.operation.MathTransform&nbsp;transform)</code>
@@ -163,29 +163,29 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#addStats-org.locationtech.geowave.core.store.adapter.statistics.DataStatistics-org.locationtech.geowave.core.index.ByteArrayId-">addStats</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;statsObj,
-        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#addStats-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-java.lang.String-">addStats</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&nbsp;statsObj,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">Adds/Replaces a stats object for the given adapter <br>
  Supports object replacement.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#createDataStatistics-org.locationtech.geowave.core.index.ByteArrayId-">createDataStatistics</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#createDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">createDataStatistics</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</code>
 <div class="block">Creates a stats object to be tracked for this adapter based on type</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#getSupportedStatisticsIds--">getSupportedStatisticsIds</a></span>()</code>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#getSupportedStatistics--">getSupportedStatistics</a></span>()</code>
 <div class="block">Get an array of stats object IDs for the Stats Manager</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/EntryVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.adapter.DataAdapter-org.locationtech.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-                    <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;adapter,
-                    <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">getVisibilityHandler</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                    <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;adapter,
+                    <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</code>
 <div class="block">Get a visibility handler for the specified statistics object</div>
 </td>
 </tr>
@@ -211,13 +211,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="StatsManager-org.locationtech.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-">
+<a name="StatsManager-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.opengis.feature.simple.SimpleFeatureType-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>StatsManager</h4>
-<pre>public&nbsp;StatsManager(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
+<pre>public&nbsp;StatsManager(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
                     org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType)</pre>
 <div class="block">Constructor - Creates a StatsManager that supports the specified adapter
  with a persisted SimpleFeatureType</div>
@@ -228,13 +228,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="StatsManager-org.locationtech.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-org.opengis.feature.simple.SimpleFeatureType-org.opengis.referencing.operation.MathTransform-">
+<a name="StatsManager-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.opengis.feature.simple.SimpleFeatureType-org.opengis.feature.simple.SimpleFeatureType-org.opengis.referencing.operation.MathTransform-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>StatsManager</h4>
-<pre>public&nbsp;StatsManager(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
+<pre>public&nbsp;StatsManager(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
                     org.opengis.feature.simple.SimpleFeatureType&nbsp;persistedType,
                     org.opengis.feature.simple.SimpleFeatureType&nbsp;reprojectedType,
                     org.opengis.referencing.operation.MathTransform&nbsp;transform)</pre>
@@ -260,13 +260,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createDataStatistics-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="createDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createDataStatistics</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;createDataStatistics(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&nbsp;createDataStatistics(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</pre>
 <div class="block">Creates a stats object to be tracked for this adapter based on type</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -277,15 +277,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.adapter.DataAdapter-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.statistics.StatisticsId-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getVisibilityHandler</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/EntryVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getVisibilityHandler(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-                                                                                             <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;adapter,
-                                                                                             <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
+                                                                                             <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;adapter,
+                                                                                             <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>&nbsp;statisticsId)</pre>
 <div class="block">Get a visibility handler for the specified statistics object</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -295,14 +295,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="addStats-org.locationtech.geowave.core.store.adapter.statistics.DataStatistics-org.locationtech.geowave.core.index.ByteArrayId-">
+<a name="addStats-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addStats</h4>
-<pre>public&nbsp;void&nbsp;addStats(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;statsObj,
-                     <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+<pre>public&nbsp;void&nbsp;addStats(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&nbsp;statsObj,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 <div class="block">Adds/Replaces a stats object for the given adapter <br>
  Supports object replacement.</div>
 <dl>
@@ -312,13 +312,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="getSupportedStatisticsIds--">
+<a name="getSupportedStatistics--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getSupportedStatisticsIds</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>[]&nbsp;getSupportedStatisticsIds()</pre>
+<h4>getSupportedStatistics</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>[]&nbsp;getSupportedStatistics()</pre>
 <div class="block">Get an array of stats object IDs for the Stats Manager</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

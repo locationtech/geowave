@@ -160,7 +160,7 @@ implements <a href="../../../../org/locationtech/geowave/core/store/adapter/Adap
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/JobContextAdapterIndexMappingStore.html#addAdapterIndexMapping-org.locationtech.geowave.core.store.AdapterToIndexMapping-">addAdapterIndexMapping</a></span>(<a href="../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</code>
 <div class="block">If an adapter is already associated with indices and the provided indices
- do not match, returns false.</div>
+ do not match, update the mapping to include the combined set of indices</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -280,18 +280,13 @@ implements <a href="../../../../org/locationtech/geowave/core/store/adapter/Adap
 <ul class="blockList">
 <li class="blockList">
 <h4>addAdapterIndexMapping</h4>
-<pre>public&nbsp;void&nbsp;addAdapterIndexMapping(<a href="../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)
-                            throws <a href="../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
+<pre>public&nbsp;void&nbsp;addAdapterIndexMapping(<a href="../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#addAdapterIndexMapping-org.locationtech.geowave.core.store.AdapterToIndexMapping-">AdapterIndexMappingStore</a></code></span></div>
 <div class="block">If an adapter is already associated with indices and the provided indices
- do not match, returns false. Adapter can only be associated with a set of
- indices once!</div>
+ do not match, update the mapping to include the combined set of indices</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#addAdapterIndexMapping-org.locationtech.geowave.core.store.AdapterToIndexMapping-">addAdapterIndexMapping</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></code> - if the provided associations does match the stored
-             associations, if they exist</dd>
 </dl>
 </li>
 </ul>

@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;RowType,FieldType[]&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;RowType,FieldType[]&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;FieldType[],byte[]&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;RowType,FieldType[]&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;RowType,FieldType[]&gt;</dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -191,7 +191,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/data/f
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.data.field.<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayWriter.html" title="class in org.locationtech.geowave.core.store.data.field">ArrayWriter</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayWriter.html#getVisibility-RowType-org.locationtech.geowave.core.index.ByteArrayId-FieldType:A-">getVisibility</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayWriter.html#writeFixedSizeField-FieldType:A-">writeFixedSizeField</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayWriter.html#writeVariableSizeField-FieldType:A-">writeVariableSizeField</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayWriter.html#getVisibility-RowType-java.lang.String-FieldType:A-">getVisibility</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayWriter.html#writeFixedSizeField-FieldType:A-">writeFixedSizeField</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayWriter.html#writeVariableSizeField-FieldType:A-">writeVariableSizeField</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -199,6 +199,20 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/data/f
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.data.field.FieldWriter">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.data.field.<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html#apply-FieldType-">apply</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.java.util.function.Function">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;java.util.function.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">Function</a></h3>
+<code>andThen, compose, identity</code></li>
 </ul>
 </li>
 </ul>

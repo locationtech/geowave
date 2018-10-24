@@ -203,8 +203,8 @@ extends <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/n
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/nn/NNMapReduce.NNSimpleFeatureIDOutputReducer.html#processNeighbors-org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData-org.locationtech.geowave.core.index.ByteArrayId-org.opengis.feature.simple.SimpleFeature-org.locationtech.geowave.analytic.nn.NeighborList-org.apache.hadoop.mapreduce.Reducer.Context-java.lang.Boolean-">processNeighbors</a></span>(<a href="../../../../../../org/locationtech/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in org.locationtech.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
-                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/nn/NNMapReduce.NNSimpleFeatureIDOutputReducer.html#processNeighbors-org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData-org.locationtech.geowave.core.index.ByteArray-org.opengis.feature.simple.SimpleFeature-org.locationtech.geowave.analytic.nn.NeighborList-org.apache.hadoop.mapreduce.Reducer.Context-java.lang.Boolean-">processNeighbors</a></span>(<a href="../../../../../../org/locationtech/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in org.locationtech.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
+                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryId,
                 org.opengis.feature.simple.SimpleFeature&nbsp;primary,
                 <a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborList</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;neighbors,
                 org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context,
@@ -271,14 +271,14 @@ extends <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/n
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="processNeighbors-org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData-org.locationtech.geowave.core.index.ByteArrayId-org.opengis.feature.simple.SimpleFeature-org.locationtech.geowave.analytic.nn.NeighborList-org.apache.hadoop.mapreduce.Reducer.Context-java.lang.Boolean-">
+<a name="processNeighbors-org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData-org.locationtech.geowave.core.index.ByteArray-org.opengis.feature.simple.SimpleFeature-org.locationtech.geowave.analytic.nn.NeighborList-org.apache.hadoop.mapreduce.Reducer.Context-java.lang.Boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>processNeighbors</h4>
 <pre>protected&nbsp;void&nbsp;processNeighbors(<a href="../../../../../../org/locationtech/geowave/analytic/partitioner/Partitioner.PartitionData.html" title="class in org.locationtech.geowave.analytic.partitioner">Partitioner.PartitionData</a>&nbsp;partitionData,
-                                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
+                                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryId,
                                 org.opengis.feature.simple.SimpleFeature&nbsp;primary,
                                 <a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborList</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;neighbors,
                                 org.apache.hadoop.mapreduce.Reducer.Context&nbsp;context,
@@ -287,7 +287,7 @@ extends <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/n
                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processNeighbors-org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData-org.locationtech.geowave.core.index.ByteArrayId-VALUEIN-org.locationtech.geowave.analytic.nn.NeighborList-org.apache.hadoop.mapreduce.Reducer.Context-PARTITION_SUMMARY-">processNeighbors</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in org.locationtech.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer</a>&lt;org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.Text,org.apache.hadoop.io.Text,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html#processNeighbors-org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData-org.locationtech.geowave.core.index.ByteArray-VALUEIN-org.locationtech.geowave.analytic.nn.NeighborList-org.apache.hadoop.mapreduce.Reducer.Context-PARTITION_SUMMARY-">processNeighbors</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/nn/NNMapReduce.NNReducer.html" title="class in org.locationtech.geowave.analytic.mapreduce.nn">NNMapReduce.NNReducer</a>&lt;org.opengis.feature.simple.SimpleFeature,org.apache.hadoop.io.Text,org.apache.hadoop.io.Text,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>

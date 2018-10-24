@@ -83,11 +83,11 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.util">org.locationtech.geowave.adapter.vector.util</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query">org.locationtech.geowave.core.geotime.store.query</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query">org.locationtech.geowave.core.geotime.store.query</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.util">org.locationtech.geowave.core.geotime.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -95,33 +95,6 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
-<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.util">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a> in <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/util/package-summary.html">org.locationtech.geowave.adapter.vector.util</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/util/package-summary.html">org.locationtech.geowave.adapter.vector.util</a> that return <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">QueryIndexHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/util/QueryIndexHelper.html#composeRangeTemporalConstraints-org.locationtech.geowave.adapter.vector.utils.TimeDescriptors-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">composeRangeTemporalConstraints</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in org.locationtech.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
-                               <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;constraintsSet)</code>
-<div class="block">Compose temporal constraints given the constraint set and the descriptors
- for the index.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">QueryIndexHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/util/QueryIndexHelper.html#getTemporalConstraintsForDescriptors-org.locationtech.geowave.adapter.vector.utils.TimeDescriptors-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">getTemporalConstraintsForDescriptors</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/utils/TimeDescriptors.html" title="class in org.locationtech.geowave.adapter.vector.utils">TimeDescriptors</a>&nbsp;timeDescriptors,
-                                    <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="org.locationtech.geowave.core.geotime.store.query">
 <!--   -->
 </a>
@@ -175,7 +148,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery.Constraints</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SpatialTemporalQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#createConstraints-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-boolean-">createConstraints</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;temporalConstraints,
                  boolean&nbsp;isDefault)</code>&nbsp;</td>
 </tr>
@@ -210,9 +183,9 @@
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
-                    <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
+                    <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
 <div class="block">Applies the set of temporal constraints to the boundaries of the provided
  polygon.</div>
 </td>
@@ -224,6 +197,33 @@
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalQuery.html#TemporalQuery-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-">TemporalQuery</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;contraints)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.geotime.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a> in <a href="../../../../../../../../org/locationtech/geowave/core/geotime/util/package-summary.html">org.locationtech.geowave.core.geotime.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/core/geotime/util/package-summary.html">org.locationtech.geowave.core.geotime.util</a> that return <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TimeUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/util/TimeUtils.html#composeRangeTemporalConstraints-org.locationtech.geowave.core.geotime.util.TimeDescriptors-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">composeRangeTemporalConstraints</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/util/TimeDescriptors.html" title="class in org.locationtech.geowave.core.geotime.util">TimeDescriptors</a>&nbsp;timeDescriptors,
+                               <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;constraintsSet)</code>
+<div class="block">Compose temporal constraints given the constraint set and the descriptors
+ for the index.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TimeUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/util/TimeUtils.html#getTemporalConstraintsForDescriptors-org.locationtech.geowave.core.geotime.util.TimeDescriptors-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">getTemporalConstraintsForDescriptors</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/util/TimeDescriptors.html" title="class in org.locationtech.geowave.core.geotime.util">TimeDescriptors</a>&nbsp;timeDescriptors,
+                                    <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

@@ -91,23 +91,11 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store">org.locationtech.geowave.core.store</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.api">org.locationtech.geowave.core.store.api</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.adapter">org.locationtech.geowave.core.store.adapter</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.base">org.locationtech.geowave.core.store.base</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.metadata">org.locationtech.geowave.core.store.metadata</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.mapreduce">org.locationtech.geowave.mapreduce</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -128,10 +116,10 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="typeNameLabel">KDEJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#setup-org.apache.hadoop.mapreduce.Job-java.lang.String-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex-">setup</a></span>(org.apache.hadoop.mapreduce.Job&nbsp;job,
+<td class="colLast"><span class="typeNameLabel">KDEJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#setup-org.apache.hadoop.mapreduce.Job-java.lang.String-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">setup</a></span>(org.apache.hadoop.mapreduce.Job&nbsp;job,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-     <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-     <a href="../../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+     <a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
+     <a href="../../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -148,50 +136,37 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="interface in org.locationtech.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">KafkaIngestRunData.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html#getIndexWriter-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex...-">getIndexWriter</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-              <a href="../../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>...&nbsp;requiredIndices)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></code></td>
+<td class="colLast"><span class="typeNameLabel">KafkaIngestRunData.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html#getIndexWriter-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index...-">getIndexWriter</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
+              <a href="../../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;requiredIndices)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="org.locationtech.geowave.core.store">
+<li class="blockList"><a name="org.locationtech.geowave.core.store.api">
 <!--   -->
 </a>
-<h3>Uses of <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a> in <a href="../../../../../../../../org/locationtech/geowave/core/store/package-summary.html">org.locationtech.geowave.core.store</a></h3>
+<h3>Uses of <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a> in <a href="../../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/core/store/package-summary.html">org.locationtech.geowave.core.store</a> that throw <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> that throw <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="interface in org.locationtech.geowave.core.store">IndexWriter</a>&lt;T&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/DataStore.html#createWriter-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex...-">createWriter</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;adapter,
-            <a href="../../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>...&nbsp;index)</code>
-<div class="block">Returns an index writer to perform batched write operations</div>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">DataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.Index...-">ingest</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+      <a href="../../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)</code>
+<div class="block">Ingest from URL.</div>
 </td>
 </tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="org.locationtech.geowave.core.store.adapter">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a> in <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/package-summary.html">org.locationtech.geowave.core.store.adapter</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/package-summary.html">org.locationtech.geowave.core.store.adapter</a> that throw <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">AdapterIndexMappingStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#addAdapterIndexMapping-org.locationtech.geowave.core.store.AdapterToIndexMapping-">addAdapterIndexMapping</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</code>
-<div class="block">If an adapter is already associated with indices and the provided indices
- do not match, returns false.</div>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">DataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">ingest</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+      <a href="../../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="class in org.locationtech.geowave.core.store.api">IngestOptions</a>&lt;T&gt;&nbsp;options,
+      <a href="../../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)</code>
+<div class="block">Ingest from URL with options.</div>
 </td>
 </tr>
 </tbody>
@@ -209,45 +184,15 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/IndexWriter.html" title="interface in org.locationtech.geowave.core.store">IndexWriter</a>&lt;T&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#createWriter-org.locationtech.geowave.core.store.adapter.WritableDataAdapter-org.locationtech.geowave.core.store.index.PrimaryIndex...-">createWriter</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;adapter,
-            <a href="../../../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)</code>&nbsp;</td>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">BaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.Index...-">ingest</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+      <a href="../../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)</code>&nbsp;</td>
 </tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="org.locationtech.geowave.core.store.metadata">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a> in <a href="../../../../../../../../org/locationtech/geowave/core/store/metadata/package-summary.html">org.locationtech.geowave.core.store.metadata</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/core/store/metadata/package-summary.html">org.locationtech.geowave.core.store.metadata</a> that throw <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">AdapterIndexMappingStoreImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/metadata/AdapterIndexMappingStoreImpl.html#addAdapterIndexMapping-org.locationtech.geowave.core.store.AdapterToIndexMapping-">addAdapterIndexMapping</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="org.locationtech.geowave.mapreduce">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a> in <a href="../../../../../../../../org/locationtech/geowave/mapreduce/package-summary.html">org.locationtech.geowave.mapreduce</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/mapreduce/package-summary.html">org.locationtech.geowave.mapreduce</a> that throw <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">JobContextAdapterIndexMappingStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/mapreduce/JobContextAdapterIndexMappingStore.html#addAdapterIndexMapping-org.locationtech.geowave.core.store.AdapterToIndexMapping-">addAdapterIndexMapping</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</code>&nbsp;</td>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">BaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">ingest</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+      <a href="../../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="class in org.locationtech.geowave.core.store.api">IngestOptions</a>&lt;T&gt;&nbsp;options,
+      <a href="../../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

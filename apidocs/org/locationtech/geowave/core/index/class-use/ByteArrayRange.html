@@ -83,34 +83,38 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.cql">org.locationtech.geowave.adapter.vector.query.cql</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query">org.locationtech.geowave.core.geotime.store.query</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.util">org.locationtech.geowave.core.geotime.util</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.index">org.locationtech.geowave.core.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.index.sfc">org.locationtech.geowave.core.index.sfc</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.query">org.locationtech.geowave.core.store.query</a></td>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.query.constraints">org.locationtech.geowave.core.store.query.constraints</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.accumulo.util">org.locationtech.geowave.datastore.accumulo.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.hbase.mapreduce">org.locationtech.geowave.datastore.hbase.mapreduce</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.hbase.operations">org.locationtech.geowave.datastore.hbase.operations</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.mapreduce.splits">org.locationtech.geowave.mapreduce.splits</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -119,12 +123,12 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
-<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.cql">
+<li class="blockList"><a name="org.locationtech.geowave.core.geotime.store.query">
 <!--   -->
 </a>
-<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a> in <a href="../../../../../../org/locationtech/geowave/adapter/vector/query/cql/package-summary.html">org.locationtech.geowave.adapter.vector.query.cql</a></h3>
+<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a> in <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/package-summary.html">org.locationtech.geowave.core.geotime.store.query</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../org/locationtech/geowave/adapter/vector/query/cql/package-summary.html">org.locationtech.geowave.adapter.vector.query.cql</a> that return types with arguments of type <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/package-summary.html">org.locationtech.geowave.core.geotime.store.query</a> that return types with arguments of type <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -132,11 +136,25 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">PropertyConstraintSet.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/query/cql/PropertyConstraintSet.html#getRangesFor-org.locationtech.geowave.core.store.index.SecondaryIndex-">getRangesFor</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ExplicitCQLQuery.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitCQLQuery.html#getSecondaryIndexConstraints-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">getSecondaryIndexConstraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexImpl.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndexImpl</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.geotime.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a> in <a href="../../../../../../org/locationtech/geowave/core/geotime/util/package-summary.html">org.locationtech.geowave.core.geotime.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/locationtech/geowave/core/geotime/util/package-summary.html">org.locationtech.geowave.core.geotime.util</a> that return types with arguments of type <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">CQLQuery.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/query/cql/CQLQuery.html#getSecondaryIndexConstraints-org.locationtech.geowave.core.store.index.SecondaryIndex-">getSecondaryIndexConstraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">PropertyConstraintSet.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/PropertyConstraintSet.html#getRangesFor-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">getRangesFor</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexImpl.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndexImpl</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -248,7 +266,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html#SinglePartitionQueryRanges-org.locationtech.geowave.core.index.ByteArrayId-java.util.Collection-">SinglePartitionQueryRanges</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html#SinglePartitionQueryRanges-org.locationtech.geowave.core.index.ByteArray-java.util.Collection-">SinglePartitionQueryRanges</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;sortKeyRanges)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -288,12 +306,12 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="org.locationtech.geowave.core.store.query">
+<li class="blockList"><a name="org.locationtech.geowave.core.store.query.constraints">
 <!--   -->
 </a>
-<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a> in <a href="../../../../../../org/locationtech/geowave/core/store/query/package-summary.html">org.locationtech.geowave.core.store.query</a></h3>
+<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a> in <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../org/locationtech/geowave/core/store/query/package-summary.html">org.locationtech.geowave.core.store.query</a> that return types with arguments of type <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a> that return types with arguments of type <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -301,17 +319,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BasicQuery.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html#getSecondaryIndexConstraints-org.locationtech.geowave.core.store.index.SecondaryIndex-">getSecondaryIndexConstraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">CoordinateRangeQuery.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/CoordinateRangeQuery.html#getSecondaryIndexConstraints-org.locationtech.geowave.core.store.index.SecondaryIndex-">getSecondaryIndexConstraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DistributableQuery.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/DistributableQuery.html#getSecondaryIndexConstraints-org.locationtech.geowave.core.store.index.SecondaryIndex-">getSecondaryIndexConstraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndex</a>&lt;?&gt;&nbsp;index)</code>
-<div class="block">Return a set of constraints to apply to the given secondary index.</div>
-</td>
+<td class="colLast"><span class="typeNameLabel">BasicQuery.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#getSecondaryIndexConstraints-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">getSecondaryIndexConstraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexImpl.html" title="class in org.locationtech.geowave.core.store.index">SecondaryIndexImpl</a>&lt;?&gt;&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

@@ -165,10 +165,10 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Inde
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#CommonIndexedPersistenceEncoding-short-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">CommonIndexedPersistenceEncoding</a></span>(short&nbsp;internalAdapterId,
-                                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;insertionPartitionKey,
-                                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;insertionSortKey,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#CommonIndexedPersistenceEncoding-short-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">CommonIndexedPersistenceEncoding</a></span>(short&nbsp;internalAdapterId,
+                                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
+                                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;insertionPartitionKey,
+                                <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;insertionSortKey,
                                 int&nbsp;duplicateCount,
                                 <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
                                 <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;unknownData)</code>&nbsp;</td>
@@ -190,7 +190,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Inde
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#getInsertionIds-org.locationtech.geowave.core.store.index.PrimaryIndex-">getInsertionIds</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#getInsertionIds-org.locationtech.geowave.core.store.api.Index-">getInsertionIds</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
 <div class="block">Given an index, convert this persistent encoding to a set of insertion
  IDs for that index</div>
 </td>
@@ -205,8 +205,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Inde
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#overlaps-org.locationtech.geowave.core.index.sfc.data.NumericData:A-org.locationtech.geowave.core.store.index.PrimaryIndex-">overlaps</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;insertTileRange,
-        <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#overlaps-org.locationtech.geowave.core.index.sfc.data.NumericData:A-org.locationtech.geowave.core.store.api.Index-">overlaps</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;insertTileRange,
+        <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -244,16 +244,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Inde
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="CommonIndexedPersistenceEncoding-short-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-org.locationtech.geowave.core.index.ByteArrayId-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">
+<a name="CommonIndexedPersistenceEncoding-short-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CommonIndexedPersistenceEncoding</h4>
 <pre>public&nbsp;CommonIndexedPersistenceEncoding(short&nbsp;internalAdapterId,
-                                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;insertionPartitionKey,
-                                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&nbsp;insertionSortKey,
+                                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
+                                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;insertionPartitionKey,
+                                        <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;insertionSortKey,
                                         int&nbsp;duplicateCount,
                                         <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
                                         <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;unknownData)</pre>
@@ -267,13 +267,13 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Inde
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getInsertionIds-org.locationtech.geowave.core.store.index.PrimaryIndex-">
+<a name="getInsertionIds-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getInsertionIds</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;getInsertionIds(<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;getInsertionIds(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 <div class="block">Given an index, convert this persistent encoding to a set of insertion
  IDs for that index</div>
 <dl>
@@ -301,14 +301,14 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Inde
 </dl>
 </li>
 </ul>
-<a name="overlaps-org.locationtech.geowave.core.index.sfc.data.NumericData:A-org.locationtech.geowave.core.store.index.PrimaryIndex-">
+<a name="overlaps-org.locationtech.geowave.core.index.sfc.data.NumericData:A-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>overlaps</h4>
 <pre>protected&nbsp;boolean&nbsp;overlaps(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>[]&nbsp;insertTileRange,
-                           <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+                           <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 </li>
 </ul>
 </li>
