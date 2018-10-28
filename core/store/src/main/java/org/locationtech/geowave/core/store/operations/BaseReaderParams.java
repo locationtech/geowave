@@ -53,7 +53,7 @@ abstract public class BaseReaderParams<T>
 			final Integer limit,
 			final Integer maxRangeDecomposition,
 			final GeoWaveRowIteratorTransformer<T> rowTransformer,
-			final String... additionalAuthorizations ) {
+			final String[] additionalAuthorizations ) {
 		this.index = index;
 		this.adapterStore = adapterStore;
 		this.internalAdapterStore = internalAdapterStore;

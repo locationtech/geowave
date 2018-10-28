@@ -87,11 +87,15 @@ public interface DataStoreOperations
 	public <T> Deleter<T> createDeleter(
 			ReaderParams<T> readerParams );
 
+	public RowDeleter createRowDeleter(
+			String indexName,
+			String... authorizations );
+
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore,
-			final boolean async );
+			final InternalAdapterStore internalAdapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore );
 
 	public boolean mergeStats(
 			DataStatisticsStore statsStore,

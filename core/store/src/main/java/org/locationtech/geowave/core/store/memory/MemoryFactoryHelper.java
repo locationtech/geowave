@@ -42,7 +42,7 @@ public class MemoryFactoryHelper implements
 			DataStoreOperations operations = OPERATIONS_CACHE.get(options.getGeowaveNamespace());
 			if (operations == null) {
 				operations = new MemoryDataStoreOperations(
-						options.getStoreOptions().isServerSideLibraryEnabled());
+						options.getStoreOptions());
 				OPERATIONS_CACHE.put(
 						options.getGeowaveNamespace(),
 						operations);

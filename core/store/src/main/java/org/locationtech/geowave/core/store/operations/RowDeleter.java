@@ -17,4 +17,6 @@ public interface RowDeleter extends
 {
 	public void delete(
 			GeoWaveRow row );
+
+	public void flush();
 }

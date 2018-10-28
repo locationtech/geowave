@@ -600,7 +600,8 @@ public class CassandraOperations implements
 				this);
 	}
 
-	public RowDeleter createDeleter(
+	@Override
+	public RowDeleter createRowDeleter(
 			final String indexName,
 			final String... authorizations ) {
 		return new CassandraDeleter(
@@ -612,13 +613,15 @@ public class CassandraOperations implements
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore,
-			final boolean async ) {
+			final InternalAdapterStore internalAdapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		return DataStoreUtils.mergeData(
+				this,
+				options,
 				index,
 				adapterStore,
-				adapterIndexMappingStore,
-				async);
+				internalAdapterStore,
+				adapterIndexMappingStore);
 	}
 
 	@Override
@@ -662,7 +665,7 @@ public class CassandraOperations implements
 	public <T> Deleter<T> createDeleter(
 			final ReaderParams<T> readerParams ) {
 		return new QueryAndDeleteByRow<>(
-				createDeleter(
+				createRowDeleter(
 						readerParams.getIndex().getName(),
 						readerParams.getAdditionalAuthorizations()),
 				createReader(readerParams));

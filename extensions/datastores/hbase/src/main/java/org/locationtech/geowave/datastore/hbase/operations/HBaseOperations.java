@@ -56,11 +56,6 @@ import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
 import org.apache.hadoop.hbase.protobuf.generated.AdminProtos.GetRegionInfoResponse.CompactionState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import org.apache.hadoop.hbase.shaded.com.google.protobuf.ByteString;
 import org.locationtech.geowave.core.cli.VersionUtils;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -573,7 +568,7 @@ public class HBaseOperations implements
 		RowDeleter deleter = null;
 		Iterable<Result> scanner = null;
 		try {
-			deleter = createDeleter(
+			deleter = createRowDeleter(
 					indexName,
 					additionalAuthorizations);
 			DataTypeAdapter<?> adapter = null;
@@ -848,19 +843,17 @@ public class HBaseOperations implements
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore,
-			final boolean async ) {
+			final InternalAdapterStore internalAdapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		if (options.isServerSideLibraryEnabled()) {
 			TableName tableName = getTableName(index.getName());
 			try (Admin admin = conn.getAdmin()) {
 				admin.compact(tableName);
-				if (!async) {
-					// wait for table compaction to finish
-					while (!admin.getCompactionState(
-							tableName).equals(
-							CompactionState.NONE)) {
-						Thread.sleep(100);
-					}
+				// wait for table compaction to finish
+				while (!admin.getCompactionState(
+						tableName).equals(
+						CompactionState.NONE)) {
+					Thread.sleep(100);
 				}
 			}
 			catch (final Exception e) {
@@ -872,10 +865,12 @@ public class HBaseOperations implements
 		}
 		else {
 			return DataStoreUtils.mergeData(
+					this,
+					options,
 					index,
 					adapterStore,
-					adapterIndexMappingStore,
-					async);
+					internalAdapterStore,
+					adapterIndexMappingStore);
 		}
 		return true;
 	}
@@ -1066,7 +1061,7 @@ public class HBaseOperations implements
 				this);
 	}
 
-	public RowDeleter createDeleter(
+	public RowDeleter createRowDeleter(
 			final String indexName,
 			final String... authorizations ) {
 		try {
@@ -1927,7 +1922,7 @@ public class HBaseOperations implements
 					this);
 		}
 		else {
-			final RowDeleter rowDeleter = createDeleter(
+			final RowDeleter rowDeleter = createRowDeleter(
 					readerParams.getIndex().getName(),
 					readerParams.getAdditionalAuthorizations());
 			if (rowDeleter != null) {

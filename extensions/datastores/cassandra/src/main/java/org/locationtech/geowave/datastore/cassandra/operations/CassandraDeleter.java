@@ -35,6 +35,11 @@ public class CassandraDeleter implements
 	}
 
 	@Override
+	public void flush() {
+		// Do nothing, delete is done immediately.
+	}
+
+	@Override
 	public void close()
 			throws Exception {
 

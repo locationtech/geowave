@@ -1340,7 +1340,8 @@ public class AccumuloOperations implements
 				false);
 	}
 
-	public RowDeleter createDeleter(
+	@Override
+	public RowDeleter createRowDeleter(
 			final String indexName,
 			final String... authorizations ) {
 		try {
@@ -1476,19 +1477,19 @@ public class AccumuloOperations implements
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore,
-			final boolean async ) {
+			final InternalAdapterStore internalAdapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		if (options.isServerSideLibraryEnabled()) {
-			return compactTable(
-					index.getName(),
-					async);
+			return compactTable(index.getName());
 		}
 		else {
 			return DataStoreUtils.mergeData(
+					this,
+					options,
 					index,
 					adapterStore,
-					adapterIndexMappingStore,
-					async);
+					internalAdapterStore,
+					adapterIndexMappingStore);
 		}
 	}
 
@@ -1497,9 +1498,7 @@ public class AccumuloOperations implements
 			final DataStatisticsStore statsStore,
 			final InternalAdapterStore internalAdapterStore ) {
 		if (options.isServerSideLibraryEnabled()) {
-			return compactTable(
-					AbstractGeoWavePersistence.METADATA_TABLE,
-					false);
+			return compactTable(AbstractGeoWavePersistence.METADATA_TABLE);
 		}
 		else {
 			return DataStoreUtils.mergeStats(
@@ -1509,8 +1508,7 @@ public class AccumuloOperations implements
 	}
 
 	public boolean compactTable(
-			final String unqualifiedTableName,
-			final boolean async ) {
+			final String unqualifiedTableName ) {
 		final String tableName = getQualifiedTableName(unqualifiedTableName);
 		try {
 			LOGGER.info("Compacting table '" + tableName + "'");
@@ -1519,13 +1517,8 @@ public class AccumuloOperations implements
 					null,
 					null,
 					true,
-					!async);
-			if (async) {
-				LOGGER.info("Successfully started compaction for table '" + tableName + "'");
-			}
-			else {
-				LOGGER.info("Successfully compacted table '" + tableName + "'");
-			}
+					true);
+			LOGGER.info("Successfully compacted table '" + tableName + "'");
 		}
 		catch (AccumuloSecurityException | TableNotFoundException | AccumuloException e) {
 			LOGGER.error(
@@ -1817,7 +1810,7 @@ public class AccumuloOperations implements
 			// combining the visibilities of a single row without
 			// WholeRowIterator so therefore we need to backup to using the
 			// slower delete by row technique
-			final RowDeleter rowDeleter = createDeleter(
+			final RowDeleter rowDeleter = createRowDeleter(
 					readerParams.getIndex().getName(),
 					readerParams.getAdditionalAuthorizations());
 			if (rowDeleter != null) {

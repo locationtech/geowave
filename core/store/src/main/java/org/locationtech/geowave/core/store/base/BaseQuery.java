@@ -35,8 +35,8 @@ import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
+import org.locationtech.geowave.core.store.operations.ReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.RowReader;
-import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 /**
@@ -114,28 +114,49 @@ abstract class BaseQuery
 			maxRangeDecomposition = isAggregation() ? options.getAggregationMaxRangeDecomposition() : options
 					.getMaxRangeDecomposition();
 		}
-		final ReaderParams<C> readerParams = new ReaderParams<>(
+
+		ReaderParams<C> readerParams = new ReaderParamsBuilder<C>(
 				index,
 				adapterStore,
 				internalAdapterStore,
-				adapterIds,
-				maxResolutionSubsamplingPerDimension,
-				getAggregation(),
-				getFieldSubsets(),
-				isMixedVisibilityRows(),
-				isAuthorizationsLimiting(),
-				isServerSideAggregation(options),
-				isRowMerging(adapterStore),
-				getRanges(
-						maxRangeDecomposition,
-						targetResolutionPerDimensionForHierarchicalIndex),
-				getServerFilter(options),
-				limit,
-				maxRangeDecomposition,
-				getCoordinateRanges(),
-				getConstraints(),
-				rowTransformer,
-				getAdditionalAuthorizations());
+				rowTransformer)
+						.adapterIds(
+								adapterIds)
+						.maxResolutionSubsamplingPerDimension(
+								maxResolutionSubsamplingPerDimension)
+						.aggregation(
+								getAggregation())
+						.fieldSubsets(
+								getFieldSubsets())
+						.isMixedVisibility(
+								isMixedVisibilityRows())
+						.isAuthorizationsLimiting(
+								isAuthorizationsLimiting())
+						.isServersideAggregation(
+								isServerSideAggregation(
+										options))
+						.isClientsideRowMerging(
+								isRowMerging(
+										adapterStore))
+						.queryRanges(
+								getRanges(
+										maxRangeDecomposition,
+										targetResolutionPerDimensionForHierarchicalIndex))
+						.filter(
+								getServerFilter(
+										options))
+						.limit(
+								limit)
+						.maxRangeDecomposition(
+								maxRangeDecomposition)
+						.coordinateRanges(
+								getCoordinateRanges())
+						.constraints(
+								getConstraints())
+						.additionalAuthorizations(
+								getAdditionalAuthorizations())
+						.build();
+
 		if (delete) {
 			scanCallback.waitUntilCallbackAdded();
 			final Deleter<C> deleter = operations.createDeleter(readerParams);

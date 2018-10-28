@@ -53,7 +53,7 @@ public class ReaderParams<T> extends
 			final List<MultiDimensionalCoordinateRangesArray> coordinateRanges,
 			final List<MultiDimensionalNumericData> constraints,
 			final GeoWaveRowIteratorTransformer<T> rowTransformer,
-			final String... additionalAuthorizations ) {
+			final String[] additionalAuthorizations ) {
 		super(
 				index,
 				adapterStore,
