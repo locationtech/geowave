@@ -10,16 +10,14 @@
  ******************************************************************************/
 package org.locationtech.geowave.test.services;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.File;
 import java.net.URISyntaxException;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.spark.SparkContext;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -37,12 +35,10 @@ import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.ZookeeperTestEnvironment;
 import org.locationtech.geowave.test.annotation.Environments;
-import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
-import org.locationtech.geowave.test.services.ServicesTestEnvironment;
-import org.locationtech.geowave.test.spark.SparkTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +46,8 @@ import org.slf4j.LoggerFactory;
 @Environments({
 	Environment.SERVICES
 })
-public class IngestIT
+public class IngestIT extends
+		BaseServiceIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IngestIT.class);
 
@@ -62,8 +59,8 @@ public class IngestIT
 	private static ConfigServiceClient configServiceClient;
 	private static BaseServiceClient baseServiceClient;
 
-	private String storeName = "existent-store";
-	private String spatialIndex = "spatial-index";
+	private final String storeName = "existent-store";
+	private final String spatialIndex = "spatial-index";
 	private static JSONParser parser;
 
 	private final static String testName = "IngestIT";
@@ -138,10 +135,10 @@ public class IngestIT
 	}
 
 	public static void assertFinalIngestStatus(
-			String msg,
-			String expectedStatus,
+			final String msg,
+			final String expectedStatus,
 			Response r,
-			int sleepTime /* in milliseconds */) {
+			final int sleepTime /* in milliseconds */) {
 
 		JSONObject json = null;
 		String operationID = null;
@@ -158,7 +155,7 @@ public class IngestIT
 			}
 			operationID = (String) (json.get("data"));
 		}
-		catch (ParseException e) {
+		catch (final ParseException e) {
 			Assert.fail("Error occurred while parsing JSON response: '" + e.getMessage() + "'");
 		}
 
@@ -224,6 +221,7 @@ public class IngestIT
 				r,
 				50);
 
+		muteLogging();
 		r = ingestServiceClient.kafkaToGW(
 				"nonexistent-store",
 				spatialIndex,
@@ -243,6 +241,7 @@ public class IngestIT
 				"ERROR",
 				r,
 				500);
+		unmuteLogging();
 	}
 
 	@Test
@@ -273,6 +272,7 @@ public class IngestIT
 				r,
 				500);
 
+		muteLogging();
 		r = ingestServiceClient.localToGW(
 				OSM_GPX_INPUT_DIR,
 				"nonexistent-store",
@@ -282,13 +282,14 @@ public class IngestIT
 				"ERROR",
 				r,
 				500);
+		unmuteLogging();
 	}
 
 	@Test
 	public void localToHdfs() {
-		String hdfsBaseDirectory = MapReduceTestEnvironment.getInstance().getHdfsBaseDirectory();
+		final String hdfsBaseDirectory = MapReduceTestEnvironment.getInstance().getHdfsBaseDirectory();
 
-		Response r = ingestServiceClient.localToHdfs(
+		final Response r = ingestServiceClient.localToHdfs(
 				OSM_GPX_INPUT_DIR,
 				hdfsBaseDirectory,
 				null,
@@ -304,8 +305,8 @@ public class IngestIT
 	// mrToGW requires data already ingested into MapReduce.
 	@Test
 	public void localToMrToGW() {
-		String hdfsBaseDirectory = MapReduceTestEnvironment.getInstance().getHdfsBaseDirectory();
-		String hdfsJobTracker = MapReduceTestEnvironment.getInstance().getJobtracker();
+		final String hdfsBaseDirectory = MapReduceTestEnvironment.getInstance().getHdfsBaseDirectory();
+		final String hdfsJobTracker = MapReduceTestEnvironment.getInstance().getJobtracker();
 
 		Response r = ingestServiceClient.localToMrGW(
 				OSM_GPX_INPUT_DIR,
@@ -338,6 +339,7 @@ public class IngestIT
 				r,
 				500);
 
+		muteLogging();
 		r = ingestServiceClient.localToMrGW(
 				OSM_GPX_INPUT_DIR,
 				hdfsBaseDirectory,
@@ -368,12 +370,13 @@ public class IngestIT
 				"ERROR",
 				r,
 				500);
+		unmuteLogging();
 	}
 
 	@Test
 	@Ignore
 	public void sparkToGW() {
-		String hdfsBaseDirectory = MapReduceTestEnvironment.getInstance().getHdfsBaseDirectory();
+		final String hdfsBaseDirectory = MapReduceTestEnvironment.getInstance().getHdfsBaseDirectory();
 
 		Response r = ingestServiceClient.localToHdfs(
 				OSM_GPX_INPUT_DIR,
