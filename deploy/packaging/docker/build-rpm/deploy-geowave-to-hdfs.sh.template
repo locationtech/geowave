@@ -1,3 +1,13 @@
+#-------------------------------------------------------------------------------
+# Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
+# 
+# See the NOTICE file distributed with this work for additional
+# information regarding copyright ownership.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License,
+# Version 2.0 which accompanies this distribution and is available at
+# http://www.apache.org/licenses/LICENSE-2.0.txt
+#-------------------------------------------------------------------------------
 #!/bin/bash
 #
 # Upload datastore jar into HDFS
@@ -152,7 +162,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #Find hbase conf path
-if [[ -x "$(command -v hbase)" ]]
+if [[ -x "$(command -v hbase)" ]]; then
     PATHS=$(hbase classpath)
     IFS=':' read -ra CLASSPATHS <<< "$PATHS"
 
@@ -181,8 +191,11 @@ if [[ -x "$(command -v aws)" ]] && [ ! -z "$CONFPATH" ] && [[ -e "$CONFPATH/hbas
 
     if [[ $GOTELEM -eq 1 ]] && [[ $CONTENT = "s3://"* ]]; then
       CONTENT=${CONTENT%/}
-      echo -e "s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar $CONTENT/lib/geowave-tools-$VENDOR_VERSION-apache.jar"
-      aws s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar $CONTENT/lib/geowave-tools-$VENDOR_VERSION-apache.jar
+      echo -e "s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar $CONTENT/lib/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar"
+      # Upload library to s3
+      aws s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar $CONTENT/lib/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar
+      # Also upload the build metadata file for ease of inspection
+      aws s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-build.properties $CONTENT/lib/geowave-$DATASTORE_TOKEN-build.properties
     fi
 
     if [ $GOTELEM -eq 1 ]; then

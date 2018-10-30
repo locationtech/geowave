@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+# Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
 # 
 # See the NOTICE file distributed with this work for additional
 # information regarding copyright ownership.
@@ -15,6 +15,7 @@
 DATASTORES=(
 	"accumulo"
 	"hbase"
+	"cassandra"
 )
 declare -A ARGS
 while [ $# -gt 0 ]; do
@@ -99,6 +100,7 @@ do
 	
 	cp $TEMPLATE_ROOT/geowave-install-lib.sh $TARGET_ROOT/$datastore/geowave-install-lib.sh
 	sed -i -e s/'$DATASTORE_TOKEN'/${datastore}/g $TARGET_ROOT/$datastore/geowave-install-lib.sh
+	sed -e '/$DATASTORE_PUPPET_TOKEN/ {' -e 'r '$TEMPLATE_ROOT/$datastore/DATASTORE_PUPPET_TOKEN'' -e 'd' -e '}' -i $TARGET_ROOT/$datastore/geowave-install-lib.sh
 	sed -e '/$DATASTORE_LIB_TOKEN/ {' -e 'r '$TEMPLATE_ROOT/$datastore/DATASTORE_LIB_TOKEN'' -e 'd' -e '}' -i $TARGET_ROOT/$datastore/geowave-install-lib.sh
 	
 	cp $TEMPLATE_ROOT/quickstart/ingest-and-kde-gdelt.sh.template $TARGET_ROOT/quickstart/$datastore/ingest-and-kde-gdelt.sh
@@ -112,6 +114,8 @@ mkdir -p $TARGET_ROOT/jupyter
 # copy permanent resources that don't need a template
 cp $TEMPLATE_ROOT/jupyter/install-conda.sh $TARGET_ROOT/jupyter/install-conda.sh
 cp $TEMPLATE_ROOT/jupyter/jupyterhub_config.py $TARGET_ROOT/jupyter/jupyterhub_config.py
+cp $TEMPLATE_ROOT/jupyter/pre-spawn.sh $TARGET_ROOT/jupyter/pre-spawn.sh
+cp $TEMPLATE_ROOT/jupyter/gw-base.yml $TARGET_ROOT/jupyter/gw-base.yml
 
 cp $TEMPLATE_ROOT/bootstrap-jupyter.sh $TARGET_ROOT/jupyter/bootstrap-jupyter.sh
 cp $TEMPLATE_ROOT/create-configure-kernel.sh $TARGET_ROOT/jupyter/create-configure-kernel.sh

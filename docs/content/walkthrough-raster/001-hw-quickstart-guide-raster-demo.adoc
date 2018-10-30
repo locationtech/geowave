@@ -4,7 +4,7 @@
 
 == GeoWave Quickstart Guide Raster Demo image:geowave-icon-logo-cropped.png[width="28%"]
 
-In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands filter the set images to select ones that meet our given parameters, and the ingest command
+In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands prints out the metadata of available imagery matching your criteria to select ones that meet parameters of interest, and the ingest command
 downloads those images and combines them to create a mosaic.
 
 === Set-Up Environment Variables
@@ -67,7 +67,7 @@ At this point, we should be ready to ingest the data.
 === Config and Ingest.
 
 . Add a GeoWave store
-
++
 We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the https://landsat.usgs.gov/landsat-8[Landsat 8 Satellite].
 
 .. If running with the GeoWave Sandbox:
@@ -98,15 +98,26 @@ geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace g
 geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
-. Add a spatial index.
+.. If running with EMR Cassandra
 +
 [source, bash]
 ----
-geowave config addindex -t spatial spatial
+geowave config addstore -t cassandra --contactPoints localhost landsatraster --gwNamespace geowave.landsat_raster --batchWriteSize 15
+
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
-. Filter the dataset by calling analyze. 
+. Add a spatial index.
++
+We're going to project this data over the Web Mercator Coordinate Reference System (CRS) to demonstrate GeoWave's Configurable Indexed CRS capabilities. 
++
+[source, bash]
+----
+geowave config addindex -t spatial spatial -c EPSG:3857
+----
 
+. Show available data by calling analyze. 
++
 In this example we look for Band 8 images that are in Berlin.
 +
 [source, bash]
@@ -117,7 +128,7 @@ geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cq
 ----
 
 . Ingest the data into geowave
-
++
 Call the ingest command to download the data, ingest it into the GeoWave stores, and create the mosaic image. Status can be monitored at using HBase or Accumulo web interface. See the link:interact-cluster.html[Interacting with the cluster, window="_blank"] section help doing so.
 More information on the landsat ingest and analyze commands can be found https://github.com/locationtech/geowave/tree/master/extensions/cli/landsat8[here].
 +

@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+# Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
 # 
 # See the NOTICE file distributed with this work for additional
 # information regarding copyright ownership.
@@ -70,7 +70,10 @@ if command -v aws >/dev/null 2>&1 ; then
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/emr/generated/ s3://geowave/${GEOWAVE_VERSION_URL}/scripts/emr/ --quiet
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/sandbox/generated/ s3://geowave/${GEOWAVE_VERSION_URL}/scripts/sandbox/ --quiet
 
-		aws s3 cp --acl public-read --recursive ${WORKSPACE}/examples/data/notebooks/jupyter/ s3://geowave-notebooks/${GEOWAVE_VERSION_URL}/notebooks/ --quiet
+		aws s3 cp --acl public-read --recursive ${WORKSPACE}/examples/data/notebooks/ s3://geowave-notebooks/${GEOWAVE_VERSION_URL}/notebooks/ --quiet
+
+		# Copy built pyspark package to lib directory
+		aws s3 cp --acl public-read ${WORKSPACE}/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz s3://geowave/${GEOWAVE_VERSION_URL}/lib/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
 	else
 		echo '###### Skipping publish to S3: GEOWAVE_VERSION_URL not defined'
 	fi

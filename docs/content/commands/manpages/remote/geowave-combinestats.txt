@@ -1,0 +1,22 @@
+//:geowave-combinestats(1)
+//:===============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave remote combinestats - Combine all statistics in GeoWave namespace, can be useful for making a datastore more efficient
+
+SYNOPSIS
+//:--------
+
+geowave remote combinestats [options] <storename>
+DESCRIPTION
+//:-----------
+
+This command will combine all statistics in a GeoWave namespace
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

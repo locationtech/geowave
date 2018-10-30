@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory
+org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory

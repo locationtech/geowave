@@ -1,22 +1,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>geowave-extension-parent</artifactId>
-        <groupId>mil.nga.giat</groupId>
-        <relativePath>../../</relativePath>
-        <version>0.9.8-SNAPSHOT</version>
-    </parent>
-    <artifactId>geowave-adapter-auth</artifactId>
-    <name>GeoWave Adapter Auth</name>
-    <description>Authorization functionality for GeoWave Data Adapters</description>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-        </dependency>
-    </dependencies>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>geowave-extension-parent</artifactId>
+		<groupId>org.locationtech.geowave</groupId>
+		<relativePath>../../</relativePath>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>geowave-adapter-auth</artifactId>
+	<name>GeoWave Adapter Auth</name>
+	<description>Authorization functionality for GeoWave Data Adapters</description>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<!-- this dependency is excluded from spring security and is considered 
+				"optional" in documentation but at least in our test it is required -->
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>

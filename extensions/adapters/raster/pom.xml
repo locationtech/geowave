@@ -1,42 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-extension-parent</artifactId>
-		<groupId>mil.nga.giat</groupId>
+		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../../</relativePath>
-		<version>0.9.8-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-adapter-raster</artifactId>
 	<name>Geowave Raster Adapter</name>
 	<description>Geowave Data Adapter for Raster Data</description>
 	<dependencies>
 		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>2.5.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>it.geosolutions.imageio-ext</groupId>
 			<artifactId>imageio-ext-gdalgeotiff</artifactId>
-			<version>1.1.13</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.vividsolutions</groupId>
-					<artifactId>jts</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-imageio-ext-gdal</artifactId>
-			<version>${geotools.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.vividsolutions</groupId>
-					<artifactId>jts</artifactId>
-				</exclusion>
-				<exclusion>
-					<artifactId>gt-epsg-hsql</artifactId>
-					<groupId>org.geotools</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>me.lemire.integercompression</groupId>
@@ -62,17 +48,17 @@
 			<version>2.2</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-adapter-auth</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-geotime</artifactId>
 			<version>${project.version}</version>
 		</dependency>

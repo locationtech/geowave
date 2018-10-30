@@ -1,3 +1,13 @@
+#-------------------------------------------------------------------------------
+# Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
+# 
+# See the NOTICE file distributed with this work for additional
+# information regarding copyright ownership.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License,
+# Version 2.0 which accompanies this distribution and is available at
+# http://www.apache.org/licenses/LICENSE-2.0.txt
+#-------------------------------------------------------------------------------
 #!/usr/bin/env bash
 #
 # Installing additional components on an EMR node depends on several config files
@@ -84,11 +94,13 @@ repo_base_url => '$GEOWAVE_REPO_BASE_URL_TOKEN',
 class { 'geowave':
 	geowave_version             => '${GEOWAVE_VERSION}',
 	hadoop_vendor_version       => 'apache',
-	install_$DATASTORE_TOKEN  	=> true,
+$DATASTORE_PUPPET_TOKEN
 	install_app                 => true,
 	install_restservices        => true,
 	install_gwgeoserver         => true,
+	install_gwgrpc              => false,
 	http_port                   => "${HTTP_PORT}",
+	grpc_port                   => "${GRPC_PORT}",
 	ajp_port                    => "${AJP_PORT}",
 	shutdown_port               => "${SHUTDOWN_PORT}",
 	set_public_dns              => ${SET_PUBLIC_DNS},

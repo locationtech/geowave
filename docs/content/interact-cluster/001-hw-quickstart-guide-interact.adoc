@@ -34,6 +34,10 @@ during the ingest, they will be reflected here.
 
 image::sandbox/hbase-overview.png[scaledwidth="100%",alt="select emr"]
 
+=== Cassandra
+
+Cassandra status can be monitored using the "nodetool" commandline utility by SSH'ing into any of the nodes.
+
 === Accumulo View
 
 You can follow the progress of the data ingest and scan (kde) performed by the cluster on the accumulo web server.

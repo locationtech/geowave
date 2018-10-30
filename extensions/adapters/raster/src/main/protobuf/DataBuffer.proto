@@ -1,0 +1,35 @@
+option java_package = "org.locationtech.geowave.adapter.raster.protobuf";
+option java_outer_classname = "DataBufferProtos";
+option optimize_for = SPEED;
+
+message SignedIntArray {
+  repeated sint32 samples = 1 [packed=true];
+}
+message DoubleArray {
+  repeated double samples = 1 [packed=true];
+}
+message FloatArray {
+  repeated float samples = 1 [packed=true];
+}
+message SignedIntDataBuffer {
+	repeated SignedIntArray banks = 1; 
+}
+message DoubleDataBuffer {
+	repeated DoubleArray banks = 1; 
+}
+message FloatDataBuffer {
+	repeated FloatArray banks = 1; 
+}
+message ByteDataBuffer {
+	repeated bytes banks = 1; 
+}
+message DataBuffer {
+  required uint32 type = 1;
+  repeated uint32 offsets = 2 [packed=true];
+  required uint32 size = 3;
+  optional SignedIntDataBuffer sint = 4;
+  optional DoubleDataBuffer dbl = 5;
+  optional FloatDataBuffer flt = 6;
+  optional ByteDataBuffer byteDb = 7;
+}
+

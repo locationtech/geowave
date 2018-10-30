@@ -2,26 +2,26 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>geowave-extension-parent</artifactId>
-        <groupId>mil.nga.giat</groupId>
+        <groupId>org.locationtech.geowave</groupId>
         <relativePath>../../</relativePath>
-        <version>0.9.8-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>geowave-datastore-accumulo</artifactId>
 	<name>GeoWave Accumulo</name>
     <description>Geowave Data Store on Apache Accumulo</description>
     <dependencies>
         <dependency>
-            <groupId>mil.nga.giat</groupId>
+            <groupId>org.locationtech.geowave</groupId>
             <artifactId>geowave-core-geotime</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>mil.nga.giat</groupId>
+            <groupId>org.locationtech.geowave</groupId>
             <artifactId>geowave-core-mapreduce</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>mil.nga.giat</groupId>
+            <groupId>org.locationtech.geowave</groupId>
             <artifactId>geowave-core-cli</artifactId>
             <version>${project.version}</version>
         </dependency>

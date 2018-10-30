@@ -1,0 +1,81 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
+ *   
+ *  See the NOTICE file distributed with this work for additional
+ *  information regarding copyright ownership.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Apache License,
+ *  Version 2.0 which accompanies this distribution and is available at
+ *  http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
+package org.locationtech.geowave.core.store.entities;
+
+import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
+
+public class GeoWaveValueImpl implements
+		GeoWaveValue
+{
+	private final byte[] fieldMask;
+	private final byte[] visibility;
+	private final byte[] value;
+
+	public GeoWaveValueImpl(
+			final GeoWaveValue[] values ) {
+		if ((values == null) || (values.length == 0)) {
+			fieldMask = new byte[] {};
+			visibility = new byte[] {};
+			value = new byte[] {};
+		}
+		else if (values.length == 1) {
+			fieldMask = values[0].getFieldMask();
+			visibility = values[0].getVisibility();
+			value = values[0].getValue();
+		}
+		else {
+			byte[] intermediateFieldMask = values[0].getFieldMask();
+			byte[] intermediateVisibility = values[0].getVisibility();
+			byte[] intermediateValue = values[0].getValue();
+			for (int i = 1; i < values.length; i++) {
+				intermediateFieldMask = BitmaskUtils.generateANDBitmask(
+						intermediateFieldMask,
+						values[i].getFieldMask());
+				intermediateVisibility = DataStoreUtils.mergeVisibilities(
+						intermediateVisibility,
+						values[i].getVisibility());
+				intermediateValue = ByteArrayUtils.combineArrays(
+						intermediateValue,
+						values[i].getValue());
+
+			}
+			fieldMask = intermediateFieldMask;
+			visibility = intermediateVisibility;
+			value = intermediateValue;
+		}
+	}
+
+	public GeoWaveValueImpl(
+			final byte[] fieldMask,
+			final byte[] visibility,
+			final byte[] value ) {
+		this.fieldMask = fieldMask;
+		this.visibility = visibility;
+		this.value = value;
+	}
+
+	@Override
+	public byte[] getFieldMask() {
+		return fieldMask;
+	}
+
+	@Override
+	public byte[] getVisibility() {
+		return visibility;
+	}
+
+	@Override
+	public byte[] getValue() {
+		return value;
+	}
+}

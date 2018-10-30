@@ -81,6 +81,13 @@ geowave config addstore gdelt --gwNamespace geowave.gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
 
+.. If using EMR Cassandra
++
+[source, bash]
+----
+geowave config addstore gdelt --gwNamespace geowave.gdelt \
+-t cassandra  --contactPoints localhost
+----
 . Add a spatial index
 +
 [source, bash]
@@ -136,6 +143,13 @@ geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
 
+.. If using EMR Cassandra
++
+[source, bash]
+----
+geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+-t cassandra  --contactPoints localhost
+----
 . Run the KDE analytic
 .. If using Sandbox
 +

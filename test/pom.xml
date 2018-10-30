@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
-		<groupId>mil.nga.giat</groupId>
+		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.8-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
@@ -16,12 +15,12 @@
 	<description>A module for integration and functional tests of GeoWave</description>
 	<dependencies>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-deploy</artifactId>
 			<version>${project.version}</version>
-		</dependency> 
+		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-spark</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -36,11 +35,15 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-geoserver</artifactId>
 			<version>${project.version}</version>
-		</dependency> 
-				<dependency>
+		</dependency>
+		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
 		</dependency>
@@ -53,7 +56,7 @@
 			<artifactId>jetty-webapp</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-service-rest</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -74,12 +77,17 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-service-client</artifactId>
 			<version>${project.version}</version>
-		</dependency> 
+		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-grpc-server</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-format-vector</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -98,32 +106,32 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-format-gpx</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-format-gdelt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-format-avro</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-osm</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -138,12 +146,17 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-dynamodb</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-datastore-cassandra</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-hbase</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -162,29 +175,36 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-datastore-cassandra</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-bigtable</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-shaded-client</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-example</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-landsat8</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-sentinel2</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.findify</groupId>
+			<artifactId>s3mock_2.11</artifactId>
+			<version>0.2.5</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
@@ -234,7 +254,29 @@
 					<groupId>javax.servlet</groupId>
 					<artifactId>servlet-api</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-testing-util</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-protocol</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>
@@ -244,6 +286,10 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>*</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -252,10 +298,67 @@
 			<version>${junit.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.cassandra</groupId>
+			<artifactId>cassandra-all</artifactId>
+			<version>${cassandra.version}</version>
+			<exclusions>
+				<!-- These are the same exclusions in cassandra-maven-plugin, but this 
+					effectively overrides the cassandra server-side version (and is necessary 
+					to avoid guava version conflicts) -->
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>log4j-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-validator</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-minikdc</artifactId>
+			<version>${hadoop.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-protocol-ldap</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-jdbm-partition</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>cassandra-maven-plugin</artifactId>
-			<version>3.5</version>
+			<version>3.6</version>
 			<exclusions>
+				<exclusion>
+					<groupId>org.apache.cassandra</groupId>
+					<artifactId>cassandra-all</artifactId>
+				</exclusion>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>log4j-over-slf4j</artifactId>
@@ -303,12 +406,41 @@
 									<type>war</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
-									<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/slf4j*.jar</excludes>
+									<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/slf4j*.jar,**/guava*.jar</excludes>
 								</artifactItem>
 							</artifactItems>
 						</configuration>
 					</execution>
-
+					<execution>
+						<id>setup-hbase</id>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<phase>pre-integration-test</phase>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<artifactId>guava</artifactId>
+									<groupId>com.google.guava</groupId>
+									<version>12.0.1</version>
+								</artifactItem>
+								<artifactItem>
+									<artifactId>protobuf-java</artifactId>
+									<groupId>com.google.protobuf</groupId>
+									<version>2.5.0</version>
+								</artifactItem>
+								<artifactItem>
+									<artifactId>hbase-client</artifactId>
+									<groupId>org.apache.hbase</groupId>
+								</artifactItem>
+								<artifactItem>
+									<artifactId>hbase-protocol</artifactId>
+									<groupId>org.apache.hbase</groupId>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/hbase/lib</outputDirectory>
+						</configuration>
+					</execution>
 					<execution>
 						<id>setup-wps</id>
 						<goals>
@@ -370,7 +502,6 @@
 				<executions>
 					<execution>
 						<id>copy-resources</id>
-						<!-- here the phase you need -->
 						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -400,7 +531,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>mil.nga.giat.geowave.adapter.raster.plugin.gdal.InstallGdal</mainClass>
+					<mainClass>org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal</mainClass>
 					<arguments>
 						<argument>${gdal.dir}</argument>
 					</arguments>
@@ -422,7 +553,7 @@
 								<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
 								<BIGTABLE_EMULATOR_HOST>${bigtable.emulator.endpoint}</BIGTABLE_EMULATOR_HOST>
 								<GDAL_DIR>${gdal.dir}</GDAL_DIR>
-								<NCS_USER_PREFS></NCS_USER_PREFS>
+								<NCS_USER_PREFS />
 							</environmentVariables>
 							<systemPropertyVariables>
 								<zookeeperUrl>${zookeeperUrl}</zookeeperUrl>
@@ -474,8 +605,7 @@
 						<configuration>
 							<tasks xmlns:jacoco="antlib:org.jacoco.ant">
 								<mkdir dir="${project.reporting.outputDirectory}" />
-								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"
-									classpathref="maven.plugin.classpath" />
+								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="maven.plugin.classpath" />
 								<jacoco:report>
 									<executiondata>
 										<fileset dir="../" includes="**/coverage-reports/*.exec" />
@@ -483,14 +613,10 @@
 
 									<structure name="GeoWave">
 										<classfiles>
-											<fileset dir="../"
-												includes="**/target/classes/**,**/target/munged/classes/**"
-												excludes="**/accumulo/target/classes/**" />
+											<fileset dir="../" includes="**/target/classes/**,**/target/munged/classes/**" excludes="**/accumulo/target/classes/**" />
 										</classfiles>
 										<sourcefiles>
-											<fileset dir="../"
-												includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**"
-												excludes="**/accumulo/target/src/main/java/**" />
+											<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**" excludes="**/accumulo/target/src/main/java/**" />
 										</sourcefiles>
 									</structure>
 
@@ -549,7 +675,7 @@
 						<sourceDirectory>../services/client/src/main/java</sourceDirectory>
 						<sourceDirectory>../services/rest/src/main/java</sourceDirectory>
 						<sourceDirectory>../services/grpc/server/src/main/java</sourceDirectory>
-						<sourceDirectory>../services/grpc/protobuf-shaded/src/main/java</sourceDirectory>
+						<sourceDirectory>../services/grpc/protobuf/src/main/java</sourceDirectory>
 						<sourceDirectory>../deploy/src/main/java</sourceDirectory>
 						<sourceDirectory>../examples/java-api/src/main/java</sourceDirectory>
 						<sourceDirectory>../test/src/main/java</sourceDirectory>
@@ -612,7 +738,6 @@
 			<id>cassandra-it</id>
 			<properties>
 				<skipITs>false</skipITs>
-				<guava.version>19.0</guava.version>
 				<testStoreType>CASSANDRA</testStoreType>
 			</properties>
 		</profile>

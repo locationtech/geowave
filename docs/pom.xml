@@ -4,9 +4,9 @@
     
     <parent>
         <artifactId>geowave-parent</artifactId>
-        <groupId>mil.nga.giat</groupId>
+        <groupId>org.locationtech.geowave</groupId>
         <relativePath>../</relativePath>
-        <version>0.9.8-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>geowave-doc</artifactId>
@@ -81,6 +81,7 @@
                             <outputDirectory>${project.build.directory}/content/</outputDirectory>
                             <resources>
                                 <resource>
+                                	<exclude>**/057-ingeststats.adoc</exclude>
                                     <directory>${project.basedir}/content/</directory>
                                     <filtering>true</filtering>
                                 </resource>
@@ -91,6 +92,8 @@
                                 <nonFilteredFileExtension>eot</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>svg</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>png</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>woff</nonFilteredFileExtension>
                             </nonFilteredFileExtensions>
                         </configuration>

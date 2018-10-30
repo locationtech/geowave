@@ -2,9 +2,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
-		<groupId>mil.nga.giat</groupId>
+		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.8-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-service-parent</artifactId>
 	<name>GeoWave Services Parent POM</name>
@@ -15,6 +15,7 @@
 		<module>api</module>
 		<module>client</module>
 		<module>grpc/server</module>
-		<module>grpc/protobuf-shaded</module>
+		<module>grpc/protobuf</module>
+		<module>grpc/protobuf-generator</module>
 	</modules>
 </project>

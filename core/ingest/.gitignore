@@ -1,2 +1,2 @@
-src/main/java/mil/nga/giat/geowave/core/ingest/avro/WholeFile.java
+src/main/java/org/locationtech/geowave/core/ingest/avro/WholeFile.java
 /bin/

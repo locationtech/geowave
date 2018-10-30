@@ -1,10 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>mil.nga.giat</groupId>
+		<groupId>org.locationtech.geowave</groupId>
 		<artifactId>geowave-core-parent</artifactId>
 		<relativePath>../</relativePath>
-		<version>0.9.8-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-core-geotime</artifactId>
 	<name>GeoWave Spatial and Temporal Support</name>
@@ -16,28 +18,38 @@
 		<!--we can switch the dependency from store to ingest when accumulo becomes 
 			a pluggable data store and is no longer a dependency on ingest -->
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-index</artifactId>
 			<version>${project.version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-epsg-wkt</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-store</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-referencing</artifactId>
-			<version>${geotools.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-api</artifactId>
-			<version>${geotools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-cql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.threeten</groupId>
+			<artifactId>threeten-extra</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -20,7 +20,7 @@ These are sets of data that are also used to construct the primary index SFC. Th
 
 ==== Common Index Data
 
-These are a collection of attributes. There can be any number of attributes but they must conform to the link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/dimension/NumericDimensionField.java[NumericDimensionField, window="_blank"] interface. The attribute type must have a link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/data/field/FieldReader.java[FieldReader, window="_blank"] and a link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/mil/nga/giat/geowave/core/store/data/field/FieldWriter.java[FieldWriter, window="_blank"] that is within the classpath of the tablet servers. GeoWave provides a basic implementation for these attribute types:
+These are a collection of attributes. There can be any number of attributes but they must conform to the link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/org/locationtech/geowave/core/store/dimension/NumericDimensionField.java[NumericDimensionField, window="_blank"] interface. The attribute type must have a link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/org/locationtech/geowave/core/store/data/field/FieldReader.java[FieldReader, window="_blank"] and a link:https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/org/locationtech/geowave/core/store/data/field/FieldWriter.java[FieldWriter, window="_blank"] that is within the classpath of the tablet servers. GeoWave provides a basic implementation for these attribute types:
 
 [frame="topbot"]
 |=======
@@ -36,16 +36,16 @@ These can be literally anything. No distributed filtering can be performed on th
 
 ==== Field Writers/Readers
 
-These are type specific implementations used by mil.nga.giat.geowave.core.store.adapter.DataAdapter to tell GeoWave how to serialize or deserialize information of a certain type. The default implementations are included in the distributed filter iterators. This is what drives the type requirements listed above in the Common Index Data section.
+These are type specific implementations used by org.locationtech.geowave.core.store.adapter.DataAdapter to tell GeoWave how to serialize or deserialize information of a certain type. The default implementations are included in the distributed filter iterators. This is what drives the type requirements listed above in the Common Index Data section.
 
 ==== Writing Data
 
 When writing data, writing implementation classes should implement the link:https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/io/Writable.html[Writable, window="_blank"] interface.
 
 .Writing Vector Data
-When writing vector data, GeoWave provides the default vector writable implementation, the link:https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/mil/nga/giat/geowave/adapter/vector/FeatureWritable.java[mil.nga.giat.geowave.adapter.vector.FeatureWritable, window="_blank"] class.
+When writing vector data, GeoWave provides the default vector writable implementation, the link:https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/FeatureWritable.java[org.locationtech.geowave.adapter.vector.FeatureWritable, window="_blank"] class.
 
-This class is used by link:https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.java[mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter, window="_blank"] to persist link:http://docs.geotools.org/stable/javadocs/org/opengis/feature/simple/SimpleFeature.html[org.opengis.feature.simple.SimpleFeature, window="_blank"] and its link:http://docs.geotools.org/stable/javadocs/org/opengis/feature/simple/SimpleFeatureType.html[org.opengis.feature.simple.SimpleFeatureType, window="_blank"]. The attribute types of the feature must be understood before the feature can be deserialized so therefore each link:http://docs.geotools.org/stable/javadocs/org/opengis/feature/simple/SimpleFeature.html[org.opengis.feature.simple.SimpleFeature, window="_blank"] serializes its type.
+This class is used by link:https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/FeatureDataAdapter.java[org.locationtech.geowave.adapter.vector.FeatureDataAdapter, window="_blank"] to persist link:http://docs.geotools.org/stable/javadocs/org/opengis/feature/simple/SimpleFeature.html[org.opengis.feature.simple.SimpleFeature, window="_blank"] and its link:http://docs.geotools.org/stable/javadocs/org/opengis/feature/simple/SimpleFeatureType.html[org.opengis.feature.simple.SimpleFeatureType, window="_blank"]. The attribute types of the feature must be understood before the feature can be deserialized so therefore each link:http://docs.geotools.org/stable/javadocs/org/opengis/feature/simple/SimpleFeature.html[org.opengis.feature.simple.SimpleFeature, window="_blank"] serializes its type.
 
 [NOTE]
 ====
@@ -53,7 +53,7 @@ This class caches feature type information. If the feature type changes, then th
 ====
 
 .Writing Raster Data
-When writing raster data, GeoWave provides the default raster writable implementation, the link:https://github.com/locationtech/geowave/blob/master/extensions/adapters/raster/src/main/java/mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.java[mil.nga.giat.geowave.adapter.raster.adapter.GridCoverageWritable, window="_blank"] class.
+When writing raster data, GeoWave provides the default raster writable implementation, the link:https://github.com/locationtech/geowave/blob/master/extensions/adapters/raster/src/main/java/org/locationtech/geowave/adapter/raster/adapter/GridCoverageWritable.java[org.locationtech.geowave.adapter.raster.adapter.GridCoverageWritable, window="_blank"] class.
 
-This class is used by GridCoverageDataAdapter, e.g., link:https://github.com/locationtech/geowave/blob/master/extensions/adapters/raster/src/main/java/mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.java[mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter, window="_blank"], to persist link:http://docs.geotools.org/stable/javadocs/org/opengis/coverage/grid/GridCoverage.html[org.opengis.coverage.grid.GridCoverage, window="_blank"]. The adapter has information regarding the sample model and color model so all that is necessary to persist is the buffer and the envelope.
+This class is used by GridCoverageDataAdapter, e.g., link:https://github.com/locationtech/geowave/blob/master/extensions/adapters/raster/src/main/java/org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.java[org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter, window="_blank"], to persist link:http://docs.geotools.org/stable/javadocs/org/opengis/coverage/grid/GridCoverage.html[org.opengis.coverage.grid.GridCoverage, window="_blank"]. The adapter has information regarding the sample model and color model so all that is necessary to persist is the buffer and the envelope.
 

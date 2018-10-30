@@ -1,3 +1,13 @@
+#-------------------------------------------------------------------------------
+# Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
+# 
+# See the NOTICE file distributed with this work for additional
+# information regarding copyright ownership.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License,
+# Version 2.0 which accompanies this distribution and is available at
+# http://www.apache.org/licenses/LICENSE-2.0.txt
+#-------------------------------------------------------------------------------
 #!/usr/bin/env bash
 #
 # Bootstrap a GeoWave cluster node
@@ -11,6 +21,7 @@
 GEOWAVE_REPO_RPM=$GEOWAVE_REPO_RPM_TOKEN # TODO: Should have a prod->latest rpm
 GEOWAVE_VERSION=$GEOWAVE_VERSION_TOKEN
 HTTP_PORT='8000'
+GRPC_PORT='8980'
 AJP_PORT='8010'
 SHUTDOWN_PORT='8006'
 PUBLIC_DNS=$(curl http://169.254.169.254/latest/meta-data/public-hostname)

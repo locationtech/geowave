@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+# Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
 # 
 # See the NOTICE file distributed with this work for additional
 # information regarding copyright ownership.
@@ -53,3 +53,10 @@ fi
 if [[ ! -f $WORKSPACE/deploy/target/puppet-scripts-${GEOWAVE_VERSION}.tar.gz ]]; then
     tar -czf $WORKSPACE/deploy/target/puppet-scripts-${GEOWAVE_VERSION}.tar.gz -C $WORKSPACE/deploy/packaging/puppet geowave
 fi
+
+## Build the pyspark module
+if [[ ! -f $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz ]]; then
+    mvn package -am -pl analytics/pyspark -Ppyspark -Dpython.executable=python3.6
+    mv $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION_STR}.tar.gz $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
+fi
+

@@ -1,3 +1,13 @@
+#-------------------------------------------------------------------------------
+# Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
+# 
+# See the NOTICE file distributed with this work for additional
+# information regarding copyright ownership.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License,
+# Version 2.0 which accompanies this distribution and is available at
+# http://www.apache.org/licenses/LICENSE-2.0.txt
+#-------------------------------------------------------------------------------
 #!/bin/bash
 
 # Variables for kernel creation
@@ -23,6 +33,10 @@ if [ ! -f /tmp/install-conda.sh ]; then
 	sudo chmod +x /tmp/install-conda.sh
 fi
 
+if [ ! -f /tmp/gw-base.yml ]; then
+	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/gw-base.yml /tmp/gw-base.yml
+fi
+
 
 # The EMR customize hooks run _before_ everything else, so Spark is not yet ready
 THIS_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
@@ -37,16 +51,19 @@ if [ ! -f "$RUN_FLAG" ]; then
 fi
 
 # Download example notebooks from s3
-aws s3 sync s3://geowave-notebooks/latest/notebooks/ $HOME/notebooks/
+aws s3 sync s3://geowave-notebooks/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ /usr/local/notebooks/
+
+# Grab pre-spawn script for properly hooking new users into system.
+sudo aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/pre-spawn.sh /srv/jupyterhub/
+sudo chmod +x /srv/jupyterhub/pre-spawn.sh
 
 # Download hub configuration file
 sudo su root -c "aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/jupyterhub_config.py /etc/jupyterhub/"
 
-# Download latest conda (Python 3.6.1) to root install location
+# Download latest conda to root install location
 sudo su root -c "source /tmp/install-conda.sh /opt/miniconda.sh /opt/conda/"
 
-# Install the necessary components for jupyter and pixiedust
-sudo su root -c "/opt/conda/bin/conda install jupyterhub jupyter ncurses"
+sudo su root -c "aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-${GEOWAVE_VER}.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz"
 
 echo bootstrap_conda.sh completed. PATH now: $PATH
 echo Performing pixiedust and jupyter kernel setup.
@@ -54,6 +71,8 @@ echo Performing pixiedust and jupyter kernel setup.
 if is_master; then
 	sudo su root -c "source /tmp/create-configure-kernel.sh $GEOWAVE_VER /usr/local/pixiedust /opt/conda/bin /opt/conda/share/jupyter/kernels"
 fi
+
+sudo su root -c "/opt/conda/bin/pip install /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz"
 
 # Allow pixiedust to be accessed by all users
 sudo chmod -R 777 /usr/local/pixiedust/
@@ -68,6 +87,7 @@ stop on runlevel [016]
 respawn
 respawn limit 0 10
 
+env JAVA_HOME=$JAVA_HOME
 script
    if [ -f /etc/jupyterhub/oauth_env.sh ]; then
        . /etc/jupyterhub/oauth_env.sh

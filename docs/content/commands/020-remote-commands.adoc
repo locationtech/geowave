@@ -14,6 +14,7 @@ Operations to manage a remote store (Required options are designated with an *)
 * <<020-remote-commands.adoc#remote-listindex, ListIndex>>
 * <<020-remote-commands.adoc#remote-liststats, ListStats>>
 * <<020-remote-commands.adoc#remote-mergedata, MergeData>>
+* <<020-remote-commands.adoc#remote-combinestats, CombineStats>>
 * <<020-remote-commands.adoc#remote-recalcstats, ReCalcStats>>
 * <<020-remote-commands.adoc#remote-rmstat, RmStat>>
 * <<020-remote-commands.adoc#remote-version, Version>>
@@ -47,6 +48,11 @@ include::manpages/remote/geowave-listindex.txt[]
 ==== *geowave remote liststats*
 
 include::manpages/remote/geowave-liststats.txt[]
+
+[[remote-combinestats]]
+==== *geowave remote combinestats*
+
+include::manpages/remote/geowave-combinestats.txt[]
 
 [[remote-mergedata]]
 ==== *geowave remote mergedata*

@@ -1,0 +1,2 @@
+if $programname == 'gwgrpc' then /var/log/gwgrpc.log
+if $programname == 'gwgrpc' then stop

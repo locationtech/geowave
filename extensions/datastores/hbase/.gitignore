@@ -1,2 +1,2 @@
-src/main/java/mil/nga/giat/geowave/datastore/hbase/query/protobuf
-src/main/java/mil/nga/giat/geowave/datastore/hbase/coprocessors/protobuf
+src/main/java/org/locationtech/geowave/datastore/hbase/query/protobuf
+src/main/java/org/locationtech/geowave/datastore/hbase/coprocessors/protobuf

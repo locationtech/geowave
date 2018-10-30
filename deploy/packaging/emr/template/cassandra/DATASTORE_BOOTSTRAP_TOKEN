@@ -1,0 +1,26 @@
+# Bootstrap a Cassandra cluster node
+#
+
+cat << EOF > /tmp/cassandra.repo
+[cassandra]
+name=Apache Cassandra
+baseurl=https://www.apache.org/dist/cassandra/redhat/311x/
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://www.apache.org/dist/cassandra/KEYS
+EOF
+
+sudo mv /tmp/cassandra.repo /etc/yum.repos.d/cassandra.repo
+sudo mkdir -p /mnt/cassandra/data
+sudo chmod 777 -R /mnt/cassandra
+sudo yum -y install cassandra
+MASTER_IP=$(xmllint --xpath "//property[name='yarn.resourcemanager.hostname']/value/text()" /etc/hadoop/conf/yarn-site.xml)
+sudo chmod 777 /etc/cassandra/conf/cassandra.yaml
+echo "auto_bootstrap: false" >> /etc/cassandra/conf/cassandra.yaml
+sudo sed -i 's/seeds:.*/seeds: \"'${MASTER_IP}'\"/g' /etc/cassandra/conf/cassandra.yaml
+sudo sed -i 's/listen_address:.*/listen_address:/g' /etc/cassandra/conf/cassandra.yaml
+sudo sed -i 's/endpoint_snitch:.*/endpoint_snitch: Ec2Snitch/g' /etc/cassandra/conf/cassandra.yaml
+sudo sed -i 's!/var/lib/cassandra/data!/mnt/cassandra/data!g' /etc/cassandra/conf/cassandra.yaml
+sudo sed -i 's/.*commitlog_total_space_in_mb:.*/commitlog_total_space_in_mb: 4096/g' /etc/cassandra/conf/cassandra.yaml
+
+sudo service cassandra start

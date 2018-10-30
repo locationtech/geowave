@@ -20,7 +20,7 @@
 [
     {
         "name": "Changeset",
-        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
         "type": "record",
         "fields": [
             {"name": "id", "type": "long"},
@@ -39,7 +39,7 @@
     },
     {
         "name": "Primitive",
-        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
         "type": "record",
         "fields": [
             {"name": "id", "type": "long"},
@@ -54,7 +54,7 @@
     },
     {
         "name": "Node",
-        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
         "type": "record",
         "fields": [
             {"name": "common", "type": "Primitive"},
@@ -64,7 +64,7 @@
     },
     {
         "name": "Way",
-        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
         "type": "record",
         "fields": [
             {"name": "common", "type": "Primitive"},
@@ -73,7 +73,7 @@
     },
     {
         "name": "Relation",
-        "namespace": "mil.nga.giat.geowave.cli.osm.types.generated",
+        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
         "type": "record",
         "fields": [
             {"name": "common", "type": "Primitive"},

@@ -1,0 +1,18 @@
+option java_package = "org.locationtech.geowave.adapter.raster.protobuf";
+option java_outer_classname = "SampleModelProtos";
+option optimize_for = SPEED;
+
+message SampleModel {
+  required uint32 modelType = 1;
+  required uint32 transferType = 2;
+  required uint32 width = 3;
+  required uint32 height = 4;
+  required uint32 scanlineStride = 5;
+  optional uint32 pixelStride = 6;
+  optional uint32 pixelBitStride = 7;
+  optional uint32 dataBitOffset = 8;
+  repeated uint32 bandOffsets = 9 [packed=true];
+  repeated uint32 bankIndices = 10 [packed=true];
+  repeated uint32 bitMasks = 11 [packed=true];
+}
+

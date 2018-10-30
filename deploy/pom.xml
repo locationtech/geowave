@@ -2,9 +2,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
-		<groupId>mil.nga.giat</groupId>
+		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.8-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-deploy</artifactId>
 	<name>GeoWave Deployment Configurations</name>
@@ -21,12 +21,12 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-adapter-vector</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-adapter-raster</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -83,93 +83,108 @@
 			<id>geowave-tools-singlejar</id>
 			<dependencies>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-analytic-spark</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-analytic-mapreduce</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-accumulo</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-hbase</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-bigtable</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-datastore-cassandra</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-datastore-dynamodb</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-cli-osm</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-cli-geoserver</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-cli-landsat8</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-cli-sentinel2</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-4676</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-avro</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-gdelt</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-geolife</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-gpx</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-raster</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-tdrive</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-twitter</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-vector</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-grpc-server</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 			</dependencies>
@@ -210,11 +225,11 @@
 									<transformers>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
-												<Main-Class>mil.nga.giat.geowave.core.cli.GeoWaveMain</Main-Class>
+												<Main-Class>org.locationtech.geowave.core.cli.GeoWaveMain</Main-Class>
 												<Specification-Title>GeoWave</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
-												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
+												<Implementation-Title>org.locationtech.geowave</Implementation-Title>
 												<Implementation-Vendor>LocationTech</Implementation-Vendor>
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
@@ -249,31 +264,38 @@
 			<properties>
 				<geotools.scope>provided</geotools.scope>
 				<container.extension>-geotools-container</container.extension>
+				<!-- this will be unnecessary for geoserver 14 and should be removed-->
+				<fasterxml.jackson.version>2.5.0</fasterxml.jackson.version>
 			</properties>
 			<dependencies>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-accumulo</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-hbase</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-bigtable</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-cassandra</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-datastore-dynamodb</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
 					<!-- This is required in case ImageDataAdapter is needed in the classpath -->
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-4676</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -298,7 +320,6 @@
 											<exclude>*:pom:*</exclude>
 											<exclude>log4j:log4j</exclude>
 											<exclude>commons-codec:commons-codec</exclude>
-											<exclude>com.fasterxml.jackson*:*</exclude>
 
 											<!-- the required version of guava should exist in geoserver's 
 												classpath, although in order to get guava's StopWatch working with HBase 
@@ -355,7 +376,7 @@
 												<Specification-Title>GeoWave-Tools</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
-												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
+												<Implementation-Title>org.locationtech.geowave</Implementation-Title>
 												<Implementation-Vendor>LocationTech</Implementation-Vendor>
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
@@ -393,7 +414,7 @@
 			</properties>
 			<dependencies>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-accumulo</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -433,7 +454,7 @@
 												<Specification-Title>GeoWave-Accumulo</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
-												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
+												<Implementation-Title>org.locationtech.geowave</Implementation-Title>
 												<Implementation-Vendor>LocationTech</Implementation-Vendor>
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
@@ -472,7 +493,7 @@
 			</properties>
 			<dependencies>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-hbase</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -513,7 +534,7 @@
 												<Specification-Title>GeoWave-HBase</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
-												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
+												<Implementation-Title>org.locationtech.geowave</Implementation-Title>
 												<Implementation-Vendor>LocationTech</Implementation-Vendor>
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
@@ -548,11 +569,11 @@
 			<id>generate-geowave-jace</id>
 			<dependencies>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-accumulo</artifactId>
 					<version>${project.version}</version>
 				</dependency>
-				<!-- For now JACE bindings do not connect to HBase <dependency> <groupId>mil.nga.giat</groupId> 
+				<!-- For now JACE bindings do not connect to HBase <dependency> <groupId>org.locationtech.geowave</groupId> 
 					<artifactId>geowave-datastore-hbase</artifactId> <version>${project.version}</version> 
 					</dependency> -->
 			</dependencies>
@@ -585,7 +606,7 @@
 												<Specification-Title>GeoWave-C++</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
-												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
+												<Implementation-Title>org.locationtech.geowave</Implementation-Title>
 												<Implementation-Vendor>LocationTech</Implementation-Vendor>
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>

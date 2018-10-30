@@ -1,5 +1,15 @@
-#!/bin/bash
 
+#-------------------------------------------------------------------------------
+# Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
+# 
+# See the NOTICE file distributed with this work for additional
+# information regarding copyright ownership.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License,
+# Version 2.0 which accompanies this distribution and is available at
+# http://www.apache.org/licenses/LICENSE-2.0.txt
+#-------------------------------------------------------------------------------
+#!/bin/bash
 
 GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
 PIXIEDUST_HOME=${2:-$HOME/pixiedust/}
@@ -63,13 +73,13 @@ wait_until_spark_is_available() {
 wait_until_spark_is_available
 
 # Create the jupyter kernel
-mkdir -p  $PIXIEDUST_HOME
+mkdir -p  ${PIXIEDUST_HOME}
 
 ${CONDA_INSTALL}/jupyter pixiedust install <<END
 n
-$PIXIEDUST_HOME
+${PIXIEDUST_HOME}
 n
-$SPARK_HOME
+${SPARK_HOME}
 y
 y
 y
@@ -78,16 +88,16 @@ END
 #Use jq to remove unnecessary keys
 GEOWAVE_INSTALL=/usr/local/geowave/tools/geowave-tools-${GEOWAVE_VER}-apache.jar
 PIXIEDUST_KERNELS=$(find $KERNEL_DIR -type d -name pythonwithpixiedustspark*)
-echo $PIXIEDUST_KERNELS
+echo ${PIXIEDUST_KERNELS}
 KERNEL_JSON=$PIXIEDUST_KERNELS/kernel.json
-jq 'del(.env["SPARK_LOCAL_IP"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
-jq 'del(.env["SPARK_DRIVER_MEMORY"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
+jq 'del(.env["SPARK_LOCAL_IP"])' ${KERNEL_JSON} > tmp.$$.json && mv tmp.$$.json ${KERNEL_JSON}
+jq 'del(.env["SPARK_DRIVER_MEMORY"])' ${KERNEL_JSON} > tmp.$$.json && mv tmp.$$.json ${KERNEL_JSON}
 
 #Disable shell file globbing
 set -f
 
 #Use jq to read submit args into array
-submit_args=($(jq -r '.env["PYSPARK_SUBMIT_ARGS"]' $KERNEL_JSON))
+submit_args=($(jq -r '.env["PYSPARK_SUBMIT_ARGS"]' ${KERNEL_JSON}))
 
 #Enable shell file globbing
 set +f
@@ -119,14 +129,14 @@ echo "Modified Yarn Container Max Memory = ${MOD_CONT_MAX}(MB)"
 DRIVER_MEM="--driver-memory ${MOD_SCHED_MAX}M "
 EXECUTOR_MEM="--executor-memory ${MOD_CONT_MAX}M "
 
-submit_string=$DRIVER_MEM$EXECUTOR_MEM$submit_string
+submit_string=${DRIVER_MEM}${EXECUTOR_MEM}${submit_string}
 
 echo "New Spark Submit Options: ${submit_string}"
 
 #Write the new submit_args to the kernel.json
-jq --arg submit_args "${submit_string}" '.env["PYSPARK_SUBMIT_ARGS"]= $submit_args' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
+jq --arg submit_args "${submit_string}" '.env["PYSPARK_SUBMIT_ARGS"]= $submit_args' ${KERNEL_JSON} > tmp.$$.json && mv tmp.$$.json ${KERNEL_JSON}
 
 echo "Modified Kernel to use yarn by default"
 
 # Copy final modified kernel to output install location
-cp -R $PIXIEDUST_KERNELS $KERNEL_OUT
+cp -R ${PIXIEDUST_KERNELS} ${KERNEL_OUT}

@@ -1,3 +1,13 @@
+#-------------------------------------------------------------------------------
+# Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
+# 
+# See the NOTICE file distributed with this work for additional
+# information regarding copyright ownership.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License,
+# Version 2.0 which accompanies this distribution and is available at
+# http://www.apache.org/licenses/LICENSE-2.0.txt
+#-------------------------------------------------------------------------------
 #!/bin/bash
 
 GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
@@ -21,6 +31,10 @@ if [ ! -f /tmp/install-conda.sh ]; then
 	sudo chmod +x /tmp/install-conda.sh
 fi
 
+if [ ! -f /tmp/gw-base.yml ]; then
+	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/gw-base.yml /tmp/gw-base.yml
+fi
+
 # The EMR customize hooks run _before_ everything else, so Spark is not yet ready
 THIS_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
 RUN_FLAG="${THIS_SCRIPT}.run"
@@ -34,19 +48,16 @@ if [ ! -f "$RUN_FLAG" ]; then
 fi
 
 # Download example notebooks from s3
-aws s3 sync s3://geowave-notebooks/latest/notebooks/ $HOME/notebooks/
+aws s3 sync s3://geowave-notebooks/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ $HOME/notebooks/
+
+aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-${GEOWAVE_VER}.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz
 
 source /tmp/install-conda.sh
 
 echo bootstrap_conda.sh completed. PATH now: $PATH
-
 echo Performing pixiedust and jupyter kernel setup.
 
-source /tmp/create-configure-kernel.sh $GEOWAVE_VER
-
 source /etc/profile.d/conda.sh
-
-conda install jupyter
 
 jupyter nbextension enable --py --sys-prefix ipyleaflet
 jupyter nbextension enable --py --sys-prefix widgetsnbextension
@@ -55,9 +66,10 @@ jupyter nbextension enable --py --sys-prefix vega
 # generate empty config for notebook server
 jupyter notebook --generate-config
 
+pip install /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz
+
 # generate default password for server
 HASHED_PASSWORD=$(python -c "from notebook.auth import passwd; print(passwd('$JUPYTER_PASSWORD'))")
-
 printf "c.NotebookApp.password = u'$HASHED_PASSWORD'" >> $HOME/.jupyter/jupyter_notebook_config.py
 printf "\nc.NotebookApp.open_browser = False" >> $HOME/.jupyter/jupyter_notebook_config.py
 printf "\nc.NotebookApp.ip = '*'" >> $HOME/.jupyter/jupyter_notebook_config.py
@@ -65,7 +77,6 @@ printf "\nc.NotebookApp.notebook_dir = '$HOME/notebooks/'" >> $HOME/.jupyter/jup
 printf "\nc.NotebookApp.port = 9000" >> $HOME/.jupyter/jupyter_notebook_config.py
 
 #Adding Jupyter to Upstart so it can be run at bootstrap
-cd $HOME
 sudo cat << EOF > $HOME/jupyter.conf
 description "Jupyter"
 
@@ -78,7 +89,8 @@ respawn limit 0 10
 env HOME=$HOME
 script
     . $HOME/.bashrc
-    exec start-stop-daemon --start -c hadoop --exec $HOME/conda/bin/jupyter-notebook
+    . /etc/profile.d/conda.sh
+    exec start-stop-daemon --start -c hadoop --exec $HOME/conda/bin/jupyter-notebook > /var/log/jupyter.log 2>&1
 end script
 EOF
 sudo mv $HOME/jupyter.conf /etc/init/
@@ -90,3 +102,6 @@ sudo initctl reload-configuration
 # start jupyter daemon
 sudo initctl start jupyter
 
+if is_master; then
+    source /tmp/create-configure-kernel.sh ${GEOWAVE_VER}
+fi

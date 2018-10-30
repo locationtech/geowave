@@ -63,8 +63,20 @@
 												This package installs the GeoWave command line tools (ingest, stats etc.)
 											</li>
 											<li>
-												<b>geowave-*-jetty</b><br/>
+												<b>geowave-*-gwtomcat</b><br/>
 												This package installs the web application server
+											</li>
+											<li>
+												<b>geowave-*-gwgeoserver</b><br/>
+												This package installs a GeoServer with the GeoWave plugin
+											</li>
+											<li>
+												<b>geowave-*-restservices</b><br/>
+												This package installs REST services supporting all GeoWave operations
+											</li>
+											<li>
+												<b>geowave-*-grpc</b><br/>
+												This package installs a gRPC service supporting all GeoWave operations
 											</li>
 											<li>
 												<b>geowave-*-puppet</b><br/>

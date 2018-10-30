@@ -1,7 +1,7 @@
 {
 	"type" : "record",
 	"name" : "GpxTrack",
-	"namespace" : "mil.nga.giat.geowave.format.gpx",
+	"namespace" : "org.locationtech.geowave.format.gpx",
 		"fields" : [{
 				"name" : "trackid",
 				"type" : ["long", "null"],

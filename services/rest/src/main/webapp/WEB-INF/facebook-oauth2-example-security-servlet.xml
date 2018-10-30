@@ -46,11 +46,11 @@
 	
 	<!-- The following three "apiKey" beans/filters are necessary for use-cases where the application
 		 needs to facilitate key generation and protecting calls to the api endpoints  -->
-	<b:bean id="apiKeyDB" class="mil.nga.giat.geowave.service.rest.security.GeoWaveSQLiteApiKeyDB" >
+	<b:bean id="apiKeyDB" class="org.locationtech.geowave.service.rest.security.GeoWaveSQLiteApiKeyDB" >
 		<b:constructor-arg index = "0" value = "ApiKeys.db"/>
 	</b:bean>
-	<b:bean id="apiKeyFilter" class="mil.nga.giat.geowave.service.rest.security.GeoWaveApiKeyFilter" />
-	<b:bean id="apiKeySetterFilter" class="mil.nga.giat.geowave.service.rest.security.GeoWaveApiKeySetterFilter" />
+	<b:bean id="apiKeyFilter" class="org.locationtech.geowave.service.rest.security.GeoWaveApiKeyFilter" />
+	<b:bean id="apiKeySetterFilter" class="org.locationtech.geowave.service.rest.security.GeoWaveApiKeySetterFilter" />
 	
 	<!-- Login entry point, unauthenticated users will be redirected here -->
     <b:bean id="authenticationEntryPoint"  class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
@@ -71,7 +71,7 @@
 		Token services definition, depending on your auth provider (Facebook, Google, etc.)
 		you may end up having to write a custom token services class and a custom token converter class  
 	-->
-	<b:bean id="oAuth2TokenServices" class="mil.nga.giat.geowave.service.rest.security.oauth2.FacebookTokenServices">
+	<b:bean id="oAuth2TokenServices" class="org.locationtech.geowave.service.rest.security.oauth2.FacebookTokenServices">
 		<b:property name="checkTokenEndpointUrl" value="${oauth.checkTokenEndpointUri}"/>
 		<b:property name="clientId" value="${oauth.client.id}"/>
 		<b:property name="clientSecret" value="${oauth.client.secret}"/>

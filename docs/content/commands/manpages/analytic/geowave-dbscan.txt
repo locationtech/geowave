@@ -47,7 +47,7 @@ OPTIONS
 - * -cms, --clusteringMinimumSize
  * Minimum Cluster Size
 - --cdf, --commonDistanceFunctionClass
- * Distance Function Class implements _mil.nga.giat.geowave.analytics.distance.DistanceFn_
+ * Distance Function Class implements _org.locationtech.geowave.analytics.distance.DistanceFn_
 -  * -emx, --extractMaxInputSplit
  * Maximum hdfs input split size
 -  * -emn, --extractMinInputSplit
@@ -59,7 +59,7 @@ OPTIONS
 - -hdt, --hullDataTypeId
  * Data Type ID for a centroid item
 - -hpe, --hullProjectionClass
- * Class to project on to 2D space. Implements _mil.nga.giat.geowave.analytics.tools.Projection_
+ * Class to project on to 2D space. Implements _org.locationtech.geowave.analytics.tools.Projection_
 - -ifc, --inputFormatClass
  * Input Format Class
 - -conf, --mapReduceConfigFile

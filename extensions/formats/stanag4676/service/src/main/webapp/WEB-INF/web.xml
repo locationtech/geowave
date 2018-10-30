@@ -9,7 +9,7 @@
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>mil.nga.giat.geowave.types.stanag4676.service.rest</param-value>
+			<param-value>org.locationtech.geowave.types.stanag4676.service.rest</param-value>
 		</init-param>
 		<init-param>
 			<param-name>jersey.config.server.provider.classnames</param-name>

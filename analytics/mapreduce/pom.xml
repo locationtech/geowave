@@ -2,20 +2,20 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-analytic-parent</artifactId>
-		<groupId>mil.nga.giat</groupId>
+		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.8-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-analytic-mapreduce</artifactId>
 	<name>GeoWave MapReduce Analytics</name>
 	<dependencies>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-cli</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>	
@@ -32,130 +32,4 @@
 			<classifier>${hadoop.env.classifier}</classifier>
 		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<id>density-singlejar</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>2.2</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>shade</goal>
-								</goals>
-								<configuration>
-									<!-- <minimizeJar>true</minimizeJar> -->
-									<filters>
-										<filter>
-											<artifact>junit:junit</artifact>
-											<includes>
-												<include>junit/framework/**</include>
-												<include>org/junit/**</include>
-											</includes>
-											<excludes>
-												<exclude>org/junit/experimental/**</exclude>
-												<exclude>org/junit/runners/**</exclude>
-											</excludes>
-										</filter>
-										<filter>
-											<artifact>*:*</artifact>
-											<excludes>
-												<exclude>META-INF/*.SF</exclude>
-												<exclude>META-INF/*.DSA</exclude>
-												<exclude>META-INF/*.RSA</exclude>
-											</excludes>
-										</filter>
-									</filters>
-									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-											<manifestEntries>
-												<Main-Class>mil.nga.giat.geowave.analytics.mapreduce.kde.KDEJobRunner</Main-Class>
-											</manifestEntries>
-										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-									</transformers>
-									<finalName>${project.build.finalName}-density-singlejar</finalName>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>analytics-singlejar</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>2.2</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>shade</goal>
-								</goals>
-								<configuration>
-									<artifactSet>
-										<excludes>
-											<!-- Below are the exclusions copied from src/main/assembly/assembly-geotools-container.xml -->
-											<exclude>*:pom:*</exclude>
-											<!-- exclude>javax.media:jai*:*</exclude -->
-											<exclude>*:jsp*:*</exclude>
-											<exclude>*:jetty*:*</exclude>
-											<exclude>*:maven*:*</exclude>
-											<exclude>org.springframework.security:*</exclude>
-											<exclude>org.springframework:spring-web</exclude>
-											<exclude>org.springframework:spring-webmvc</exclude>
-											<exclude>org.geoserver:*</exclude>
-											<exclude>org.apache.hadoop:hadoop-yarn-server-tests</exclude>
-											<exclude>org.geotools:gt-wps</exclude>
-											<exclude>org.geotools:gt-wms</exclude>
-											<exclude>org.apache.hadoop:hadoop-minicluster</exclude>
-										</excludes>
-									</artifactSet>
-									<filters>
-										<filter>
-											<artifact>junit:junit</artifact>
-											<excludes>
-												<exclude>junit/framework/**</exclude>
-												<exclude>org/junit/**</exclude>
-												<exclude>org/junit/experimental/**</exclude>
-												<exclude>org/junit/runners/**</exclude>
-											</excludes>
-										</filter>
-										<filter>
-											<artifact>*:*</artifact>
-											<excludes>
-												<exclude>META-INF/*.SF</exclude>
-												<exclude>META-INF/*.DSA</exclude>
-												<exclude>META-INF/*.RSA</exclude>
-												<exclude>javax/servlet/**</exclude>
-											</excludes>
-										</filter>
-									</filters>
-									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-											<manifestEntries>
-												<Main-Class>mil.nga.giat.geowave.core.cli.GeoWaveMain</Main-Class>
-											</manifestEntries>
-										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-									</transformers>
-									<createDependencyReducedPom>false</createDependencyReducedPom>
-									<minimizeJar>false</minimizeJar>
-									<finalName>${project.build.finalName}-analytics-singlejar</finalName>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>

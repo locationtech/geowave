@@ -3,9 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>mil.nga.giat</groupId>
+	<groupId>org.locationtech.geowave</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.9.8-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -34,18 +34,25 @@
 		<tag>HEAD</tag>
 	</scm>
 	<properties>
-		<spark.version>2.2.0</spark.version>
-		<geotools.version>18.1</geotools.version>
-		<guava.version>14.0-rc1</guava.version>
+		<spark.version>2.3.1</spark.version>
+		<geotools.version>19.2</geotools.version>
+		<imageio.ext.version>1.1.24</imageio.ext.version>
+		<guava.version>25.1-jre</guava.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
-		<geoserver.version>2.12.1</geoserver.version>
-		<accumulo.version>1.8.1</accumulo.version>
-		<accumulo.api>1.8</accumulo.api>
-		<skipITs>true</skipITs>
+		<geoserver.version>2.13.2</geoserver.version>
+		<accumulo.version>1.9.2</accumulo.version>
+		<thrift.version>0.9.3</thrift.version>
+		<accumulo.api>1.9</accumulo.api>
 		<bigtable.version>1.2.0</bigtable.version>
+		<cassandra.version>3.11.3</cassandra.version>
+		<grpc.version>1.13.1</grpc.version>
+		<netty.version>4.1.25.Final</netty.version>
+		<protobuf.version>3.5.1</protobuf.version>
+		<guice.version>3.0</guice.version>
+		<skipITs>true</skipITs>
 		<vfs2.version>2.1</vfs2.version>
-		<hbase.version>1.4.3</hbase.version>
-		<hadoop.version>2.7.3</hadoop.version>
+		<hbase.version>1.4.6</hbase.version>
+		<hadoop.version>2.8.4</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<awssdk.version>1.11.281</awssdk.version>
 		<httpclient.version>4.5.2</httpclient.version>
@@ -54,7 +61,7 @@
 		<accumulo.scope>compile</accumulo.scope>
 		<hbase.scope>compile</hbase.scope>
 		<hadoop.scope>compile</hadoop.scope>
-		<jetty.version>9.4.8.v20171121</jetty.version>
+		<jetty.version>9.4.11.v20180605</jetty.version>
 		<zookeeper.version>3.4.6</zookeeper.version>
 		<jersey.version>2.23.1</jersey.version>
 		<scala.version>2.11.8</scala.version>
@@ -63,8 +70,8 @@
 		<snappy.version>1.1.2.6</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
 		<jackson.version>1.9.13</jackson.version>
-		<fasterxml.jackson.version>2.6.6</fasterxml.jackson.version>
-		<spring-security.version>4.0.4.RELEASE</spring-security.version>
+		<fasterxml.jackson.version>2.9.5</fasterxml.jackson.version>
+		<spring-security.version>4.2.7.RELEASE</spring-security.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<junit.version>4.11</junit.version>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
@@ -137,6 +144,16 @@
 				<version>${zookeeper.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.thrift</groupId>
+				<artifactId>libthrift</artifactId>
+				<version>0.9.3</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk15on</artifactId>
+				<version>1.60</version>
+			</dependency>
+			<dependency>
 				<groupId>xerces</groupId>
 				<artifactId>xercesImpl</artifactId>
 				<version>2.11.0</version>
@@ -191,7 +208,7 @@
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.4</version>
+				<version>2.6</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -210,6 +227,11 @@
 				<version>${guava.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.google.inject</groupId>
+				<artifactId>guice</artifactId>
+				<version>${guice.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.aol.simplereact</groupId>
 				<artifactId>cyclops-react</artifactId>
 				<version>1.0.0-RC4</version>
@@ -224,6 +246,11 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-math</artifactId>
 				<version>2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.threeten</groupId>
+				<artifactId>threeten-extra</artifactId>
+				<version>1.4</version>
 			</dependency>
 			<dependency>
 				<groupId>org.xerial.snappy</groupId>
@@ -272,9 +299,14 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
-				<artifactId>hbase-client</artifactId>
+				<artifactId>hbase-shaded-client</artifactId>
 				<version>${hbase.version}</version>
 				<scope>${hbase.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hbase</groupId>
+				<artifactId>hbase-client</artifactId>
+				<version>${hbase.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
@@ -400,6 +432,58 @@
 				<groupId>com.beust</groupId>
 				<artifactId>jcommander</artifactId>
 				<version>${jcommander.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>it.geosolutions.imageio-ext</groupId>
+				<artifactId>imageio-ext-gdalgeotiff</artifactId>
+				<version>${imageio.ext.version}</version>
+				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-imageio-ext-gdal</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+					<exclusion>
+						<artifactId>gt-epsg-hsql</artifactId>
+						<groupId>org.geotools</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-referencing</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-api</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-cql</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-geojson</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>
@@ -598,10 +682,16 @@
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
 				<version>${fasterxml.jackson.version}</version>
+				<scope>${geotools.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.dataformat</groupId>
 				<artifactId>jackson-dataformat-cbor</artifactId>
+				<version>${fasterxml.jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.module</groupId>
+				<artifactId>jackson-module-scala_2.11</artifactId>
 				<version>${fasterxml.jackson.version}</version>
 			</dependency>
 			<dependency>
@@ -614,6 +704,91 @@
 				<groupId>net.jpountz.lz4</groupId>
 				<artifactId>lz4</artifactId>
 				<version>1.3.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.protobuf</groupId>
+				<artifactId>protobuf-java</artifactId>
+				<version>${protobuf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.protobuf</groupId>
+				<artifactId>protobuf-java-util</artifactId>
+				<version>3.5.1</version>
+			</dependency>
+			<dependency>
+				<groupId>io.grpc</groupId>
+				<artifactId>grpc-protobuf</artifactId>
+				<version>${grpc.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.grpc</groupId>
+				<artifactId>grpc-stub</artifactId>
+				<version>${grpc.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.grpc</groupId>
+				<artifactId>grpc-common</artifactId>
+				<version>${grpc.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.grpc</groupId>
+				<artifactId>grpc-protobuf-lite</artifactId>
+				<version>${grpc.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.grpc</groupId>
+				<artifactId>grpc-netty</artifactId>
+				<version>${grpc.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-all</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-common</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec-http2</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec-socks</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-buffer</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-transport</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-handler</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-handler-proxy</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-resolver</artifactId>
+				<version>${netty.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -736,7 +911,7 @@
 					</configuration>
 					<dependencies>
 						<dependency>
-							<groupId>mil.nga.giat</groupId>
+							<groupId>org.locationtech.geowave</groupId>
 							<artifactId>geowave-dev-resources</artifactId>
 							<version>1.2</version>
 						</dependency>
@@ -821,7 +996,7 @@
 						</goals>
 						<configuration>
 							<includes>
-								<include>mil/nga/giat/geowave/**</include>
+								<include>org/locationtech/geowave/**</include>
 							</includes>
 							<destFile>${jacoco.ut.reportPath}</destFile>
 							<propertyName>jacoco.surefire.argline</propertyName>
@@ -846,7 +1021,7 @@
 						</goals>
 						<configuration>
 							<includes>
-								<include>mil/nga/giat/geowave/**</include>
+								<include>org/locationtech/geowave/**</include>
 							</includes>
 							<destFile>${jacoco.it.reportPath}</destFile>
 							<propertyName>jacoco.failsafe.argline</propertyName>
@@ -893,7 +1068,7 @@
 						<LD_LIBRARY_PATH>${gdal.dir}</LD_LIBRARY_PATH>
 						<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
 						<GDAL_DIR>${gdal.dir}</GDAL_DIR>
-						<NCS_USER_PREFS></NCS_USER_PREFS>
+						<NCS_USER_PREFS />
 					</environmentVariables>
 					<outputDirectory>${surefire.report.path}</outputDirectory>
 				</configuration>
@@ -923,59 +1098,59 @@
 							<groups>
 								<group>
 									<title>Analytics</title>
-									<packages>mil.nga.giat.geowave.analytic*:mil.nga.giat.geowave.mapreduce*</packages>
+									<packages>org.locationtech.geowave.analytic*:org.locationtech.geowave.mapreduce*</packages>
 								</group>
 								<group>
 									<title>Data Adapter for Vector Data</title>
-									<packages>mil.nga.giat.geowave.adapter.vector*</packages>
+									<packages>org.locationtech.geowave.adapter.vector*</packages>
 								</group>
 								<group>
 									<title>Data Adapter for Raster Data</title>
-									<packages>mil.nga.giat.geowave.adapter.raster*</packages>
+									<packages>org.locationtech.geowave.adapter.raster*</packages>
 								</group>
 								<group>
 									<title>Data Adapter Authorizations</title>
-									<packages>mil.nga.giat.geowave.adapter.auth*</packages>
+									<packages>org.locationtech.geowave.adapter.auth*</packages>
 								</group>
 								<group>
 									<title>Storage API</title>
-									<packages>mil.nga.giat.geowave.core.store*</packages>
+									<packages>org.locationtech.geowave.core.store*</packages>
 								</group>
 								<group>
 									<title>Spatial-Temporal Core</title>
-									<packages>mil.nga.giat.geowave.core.geotime*</packages>
+									<packages>org.locationtech.geowave.core.geotime*</packages>
 								</group>
 								<group>
 									<title>Accumulo Data Store</title>
-									<packages>mil.nga.giat.geowave.datastore.accumulo*</packages>
+									<packages>org.locationtech.geowave.datastore.accumulo*</packages>
 								</group>
 								<group>
 									<title>HBase Data Store</title>
-									<packages>mil.nga.giat.geowave.datastore.hbase*</packages>
+									<packages>org.locationtech.geowave.datastore.hbase*</packages>
 								</group>
 								<group>
 									<title>Indexing</title>
-									<packages>mil.nga.giat.geowave.core.index*</packages>
+									<packages>org.locationtech.geowave.core.index*</packages>
 								</group>
 								<group>
 									<title>Command-Line Tools</title>
-									<packages>mil.nga.giat.geowave.core.cli*:mil.nga.giat.geowave.cli*</packages>
+									<packages>org.locationtech.geowave.core.cli*:org.locationtech.geowave.cli*</packages>
 								</group>
 								<group>
 									<title>Ingest Framework</title>
-									<packages>mil.nga.giat.geowave.core.ingest*</packages>
+									<packages>org.locationtech.geowave.core.ingest*</packages>
 								</group>
 								<group>
 									<title>Base Ingest Formats</title>
-									<packages>mil.nga.giat.geowave.format*</packages>
+									<packages>org.locationtech.geowave.format*</packages>
 								</group>
 								<group>
 									<title>Services</title>
-									<packages>mil.nga.giat.geowave.service*</packages>
+									<packages>org.locationtech.geowave.service*</packages>
 								</group>
 								<group>
 									<title>Examples</title>
-									<packages>mil.nga.giat.geowave.example*</packages>
+									<packages>org.locationtech.geowave.example*</packages>
 								</group>
 							</groups>
 						</configuration>
@@ -998,7 +1173,7 @@
 				</executions>
 				<dependencies>
 					<dependency>
-						<groupId>mil.nga.giat</groupId>
+						<groupId>org.locationtech.geowave</groupId>
 						<artifactId>geowave-dev-resources</artifactId>
 						<version>1.2</version>
 					</dependency>
@@ -1136,10 +1311,13 @@
 			<id>cloudera</id>
 			<properties>
 				<accumulo.version>1.7.2-cdh5.5.0</accumulo.version>
-				<hbase.version>1.2.0-cdh5.12.1</hbase.version>
-				<hadoop.version>2.6.0-cdh5.12.1</hadoop.version>
-				<spark.version>2.1.0.cloudera2</spark.version>
+				<hbase.version>1.2.0-cdh5.14.0</hbase.version>
+				<hadoop.version>2.6.0-cdh5.14.0</hadoop.version>
+				<spark.version>2.2.0.cloudera2</spark.version>
 				<accumulo.api>1.7</accumulo.api>
+				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
+					which was removed in guava 22.0 -->
+				<guava.version>21.0</guava.version>
 			</properties>
 			<repositories>
 				<repository>
@@ -1173,11 +1351,17 @@
 		<profile>
 			<id>hortonworks</id>
 			<properties>
-				<accumulo.version>1.7.0.2.6.0.3-8</accumulo.version>
-				<hbase.version>1.1.2.2.6.0.3-8</hbase.version>
-				<hadoop.version>2.7.3.2.6.0.3-8</hadoop.version>
-				<spark.version>2.1.0.2.6.0.3-8</spark.version>
+				<accumulo.version>1.7.0.2.6.5.35-1</accumulo.version>
+				<!-- this is used in place of 1.1.2.2.6.5.35-1 because the hbase-shaded-client 
+					from hortonworks doesn't shade third party libraries like the apache one 
+					does -->
+				<hbase.version>1.1.2</hbase.version>
+				<hadoop.version>2.7.3.2.6.5.35-1</hadoop.version>
+				<spark.version>2.3.0.2.6.5.35-1</spark.version>
 				<accumulo.api>1.7</accumulo.api>
+				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
+					which was removed in guava 22.0 -->
+				<guava.version>21.0</guava.version>
 			</properties>
 			<repositories>
 				<repository>
@@ -1221,8 +1405,12 @@
 				<accumulo.api>1.7</accumulo.api>
 				<hadoop.version>2.6.4</hadoop.version>
 				<hbase.version>1.3.1</hbase.version>
-				<geotools.version>16.0</geotools.version>
-				<geoserver.version>2.10.0</geoserver.version>
+				<geotools.version>18.1</geotools.version>
+				<geoserver.version>2.12.1</geoserver.version>
+				<imageio.ext.version>1.1.18</imageio.ext.version>
+				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
+					which was removed in guava 22.0 -->
+				<guava.version>21.0</guava.version>
 			</properties>
 		</profile>
 		<profile>

@@ -1,0 +1,2 @@
+org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider
+org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider

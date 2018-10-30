@@ -2,9 +2,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-service-parent</artifactId>
-		<groupId>mil.nga.giat</groupId>
+		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.8-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<restlet.version>2.4.0</restlet.version>
@@ -74,7 +74,7 @@
 			<version>2.8.1</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -93,7 +93,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-hbase</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -104,17 +104,17 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-bigtable</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-dynamodb</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-cassandra</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -126,7 +126,7 @@
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
-			<version>2.2.0.RELEASE</version>
+			<version>2.3.3.RELEASE</version>
 		</dependency>
 		<dependency>
    			<groupId>org.mockito</groupId>
@@ -140,77 +140,77 @@
 			<id>rest-services-war</id>
 			<dependencies>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-deploy</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-cli-geoserver</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-analytic-spark</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-analytic-mapreduce</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-adapter-raster</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-adapter-vector</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-4676</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-avro</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-gdelt</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-geolife</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-gpx</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-raster</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-tdrive</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-twitter</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
-					<groupId>mil.nga.giat</groupId>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-format-vector</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -262,7 +262,7 @@
 										<!-- these get included in the WAR so exclude them from the shaded 
 											jar -->
 										<filter>
-											<artifact>mil.nga.giat:geowave-service-rest</artifact>
+											<artifact>org.locationtech.geowave:geowave-service-rest</artifact>
 											<excludes>
 												<exclude>**/*.xml</exclude>
 												<exclude>**/*.properties</exclude>
@@ -275,7 +275,7 @@
 												<Specification-Title>GeoWave-REST-Services</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
-												<Implementation-Title>mil.nga.giat.geowave</Implementation-Title>
+												<Implementation-Title>org.locationtech.geowave</Implementation-Title>
 												<Implementation-Vendor>LocationTech</Implementation-Vendor>
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>

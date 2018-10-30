@@ -50,7 +50,7 @@ OPTIONS
 //:-------
 
 - -cdf, --commonDistanceFunctionClass
- * Distance Function Class implements _mil.nga.giat.geowave.analytics.distance.DistanceFn_
+ * Distance Function Class implements _org.locationtech.geowave.analytics.distance.DistanceFn_
 - * -emx, --extractMaxInputSplit
  * Maximum hdfs input split size
 - * -emn, --extractMinInputSplit

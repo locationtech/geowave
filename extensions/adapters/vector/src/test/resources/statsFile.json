@@ -2,22 +2,22 @@
   "configurations": 
    {
      "type1": [
-       { "@class":"mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
+       { "@class":"org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
          "attConfig" : {
            "pop" : { 
              "configurationsForAttribute" :  [ 
-               {"@class" : "mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig","bins" : 24} 
+               {"@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig","bins" : 24} 
               ]
             }
          }
        },
-       { "@class": "mil.nga.giat.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration",
+       { "@class": "org.locationtech.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration",
          "attributes" : ["pop"]
        },
-       { "@class": "mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
+       { "@class": "org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
          "attributeName" : "vis"
        },
-       { "@class": "mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration",
+       { "@class": "org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration",
          "indexNames": ["SPATIAL_IDX"]
        }
      ]

@@ -1,7 +1,7 @@
 {
 	"type" : "record",
 	"name" : "WholeFile",
-	"namespace" : "mil.nga.giat.geowave.core.ingest.avro",
+	"namespace" : "org.locationtech.geowave.core.ingest.avro",
 		"fields" : [{
 				"name" : "originalFile",
 				"type" : "bytes",

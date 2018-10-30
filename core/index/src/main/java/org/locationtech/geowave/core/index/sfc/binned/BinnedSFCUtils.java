@@ -1,0 +1,229 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
+ *   
+ *  See the NOTICE file distributed with this work for additional
+ *  information regarding copyright ownership.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Apache License,
+ *  Version 2.0 which accompanies this distribution and is available at
+ *  http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
+package org.locationtech.geowave.core.index.sfc.binned;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.Coordinate;
+import org.locationtech.geowave.core.index.CoordinateRange;
+import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
+import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
+import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
+import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
+import org.locationtech.geowave.core.index.dimension.bin.BinRange;
+import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
+import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
+import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
+import org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset;
+import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+
+public class BinnedSFCUtils
+{
+
+	public static List<SinglePartitionQueryRanges> getQueryRanges(
+			final List<BinnedNumericDataset> binnedQueries,
+			final SpaceFillingCurve sfc,
+			final int maxRanges,
+			final byte tier ) {
+		final List<SinglePartitionQueryRanges> queryRanges = new ArrayList<SinglePartitionQueryRanges>();
+
+		int maxRangeDecompositionPerBin = maxRanges;
+		if ((maxRanges > 1) && (binnedQueries.size() > 1)) {
+			maxRangeDecompositionPerBin = (int) Math.ceil((double) maxRanges / (double) binnedQueries.size());
+		}
+		for (final BinnedNumericDataset binnedQuery : binnedQueries) {
+			final RangeDecomposition rangeDecomp = sfc.decomposeRange(
+					binnedQuery,
+					true,
+					maxRangeDecompositionPerBin);
+			final byte[] tierAndBinId = ByteArrayUtils.combineArrays(
+					new byte[] {
+						tier
+					// we're assuming tiers only go to 127 (the max byte
+					// value)
+					},
+					binnedQuery.getBinId());
+
+			queryRanges.add(new SinglePartitionQueryRanges(
+					new ByteArray(
+							tierAndBinId),
+					Arrays.asList(rangeDecomp.getRanges())));
+		}
+		return queryRanges;
+	}
+
+	public static MultiDimensionalCoordinateRanges getCoordinateRanges(
+			final BinRange[][] binRangesPerDimension,
+			final SpaceFillingCurve sfc,
+			final int numDimensions,
+			final byte tier ) {
+		final CoordinateRange[][] coordinateRangesPerDimension = new CoordinateRange[numDimensions][];
+		for (int d = 0; d < coordinateRangesPerDimension.length; d++) {
+			coordinateRangesPerDimension[d] = new CoordinateRange[binRangesPerDimension[d].length];
+			for (int i = 0; i < binRangesPerDimension[d].length; i++) {
+				final long[] range = sfc.normalizeRange(
+						binRangesPerDimension[d][i].getNormalizedMin(),
+						binRangesPerDimension[d][i].getNormalizedMax(),
+						d);
+				coordinateRangesPerDimension[d][i] = new CoordinateRange(
+						range[0],
+						range[1],
+						binRangesPerDimension[d][i].getBinId());
+			}
+		}
+		return new MultiDimensionalCoordinateRanges(
+				new byte[] {
+					tier
+				},
+				coordinateRangesPerDimension);
+	}
+
+	public static SinglePartitionInsertionIds getSingleBinnedInsertionId(
+			final BigInteger rowCount,
+			final byte multiDimensionalId,
+			final BinnedNumericDataset index,
+			final SpaceFillingCurve sfc ) {
+		if (rowCount.equals(BigInteger.ONE)) {
+			final byte[] tierAndBinId = ByteArrayUtils.combineArrays(
+					new byte[] {
+						multiDimensionalId
+					},
+					index.getBinId());
+			final double[] minValues = index.getMinValuesPerDimension();
+			final double[] maxValues = index.getMaxValuesPerDimension();
+			byte[] singleId = null;
+			if (Arrays.equals(
+					maxValues,
+					minValues)) {
+				singleId = sfc.getId(minValues);
+			}
+			else {
+				final byte[] minId = sfc.getId(minValues);
+				final byte[] maxId = sfc.getId(maxValues);
+
+				if (Arrays.equals(
+						minId,
+						maxId)) {
+					singleId = minId;
+				}
+			}
+			if (singleId != null) {
+				return new SinglePartitionInsertionIds(
+						new ByteArray(
+								tierAndBinId),
+						new ByteArray(
+								singleId));
+			}
+		}
+		return null;
+	}
+
+	public static Coordinate[] getCoordinatesForId(
+			final byte[] rowId,
+			final NumericDimensionDefinition[] baseDefinitions,
+			final SpaceFillingCurve sfc ) {
+		final SFCIdAndBinInfo sfcIdAndBinInfo = getSFCIdAndBinInfo(
+				rowId,
+				baseDefinitions);
+		final long[] coordinateValues = sfc.getCoordinates(sfcIdAndBinInfo.sfcId);
+		final Coordinate[] retVal = new Coordinate[coordinateValues.length];
+		for (int i = 0; i < coordinateValues.length; i++) {
+			final byte[] bin = sfcIdAndBinInfo.binIds.get(i);
+			retVal[i] = new Coordinate(
+					coordinateValues[i],
+					bin);
+		}
+		return retVal;
+	}
+
+	public static MultiDimensionalNumericData getRangeForId(
+			final byte[] rowId,
+			final NumericDimensionDefinition[] baseDefinitions,
+			final SpaceFillingCurve sfc ) {
+		final SFCIdAndBinInfo sfcIdAndBinInfo = getSFCIdAndBinInfo(
+				rowId,
+				baseDefinitions);
+		final MultiDimensionalNumericData numericData = sfc.getRanges(sfcIdAndBinInfo.sfcId);
+		// now we need to unapply the bins to the data, denormalizing the
+		// ranges to the native bounds
+		if (sfcIdAndBinInfo.rowIdOffset > 1) {
+			final NumericData[] data = numericData.getDataPerDimension();
+			for (final Entry<Integer, byte[]> entry : sfcIdAndBinInfo.binIds.entrySet()) {
+				final int dimension = entry.getKey();
+				final NumericRange range = baseDefinitions[dimension].getDenormalizedRange(new BinRange(
+						entry.getValue(),
+						data[dimension].getMin(),
+						data[dimension].getMax(),
+						false));
+				data[dimension] = range;
+			}
+			return new BasicNumericDataset(
+					data);
+		}
+		return numericData;
+	}
+
+	private static SFCIdAndBinInfo getSFCIdAndBinInfo(
+			final byte[] rowId,
+			final NumericDimensionDefinition[] baseDefinitions ) {
+
+		final Map<Integer, byte[]> binIds = new HashMap<Integer, byte[]>();
+		// one for the tier
+		int rowIdOffset = 1;
+		for (int dimensionIdx = 0; dimensionIdx < baseDefinitions.length; dimensionIdx++) {
+			final int binSize = baseDefinitions[dimensionIdx].getFixedBinIdSize();
+			if (binSize > 0) {
+				binIds.put(
+						dimensionIdx,
+						Arrays.copyOfRange(
+								rowId,
+								rowIdOffset,
+								rowIdOffset + binSize));
+				rowIdOffset += binSize;
+			}
+		}
+		final byte[] sfcId = Arrays.copyOfRange(
+				rowId,
+				rowIdOffset,
+				rowId.length);
+		return new SFCIdAndBinInfo(
+				sfcId,
+				binIds,
+				rowIdOffset);
+	}
+
+	private static class SFCIdAndBinInfo
+	{
+		private final byte[] sfcId;
+		private final Map<Integer, byte[]> binIds;
+		private final int rowIdOffset;
+
+		public SFCIdAndBinInfo(
+				final byte[] sfcId,
+				final Map<Integer, byte[]> binIds,
+				final int rowIdOffset ) {
+			super();
+			this.sfcId = sfcId;
+			this.binIds = binIds;
+			this.rowIdOffset = rowIdOffset;
+		}
+	}
+}

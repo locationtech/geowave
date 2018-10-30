@@ -1,2 +1,2 @@
-mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormatFactory
-mil.nga.giat.geowave.adapter.raster.plugin.gdal.GDALGeoTiffFormatFactory
+org.locationtech.geowave.adapter.raster.plugin.GeoWaveGTRasterFormatFactory
+org.locationtech.geowave.adapter.raster.plugin.gdal.GDALGeoTiffFormatFactory
