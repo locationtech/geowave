@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -121,6 +121,10 @@ var activeTableTab = "activeTableTab";
 <dt>All Implemented Interfaces:</dt>
 <dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;</dd>
 </dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../../org/locationtech/geowave/core/store/util/RewritingMergingEntryIterator.html" title="class in org.locationtech.geowave.core.store.util">RewritingMergingEntryIterator</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">MergingEntryIterator&lt;T&gt;</span>
@@ -190,6 +194,11 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Nati
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/MergingEntryIterator.html#hasNextScannedResult--">hasNextScannedResult</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/MergingEntryIterator.html#mergeSingleRowValues-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform-">mergeSingleRowValues</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;singleRow,
+                    <a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&nbsp;rowTransform)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/MergingEntryIterator.html#remove--">remove</a></span>()</code>&nbsp;</td>
 </tr>
@@ -270,6 +279,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Nati
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#getNextEncodedResult--">getNextEncodedResult</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html" title="class in org.locationtech.geowave.core.store.util">EntryIteratorWrapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/MergingEntryIterator.html" title="type parameter in MergingEntryIterator">T</a>&gt;</code></dd>
 </dl>
+</li>
+</ul>
+<a name="mergeSingleRowValues-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>mergeSingleRowValues</h4>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;mergeSingleRowValues(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;singleRow,
+                                          <a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&nbsp;rowTransform)</pre>
 </li>
 </ul>
 <a name="hasNextScannedResult--">
