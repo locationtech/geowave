@@ -78,4 +78,17 @@ public class HBaseRowDeleter implements
 					e);
 		}
 	}
+
+	@Override
+	public void flush() {
+		try {
+			deleter.flush();
+			duplicateRowTracker.clear();
+		}
+		catch (IOException e) {
+			LOGGER.warn(
+					"Unable to flush deleter.",
+					e);
+		}
+	}
 }

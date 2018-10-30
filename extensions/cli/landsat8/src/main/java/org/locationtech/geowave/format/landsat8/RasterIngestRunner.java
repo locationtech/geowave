@@ -387,6 +387,7 @@ public class RasterIngestRunner extends
 				if (dataStorePluginOptions.createDataStoreOperations().mergeData(
 						index,
 						dataStorePluginOptions.createAdapterStore(),
+						dataStorePluginOptions.createInternalAdapterStore(),
 						dataStorePluginOptions.createAdapterIndexMappingStore())) {
 					System.out.println("Successfully merged overlapping tiles within index '" + index.getName() + "'");
 				}

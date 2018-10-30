@@ -55,6 +55,7 @@ import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
+import org.apache.hadoop.hbase.protobuf.generated.AdminProtos.GetRegionInfoResponse.CompactionState;
 import org.apache.hadoop.hbase.shaded.com.google.protobuf.ByteString;
 import org.locationtech.geowave.core.cli.VersionUtils;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -567,7 +568,7 @@ public class HBaseOperations implements
 		RowDeleter deleter = null;
 		Iterable<Result> scanner = null;
 		try {
-			deleter = createDeleter(
+			deleter = createRowDeleter(
 					indexName,
 					additionalAuthorizations);
 			DataTypeAdapter<?> adapter = null;
@@ -842,18 +843,20 @@ public class HBaseOperations implements
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
-		// simply compact the table,
-		// NOTE: this is an asynchronous operations and this does not block and
-		// wait for the table to be fully compacted, which may be a long-running
-		// distributed process, but this is primarily used for efficiency not
-		// correctness so it seems ok to just let it compact in the background
-		// but we can consider blocking and waiting for completion
 		if (options.isServerSideLibraryEnabled()) {
+			TableName tableName = getTableName(index.getName());
 			try (Admin admin = conn.getAdmin()) {
-				admin.compact(getTableName(index.getName()));
+				admin.compact(tableName);
+				// wait for table compaction to finish
+				while (!admin.getCompactionState(
+						tableName).equals(
+						CompactionState.NONE)) {
+					Thread.sleep(100);
+				}
 			}
-			catch (final IOException e) {
+			catch (final Exception e) {
 				LOGGER.error(
 						"Cannot compact table '" + index.getName() + "'",
 						e);
@@ -862,8 +865,11 @@ public class HBaseOperations implements
 		}
 		else {
 			return DataStoreUtils.mergeData(
+					this,
+					options,
 					index,
 					adapterStore,
+					internalAdapterStore,
 					adapterIndexMappingStore);
 		}
 		return true;
@@ -1055,7 +1061,7 @@ public class HBaseOperations implements
 				this);
 	}
 
-	public RowDeleter createDeleter(
+	public RowDeleter createRowDeleter(
 			final String indexName,
 			final String... authorizations ) {
 		try {
@@ -1916,7 +1922,7 @@ public class HBaseOperations implements
 					this);
 		}
 		else {
-			final RowDeleter rowDeleter = createDeleter(
+			final RowDeleter rowDeleter = createRowDeleter(
 					readerParams.getIndex().getName(),
 					readerParams.getAdditionalAuthorizations());
 			if (rowDeleter != null) {

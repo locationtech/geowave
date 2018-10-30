@@ -61,4 +61,9 @@ public class AccumuloRowDeleter implements
 					e);
 		}
 	}
+
+	@Override
+	public synchronized void flush() {
+		// Do nothing, delete is done immediately.
+	}
 }

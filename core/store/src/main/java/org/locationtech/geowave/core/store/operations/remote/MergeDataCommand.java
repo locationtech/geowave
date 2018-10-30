@@ -19,7 +19,7 @@ import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.RemoteSection;
@@ -81,6 +81,7 @@ public class MergeDataCommand extends
 
 		inputIndexOptions = indexLoader.getLoadedIndexes();
 		final PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
+		final InternalAdapterStore internalAdapterStore = inputStoreOptions.createInternalAdapterStore();
 		final AdapterIndexMappingStore adapterIndexMappingStore = inputStoreOptions.createAdapterIndexMappingStore();
 		final DataStoreOperations operations = inputStoreOptions.createDataStoreOperations();
 
@@ -89,6 +90,7 @@ public class MergeDataCommand extends
 			if (!operations.mergeData(
 					index,
 					adapterStore,
+					internalAdapterStore,
 					adapterIndexMappingStore)) {
 				JCommander.getConsole().println(
 						"Unable to merge data within index '" + index.getName() + "'");

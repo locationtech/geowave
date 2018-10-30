@@ -34,7 +34,9 @@ import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -82,16 +84,23 @@ public class MemoryDataStoreOperations implements
 			.synchronizedMap(new HashMap<String, SortedSet<MemoryStoreEntry>>());
 	private final Map<MetadataType, SortedSet<MemoryMetadataEntry>> metadataStore = Collections
 			.synchronizedMap(new HashMap<MetadataType, SortedSet<MemoryMetadataEntry>>());
-	private final boolean serversideEnabled;
+	private final DataStoreOptions options;
 
 	public MemoryDataStoreOperations() {
 		this(
-				true);
+				new BaseDataStoreOptions() {
+					@Override
+					public boolean isServerSideLibraryEnabled() {
+						// memory datastore doesn't have a serverside option
+						return false;
+					}
+
+				});
 	}
 
 	public MemoryDataStoreOperations(
-			final boolean serversideEnabled ) {
-		this.serversideEnabled = serversideEnabled;
+			final DataStoreOptions options ) {
+		this.options = options;
 	}
 
 	@Override
@@ -134,7 +143,7 @@ public class MemoryDataStoreOperations implements
 				index.getName());
 	}
 
-	public RowDeleter createDeleter(
+	public RowDeleter createRowDeleter(
 			final String indexName,
 			final String... authorizations ) {
 		return new MyIndexDeleter(
@@ -240,7 +249,7 @@ public class MemoryDataStoreOperations implements
 							@Override
 							public boolean apply(
 									final MemoryStoreEntry input ) {
-								if ((readerParams.getFilter() != null) && serversideEnabled) {
+								if ((readerParams.getFilter() != null) && options.isServerSideLibraryEnabled()) {
 									final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<>();
 									final List<FlattenedUnreadData> unreadData = new ArrayList<>();
 									final List<String> commonIndexFieldNames = DataStoreUtils
@@ -408,6 +417,11 @@ public class MemoryDataStoreOperations implements
 					}
 				}
 			}
+		}
+
+		@Override
+		public void flush() {
+			// Do nothing, delete is done immediately.
 		}
 	}
 
@@ -878,12 +892,16 @@ public class MemoryDataStoreOperations implements
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		// considering memory data store is for test purposes, this
 		// implementation is unnecessary
 		return DataStoreUtils.mergeData(
+				this,
+				options,
 				index,
 				adapterStore,
+				internalAdapterStore,
 				adapterIndexMappingStore);
 	}
 
@@ -913,8 +931,8 @@ public class MemoryDataStoreOperations implements
 	@Override
 	public <T> Deleter<T> createDeleter(
 			final ReaderParams<T> readerParams ) {
-		return new QueryAndDeleteByRow(
-				createDeleter(
+		return new QueryAndDeleteByRow<>(
+				createRowDeleter(
 						readerParams.getIndex().getName(),
 						readerParams.getAdditionalAuthorizations()),
 				createReader(readerParams));

@@ -37,9 +37,12 @@ import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
@@ -54,6 +57,8 @@ import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibili
 import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.flatten.FlattenedDataSet;
@@ -62,6 +67,11 @@ import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.operations.ReaderParamsBuilder;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions.HintKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -489,10 +499,84 @@ public class DataStoreUtils
 		return true;
 	}
 
+	@SuppressWarnings({
+		"rawtypes",
+		"unchecked"
+	})
 	public static boolean mergeData(
+			final DataStoreOperations operations,
+			final DataStoreOptions options,
 			final Index index,
 			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
-		return false;
+		RowDeleter deleter = operations.createRowDeleter(index.getName());
+		try {
+			final Map<Short, RowMergingDataAdapter> mergingAdapters = new HashMap<Short, RowMergingDataAdapter>();
+
+			try (CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters()) {
+				while (adapters.hasNext()) {
+					final InternalDataAdapter<?> adapter = adapters.next();
+					if ((adapter.getAdapter() instanceof RowMergingDataAdapter)
+							&& (((RowMergingDataAdapter) adapter.getAdapter()).getTransform() != null)) {
+						mergingAdapters.put(
+								adapter.getAdapterId(),
+								(RowMergingDataAdapter) adapter.getAdapter());
+					}
+				}
+			}
+
+			final ReaderParamsBuilder<GeoWaveRow> paramsBuilder = new ReaderParamsBuilder<GeoWaveRow>(
+					index,
+					adapterStore,
+					internalAdapterStore,
+					GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER)
+							.isClientsideRowMerging(
+									true)
+							.maxRangeDecomposition(
+									options.getMaxRangeDecomposition());
+
+			final short[] adapterIds = new short[1];
+
+			for (Entry<Short, RowMergingDataAdapter> adapter : mergingAdapters.entrySet()) {
+				adapterIds[0] = adapter.getKey();
+				paramsBuilder.adapterIds(adapterIds);
+
+				try (RowWriter writer = operations.createWriter(
+						index,
+						adapter.getValue().getTypeName(),
+						adapter.getKey());
+						RowReader<GeoWaveRow> reader = operations.createReader(paramsBuilder.build())) {
+					RewritingMergingEntryIterator<?> iterator = new RewritingMergingEntryIterator(
+							adapterStore,
+							index,
+							reader,
+							mergingAdapters,
+							writer,
+							deleter);
+					while (iterator.hasNext()) {
+						iterator.next();
+					}
+				}
+				catch (Exception e) {
+					LOGGER.error(
+							"Exception occurred while merging data.",
+							e);
+					throw new RuntimeException(
+							e);
+				}
+			}
+		}
+		finally {
+			try {
+				deleter.close();
+			}
+			catch (Exception e) {
+				LOGGER.warn(
+						"Exception occurred when closing deleter.",
+						e);
+			}
+		}
+		return true;
 	}
 }

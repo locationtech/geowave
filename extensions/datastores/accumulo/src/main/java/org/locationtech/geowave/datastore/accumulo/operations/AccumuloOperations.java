@@ -1340,7 +1340,8 @@ public class AccumuloOperations implements
 				false);
 	}
 
-	public RowDeleter createDeleter(
+	@Override
+	public RowDeleter createRowDeleter(
 			final String indexName,
 			final String... authorizations ) {
 		try {
@@ -1476,14 +1477,18 @@ public class AccumuloOperations implements
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		if (options.isServerSideLibraryEnabled()) {
 			return compactTable(index.getName());
 		}
 		else {
 			return DataStoreUtils.mergeData(
+					this,
+					options,
 					index,
 					adapterStore,
+					internalAdapterStore,
 					adapterIndexMappingStore);
 		}
 	}
@@ -1805,7 +1810,7 @@ public class AccumuloOperations implements
 			// combining the visibilities of a single row without
 			// WholeRowIterator so therefore we need to backup to using the
 			// slower delete by row technique
-			final RowDeleter rowDeleter = createDeleter(
+			final RowDeleter rowDeleter = createRowDeleter(
 					readerParams.getIndex().getName(),
 					readerParams.getAdditionalAuthorizations());
 			if (rowDeleter != null) {

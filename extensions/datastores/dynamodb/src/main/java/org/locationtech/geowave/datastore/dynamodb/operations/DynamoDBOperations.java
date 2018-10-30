@@ -341,7 +341,8 @@ public class DynamoDBOperations implements
 				this);
 	}
 
-	public RowDeleter createDeleter(
+	@Override
+	public RowDeleter createRowDeleter(
 			final String indexName,
 			final String... authorizations ) {
 		return new DynamoDBDeleter(
@@ -352,11 +353,15 @@ public class DynamoDBOperations implements
 	@Override
 	public boolean mergeData(
 			final Index index,
-			final PersistentAdapterStore adapterStore,
+			PersistentAdapterStore adapterStore,
+			InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		return DataStoreUtils.mergeData(
+				this,
+				options.getStoreOptions(),
 				index,
 				adapterStore,
+				internalAdapterStore,
 				adapterIndexMappingStore);
 	}
 
@@ -397,7 +402,7 @@ public class DynamoDBOperations implements
 	public <T> Deleter<T> createDeleter(
 			final ReaderParams<T> readerParams ) {
 		return new QueryAndDeleteByRow<>(
-				createDeleter(
+				createRowDeleter(
 						readerParams.getIndex().getName(),
 						readerParams.getAdditionalAuthorizations()),
 				createReader(readerParams));

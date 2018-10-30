@@ -61,4 +61,9 @@ public class DynamoDBDeleter implements
 		}
 	}
 
+	@Override
+	public void flush() {
+		// Do nothing, delete is done immediately.
+	}
+
 }

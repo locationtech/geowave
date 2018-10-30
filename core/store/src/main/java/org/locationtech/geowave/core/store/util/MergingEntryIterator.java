@@ -107,7 +107,7 @@ public class MergingEntryIterator<T> extends
 		return transform;
 	}
 
-	private GeoWaveRow mergeSingleRowValues(
+	protected GeoWaveRow mergeSingleRowValues(
 			final GeoWaveRow singleRow,
 			final RowTransform rowTransform ) {
 		if (singleRow.getFieldValues().length < 2) {
