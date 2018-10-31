@@ -25,11 +25,13 @@ import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToA
  * applied directly to the data which are similar to statistics, but are more
  * dynamic in that any query criteria can be applied as the input of the
  * aggregation. Datastores that support serverside processing will run the
- * aggregation within the scope of iterating through the results for additional efficiency.
+ * aggregation within the scope of iterating through the results for additional
+ * efficiency.
  *
- * Here is a simple snippets of pseudocode showing how a data store can be used to store and retrieve your data.
- * @formatter:off
- * <pre>
+ * Here is a simple snippets of pseudocode showing how a data store can be used
+ * to store and retrieve your data.
+ * 
+ * @formatter:off <pre>
  * {@code
  *  DataStore store = DataStoreFactory.createDataStore(<data store options>);
  * 	store.addType(<my data type>, <my index>);
@@ -37,7 +39,7 @@ import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToA
  *    //write data
  *    writer.writer(<data);
  *  }
- *
+ * 
  *  //this just queries everything
  *  try(CloseableIterator it = store.query(QueryBuilder.newBuilder().build())){
  *    while(it.hasNext()){
@@ -104,6 +106,27 @@ public interface DataStore
 	 */
 	<T> CloseableIterator<T> query(
 			final Query<T> query );
+
+	/**
+	 * Returns all data in this data store that matches the query parameter and
+	 * gives the user the option of specifying if duplicates should be filtered
+	 * out or not. All data that matches the query will be returned as an
+	 * instance of the native data type. The Iterator must be closed when it is
+	 * no longer needed - this wraps the underlying scanner implementation and
+	 * closes underlying resources.
+	 *
+	 * @param query
+	 *            data constraints for the query and additional options for
+	 *            processing the query
+	 * @param filterDuplicates
+	 *            should the iterator filter out duplicates?
+	 * @return An iterator on all results that match the query. The iterator
+	 *         implements Closeable and it is best practice to close the
+	 *         iterator after it is no longer needed.
+	 */
+	<T> CloseableIterator<T> query(
+			final Query<T> query,
+			final boolean filterDuplicates );
 
 	/**
 	 * Perform an aggregation on the data and just return the aggregated result.

@@ -39,6 +39,7 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
+import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -187,6 +188,20 @@ public class DataStoreUtils
 			}
 		}
 		return count;
+	}
+
+	@SuppressWarnings({
+		"rawtypes",
+		"unchecked"
+	})
+	public static <T> InsertionIds getInsertionIdsForEntry(
+			T entry,
+			final InternalDataAdapter adapter,
+			final Index index ) {
+		AdapterPersistenceEncoding encoding = adapter.encode(
+				entry,
+				index.getIndexModel());
+		return encoding.getInsertionIds(index);
 	}
 
 	public static InsertionIds keysToInsertionIds(
@@ -530,11 +545,9 @@ public class DataStoreUtils
 					index,
 					adapterStore,
 					internalAdapterStore,
-					GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER)
-							.isClientsideRowMerging(
-									true)
-							.maxRangeDecomposition(
-									options.getMaxRangeDecomposition());
+					GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER).isClientsideRowMerging(
+					true).maxRangeDecomposition(
+					options.getMaxRangeDecomposition());
 
 			final short[] adapterIds = new short[1];
 

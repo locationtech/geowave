@@ -13,6 +13,7 @@ package org.locationtech.geowave.test.query;
 import java.io.Closeable;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -82,6 +83,8 @@ public class SpatialTemporalQueryIT
 	private static final int MULTI_MONTH_YEAR = 2000;
 	private static final int MULTI_YEAR_MIN = 1980;
 	private static final int MULTI_YEAR_MAX = 1995;
+	private static final int DUPLICATE_DELETION_YEAR_MIN = 1970;
+	private static final int DUPLICATE_DELETION_YEAR_MAX = 1974;
 	private static final Index DAY_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
 			PartitionStrategy.ROUND_ROBIN).setNumPartitions(
 			10).setPeriodicity(
@@ -294,6 +297,19 @@ public class SpatialTemporalQueryIT
 			featureTimeRangeBuilder.add(cal.getTime());
 			feature = featureTimeRangeBuilder.buildFeature("outlier2timerange");
 			timeWriters.write(feature);
+
+			// Ingest data for duplicate deletion, should not overlap time
+			// ranges
+			// from other tests, see
+			//
+			ingestTimeRangeDataForDuplicateDeletion(
+					cal,
+					rangeWriters,
+					featureTimeRangeBuilder,
+					DUPLICATE_DELETION_YEAR_MIN,
+					DUPLICATE_DELETION_YEAR_MAX,
+					Calendar.YEAR,
+					"year");
 		}
 		finally {
 			timeWriters.close();
@@ -443,6 +459,32 @@ public class SpatialTemporalQueryIT
 
 		featureTimeRangeBuilder.add(cal.getTime());
 		feature = featureTimeRangeBuilder.buildFeature(name + ":secondhalfrange");
+		writer.write(feature);
+	}
+
+	private static void ingestTimeRangeDataForDuplicateDeletion(
+			final Calendar cal,
+			final Writer writer,
+			final SimpleFeatureBuilder featureTimeRangeBuilder,
+			final int min,
+			final int max,
+			final int field,
+			final String name )
+			throws IOException {
+		final GeometryFactory geomFactory = new GeometryFactory();
+		final int midPoint = (int) Math.floor((min + max) / 2.0);
+		cal.set(
+				field,
+				min);
+		featureTimeRangeBuilder.add(geomFactory.createPoint(new Coordinate(
+				0,
+				0)));
+		featureTimeRangeBuilder.add(cal.getTime());
+		cal.set(
+				field,
+				max);
+		featureTimeRangeBuilder.add(cal.getTime());
+		SimpleFeature feature = featureTimeRangeBuilder.buildFeature(name + ":fullrange");
 		writer.write(feature);
 	}
 
@@ -755,4 +797,153 @@ public class SpatialTemporalQueryIT
 				"year");
 
 	}
+
+	@Test
+	public void testTimeRangeDuplicateDeletion()
+			throws IOException {
+		VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+		bldr.indexName(YEAR_INDEX.getName());
+		bldr.setTypeNames(new String[] {
+			timeRangeAdapter.getTypeName()
+		});
+
+		currentGeotoolsIndex = YEAR_INDEX;
+		final Calendar cal = getInitialYearCalendar();
+
+		cal.set(
+				Calendar.YEAR,
+				DUPLICATE_DELETION_YEAR_MIN);
+		Date startOfQuery = cal.getTime();
+
+		cal.set(
+				Calendar.YEAR,
+				DUPLICATE_DELETION_YEAR_MAX);
+		Date endOfQuery = cal.getTime();
+
+		// the query over the entire year range
+		SpatialTemporalQuery fullRangeQuery = new SpatialTemporalQuery(
+				startOfQuery,
+				endOfQuery,
+				new GeometryFactory().toGeometry(new Envelope(
+						-1,
+						1,
+						-1,
+						1)));
+
+		// Create query for selecting items that should still exist
+		// after the deletion query is performed
+		// (i.e. we didn't actually delete something we weren't supposed to)
+		cal.set(
+				Calendar.YEAR,
+				MULTI_YEAR_MIN);
+		startOfQuery = cal.getTime();
+
+		cal.set(
+				Calendar.YEAR,
+				MULTI_YEAR_MAX);
+		endOfQuery = cal.getTime();
+
+		SpatialTemporalQuery sanityQuery = new SpatialTemporalQuery(
+				startOfQuery,
+				endOfQuery,
+				new GeometryFactory().toGeometry(new Envelope(
+						-1,
+						1,
+						-1,
+						1)));
+
+		// Delete everything from the beginning to one year after
+		cal.set(
+				Calendar.YEAR,
+				DUPLICATE_DELETION_YEAR_MIN);
+		startOfQuery = cal.getTime();
+
+		cal.set(
+				Calendar.YEAR,
+				DUPLICATE_DELETION_YEAR_MIN + 1);
+		endOfQuery = cal.getTime();
+
+		// Even though we are requesting to delete within a 1 year range from
+		// the min year
+		// this should remove all duplicates
+		SpatialTemporalQuery deletionQuery = new SpatialTemporalQuery(
+				startOfQuery,
+				endOfQuery,
+				new GeometryFactory().toGeometry(new Envelope(
+						-1,
+						1,
+						-1,
+						1)));
+
+		// first check to make sure our number of entries match what we expect
+		int count = 0;
+		int numExpectedEntries = (DUPLICATE_DELETION_YEAR_MAX - DUPLICATE_DELETION_YEAR_MIN) + 1;
+		ArrayList<Short> adapters = new ArrayList<Short>();
+
+		// Sanity count number of entries that have nothing to do with
+		// the deletion query (after the deletion we will query again and see
+		// if count == sanity_count
+		int sanity_count = 0;
+		try (CloseableIterator<?> dataIt = dataStore.query(
+				bldr.constraints(
+						sanityQuery).build(),
+				false)) {
+			while (dataIt.hasNext()) {
+				dataIt.next();
+				sanity_count++;
+			}
+		}
+
+		try (CloseableIterator<?> dataIt = dataStore.query(
+				bldr.constraints(
+						fullRangeQuery).build(),
+				false)) {
+			while (dataIt.hasNext()) {
+				SimpleFeature feat = (SimpleFeature) dataIt.next();
+				count++;
+			}
+		}
+		Assert.assertEquals(
+				numExpectedEntries,
+				count);
+
+		// perform the delete for a single year
+		dataStore.delete(bldr.constraints(
+				deletionQuery).build());
+
+		// if delete works, it should have removed the duplicate entries for the
+		// full time range
+		// and this query should return a count of 0
+		count = 0;
+		try (CloseableIterator<?> dataIt = dataStore.query(
+				bldr.constraints(
+						fullRangeQuery).build(),
+				false)) {
+			while (dataIt.hasNext()) {
+				dataIt.next();
+				count++;
+			}
+		}
+		numExpectedEntries = 0;
+		Assert.assertEquals(
+				numExpectedEntries,
+				count);
+
+		// Perform sanity query to make sure there were no unintended deltions
+		count = 0;
+		try (CloseableIterator<?> dataIt = dataStore.query(
+				bldr.constraints(
+						sanityQuery).build(),
+				false)) {
+			while (dataIt.hasNext()) {
+				dataIt.next();
+				count++;
+			}
+		}
+		Assert.assertEquals(
+				sanity_count,
+				count);
+
+	}
+
 }
