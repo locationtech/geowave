@@ -49,19 +49,7 @@ public class RedisRowDeleter implements
 
 	@Override
 	public void close()
-			throws Exception {
-		// TODO its unclear whether this is necessary
-		// setCache
-		// .asMap()
-		// .forEach(
-		// (
-		// k,
-		// v ) -> {
-		// if (v.isEmpty()) {
-		// v.delete();
-		// }
-		// });
-	}
+			throws Exception {}
 
 	private RScoredSortedSet<GeoWaveRedisPersistedRow> getSet(
 			final Pair<String, Short> setNameAndAdapterId ) {

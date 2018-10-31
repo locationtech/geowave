@@ -333,31 +333,6 @@ public class BatchedRangeRead<T>
 	private Iterator<T> transformAndFilter(
 			final Collection<ScoredEntry<GeoWaveRedisPersistedRow>> result,
 			final byte[] partitionKey ) {
-		// final List<ScoredEntry<GeoWaveRedisPersistedRow>> list = new
-		// ArrayList<>(
-		// result);
-		// Collections
-		// .sort(
-		// list,
-		// new Comparator<ScoredEntry<GeoWaveRedisPersistedRow>>() {
-		//
-		// @Override
-		// public int compare(
-		// final ScoredEntry<GeoWaveRedisPersistedRow> o1,
-		// final ScoredEntry<GeoWaveRedisPersistedRow> o2 ) {
-		// final int compareScore = Double
-		// .compare(
-		// o1.getScore(),
-		// o2.getScore());
-		// if (compareScore == 0) {
-		// return o1
-		// .getValue()
-		// .compareTo(
-		// o2.getValue());
-		// }
-		// return 0;
-		// }
-		// });
 		return rowTransformer
 				.apply(
 						(Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<>(

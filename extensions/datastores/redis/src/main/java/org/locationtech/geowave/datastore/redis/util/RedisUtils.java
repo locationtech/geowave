@@ -35,9 +35,10 @@ public class RedisUtils
 			final RedissonClient client,
 			final String namespace,
 			final MetadataType metadataType ) {
-		return client.getScoredSortedSet(
-				namespace + "_" + metadataType.toString(),
-				GeoWaveMetadataCodec.SINGLETON);
+		return client
+				.getScoredSortedSet(
+						namespace + "_" + metadataType.toString(),
+						GeoWaveMetadataCodec.SINGLETON);
 	}
 
 	public static String getRowSetPrefix(
@@ -79,7 +80,9 @@ public class RedisUtils
 			final byte[] partitionKey ) {
 		String partitionStr;
 		if ((partitionKey != null) && (partitionKey.length > 0)) {
-			partitionStr = "_" + ByteArrayUtils.byteArrayToString(partitionKey);
+			partitionStr = "_" + ByteArrayUtils
+					.byteArrayToString(
+							partitionKey);
 		}
 		else {
 			partitionStr = "";
@@ -91,9 +94,11 @@ public class RedisUtils
 			final RedissonClient client,
 			final String setName,
 			final boolean requiresTimestamp ) {
-		return client.getScoredSortedSet(
-				setName,
-				requiresTimestamp ? GeoWaveRedisRowWithTimestampCodec.SINGLETON : GeoWaveRedisRowCodec.SINGLETON);
+		return client
+				.getScoredSortedSet(
+						setName,
+						requiresTimestamp ? GeoWaveRedisRowWithTimestampCodec.SINGLETON
+								: GeoWaveRedisRowCodec.SINGLETON);
 
 	}
 
@@ -116,12 +121,14 @@ public class RedisUtils
 
 	public static double getScore(
 			final byte[] byteArray ) {
-		return bytesToLong(byteArray);
+		return bytesToLong(
+				byteArray);
 	}
 
 	public static byte[] getSortKey(
 			final double score ) {
-		return longToBytes((long) score);
+		return longToBytes(
+				(long) score);
 	}
 
 	private static byte[] longToBytes(
@@ -203,33 +210,6 @@ public class RedisUtils
 	public static Collection<ScoredEntry<GeoWaveRedisPersistedRow>> groupByRow(
 			final Collection<ScoredEntry<GeoWaveRedisPersistedRow>> result,
 			final boolean sortByTime ) {
-		// final List<ScoredEntry<GeoWaveRedisPersistedRow>> list = new
-		// ArrayList<>(
-		// result);
-		// Collections
-		// .sort(
-		// list,
-		// new Comparator<ScoredEntry<GeoWaveRedisPersistedRow>>() {
-		//
-		// @Override
-		// public int compare(
-		// final ScoredEntry<GeoWaveRedisPersistedRow> o1,
-		// final ScoredEntry<GeoWaveRedisPersistedRow> o2 ) {
-		// final int compareScore = Double
-		// .compare(
-		// o1.getScore(),
-		// o2.getScore());
-		// if (compareScore == 0) {
-		// return o1
-		// .getValue()
-		// .compareTo(
-		// o2.getValue());
-		// }
-		// return 0;
-		// }
-		// });
-		// return list;
-
 		final ListMultimap<Pair<Double, ByteArray>, ScoredEntry<GeoWaveRedisPersistedRow>> multimap = MultimapBuilder
 				.hashKeys()
 				.arrayListValues()
@@ -266,11 +246,15 @@ public class RedisUtils
 	public static Pair<Boolean, Boolean> isGroupByRowAndIsSortByTime(
 			final BaseReaderParams<?> readerParams,
 			final short adapterId ) {
-		final boolean sortByTime = isSortByTime(readerParams.getAdapterStore().getAdapter(
-				adapterId));
-		return Pair.of(
-				readerParams.isMixedVisibility() || sortByTime,
-				sortByTime);
+		final boolean sortByTime = isSortByTime(
+				readerParams
+						.getAdapterStore()
+						.getAdapter(
+								adapterId));
+		return Pair
+				.of(
+						readerParams.isMixedVisibility() || sortByTime,
+						sortByTime);
 	}
 
 	private static final ReverseTimestampComparator TIMESTAMP_COMPARATOR = new ReverseTimestampComparator();
@@ -289,15 +273,17 @@ public class RedisUtils
 			final GeoWaveRedisPersistedTimestampRow row2 = (GeoWaveRedisPersistedTimestampRow) o2.getValue();
 			// we are purposely reversing the order because we want it to be
 			// sorted from most recent to least recent
-			final int compare = Long.compare(
-					row2.getSecondsSinceEpic(),
-					row1.getSecondsSinceEpic());
+			final int compare = Long
+					.compare(
+							row2.getSecondsSinceEpic(),
+							row1.getSecondsSinceEpic());
 			if (compare != 0) {
 				return compare;
 			}
-			return Integer.compare(
-					row2.getNanoOfSecond(),
-					row1.getNanoOfSecond());
+			return Integer
+					.compare(
+							row2.getNanoOfSecond(),
+							row1.getNanoOfSecond());
 		}
 
 	}

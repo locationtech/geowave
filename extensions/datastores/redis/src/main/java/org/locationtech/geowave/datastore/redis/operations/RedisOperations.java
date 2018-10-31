@@ -40,16 +40,6 @@ import org.redisson.api.RedissonClient;
 public class RedisOperations implements
 		MapReduceDataStoreOperations
 {
-	// private final static int WRITE_RESPONSE_THREAD_SIZE = 16;
-	// private final static int READ_RESPONSE_THREAD_SIZE = 16;
-	// protected final static ExecutorService WRITE_RESPONSE_THREADS =
-	// MoreExecutors
-	// .getExitingExecutorService((ThreadPoolExecutor)
-	// Executors.newFixedThreadPool(WRITE_RESPONSE_THREAD_SIZE));
-	// protected final static ExecutorService READ_RESPONSE_THREADS =
-	// MoreExecutors
-	// .getExitingExecutorService((ThreadPoolExecutor)
-	// Executors.newFixedThreadPool(READ_RESPONSE_THREAD_SIZE));
 	private static final boolean READER_ASYNC = true;
 	private final String gwNamespace;
 	private final RedisOptions options;
@@ -65,7 +55,6 @@ public class RedisOperations implements
 			gwNamespace = options.getGeowaveNamespace();
 		}
 		this.options = options;
-		// this.options = options;
 		client = RedissonClientCache.getInstance().getClient(
 				options.getAddress());
 	}
@@ -94,11 +83,6 @@ public class RedisOperations implements
 	private void deleteByPattern(
 			final String pattern ) {
 		final RKeys keySet = client.getKeys();
-		// final String[] keys = Iterators.toArray(
-		// keySet.getKeysByPattern(
-		// pattern).iterator(),
-		// String.class);
-		// keySet.delete(keys);
 
 		keySet
 				.getKeysByPattern(

@@ -3,10 +3,8 @@ package org.locationtech.geowave.test;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
-import org.locationtech.geowave.datastore.dynamodb.DynamoDBOptions;
 import org.locationtech.geowave.datastore.redis.RedisStoreFactoryFamily;
 import org.locationtech.geowave.datastore.redis.config.RedisOptions;
-import org.locationtech.geowave.datastore.redis.operations.RedisOperations;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 import redis.embedded.RedisServer;
@@ -30,7 +28,6 @@ public class RedisStoreTestEnvironment extends
 
 	@Override
 	public void setup() {
-		// DynamoDB IT's rely on an external dynamo local process
 		if (redisServer == null) {
 			redisServer = RedisServer.builder().port(
 					6379).setting(
@@ -60,7 +57,7 @@ public class RedisStoreTestEnvironment extends
 
 	@Override
 	protected GeoWaveStoreType getStoreType() {
-		return GeoWaveStoreType.DYNAMODB;
+		return GeoWaveStoreType.REDIS;
 	}
 
 	@Override
