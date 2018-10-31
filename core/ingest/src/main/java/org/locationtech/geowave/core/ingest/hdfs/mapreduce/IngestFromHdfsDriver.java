@@ -98,11 +98,12 @@ public class IngestFromHdfsDriver
 		final Path hdfsBaseDirectory = new Path(
 				basePath);
 		try {
-			final Configuration conf = new Configuration();
+			final Configuration conf = new Configuration(false);
 			GeoWaveConfiguratorBase.setRemoteInvocationParams(
 					hdfsHostPort,
 					mapReduceOptions.getJobTrackerOrResourceManagerHostPort(),
 					conf);
+			mapReduceOptions.applyConfigurationProperties(conf);
 			try (FileSystem fs = FileSystem.get(conf)) {
 				if (!fs.exists(hdfsBaseDirectory)) {
 					LOGGER.error(
