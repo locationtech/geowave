@@ -15,6 +15,7 @@ import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.BaseReaderParams;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.redisson.api.RScoredSortedSet;
@@ -25,6 +26,7 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.Streams;
 import com.google.common.primitives.Bytes;
+import com.google.common.primitives.UnsignedBytes;
 
 public class RedisUtils
 {
@@ -243,6 +245,23 @@ public class RedisUtils
 		return adapter.getAdapter() instanceof RowMergingDataAdapter;
 	}
 
+	public static boolean isSortByKeyRequired(
+			final BaseReaderParams<?> params ) {
+		// subsampling needs to be sorted by sort key to work properly
+		return (params.getMaxResolutionSubsamplingPerDimension() != null)
+				&& (params.getMaxResolutionSubsamplingPerDimension().length > 0);
+	}
+
+	public static Iterator<GeoWaveRow> sortBySortKey(
+			final Iterator<GeoWaveRow> it ) {
+		return Streams
+				.stream(
+						it)
+				.sorted(
+						SortKeyOrder.SINGLETON)
+				.iterator();
+	}
+
 	public static Pair<Boolean, Boolean> isGroupByRowAndIsSortByTime(
 			final BaseReaderParams<?> readerParams,
 			final short adapterId ) {
@@ -284,6 +303,75 @@ public class RedisUtils
 					.compare(
 							row2.getNanoOfSecond(),
 							row1.getNanoOfSecond());
+		}
+
+	}
+
+	private static class SortKeyOrder implements
+			Comparator<GeoWaveRow>,
+			Serializable
+	{
+		private static SortKeyOrder SINGLETON = new SortKeyOrder();
+		private static final long serialVersionUID = 23275155231L;
+
+		@Override
+		public int compare(
+				final GeoWaveRow o1,
+				final GeoWaveRow o2 ) {
+			if (o1 == o2) {
+				return 0;
+			}
+			if (o1 == null) {
+				return 1;
+			}
+			if (o2 == null) {
+				return -1;
+			}
+			byte[] otherComp = o2.getSortKey() == null ? new byte[0] : o2.getSortKey();
+			byte[] thisComp = o1.getSortKey() == null ? new byte[0] : o1.getSortKey();
+
+			int comp = UnsignedBytes
+					.lexicographicalComparator()
+					.compare(
+							thisComp,
+							otherComp);
+			if (comp != 0) {
+				return comp;
+			}
+			otherComp = o2.getPartitionKey() == null ? new byte[0] : o2.getPartitionKey();
+			thisComp = o1.getPartitionKey() == null ? new byte[0] : o1.getPartitionKey();
+
+			comp = UnsignedBytes
+					.lexicographicalComparator()
+					.compare(
+							thisComp,
+							otherComp);
+			if (comp != 0) {
+				return comp;
+			}
+			comp = Short
+					.compare(
+							o1.getAdapterId(),
+							o2.getAdapterId());
+			if (comp != 0) {
+				return comp;
+			}
+			otherComp = o2.getDataId() == null ? new byte[0] : o2.getDataId();
+			thisComp = o1.getDataId() == null ? new byte[0] : o1.getDataId();
+
+			comp = UnsignedBytes
+					.lexicographicalComparator()
+					.compare(
+							thisComp,
+							otherComp);
+
+			if (comp != 0) {
+				return comp;
+			}
+			return Integer
+					.compare(
+							o1.getNumberOfDuplicates(),
+							o2.getNumberOfDuplicates());
 		}
 
 	}

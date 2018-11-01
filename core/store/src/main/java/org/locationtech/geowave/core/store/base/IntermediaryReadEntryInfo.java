@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.base;
 
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -66,7 +66,7 @@ class IntermediaryReadEntryInfo<T>
 	public boolean setOrRetrieveAdapter(
 			final InternalDataAdapter<T> adapter,
 			final short internalAdapterId,
-			final AdapterStore adapterStore ) {
+			final PersistentAdapterStore adapterStore ) {
 		// Verify the current data adapter
 		if (setDataAdapter(
 				adapter,

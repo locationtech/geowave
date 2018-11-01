@@ -1,5 +1,10 @@
 package org.locationtech.geowave.datastore.redis.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.MergeableGeoWaveRow;
@@ -12,6 +17,7 @@ public class GeoWaveRedisRow extends
 	private final byte[] partitionKey;
 	private final byte[] sortKey;
 	private final GeoWaveRedisPersistedRow persistedRow;
+	List<GeoWaveRedisPersistedRow> mergedRows;
 
 	public GeoWaveRedisRow(
 			final GeoWaveRedisPersistedRow persistedRow,
@@ -53,8 +59,40 @@ public class GeoWaveRedisRow extends
 		return persistedRow.getNumDuplicates();
 	}
 
-	public GeoWaveRedisPersistedRow getPersistedRow() {
-		return persistedRow;
+	@Override
+	public void mergeRow(
+			final MergeableGeoWaveRow row ) {
+		super.mergeRow(
+				row);
+		if (row instanceof GeoWaveRedisRow) {
+			// this is intentionally not threadsafe because it isn't required
+			if (mergedRows == null) {
+				mergedRows = new ArrayList<>();
+			}
+			Arrays
+					.stream(
+							((GeoWaveRedisRow) row).getPersistedRows())
+					.forEach(
+							r -> mergedRows
+									.add(
+											r));
+		}
 	}
 
+	public GeoWaveRedisPersistedRow[] getPersistedRows() {
+		// this is intentionally not threadsafe because it isn't required
+		if (mergedRows == null) {
+			return new GeoWaveRedisPersistedRow[] {
+				persistedRow
+			};
+		}
+		else {
+			return ArrayUtils
+					.add(
+							mergedRows
+									.toArray(
+											new GeoWaveRedisPersistedRow[0]),
+							persistedRow);
+		}
+	}
 }

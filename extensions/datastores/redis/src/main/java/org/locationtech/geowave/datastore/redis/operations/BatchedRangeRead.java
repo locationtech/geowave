@@ -12,8 +12,10 @@ package org.locationtech.geowave.datastore.redis.operations;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -47,6 +49,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.primitives.UnsignedBytes;
 
 public class BatchedRangeRead<T>
 {
@@ -70,6 +73,43 @@ public class BatchedRangeRead<T>
 		}
 	}
 
+	private static class ScoreOrderComparator implements
+			Comparator<RangeReadInfo>,
+			Serializable
+	{
+		private static final long serialVersionUID = 1L;
+		private static final ScoreOrderComparator SINGLETON = new ScoreOrderComparator();
+
+		@Override
+		public int compare(
+				final RangeReadInfo o1,
+				final RangeReadInfo o2 ) {
+			int comp = Double
+					.compare(
+							o1.startScore,
+							o2.startScore);
+			if (comp != 0) {
+				return comp;
+			}
+			comp = Double
+					.compare(
+							o1.endScore,
+							o2.endScore);
+			if (comp != 0) {
+				return comp;
+			}
+			final byte[] otherComp = o2.partitionKey == null ? new byte[0] : o2.partitionKey;
+			final byte[] thisComp = o1.partitionKey == null ? new byte[0] : o1.partitionKey;
+
+			return UnsignedBytes
+					.lexicographicalComparator()
+					.compare(
+							thisComp,
+							otherComp);
+		}
+
+	}
+
 	private final static int MAX_CONCURRENT_READ = 100;
 	private final static int MAX_BOUNDED_READS_ENQUEUED = 1000000;
 	private static ByteArray EMPTY_PARTITION_KEY = new ByteArray();
@@ -91,6 +131,7 @@ public class BatchedRangeRead<T>
 			MAX_CONCURRENT_READ);
 	private final boolean async;
 	private final Pair<Boolean, Boolean> groupByRowAndSortByTimePair;
+	private final boolean isSortFinalResultsBySortKey;
 
 	protected BatchedRangeRead(
 			final RedissonClient client,
@@ -100,15 +141,18 @@ public class BatchedRangeRead<T>
 			final GeoWaveRowIteratorTransformer<T> rowTransformer,
 			final Predicate<GeoWaveRow> filter,
 			final boolean async,
-			final Pair<Boolean, Boolean> groupByRowAndSortByTimePair ) {
+			final Pair<Boolean, Boolean> groupByRowAndSortByTimePair,
+			final boolean isSortFinalResultsBySortKey ) {
 		this.client = client;
 		this.setNamePrefix = setNamePrefix;
 		this.adapterId = adapterId;
 		this.ranges = ranges;
 		this.rowTransformer = rowTransformer;
 		this.filter = filter;
-		this.async = async;
+		// we can't efficiently guarantee sort order with async queries
+		this.async = async && !isSortFinalResultsBySortKey;
 		this.groupByRowAndSortByTimePair = groupByRowAndSortByTimePair;
+		this.isSortFinalResultsBySortKey = isSortFinalResultsBySortKey;
 	}
 
 	private RScoredSortedSet<GeoWaveRedisPersistedRow> getSet(
@@ -155,6 +199,12 @@ public class BatchedRangeRead<T>
 
 	public CloseableIterator<T> executeQuery(
 			final List<RangeReadInfo> reads ) {
+		if (isSortFinalResultsBySortKey) {
+			// order the reads by sort keys
+			reads
+					.sort(
+							ScoreOrderComparator.SINGLETON);
+		}
 		return new CloseableIterator.Wrapper<>(
 				Iterators
 						.concat(
@@ -335,37 +385,51 @@ public class BatchedRangeRead<T>
 			final byte[] partitionKey ) {
 		return rowTransformer
 				.apply(
-						(Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<>(
-								Iterators
-										.filter(
-												Iterators
-														.transform(
-																groupByRowAndSortByTimePair.getLeft()
-																		? RedisUtils
-																				.groupByRow(
-																						result,
-																						groupByRowAndSortByTimePair
-																								.getRight())
-																				.iterator()
-																		: result.iterator(),
-																new Function<ScoredEntry<GeoWaveRedisPersistedRow>, GeoWaveRedisRow>() {
+						sortByKeyIfRequired(
+								isSortFinalResultsBySortKey,
+								(Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<>(
+										Iterators
+												.filter(
+														Iterators
+																.transform(
+																		groupByRowAndSortByTimePair.getLeft()
+																				? RedisUtils
+																						.groupByRow(
+																								result,
+																								groupByRowAndSortByTimePair
+																										.getRight())
+																						.iterator()
+																				: result.iterator(),
+																		new Function<ScoredEntry<GeoWaveRedisPersistedRow>, GeoWaveRedisRow>() {
 
-																	@Override
-																	public GeoWaveRedisRow apply(
-																			final ScoredEntry<GeoWaveRedisPersistedRow> entry ) {
-																// @formatter:off
+																			@Override
+																			public GeoWaveRedisRow apply(
+																					final ScoredEntry<GeoWaveRedisPersistedRow> entry ) {
+																		// @formatter:off
 																		// wrap the persisted row with additional metadata
 																		// @formatter:on
-																		return new GeoWaveRedisRow(
-																				entry.getValue(),
-																				adapterId,
-																				partitionKey,
-																				RedisUtils
-																						.getSortKey(
-																								entry.getScore()));
-																	}
-																}),
-												filter)));
+																				return new GeoWaveRedisRow(
+																						entry.getValue(),
+																						adapterId,
+																						partitionKey,
+																						RedisUtils
+																								.getSortKey(
+																										entry
+																												.getScore()));
+																			}
+																		}),
+														filter))));
+	}
+
+	private static Iterator<GeoWaveRow> sortByKeyIfRequired(
+			final boolean isRequired,
+			final Iterator<GeoWaveRow> it ) {
+		if (isRequired) {
+			return RedisUtils
+					.sortBySortKey(
+							it);
+		}
+		return it;
 	}
 
 	private static void checkFinalize(

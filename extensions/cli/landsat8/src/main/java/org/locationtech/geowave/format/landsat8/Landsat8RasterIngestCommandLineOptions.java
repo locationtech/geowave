@@ -25,7 +25,7 @@ public class Landsat8RasterIngestCommandLineOptions
 	private boolean retainImages = false;
 	@Parameter(names = "--tilesize", description = "The option to set the pixel size for each tile stored in GeoWave. The default is "
 			+ RasterDataAdapter.DEFAULT_TILE_SIZE)
-	private int tileSize = 512;
+	private int tileSize = RasterDataAdapter.DEFAULT_TILE_SIZE;
 	@Parameter(names = "--coverage", description = "The name to give to each unique coverage. Freemarker templating can be used for variable substition based on the same attributes used for filtering.  The default coverage name is '${"
 			+ SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME
 			+ "}_${"

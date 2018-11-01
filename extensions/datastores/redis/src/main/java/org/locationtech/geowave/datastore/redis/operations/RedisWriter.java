@@ -90,6 +90,7 @@ public class RedisWriter implements
 											(short) row.getNumberOfDuplicates(),
 											row.getDataId(),
 											value));
+
 		}
 	}
 

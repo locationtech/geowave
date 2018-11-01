@@ -1,10 +1,8 @@
 package org.locationtech.geowave.datastore.redis.operations;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -32,7 +30,6 @@ public class RedisRowDeleter implements
 	private final InternalAdapterStore internalAdapterStore;
 	private final String indexName;
 	private final String namespace;
-	private final Set<ByteArray> partitions = new HashSet<>();
 
 	public RedisRowDeleter(
 			final RedissonClient client,
@@ -67,10 +64,6 @@ public class RedisRowDeleter implements
 	@Override
 	public void delete(
 			final GeoWaveRow row ) {
-		partitions
-				.add(
-						new ByteArray(
-								row.getPartitionKey()));
 		final RScoredSortedSet<GeoWaveRedisPersistedRow> set = setCache
 				.get(
 						Pair
@@ -84,9 +77,13 @@ public class RedisRowDeleter implements
 														indexName,
 														row.getPartitionKey()),
 										row.getAdapterId()));
-		set
-				.remove(
-						((GeoWaveRedisRow) row).getPersistedRow());
+		Arrays
+				.stream(
+						((GeoWaveRedisRow) row).getPersistedRows())
+				.forEach(
+						r -> set
+								.remove(
+										r));
 	}
 
 	@Override

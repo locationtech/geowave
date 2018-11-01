@@ -170,13 +170,7 @@ public class GeoWaveBasicRasterIT extends
 			assertFalse(reader.hasNext());
 		}
 
-		DataStoreUtils.mergeData(
-				operations,
-				dataStoreOptions.getFactoryOptions().getStoreOptions(),
-				TestUtils.DEFAULT_SPATIAL_INDEX,
-				adapterStore,
-				internalAdapterStore,
-				dataStoreOptions.createAdapterIndexMappingStore());
+		operations.mergeData(TestUtils.DEFAULT_SPATIAL_INDEX, adapterStore, internalAdapterStore, dataStoreOptions.createAdapterIndexMappingStore());
 
 		// Make sure the row was merged
 		try (RowReader<GeoWaveRow> reader = operations.createReader(params)) {

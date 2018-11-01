@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.cassandra.operations;
 
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.slf4j.Logger;
@@ -55,6 +56,9 @@ public class CassandraWriter implements
 			}
 			batchedWrite.insert(row);
 		}
+
+		System.err.println("writing " + new ByteArray(
+						row.getSortKey()).getHexString() + " part: " + new ByteArray(row.getPartitionKey()).getHexString());
 	}
 
 	@Override
