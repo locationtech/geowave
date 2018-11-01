@@ -27,7 +27,6 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
@@ -748,13 +747,6 @@ public class TestUtils
 			final BufferedImage expected,
 			final double minPctError,
 			final double maxPctError ) {
-//		try {
-//			ImageIO.write(actual, "gif", new File("test"+(i++) + ".gif"));
-//		}
-//		catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		Assert.assertEquals(
 				expected.getWidth(),
 				actual.getWidth());
@@ -802,6 +794,7 @@ public class TestUtils
 			System.out.println(((float) errorPixels / (float) totalPixels) + "% pixels differed from expected");
 		}
 	}
+
 	private static int i = 0;
 
 	public static double getTileValue(

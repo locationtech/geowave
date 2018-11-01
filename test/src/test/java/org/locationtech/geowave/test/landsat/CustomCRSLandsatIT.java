@@ -194,7 +194,7 @@ public class CustomCRSLandsatIT extends
 		ingestOptions.setRetainImages(true);
 		ingestOptions.setCreatePyramid(false);
 		ingestOptions.setCreateHistogram(false);
-		ingestOptions.setCoverageName("test");		
+		ingestOptions.setCoverageName("test");
 		ingestOptions.setTileSize(128);
 		// crop to the specified bbox
 		ingestOptions.setCropToSpatialConstraint(true);
@@ -283,7 +283,6 @@ public class CustomCRSLandsatIT extends
 		// test the result with expected, allowing for minimal error
 		final BufferedImage reference = ImageIO.read(new File(
 				CUSTOM_REFERENCE_LANDSAT_IMAGE_PATH));
-		ImageIO.write(swappedRedBlueImg, "png", new File("test.png"));
 		TestUtils.testTileAgainstReference(
 				swappedRedBlueImg,
 				reference,

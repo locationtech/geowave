@@ -204,11 +204,11 @@ public class ServicesTestEnvironment implements
 				// classes (until hadoop updates guava support to a later
 				// version, slated for hadoop 3.x)
 				gsWebapp.setParentLoaderPriority(false);
-				File configFile = new File(GEOWAVE_CONFIG_FILE);
-				if(configFile.exists()) {
-					if (!configFile.delete()){
-						LOGGER.warn(
-								"Unable to delete config file");
+				File configFile = new File(
+						GEOWAVE_CONFIG_FILE);
+				if (configFile.exists()) {
+					if (!configFile.delete()) {
+						LOGGER.warn("Unable to delete config file");
 					}
 				}
 				final WebAppContext restWebapp = new WebAppContext();
@@ -261,9 +261,9 @@ public class ServicesTestEnvironment implements
 					try {
 						jettyServer.stop();
 						jettyServer = null;
-						if (!new File(GEOWAVE_CONFIG_FILE).delete()){
-							LOGGER.warn(
-									"Unable to delete config file");
+						if (!new File(
+								GEOWAVE_CONFIG_FILE).delete()) {
+							LOGGER.warn("Unable to delete config file");
 						}
 					}
 					catch (final Exception e) {

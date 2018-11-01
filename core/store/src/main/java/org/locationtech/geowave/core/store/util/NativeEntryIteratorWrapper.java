@@ -85,16 +85,19 @@ public class NativeEntryIteratorWrapper<T> extends
 		}
 		return (T) decodedRow;
 	}
+
 	boolean first = false;
 
 	private boolean passesSkipFilter(
 			final GeoWaveRow row ) {
-		if ((reachedEnd == true) || ((skipUntilRow != null) && (skipUntilRow.compareTo(new ByteArray(row.getSortKey()))) > 0)) {
+		if ((reachedEnd == true) || ((skipUntilRow != null) && (skipUntilRow.compareTo(new ByteArray(
+				row.getSortKey()))) > 0)) {
 			return false;
 		}
 
 		return true;
 	}
+
 	private void incrementSkipRow(
 			final GeoWaveRow row ) {
 		if (bitPosition != null) {

@@ -58,7 +58,8 @@ public class CassandraWriter implements
 		}
 
 		System.err.println("writing " + new ByteArray(
-						row.getSortKey()).getHexString() + " part: " + new ByteArray(row.getPartitionKey()).getHexString());
+				row.getSortKey()).getHexString() + " part: " + new ByteArray(
+				row.getPartitionKey()).getHexString());
 	}
 
 	@Override

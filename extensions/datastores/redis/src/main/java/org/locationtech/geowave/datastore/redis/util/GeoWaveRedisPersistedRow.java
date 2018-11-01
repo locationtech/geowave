@@ -47,9 +47,7 @@ public class GeoWaveRedisPersistedRow
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + Arrays
-				.hashCode(
-						dataId);
+		result = (prime * result) + Arrays.hashCode(dataId);
 		result = (prime * result) + numDuplicates;
 		result = (prime * result) + ((value == null) ? 0 : value.hashCode());
 		return result;
@@ -68,10 +66,9 @@ public class GeoWaveRedisPersistedRow
 			return false;
 		}
 		final GeoWaveRedisPersistedRow other = (GeoWaveRedisPersistedRow) obj;
-		if (!Arrays
-				.equals(
-						dataId,
-						other.dataId)) {
+		if (!Arrays.equals(
+				dataId,
+				other.dataId)) {
 			return false;
 		}
 		if (numDuplicates != other.numDuplicates) {
@@ -82,9 +79,7 @@ public class GeoWaveRedisPersistedRow
 				return false;
 			}
 		}
-		else if (!value
-				.equals(
-						other.value)) {
+		else if (!value.equals(other.value)) {
 			return false;
 		}
 		return true;

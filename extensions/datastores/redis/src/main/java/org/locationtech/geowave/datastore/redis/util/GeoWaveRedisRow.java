@@ -87,12 +87,9 @@ public class GeoWaveRedisRow extends
 			};
 		}
 		else {
-			return ArrayUtils
-					.add(
-							mergedRows
-									.toArray(
-											new GeoWaveRedisPersistedRow[0]),
-							persistedRow);
+			return ArrayUtils.add(
+					mergedRows.toArray(new GeoWaveRedisPersistedRow[0]),
+					persistedRow);
 		}
 	}
 }
