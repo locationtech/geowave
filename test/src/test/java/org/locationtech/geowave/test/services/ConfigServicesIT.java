@@ -20,6 +20,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -111,7 +112,7 @@ public class ConfigServicesIT
 						dataStorePluginOptions.getOptionsAsMap()));
 	}
 
-//	@Test
+	@Test
 	public void testAddSpatialIndex() {
 
 		Response firstAdd = configServiceClient.addSpatialIndex(spatialIndexName);
@@ -130,7 +131,7 @@ public class ConfigServicesIT
 
 	}
 
-//	@Test
+	@Test
 	public void testAddSpatialTemporalIndex() {
 
 		Response firstAdd = configServiceClient.addSpatialTemporalIndex(spatialTemporalIndexName);
@@ -148,7 +149,7 @@ public class ConfigServicesIT
 				secondAdd);
 	}
 
-//	@Test
+	@Test
 	public void testAddIndex() {
 		Response spatial = configServiceClient.addIndex(
 				spatialIndexName,
@@ -169,7 +170,7 @@ public class ConfigServicesIT
 				spatial_temporal);
 	}
 
-//	@Test
+	@Test
 	public void testAddIndexGroup() {
 
 		configServiceClient.addSpatialIndex("index1");
@@ -233,7 +234,7 @@ public class ConfigServicesIT
 
 	}
 
-//	@Test
+	@Test
 	public void testRemoveIndex() {
 
 		configServiceClient.addSpatialIndex("test_remove_index");
@@ -253,7 +254,7 @@ public class ConfigServicesIT
 
 	}
 
-//	@Test
+	@Test
 	public void testRemoveIndexGroup() {
 		configServiceClient.addSpatialIndex("index1");
 		configServiceClient.addSpatialIndex("index2");
@@ -280,7 +281,7 @@ public class ConfigServicesIT
 
 	}
 
-//	@Test
+	@Test
 	public void testHdfsConfig() {
 		// Should always return 200
 		Response config = configServiceClient.configHDFS("localhost:8020");
@@ -290,7 +291,7 @@ public class ConfigServicesIT
 				config);
 	}
 
-//	@Test
+	@Test
 	public void testSet()
 			throws ParseException {
 		// Should always return 200
@@ -315,7 +316,7 @@ public class ConfigServicesIT
 
 	}
 
-//	@Test
+	@Test
 	public void testList() {
 		// Should always return 200
 		Response list = configServiceClient.list();
@@ -325,7 +326,7 @@ public class ConfigServicesIT
 				list);
 	}
 
-//	@Test
+	@Test
 	public void testConfigGeoServer()
 			throws ParseException {
 		// Should always return 200

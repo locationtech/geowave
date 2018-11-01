@@ -120,6 +120,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-datastore-redis</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-geotime</artifactId>
 			<version>${project.version}</version>
 		</dependency>

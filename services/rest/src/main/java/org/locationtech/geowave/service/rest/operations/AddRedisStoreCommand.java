@@ -18,27 +18,25 @@ import java.util.Properties;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.cli.converters.PasswordConverter;
 import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
 import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-@GeowaveOperation(name = "addstore/accumulo", parentOperation = ConfigSection.class)
+@GeowaveOperation(name = "addstore/redis", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
-public class AddAccumuloStoreCommand extends
+public class AddRedisStoreCommand extends
 		ServiceEnabledCommand<String>
 {
 	/**
-	 * A REST Operation for the AddStoreCommand where --type=accumulo
+	 * A REST Operation for the AddStoreCommand where --type=redis
 	 */
-
 	public static final String PROPERTIES_CONTEXT = "properties";
 
 	// Default AddStore Options
@@ -54,15 +52,13 @@ public class AddAccumuloStoreCommand extends
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
 
 	@ParametersDelegate
-	private AccumuloRequiredOptions requiredOptions;
+	private RedisOptions requiredOptions;
 
 	@Override
 	public boolean prepare(
 			final OperationParams params ) {
-
-		pluginOptions.selectPlugin("accumulo");
+		pluginOptions.selectPlugin("redis");
 		pluginOptions.setFactoryOptions(requiredOptions);
-
 		return true;
 	}
 
@@ -78,11 +74,6 @@ public class AddAccumuloStoreCommand extends
 			final OperationParams params )
 			throws Exception {
 
-		// Converts the PW manually for rest calls
-		if (requiredOptions.getPassword() != null) {
-			requiredOptions.setPassword(new PasswordConverter(
-					"password").convert(requiredOptions.getPassword()));
-		}
 		final File propFile = getGeoWaveConfigFile(params);
 
 		final Properties existingProps = ConfigOptions.loadProperties(propFile);
@@ -132,6 +123,16 @@ public class AddAccumuloStoreCommand extends
 		return builder.toString();
 	}
 
+	@Override
+	public String getId() {
+		return ConfigSection.class.getName() + ".addstore/redis";
+	}
+
+	@Override
+	public String getPath() {
+		return "v0/config/addstore/redis";
+	}
+
 	public DataStorePluginOptions getPluginOptions() {
 		return pluginOptions;
 	}
@@ -146,16 +147,6 @@ public class AddAccumuloStoreCommand extends
 
 	public List<String> getParameters() {
 		return parameters;
-	}
-
-	@Override
-	public String getId() {
-		return ConfigSection.class.getName() + ".addstore/accumulo";
-	}
-
-	@Override
-	public String getPath() {
-		return "v0/config/addstore/accumulo";
 	}
 
 	public void setParameters(
@@ -174,7 +165,7 @@ public class AddAccumuloStoreCommand extends
 	}
 
 	public String getStoreType() {
-		return "accumulo";
+		return "redis";
 	}
 
 	public void setPluginOptions(
