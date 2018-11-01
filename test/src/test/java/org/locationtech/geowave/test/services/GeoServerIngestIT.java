@@ -57,7 +57,8 @@ import org.slf4j.LoggerFactory;
 @Environments({
 	Environment.SERVICES
 })
-public class GeoServerIngestIT
+public class GeoServerIngestIT extends
+		BaseServiceIT
 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerIngestIT.class);
@@ -159,12 +160,15 @@ public class GeoServerIngestIT
 				geoServerServiceClient.addStyle(
 						ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should return 400, that layer was already added",
 				400,
 				geoServerServiceClient.addStyle(
 						ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
+		unmuteLogging();
+
 		TestUtils.assertStatusCode(
 				"Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "' Style",
 				201,
@@ -193,6 +197,8 @@ public class GeoServerIngestIT
 						null,
 						null,
 						"point"));
+
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should return 400, that layer was already added",
 				400,
@@ -202,6 +208,8 @@ public class GeoServerIngestIT
 						null,
 						null,
 						"point"));
+		unmuteLogging();
+
 		final BufferedImage biDirectRender = getWMSSingleTile(
 				-180,
 				180,
