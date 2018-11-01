@@ -544,6 +544,9 @@ public class GeoWaveConfiguratorBase
 				"fs.defaultFS",
 				finalHdfsHostPort);
 		conf.set(
+				"fs.AbstractFileSystem.hdfs.impl",
+				org.apache.hadoop.fs.Hdfs.class.getName());
+		conf.set(
 				"fs.hdfs.impl",
 				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 
