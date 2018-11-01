@@ -2,7 +2,6 @@ package org.locationtech.geowave.datastore.redis.operations;
 
 import java.util.Arrays;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -64,7 +63,6 @@ public class RedisMetadataReader implements
 
 						@Override
 						public boolean apply(
-								@Nullable
 								final GeoWaveMetadata input ) {
 							if (query.hasPrimaryId() && !startsWith(
 									input.getPrimaryId(),
