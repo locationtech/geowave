@@ -21,6 +21,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Index;
@@ -185,6 +186,7 @@ public class DynamoDBOperations implements
 	@Override
 	public boolean deleteAll(
 			final String indexName,
+			final String typeName,
 			final Short adapterId,
 			final String... additionalAuthorizations ) {
 		// TODO Auto-generated method stub
@@ -201,8 +203,7 @@ public class DynamoDBOperations implements
 	@Override
 	public RowWriter createWriter(
 			final Index index,
-			final String typeName,
-			final short internalAdapterId ) {
+			final InternalDataAdapter<?> adapter ) {
 		final String qName = getQualifiedTableName(index.getName());
 
 		final DynamoDBWriter writer = new DynamoDBWriter(
@@ -344,6 +345,8 @@ public class DynamoDBOperations implements
 	@Override
 	public RowDeleter createRowDeleter(
 			final String indexName,
+			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final String... authorizations ) {
 		return new DynamoDBDeleter(
 				this,
@@ -404,6 +407,8 @@ public class DynamoDBOperations implements
 		return new QueryAndDeleteByRow<>(
 				createRowDeleter(
 						readerParams.getIndex().getName(),
+						readerParams.getAdapterStore(),
+						readerParams.getInternalAdapterStore(),
 						readerParams.getAdditionalAuthorizations()),
 				createReader(readerParams));
 	}

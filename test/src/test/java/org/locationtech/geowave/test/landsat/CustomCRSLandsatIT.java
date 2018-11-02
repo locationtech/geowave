@@ -112,7 +112,8 @@ public class CustomCRSLandsatIT extends
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.REDIS
 	}, namespace = "customcrs")
 	protected DataStorePluginOptions dataStoreOptions;
 	private static final String CUSTOM_REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected_custom.png";
@@ -194,6 +195,7 @@ public class CustomCRSLandsatIT extends
 		ingestOptions.setCreatePyramid(false);
 		ingestOptions.setCreateHistogram(false);
 		ingestOptions.setCoverageName("test");
+		ingestOptions.setTileSize(128);
 		// crop to the specified bbox
 		ingestOptions.setCropToSpatialConstraint(true);
 		final RasterIngestTester runner = new RasterIngestTester(

@@ -61,8 +61,11 @@ public interface SpatialTemporalConstraintsBuilder
 
 	/**
 	 * add a time range
-	 * @param startTime the start of the range
-	 * @param endTime the end of the range
+	 * 
+	 * @param startTime
+	 *            the start of the range
+	 * @param endTime
+	 *            the end of the range
 	 * @return this builder
 	 */
 	SpatialTemporalConstraintsBuilder addTimeRange(
@@ -71,7 +74,9 @@ public interface SpatialTemporalConstraintsBuilder
 
 	/**
 	 * add a time range as an interval
-	 * @param timeRange the time range
+	 * 
+	 * @param timeRange
+	 *            the time range
 	 * @return this builder
 	 */
 	SpatialTemporalConstraintsBuilder addTimeRange(
@@ -79,14 +84,18 @@ public interface SpatialTemporalConstraintsBuilder
 
 	/**
 	 * set the time ranges to this array of intervals
-	 * @param timeRanges the time ranges
+	 * 
+	 * @param timeRanges
+	 *            the time ranges
 	 * @return this builder
 	 */
 	SpatialTemporalConstraintsBuilder setTimeRanges(
 			Interval[] timeRanges );
 
 	/**
-	 * build a query constraints that represents the spatiotemporal constraints of this builder
+	 * build a query constraints that represents the spatiotemporal constraints
+	 * of this builder
+	 * 
 	 * @return the constraints
 	 */
 	QueryConstraints build();

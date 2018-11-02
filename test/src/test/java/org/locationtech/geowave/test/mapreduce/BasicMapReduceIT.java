@@ -138,7 +138,8 @@ public class BasicMapReduceIT extends
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.DYNAMODB,
-		GeoWaveStoreType.CASSANDRA
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 

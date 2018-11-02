@@ -7,6 +7,7 @@ env:
     # The first line of the matrix just builds docs (only on master) and runs unit tests
     # The rest skip the unit tests and run ITs only
     - NAME='UT and Publish Docs with Latest ASF Versions' MAVEN_PROFILES='""' BUILD_DOCS=true   IT_ONLY=false
+    - NAME='Redis IT on Latest ASF Versions' MAVEN_PROFILES='redis-it' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo Client IT on Latest ASF Versions' MAVEN_PROFILES='accumulo-it-client' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo Server IT on Latest ASF Versions' MAVEN_PROFILES='accumulo-it-server' BUILD_DOCS=false  IT_ONLY=true
     - NAME='HBase Client IT on Latest ASF Versions' MAVEN_PROFILES='hbase-it-client' BUILD_DOCS=false  IT_ONLY=true

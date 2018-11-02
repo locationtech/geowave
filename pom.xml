@@ -45,6 +45,7 @@
 		<accumulo.api>1.9</accumulo.api>
 		<bigtable.version>1.2.0</bigtable.version>
 		<cassandra.version>3.11.3</cassandra.version>
+		<redisson.version>3.8.2</redisson.version>
 		<grpc.version>1.13.1</grpc.version>
 		<netty.version>4.1.25.Final</netty.version>
 		<protobuf.version>3.5.1</protobuf.version>
@@ -149,6 +150,11 @@
 				<version>0.9.3</version>
 			</dependency>
 			<dependency>
+				<groupId>com.clearspring.analytics</groupId>
+				<artifactId>stream</artifactId>
+				<version>2.9.6</version>
+			</dependency>
+			<dependency>
 				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcprov-jdk15on</artifactId>
 				<version>1.60</version>
@@ -179,6 +185,11 @@
 				<groupId>javax.media</groupId>
 				<artifactId>jai_imageio</artifactId>
 				<version>1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.ben-manes.caffeine</groupId>
+				<artifactId>caffeine</artifactId>
+				<version>2.6.2</version>
 			</dependency>
 			<dependency>
 				<groupId>com.vividsolutions</groupId>
@@ -256,6 +267,11 @@
 				<groupId>org.xerial.snappy</groupId>
 				<artifactId>snappy-java</artifactId>
 				<version>${snappy.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.redisson</groupId>
+				<artifactId>redisson</artifactId>
+				<version>${redisson.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.accumulo</groupId>

@@ -126,60 +126,6 @@ public class SimpleIngest
 		return feats;
 	}
 
-	public static List<SimpleFeature> getGriddedTemporalFeatures(
-			final SimpleFeatureBuilder pointBuilder,
-			final int firstFeatureId ) {
-
-		int featureId = firstFeatureId;
-		final Calendar cal = Calendar.getInstance();
-		cal.set(
-				1996,
-				Calendar.JUNE,
-				15);
-		final Date[] dates = new Date[3];
-		dates[0] = cal.getTime();
-		cal.set(
-				1997,
-				Calendar.JUNE,
-				15);
-		dates[1] = cal.getTime();
-		cal.set(
-				1998,
-				Calendar.JUNE,
-				15);
-		dates[2] = cal.getTime();
-		// put 3 points on each grid location with different temporal attributes
-		final List<SimpleFeature> feats = new ArrayList<>();
-		for (int longitude = -180; longitude <= 180; longitude += 5) {
-			for (int latitude = -90; latitude <= 90; latitude += 5) {
-				for (int date = 0; date < dates.length; date++) {
-					pointBuilder.set(
-							"geometry",
-							GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-									longitude,
-									latitude)));
-					pointBuilder.set(
-							"TimeStamp",
-							dates[date]);
-					pointBuilder.set(
-							"Latitude",
-							latitude);
-					pointBuilder.set(
-							"Longitude",
-							longitude);
-					// Note since trajectoryID and comment are marked as
-					// nillable we
-					// don't need to set them (they default ot null).
-
-					final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-					feats.add(sft);
-					featureId++;
-				}
-			}
-		}
-		return feats;
-	}
-
 	/***
 	 * The dataadapter interface describes how to serialize a data type. Here we
 	 * are using an implementation that understands how to serialize OGC

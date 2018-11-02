@@ -15,11 +15,11 @@ import java.util.Iterator;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
-import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
@@ -34,7 +34,7 @@ public class NativeEntryIteratorWrapper<T> extends
 	private boolean adapterValid = true;
 
 	public NativeEntryIteratorWrapper(
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final Index index,
 			final Iterator<GeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,
@@ -86,10 +86,12 @@ public class NativeEntryIteratorWrapper<T> extends
 		return (T) decodedRow;
 	}
 
+	boolean first = false;
+
 	private boolean passesSkipFilter(
 			final GeoWaveRow row ) {
 		if ((reachedEnd == true) || ((skipUntilRow != null) && (skipUntilRow.compareTo(new ByteArray(
-				GeoWaveKey.getCompositeId(row))) > 0))) {
+				row.getSortKey()))) > 0)) {
 			return false;
 		}
 
@@ -100,9 +102,8 @@ public class NativeEntryIteratorWrapper<T> extends
 			final GeoWaveRow row ) {
 		if (bitPosition != null) {
 			final byte[] nextRow = IndexUtils.getNextRowForSkip(
-					GeoWaveKey.getCompositeId(row),
+					row.getSortKey(),
 					bitPosition);
-
 			if (nextRow == null) {
 				reachedEnd = true;
 			}
@@ -116,7 +117,7 @@ public class NativeEntryIteratorWrapper<T> extends
 	private void initializeBitPosition(
 			final double[] maxResolutionSubsamplingPerDimension ) {
 		if ((maxResolutionSubsamplingPerDimension != null) && (maxResolutionSubsamplingPerDimension.length > 0)) {
-			bitPosition = IndexUtils.getBitPositionFromSubsamplingArray(
+			bitPosition = IndexUtils.getBitPositionOnSortKeyFromSubsamplingArray(
 					index.getIndexStrategy(),
 					maxResolutionSubsamplingPerDimension);
 		}

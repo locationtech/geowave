@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.converters.PasswordConverter;
@@ -29,6 +30,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
+@GeowaveOperation(name = "addstore/accumulo", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddAccumuloStoreCommand extends
 		ServiceEnabledCommand<String>

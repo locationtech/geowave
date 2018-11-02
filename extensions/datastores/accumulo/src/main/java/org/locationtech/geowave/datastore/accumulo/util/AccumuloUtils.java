@@ -40,6 +40,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -563,7 +564,7 @@ public class AccumuloUtils
 		final IndexStore indexStore = new IndexStoreImpl(
 				operations,
 				options);
-		final AdapterStore adapterStore = new AdapterStoreImpl(
+		final PersistentAdapterStore adapterStore = new AdapterStoreImpl(
 				operations,
 				options);
 
@@ -595,13 +596,13 @@ public class AccumuloUtils
 	{
 
 		private final Iterator<Entry<Key, Value>> scannerIt;
-		private final AdapterStore adapterStore;
+		private final PersistentAdapterStore adapterStore;
 		private final Index index;
 		private final QueryFilter clientFilter;
 		private Entry<Key, Value> nextValue;
 
 		public IteratorWrapper(
-				final AdapterStore adapterStore,
+				final PersistentAdapterStore adapterStore,
 				final Index index,
 				final Iterator<Entry<Key, Value>> scannerIt,
 				final QueryFilter clientFilter ) {

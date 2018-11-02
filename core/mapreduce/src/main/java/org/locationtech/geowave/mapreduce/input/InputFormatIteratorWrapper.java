@@ -93,7 +93,7 @@ public class InputFormatIteratorWrapper<T> implements
 					row,
 					clientFilter,
 					adapter,
-					serializationTool.getAdapterStore(),
+					null,
 					index,
 					null,
 					null,

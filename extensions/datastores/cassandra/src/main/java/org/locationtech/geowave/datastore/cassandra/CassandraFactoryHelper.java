@@ -13,8 +13,8 @@ package org.locationtech.geowave.datastore.cassandra;
 import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.datastore.cassandra.config.CassandraRequiredOptions;
 import org.locationtech.geowave.datastore.cassandra.operations.CassandraOperations;
-import org.locationtech.geowave.datastore.cassandra.operations.config.CassandraRequiredOptions;
 
 public class CassandraFactoryHelper implements
 		StoreFactoryHelper

@@ -53,19 +53,8 @@ public class CloseableIteratorWrapper<E> implements
 
 	@Override
 	public boolean hasNext() {
-		final boolean hasNext = iterator.hasNext();
-		if (!hasNext) {
-			try {
-				closeable.close();
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Unable to close iterator",
-						e);
-			}
-		}
 		if (limit != null && limit > 0 && count > limit) return false;
-		return hasNext;
+		return iterator.hasNext();
 	}
 
 	@Override

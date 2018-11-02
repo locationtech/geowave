@@ -109,7 +109,9 @@ public class BaseDataStore implements
 		this.indexMappingStore = indexMappingStore;
 		this.secondaryIndexDataStore = secondaryIndexDataStore;
 		this.internalAdapterStore = internalAdapterStore;
-
+		if (secondaryIndexDataStore != null) {
+			secondaryIndexDataStore.setDataStore(this);
+		}
 		baseOperations = operations;
 		baseOptions = options;
 	}
@@ -537,6 +539,7 @@ public class BaseDataStore implements
 
 		baseOperations.deleteAll(
 				index.getName(),
+				adapter.getTypeName(),
 				adapter.getAdapterId(),
 				additionalAuthorizations);
 	}

@@ -592,9 +592,10 @@ public class GeoWaveGrpcTestClient
 		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
 		params.add(GeoWaveGrpcTestUtils.typeName);
-		params.add("FEATURE_BBOX#geometry");
+		params.add("BOUNDING_BOX");
 		final RemoveStatCommandParameters request = RemoveStatCommandParameters.newBuilder().addAllParameters(
-				params).build();
+				params).setFieldName(
+				"geometry").build();
 		coreStoreBlockingStub.removeStatCommand(request);
 		return true;
 	}
@@ -603,9 +604,10 @@ public class GeoWaveGrpcTestClient
 		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
 		params.add(GeoWaveGrpcTestUtils.typeName);
-		params.add("FEATURE_BBOX#geometry");
+		params.add("BOUNDING_BOX");
 		final CalculateStatCommandParameters request = CalculateStatCommandParameters.newBuilder().addAllParameters(
-				params).build();
+				params).setFieldName(
+				"geometry").build();
 		coreStoreBlockingStub.calculateStatCommand(request);
 		return true;
 	}

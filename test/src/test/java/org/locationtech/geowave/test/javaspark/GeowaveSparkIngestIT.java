@@ -60,7 +60,8 @@ public class GeowaveSparkIngestIT extends
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.DYNAMODB
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStore;
 

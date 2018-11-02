@@ -44,7 +44,8 @@ import org.slf4j.LoggerFactory;
 @Environments({
 	Environment.SERVICES
 })
-public class RemoteIT
+public class RemoteIT extends
+		BaseServiceIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoteIT.class);
 	private static ConfigServiceClient configServiceClient;
@@ -59,7 +60,8 @@ public class RemoteIT
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.DYNAMODB
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.REDIS
 	}, namespace = TestUtils.TEST_NAMESPACE)
 	protected DataStorePluginOptions dataStoreOptions;
 
@@ -162,6 +164,7 @@ public class RemoteIT
 								"nonexistent-adapter",
 								"COUNT_DATA"));
 
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should fail to calculate stat for existent adapterID and statID, but nonexistent store",
 				400,
@@ -169,6 +172,7 @@ public class RemoteIT
 						"nonexistent-store",
 						"GridPoint",
 						"COUNT_DATA"));
+		unmuteLogging();
 	}
 
 	@Test
@@ -178,10 +182,12 @@ public class RemoteIT
 				200,
 				remoteServiceClient.clear(store_name));
 
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should fail to clear for nonexistent store",
 				400,
 				remoteServiceClient.clear("nonexistent-store"));
+		unmuteLogging();
 	}
 
 	@Test
@@ -191,10 +197,12 @@ public class RemoteIT
 				200,
 				remoteServiceClient.listTypes(store_name));
 
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should fail to list types for nonexistent store",
 				400,
 				remoteServiceClient.listTypes("nonexistent-store"));
+		unmuteLogging();
 	}
 
 	@Test
@@ -204,10 +212,12 @@ public class RemoteIT
 				200,
 				remoteServiceClient.listIndices(store_name));
 
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should fail to list indices for nonexistent store",
 				400,
 				remoteServiceClient.listIndices("nonexistent-store"));
+		unmuteLogging();
 	}
 
 	@Test
@@ -217,10 +227,12 @@ public class RemoteIT
 				200,
 				remoteServiceClient.listStats(store_name));
 
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should fail to liststats for nonexistent store",
 				400,
 				remoteServiceClient.listStats("nonexistent-store"));
+		unmuteLogging();
 	}
 
 	@Test
@@ -250,10 +262,12 @@ public class RemoteIT
 						null,
 						null));
 
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should fail to recalc stats for nonexistent store",
 				400,
 				remoteServiceClient.recalcStats("nonexistent-store"));
+		unmuteLogging();
 	}
 
 	@Test
@@ -285,12 +299,14 @@ public class RemoteIT
 								store_name,
 								"nonexistent-adapter"));
 
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should fail to remove type for nonexistent store",
 				400,
 				remoteServiceClient.removeType(
 						"nonexistent-store",
 						"GridPoint"));
+		unmuteLogging();
 	}
 
 	@Test
@@ -325,6 +341,7 @@ public class RemoteIT
 								"nonexistent-type",
 								"COUNT_DATA"));
 
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should fail to remove for existent data type name and stat type, but nonexistent store",
 				400,
@@ -332,6 +349,7 @@ public class RemoteIT
 						"nonexistent-store",
 						"GridPoint",
 						"COUNT_DATA"));
+		unmuteLogging();
 	}
 
 	@Test
@@ -341,9 +359,11 @@ public class RemoteIT
 				200,
 				remoteServiceClient.version(store_name));
 
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should fail to return version for nonexistent store",
 				400,
 				remoteServiceClient.version("nonexistent-store"));
+		unmuteLogging();
 	}
 }

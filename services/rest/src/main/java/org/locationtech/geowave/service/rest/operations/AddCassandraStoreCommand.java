@@ -22,7 +22,7 @@ import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
 import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.datastore.cassandra.operations.config.CassandraRequiredOptions;
+import org.locationtech.geowave.datastore.cassandra.config.CassandraRequiredOptions;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;

@@ -43,6 +43,7 @@ import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Aggregation;
@@ -101,7 +102,7 @@ public class BaseDataStoreUtils
 			final GeoWaveRow geowaveRow,
 			final QueryFilter clientFilter,
 			final InternalDataAdapter<T> adapter,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final Index index,
 			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,

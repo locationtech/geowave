@@ -41,7 +41,6 @@ import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -68,15 +67,10 @@ import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
-import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
-import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
-import org.locationtech.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,17 +90,11 @@ public class AccumuloDataStoreStatsTest
 
 	AccumuloOperations accumuloOperations;
 
-	IndexStore indexStore;
-
-	PersistentAdapterStore adapterStore;
-
 	InternalAdapterStore internalAdapterStore;
 
 	DataStatisticsStore statsStore;
 
 	AccumuloDataStore mockDataStore;
-
-	AccumuloSecondaryIndexDataStore secondaryIndexDataStore;
 
 	@Before
 	public void setUp()
@@ -130,19 +118,8 @@ public class AccumuloDataStoreStatsTest
 		accumuloOperations = new AccumuloOperations(
 				mockConnector,
 				options);
-		indexStore = new IndexStoreImpl(
-				accumuloOperations,
-				options);
-
-		adapterStore = new AdapterStoreImpl(
-				accumuloOperations,
-				options);
 
 		statsStore = new DataStatisticsStoreImpl(
-				accumuloOperations,
-				options);
-
-		secondaryIndexDataStore = new AccumuloSecondaryIndexDataStore(
 				accumuloOperations,
 				options);
 
@@ -150,16 +127,8 @@ public class AccumuloDataStoreStatsTest
 				accumuloOperations);
 
 		mockDataStore = new AccumuloDataStore(
-				indexStore,
-				adapterStore,
-				statsStore,
-				secondaryIndexDataStore,
-				new AdapterIndexMappingStoreImpl(
-						accumuloOperations,
-						options),
 				accumuloOperations,
-				accumuloOptions,
-				internalAdapterStore);
+				options);
 	}
 
 	public static final VisibilityWriter<TestGeometry> visWriterAAA = new VisibilityWriter<TestGeometry>() {
