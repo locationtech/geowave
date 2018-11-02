@@ -255,14 +255,18 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.format.stanag4676.image">org.locationtech.geowave.format.stanag4676.image</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.redis.util">org.locationtech.geowave.datastore.redis.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.mapreduce.input">org.locationtech.geowave.mapreduce.input</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.format.stanag4676.image">org.locationtech.geowave.format.stanag4676.image</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.mapreduce.input">org.locationtech.geowave.mapreduce.input</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.mapreduce.splits">org.locationtech.geowave.mapreduce.splits</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -2311,7 +2315,7 @@
 <td class="colLast"><span class="typeNameLabel">DataStatisticsStoreImpl.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/DataStatisticsStoreImpl.html#getPrimaryId-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">getPrimaryId</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;persistedObject)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected static <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
 <td class="colLast"><span class="typeNameLabel">DataStatisticsStoreImpl.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/DataStatisticsStoreImpl.html#getPrimaryId-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String-">getPrimaryId</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;type,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedId)</code>&nbsp;</td>
 </tr>
@@ -2913,6 +2917,25 @@
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
            boolean&nbsp;enableVersioning,
            short&nbsp;internalAdapterId)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.redis.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a> in <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/package-summary.html">org.locationtech.geowave.datastore.redis.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/package-summary.html">org.locationtech.geowave.datastore.redis.util</a> that return types with arguments of type <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#getPartitions-org.redisson.api.RedissonClient-java.lang.String-">getPartitions</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setNamePrefix)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

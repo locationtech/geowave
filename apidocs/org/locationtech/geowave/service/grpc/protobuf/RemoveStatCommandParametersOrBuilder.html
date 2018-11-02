@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -132,40 +132,52 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getAuthorizations--">getAuthorizations</a></span>()</code>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getAuthorizationsBytes--">getAuthorizationsBytes</a></span>()</code>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getJsonFormatFlag--">getJsonFormatFlag</a></span>()</code>
-<div class="block"><code>bool jsonFormatFlag = 3;</code></div>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getFieldName--">getFieldName</a></span>()</code>
+<div class="block"><code>string fieldName = 2;</code></div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getFieldNameBytes--">getFieldNameBytes</a></span>()</code>
+<div class="block"><code>string fieldName = 2;</code></div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getJsonFormatFlag--">getJsonFormatFlag</a></span>()</code>
+<div class="block"><code>bool jsonFormatFlag = 4;</code></div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getParameters-int-">getParameters</a></span>(int&nbsp;index)</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getParametersBytes-int-">getParametersBytes</a></span>(int&nbsp;index)</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getParametersCount--">getParametersCount</a></span>()</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getParametersList--">getParametersList</a></span>()</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
@@ -240,6 +252,26 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </li>
 </ul>
+<a name="getFieldName--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldName</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFieldName()</pre>
+<div class="block"><code>string fieldName = 2;</code></div>
+</li>
+</ul>
+<a name="getFieldNameBytes--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldNameBytes</h4>
+<pre>com.google.protobuf.ByteString&nbsp;getFieldNameBytes()</pre>
+<div class="block"><code>string fieldName = 2;</code></div>
+</li>
+</ul>
 <a name="getAuthorizations--">
 <!--   -->
 </a>
@@ -247,7 +279,7 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <li class="blockList">
 <h4>getAuthorizations</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getAuthorizations()</pre>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </li>
 </ul>
 <a name="getAuthorizationsBytes--">
@@ -257,7 +289,7 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <li class="blockList">
 <h4>getAuthorizationsBytes</h4>
 <pre>com.google.protobuf.ByteString&nbsp;getAuthorizationsBytes()</pre>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </li>
 </ul>
 <a name="getJsonFormatFlag--">
@@ -267,7 +299,7 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <li class="blockList">
 <h4>getJsonFormatFlag</h4>
 <pre>boolean&nbsp;getJsonFormatFlag()</pre>
-<div class="block"><code>bool jsonFormatFlag = 3;</code></div>
+<div class="block"><code>bool jsonFormatFlag = 4;</code></div>
 </li>
 </ul>
 </li>

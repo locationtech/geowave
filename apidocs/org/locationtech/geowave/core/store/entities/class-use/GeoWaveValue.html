@@ -106,6 +106,10 @@
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.hbase">org.locationtech.geowave.datastore.hbase</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.redis.util">org.locationtech.geowave.datastore.redis.util</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -307,6 +311,50 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">HBaseRow.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/HBaseRow.html#getFieldValues--">getFieldValues</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.redis.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/package-summary.html">org.locationtech.geowave.datastore.redis.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/package-summary.html">org.locationtech.geowave.datastore.redis.util</a> that return <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRedisPersistedRow.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html#getGeoWaveValue--">getGeoWaveValue</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/package-summary.html">org.locationtech.geowave.datastore.redis.util</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html#GeoWaveRedisPersistedRow-short-byte:A-org.locationtech.geowave.core.store.entities.GeoWaveValue-">GeoWaveRedisPersistedRow</a></span>(short&nbsp;numDuplicates,
+                        byte[]&nbsp;dataId,
+                        <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedTimestampRow.html#GeoWaveRedisPersistedTimestampRow-short-byte:A-org.locationtech.geowave.core.store.entities.GeoWaveValue-java.time.Instant-">GeoWaveRedisPersistedTimestampRow</a></span>(short&nbsp;numDuplicates,
+                                 byte[]&nbsp;dataId,
+                                 <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value,
+                                 java.time.Instant&nbsp;time)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedTimestampRow.html#GeoWaveRedisPersistedTimestampRow-short-byte:A-org.locationtech.geowave.core.store.entities.GeoWaveValue-long-int-">GeoWaveRedisPersistedTimestampRow</a></span>(short&nbsp;numDuplicates,
+                                 byte[]&nbsp;dataId,
+                                 <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value,
+                                 long&nbsp;secondsSinceEpic,
+                                 int&nbsp;nanoOfSecond)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

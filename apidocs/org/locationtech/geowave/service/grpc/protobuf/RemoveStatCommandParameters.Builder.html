@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":9,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":9,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -192,7 +192,7 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#clearAuthorizations--">clearAuthorizations</a></span>()</code>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -201,140 +201,170 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#clearJsonFormatFlag--">clearJsonFormatFlag</a></span>()</code>
-<div class="block"><code>bool jsonFormatFlag = 3;</code></div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#clearFieldName--">clearFieldName</a></span>()</code>
+<div class="block"><code>string fieldName = 2;</code></div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#clearOneof-com.google.protobuf.Descriptors.OneofDescriptor-">clearOneof</a></span>(com.google.protobuf.Descriptors.OneofDescriptor&nbsp;oneof)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#clearJsonFormatFlag--">clearJsonFormatFlag</a></span>()</code>
+<div class="block"><code>bool jsonFormatFlag = 4;</code></div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#clearOneof-com.google.protobuf.Descriptors.OneofDescriptor-">clearOneof</a></span>(com.google.protobuf.Descriptors.OneofDescriptor&nbsp;oneof)</code>&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#clearParameters--">clearParameters</a></span>()</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#clone--">clone</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getAuthorizations--">getAuthorizations</a></span>()</code>
-<div class="block"><code>string authorizations = 2;</code></div>
-</td>
-</tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getAuthorizationsBytes--">getAuthorizationsBytes</a></span>()</code>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
+<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getAuthorizationsBytes--">getAuthorizationsBytes</a></span>()</code>
+<div class="block"><code>string authorizations = 3;</code></div>
+</td>
+</tr>
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getDefaultInstanceForType--">getDefaultInstanceForType</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static com.google.protobuf.Descriptors.Descriptor</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getDescriptor--">getDescriptor</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>com.google.protobuf.Descriptors.Descriptor</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getDescriptorForType--">getDescriptorForType</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getJsonFormatFlag--">getJsonFormatFlag</a></span>()</code>
-<div class="block"><code>bool jsonFormatFlag = 3;</code></div>
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getFieldName--">getFieldName</a></span>()</code>
+<div class="block"><code>string fieldName = 2;</code></div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
+<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getFieldNameBytes--">getFieldNameBytes</a></span>()</code>
+<div class="block"><code>string fieldName = 2;</code></div>
+</td>
+</tr>
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getJsonFormatFlag--">getJsonFormatFlag</a></span>()</code>
+<div class="block"><code>bool jsonFormatFlag = 4;</code></div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getParameters-int-">getParameters</a></span>(int&nbsp;index)</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getParametersBytes-int-">getParametersBytes</a></span>(int&nbsp;index)</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getParametersCount--">getParametersCount</a></span>()</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>com.google.protobuf.ProtocolStringList</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#getParametersList--">getParametersList</a></span>()</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#internalGetFieldAccessorTable--">internalGetFieldAccessorTable</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#isInitialized--">isInitialized</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#mergeFrom-com.google.protobuf.CodedInputStream-com.google.protobuf.ExtensionRegistryLite-">mergeFrom</a></span>(com.google.protobuf.CodedInputStream&nbsp;input,
          com.google.protobuf.ExtensionRegistryLite&nbsp;extensionRegistry)</code>&nbsp;</td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#mergeFrom-com.google.protobuf.Message-">mergeFrom</a></span>(com.google.protobuf.Message&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#mergeFrom-org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParameters-">mergeFrom</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters</a>&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#mergeUnknownFields-com.google.protobuf.UnknownFieldSet-">mergeUnknownFields</a></span>(com.google.protobuf.UnknownFieldSet&nbsp;unknownFields)</code>&nbsp;</td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#setAuthorizations-java.lang.String-">setAuthorizations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#setAuthorizationsBytes-com.google.protobuf.ByteString-">setAuthorizationsBytes</a></span>(com.google.protobuf.ByteString&nbsp;value)</code>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#setField-com.google.protobuf.Descriptors.FieldDescriptor-java.lang.Object-">setField</a></span>(com.google.protobuf.Descriptors.FieldDescriptor&nbsp;field,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#setJsonFormatFlag-boolean-">setJsonFormatFlag</a></span>(boolean&nbsp;value)</code>
-<div class="block"><code>bool jsonFormatFlag = 3;</code></div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#setFieldName-java.lang.String-">setFieldName</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
+<div class="block"><code>string fieldName = 2;</code></div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i36" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#setFieldNameBytes-com.google.protobuf.ByteString-">setFieldNameBytes</a></span>(com.google.protobuf.ByteString&nbsp;value)</code>
+<div class="block"><code>string fieldName = 2;</code></div>
+</td>
+</tr>
+<tr id="i37" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#setJsonFormatFlag-boolean-">setJsonFormatFlag</a></span>(boolean&nbsp;value)</code>
+<div class="block"><code>bool jsonFormatFlag = 4;</code></div>
+</td>
+</tr>
+<tr id="i38" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#setParameters-int-java.lang.String-">setParameters</a></span>(int&nbsp;index,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#setRepeatedField-com.google.protobuf.Descriptors.FieldDescriptor-int-java.lang.Object-">setRepeatedField</a></span>(com.google.protobuf.Descriptors.FieldDescriptor&nbsp;field,
                 int&nbsp;index,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html#setUnknownFields-com.google.protobuf.UnknownFieldSet-">setUnknownFields</a></span>(com.google.protobuf.UnknownFieldSet&nbsp;unknownFields)</code>&nbsp;</td>
 </tr>
@@ -759,6 +789,64 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </li>
 </ul>
+<a name="getFieldName--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFieldName()</pre>
+<div class="block"><code>string fieldName = 2;</code></div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getFieldName--">getFieldName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParametersOrBuilder</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getFieldNameBytes--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldNameBytes</h4>
+<pre>public&nbsp;com.google.protobuf.ByteString&nbsp;getFieldNameBytes()</pre>
+<div class="block"><code>string fieldName = 2;</code></div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getFieldNameBytes--">getFieldNameBytes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParametersOrBuilder</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="setFieldName-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFieldName</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a>&nbsp;setFieldName(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</pre>
+<div class="block"><code>string fieldName = 2;</code></div>
+</li>
+</ul>
+<a name="clearFieldName--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clearFieldName</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a>&nbsp;clearFieldName()</pre>
+<div class="block"><code>string fieldName = 2;</code></div>
+</li>
+</ul>
+<a name="setFieldNameBytes-com.google.protobuf.ByteString-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFieldNameBytes</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a>&nbsp;setFieldNameBytes(com.google.protobuf.ByteString&nbsp;value)</pre>
+<div class="block"><code>string fieldName = 2;</code></div>
+</li>
+</ul>
 <a name="getAuthorizations--">
 <!--   -->
 </a>
@@ -766,7 +854,7 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <li class="blockList">
 <h4>getAuthorizations</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getAuthorizations()</pre>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getAuthorizations--">getAuthorizations</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParametersOrBuilder</a></code></dd>
@@ -780,7 +868,7 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <li class="blockList">
 <h4>getAuthorizationsBytes</h4>
 <pre>public&nbsp;com.google.protobuf.ByteString&nbsp;getAuthorizationsBytes()</pre>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getAuthorizationsBytes--">getAuthorizationsBytes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParametersOrBuilder</a></code></dd>
@@ -794,7 +882,7 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <li class="blockList">
 <h4>setAuthorizations</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a>&nbsp;setAuthorizations(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</pre>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </li>
 </ul>
 <a name="clearAuthorizations--">
@@ -804,7 +892,7 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <li class="blockList">
 <h4>clearAuthorizations</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a>&nbsp;clearAuthorizations()</pre>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </li>
 </ul>
 <a name="setAuthorizationsBytes-com.google.protobuf.ByteString-">
@@ -814,7 +902,7 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <li class="blockList">
 <h4>setAuthorizationsBytes</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a>&nbsp;setAuthorizationsBytes(com.google.protobuf.ByteString&nbsp;value)</pre>
-<div class="block"><code>string authorizations = 2;</code></div>
+<div class="block"><code>string authorizations = 3;</code></div>
 </li>
 </ul>
 <a name="getJsonFormatFlag--">
@@ -824,7 +912,7 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <li class="blockList">
 <h4>getJsonFormatFlag</h4>
 <pre>public&nbsp;boolean&nbsp;getJsonFormatFlag()</pre>
-<div class="block"><code>bool jsonFormatFlag = 3;</code></div>
+<div class="block"><code>bool jsonFormatFlag = 4;</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html#getJsonFormatFlag--">getJsonFormatFlag</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParametersOrBuilder</a></code></dd>
@@ -838,7 +926,7 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <li class="blockList">
 <h4>setJsonFormatFlag</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a>&nbsp;setJsonFormatFlag(boolean&nbsp;value)</pre>
-<div class="block"><code>bool jsonFormatFlag = 3;</code></div>
+<div class="block"><code>bool jsonFormatFlag = 4;</code></div>
 </li>
 </ul>
 <a name="clearJsonFormatFlag--">
@@ -848,7 +936,7 @@ implements <a href="../../../../../../org/locationtech/geowave/service/grpc/prot
 <li class="blockList">
 <h4>clearJsonFormatFlag</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParameters.Builder</a>&nbsp;clearJsonFormatFlag()</pre>
-<div class="block"><code>bool jsonFormatFlag = 3;</code></div>
+<div class="block"><code>bool jsonFormatFlag = 4;</code></div>
 </li>
 </ul>
 <a name="setUnknownFields-com.google.protobuf.UnknownFieldSet-">

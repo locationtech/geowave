@@ -185,8 +185,8 @@ org.locationtech.geowave.datastore.bigtable
 org.locationtech.geowave.datastore.bigtable.operations
 org.locationtech.geowave.datastore.bigtable.operations.config
 org.locationtech.geowave.datastore.cassandra
+org.locationtech.geowave.datastore.cassandra.config
 org.locationtech.geowave.datastore.cassandra.operations
-org.locationtech.geowave.datastore.cassandra.operations.config
 org.locationtech.geowave.datastore.cassandra.util
 org.locationtech.geowave.datastore.dynamodb
 org.locationtech.geowave.datastore.dynamodb.operations
@@ -202,6 +202,10 @@ org.locationtech.geowave.datastore.hbase.operations.config
 org.locationtech.geowave.datastore.hbase.query.protobuf
 org.locationtech.geowave.datastore.hbase.server
 org.locationtech.geowave.datastore.hbase.util
+org.locationtech.geowave.datastore.redis
+org.locationtech.geowave.datastore.redis.config
+org.locationtech.geowave.datastore.redis.operations
+org.locationtech.geowave.datastore.redis.util
 org.locationtech.geowave.examples.ingest
 org.locationtech.geowave.examples.ingest.bulk
 org.locationtech.geowave.examples.query

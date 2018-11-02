@@ -99,6 +99,7 @@
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/AddIndexGroupCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddIndexGroupCommandParameters</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/AddIndexGroupCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddIndexGroupCommandParameters.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/AddIndexGroupCommandParametersOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">AddIndexGroupCommandParametersOrBuilder</span></a></li>
+<li><a href="org/locationtech/geowave/service/rest/operations/AddRedisStoreCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddRedisStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/rest/operations/AddSpatialIndexCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddSpatialIndexCommand</a></li>
 <li><a href="org/locationtech/geowave/service/rest/operations/AddSpatialTemporalIndexCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddSpatialTemporalIndexCommand</a></li>
 <li><a href="org/locationtech/geowave/core/store/cli/config/AddStoreCommand.html" title="class in org.locationtech.geowave.core.store.cli.config">AddStoreCommand</a></li>
@@ -260,6 +261,7 @@
 <li><a href="org/locationtech/geowave/datastore/hbase/server/BasicRowScanner.html" title="class in org.locationtech.geowave.datastore.hbase.server">BasicRowScanner</a></li>
 <li><a href="org/locationtech/geowave/core/store/data/field/BasicWriter.html" title="class in org.locationtech.geowave.core.store.data.field">BasicWriter</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/operations/BatchedRangeRead.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">BatchedRangeRead</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" title="class in org.locationtech.geowave.datastore.redis.operations">BatchedRangeRead</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/operations/BatchedRangeRead.QueryCallback.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">BatchedRangeRead.QueryCallback</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/operations/BatchedWrite.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">BatchedWrite</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/operations/BatchedWrite.IngestCallback.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">BatchedWrite.IngestCallback</a></li>
@@ -325,12 +327,11 @@
 <li><a href="org/locationtech/geowave/datastore/cassandra/operations/CassandraOperations.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">CassandraOperations</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/operations/CassandraOperations.ByteArrayIdToByteBuffer.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">CassandraOperations.ByteArrayIdToByteBuffer</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/operations/CassandraOperations.StringToByteBuffer.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">CassandraOperations.StringToByteBuffer</a></li>
-<li><a href="org/locationtech/geowave/datastore/cassandra/operations/config/CassandraOptions.html" title="class in org.locationtech.geowave.datastore.cassandra.operations.config">CassandraOptions</a></li>
+<li><a href="org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html" title="class in org.locationtech.geowave.datastore.cassandra.config">CassandraOptions</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/operations/CassandraReader.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">CassandraReader</a></li>
-<li><a href="org/locationtech/geowave/datastore/cassandra/operations/config/CassandraRequiredOptions.html" title="class in org.locationtech.geowave.datastore.cassandra.operations.config">CassandraRequiredOptions</a></li>
+<li><a href="org/locationtech/geowave/datastore/cassandra/config/CassandraRequiredOptions.html" title="class in org.locationtech.geowave.datastore.cassandra.config">CassandraRequiredOptions</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/CassandraRow.html" title="class in org.locationtech.geowave.datastore.cassandra">CassandraRow</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/CassandraRow.CassandraField.html" title="enum in org.locationtech.geowave.datastore.cassandra">CassandraRow.CassandraField</a></li>
-<li><a href="org/locationtech/geowave/datastore/cassandra/operations/CassandraRowConsumer.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">CassandraRowConsumer</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/CassandraStoreFactoryFamily.html" title="class in org.locationtech.geowave.datastore.cassandra">CassandraStoreFactoryFamily</a></li>
 <li><a href="org/locationtech/geowave/test/CassandraStoreTestEnvironment.html" title="class in org.locationtech.geowave.test">CassandraStoreTestEnvironment</a></li>
 <li><a href="org/locationtech/geowave/datastore/cassandra/util/CassandraUtils.html" title="class in org.locationtech.geowave.datastore.cassandra.util">CassandraUtils</a></li>
@@ -1020,6 +1021,7 @@
 <li><a href="org/locationtech/geowave/core/cli/GeoWaveMain.html" title="class in org.locationtech.geowave.core.cli">GeoWaveMain</a></li>
 <li><a href="org/locationtech/geowave/mapreduce/GeoWaveMapper.html" title="class in org.locationtech.geowave.mapreduce">GeoWaveMapper</a></li>
 <li><a href="org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/util/GeoWaveMetadataCodec.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveMetadataCodec</a></li>
 <li><a href="org/locationtech/geowave/datastore/accumulo/minicluster/GeoWaveMiniAccumuloClusterImpl.html" title="class in org.locationtech.geowave.datastore.accumulo.minicluster">GeoWaveMiniAccumuloClusterImpl</a></li>
 <li><a href="org/locationtech/geowave/core/cli/annotations/GeowaveOperation.html" title="annotation in org.locationtech.geowave.core.cli.annotations">GeowaveOperation</a></li>
 <li><a href="org/locationtech/geowave/service/rest/GeoWaveOperationFinder.html" title="class in org.locationtech.geowave.service.rest">GeoWaveOperationFinder</a></li>
@@ -1042,6 +1044,11 @@
 <li><a href="org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="class in org.locationtech.geowave.mapreduce.splits">GeoWaveRecordReader</a></li>
 <li><a href="org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in org.locationtech.geowave.mapreduce.splits"><span class="interfaceName">GeoWaveRecordReader.NextRangeCallback</span></a></li>
 <li><a href="org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.ProgressPerRange.html" title="class in org.locationtech.geowave.mapreduce.splits">GeoWaveRecordReader.ProgressPerRange</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedTimestampRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedTimestampRow</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisRow</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisRowCodec</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowWithTimestampCodec.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisRowWithTimestampCodec</a></li>
 <li><a href="org/locationtech/geowave/mapreduce/GeoWaveReducer.html" title="class in org.locationtech.geowave.mapreduce">GeoWaveReducer</a></li>
 <li><a href="org/locationtech/geowave/analytic/spark/GeoWaveRegistrator.html" title="class in org.locationtech.geowave.analytic.spark">GeoWaveRegistrator</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes</a></li>
@@ -1750,6 +1757,23 @@
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParameters.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RecalculateStatsCommandParameters.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">RecalculateStatsCommandParametersOrBuilder</span></a></li>
 <li><a href="org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/RedisDataStore.html" title="class in org.locationtech.geowave.datastore.redis">RedisDataStore</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/RedisDataStoreFactory.html" title="class in org.locationtech.geowave.datastore.redis">RedisDataStoreFactory</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/RedisFactoryHelper.html" title="class in org.locationtech.geowave.datastore.redis">RedisFactoryHelper</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/operations/RedisMetadataDeleter.html" title="class in org.locationtech.geowave.datastore.redis.operations">RedisMetadataDeleter</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/operations/RedisMetadataReader.html" title="class in org.locationtech.geowave.datastore.redis.operations">RedisMetadataReader</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/operations/RedisMetadataWriter.html" title="class in org.locationtech.geowave.datastore.redis.operations">RedisMetadataWriter</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/operations/RedisOperations.html" title="class in org.locationtech.geowave.datastore.redis.operations">RedisOperations</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/config/RedisOptions.html" title="class in org.locationtech.geowave.datastore.redis.config">RedisOptions</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/config/RedisOptions.CompressionConverter.html" title="class in org.locationtech.geowave.datastore.redis.config">RedisOptions.CompressionConverter</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/operations/RedisReader.html" title="class in org.locationtech.geowave.datastore.redis.operations">RedisReader</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/operations/RedisRowDeleter.html" title="class in org.locationtech.geowave.datastore.redis.operations">RedisRowDeleter</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/util/RedissonClientCache.html" title="class in org.locationtech.geowave.datastore.redis.util">RedissonClientCache</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/RedisStoreFactoryFamily.html" title="class in org.locationtech.geowave.datastore.redis">RedisStoreFactoryFamily</a></li>
+<li><a href="org/locationtech/geowave/test/RedisStoreTestEnvironment.html" title="class in org.locationtech.geowave.test">RedisStoreTestEnvironment</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/util/RedisUtils.html" title="class in org.locationtech.geowave.datastore.redis.util">RedisUtils</a></li>
+<li><a href="org/locationtech/geowave/datastore/redis/operations/RedisWriter.html" title="class in org.locationtech.geowave.datastore.redis.operations">RedisWriter</a></li>
 <li><a href="org/locationtech/geowave/cli/osm/types/generated/Relation.html" title="class in org.locationtech.geowave.cli.osm.types.generated">Relation</a></li>
 <li><a href="org/locationtech/geowave/cli/osm/types/generated/Relation.Builder.html" title="class in org.locationtech.geowave.cli.osm.types.generated">Relation.Builder</a></li>
 <li><a href="org/locationtech/geowave/cli/osm/types/generated/RelationMember.html" title="class in org.locationtech.geowave.cli.osm.types.generated">RelationMember</a></li>
@@ -1795,6 +1819,7 @@
 <li><a href="org/locationtech/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html" title="interface in org.locationtech.geowave.format.geotools.vector"><span class="interfaceName">RetypingVectorDataPlugin.RetypingVectorDataSource</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/util/RewritingMergingEntryIterator.html" title="class in org.locationtech.geowave.core.store.util">RewritingMergingEntryIterator</a></li>
 <li><a href="org/locationtech/geowave/core/index/simple/RoundRobinKeyIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">RoundRobinKeyIndexStrategy</a></li>
+<li><a href="org/locationtech/geowave/core/store/util/RowConsumer.html" title="class in org.locationtech.geowave.core.store.util">RowConsumer</a></li>
 <li><a href="org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations"><span class="interfaceName">RowDeleter</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/server/RowMergingAdapterOptionProvider.html" title="class in org.locationtech.geowave.core.store.server">RowMergingAdapterOptionProvider</a></li>
 <li><a href="org/locationtech/geowave/datastore/accumulo/RowMergingCombiner.html" title="class in org.locationtech.geowave.datastore.accumulo">RowMergingCombiner</a></li>
