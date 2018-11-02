@@ -26,9 +26,9 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.TopologyException;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.TopologyException;
 
 /**
  * 

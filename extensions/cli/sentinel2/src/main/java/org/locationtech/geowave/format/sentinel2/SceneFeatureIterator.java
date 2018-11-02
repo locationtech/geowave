@@ -35,8 +35,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Polygon;
 
 public class SceneFeatureIterator implements
 		SimpleFeatureIterator

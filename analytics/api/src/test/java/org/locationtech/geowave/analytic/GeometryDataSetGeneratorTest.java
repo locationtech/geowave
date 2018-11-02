@@ -19,8 +19,8 @@ import org.junit.Test;
 import org.locationtech.geowave.analytic.GeometryDataSetGenerator;
 import org.locationtech.geowave.analytic.distance.FeatureCentroidDistanceFn;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 
 public class GeometryDataSetGeneratorTest
 {

@@ -334,6 +334,9 @@ public class FeatureDataAdapter extends
 						persistedCRS,
 						indexCRS,
 						true);
+				if (transform.isIdentity()) {
+					transform = null;
+				}
 			}
 			catch (final FactoryException e) {
 				LOGGER.warn(

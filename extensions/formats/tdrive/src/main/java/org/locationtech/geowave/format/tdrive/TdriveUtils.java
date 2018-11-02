@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.mortbay.log.Log;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  * This is a convenience class for performing common GPX static utility methods

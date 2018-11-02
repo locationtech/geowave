@@ -13,7 +13,7 @@ package org.locationtech.geowave.analytic.spark.sparksql.udf;
 import org.apache.spark.sql.api.java.UDF2;
 import org.locationtech.geowave.analytic.spark.sparksql.util.GeomReader;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 public class GeomDistance implements
 		UDF2<Geometry, Geometry, Double>

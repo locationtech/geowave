@@ -15,7 +15,7 @@ import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 public class GeometrySerializationProvider implements
 		FieldSerializationProviderSpi<Geometry>

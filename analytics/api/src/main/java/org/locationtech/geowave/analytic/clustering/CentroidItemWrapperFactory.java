@@ -19,8 +19,8 @@ import org.locationtech.geowave.analytic.kmeans.AssociationNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  * Determine the group ID for an item dynamically.
@@ -201,7 +201,7 @@ public class CentroidItemWrapperFactory<T> implements
 	/*
 	 * @see
 	 * org.locationtech.geowave.analytics.tools.CentroidFactory#createNextCentroid
-	 * (java.lang.Object, com.vividsolutions.jts.geom.Coordinate,
+	 * (java.lang.Object, org.locationtech.jts.geom.Coordinate,
 	 * java.lang.String[], double[])
 	 */
 

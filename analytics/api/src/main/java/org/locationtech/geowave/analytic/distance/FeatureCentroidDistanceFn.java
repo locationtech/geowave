@@ -12,8 +12,8 @@ package org.locationtech.geowave.analytic.distance;
 
 import org.opengis.feature.simple.SimpleFeature;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  * Calculate distance between two SimpleFeatures, assuming has a Geometry.

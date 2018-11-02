@@ -32,8 +32,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
 
 public class GaussianCellMapper extends
 		Mapper<GeoWaveInputKey, SimpleFeature, LongWritable, DoubleWritable>

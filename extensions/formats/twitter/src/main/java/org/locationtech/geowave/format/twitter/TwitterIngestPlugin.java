@@ -11,8 +11,8 @@
 package org.locationtech.geowave.format.twitter;
 
 import com.google.common.collect.Iterators;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 

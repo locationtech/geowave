@@ -15,7 +15,7 @@ package org.locationtech.geowave.core.geotime.util;
 
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  * @author Ashish Shah

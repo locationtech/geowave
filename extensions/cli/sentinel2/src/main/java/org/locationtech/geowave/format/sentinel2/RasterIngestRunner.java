@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.beust.jcommander.ParameterException;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

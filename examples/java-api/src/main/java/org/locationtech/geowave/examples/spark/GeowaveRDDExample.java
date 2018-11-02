@@ -26,9 +26,9 @@ import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.opengis.feature.simple.SimpleFeature;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 
 public class GeowaveRDDExample
 {

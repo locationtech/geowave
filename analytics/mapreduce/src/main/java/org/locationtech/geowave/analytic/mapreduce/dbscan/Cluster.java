@@ -15,7 +15,7 @@ import java.util.Set;
 import org.locationtech.geowave.analytic.nn.NeighborList;
 import org.locationtech.geowave.core.index.ByteArray;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 public interface Cluster extends
 		NeighborList<ClusterItem>

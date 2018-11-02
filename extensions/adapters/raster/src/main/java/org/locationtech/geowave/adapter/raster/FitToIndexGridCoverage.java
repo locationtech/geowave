@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.coverage.CannotEvaluateException;
 import org.opengis.coverage.PointOutsideCoverageException;
 import org.opengis.coverage.SampleDimension;
@@ -28,8 +29,6 @@ import org.opengis.geometry.Envelope;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.util.Record;
 import org.opengis.util.RecordType;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 public class FitToIndexGridCoverage implements
 		GridCoverage

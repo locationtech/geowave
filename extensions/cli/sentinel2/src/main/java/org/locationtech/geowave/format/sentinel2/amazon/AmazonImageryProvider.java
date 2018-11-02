@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 
 import it.geosolutions.imageio.plugins.jp2ecw.JP2GDALEcwImageReaderSpi;
 import net.sf.json.JSONArray;

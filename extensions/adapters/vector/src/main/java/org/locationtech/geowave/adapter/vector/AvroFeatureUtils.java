@@ -33,10 +33,10 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
 import com.google.common.base.Preconditions;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKBReader;
-import com.vividsolutions.jts.io.WKBWriter;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKBReader;
+import org.locationtech.jts.io.WKBWriter;
 
 public class AvroFeatureUtils
 {
@@ -238,7 +238,7 @@ public class AvroFeatureUtils
 
 			if (attributeTypes.get(
 					i).equals(
-					"com.vividsolutions.jts.geom.Geometry")) {
+					"org.locationtech.jts.geom.Geometry")) {
 				sfb.add(WKB_READER.read(val.array()));
 			}
 			else {

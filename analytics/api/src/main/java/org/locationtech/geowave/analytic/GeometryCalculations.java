@@ -13,10 +13,8 @@ package org.locationtech.geowave.analytic;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.measure.converter.ConversionException;
+import javax.measure.Unit;
 import javax.measure.quantity.Length;
-import javax.measure.unit.SI;
-import javax.measure.unit.Unit;
 
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.GeodeticCalculator;
@@ -26,10 +24,12 @@ import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.PrecisionModel;
+import si.uom.SI;
+
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.PrecisionModel;
 
 public class GeometryCalculations
 {
@@ -79,13 +79,13 @@ public class GeometryCalculations
 			geoCalc.setDirection(
 					0,
 					unit.getConverterTo(
-							SI.METER).convert(
+							SI.METRE).convert(
 							distances[1]));
 			DirectPosition north = geoCalc.getDestinationPosition();
 			geoCalc.setDirection(
 					90,
 					unit.getConverterTo(
-							SI.METER).convert(
+							SI.METRE).convert(
 							distances[0]));
 			DirectPosition east = geoCalc.getDestinationPosition();
 			geoCalc.setStartingGeographicPoint(
@@ -94,13 +94,13 @@ public class GeometryCalculations
 			geoCalc.setDirection(
 					-90,
 					unit.getConverterTo(
-							SI.METER).convert(
+							SI.METRE).convert(
 							distances[0]));
 			DirectPosition west = geoCalc.getDestinationPosition();
 			geoCalc.setDirection(
 					180,
 					unit.getConverterTo(
-							SI.METER).convert(
+							SI.METRE).convert(
 							distances[1]));
 			DirectPosition south = geoCalc.getDestinationPosition();
 
@@ -118,7 +118,7 @@ public class GeometryCalculations
 					y2);
 			return geos;
 		}
-		catch (IllegalArgumentException | IndexOutOfBoundsException | TransformException | ConversionException ex) {
+		catch (TransformException ex) {
 			LOGGER.error(
 					"Unable to build geometry",
 					ex);

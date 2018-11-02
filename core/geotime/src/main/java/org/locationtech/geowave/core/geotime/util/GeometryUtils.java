@@ -24,11 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.measure.unit.BaseUnit;
-import javax.measure.unit.DerivedUnit;
-import javax.measure.unit.NonSI;
-import javax.measure.unit.SI;
-import javax.measure.unit.Unit;
+import javax.measure.Unit;
+import javax.measure.quantity.Length;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.factory.GeoTools;
@@ -53,6 +50,17 @@ import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constrai
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.locationtech.geowave.core.store.util.ClasspathUtils;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKBReader;
+import org.locationtech.jts.io.WKBWriter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -65,17 +73,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.uzaygezen.core.BitSetMath;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKBReader;
-import com.vividsolutions.jts.io.WKBWriter;
+
+import si.uom.NonSI;
+import si.uom.SI;
+import tec.uom.se.AbstractUnit;
+import tec.uom.se.unit.AlternateUnit;
+import tec.uom.se.unit.BaseUnit;
+import tec.uom.se.unit.Units;
 
 /**
  * This class contains a set of Geometry utility methods that are generally
@@ -371,8 +375,7 @@ public class GeometryUtils
 		int dimensions = DEFAULT_DIMENSIONALITY;
 
 		if (!geometry.isEmpty()) {
-			dimensions = Double.isNaN(geometry.getCoordinate().getOrdinate(
-					Coordinate.Z)) ? 2 : 3;
+			dimensions = Double.isNaN(geometry.getCoordinate().getZ()) ? 2 : 3;
 		}
 
 		return new WKBWriter(
@@ -513,18 +516,18 @@ public class GeometryUtils
 			final String distanceUnits,
 			final double distance )
 			throws TransformException {
-		Unit<?> unit;
+		Unit<Length> unit;
 		try {
 			unit = lookup(distanceUnits);
 		}
 		catch (final Exception e) {
-			unit = SI.METER;
+			unit = Units.METRE;
 			LOGGER.warn(
 					"Cannot lookup unit of measure " + distanceUnits,
 					e);
 		}
 		final double meterDistance = unit.getConverterTo(
-				SI.METER).convert(
+				Units.METRE).convert(
 				distance);
 		final double degrees = distanceToDegrees(
 				crs,
@@ -540,9 +543,9 @@ public class GeometryUtils
 
 	}
 
-	private static Unit lookup(
+	public static Unit<Length> lookup(
 			final String name ) {
-		Unit unit = lookup(
+		Unit<Length> unit = lookup(
 				SI.class,
 				name);
 		if (unit != null) {
@@ -574,25 +577,25 @@ public class GeometryUtils
 					"m");
 		}
 		if (name.equalsIgnoreCase("unity")) {
-			return Unit.ONE;
+			return (Unit) AbstractUnit.ONE;
 		}
 		return null;
 	}
 
-	private static Unit lookup(
+	private static Unit<Length> lookup(
 			final Class class1,
 			final String name ) {
-		Unit unit = null;
+		Unit<Length> unit = null;
 		final Field[] fields = class1.getDeclaredFields();
 		for (int i = 0; i < fields.length; i++) {
 			final Field field = fields[i];
 			final String name2 = field.getName();
 			if ((field.getType().isAssignableFrom(
 					BaseUnit.class) || field.getType().isAssignableFrom(
-					DerivedUnit.class)) && name2.equalsIgnoreCase(name)) {
+					AlternateUnit.class)) && name2.equalsIgnoreCase(name)) {
 
 				try {
-					unit = (Unit) field.get(unit);
+					unit = (Unit<Length>) field.get(unit);
 					return unit;
 				}
 				catch (final Exception e) {}
@@ -682,10 +685,28 @@ public class GeometryUtils
 			final Coordinate coord,
 			final Coordinate modifier ) {
 		for (int i = 0; i < 3; i++) {
-			if (Math.abs(modifier.getOrdinate(i)) < Math.abs(coord.getOrdinate(i))) {
-				modifier.setOrdinate(
-						i,
-						coord.getOrdinate(i));
+			double coordOrdinateValue, modifierOrdinateValue;
+			switch (i) {
+				case 1:
+					coordOrdinateValue = coord.getY();
+					modifierOrdinateValue = coord.getY();
+					break;
+				case 2:
+					coordOrdinateValue = coord.getZ();
+					modifierOrdinateValue = coord.getZ();
+					break;
+				default:
+				case 0:
+					coordOrdinateValue = coord.getX();
+					modifierOrdinateValue = coord.getX();
+					break;
+			}
+			if (!Double.isNaN(coordOrdinateValue) && !Double.isNaN(modifierOrdinateValue)) {
+				if (Math.abs(modifierOrdinateValue) < Math.abs(coordOrdinateValue)) {
+					modifier.setOrdinate(
+							i,
+							coord.getOrdinate(i));
+				}
 			}
 		}
 	}

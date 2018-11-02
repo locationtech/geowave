@@ -17,9 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.measure.Unit;
 import javax.measure.quantity.Length;
-import javax.measure.unit.SI;
-import javax.measure.unit.Unit;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
@@ -35,6 +34,7 @@ import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -47,9 +47,11 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
+import si.uom.SI;
+
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 
 /*
  * Calculates distance use orthodromic distance to calculate the bounding box around each
@@ -75,7 +77,7 @@ public class OrthodromicDistancePartitioner<T> extends
 
 	final static Logger LOGGER = LoggerFactory.getLogger(OrthodromicDistancePartitioner.class);
 
-	private Unit<Length> geometricDistanceUnit = SI.METER;
+	private Unit<Length> geometricDistanceUnit = SI.METRE;
 	private String crsName;
 	private transient CoordinateReferenceSystem crs = null;
 	private transient GeometryCalculations calculator;
@@ -186,7 +188,7 @@ public class OrthodromicDistancePartitioner<T> extends
 					distancePerDimension[longDimensionPosition],
 					distancePerDimension[latDimensionPosition]
 				},
-				geometricDistanceUnit == null ? SI.METER : geometricDistanceUnit,
+				geometricDistanceUnit == null ? SI.METRE : geometricDistanceUnit,
 				coordinate);
 	}
 
@@ -301,7 +303,7 @@ public class OrthodromicDistancePartitioner<T> extends
 				PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT,
 				"m");
 
-		this.geometricDistanceUnit = (Unit<Length>) Unit.valueOf(distanceUnit);
+		this.geometricDistanceUnit = (Unit<Length>) GeometryUtils.lookup(distanceUnit);
 
 		super.initialize(config);
 	}

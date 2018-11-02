@@ -26,7 +26,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 
 abstract public class BoundingBoxDataStatistics<T> extends
 		AbstractDataStatistics<T, Envelope, FieldStatisticsQueryBuilder<Envelope>>

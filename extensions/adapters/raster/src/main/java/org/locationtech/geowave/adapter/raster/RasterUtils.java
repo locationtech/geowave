@@ -24,19 +24,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ComponentColorModel;
 import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
-import java.awt.image.DataBufferDouble;
-import java.awt.image.DataBufferFloat;
-import java.awt.image.DataBufferInt;
-import java.awt.image.DataBufferShort;
-import java.awt.image.DataBufferUShort;
 import java.awt.image.IndexColorModel;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -83,6 +75,11 @@ import org.locationtech.geowave.adapter.raster.adapter.merge.RasterTileMergeStra
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.simplify.DouglasPeuckerSimplifier;
 import org.opengis.coverage.SampleDimension;
 import org.opengis.coverage.SampleDimensionType;
 import org.opengis.coverage.grid.GridCoverage;
@@ -100,11 +97,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 import com.sun.media.imageioimpl.common.BogusColorSpace;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.simplify.DouglasPeuckerSimplifier;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -156,7 +148,7 @@ public class RasterUtils
 		final Envelope sampleEnvelope = gridCoverage.getEnvelope();
 
 		final ReferencedEnvelope sampleReferencedEnvelope = new ReferencedEnvelope(
-				new com.vividsolutions.jts.geom.Envelope(
+				new org.locationtech.jts.geom.Envelope(
 						sampleEnvelope.getMinimum(0),
 						sampleEnvelope.getMaximum(0),
 						sampleEnvelope.getMinimum(1),

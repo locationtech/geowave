@@ -57,8 +57,8 @@ import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.GeometryFactory;
 
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveBasicRasterIT extends

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.mapreduce.dbscan;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  * A DB Scan cluster Item

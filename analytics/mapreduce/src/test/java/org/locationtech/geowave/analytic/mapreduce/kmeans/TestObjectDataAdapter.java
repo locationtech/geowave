@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.mapreduce.HadoopDataAdapter;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 public class TestObjectDataAdapter extends
 		AbstractDataAdapter<TestObject> implements

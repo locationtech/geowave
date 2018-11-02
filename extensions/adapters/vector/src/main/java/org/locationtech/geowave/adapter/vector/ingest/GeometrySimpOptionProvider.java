@@ -17,8 +17,8 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 
 import com.beust.jcommander.Parameter;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.simplify.DouglasPeuckerSimplifier;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.simplify.DouglasPeuckerSimplifier;
 
 public class GeometrySimpOptionProvider implements
 		Persistable

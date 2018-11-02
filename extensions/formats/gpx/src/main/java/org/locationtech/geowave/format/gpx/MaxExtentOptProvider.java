@@ -15,7 +15,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
 import com.beust.jcommander.Parameter;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 public class MaxExtentOptProvider implements
 		Persistable

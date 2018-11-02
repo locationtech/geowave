@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.spark.sparksql;
 
-import com.vividsolutions.jts.geom.*;
+import org.locationtech.jts.geom.*;
 
 import org.apache.spark.sql.types.UDTRegistration;
 import org.locationtech.geowave.analytic.spark.sparksql.udt.*;

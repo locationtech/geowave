@@ -6,7 +6,7 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.Index;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 
 public class OptimalVectorBoundingBoxAggregation<P extends Persistable, T> extends
 		BaseOptimalVectorAggregation<P, Envelope, T>

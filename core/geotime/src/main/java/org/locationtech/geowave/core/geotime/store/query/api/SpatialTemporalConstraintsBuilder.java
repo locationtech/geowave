@@ -6,7 +6,7 @@ import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilt
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.threeten.extra.Interval;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  * This is a builder for creating purely spatiotemporal query constraints

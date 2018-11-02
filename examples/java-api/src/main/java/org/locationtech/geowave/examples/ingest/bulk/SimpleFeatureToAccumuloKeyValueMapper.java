@@ -35,7 +35,7 @@ import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloKeyValuePairGenerator;
 import org.opengis.feature.simple.SimpleFeature;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 
 public class SimpleFeatureToAccumuloKeyValueMapper extends
 		Mapper<LongWritable, Text, Key, Value>

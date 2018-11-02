@@ -15,7 +15,7 @@ import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.opengis.coverage.grid.GridCoverage;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 
 public class RasterBoundingBoxStatistics extends
 		BoundingBoxDataStatistics<GridCoverage>

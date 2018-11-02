@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 
 abstract public class BoundingBoxAggregation<P extends Persistable, T> implements
 		Aggregation<P, Envelope, T>

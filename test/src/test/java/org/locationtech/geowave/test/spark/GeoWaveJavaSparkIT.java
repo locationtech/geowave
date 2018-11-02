@@ -43,7 +43,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.util.Stopwatch;
+import org.locationtech.jts.util.Stopwatch;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({

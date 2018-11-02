@@ -21,7 +21,7 @@ import org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter;
 import org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange;
 import org.opengis.feature.simple.SimpleFeature;
 
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.geom.Point;
 
 public class ComparisonGaussianCellMapper extends
 		GaussianCellMapper

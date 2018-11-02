@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.measure.Unit;
 import javax.measure.quantity.Length;
-import javax.measure.unit.Unit;
 
 import org.locationtech.geowave.analytic.ScopedJobConfiguration;
 import org.locationtech.geowave.analytic.extract.DimensionExtractor;
@@ -25,8 +25,8 @@ import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  * Partition on the boundary of polygons (the hull); not on the interior space.

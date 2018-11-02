@@ -15,7 +15,7 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 public class IndexOnlySpatialQuery extends
 		SpatialQuery
