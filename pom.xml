@@ -37,7 +37,7 @@
 		<spark.version>2.3.1</spark.version>
 		<geotools.version>20.0</geotools.version>
 		<jts.version>1.16.0</jts.version>
-		<imageio.ext.version>1.1.24</imageio.ext.version>
+		<imageio.ext.version>1.1.25</imageio.ext.version>
 		<guava.version>25.1-jre</guava.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.14.0</geoserver.version>
@@ -1424,7 +1424,7 @@
 				<hbase.version>1.3.1</hbase.version>
 				<geotools.version>20.0</geotools.version>
 				<geoserver.version>2.14.0</geoserver.version>
-				<imageio.ext.version>1.1.18</imageio.ext.version>
+				<imageio.ext.version>1.1.25</imageio.ext.version>
 				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
 					which was removed in guava 22.0 -->
 				<guava.version>21.0</guava.version>
