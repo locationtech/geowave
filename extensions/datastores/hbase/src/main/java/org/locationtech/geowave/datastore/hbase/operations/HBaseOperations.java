@@ -67,10 +67,10 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -563,6 +563,7 @@ public class HBaseOperations implements
 	@Override
 	public boolean deleteAll(
 			final String indexName,
+			final String typeName,
 			final Short adapterId,
 			final String... additionalAuthorizations ) {
 		RowDeleter deleter = null;
@@ -570,22 +571,11 @@ public class HBaseOperations implements
 		try {
 			deleter = createRowDeleter(
 					indexName,
+					// these params aren't needed for hbase
+					null,
+					null,
 					additionalAuthorizations);
-			DataTypeAdapter<?> adapter = null;
 			Index index = null;
-			try (final CloseableIterator<GeoWaveMetadata> it = createMetadataReader(
-					MetadataType.ADAPTER).query(
-					new MetadataQuery(
-							ByteArrayUtils.shortToByteArray(adapterId),
-							null,
-							additionalAuthorizations))) {
-				if (!it.hasNext()) {
-					LOGGER.warn("Unable to find adapter to delete");
-					return false;
-				}
-				final GeoWaveMetadata adapterMd = it.next();
-				adapter = (DataTypeAdapter<?>) URLClassloaderUtils.fromBinary(adapterMd.getValue());
-			}
 			try (final CloseableIterator<GeoWaveMetadata> it = createMetadataReader(
 					MetadataType.INDEX).query(
 					new MetadataQuery(
@@ -846,7 +836,7 @@ public class HBaseOperations implements
 			final InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		if (options.isServerSideLibraryEnabled()) {
-			TableName tableName = getTableName(index.getName());
+			final TableName tableName = getTableName(index.getName());
 			try (Admin admin = conn.getAdmin()) {
 				admin.compact(tableName);
 				// wait for table compaction to finish
@@ -945,13 +935,12 @@ public class HBaseOperations implements
 	@Override
 	public RowWriter createWriter(
 			final Index index,
-			final String typeName,
-			final short internalAdapterId ) {
+			final InternalDataAdapter<?> adapter ) {
 		final TableName tableName = getTableName(index.getName());
 		try {
 			final GeoWaveColumnFamily[] columnFamilies = new GeoWaveColumnFamily[1];
 			columnFamilies[0] = new StringColumnFamily(
-					ByteArrayUtils.shortToString(internalAdapterId));
+					ByteArrayUtils.shortToString(adapter.getAdapterId()));
 
 			createTable(
 					index.getIndexStrategy().getPredefinedSplits(),
@@ -1061,8 +1050,11 @@ public class HBaseOperations implements
 				this);
 	}
 
+	@Override
 	public RowDeleter createRowDeleter(
 			final String indexName,
+			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final String... authorizations ) {
 		try {
 			final TableName tableName = getTableName(indexName);
@@ -1924,6 +1916,8 @@ public class HBaseOperations implements
 		else {
 			final RowDeleter rowDeleter = createRowDeleter(
 					readerParams.getIndex().getName(),
+					readerParams.getAdapterStore(),
+					readerParams.getInternalAdapterStore(),
 					readerParams.getAdditionalAuthorizations());
 			if (rowDeleter != null) {
 				return new QueryAndDeleteByRow<>(

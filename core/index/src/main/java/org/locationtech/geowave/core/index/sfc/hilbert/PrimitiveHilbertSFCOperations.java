@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.index.sfc.hilbert;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArray;
@@ -86,7 +87,7 @@ public class PrimitiveHilbertSFCOperations implements
 			final CompactHilbertCurve compactHilbertCurve,
 			final SFCDimensionDefinition[] dimensionDefinitions ) {
 
-		final List<Long> dimensionValues = new ArrayList<Long>();
+		final List<Long> dimensionValues = new ArrayList<>();
 
 		// Compare the number of dimensions to the number of values sent in
 		if (dimensionDefinitions.length != values.length) {
@@ -197,14 +198,19 @@ public class PrimitiveHilbertSFCOperations implements
 	}
 
 	protected static BitVector[] indexInverse(
-			final byte[] hilbertValue,
+			byte[] hilbertValue,
 			final CompactHilbertCurve compactHilbertCurve,
 			final SFCDimensionDefinition[] dimensionDefinitions ) {
 		final BitVector[] perDimensionBitVectors = new BitVector[dimensionDefinitions.length];
 
-		final BitVector hilbertBitVector = BitVectorFactories.OPTIMAL.apply(compactHilbertCurve
-				.getSpec()
-				.sumBitsPerDimension());
+		final int bits = compactHilbertCurve.getSpec().sumBitsPerDimension();
+		final BitVector hilbertBitVector = BitVectorFactories.OPTIMAL.apply(bits);
+		final int bytes = ((bits + 7) / 8);
+		if (hilbertValue.length < bytes) {
+			hilbertValue = Arrays.copyOf(
+					hilbertValue,
+					bytes);
+		}
 		hilbertBitVector.copyFromBigEndian(hilbertValue);
 		for (int i = 0; i < dimensionDefinitions.length; i++) {
 			perDimensionBitVectors[i] = BitVectorFactories.OPTIMAL.apply(dimensionDefinitions[i].getBitsOfPrecision());
@@ -325,12 +331,12 @@ public class PrimitiveHilbertSFCOperations implements
 													// and
 		// maximum
 		// values
-		final List<Long> minRangeList = new ArrayList<Long>();
-		final List<Long> maxRangeList = new ArrayList<Long>();
+		final List<Long> minRangeList = new ArrayList<>();
+		final List<Long> maxRangeList = new ArrayList<>();
 
 		final LongContent zero = new LongContent(
 				0L);
-		final List<LongRange> region = new ArrayList<LongRange>(
+		final List<LongRange> region = new ArrayList<>(
 				dimensionDefinitions.length);
 		for (int d = 0; d < dimensionDefinitions.length; d++) {
 
@@ -372,7 +378,7 @@ public class PrimitiveHilbertSFCOperations implements
 				LongRangeHome.INSTANCE,
 				zero);
 
-		final PlainFilterCombiner<LongRange, Long, LongContent, LongRange> intervalCombiner = new PlainFilterCombiner<LongRange, Long, LongContent, LongRange>(
+		final PlainFilterCombiner<LongRange, Long, LongContent, LongRange> intervalCombiner = new PlainFilterCombiner<>(
 				LongRange.of(
 						0,
 						1));

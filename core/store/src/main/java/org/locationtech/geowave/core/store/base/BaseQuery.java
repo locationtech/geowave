@@ -119,43 +119,24 @@ abstract class BaseQuery
 				index,
 				adapterStore,
 				internalAdapterStore,
-				rowTransformer)
-						.adapterIds(
-								adapterIds)
-						.maxResolutionSubsamplingPerDimension(
-								maxResolutionSubsamplingPerDimension)
-						.aggregation(
-								getAggregation())
-						.fieldSubsets(
-								getFieldSubsets())
-						.isMixedVisibility(
-								isMixedVisibilityRows())
-						.isAuthorizationsLimiting(
-								isAuthorizationsLimiting())
-						.isServersideAggregation(
-								isServerSideAggregation(
-										options))
-						.isClientsideRowMerging(
-								isRowMerging(
-										adapterStore))
-						.queryRanges(
-								getRanges(
-										maxRangeDecomposition,
-										targetResolutionPerDimensionForHierarchicalIndex))
-						.filter(
-								getServerFilter(
-										options))
-						.limit(
-								limit)
-						.maxRangeDecomposition(
-								maxRangeDecomposition)
-						.coordinateRanges(
-								getCoordinateRanges())
-						.constraints(
-								getConstraints())
-						.additionalAuthorizations(
-								getAdditionalAuthorizations())
-						.build();
+				rowTransformer).adapterIds(
+				adapterIds).maxResolutionSubsamplingPerDimension(
+				maxResolutionSubsamplingPerDimension).aggregation(
+				getAggregation()).fieldSubsets(
+				getFieldSubsets()).isMixedVisibility(
+				isMixedVisibilityRows()).isAuthorizationsLimiting(
+				isAuthorizationsLimiting()).isServersideAggregation(
+				isServerSideAggregation(options)).isClientsideRowMerging(
+				isRowMerging(adapterStore)).queryRanges(
+				getRanges(
+						maxRangeDecomposition,
+						targetResolutionPerDimensionForHierarchicalIndex)).filter(
+				getServerFilter(options)).limit(
+				limit).maxRangeDecomposition(
+				maxRangeDecomposition).coordinateRanges(
+				getCoordinateRanges()).constraints(
+				getConstraints()).additionalAuthorizations(
+				getAdditionalAuthorizations()).build();
 
 		if (delete) {
 			scanCallback.waitUntilCallbackAdded();

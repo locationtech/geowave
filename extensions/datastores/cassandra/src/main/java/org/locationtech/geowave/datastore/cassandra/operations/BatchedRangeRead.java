@@ -32,6 +32,7 @@ import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
+import org.locationtech.geowave.core.store.util.RowConsumer;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import org.slf4j.Logger;
@@ -168,7 +169,7 @@ public class BatchedRangeRead<T>
 							// been any
 							// statements submitted
 							try {
-								results.put(CassandraRowConsumer.POISON);
+								results.put(RowConsumer.POISON);
 							}
 							catch (final InterruptedException e) {
 								LOGGER.error("Interrupted while finishing blocking queue, this may result in deadlock!");
@@ -187,7 +188,7 @@ public class BatchedRangeRead<T>
 						}
 					}
 				},
-				new CassandraRowConsumer(
+				new RowConsumer(
 						results));
 	}
 
@@ -279,7 +280,7 @@ public class BatchedRangeRead<T>
 			semaphore.release();
 			if (queryCount.decrementAndGet() <= 0) {
 				try {
-					resultQueue.put(CassandraRowConsumer.POISON);
+					resultQueue.put(RowConsumer.POISON);
 				}
 				catch (final InterruptedException e) {
 					LOGGER.error("Interrupted while finishing blocking queue, this may result in deadlock!");

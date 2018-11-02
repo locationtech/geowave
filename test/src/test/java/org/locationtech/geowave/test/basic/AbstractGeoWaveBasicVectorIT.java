@@ -82,6 +82,8 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 abstract public class AbstractGeoWaveBasicVectorIT extends
 		AbstractGeoWaveIT
 {
@@ -511,6 +513,9 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 		LOGGER.warn(deletedFeatures + " features bulk deleted.");
 		LOGGER.warn(remainingFeatures + " features not deleted.");
 
+		Assert.assertTrue(
+				"Unable to delete all features in bulk delete, there are " + remainingFeatures + " not deleted",
+				remainingFeatures == 0);
 		// Now for the final check, query everything again
 		queryResults = geowaveStore.query(QueryBuilder.newBuilder().indexName(
 				index.getName()).build());
@@ -656,15 +661,14 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 										.getType()
 										.getString()
 										.startsWith(
-												"FEATURE_BBOX"))) {
+												"BOUNDING_BOX"))) {
 									continue;
 								}
 							}
 
 							Assert.assertNotNull(actualStats);
 							// if the stats are the same, their binary
-							// serialization
-							// should be the same
+							// serialization should be the same
 							Assert.assertArrayEquals(
 									actualStats.toString() + " = " + expectedStat.toString(),
 									expectedStat.toBinary(),
@@ -676,10 +680,16 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 				}
 				// finally check the one stat that is more manually calculated -
 				// the bounding box
-				StatisticsQuery<Envelope> query = VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
-						adapter.getFeatureType().getGeometryDescriptor().getLocalName()).dataType(
-						adapter.getTypeName()).build();
-				StatisticsId id = query.getId();
+				final StatisticsQuery<Envelope> query = VectorStatisticsQueryBuilder
+						.newBuilder()
+						.factory()
+						.bbox()
+						.fieldName(
+								adapter.getFeatureType().getGeometryDescriptor().getLocalName())
+						.dataType(
+								adapter.getTypeName())
+						.build();
+				final StatisticsId id = query.getId();
 				final Envelope bboxStat = getDataStorePluginOptions().createDataStore().aggregateStatistics(
 						query);
 				Assert.assertNotNull(bboxStat);
@@ -710,12 +720,14 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 								id.getExtendedId(),
 								id.getType()));
 
-				Assert.assertFalse(
-						"Individual stat was not successfully removed",
-						statsStore.getDataStatistics(
-								internalDataAdapter.getAdapterId(),
-								id.getExtendedId(),
-								id.getType()).hasNext());
+				try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> statsIt = statsStore.getDataStatistics(
+						internalDataAdapter.getAdapterId(),
+						id.getExtendedId(),
+						id.getType())) {
+					Assert.assertFalse(
+							"Individual stat was not successfully removed",
+							statsIt.hasNext());
+				}
 			}
 		}
 	}

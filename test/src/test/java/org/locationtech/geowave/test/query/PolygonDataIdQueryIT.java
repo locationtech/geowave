@@ -63,7 +63,8 @@ public class PolygonDataIdQueryIT extends
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE,
-		GeoWaveStoreType.DYNAMODB
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStore;
 

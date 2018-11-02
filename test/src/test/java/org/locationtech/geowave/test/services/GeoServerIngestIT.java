@@ -15,10 +15,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpResponse;
@@ -35,6 +37,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
@@ -52,6 +55,8 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.vividsolutions.jts.geom.Coordinate;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
@@ -75,7 +80,8 @@ public class GeoServerIngestIT extends
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.DYNAMODB
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
@@ -104,6 +110,60 @@ public class GeoServerIngestIT extends
 				startMillis);
 	}
 
+	private static List<SimpleFeature> getGriddedTemporalFeatures(
+			final SimpleFeatureBuilder pointBuilder,
+			final int firstFeatureId ) {
+
+		int featureId = firstFeatureId;
+		final Calendar cal = Calendar.getInstance();
+		cal.set(
+				1996,
+				Calendar.JUNE,
+				15);
+		final Date[] dates = new Date[3];
+		dates[0] = cal.getTime();
+		cal.set(
+				1997,
+				Calendar.JUNE,
+				15);
+		dates[1] = cal.getTime();
+		cal.set(
+				1998,
+				Calendar.JUNE,
+				15);
+		dates[2] = cal.getTime();
+		// put 3 points on each grid location with different temporal attributes
+		final List<SimpleFeature> feats = new ArrayList<>();
+		for (int longitude = -180; longitude <= 180; longitude += 5) {
+			for (int latitude = -90; latitude <= 90; latitude += 5) {
+				for (int date = 0; date < dates.length; date++) {
+					pointBuilder.set(
+							"geometry",
+							GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+									longitude,
+									latitude)));
+					pointBuilder.set(
+							"TimeStamp",
+							dates[date]);
+					pointBuilder.set(
+							"Latitude",
+							latitude);
+					pointBuilder.set(
+							"Longitude",
+							longitude);
+					// Note since trajectoryID and comment are marked as
+					// nillable we
+					// don't need to set them (they default ot null).
+
+					final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
+					feats.add(sft);
+					featureId++;
+				}
+			}
+		}
+		return feats;
+	}
+
 	@Test
 	public void testExamplesIngest()
 			throws IOException,
@@ -113,7 +173,7 @@ public class GeoServerIngestIT extends
 		final Index spatialIdx = SimpleIngest.createSpatialIndex();
 		final Index spatialTemporalIdx = SimpleIngest.createSpatialTemporalIndex();
 		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
-		final List<SimpleFeature> features = SimpleIngest.getGriddedTemporalFeatures(
+		final List<SimpleFeature> features = getGriddedTemporalFeatures(
 				new SimpleFeatureBuilder(
 						sft),
 				8675309);
@@ -390,49 +450,16 @@ public class GeoServerIngestIT extends
 
 	@After
 	public void cleanup() {
-
-		final Response layer = geoServerServiceClient.removeFeatureLayer(SimpleIngest.FEATURE_NAME);
-		final Response datastore = geoServerServiceClient.removeDataStore(
+		geoServerServiceClient.removeFeatureLayer(SimpleIngest.FEATURE_NAME);
+		geoServerServiceClient.removeDataStore(
 				TestUtils.TEST_NAMESPACE,
 				WORKSPACE);
-		final Response styleNoDifference = geoServerServiceClient
-				.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE);
-		final Response styleMinor = geoServerServiceClient
-				.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE);
-		final Response styleMajor = geoServerServiceClient
-				.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE);
-		final Response workspace = geoServerServiceClient.removeWorkspace(WORKSPACE);
+		geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE);
+		geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE);
+		geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE);
+		geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER);
+		geoServerServiceClient.removeWorkspace(WORKSPACE);
 
-		TestUtils.assertStatusCode(
-				"Should Delete Layer '" + SimpleIngest.FEATURE_NAME + "'",
-				200,
-				layer);
-		TestUtils.assertStatusCode(
-				"Should Delete Datastore '" + TestUtils.TEST_NAMESPACE + "'",
-				200,
-				datastore);
-		TestUtils.assertStatusCode(
-				"Should Delete Style '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "'",
-				200,
-				styleNoDifference);
-
-		TestUtils.assertStatusCode(
-				"Should Delete Style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
-				200,
-				styleMinor);
-		TestUtils.assertStatusCode(
-				"Should Delete Style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "'",
-				200,
-				styleMajor);
-		TestUtils.assertStatusCode(
-				"Should Delete Workspace '" + WORKSPACE + "'",
-				200,
-				workspace);
-
-		TestUtils.assertStatusCode(
-				"Should Delete Style '" + ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER + "'",
-				200,
-				geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
 	}
 
 }

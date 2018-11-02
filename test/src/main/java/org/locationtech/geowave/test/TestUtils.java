@@ -795,6 +795,8 @@ public class TestUtils
 		}
 	}
 
+	private static int i = 0;
+
 	public static double getTileValue(
 			final int x,
 			final int y,

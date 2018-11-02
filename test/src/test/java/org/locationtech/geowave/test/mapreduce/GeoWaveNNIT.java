@@ -71,7 +71,8 @@ public class GeoWaveNNIT extends
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE,
-		GeoWaveStoreType.DYNAMODB
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 

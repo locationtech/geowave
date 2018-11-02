@@ -33,7 +33,7 @@ public class DynamoDBDataStore extends
 
 	public DynamoDBDataStore(
 			final DynamoDBOperations operations ) {
-		this(
+		super(
 				new IndexStoreImpl(
 						operations,
 						operations.getOptions().getBaseOptions()),
@@ -51,27 +51,5 @@ public class DynamoDBDataStore extends
 				operations.getOptions().getBaseOptions(),
 				new InternalAdapterStoreImpl(
 						operations));
-	}
-
-	public DynamoDBDataStore(
-			final IndexStore indexStore,
-			final PersistentAdapterStore adapterStore,
-			final DataStatisticsStore statisticsStore,
-			final AdapterIndexMappingStore indexMappingStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore,
-			final DynamoDBOperations operations,
-			final DataStoreOptions options,
-			final InternalAdapterStore internalAdapterStore ) {
-		super(
-				indexStore,
-				adapterStore,
-				statisticsStore,
-				indexMappingStore,
-				secondaryIndexDataStore,
-				operations,
-				options,
-				internalAdapterStore);
-
-		secondaryIndexDataStore.setDataStore(this);
 	}
 }

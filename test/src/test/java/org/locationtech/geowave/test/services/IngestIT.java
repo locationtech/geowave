@@ -70,7 +70,8 @@ public class IngestIT extends
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.DYNAMODB
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 

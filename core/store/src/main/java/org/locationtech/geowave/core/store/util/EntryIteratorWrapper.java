@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.util;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 public abstract class EntryIteratorWrapper<T> implements
 		Iterator<T>
 {
-	protected final AdapterStore adapterStore;
+	protected final PersistentAdapterStore adapterStore;
 	protected final Index index;
 	protected final Iterator<GeoWaveRow> scannerIt;
 	protected final QueryFilter clientFilter;
@@ -40,7 +40,7 @@ public abstract class EntryIteratorWrapper<T> implements
 	protected T nextValue;
 
 	public EntryIteratorWrapper(
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final Index index,
 			final Iterator<GeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,

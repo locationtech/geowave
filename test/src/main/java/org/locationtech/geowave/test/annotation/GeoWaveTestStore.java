@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -20,6 +20,7 @@ import org.locationtech.geowave.test.BigtableStoreTestEnvironment;
 import org.locationtech.geowave.test.CassandraStoreTestEnvironment;
 import org.locationtech.geowave.test.DynamoDBTestEnvironment;
 import org.locationtech.geowave.test.HBaseStoreTestEnvironment;
+import org.locationtech.geowave.test.RedisStoreTestEnvironment;
 import org.locationtech.geowave.test.StoreTestEnvironment;
 import org.locationtech.geowave.test.TestUtils;
 
@@ -60,7 +61,9 @@ public @interface GeoWaveTestStore {
 		CASSANDRA(
 				CassandraStoreTestEnvironment.getInstance()),
 		HBASE(
-				HBaseStoreTestEnvironment.getInstance());
+				HBaseStoreTestEnvironment.getInstance()),
+		REDIS(
+				RedisStoreTestEnvironment.getInstance());
 		private final StoreTestEnvironment testEnvironment;
 
 		private GeoWaveStoreType(

@@ -57,7 +57,8 @@ public class GeowaveBasicURLIngestIT extends
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStore;
 

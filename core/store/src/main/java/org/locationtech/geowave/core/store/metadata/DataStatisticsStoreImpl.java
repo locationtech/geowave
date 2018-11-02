@@ -194,32 +194,45 @@ public class DataStatisticsStoreImpl extends
 				entry,
 				authorizations);
 		if (stats != null) {
-			stats.setAdapterId(byteArrayToShort(entry.getSecondaryId()));
+			return setFields(
+					entry,
+					stats,
+					byteArrayToShort(entry.getSecondaryId()));
+		}
+		return null;
+	}
+
+	public static InternalDataStatistics<?, ?, ?> setFields(
+			final GeoWaveMetadata entry,
+			final InternalDataStatistics<?, ?, ?> basicStats,
+			final short adapterId ) {
+		if (basicStats != null) {
+			basicStats.setAdapterId(adapterId);
 			final int index = Bytes.indexOf(
 					entry.getPrimaryId(),
 					(byte) 0);
 			if ((index > 0) && (index < (entry.getPrimaryId().length - 1))) {
-				stats.setType(new BaseStatisticsType(
+				basicStats.setType(new BaseStatisticsType(
 						Arrays.copyOfRange(
 								entry.getPrimaryId(),
 								0,
 								index)));
 
-				stats.setExtendedId(StringUtils.stringFromBinary(Arrays.copyOfRange(
+				basicStats.setExtendedId(StringUtils.stringFromBinary(Arrays.copyOfRange(
 						entry.getPrimaryId(),
 						index + 1,
 						entry.getPrimaryId().length)));
 			}
 			else {
-				stats.setType(new BaseStatisticsType(
+				basicStats.setType(new BaseStatisticsType(
 						entry.getPrimaryId()));
 			}
 			final byte[] visibility = entry.getVisibility();
 			if (visibility != null) {
-				stats.setVisibility(visibility);
+				basicStats.setVisibility(visibility);
 			}
 		}
-		return stats;
+		return basicStats;
 	}
 
 	@Override
@@ -230,7 +243,7 @@ public class DataStatisticsStoreImpl extends
 				persistedObject.getExtendedId());
 	}
 
-	protected static ByteArray getPrimaryId(
+	public static ByteArray getPrimaryId(
 			final StatisticsType<?, ?> type,
 			final String extendedId ) {
 		if ((extendedId != null) && (extendedId.length() > 0)) {

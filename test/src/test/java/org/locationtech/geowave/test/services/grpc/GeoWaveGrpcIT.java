@@ -60,7 +60,8 @@ import org.slf4j.LoggerFactory;
 	GeoWaveStoreType.BIGTABLE,
 	GeoWaveStoreType.CASSANDRA,
 	GeoWaveStoreType.DYNAMODB,
-	GeoWaveStoreType.HBASE
+	GeoWaveStoreType.HBASE,
+	GeoWaveStoreType.REDIS
 })
 public class GeoWaveGrpcIT extends
 		AbstractGeoWaveBasicVectorIT

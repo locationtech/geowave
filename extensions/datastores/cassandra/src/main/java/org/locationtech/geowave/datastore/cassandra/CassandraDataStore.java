@@ -19,11 +19,9 @@ import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.MRJobConfig;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
@@ -34,8 +32,8 @@ import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
 import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
+import org.locationtech.geowave.datastore.cassandra.config.CassandraOptions;
 import org.locationtech.geowave.datastore.cassandra.operations.CassandraOperations;
-import org.locationtech.geowave.datastore.cassandra.operations.config.CassandraOptions;
 import org.locationtech.geowave.mapreduce.BaseMapReduceDataStore;
 
 public class CassandraDataStore extends
@@ -44,7 +42,7 @@ public class CassandraDataStore extends
 	public CassandraDataStore(
 			final CassandraOperations operations,
 			final CassandraOptions options ) {
-		this(
+		super(
 				new IndexStoreImpl(
 						operations,
 						options),
@@ -62,28 +60,6 @@ public class CassandraDataStore extends
 				options,
 				new InternalAdapterStoreImpl(
 						operations));
-	}
-
-	public CassandraDataStore(
-			final IndexStore indexStore,
-			final PersistentAdapterStore adapterStore,
-			final DataStatisticsStore statisticsStore,
-			final AdapterIndexMappingStore indexMappingStore,
-			final SecondaryIndexDataStore secondaryIndexDataStore,
-			final CassandraOperations operations,
-			final CassandraOptions options,
-			final InternalAdapterStore internalAdapterStore ) {
-		super(
-				indexStore,
-				adapterStore,
-				statisticsStore,
-				indexMappingStore,
-				secondaryIndexDataStore,
-				operations,
-				options,
-				internalAdapterStore);
-
-		secondaryIndexDataStore.setDataStore(this);
 	}
 
 	@Override

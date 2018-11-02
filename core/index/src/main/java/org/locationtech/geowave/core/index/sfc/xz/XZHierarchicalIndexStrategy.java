@@ -407,7 +407,6 @@ public class XZHierarchicalIndexStrategy implements
 	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
 			final MultiDimensionalNumericData dataRange,
 			final IndexMetaData... hints ) {
-
 		final MultiDimensionalCoordinateRanges[] rasterRanges = rasterStrategy.getCoordinateRangesPerDimension(
 				dataRange,
 				hints);
