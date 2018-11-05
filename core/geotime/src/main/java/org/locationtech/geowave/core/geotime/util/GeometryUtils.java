@@ -597,7 +597,7 @@ public class GeometryUtils
 			final String name2 = field.getName();
 			if ((field.getType().isAssignableFrom(
 					BaseUnit.class) || field.getType().isAssignableFrom(
-					AlternateUnit.class)) && name2.equals(name)) {
+					AlternateUnit.class)) && name2.equalsIgnoreCase(name)) {
 
 				try {
 					unit = (Unit<Length>) field.get(unit);
