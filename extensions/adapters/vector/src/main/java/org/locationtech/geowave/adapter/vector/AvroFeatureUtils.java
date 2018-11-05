@@ -209,7 +209,7 @@ public class AvroFeatureUtils
 		for (int i = 0; i < featureDefinition.getAttributeNames().size(); i++) {
 			final String type = featureTypes.get(i);
 			final String name = featureNames.get(i);
-			final Class<?> c = Class.forName(type);
+			final Class<?> c = Class.forName(jtsCompatibility(type));
 			sftb.add(
 					name,
 					c);
@@ -242,13 +242,24 @@ public class AvroFeatureUtils
 				sfb.add(WKB_READER.read(val.array()));
 			}
 			else {
-				final FieldReader<?> fr = FieldUtils.getDefaultReaderForClass(Class.forName(attributeTypes.get(i)));
+				final FieldReader<?> fr = FieldUtils.getDefaultReaderForClass(Class
+						.forName(jtsCompatibility(attributeTypes.get(i))));
 				sfb.add(fr.readField(val.array()));
 			}
 		}
 
 		simpleFeature = sfb.buildFeature(attributeValues.getFid());
 		return simpleFeature;
+	}
+
+	private static String jtsCompatibility(
+			String attrTypeName ) {
+		if (attrTypeName.startsWith("com.vividsolutions")) {
+			return attrTypeName.replace(
+					"com.vividsolutions",
+					"org.locationtech");
+		}
+		return attrTypeName;
 	}
 
 	/***
