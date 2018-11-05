@@ -143,17 +143,17 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapper.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapper</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">SimpleFeatureItemWrapperFactory.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/SimpleFeatureItemWrapperFactory.html#createNextItem-org.opengis.feature.simple.SimpleFeature-java.lang.String-com.vividsolutions.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextItem</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;feature,
+<td class="colLast"><span class="typeNameLabel">SimpleFeatureItemWrapperFactory.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/SimpleFeatureItemWrapperFactory.html#createNextItem-org.opengis.feature.simple.SimpleFeature-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextItem</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;feature,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupID,
-              com.vividsolutions.jts.geom.Coordinate&nbsp;coordinate,
+              org.locationtech.jts.geom.Coordinate&nbsp;coordinate,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;extraNames,
               double[]&nbsp;extraValues)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapper.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapper</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="type parameter in AnalyticItemWrapperFactory">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AnalyticItemWrapperFactory.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html#createNextItem-T-java.lang.String-com.vividsolutions.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextItem</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="type parameter in AnalyticItemWrapperFactory">T</a>&nbsp;feature,
+<td class="colLast"><span class="typeNameLabel">AnalyticItemWrapperFactory.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html#createNextItem-T-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextItem</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="type parameter in AnalyticItemWrapperFactory">T</a>&nbsp;feature,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupID,
-              com.vividsolutions.jts.geom.Coordinate&nbsp;coordinate,
+              org.locationtech.jts.geom.Coordinate&nbsp;coordinate,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;extraNames,
               double[]&nbsp;extraValues)</code>
 <div class="block">Creates a new item based on the old item with new coordinates and
@@ -197,9 +197,9 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapper.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapper</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="type parameter in CentroidManagerGeoWave">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">CentroidManagerGeoWave.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidManagerGeoWave.html#createNextCentroid-T-java.lang.String-com.vividsolutions.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextCentroid</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="type parameter in CentroidManagerGeoWave">T</a>&nbsp;feature,
+<td class="colLast"><span class="typeNameLabel">CentroidManagerGeoWave.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidManagerGeoWave.html#createNextCentroid-T-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextCentroid</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="type parameter in CentroidManagerGeoWave">T</a>&nbsp;feature,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupID,
-                  com.vividsolutions.jts.geom.Coordinate&nbsp;coordinate,
+                  org.locationtech.jts.geom.Coordinate&nbsp;coordinate,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;extraNames,
                   double[]&nbsp;extraValues)</code>
 <div class="block">Creates a new centroid based on the old centroid with new coordinates and
@@ -208,9 +208,9 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapper.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapper</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidManager.html" title="type parameter in CentroidManager">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">CentroidManager.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidManager.html#createNextCentroid-T-java.lang.String-com.vividsolutions.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextCentroid</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidManager.html" title="type parameter in CentroidManager">T</a>&nbsp;feature,
+<td class="colLast"><span class="typeNameLabel">CentroidManager.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidManager.html#createNextCentroid-T-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextCentroid</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidManager.html" title="type parameter in CentroidManager">T</a>&nbsp;feature,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupID,
-                  com.vividsolutions.jts.geom.Coordinate&nbsp;coordinate,
+                  org.locationtech.jts.geom.Coordinate&nbsp;coordinate,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;extraNames,
                   double[]&nbsp;extraValues)</code>
 <div class="block">Creates a new centroid based on the old centroid with new coordinates and
@@ -219,9 +219,9 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapper.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapper</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">CentroidItemWrapperFactory.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html#createNextItem-T-java.lang.String-com.vividsolutions.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextItem</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&nbsp;feature,
+<td class="colLast"><span class="typeNameLabel">CentroidItemWrapperFactory.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html#createNextItem-T-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextItem</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&nbsp;feature,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupID,
-              com.vividsolutions.jts.geom.Coordinate&nbsp;coordinate,
+              org.locationtech.jts.geom.Coordinate&nbsp;coordinate,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;extraNames,
               double[]&nbsp;extraValues)</code>&nbsp;</td>
 </tr>

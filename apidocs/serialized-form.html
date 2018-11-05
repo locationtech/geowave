@@ -75,44 +75,6 @@
 <div class="serializedFormContainer">
 <ul class="blockList">
 <li class="blockList">
-<h2 title="Package">Package&nbsp;org.geotools.renderer.lite</h2>
-<ul class="blockList">
-<li class="blockList"><a name="org.geotools.renderer.lite.DistributedRenderer.DistributedRenderingBlockingQueue">
-<!--   -->
-</a>
-<h3>Class <a href="org/geotools/renderer/lite/DistributedRenderer.DistributedRenderingBlockingQueue.html" title="class in org.geotools.renderer.lite">org.geotools.renderer.lite.DistributedRenderer.DistributedRenderingBlockingQueue</a> extends org.geotools.renderer.lite.StreamingRenderer.RenderingBlockingQueue implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>-1014302908773318665L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>compositeGroupGraphicsToStyleGraphicsMapping</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; compositeGroupGraphicsToStyleGraphicsMapping</pre>
-</li>
-<li class="blockListLast">
-<h4>compositeGroupGraphicsToCompositeMapping</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; compositeGroupGraphicsToCompositeMapping</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="org.geotools.renderer.lite.StreamingRenderer.RenderingBlockingQueue">
-<!--   -->
-</a>
-<h3>Class org.geotools.renderer.lite.StreamingRenderer.RenderingBlockingQueue extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ArrayBlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent">ArrayBlockingQueue</a>&lt;org.geotools.renderer.lite.StreamingRenderer.RenderingRequest&gt; implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>4908029658595573833L</dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
 <h2 title="Package">Package&nbsp;org.locationtech.geowave.adapter.raster.adapter</h2>
 <ul class="blockList">
 <li class="blockList"><a name="org.locationtech.geowave.adapter.raster.adapter.MosaicPropertyGenerator">
@@ -1602,7 +1564,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>geometricDistanceUnit</h4>
-<pre>javax.measure.unit.Unit&lt;Q extends javax.measure.quantity.Quantity&gt; geometricDistanceUnit</pre>
+<pre>javax.measure.Unit&lt;Q extends javax.measure.Quantity&lt;Q&gt;&gt; geometricDistanceUnit</pre>
 </li>
 <li class="blockList">
 <h4>crsName</h4>
@@ -1840,42 +1802,42 @@
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.sparksql.udt.AbstractGeometryUDT">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.AbstractGeometryUDT</a> extends org.apache.spark.sql.types.UserDefinedType&lt;<a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends com.vividsolutions.jts.geom.Geometry&gt; implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.AbstractGeometryUDT</a> extends org.apache.spark.sql.types.UserDefinedType&lt;<a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends org.locationtech.jts.geom.Geometry&gt; implements Serializable</h3>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.sparksql.udt.GeometryUDT">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/GeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.GeometryUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.Geometry&gt; implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/GeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.GeometryUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;org.locationtech.jts.geom.Geometry&gt; implements Serializable</h3>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.sparksql.udt.LineStringUDT">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/LineStringUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.LineStringUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.LineString&gt; implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/LineStringUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.LineStringUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;org.locationtech.jts.geom.LineString&gt; implements Serializable</h3>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.sparksql.udt.MultiLineStringUDT">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/MultiLineStringUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.MultiLineStringUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.MultiLineString&gt; implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/MultiLineStringUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.MultiLineStringUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;org.locationtech.jts.geom.MultiLineString&gt; implements Serializable</h3>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.sparksql.udt.MultiPointUDT">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/MultiPointUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.MultiPointUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.MultiPoint&gt; implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/MultiPointUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.MultiPointUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;org.locationtech.jts.geom.MultiPoint&gt; implements Serializable</h3>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.sparksql.udt.MultiPolygonUDT">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/MultiPolygonUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.MultiPolygonUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.MultiPolygon&gt; implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/MultiPolygonUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.MultiPolygonUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;org.locationtech.jts.geom.MultiPolygon&gt; implements Serializable</h3>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.sparksql.udt.PointUDT">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/PointUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.PointUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.Point&gt; implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/PointUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.PointUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;org.locationtech.jts.geom.Point&gt; implements Serializable</h3>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.sparksql.udt.PolygonUDT">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/PolygonUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.PolygonUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.Polygon&gt; implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/PolygonUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">org.locationtech.geowave.analytic.spark.sparksql.udt.PolygonUDT</a> extends <a href="org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;org.locationtech.jts.geom.Polygon&gt; implements Serializable</h3>
 </li>
 </ul>
 </li>
@@ -1885,12 +1847,12 @@
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.sparksql.util.GeomReader">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/util/GeomReader.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.util">org.locationtech.geowave.analytic.spark.sparksql.util.GeomReader</a> extends com.vividsolutions.jts.io.WKBReader implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/util/GeomReader.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.util">org.locationtech.geowave.analytic.spark.sparksql.util.GeomReader</a> extends org.locationtech.jts.io.WKBReader implements Serializable</h3>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.sparksql.util.GeomWriter">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/util/GeomWriter.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.util">org.locationtech.geowave.analytic.spark.sparksql.util.GeomWriter</a> extends com.vividsolutions.jts.io.WKBWriter implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/sparksql/util/GeomWriter.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.util">org.locationtech.geowave.analytic.spark.sparksql.util.GeomWriter</a> extends org.locationtech.jts.io.WKBWriter implements Serializable</h3>
 </li>
 </ul>
 </li>

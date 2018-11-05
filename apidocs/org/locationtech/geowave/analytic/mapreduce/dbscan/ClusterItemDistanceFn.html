@@ -161,7 +161,7 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/distance
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItemDistanceFn.html#ClusterItemDistanceFn--">ClusterItemDistanceFn</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItemDistanceFn.html#ClusterItemDistanceFn-org.locationtech.geowave.analytic.distance.DistanceFn-">ClusterItemDistanceFn</a></span>(<a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItemDistanceFn.html#ClusterItemDistanceFn-org.locationtech.geowave.analytic.distance.DistanceFn-">ClusterItemDistanceFn</a></span>(<a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -184,7 +184,7 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/distance
               <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&nbsp;item2)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItemDistanceFn.html#getCoordinateDistanceFunction--">getCoordinateDistanceFunction</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -194,7 +194,7 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/distance
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItemDistanceFn.html#setCoordinateDistanceFunction-org.locationtech.geowave.analytic.distance.DistanceFn-">setCoordinateDistanceFunction</a></span>(<a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItemDistanceFn.html#setCoordinateDistanceFunction-org.locationtech.geowave.analytic.distance.DistanceFn-">setCoordinateDistanceFunction</a></span>(<a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -233,7 +233,7 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/distance
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ClusterItemDistanceFn</h4>
-<pre>public&nbsp;ClusterItemDistanceFn(<a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</pre>
+<pre>public&nbsp;ClusterItemDistanceFn(<a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</pre>
 </li>
 </ul>
 </li>
@@ -250,7 +250,7 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/distance
 <ul class="blockList">
 <li class="blockList">
 <h4>getCoordinateDistanceFunction</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;getCoordinateDistanceFunction()</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;getCoordinateDistanceFunction()</pre>
 </li>
 </ul>
 <a name="setCoordinateDistanceFunction-org.locationtech.geowave.analytic.distance.DistanceFn-">
@@ -259,7 +259,7 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/distance
 <ul class="blockList">
 <li class="blockList">
 <h4>setCoordinateDistanceFunction</h4>
-<pre>public&nbsp;void&nbsp;setCoordinateDistanceFunction(<a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</pre>
+<pre>public&nbsp;void&nbsp;setCoordinateDistanceFunction(<a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</pre>
 </li>
 </ul>
 <a name="measure-org.locationtech.geowave.analytic.mapreduce.dbscan.ClusterItem-org.locationtech.geowave.analytic.mapreduce.dbscan.ClusterItem-">

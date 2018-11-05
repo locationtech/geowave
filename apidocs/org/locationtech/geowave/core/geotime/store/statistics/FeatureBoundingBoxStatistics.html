@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics</a>&lt;T,com.vividsolutions.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;com.vividsolutions.jts.geom.Envelope&gt;&gt;</li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics</a>&lt;T,org.locationtech.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;</li>
 <li>
 <ul class="inheritance">
 <li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</li>
@@ -119,7 +119,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/FieldNameStatistic.html" title="interface in org.locationtech.geowave.core.geotime.store.statistics">FieldNameStatistic</a>, <a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,com.vividsolutions.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;com.vividsolutions.jts.geom.Envelope&gt;&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/FieldNameStatistic.html" title="interface in org.locationtech.geowave.core.geotime.store.statistics">FieldNameStatistic</a>, <a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,org.locationtech.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</dd>
 </dl>
 <hr>
 <br>
@@ -202,15 +202,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/geotime/s
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>com.vividsolutions.jts.geom.Geometry</code></td>
+<td class="colFirst"><code>org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/FeatureBoundingBoxStatistics.html#composeGeometry-org.opengis.referencing.crs.CoordinateReferenceSystem-">composeGeometry</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;system)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,com.vividsolutions.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;com.vividsolutions.jts.geom.Envelope&gt;&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,org.locationtech.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/FeatureBoundingBoxStatistics.html#duplicate--">duplicate</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>protected com.vividsolutions.jts.geom.Envelope</code></td>
+<td class="colFirst"><code>protected org.locationtech.jts.geom.Envelope</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/FeatureBoundingBoxStatistics.html#getEnvelope-org.opengis.feature.simple.SimpleFeature-">getEnvelope</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;entry)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -338,7 +338,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/geotime/s
 <ul class="blockList">
 <li class="blockList">
 <h4>composeGeometry</h4>
-<pre>public&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;composeGeometry(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;system)</pre>
+<pre>public&nbsp;org.locationtech.jts.geom.Geometry&nbsp;composeGeometry(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;system)</pre>
 </li>
 </ul>
 <a name="getEnvelope-org.opengis.feature.simple.SimpleFeature-">
@@ -347,7 +347,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/geotime/s
 <ul class="blockList">
 <li class="blockList">
 <h4>getEnvelope</h4>
-<pre>protected&nbsp;com.vividsolutions.jts.geom.Envelope&nbsp;getEnvelope(org.opengis.feature.simple.SimpleFeature&nbsp;entry)</pre>
+<pre>protected&nbsp;org.locationtech.jts.geom.Envelope&nbsp;getEnvelope(org.opengis.feature.simple.SimpleFeature&nbsp;entry)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getEnvelope-T-">getEnvelope</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
@@ -360,12 +360,12 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/geotime/s
 <ul class="blockListLast">
 <li class="blockList">
 <h4>duplicate</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,com.vividsolutions.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;com.vividsolutions.jts.geom.Envelope&gt;&gt;&nbsp;duplicate()</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,org.locationtech.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;&nbsp;duplicate()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#duplicate--">duplicate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,com.vividsolutions.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;com.vividsolutions.jts.geom.Envelope&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html#duplicate--">duplicate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,org.locationtech.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#duplicate--">duplicate</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,com.vividsolutions.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;com.vividsolutions.jts.geom.Envelope&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#duplicate--">duplicate</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,org.locationtech.jts.geom.Envelope,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>

@@ -192,12 +192,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/GeometryDataSetGenerator.html#generatePointSet-com.vividsolutions.jts.geom.LineString-double-int-">generatePointSet</a></span>(com.vividsolutions.jts.geom.LineString&nbsp;line,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/GeometryDataSetGenerator.html#generatePointSet-org.locationtech.jts.geom.LineString-double-int-">generatePointSet</a></span>(org.locationtech.jts.geom.LineString&nbsp;line,
                 double&nbsp;distanceFactor,
                 int&nbsp;points)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>com.vividsolutions.jts.geom.Geometry</code></td>
+<td class="colFirst"><code>org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/GeometryDataSetGenerator.html#getBoundingRegion--">getBoundingRegion</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -205,7 +205,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/GeometryDataSetGenerator.html#getCorner--">getCorner</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>com.vividsolutions.jts.geom.GeometryFactory</code></td>
+<td class="colFirst"><code>org.locationtech.jts.geom.GeometryFactory</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/GeometryDataSetGenerator.html#getFactory--">getFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -294,7 +294,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getBoundingRegion</h4>
-<pre>public&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;getBoundingRegion()</pre>
+<pre>public&nbsp;org.locationtech.jts.geom.Geometry&nbsp;getBoundingRegion()</pre>
 </li>
 </ul>
 <a name="writeToGeoWave-org.locationtech.geowave.core.store.api.DataStore-java.util.List-">
@@ -324,13 +324,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                        int&nbsp;minSetSize)</pre>
 </li>
 </ul>
-<a name="generatePointSet-com.vividsolutions.jts.geom.LineString-double-int-">
+<a name="generatePointSet-org.locationtech.jts.geom.LineString-double-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>generatePointSet</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;generatePointSet(com.vividsolutions.jts.geom.LineString&nbsp;line,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;generatePointSet(org.locationtech.jts.geom.LineString&nbsp;line,
                                                                        double&nbsp;distanceFactor,
                                                                        int&nbsp;points)</pre>
 </li>
@@ -367,7 +367,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getFactory</h4>
-<pre>public&nbsp;com.vividsolutions.jts.geom.GeometryFactory&nbsp;getFactory()</pre>
+<pre>public&nbsp;org.locationtech.jts.geom.GeometryFactory&nbsp;getFactory()</pre>
 </li>
 </ul>
 </li>

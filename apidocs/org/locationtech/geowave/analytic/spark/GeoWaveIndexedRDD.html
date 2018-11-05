@@ -169,11 +169,11 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/spark/GeoWaveIndexedRDD.html#getIndexedFeatureRDD-double-">getIndexedFeatureRDD</a></span>(double&nbsp;bufferAmount)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,scala.Tuple2&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,com.vividsolutions.jts.geom.Geometry&gt;&gt;</code></td>
+<td class="colFirst"><code>org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,scala.Tuple2&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.locationtech.jts.geom.Geometry&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/spark/GeoWaveIndexedRDD.html#getIndexedGeometryRDD--">getIndexedGeometryRDD</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,scala.Tuple2&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,com.vividsolutions.jts.geom.Geometry&gt;&gt;</code></td>
+<td class="colFirst"><code>org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,scala.Tuple2&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.locationtech.jts.geom.Geometry&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/spark/GeoWaveIndexedRDD.html#getIndexedGeometryRDD-double-boolean-">getIndexedGeometryRDD</a></span>(double&nbsp;bufferAmount,
                      boolean&nbsp;recalculate)</code>&nbsp;</td>
 </tr>
@@ -271,7 +271,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndexedGeometryRDD</h4>
-<pre>public&nbsp;org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,scala.Tuple2&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,com.vividsolutions.jts.geom.Geometry&gt;&gt;&nbsp;getIndexedGeometryRDD()</pre>
+<pre>public&nbsp;org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,scala.Tuple2&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.locationtech.jts.geom.Geometry&gt;&gt;&nbsp;getIndexedGeometryRDD()</pre>
 </li>
 </ul>
 <a name="getIndexedGeometryRDD-double-boolean-">
@@ -280,8 +280,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndexedGeometryRDD</h4>
-<pre>public&nbsp;org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,scala.Tuple2&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,com.vividsolutions.jts.geom.Geometry&gt;&gt;&nbsp;getIndexedGeometryRDD(double&nbsp;bufferAmount,
-                                                                                                                                                 boolean&nbsp;recalculate)</pre>
+<pre>public&nbsp;org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,scala.Tuple2&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.locationtech.jts.geom.Geometry&gt;&gt;&nbsp;getIndexedGeometryRDD(double&nbsp;bufferAmount,
+                                                                                                                                               boolean&nbsp;recalculate)</pre>
 </li>
 </ul>
 <a name="getIndexStrategy--">

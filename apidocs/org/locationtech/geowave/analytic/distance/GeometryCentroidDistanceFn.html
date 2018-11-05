@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Geometry&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Geometry&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">GeometryCentroidDistanceFn</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Geometry&gt;</pre>
+implements <a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Geometry&gt;</pre>
 <div class="block">Calculate distance between two geometries.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -143,7 +143,7 @@ implements <a href="../../../../../org/locationtech/geowave/analytic/distance/Di
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/distance/GeometryCentroidDistanceFn.html#GeometryCentroidDistanceFn--">GeometryCentroidDistanceFn</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/distance/GeometryCentroidDistanceFn.html#GeometryCentroidDistanceFn-org.locationtech.geowave.analytic.distance.DistanceFn-">GeometryCentroidDistanceFn</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/distance/GeometryCentroidDistanceFn.html#GeometryCentroidDistanceFn-org.locationtech.geowave.analytic.distance.DistanceFn-">GeometryCentroidDistanceFn</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -161,17 +161,17 @@ implements <a href="../../../../../org/locationtech/geowave/analytic/distance/Di
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/distance/GeometryCentroidDistanceFn.html#getCoordinateDistanceFunction--">getCoordinateDistanceFunction</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/distance/GeometryCentroidDistanceFn.html#measure-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">measure</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;x,
-       com.vividsolutions.jts.geom.Geometry&nbsp;y)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/distance/GeometryCentroidDistanceFn.html#measure-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-">measure</a></span>(org.locationtech.jts.geom.Geometry&nbsp;x,
+       org.locationtech.jts.geom.Geometry&nbsp;y)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/distance/GeometryCentroidDistanceFn.html#setCoordinateDistanceFunction-org.locationtech.geowave.analytic.distance.DistanceFn-">setCoordinateDistanceFunction</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/distance/GeometryCentroidDistanceFn.html#setCoordinateDistanceFunction-org.locationtech.geowave.analytic.distance.DistanceFn-">setCoordinateDistanceFunction</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -210,7 +210,7 @@ implements <a href="../../../../../org/locationtech/geowave/analytic/distance/Di
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeometryCentroidDistanceFn</h4>
-<pre>public&nbsp;GeometryCentroidDistanceFn(<a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</pre>
+<pre>public&nbsp;GeometryCentroidDistanceFn(<a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</pre>
 </li>
 </ul>
 </li>
@@ -227,7 +227,7 @@ implements <a href="../../../../../org/locationtech/geowave/analytic/distance/Di
 <ul class="blockList">
 <li class="blockList">
 <h4>getCoordinateDistanceFunction</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;getCoordinateDistanceFunction()</pre>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;getCoordinateDistanceFunction()</pre>
 </li>
 </ul>
 <a name="setCoordinateDistanceFunction-org.locationtech.geowave.analytic.distance.DistanceFn-">
@@ -236,20 +236,20 @@ implements <a href="../../../../../org/locationtech/geowave/analytic/distance/Di
 <ul class="blockList">
 <li class="blockList">
 <h4>setCoordinateDistanceFunction</h4>
-<pre>public&nbsp;void&nbsp;setCoordinateDistanceFunction(<a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</pre>
+<pre>public&nbsp;void&nbsp;setCoordinateDistanceFunction(<a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;coordinateDistanceFunction)</pre>
 </li>
 </ul>
-<a name="measure-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">
+<a name="measure-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>measure</h4>
-<pre>public&nbsp;double&nbsp;measure(com.vividsolutions.jts.geom.Geometry&nbsp;x,
-                      com.vividsolutions.jts.geom.Geometry&nbsp;y)</pre>
+<pre>public&nbsp;double&nbsp;measure(org.locationtech.jts.geom.Geometry&nbsp;x,
+                      org.locationtech.jts.geom.Geometry&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html#measure-T-T-">measure</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;com.vividsolutions.jts.geom.Geometry&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html#measure-T-T-">measure</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance">DistanceFn</a>&lt;org.locationtech.jts.geom.Geometry&gt;</code></dd>
 </dl>
 </li>
 </ul>

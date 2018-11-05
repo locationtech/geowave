@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -155,7 +155,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#DEFAULT_CRS_STR">DEFAULT_CRS_STR</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.GeometryFactory</code></td>
+<td class="colFirst"><code>static org.locationtech.jts.geom.GeometryFactory</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#GEOMETRY_FACTORY">GEOMETRY_FACTORY</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -200,38 +200,38 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.Coordinate</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#adjustCoordinateToFitInRange-org.opengis.referencing.crs.CoordinateReferenceSystem-com.vividsolutions.jts.geom.Coordinate-">adjustCoordinateToFitInRange</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
-                            com.vividsolutions.jts.geom.Coordinate&nbsp;coord)</code>
+<td class="colFirst"><code>static org.locationtech.jts.geom.Coordinate</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#adjustCoordinateToFitInRange-org.opengis.referencing.crs.CoordinateReferenceSystem-org.locationtech.jts.geom.Coordinate-">adjustCoordinateToFitInRange</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                            org.locationtech.jts.geom.Coordinate&nbsp;coord)</code>
 <div class="block">Make sure the coordinate falls in the range of provided coordinate
  reference systems's coordinate system.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#adjustGeo-org.opengis.referencing.crs.CoordinateReferenceSystem-com.vividsolutions.jts.geom.Geometry-">adjustGeo</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
-         com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
+<td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#adjustGeo-org.opengis.referencing.crs.CoordinateReferenceSystem-org.locationtech.jts.geom.Geometry-">adjustGeo</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+         org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Consume a geometry that may be over the ranges of the CRS (e.g date-line
  crossing).</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicConstraintSetFromEnvelope-com.vividsolutions.jts.geom.Envelope-">basicConstraintSetFromEnvelope</a></span>(com.vividsolutions.jts.geom.Envelope&nbsp;env)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicConstraintSetFromEnvelope-org.locationtech.jts.geom.Envelope-">basicConstraintSetFromEnvelope</a></span>(org.locationtech.jts.geom.Envelope&nbsp;env)</code>
 <div class="block">This utility method will convert a JTS envelope to contraints that can be
  used in a GeoWave query.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicConstraintsFromEnvelope-com.vividsolutions.jts.geom.Envelope-">basicConstraintsFromEnvelope</a></span>(com.vividsolutions.jts.geom.Envelope&nbsp;env)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicConstraintsFromEnvelope-org.locationtech.jts.geom.Envelope-">basicConstraintsFromEnvelope</a></span>(org.locationtech.jts.geom.Envelope&nbsp;env)</code>
 <div class="block">This utility method will convert a JTS envelope to contraints that can be
  used in a GeoWave query.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicConstraintsFromGeometry-com.vividsolutions.jts.geom.Geometry-">basicConstraintsFromGeometry</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicConstraintsFromGeometry-org.locationtech.jts.geom.Geometry-">basicConstraintsFromGeometry</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a></code></td>
@@ -243,24 +243,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeoConstraintsWrapper.html" title="class in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeoConstraintsWrapper</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicGeoConstraintsWrapperFromGeometry-com.vividsolutions.jts.geom.Geometry-">basicGeoConstraintsWrapperFromGeometry</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicGeoConstraintsWrapperFromGeometry-org.locationtech.jts.geom.Geometry-">basicGeoConstraintsWrapperFromGeometry</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">This utility method will convert a JTS geometry to contraints that can be
  used in a GeoWave query.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>static org.apache.commons.lang3.tuple.Pair&lt;com.vividsolutions.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#buffer-org.opengis.referencing.crs.CoordinateReferenceSystem-com.vividsolutions.jts.geom.Geometry-java.lang.String-double-">buffer</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
-      com.vividsolutions.jts.geom.Geometry&nbsp;geometry,
+<td class="colFirst"><code>static org.apache.commons.lang3.tuple.Pair&lt;org.locationtech.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#buffer-org.opengis.referencing.crs.CoordinateReferenceSystem-org.locationtech.jts.geom.Geometry-java.lang.String-double-">buffer</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+      org.locationtech.jts.geom.Geometry&nbsp;geometry,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;distanceUnits,
       double&nbsp;distance)</code>
 <div class="block">Build a buffer around a geometry</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;com.vividsolutions.jts.geom.Polygon&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#constructGeometriesOverMapRegions-com.vividsolutions.jts.geom.Coordinate-com.vividsolutions.jts.geom.Geometry-">constructGeometriesOverMapRegions</a></span>(com.vividsolutions.jts.geom.Coordinate&nbsp;modifier,
-                                 com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.jts.geom.Polygon&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#constructGeometriesOverMapRegions-org.locationtech.jts.geom.Coordinate-org.locationtech.jts.geom.Geometry-">constructGeometriesOverMapRegions</a></span>(org.locationtech.jts.geom.Coordinate&nbsp;modifier,
+                                 org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Produce a set of polygons for each region of the map corrected for date
  line and hemisphere crossings.</div>
 </td>
@@ -272,27 +272,27 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
             org.opengis.referencing.operation.MathTransform&nbsp;transform)</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;com.vividsolutions.jts.geom.Polygon&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#fixRangeOfCoordinates-org.opengis.referencing.crs.CoordinateReferenceSystem-com.vividsolutions.jts.geom.Geometry-">fixRangeOfCoordinates</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
-                     com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.jts.geom.Polygon&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#fixRangeOfCoordinates-org.opengis.referencing.crs.CoordinateReferenceSystem-org.locationtech.jts.geom.Geometry-">fixRangeOfCoordinates</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                     org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Adjust geometry so that coordinates fit into long/lat bounds.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
+<td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#geometryFromBinary-byte:A-">geometryFromBinary</a></span>(byte[]&nbsp;binary)</code>
 <div class="block">Converts a byte array as well-known binary to a JTS geometry</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>static byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#geometryToBinary-com.vividsolutions.jts.geom.Geometry-">geometryToBinary</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#geometryToBinary-org.locationtech.jts.geom.Geometry-">geometryToBinary</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Converts a JTS geometry to binary using JTS a Well Known Binary writer</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#getBoundsFromEnvelope-com.vividsolutions.jts.geom.Envelope-">getBoundsFromEnvelope</a></span>(com.vividsolutions.jts.geom.Envelope&nbsp;envelope)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#getBoundsFromEnvelope-org.locationtech.jts.geom.Envelope-">getBoundsFromEnvelope</a></span>(org.locationtech.jts.geom.Envelope&nbsp;envelope)</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
@@ -311,7 +311,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#getIndexCrs-org.locationtech.geowave.core.store.api.Index:A-">getIndexCrs</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;indices)</code>&nbsp;</td>
 </tr>
 <tr id="i19" class="rowColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
+<td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#infinity--">infinity</a></span>()</code>
 <div class="block">This mehtod returns an envelope between negative infinite and positive
  inifinity in both x and y</div>
@@ -322,22 +322,26 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#initClassLoader--">initClassLoader</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i21" class="rowColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#world-com.vividsolutions.jts.geom.GeometryFactory-org.opengis.referencing.crs.CoordinateReferenceSystem-">world</a></span>(com.vividsolutions.jts.geom.GeometryFactory&nbsp;factory,
+<td class="colFirst"><code>static javax.measure.Unit&lt;javax.measure.quantity.Length&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#lookup-java.lang.String-">lookup</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
+</tr>
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#world-org.locationtech.jts.geom.GeometryFactory-org.opengis.referencing.crs.CoordinateReferenceSystem-">world</a></span>(org.locationtech.jts.geom.GeometryFactory&nbsp;factory,
      org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>
 <div class="block">Return a multi-polygon representing the bounded map regions split by the
  axis</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#xRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">xRangeFromGeometry</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#xRangeFromGeometry-org.locationtech.jts.geom.Geometry-">xRangeFromGeometry</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Generate a longitude range from a JTS geometry</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#yRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">yRangeFromGeometry</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#yRangeFromGeometry-org.locationtech.jts.geom.Geometry-">yRangeFromGeometry</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Generate a latitude range from a JTS geometry</div>
 </td>
 </tr>
@@ -369,7 +373,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>GEOMETRY_FACTORY</h4>
-<pre>public static final&nbsp;com.vividsolutions.jts.geom.GeometryFactory GEOMETRY_FACTORY</pre>
+<pre>public static final&nbsp;org.locationtech.jts.geom.GeometryFactory GEOMETRY_FACTORY</pre>
 </li>
 </ul>
 <a name="DEFAULT_CRS_STR">
@@ -433,22 +437,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="basicConstraintsFromGeometry-com.vividsolutions.jts.geom.Geometry-">
+<a name="basicConstraintsFromGeometry-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>basicConstraintsFromGeometry</h4>
-<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;basicConstraintsFromGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;basicConstraintsFromGeometry(org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
 </li>
 </ul>
-<a name="basicGeoConstraintsWrapperFromGeometry-com.vividsolutions.jts.geom.Geometry-">
+<a name="basicGeoConstraintsWrapperFromGeometry-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>basicGeoConstraintsWrapperFromGeometry</h4>
-<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeoConstraintsWrapper.html" title="class in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeoConstraintsWrapper</a>&nbsp;basicGeoConstraintsWrapperFromGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeoConstraintsWrapper.html" title="class in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeoConstraintsWrapper</a>&nbsp;basicGeoConstraintsWrapperFromGeometry(org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">This utility method will convert a JTS geometry to contraints that can be
  used in a GeoWave query.</div>
 <dl>
@@ -458,13 +462,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="basicConstraintSetFromEnvelope-com.vividsolutions.jts.geom.Envelope-">
+<a name="basicConstraintSetFromEnvelope-org.locationtech.jts.geom.Envelope-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>basicConstraintSetFromEnvelope</h4>
-<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a>&nbsp;basicConstraintSetFromEnvelope(com.vividsolutions.jts.geom.Envelope&nbsp;env)</pre>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a>&nbsp;basicConstraintSetFromEnvelope(org.locationtech.jts.geom.Envelope&nbsp;env)</pre>
 <div class="block">This utility method will convert a JTS envelope to contraints that can be
  used in a GeoWave query.</div>
 <dl>
@@ -474,13 +478,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="basicConstraintsFromEnvelope-com.vividsolutions.jts.geom.Envelope-">
+<a name="basicConstraintsFromEnvelope-org.locationtech.jts.geom.Envelope-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>basicConstraintsFromEnvelope</h4>
-<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;basicConstraintsFromEnvelope(com.vividsolutions.jts.geom.Envelope&nbsp;env)</pre>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;basicConstraintsFromEnvelope(org.locationtech.jts.geom.Envelope&nbsp;env)</pre>
 <div class="block">This utility method will convert a JTS envelope to contraints that can be
  used in a GeoWave query.</div>
 <dl>
@@ -507,22 +511,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="getBoundsFromEnvelope-com.vividsolutions.jts.geom.Envelope-">
+<a name="getBoundsFromEnvelope-org.locationtech.jts.geom.Envelope-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getBoundsFromEnvelope</h4>
-<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;getBoundsFromEnvelope(com.vividsolutions.jts.geom.Envelope&nbsp;envelope)</pre>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;getBoundsFromEnvelope(org.locationtech.jts.geom.Envelope&nbsp;envelope)</pre>
 </li>
 </ul>
-<a name="xRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">
+<a name="xRangeFromGeometry-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>xRangeFromGeometry</h4>
-<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;xRangeFromGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;xRangeFromGeometry(org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">Generate a longitude range from a JTS geometry</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -532,13 +536,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="yRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">
+<a name="yRangeFromGeometry-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>yRangeFromGeometry</h4>
-<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;yRangeFromGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;yRangeFromGeometry(org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">Generate a latitude range from a JTS geometry</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -548,13 +552,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="geometryToBinary-com.vividsolutions.jts.geom.Geometry-">
+<a name="geometryToBinary-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>geometryToBinary</h4>
-<pre>public static&nbsp;byte[]&nbsp;geometryToBinary(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+<pre>public static&nbsp;byte[]&nbsp;geometryToBinary(org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">Converts a JTS geometry to binary using JTS a Well Known Binary writer</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -570,7 +574,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>geometryFromBinary</h4>
-<pre>public static&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;geometryFromBinary(byte[]&nbsp;binary)</pre>
+<pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;geometryFromBinary(byte[]&nbsp;binary)</pre>
 <div class="block">Converts a byte array as well-known binary to a JTS geometry</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -586,7 +590,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>infinity</h4>
-<pre>public static&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;infinity()</pre>
+<pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;infinity()</pre>
 <div class="block">This mehtod returns an envelope between negative infinite and positive
  inifinity in both x and y</div>
 <dl>
@@ -622,17 +626,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getCrsCode(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
 </li>
 </ul>
-<a name="buffer-org.opengis.referencing.crs.CoordinateReferenceSystem-com.vividsolutions.jts.geom.Geometry-java.lang.String-double-">
+<a name="buffer-org.opengis.referencing.crs.CoordinateReferenceSystem-org.locationtech.jts.geom.Geometry-java.lang.String-double-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>buffer</h4>
-<pre>public static final&nbsp;org.apache.commons.lang3.tuple.Pair&lt;com.vividsolutions.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;buffer(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
-                                                                                                            com.vividsolutions.jts.geom.Geometry&nbsp;geometry,
-                                                                                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;distanceUnits,
-                                                                                                            double&nbsp;distance)
-                                                                                                     throws org.opengis.referencing.operation.TransformException</pre>
+<pre>public static final&nbsp;org.apache.commons.lang3.tuple.Pair&lt;org.locationtech.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;buffer(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                                                                                                          org.locationtech.jts.geom.Geometry&nbsp;geometry,
+                                                                                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;distanceUnits,
+                                                                                                          double&nbsp;distance)
+                                                                                                   throws org.opengis.referencing.operation.TransformException</pre>
 <div class="block">Build a buffer around a geometry</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -646,14 +650,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="adjustGeo-org.opengis.referencing.crs.CoordinateReferenceSystem-com.vividsolutions.jts.geom.Geometry-">
+<a name="lookup-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>lookup</h4>
+<pre>public static&nbsp;javax.measure.Unit&lt;javax.measure.quantity.Length&gt;&nbsp;lookup(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+</li>
+</ul>
+<a name="adjustGeo-org.opengis.referencing.crs.CoordinateReferenceSystem-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>adjustGeo</h4>
-<pre>public static&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;adjustGeo(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
-                                                             com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+<pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;adjustGeo(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                                                           org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">Consume a geometry that may be over the ranges of the CRS (e.g date-line
  crossing). Adjust for crossings with a multi-polygon instance where each
  contained polygon represents a portion of the provided geometry longitude
@@ -666,14 +679,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="fixRangeOfCoordinates-org.opengis.referencing.crs.CoordinateReferenceSystem-com.vividsolutions.jts.geom.Geometry-">
+<a name="fixRangeOfCoordinates-org.opengis.referencing.crs.CoordinateReferenceSystem-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>fixRangeOfCoordinates</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;com.vividsolutions.jts.geom.Polygon&gt;&nbsp;fixRangeOfCoordinates(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
-                                                                              com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.jts.geom.Polygon&gt;&nbsp;fixRangeOfCoordinates(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                                                                            org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">Adjust geometry so that coordinates fit into long/lat bounds.
 
  Split date-line crossing polygons.
@@ -687,14 +700,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="constructGeometriesOverMapRegions-com.vividsolutions.jts.geom.Coordinate-com.vividsolutions.jts.geom.Geometry-">
+<a name="constructGeometriesOverMapRegions-org.locationtech.jts.geom.Coordinate-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>constructGeometriesOverMapRegions</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;com.vividsolutions.jts.geom.Polygon&gt;&nbsp;constructGeometriesOverMapRegions(com.vividsolutions.jts.geom.Coordinate&nbsp;modifier,
-                                                                                          com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.jts.geom.Polygon&gt;&nbsp;constructGeometriesOverMapRegions(org.locationtech.jts.geom.Coordinate&nbsp;modifier,
+                                                                                        org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">Produce a set of polygons for each region of the map corrected for date
  line and hemisphere crossings. Due to the complexity of going around the
  hemisphere, clip the range.
@@ -711,14 +724,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="adjustCoordinateToFitInRange-org.opengis.referencing.crs.CoordinateReferenceSystem-com.vividsolutions.jts.geom.Coordinate-">
+<a name="adjustCoordinateToFitInRange-org.opengis.referencing.crs.CoordinateReferenceSystem-org.locationtech.jts.geom.Coordinate-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>adjustCoordinateToFitInRange</h4>
-<pre>public static&nbsp;com.vividsolutions.jts.geom.Coordinate&nbsp;adjustCoordinateToFitInRange(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
-                                                                                  com.vividsolutions.jts.geom.Coordinate&nbsp;coord)</pre>
+<pre>public static&nbsp;org.locationtech.jts.geom.Coordinate&nbsp;adjustCoordinateToFitInRange(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
+                                                                                org.locationtech.jts.geom.Coordinate&nbsp;coord)</pre>
 <div class="block">Make sure the coordinate falls in the range of provided coordinate
  reference systems's coordinate system. 'x' coordinate is wrapped around
  date line. 'y' and 'z' coordinate are clipped. At some point, this
@@ -752,14 +765,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="world-com.vividsolutions.jts.geom.GeometryFactory-org.opengis.referencing.crs.CoordinateReferenceSystem-">
+<a name="world-org.locationtech.jts.geom.GeometryFactory-org.opengis.referencing.crs.CoordinateReferenceSystem-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>world</h4>
-<pre>public static&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;world(com.vividsolutions.jts.geom.GeometryFactory&nbsp;factory,
-                                                         org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
+<pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;world(org.locationtech.jts.geom.GeometryFactory&nbsp;factory,
+                                                       org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
 <div class="block">Return a multi-polygon representing the bounded map regions split by the
  axis</div>
 <dl>

@@ -183,9 +183,9 @@ implements <a href="../../../../../org/locationtech/geowave/analytic/AnalyticIte
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapper.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapper</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html#createNextItem-T-java.lang.String-com.vividsolutions.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextItem</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&nbsp;feature,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html#createNextItem-T-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextItem</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&nbsp;feature,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupID,
-              com.vividsolutions.jts.geom.Coordinate&nbsp;coordinate,
+              org.locationtech.jts.geom.Coordinate&nbsp;coordinate,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;extraNames,
               double[]&nbsp;extraValues)</code>
 <div class="block">Creates a new item based on the old item with new coordinates and
@@ -299,9 +299,9 @@ implements <a href="../../../../../org/locationtech/geowave/analytic/AnalyticIte
 <pre>public&nbsp;void&nbsp;setItemFactory(<a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&gt;&nbsp;itemFactory)</pre>
 </li>
 </ul>
-<a name="createNextItem-java.lang.Object-java.lang.String-com.vividsolutions.jts.geom.Coordinate-java.lang.String:A-double:A-">
+<a name="createNextItem-java.lang.Object-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">
 <!--   -->
-</a><a name="createNextItem-T-java.lang.String-com.vividsolutions.jts.geom.Coordinate-java.lang.String:A-double:A-">
+</a><a name="createNextItem-T-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -309,15 +309,15 @@ implements <a href="../../../../../org/locationtech/geowave/analytic/AnalyticIte
 <h4>createNextItem</h4>
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapper.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapper</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&gt;&nbsp;createNextItem(<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&nbsp;feature,
                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupID,
-                                             com.vividsolutions.jts.geom.Coordinate&nbsp;coordinate,
+                                             org.locationtech.jts.geom.Coordinate&nbsp;coordinate,
                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;extraNames,
                                              double[]&nbsp;extraValues)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html#createNextItem-T-java.lang.String-com.vividsolutions.jts.geom.Coordinate-java.lang.String:A-double:A-">AnalyticItemWrapperFactory</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html#createNextItem-T-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">AnalyticItemWrapperFactory</a></code></span></div>
 <div class="block">Creates a new item based on the old item with new coordinates and
  dimension values</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html#createNextItem-T-java.lang.String-com.vividsolutions.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextItem</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html#createNextItem-T-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">createNextItem</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/clustering/CentroidItemWrapperFactory.html" title="type parameter in CentroidItemWrapperFactory">T</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 </dl>
 </li>

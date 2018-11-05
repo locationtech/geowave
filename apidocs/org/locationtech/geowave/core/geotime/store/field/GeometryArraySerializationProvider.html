@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldSerializationProviderSpi</a>&lt;com.vividsolutions.jts.geom.Geometry[]&gt;</dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldSerializationProviderSpi</a>&lt;org.locationtech.jts.geom.Geometry[]&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">GeometryArraySerializationProvider</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldSerializationProviderSpi</a>&lt;com.vividsolutions.jts.geom.Geometry[]&gt;</pre>
+implements <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldSerializationProviderSpi</a>&lt;org.locationtech.jts.geom.Geometry[]&gt;</pre>
 </li>
 </ul>
 </div>
@@ -152,11 +152,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;com.vividsolutions.jts.geom.Geometry[]&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;org.locationtech.jts.geom.Geometry[]&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/field/GeometryArraySerializationProvider.html#getFieldReader--">getFieldReader</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,com.vividsolutions.jts.geom.Geometry[]&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.locationtech.jts.geom.Geometry[]&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/field/GeometryArraySerializationProvider.html#getFieldWriter--">getFieldWriter</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
@@ -204,10 +204,10 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <ul class="blockList">
 <li class="blockList">
 <h4>getFieldReader</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;com.vividsolutions.jts.geom.Geometry[]&gt;&nbsp;getFieldReader()</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;org.locationtech.jts.geom.Geometry[]&gt;&nbsp;getFieldReader()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html#getFieldReader--">getFieldReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldSerializationProviderSpi</a>&lt;com.vividsolutions.jts.geom.Geometry[]&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html#getFieldReader--">getFieldReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldSerializationProviderSpi</a>&lt;org.locationtech.jts.geom.Geometry[]&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -217,10 +217,10 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getFieldWriter</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,com.vividsolutions.jts.geom.Geometry[]&gt;&nbsp;getFieldWriter()</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldWriter.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.locationtech.jts.geom.Geometry[]&gt;&nbsp;getFieldWriter()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html#getFieldWriter--">getFieldWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldSerializationProviderSpi</a>&lt;com.vividsolutions.jts.geom.Geometry[]&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html#getFieldWriter--">getFieldWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldSerializationProviderSpi.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldSerializationProviderSpi</a>&lt;org.locationtech.jts.geom.Geometry[]&gt;</code></dd>
 </dl>
 </li>
 </ul>

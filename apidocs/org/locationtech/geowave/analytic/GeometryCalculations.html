@@ -147,10 +147,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;com.vividsolutions.jts.geom.Geometry&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/GeometryCalculations.html#buildSurroundingGeometries-double:A-javax.measure.unit.Unit-com.vividsolutions.jts.geom.Coordinate-">buildSurroundingGeometries</a></span>(double[]&nbsp;distances,
-                          javax.measure.unit.Unit&lt;javax.measure.quantity.Length&gt;&nbsp;unit,
-                          com.vividsolutions.jts.geom.Coordinate&nbsp;coordinate)</code>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.jts.geom.Geometry&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/GeometryCalculations.html#buildSurroundingGeometries-double:A-javax.measure.Unit-org.locationtech.jts.geom.Coordinate-">buildSurroundingGeometries</a></span>(double[]&nbsp;distances,
+                          javax.measure.Unit&lt;javax.measure.quantity.Length&gt;&nbsp;unit,
+                          org.locationtech.jts.geom.Coordinate&nbsp;coordinate)</code>
 <div class="block">Build geometries with the provided coordinate at the center.</div>
 </td>
 </tr>
@@ -193,15 +193,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="buildSurroundingGeometries-double:A-javax.measure.unit.Unit-com.vividsolutions.jts.geom.Coordinate-">
+<a name="buildSurroundingGeometries-double:A-javax.measure.Unit-org.locationtech.jts.geom.Coordinate-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>buildSurroundingGeometries</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;com.vividsolutions.jts.geom.Geometry&gt;&nbsp;buildSurroundingGeometries(double[]&nbsp;distances,
-                                                                             javax.measure.unit.Unit&lt;javax.measure.quantity.Length&gt;&nbsp;unit,
-                                                                             com.vividsolutions.jts.geom.Coordinate&nbsp;coordinate)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.jts.geom.Geometry&gt;&nbsp;buildSurroundingGeometries(double[]&nbsp;distances,
+                                                                           javax.measure.Unit&lt;javax.measure.quantity.Length&gt;&nbsp;unit,
+                                                                           org.locationtech.jts.geom.Coordinate&nbsp;coordinate)</pre>
 <div class="block">Build geometries with the provided coordinate at the center. The width of
  the geometry is twice the distance provided. More than one geometry is
  return when passing the date line.</div>

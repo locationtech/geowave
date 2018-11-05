@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;byte[],com.vividsolutions.jts.geom.Geometry&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;com.vividsolutions.jts.geom.Geometry&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;byte[],org.locationtech.jts.geom.Geometry&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;org.locationtech.jts.geom.Geometry&gt;</dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -119,7 +119,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>protected static class <span class="typeNameLabel">GeometrySerializationProvider.GeometryReader</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;com.vividsolutions.jts.geom.Geometry&gt;</pre>
+implements <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;org.locationtech.jts.geom.Geometry&gt;</pre>
 </li>
 </ul>
 </div>
@@ -158,7 +158,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>com.vividsolutions.jts.geom.Geometry</code></td>
+<td class="colFirst"><code>org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/field/GeometrySerializationProvider.GeometryReader.html#readField-byte:A-">readField</a></span>(byte[]&nbsp;fieldData)</code>
 <div class="block">Deserializes the field from binary data</div>
 </td>
@@ -222,12 +222,12 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <ul class="blockListLast">
 <li class="blockList">
 <h4>readField</h4>
-<pre>public&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;readField(byte[]&nbsp;fieldData)</pre>
+<pre>public&nbsp;org.locationtech.jts.geom.Geometry&nbsp;readField(byte[]&nbsp;fieldData)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html#readField-byte:A-">FieldReader</a></code></span></div>
 <div class="block">Deserializes the field from binary data</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html#readField-byte:A-">readField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;com.vividsolutions.jts.geom.Geometry&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html#readField-byte:A-">readField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;org.locationtech.jts.geom.Geometry&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fieldData</code> - The binary serialization of the data object</dd>
 <dt><span class="returnLabel">Returns:</span></dt>

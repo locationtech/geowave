@@ -166,9 +166,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/raster/RasterUtils.html#combineIntoOneGeometry-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">combineIntoOneGeometry</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry1,
-                      com.vividsolutions.jts.geom.Geometry&nbsp;geometry2)</code>&nbsp;</td>
+<td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/raster/RasterUtils.html#combineIntoOneGeometry-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-">combineIntoOneGeometry</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geometry1,
+                      org.locationtech.jts.geom.Geometry&nbsp;geometry2)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/AffineTransform.html?is-external=true" title="class or interface in java.awt.geom">AffineTransform</a></code></td>
@@ -268,12 +268,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
              <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ColorModel.html?is-external=true" title="class or interface in java.awt.image">ColorModel</a>&nbsp;defaultColorModel)</code>&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
+<td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/raster/RasterUtils.html#getFootprint-org.opengis.coverage.grid.GridCoverage-org.opengis.referencing.crs.CoordinateReferenceSystem-">getFootprint</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
             org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;targetCrs)</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
+<td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/raster/RasterUtils.html#getFootprint-org.geotools.geometry.jts.ReferencedEnvelope-org.opengis.coverage.grid.GridCoverage-">getFootprint</a></span>(org.geotools.geometry.jts.ReferencedEnvelope&nbsp;projectedReferenceEnvelope,
             org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage)</code>&nbsp;</td>
 </tr>
@@ -368,8 +368,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getFootprint</h4>
-<pre>public static&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;getFootprint(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
-                                                                org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;targetCrs)</pre>
+<pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;getFootprint(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
+                                                              org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;targetCrs)</pre>
 </li>
 </ul>
 <a name="getReferenceEnvelope-org.opengis.coverage.grid.GridCoverage-org.opengis.referencing.crs.CoordinateReferenceSystem-">
@@ -388,18 +388,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getFootprint</h4>
-<pre>public static&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;getFootprint(org.geotools.geometry.jts.ReferencedEnvelope&nbsp;projectedReferenceEnvelope,
-                                                                org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage)</pre>
+<pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;getFootprint(org.geotools.geometry.jts.ReferencedEnvelope&nbsp;projectedReferenceEnvelope,
+                                                              org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage)</pre>
 </li>
 </ul>
-<a name="combineIntoOneGeometry-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">
+<a name="combineIntoOneGeometry-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>combineIntoOneGeometry</h4>
-<pre>public static&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;combineIntoOneGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry1,
-                                                                          com.vividsolutions.jts.geom.Geometry&nbsp;geometry2)</pre>
+<pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;combineIntoOneGeometry(org.locationtech.jts.geom.Geometry&nbsp;geometry1,
+                                                                        org.locationtech.jts.geom.Geometry&nbsp;geometry2)</pre>
 </li>
 </ul>
 <a name="createTransform-double:A-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">

@@ -147,9 +147,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static com.vividsolutions.jts.geom.Geometry</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/QueryIndexHelper.html#clipIndexedBBOXConstraints-org.opengis.feature.simple.SimpleFeatureType-com.vividsolutions.jts.geom.Geometry-java.util.Map-">clipIndexedBBOXConstraints</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
-                          com.vividsolutions.jts.geom.Geometry&nbsp;bbox,
+<td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/QueryIndexHelper.html#clipIndexedBBOXConstraints-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.jts.geom.Geometry-java.util.Map-">clipIndexedBBOXConstraints</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
+                          org.locationtech.jts.geom.Geometry&nbsp;bbox,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&gt;&nbsp;statsMap)</code>
 <div class="block">Clip the provided bounded box with the statistics for the index</div>
 </td>
@@ -164,19 +164,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/QueryIndexHelper.html#composeConstraints-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.geotime.util.TimeDescriptors-java.util.Map-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">composeConstraints</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/QueryIndexHelper.html#composeConstraints-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.geotime.util.TimeDescriptors-java.util.Map-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">composeConstraints</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                   <a href="../../../../../../org/locationtech/geowave/core/geotime/util/TimeDescriptors.html" title="class in org.locationtech.geowave.core.geotime.util">TimeDescriptors</a>&nbsp;timeDescriptors,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&gt;&nbsp;statsMap,
-                  com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+                  org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
                   <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</code>
 <div class="block">Compose a query from the set of constraints.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeoConstraintsWrapper.html" title="class in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeoConstraintsWrapper</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/QueryIndexHelper.html#composeGeometricConstraints-org.opengis.feature.simple.SimpleFeatureType-java.util.Map-com.vividsolutions.jts.geom.Geometry-">composeGeometricConstraints</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/QueryIndexHelper.html#composeGeometricConstraints-org.opengis.feature.simple.SimpleFeatureType-java.util.Map-org.locationtech.jts.geom.Geometry-">composeGeometricConstraints</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&gt;&nbsp;statsMap,
-                           com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds)</code>
+                           org.locationtech.jts.geom.Geometry&nbsp;jtsBounds)</code>
 <div class="block">If composed constraints matched statistics constraints, are empty or
  null, then return empty constraint set</div>
 </td>
@@ -268,15 +268,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="clipIndexedBBOXConstraints-org.opengis.feature.simple.SimpleFeatureType-com.vividsolutions.jts.geom.Geometry-java.util.Map-">
+<a name="clipIndexedBBOXConstraints-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.jts.geom.Geometry-java.util.Map-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>clipIndexedBBOXConstraints</h4>
-<pre>public static&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;clipIndexedBBOXConstraints(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
-                                                                              com.vividsolutions.jts.geom.Geometry&nbsp;bbox,
-                                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&gt;&nbsp;statsMap)</pre>
+<pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;clipIndexedBBOXConstraints(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
+                                                                            org.locationtech.jts.geom.Geometry&nbsp;bbox,
+                                                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&gt;&nbsp;statsMap)</pre>
 <div class="block">Clip the provided bounded box with the statistics for the index</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -351,7 +351,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="composeGeometricConstraints-org.opengis.feature.simple.SimpleFeatureType-java.util.Map-com.vividsolutions.jts.geom.Geometry-">
+<a name="composeGeometricConstraints-org.opengis.feature.simple.SimpleFeatureType-java.util.Map-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -359,7 +359,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>composeGeometricConstraints</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeoConstraintsWrapper.html" title="class in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeoConstraintsWrapper</a>&nbsp;composeGeometricConstraints(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                                                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&gt;&nbsp;statsMap,
-                                                                              com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds)</pre>
+                                                                              org.locationtech.jts.geom.Geometry&nbsp;jtsBounds)</pre>
 <div class="block">If composed constraints matched statistics constraints, are empty or
  null, then return empty constraint set</div>
 <dl>
@@ -372,7 +372,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="composeConstraints-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.geotime.util.TimeDescriptors-java.util.Map-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">
+<a name="composeConstraints-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.geotime.util.TimeDescriptors-java.util.Map-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -381,7 +381,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;composeConstraints(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                                                         <a href="../../../../../../org/locationtech/geowave/core/geotime/util/TimeDescriptors.html" title="class in org.locationtech.geowave.core.geotime.util">TimeDescriptors</a>&nbsp;timeDescriptors,
                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&gt;&nbsp;statsMap,
-                                                        com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+                                                        org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
                                                         <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</pre>
 <div class="block">Compose a query from the set of constraints. When the provided
  constraints do not fulfill the indexed dimensions, compose constraints

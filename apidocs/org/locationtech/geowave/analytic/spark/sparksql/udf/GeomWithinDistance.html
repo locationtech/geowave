@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, org.apache.spark.sql.api.java.UDF2&lt;com.vividsolutions.jts.geom.Geometry,com.vividsolutions.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;, <a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/BufferOperation.html" title="interface in org.locationtech.geowave.analytic.spark.sparksql.udf">BufferOperation</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, org.apache.spark.sql.api.java.UDF2&lt;org.locationtech.jts.geom.Geometry,org.locationtech.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;, <a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/BufferOperation.html" title="interface in org.locationtech.geowave.analytic.spark.sparksql.udf">BufferOperation</a></dd>
 </dl>
 <hr>
 <br>
@@ -164,8 +164,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/analytic/spark/sp
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomWithinDistance.html#apply-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">apply</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geom1,
-     com.vividsolutions.jts.geom.Geometry&nbsp;geom2)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomWithinDistance.html#apply-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-">apply</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geom1,
+     org.locationtech.jts.geom.Geometry&nbsp;geom2)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>double</code></td>
@@ -185,7 +185,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/analytic/spark/sp
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.analytic.spark.sparksql.udf.<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udf">GeomFunction</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomFunction.html#call-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">call</a>, <a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomFunction.html#getRegisterName--">getRegisterName</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomFunction.html#call-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-">call</a>, <a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomFunction.html#getRegisterName--">getRegisterName</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -267,17 +267,17 @@ extends <a href="../../../../../../../org/locationtech/geowave/analytic/spark/sp
 <pre>public&nbsp;void&nbsp;setRadius(double&nbsp;radius)</pre>
 </li>
 </ul>
-<a name="apply-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">
+<a name="apply-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>apply</h4>
-<pre>public&nbsp;boolean&nbsp;apply(com.vividsolutions.jts.geom.Geometry&nbsp;geom1,
-                     com.vividsolutions.jts.geom.Geometry&nbsp;geom2)</pre>
+<pre>public&nbsp;boolean&nbsp;apply(org.locationtech.jts.geom.Geometry&nbsp;geom1,
+                     org.locationtech.jts.geom.Geometry&nbsp;geom2)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomFunction.html#apply-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">apply</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udf">GeomFunction</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomFunction.html#apply-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-">apply</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in org.locationtech.geowave.analytic.spark.sparksql.udf">GeomFunction</a></code></dd>
 </dl>
 </li>
 </ul>

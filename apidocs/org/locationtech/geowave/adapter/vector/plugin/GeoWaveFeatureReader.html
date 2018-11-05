@@ -157,8 +157,8 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected com.vividsolutions.jts.geom.Geometry</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#clipIndexedBBOXConstraints-com.vividsolutions.jts.geom.Geometry-">clipIndexedBBOXConstraints</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;bbox)</code>&nbsp;</td>
+<td class="colFirst"><code>protected org.locationtech.jts.geom.Geometry</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#clipIndexedBBOXConstraints-org.locationtech.jts.geom.Geometry-">clipIndexedBBOXConstraints</a></span>(org.locationtech.jts.geom.Geometry&nbsp;bbox)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a></code></td>
@@ -183,27 +183,27 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getCountInternal-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-">getCountInternal</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getCountInternal-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-">getCountInternal</a></span>(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
                 <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
                 org.opengis.filter.Filter&nbsp;filter,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getData-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-">getData</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getData-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-">getData</a></span>(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
        <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
        org.opengis.filter.Filter&nbsp;filter,
        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getData-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-java.lang.Integer-">getData</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getData-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-java.lang.Integer-">getData</a></span>(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
        <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getData-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-int-int-double-org.opengis.filter.Filter-org.geotools.geometry.jts.ReferencedEnvelope-java.lang.Integer-">getData</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getData-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-int-int-double-org.opengis.filter.Filter-org.geotools.geometry.jts.ReferencedEnvelope-java.lang.Integer-">getData</a></span>(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
        <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
        int&nbsp;width,
        int&nbsp;height,
@@ -246,7 +246,7 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#issueQuery-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.locationtech.geowave.adapter.vector.plugin.QueryIssuer-">issueQuery</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#issueQuery-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.locationtech.geowave.adapter.vector.plugin.QueryIssuer-">issueQuery</a></span>(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
           <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
           <a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/QueryIssuer.html" title="interface in org.locationtech.geowave.adapter.vector.plugin">QueryIssuer</a>&nbsp;issuer)</code>&nbsp;</td>
 </tr>
@@ -256,7 +256,7 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#renderData-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions-">renderData</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#renderData-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions-">renderData</a></span>(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
           <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
           org.opengis.filter.Filter&nbsp;filter,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
@@ -413,25 +413,25 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 <pre>public&nbsp;long&nbsp;getCount()</pre>
 </li>
 </ul>
-<a name="getCountInternal-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-">
+<a name="getCountInternal-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getCountInternal</h4>
-<pre>protected&nbsp;long&nbsp;getCountInternal(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<pre>protected&nbsp;long&nbsp;getCountInternal(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
                                 <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
                                 org.opengis.filter.Filter&nbsp;filter,
                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</pre>
 </li>
 </ul>
-<a name="issueQuery-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.locationtech.geowave.adapter.vector.plugin.QueryIssuer-">
+<a name="issueQuery-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.locationtech.geowave.adapter.vector.plugin.QueryIssuer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>issueQuery</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;issueQuery(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;issueQuery(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
                                                                               <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
                                                                               <a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/QueryIssuer.html" title="interface in org.locationtech.geowave.adapter.vector.plugin">QueryIssuer</a>&nbsp;issuer)</pre>
 </li>
@@ -454,26 +454,26 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 <pre>protected static&nbsp;boolean&nbsp;hasTime(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 </li>
 </ul>
-<a name="renderData-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions-">
+<a name="renderData-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>renderData</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;renderData(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;renderData(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
                                                                               <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
                                                                               org.opengis.filter.Filter&nbsp;filter,
                                                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
                                                                               <a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderOptions.html" title="class in org.locationtech.geowave.adapter.vector.render">DistributedRenderOptions</a>&nbsp;renderOptions)</pre>
 </li>
 </ul>
-<a name="getData-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-int-int-double-org.opengis.filter.Filter-org.geotools.geometry.jts.ReferencedEnvelope-java.lang.Integer-">
+<a name="getData-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-int-int-double-org.opengis.filter.Filter-org.geotools.geometry.jts.ReferencedEnvelope-java.lang.Integer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getData</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getData(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getData(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
                                                                            <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
                                                                            int&nbsp;width,
                                                                            int&nbsp;height,
@@ -483,24 +483,24 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
                                                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</pre>
 </li>
 </ul>
-<a name="getData-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-java.lang.Integer-">
+<a name="getData-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-java.lang.Integer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getData</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getData(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getData(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
                                                                            <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
                                                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</pre>
 </li>
 </ul>
-<a name="getData-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-">
+<a name="getData-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getData</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getData(com.vividsolutions.jts.geom.Geometry&nbsp;jtsBounds,
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getData(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
                                                                            <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
                                                                            org.opengis.filter.Filter&nbsp;filter,
                                                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit)</pre>
@@ -533,13 +533,13 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 <pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;clipIndexedTemporalConstraints(<a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;constraintsSet)</pre>
 </li>
 </ul>
-<a name="clipIndexedBBOXConstraints-com.vividsolutions.jts.geom.Geometry-">
+<a name="clipIndexedBBOXConstraints-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>clipIndexedBBOXConstraints</h4>
-<pre>protected&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;clipIndexedBBOXConstraints(com.vividsolutions.jts.geom.Geometry&nbsp;bbox)</pre>
+<pre>protected&nbsp;org.locationtech.jts.geom.Geometry&nbsp;clipIndexedBBOXConstraints(org.locationtech.jts.geom.Geometry&nbsp;bbox)</pre>
 </li>
 </ul>
 <a name="convertToType-java.lang.String-java.lang.Object-">

@@ -152,7 +152,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                       <a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static org.apache.spark.api.java.JavaRDD&lt;com.vividsolutions.jts.geom.Point&gt;</code></td>
+<td class="colFirst"><code>static org.apache.spark.api.java.JavaRDD&lt;org.locationtech.jts.geom.Point&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/spark/RDDUtils.html#rddFeatureCentroids-org.locationtech.geowave.analytic.spark.GeoWaveRDD-">rddFeatureCentroids</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRDD.html" title="class in org.locationtech.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;inputRDD)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -167,8 +167,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/spark/RDDUtils.html#trimIndexIds-org.locationtech.geowave.core.index.InsertionIds-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.index.NumericIndexStrategy-">trimIndexIds</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;rawIds,
-            com.vividsolutions.jts.geom.Geometry&nbsp;geom,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/spark/RDDUtils.html#trimIndexIds-org.locationtech.geowave.core.index.InsertionIds-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.index.NumericIndexStrategy-">trimIndexIds</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;rawIds,
+            org.locationtech.jts.geom.Geometry&nbsp;geom,
             <a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -273,7 +273,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>rddFeatureCentroids</h4>
-<pre>public static&nbsp;org.apache.spark.api.java.JavaRDD&lt;com.vividsolutions.jts.geom.Point&gt;&nbsp;rddFeatureCentroids(<a href="../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRDD.html" title="class in org.locationtech.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;inputRDD)</pre>
+<pre>public static&nbsp;org.apache.spark.api.java.JavaRDD&lt;org.locationtech.jts.geom.Point&gt;&nbsp;rddFeatureCentroids(<a href="../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRDD.html" title="class in org.locationtech.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;inputRDD)</pre>
 </li>
 </ul>
 <a name="rddFeatureVectors-org.locationtech.geowave.analytic.spark.GeoWaveRDD-">
@@ -296,14 +296,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                                                         <a href="../../../../../org/locationtech/geowave/core/geotime/store/query/ScaledTemporalRange.html" title="class in org.locationtech.geowave.core.geotime.store.query">ScaledTemporalRange</a>&nbsp;scaledRange)</pre>
 </li>
 </ul>
-<a name="trimIndexIds-org.locationtech.geowave.core.index.InsertionIds-com.vividsolutions.jts.geom.Geometry-org.locationtech.geowave.core.index.NumericIndexStrategy-">
+<a name="trimIndexIds-org.locationtech.geowave.core.index.InsertionIds-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.index.NumericIndexStrategy-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>trimIndexIds</h4>
 <pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;trimIndexIds(<a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;rawIds,
-                                        com.vividsolutions.jts.geom.Geometry&nbsp;geom,
+                                        org.locationtech.jts.geom.Geometry&nbsp;geom,
                                         <a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;index)</pre>
 </li>
 </ul>

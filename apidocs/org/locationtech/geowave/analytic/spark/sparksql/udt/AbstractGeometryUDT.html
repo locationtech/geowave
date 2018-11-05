@@ -93,7 +93,7 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">org.locationtech.geowave.analytic.spark.sparksql.udt</div>
-<h2 title="Class AbstractGeometryUDT" class="title">Class AbstractGeometryUDT&lt;T extends com.vividsolutions.jts.geom.Geometry&gt;</h2>
+<h2 title="Class AbstractGeometryUDT" class="title">Class AbstractGeometryUDT&lt;T extends org.locationtech.jts.geom.Geometry&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
@@ -132,7 +132,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public abstract class <span class="typeNameLabel">AbstractGeometryUDT&lt;T extends com.vividsolutions.jts.geom.Geometry&gt;</span>
+<pre>public abstract class <span class="typeNameLabel">AbstractGeometryUDT&lt;T extends org.locationtech.jts.geom.Geometry&gt;</span>
 extends org.apache.spark.sql.types.UserDefinedType&lt;T&gt;</pre>
 <div class="block">Created by jwileczek on 7/20/18.</div>
 <dl>
@@ -267,7 +267,7 @@ extends org.apache.spark.sql.types.UserDefinedType&lt;T&gt;</pre>
 <pre>public&nbsp;org.apache.spark.sql.types.DataType&nbsp;sqlType()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>sqlType</code>&nbsp;in class&nbsp;<code>org.apache.spark.sql.types.UserDefinedType&lt;<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends com.vividsolutions.jts.geom.Geometry&gt;</code></dd>
+<dd><code>sqlType</code>&nbsp;in class&nbsp;<code>org.apache.spark.sql.types.UserDefinedType&lt;<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends org.locationtech.jts.geom.Geometry&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -280,11 +280,11 @@ extends org.apache.spark.sql.types.UserDefinedType&lt;T&gt;</pre>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pyUDT()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>pyUDT</code>&nbsp;in class&nbsp;<code>org.apache.spark.sql.types.UserDefinedType&lt;<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends com.vividsolutions.jts.geom.Geometry&gt;</code></dd>
+<dd><code>pyUDT</code>&nbsp;in class&nbsp;<code>org.apache.spark.sql.types.UserDefinedType&lt;<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends org.locationtech.jts.geom.Geometry&gt;</code></dd>
 </dl>
 </li>
 </ul>
-<a name="serialize-com.vividsolutions.jts.geom.Geometry-">
+<a name="serialize-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a><a name="serialize-T-">
 <!--   -->
@@ -295,7 +295,7 @@ extends org.apache.spark.sql.types.UserDefinedType&lt;T&gt;</pre>
 <pre>public&nbsp;org.apache.spark.sql.catalyst.InternalRow&nbsp;serialize(<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a>&nbsp;obj)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>serialize</code>&nbsp;in class&nbsp;<code>org.apache.spark.sql.types.UserDefinedType&lt;<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends com.vividsolutions.jts.geom.Geometry&gt;</code></dd>
+<dd><code>serialize</code>&nbsp;in class&nbsp;<code>org.apache.spark.sql.types.UserDefinedType&lt;<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends org.locationtech.jts.geom.Geometry&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -308,7 +308,7 @@ extends org.apache.spark.sql.types.UserDefinedType&lt;T&gt;</pre>
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a>&nbsp;deserialize(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;datum)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>deserialize</code>&nbsp;in class&nbsp;<code>org.apache.spark.sql.types.UserDefinedType&lt;<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends com.vividsolutions.jts.geom.Geometry&gt;</code></dd>
+<dd><code>deserialize</code>&nbsp;in class&nbsp;<code>org.apache.spark.sql.types.UserDefinedType&lt;<a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends org.locationtech.jts.geom.Geometry&gt;</code></dd>
 </dl>
 </li>
 </ul>

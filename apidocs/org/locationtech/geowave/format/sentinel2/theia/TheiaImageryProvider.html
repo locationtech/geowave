@@ -240,11 +240,11 @@ extends <a href="../../../../../../org/locationtech/geowave/format/sentinel2/Sen
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/sentinel2/theia/TheiaImageryProvider.html#searchScenes-java.io.File-java.lang.String-java.lang.String-java.lang.String-com.vividsolutions.jts.geom.Envelope-java.util.Date-java.util.Date-int-int-">searchScenes</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;scenesDir,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/sentinel2/theia/TheiaImageryProvider.html#searchScenes-java.io.File-java.lang.String-java.lang.String-java.lang.String-org.locationtech.jts.geom.Envelope-java.util.Date-java.util.Date-int-int-">searchScenes</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;scenesDir,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;collection,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;platform,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;location,
-            com.vividsolutions.jts.geom.Envelope&nbsp;envelope,
+            org.locationtech.jts.geom.Envelope&nbsp;envelope,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;startDate,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;endDate,
             int&nbsp;orbitNumber,
@@ -400,7 +400,7 @@ extends <a href="../../../../../../org/locationtech/geowave/format/sentinel2/Sen
 </dl>
 </li>
 </ul>
-<a name="searchScenes-java.io.File-java.lang.String-java.lang.String-java.lang.String-com.vividsolutions.jts.geom.Envelope-java.util.Date-java.util.Date-int-int-">
+<a name="searchScenes-java.io.File-java.lang.String-java.lang.String-java.lang.String-org.locationtech.jts.geom.Envelope-java.util.Date-java.util.Date-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -410,17 +410,17 @@ extends <a href="../../../../../../org/locationtech/geowave/format/sentinel2/Sen
                                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;collection,
                                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;platform,
                                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;location,
-                                                                       com.vividsolutions.jts.geom.Envelope&nbsp;envelope,
+                                                                       org.locationtech.jts.geom.Envelope&nbsp;envelope,
                                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;startDate,
                                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;endDate,
                                                                        int&nbsp;orbitNumber,
                                                                        int&nbsp;relativeOrbitNumber)
                                                                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/format/sentinel2/Sentinel2ImageryProvider.html#searchScenes-java.io.File-java.lang.String-java.lang.String-java.lang.String-com.vividsolutions.jts.geom.Envelope-java.util.Date-java.util.Date-int-int-">Sentinel2ImageryProvider</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/format/sentinel2/Sentinel2ImageryProvider.html#searchScenes-java.io.File-java.lang.String-java.lang.String-java.lang.String-org.locationtech.jts.geom.Envelope-java.util.Date-java.util.Date-int-int-">Sentinel2ImageryProvider</a></code></span></div>
 <div class="block">Returns the Product/Scene collection that matches the specified criteria.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/format/sentinel2/Sentinel2ImageryProvider.html#searchScenes-java.io.File-java.lang.String-java.lang.String-java.lang.String-com.vividsolutions.jts.geom.Envelope-java.util.Date-java.util.Date-int-int-">searchScenes</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/format/sentinel2/Sentinel2ImageryProvider.html" title="class in org.locationtech.geowave.format.sentinel2">Sentinel2ImageryProvider</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/format/sentinel2/Sentinel2ImageryProvider.html#searchScenes-java.io.File-java.lang.String-java.lang.String-java.lang.String-org.locationtech.jts.geom.Envelope-java.util.Date-java.util.Date-int-int-">searchScenes</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/format/sentinel2/Sentinel2ImageryProvider.html" title="class in org.locationtech.geowave.format.sentinel2">Sentinel2ImageryProvider</a></code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>

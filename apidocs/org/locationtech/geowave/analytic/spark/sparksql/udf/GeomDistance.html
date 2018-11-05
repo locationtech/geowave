@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, org.apache.spark.sql.api.java.UDF2&lt;com.vividsolutions.jts.geom.Geometry,com.vividsolutions.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, org.apache.spark.sql.api.java.UDF2&lt;org.locationtech.jts.geom.Geometry,org.locationtech.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">GeomDistance</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements org.apache.spark.sql.api.java.UDF2&lt;com.vividsolutions.jts.geom.Geometry,com.vividsolutions.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</pre>
+implements org.apache.spark.sql.api.java.UDF2&lt;org.locationtech.jts.geom.Geometry,org.locationtech.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../../../serialized-form.html#org.locationtech.geowave.analytic.spark.sparksql.udf.GeomDistance">Serialized Form</a></dd>
@@ -157,8 +157,8 @@ implements org.apache.spark.sql.api.java.UDF2&lt;com.vividsolutions.jts.geom.Geo
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomDistance.html#call-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">call</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;leftGeom,
-    com.vividsolutions.jts.geom.Geometry&nbsp;rightGeom)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/spark/sparksql/udf/GeomDistance.html#call-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-">call</a></span>(org.locationtech.jts.geom.Geometry&nbsp;leftGeom,
+    org.locationtech.jts.geom.Geometry&nbsp;rightGeom)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -199,18 +199,18 @@ implements org.apache.spark.sql.api.java.UDF2&lt;com.vividsolutions.jts.geom.Geo
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="call-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">
+<a name="call-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>call</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;call(com.vividsolutions.jts.geom.Geometry&nbsp;leftGeom,
-                   com.vividsolutions.jts.geom.Geometry&nbsp;rightGeom)
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;call(org.locationtech.jts.geom.Geometry&nbsp;leftGeom,
+                   org.locationtech.jts.geom.Geometry&nbsp;rightGeom)
             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>call</code>&nbsp;in interface&nbsp;<code>org.apache.spark.sql.api.java.UDF2&lt;com.vividsolutions.jts.geom.Geometry,com.vividsolutions.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
+<dd><code>call</code>&nbsp;in interface&nbsp;<code>org.apache.spark.sql.api.java.UDF2&lt;org.locationtech.jts.geom.Geometry,org.locationtech.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>
