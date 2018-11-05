@@ -76,6 +76,7 @@ import com.google.uzaygezen.core.BitSetMath;
 
 import si.uom.NonSI;
 import si.uom.SI;
+import systems.uom.common.USCustomary;
 import tec.uom.se.AbstractUnit;
 import tec.uom.se.unit.AlternateUnit;
 import tec.uom.se.unit.BaseUnit;
@@ -545,6 +546,9 @@ public class GeometryUtils
 
 	public static Unit<Length> lookup(
 			final String name ) {
+		if (!name.equals(name.toLowerCase())) {
+			return lookup(name.toLowerCase());
+		}
 		Unit<Length> unit = lookup(
 				SI.class,
 				name);
@@ -559,22 +563,25 @@ public class GeometryUtils
 			return unit;
 		}
 
-		if (name.endsWith("s") || name.endsWith("S")) {
+		if (name.endsWith("s")) {
 			return lookup(name.substring(
 					0,
 					name.length() - 1));
 		}
-		// if we get here, try some aliases
-		if (name.equalsIgnoreCase("feet")) {
-			return lookup(
-					NonSI.class,
-					"foot");
+		if (name.toLowerCase().startsWith(
+				"kilo") && (name.length() > 4)) {
+			Unit<Length> u = lookup(name.substring(4));
+			if (u != null) {
+				return u.multiply(1000);
+			}
 		}
 		// if we get here, try some aliases
-		if (name.equalsIgnoreCase("meters") || name.equalsIgnoreCase("meter")) {
-			return lookup(
-					SI.class,
-					"m");
+		if (name.equalsIgnoreCase("feet")) {
+			return USCustomary.FOOT;
+		}
+		// if we get here, try some aliases
+		if (name.equalsIgnoreCase("meter")) {
+			return SI.METRE;
 		}
 		if (name.equalsIgnoreCase("unity")) {
 			return (Unit) AbstractUnit.ONE;
