@@ -97,7 +97,7 @@ public class SpatialQuery extends
 				Collections.emptyMap());
 	}
 
-	protected SpatialQuery(
+	public SpatialQuery(
 			final Constraints constraints,
 			final Geometry queryGeometry,
 			final String crsCode ) {

@@ -359,7 +359,7 @@ public class GeoWaveFeatureCollection extends
 				.getLocalName();
 		final ExtractGeometryFilterVisitorResult geoAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
 				query.getFilter(),
-				GeometryUtils.getDefaultCRS(),
+				reader.getComponents().getAdapter().getFeatureType().getCoordinateReferenceSystem(),
 				geomAtrributeName);
 		if (geoAndCompareOp == null) {
 			return reader.clipIndexedBBOXConstraints(null);

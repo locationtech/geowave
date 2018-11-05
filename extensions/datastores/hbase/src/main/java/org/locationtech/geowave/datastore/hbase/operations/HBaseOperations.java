@@ -684,7 +684,7 @@ public class HBaseOperations implements
 						tableNameStr,
 						new ArrayList<String>());
 			}
-			
+
 			boolean tableDisabled = false;
 
 			synchronized (ADMIN_MUTEX) {
@@ -755,7 +755,8 @@ public class HBaseOperations implements
 							tableNameStr).add(
 							coprocessorName);
 
-				} finally {
+				}
+				finally {
 					if (tableDisabled) {
 						try (Admin admin = conn.getAdmin()) {
 							final TableName tableName = getTableName(tableNameStr);

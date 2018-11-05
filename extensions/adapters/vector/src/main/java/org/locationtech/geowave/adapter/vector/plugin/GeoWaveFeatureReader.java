@@ -52,6 +52,7 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQu
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWrapper;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -64,6 +65,8 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -77,8 +80,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
 
 /**
  * This class wraps a geotools data store as well as one for statistics (for
@@ -693,7 +694,8 @@ public class GeoWaveFeatureReader implements
 		return new SpatialQuery(
 				geoConstraints.getConstraints().merge(
 						temporalConstraints),
-				geoConstraints.getGeometry());
+				geoConstraints.getGeometry(),
+				GeometryUtils.getCrsCode(components.getAdapter().getFeatureType().getCoordinateReferenceSystem()));
 		// }
 	}
 
