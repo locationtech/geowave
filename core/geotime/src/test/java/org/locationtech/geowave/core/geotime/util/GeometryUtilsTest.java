@@ -85,7 +85,7 @@ public class GeometryUtilsTest
 				convCoords.y,
 				DELTA);
 
-		Assert.assertTrue(Double.isNaN(convCoords.getOrdinate(Coordinate.Z)));
+		Assert.assertTrue(Double.isNaN(convCoords.getZ()));
 	}
 
 	@Test

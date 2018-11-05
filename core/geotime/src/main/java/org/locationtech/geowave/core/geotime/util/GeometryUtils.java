@@ -689,16 +689,16 @@ public class GeometryUtils
 			switch (i) {
 				case 1:
 					coordOrdinateValue = coord.getY();
-					modifierOrdinateValue = coord.getY();
+					modifierOrdinateValue = modifier.getY();
 					break;
 				case 2:
 					coordOrdinateValue = coord.getZ();
-					modifierOrdinateValue = coord.getZ();
+					modifierOrdinateValue = modifier.getZ();
 					break;
 				default:
 				case 0:
 					coordOrdinateValue = coord.getX();
-					modifierOrdinateValue = coord.getX();
+					modifierOrdinateValue = modifier.getX();
 					break;
 			}
 			if (!Double.isNaN(coordOrdinateValue) && !Double.isNaN(modifierOrdinateValue)) {
@@ -813,15 +813,15 @@ public class GeometryUtils
 			final Coordinate coord ) {
 		return new Coordinate(
 				adjustCoordinateDimensionToRange(
-						coord.x,
+						coord.getX(),
 						crs,
 						0),
 				clipRange(
-						coord.y,
+						coord.getY(),
 						crs,
 						1),
 				clipRange(
-						coord.z,
+						coord.getZ(),
 						crs,
 						2));
 	}
@@ -838,9 +838,9 @@ public class GeometryUtils
 			final Coordinate coord1,
 			final Coordinate coord2 ) {
 		return new Coordinate(
-				coord1.x - coord2.x,
-				coord1.y - coord2.y,
-				coord1.z - coord2.z);
+				coord1.getX() - coord2.getX(),
+				coord1.getY() - coord2.getY(),
+				coord1.getZ() - coord2.getZ());
 	}
 
 	/**
