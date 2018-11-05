@@ -684,6 +684,8 @@ public class HBaseOperations implements
 						tableNameStr,
 						new ArrayList<String>());
 			}
+			
+			boolean tableDisabled = false;
 
 			synchronized (ADMIN_MUTEX) {
 				try (Admin admin = conn.getAdmin()) {
@@ -697,6 +699,7 @@ public class HBaseOperations implements
 						disableTable(
 								admin,
 								tableName);
+						tableDisabled = true;
 
 						LOGGER.debug("- add coprocessor...");
 
@@ -738,6 +741,7 @@ public class HBaseOperations implements
 						enableTable(
 								admin,
 								tableName);
+						tableDisabled = false;
 
 						waitForUpdate(
 								admin,
@@ -751,15 +755,19 @@ public class HBaseOperations implements
 							tableNameStr).add(
 							coprocessorName);
 
-					coprocessorCache.get(
-							tableNameStr).add(
-							coprocessorName);
+				} finally {
+					if (tableDisabled) {
+						try (Admin admin = conn.getAdmin()) {
+							final TableName tableName = getTableName(tableNameStr);
+							enableTable(
+									admin,
+									tableName);
+						}
+					}
 				}
 			}
 		}
-		catch (
-
-		final IOException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"Error verifying/adding coprocessor.",
 					e);

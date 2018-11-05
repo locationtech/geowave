@@ -22,7 +22,7 @@ public class BaseDataStoreOptions implements
 	protected boolean enableBlockCache = true;
 
 	@Parameter(names = "--enableServerSideLibrary", arity = 1)
-	protected boolean enableServerSideLibrary = false;
+	protected boolean enableServerSideLibrary = true;
 
 	@Parameter(names = "--maxRangeDecomposition", arity = 1)
 	protected int configuredMaxRangeDecomposition = Integer.MIN_VALUE;
