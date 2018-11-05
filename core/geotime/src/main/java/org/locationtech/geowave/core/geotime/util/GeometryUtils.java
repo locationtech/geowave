@@ -546,44 +546,42 @@ public class GeometryUtils
 
 	public static Unit<Length> lookup(
 			final String name ) {
-		if (!name.equals(name.toLowerCase())) {
-			return lookup(name.toLowerCase());
-		}
+		String lowerCaseName = name.toLowerCase();
+
 		Unit<Length> unit = lookup(
 				SI.class,
-				name);
+				lowerCaseName);
 		if (unit != null) {
 			return unit;
 		}
 
 		unit = lookup(
 				NonSI.class,
-				name);
+				lowerCaseName);
 		if (unit != null) {
 			return unit;
 		}
 
-		if (name.endsWith("s")) {
-			return lookup(name.substring(
+		if (lowerCaseName.endsWith("s")) {
+			return lookup(lowerCaseName.substring(
 					0,
-					name.length() - 1));
+					lowerCaseName.length() - 1));
 		}
-		if (name.toLowerCase().startsWith(
-				"kilo") && (name.length() > 4)) {
-			Unit<Length> u = lookup(name.substring(4));
+		if (lowerCaseName.startsWith("kilo") && (lowerCaseName.length() > 4)) {
+			Unit<Length> u = lookup(lowerCaseName.substring(4));
 			if (u != null) {
 				return u.multiply(1000);
 			}
 		}
 		// if we get here, try some aliases
-		if (name.equalsIgnoreCase("feet")) {
+		if (lowerCaseName.equals("feet")) {
 			return USCustomary.FOOT;
 		}
 		// if we get here, try some aliases
-		if (name.equalsIgnoreCase("meter")) {
+		if (lowerCaseName.equals("meter")) {
 			return SI.METRE;
 		}
-		if (name.equalsIgnoreCase("unity")) {
+		if (lowerCaseName.equals("unity")) {
 			return (Unit) AbstractUnit.ONE;
 		}
 		return null;
@@ -599,7 +597,7 @@ public class GeometryUtils
 			final String name2 = field.getName();
 			if ((field.getType().isAssignableFrom(
 					BaseUnit.class) || field.getType().isAssignableFrom(
-					AlternateUnit.class)) && name2.equalsIgnoreCase(name)) {
+					AlternateUnit.class)) && name2.equals(name)) {
 
 				try {
 					unit = (Unit<Length>) field.get(unit);
