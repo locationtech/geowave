@@ -13,8 +13,8 @@ package org.locationtech.geowave.analytic.mapreduce.kmeans;
 import org.locationtech.geowave.analytic.distance.CoordinateEuclideanDistanceFn;
 import org.locationtech.geowave.analytic.distance.DistanceFn;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 
 public class TestObjectDistanceFn implements
 		DistanceFn<TestObject>

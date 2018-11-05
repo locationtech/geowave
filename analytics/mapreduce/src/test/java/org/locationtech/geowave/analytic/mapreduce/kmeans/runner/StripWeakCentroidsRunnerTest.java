@@ -33,7 +33,7 @@ import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentro
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 
 public class StripWeakCentroidsRunnerTest
 {

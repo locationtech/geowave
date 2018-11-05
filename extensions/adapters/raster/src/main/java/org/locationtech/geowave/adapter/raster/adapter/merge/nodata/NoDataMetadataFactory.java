@@ -18,10 +18,10 @@ import java.util.Set;
 
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMetadata.SampleIndex;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 
 public class NoDataMetadataFactory
 {

@@ -98,7 +98,8 @@ public class IngestFromHdfsDriver
 		final Path hdfsBaseDirectory = new Path(
 				basePath);
 		try {
-			final Configuration conf = new Configuration(false);
+			final Configuration conf = new Configuration(
+					false);
 			GeoWaveConfiguratorBase.setRemoteInvocationParams(
 					hdfsHostPort,
 					mapReduceOptions.getJobTrackerOrResourceManagerHostPort(),

@@ -2,8 +2,8 @@ package org.locationtech.geowave.core.geotime.store.query.aggregate;
 
 import org.opengis.feature.simple.SimpleFeature;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 
 public class VectorBoundingBoxAggregation extends
 		BoundingBoxAggregation<FieldNameParam, SimpleFeature>

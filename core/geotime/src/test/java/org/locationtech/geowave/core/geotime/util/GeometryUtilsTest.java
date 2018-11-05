@@ -35,11 +35,11 @@ import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
 public class GeometryUtilsTest
 {
@@ -85,7 +85,7 @@ public class GeometryUtilsTest
 				convCoords.y,
 				DELTA);
 
-		Assert.assertTrue(Double.isNaN(convCoords.getOrdinate(Coordinate.Z)));
+		Assert.assertTrue(Double.isNaN(convCoords.getZ()));
 	}
 
 	@Test

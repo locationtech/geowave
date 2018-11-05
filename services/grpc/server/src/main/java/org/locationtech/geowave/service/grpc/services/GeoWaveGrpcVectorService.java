@@ -62,8 +62,8 @@ import org.threeten.extra.Interval;
 
 import com.beust.jcommander.ParameterException;
 import com.google.protobuf.util.Timestamps;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.WKBReader;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.WKBReader;
 
 import io.grpc.BindableService;
 import io.grpc.stub.StreamObserver;
@@ -345,7 +345,7 @@ public class GeoWaveGrpcVectorService extends
 										.getValGeometry()
 										.toByteArray());
 							}
-							catch (FactoryRegistryException | com.vividsolutions.jts.io.ParseException e) {
+							catch (FactoryRegistryException | org.locationtech.jts.io.ParseException e) {
 								LOGGER.error(
 										"Failed to parse string for geometry",
 										e);
@@ -507,7 +507,7 @@ public class GeoWaveGrpcVectorService extends
 			queryGeom = new WKBReader(
 					JTSFactoryFinder.getGeometryFactory()).read(request.getGeometry().toByteArray());
 		}
-		catch (final FactoryRegistryException | com.vividsolutions.jts.io.ParseException e) {
+		catch (final FactoryRegistryException | org.locationtech.jts.io.ParseException e) {
 			LOGGER.error(
 					"Exception encountered creating query geometry",
 					e);
@@ -590,7 +590,7 @@ public class GeoWaveGrpcVectorService extends
 
 			stBldr = stBldr.spatialConstraintsCompareOperation(CompareOperation.valueOf(request.getCompareOperation()));
 		}
-		catch (final FactoryRegistryException | com.vividsolutions.jts.io.ParseException e) {
+		catch (final FactoryRegistryException | org.locationtech.jts.io.ParseException e) {
 			LOGGER.error(
 					"Exception encountered creating query geometry",
 					e);

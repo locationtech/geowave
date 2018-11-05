@@ -40,7 +40,7 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.measure.unit.Unit;
+import javax.measure.Unit;
 import javax.media.jai.Interpolation;
 import javax.media.jai.InterpolationBicubic2;
 import javax.media.jai.InterpolationBilinear;
@@ -142,9 +142,9 @@ import org.opengis.util.InternationalString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.PrecisionModel;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.PrecisionModel;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -509,7 +509,7 @@ public class RasterDataAdapter implements
 			final Envelope sampleEnvelope = gridCoverage.getEnvelope();
 
 			final ReferencedEnvelope sampleReferencedEnvelope = new ReferencedEnvelope(
-					new com.vividsolutions.jts.geom.Envelope(
+					new org.locationtech.jts.geom.Envelope(
 							sampleEnvelope.getMinimum(0),
 							sampleEnvelope.getMaximum(0),
 							sampleEnvelope.getMinimum(1),
@@ -774,7 +774,7 @@ public class RasterDataAdapter implements
 																			footprint,
 																			new AffineTransform2D(
 																					worldToScreenTransform)));
-							final com.vividsolutions.jts.geom.Envelope fullTileEnvelope = new com.vividsolutions.jts.geom.Envelope(
+							final org.locationtech.jts.geom.Envelope fullTileEnvelope = new org.locationtech.jts.geom.Envelope(
 									0,
 									tileSize,
 									0,
@@ -837,7 +837,7 @@ public class RasterDataAdapter implements
 						if ((dataType == DataBuffer.TYPE_FLOAT) || (dataType == DataBuffer.TYPE_DOUBLE)) {
 							final Envelope tileEnvelope = insertionIdGeometry.getEnvelope();
 							final ReferencedEnvelope tileReferencedEnvelope = new ReferencedEnvelope(
-									new com.vividsolutions.jts.geom.Envelope(
+									new org.locationtech.jts.geom.Envelope(
 											tileEnvelope
 													.getMinimum(
 															0),

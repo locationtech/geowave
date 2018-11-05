@@ -12,7 +12,7 @@ package org.locationtech.geowave.analytic.spark.sparksql.util;
 
 import java.io.Serializable;
 
-import com.vividsolutions.jts.io.WKBReader;
+import org.locationtech.jts.io.WKBReader;
 
 public class GeomReader extends
 		WKBReader implements

@@ -37,8 +37,8 @@ import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Point;
 
 /**
  * K-Means mapper and reducer. Mapper determines the closest centroid for an

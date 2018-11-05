@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.Writable;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 
 public class TestObjectWritable implements
 		Writable

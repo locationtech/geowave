@@ -135,9 +135,9 @@ public class FilterToCQLTool
 											e2),
 									e1 instanceof PropertyName ? e2.evaluate(
 											null,
-											com.vividsolutions.jts.geom.Geometry.class) : e1.evaluate(
+											org.locationtech.jts.geom.Geometry.class) : e1.evaluate(
 											null,
-											com.vividsolutions.jts.geom.Geometry.class),
+											org.locationtech.jts.geom.Geometry.class),
 									units,
 									distance).getLeft()),
 					e1 instanceof PropertyName ? e1 : e2);
@@ -167,7 +167,7 @@ public class FilterToCQLTool
 											e2),
 									e1.evaluate(
 											null,
-											com.vividsolutions.jts.geom.Geometry.class),
+											org.locationtech.jts.geom.Geometry.class),
 									units,
 									distance).getLeft()),
 					e2,

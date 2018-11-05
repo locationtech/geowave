@@ -34,7 +34,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 		LocalFileIngestPlugin<SimpleFeature>,

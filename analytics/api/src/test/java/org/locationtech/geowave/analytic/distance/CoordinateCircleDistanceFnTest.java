@@ -16,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.locationtech.geowave.analytic.distance.CoordinateCircleDistanceFn;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 
 public class CoordinateCircleDistanceFnTest
 {

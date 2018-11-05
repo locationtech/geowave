@@ -33,10 +33,10 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
 import com.google.common.base.Preconditions;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKBReader;
-import com.vividsolutions.jts.io.WKBWriter;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKBReader;
+import org.locationtech.jts.io.WKBWriter;
 
 public class AvroFeatureUtils
 {
@@ -209,7 +209,7 @@ public class AvroFeatureUtils
 		for (int i = 0; i < featureDefinition.getAttributeNames().size(); i++) {
 			final String type = featureTypes.get(i);
 			final String name = featureNames.get(i);
-			final Class<?> c = Class.forName(type);
+			final Class<?> c = Class.forName(jtsCompatibility(type));
 			sftb.add(
 					name,
 					c);
@@ -238,17 +238,28 @@ public class AvroFeatureUtils
 
 			if (attributeTypes.get(
 					i).equals(
-					"com.vividsolutions.jts.geom.Geometry")) {
+					"org.locationtech.jts.geom.Geometry")) {
 				sfb.add(WKB_READER.read(val.array()));
 			}
 			else {
-				final FieldReader<?> fr = FieldUtils.getDefaultReaderForClass(Class.forName(attributeTypes.get(i)));
+				final FieldReader<?> fr = FieldUtils.getDefaultReaderForClass(Class
+						.forName(jtsCompatibility(attributeTypes.get(i))));
 				sfb.add(fr.readField(val.array()));
 			}
 		}
 
 		simpleFeature = sfb.buildFeature(attributeValues.getFid());
 		return simpleFeature;
+	}
+
+	private static String jtsCompatibility(
+			String attrTypeName ) {
+		if (attrTypeName.startsWith("com.vividsolutions")) {
+			return attrTypeName.replace(
+					"com.vividsolutions",
+					"org.locationtech");
+		}
+		return attrTypeName;
 	}
 
 	/***

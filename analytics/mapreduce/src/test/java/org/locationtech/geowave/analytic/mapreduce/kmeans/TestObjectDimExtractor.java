@@ -13,7 +13,7 @@ package org.locationtech.geowave.analytic.mapreduce.kmeans;
 import org.locationtech.geowave.analytic.extract.DimensionExtractor;
 import org.locationtech.geowave.analytic.extract.EmptyDimensionExtractor;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 public class TestObjectDimExtractor extends
 		EmptyDimensionExtractor<TestObject> implements

@@ -17,8 +17,8 @@ import org.locationtech.geowave.analytic.AnalyticItemWrapper;
 import org.locationtech.geowave.analytic.AnalyticItemWrapperFactory;
 import org.slf4j.Logger;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 
 public class TestObjectItemWrapperFactory implements
 		AnalyticItemWrapperFactory<TestObject>

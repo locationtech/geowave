@@ -40,7 +40,7 @@ import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.geom.Point;
 
 /**
  * Calculate the distortation.

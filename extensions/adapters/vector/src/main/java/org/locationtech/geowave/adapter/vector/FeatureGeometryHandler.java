@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  * This class handles the internal responsibility of persisting JTS geometry to

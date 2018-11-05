@@ -15,7 +15,7 @@ import java.io.IOException;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.slf4j.Logger;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 
 /**
  * Create an analytic item wrapper for the provided item.

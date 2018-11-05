@@ -14,8 +14,8 @@ import org.apache.spark.sql.api.java.UDF2;
 import org.locationtech.geowave.analytic.spark.sparksql.udf.BufferOperation;
 import org.locationtech.geowave.analytic.spark.sparksql.util.GeomReader;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 

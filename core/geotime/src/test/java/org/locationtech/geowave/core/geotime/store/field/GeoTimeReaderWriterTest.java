@@ -20,9 +20,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 
 public class GeoTimeReaderWriterTest
 {

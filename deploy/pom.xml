@@ -119,6 +119,11 @@
 				</dependency>
 				<dependency>
 					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-datastore-redis</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-cli-osm</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -264,8 +269,6 @@
 			<properties>
 				<geotools.scope>provided</geotools.scope>
 				<container.extension>-geotools-container</container.extension>
-				<!-- this will be unnecessary for geoserver 14 and should be removed-->
-				<fasterxml.jackson.version>2.5.0</fasterxml.jackson.version>
 			</properties>
 			<dependencies>
 				<dependency>
@@ -291,6 +294,11 @@
 				<dependency>
 					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-dynamodb</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-datastore-redis</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
@@ -342,7 +350,7 @@
 											<exclude>*:httpcore:*</exclude>
 											<exclude>*:commons-logging:*</exclude>
 											<exclude>*:commons-io:*</exclude>
-											<exclude>*:jts:*</exclude>
+											<exclude>*:jts*:*</exclude>
 											<exclude>*:stax*:*</exclude>
 											<exclude>*:activation:*</exclude>
 											<exclude>*:servlet-api:*</exclude>

@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.spark.sparksql.udf;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.WKTReader;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.WKTReader;
 import org.apache.spark.sql.api.java.UDF1;
 
 /**

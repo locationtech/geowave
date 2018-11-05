@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.index.persist.PersistableFactory;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.prep.PreparedGeometry;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.prep.PreparedGeometry;
 
 public class GeoWaveRegistrator implements
 		KryoRegistrator

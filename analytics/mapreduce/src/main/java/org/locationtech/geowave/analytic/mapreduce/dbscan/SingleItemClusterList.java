@@ -22,9 +22,9 @@ import org.locationtech.geowave.analytic.nn.NeighborList;
 import org.locationtech.geowave.analytic.nn.NeighborListFactory;
 import org.locationtech.geowave.core.index.ByteArray;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
 
 /**
  * 
