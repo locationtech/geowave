@@ -351,7 +351,7 @@ public class GeoServerIngestIT extends
 				biSubsamplingWithLotsOfError,
 				ref,
 				0.3,
-				0.35);
+				0.4);
 		final BufferedImage biDistributedRendering = getWMSSingleTile(
 				env.getMinX(),
 				env.getMaxX(),
@@ -362,11 +362,6 @@ public class GeoServerIngestIT extends
 				920,
 				360,
 				null);
-		ImageIO.write(
-				biDistributedRendering,
-				"gif",
-				new File(
-						"test-sub-dist.gif"));
 		TestUtils.testTileAgainstReference(
 				biDistributedRendering,
 				ref,
