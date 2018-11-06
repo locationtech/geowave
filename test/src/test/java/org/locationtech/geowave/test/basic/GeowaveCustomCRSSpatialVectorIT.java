@@ -130,7 +130,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 						new File(
 								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					TestUtils.createCustomCRSPrimaryIndex(),
+					TestUtils.createWebMercatorSpatialIndex(),
 					"bounding box constraint only",
 					crs,
 					true);
@@ -148,7 +148,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 						new File(
 								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					TestUtils.createCustomCRSPrimaryIndex(),
+					TestUtils.createWebMercatorSpatialIndex(),
 					"polygon constraint only",
 					crs,
 					true);
@@ -171,7 +171,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 						new File(
 								TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
 					},
-					TestUtils.createCustomCRSPrimaryIndex(),
+					TestUtils.createWebMercatorSpatialIndex(),
 					false,
 					CRS.decode(TestUtils.CUSTOM_CRSCODE));
 		}
@@ -185,7 +185,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 		try {
 			testDeleteCQL(
 					CQL_DELETE_STR,
-					TestUtils.createCustomCRSPrimaryIndex());
+					TestUtils.createWebMercatorSpatialIndex());
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -198,7 +198,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 			testDeleteSpatial(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
-					TestUtils.createCustomCRSPrimaryIndex());
+					TestUtils.createWebMercatorSpatialIndex());
 		}
 		catch (final Exception e) {
 			e.printStackTrace();

@@ -46,6 +46,8 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
@@ -139,11 +141,19 @@ public class TestUtils
 		}
 	}
 
-	public static Index createCustomCRSPrimaryIndex() {
+	public static Index createWebMercatorSpatialIndex() {
 		final SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
 		final SpatialOptions so = sdp.createOptions();
 		so.setCrs(CUSTOM_CRSCODE);
 		final Index primaryIndex = sdp.createIndex(so);
+		return primaryIndex;
+	}
+
+	public static Index createWebMercatorSpatialTemporalIndex() {
+		final SpatialTemporalDimensionalityTypeProvider p = new SpatialTemporalDimensionalityTypeProvider();
+		final SpatialTemporalOptions o = p.createOptions();
+		o.setCrs(CUSTOM_CRSCODE);
+		final Index primaryIndex = p.createIndex(o);
 		return primaryIndex;
 	}
 

@@ -35,7 +35,6 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.filter.FidFilterImpl;
 import org.geotools.geometry.jts.Decimator;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.transform.ProjectiveTransform;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
@@ -52,6 +51,7 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQu
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWrapper;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -64,12 +64,13 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.MathTransform2D;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
@@ -77,8 +78,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
 
 /**
  * This class wraps a geotools data store as well as one for statistics (for
@@ -453,7 +452,7 @@ public class GeoWaveFeatureReader implements
 										east,
 										south,
 										north),
-								CRS.decode("EPSG:4326")),
+								envelope.getCoordinateReferenceSystem()),
 						new Rectangle(
 								width,
 								height));
@@ -478,9 +477,9 @@ public class GeoWaveFeatureReader implements
 							e);
 				}
 			}
-			catch (MismatchedDimensionException | FactoryException e) {
+			catch (final MismatchedDimensionException e) {
 				throw new IllegalArgumentException(
-						"Unable to decode CRS EPSG:4326",
+						"Unable to create Reference Envelope",
 						e);
 			}
 		}
@@ -693,7 +692,8 @@ public class GeoWaveFeatureReader implements
 		return new SpatialQuery(
 				geoConstraints.getConstraints().merge(
 						temporalConstraints),
-				geoConstraints.getGeometry());
+				geoConstraints.getGeometry(),
+				GeometryUtils.getCrsCode(components.getAdapter().getFeatureType().getCoordinateReferenceSystem()));
 		// }
 	}
 
