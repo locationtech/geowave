@@ -35,7 +35,6 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.filter.FidFilterImpl;
 import org.geotools.geometry.jts.Decimator;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.transform.ProjectiveTransform;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
@@ -72,7 +71,6 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.MathTransform2D;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
@@ -454,7 +452,7 @@ public class GeoWaveFeatureReader implements
 										east,
 										south,
 										north),
-								CRS.decode("EPSG:4326")),
+								envelope.getCoordinateReferenceSystem()),
 						new Rectangle(
 								width,
 								height));
@@ -479,9 +477,9 @@ public class GeoWaveFeatureReader implements
 							e);
 				}
 			}
-			catch (MismatchedDimensionException | FactoryException e) {
+			catch (final MismatchedDimensionException e) {
 				throw new IllegalArgumentException(
-						"Unable to decode CRS EPSG:4326",
+						"Unable to create Reference Envelope",
 						e);
 			}
 		}

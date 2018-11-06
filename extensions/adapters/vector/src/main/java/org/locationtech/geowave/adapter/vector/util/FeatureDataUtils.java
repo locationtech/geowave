@@ -23,7 +23,6 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -38,60 +37,12 @@ import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.CoordinateSystem;
-import org.opengis.referencing.operation.MathTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FeatureDataUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(FeatureDataUtils.class);
-
-	public static SimpleFeature defaultCRSTransform(
-			final SimpleFeature entry,
-			final SimpleFeatureType persistedType,
-			final SimpleFeatureType reprojectedType,
-			final MathTransform transform ) {
-
-		// if the feature is in a different coordinate reference system than
-		// EPSG:4326, transform the geometry
-		final CoordinateReferenceSystem crs = entry.getFeatureType().getCoordinateReferenceSystem();
-		SimpleFeature defaultCRSEntry = entry;
-
-		if (!GeometryUtils.getDefaultCRS().equals(
-				crs)) {
-			MathTransform featureTransform = null;
-			if ((persistedType.getCoordinateReferenceSystem() != null)
-					&& persistedType.getCoordinateReferenceSystem().equals(
-							crs) && (transform != null)) {
-				// we can use the transform we have already calculated for this
-				// feature
-				featureTransform = transform;
-			}
-			else if (crs != null) {
-				// this feature differs from the persisted type in CRS,
-				// calculate the transform
-				try {
-					featureTransform = CRS.findMathTransform(
-							crs,
-							GeometryUtils.getDefaultCRS(),
-							true);
-				}
-				catch (final FactoryException e) {
-					LOGGER
-							.warn(
-									"Unable to find transform to EPSG:4326, the feature geometry will remain in its original CRS",
-									e);
-				}
-			}
-			if (featureTransform != null) {
-				defaultCRSEntry = GeometryUtils.crsTransform(
-						defaultCRSEntry,
-						reprojectedType,
-						featureTransform);
-			}
-		}
-		return defaultCRSEntry;
-	}
 
 	public static String getAxis(
 			final CoordinateReferenceSystem crs ) {

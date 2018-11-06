@@ -141,7 +141,7 @@ public class GeoWaveFeatureCollection extends
 						stats.getMaxX(),
 						stats.getMinY(),
 						stats.getMaxY(),
-						GeometryUtils.getDefaultCRS());
+						reader.getFeatureType().getCoordinateReferenceSystem());
 			}
 			final Iterator<SimpleFeature> iterator = openIterator();
 			if (!iterator.hasNext()) {
@@ -339,7 +339,7 @@ public class GeoWaveFeatureCollection extends
 				SubsampleProcess.OUTPUT_BBOX)) {
 			return ((ReferencedEnvelope) query.getHints().get(
 					SubsampleProcess.OUTPUT_BBOX)).transform(
-					GeometryUtils.getDefaultCRS(),
+					reader.getFeatureType().getCoordinateReferenceSystem(),
 					true);
 		}
 		return null;

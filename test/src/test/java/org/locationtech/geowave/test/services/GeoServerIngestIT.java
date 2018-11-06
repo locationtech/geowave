@@ -37,6 +37,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
@@ -51,12 +52,12 @@ import org.locationtech.geowave.test.annotation.Environments;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.locationtech.jts.geom.Coordinate;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
@@ -72,8 +73,7 @@ public class GeoServerIngestIT extends
 	private static final String WORKSPACE = "testomatic";
 	private static final String WMS_VERSION = "1.3";
 	private static final String WMS_URL_PREFIX = "/geoserver/wms";
-	private static final String REFERENCE_26_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.6.gif";
-	private static final String REFERENCE_25_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.5.gif";
+	private static final String REFERENCE_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid.gif";
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
@@ -134,8 +134,10 @@ public class GeoServerIngestIT extends
 		dates[2] = cal.getTime();
 		// put 3 points on each grid location with different temporal attributes
 		final List<SimpleFeature> feats = new ArrayList<>();
-		for (int longitude = -180; longitude <= 180; longitude += 5) {
-			for (int latitude = -90; latitude <= 90; latitude += 5) {
+		// extremes are close to -180,180,-90,and 90 wiuthout exactly matching
+		// because coordinate transforms are illegal on the boundary
+		for (int longitude = -36; longitude <= 36; longitude++) {
+			for (int latitude = -18; latitude <= 18; latitude++) {
 				for (int date = 0; date < dates.length; date++) {
 					pointBuilder.set(
 							"geometry",
@@ -170,8 +172,8 @@ public class GeoServerIngestIT extends
 			URISyntaxException {
 		final DataStore ds = dataStorePluginOptions.createDataStore();
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
-		final Index spatialIdx = SimpleIngest.createSpatialIndex();
-		final Index spatialTemporalIdx = SimpleIngest.createSpatialTemporalIndex();
+		final Index spatialIdx = TestUtils.createWebMercatorSpatialIndex();
+		final Index spatialTemporalIdx = TestUtils.createWebMercatorSpatialTemporalIndex();
 		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 		final List<SimpleFeature> features = getGriddedTemporalFeatures(
 				new SimpleFeatureBuilder(
@@ -197,6 +199,13 @@ public class GeoServerIngestIT extends
 				}
 			}
 		}
+		final Envelope env = ds.aggregateStatistics(VectorStatisticsQueryBuilder
+				.newBuilder()
+				.factory()
+				.bbox()
+				.fieldName(
+						sft.getGeometryDescriptor().getLocalName())
+				.build());
 		TestUtils.assertStatusCode(
 				"Should Create 'testomatic' Workspace",
 				201,
@@ -271,31 +280,19 @@ public class GeoServerIngestIT extends
 		unmuteLogging();
 
 		final BufferedImage biDirectRender = getWMSSingleTile(
-				-180,
-				180,
-				-90,
-				90,
+				env.getMinX(),
+				env.getMaxX(),
+				env.getMinY(),
+				env.getMaxY(),
 				SimpleIngest.FEATURE_NAME,
 				"point",
 				920,
 				360,
 				null);
 
-		BufferedImage ref = null;
+		BufferedImage ref = ImageIO.read(new File(
+				REFERENCE_WMS_IMAGE_PATH));
 
-		final String geoserverVersion = (System.getProperty("geoserver.version") != null) ? System
-				.getProperty("geoserver.version") : "";
-
-		Assert.assertNotNull(geoserverVersion);
-
-		if (geoserverVersion.startsWith("2.5") || geoserverVersion.equals("2.6.0") || geoserverVersion.equals("2.6.1")) {
-			ref = ImageIO.read(new File(
-					REFERENCE_25_WMS_IMAGE_PATH));
-		}
-		else {
-			ref = ImageIO.read(new File(
-					REFERENCE_26_WMS_IMAGE_PATH));
-		}
 		// being a little lenient because of differences in O/S rendering
 		TestUtils.testTileAgainstReference(
 				biDirectRender,
@@ -304,10 +301,10 @@ public class GeoServerIngestIT extends
 				0.07);
 
 		final BufferedImage biSubsamplingWithoutError = getWMSSingleTile(
-				-180,
-				180,
-				-90,
-				90,
+				env.getMinX(),
+				env.getMaxX(),
+				env.getMinY(),
+				env.getMaxY(),
 				SimpleIngest.FEATURE_NAME,
 				ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
 				920,
@@ -323,10 +320,10 @@ public class GeoServerIngestIT extends
 				0.07);
 
 		final BufferedImage biSubsamplingWithExpectedError = getWMSSingleTile(
-				-180,
-				180,
-				-90,
-				90,
+				env.getMinX(),
+				env.getMaxX(),
+				env.getMinY(),
+				env.getMaxY(),
 				SimpleIngest.FEATURE_NAME,
 				ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
 				920,
@@ -340,10 +337,10 @@ public class GeoServerIngestIT extends
 				0.15);
 
 		final BufferedImage biSubsamplingWithLotsOfError = getWMSSingleTile(
-				-180,
-				180,
-				-90,
-				90,
+				env.getMinX(),
+				env.getMaxX(),
+				env.getMinY(),
+				env.getMaxY(),
 				SimpleIngest.FEATURE_NAME,
 				ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
 				920,
@@ -356,15 +353,20 @@ public class GeoServerIngestIT extends
 				0.3,
 				0.35);
 		final BufferedImage biDistributedRendering = getWMSSingleTile(
-				-180,
-				180,
-				-90,
-				90,
+				env.getMinX(),
+				env.getMaxX(),
+				env.getMinY(),
+				env.getMaxY(),
 				SimpleIngest.FEATURE_NAME,
 				ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER,
 				920,
 				360,
 				null);
+		ImageIO.write(
+				biDistributedRendering,
+				"gif",
+				new File(
+						"test-sub-dist.gif"));
 		TestUtils.testTileAgainstReference(
 				biDistributedRendering,
 				ref,
@@ -373,10 +375,10 @@ public class GeoServerIngestIT extends
 	}
 
 	private static BufferedImage getWMSSingleTile(
-			final double minlon,
-			final double maxlon,
-			final double minlat,
-			final double maxlat,
+			final double minX,
+			final double maxX,
+			final double minY,
+			final double maxY,
 			final String layer,
 			final String style,
 			final int width,
@@ -401,14 +403,14 @@ public class GeoServerIngestIT extends
 				"styles",
 				style == null ? "" : style).setParameter(
 				"crs",
-				"EPSG:4326").setParameter(
+				"EPSG:3857").setParameter(
 				"bbox",
 				String.format(
 						"%.2f, %.2f, %.2f, %.2f",
-						minlon,
-						minlat,
-						maxlon,
-						maxlat)).setParameter(
+						minX,
+						minY,
+						maxX,
+						maxY)).setParameter(
 				"format",
 				outputFormat == null ? "image/gif" : outputFormat).setParameter(
 				"width",

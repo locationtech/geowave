@@ -184,11 +184,14 @@ public class IndexUtils
 	public static byte[] getNextRowForSkip(
 			final byte[] row,
 			final int bitPosition ) {
+		if (bitPosition <= 0) {
+			return new byte[0];
+		}
 		// Calculate the number of full bytes affected by the bit position
-		int numBytes = bitPosition / 8;
+		int numBytes = (bitPosition + 1) / 8;
 
 		// Calculate the number of bits used in the last byte
-		final int extraBits = bitPosition % 8;
+		final int extraBits = (bitPosition + 1) % 8;
 
 		// If there was a remainder, add 1 to the number of bytes
 		if (extraBits > 0) {
@@ -203,14 +206,14 @@ public class IndexUtils
 		final int lastByte = rowCopy.length - 1;
 
 		// Turn on all bits after the bit position
-		rowCopy[lastByte] |= 0xFF >> (extraBits + 1);
+		rowCopy[lastByte] |= 0xFF >> (extraBits);
 
 		// Increment the bit represented by the bit position
 		for (int i = lastByte; i >= 0; i--) {
 			rowCopy[i]++;
 			if (rowCopy[i] != 0) {
 				// Turn on all bits after the bit position
-				rowCopy[lastByte] |= 0xFF >> (extraBits + 1);
+				rowCopy[lastByte] |= 0xFF >> (extraBits);
 				return rowCopy;
 			}
 		}

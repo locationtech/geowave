@@ -25,6 +25,7 @@ import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.system.InterruptibleIterator;
 import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.IndexUtils;
 
 /**
  * This class is an Accumulo Iterator that can support skipping by a fixed
@@ -134,34 +135,9 @@ public class FixedCardinalitySkippingIterator extends
 
 	private byte[] incrementBit(
 			final byte[] row ) {
-		final int cardinality = bitPosition + 1;
-		final byte[] rowCopy = new byte[(int) Math.ceil(cardinality / 8.0)];
-		System.arraycopy(
+		return IndexUtils.getNextRowForSkip(
 				row,
-				0,
-				rowCopy,
-				0,
-				rowCopy.length);
-		// number of bits not used in the last byte
-		int remainder = (8 - (cardinality % 8));
-		if (remainder == 8) {
-			remainder = 0;
-		}
-
-		final int numIncrements = (int) Math.pow(
-				2,
-				remainder);
-		if (remainder > 0) {
-			for (int i = 0; i < remainder; i++) {
-				rowCopy[rowCopy.length - 1] |= (1 << (i));
-			}
-		}
-		for (int i = 0; i < numIncrements; i++) {
-			if (!ByteArrayUtils.increment(rowCopy)) {
-				return null;
-			}
-		}
-		return rowCopy;
+				bitPosition);
 	}
 
 	@Override

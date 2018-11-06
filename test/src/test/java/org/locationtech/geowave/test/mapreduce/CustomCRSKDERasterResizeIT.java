@@ -274,7 +274,7 @@ public class CustomCRSKDERasterResizeIT
 			command.getOptions().setOutputCoverageName(
 					resizeTileSizeCoverageName);
 			command.getOptions().setIndexName(
-					TestUtils.createCustomCRSPrimaryIndex().getName());
+					TestUtils.createWebMercatorSpatialIndex().getName());
 
 			// due to time considerations when running the test, downsample to
 			// at most 2 powers of 2 lower
