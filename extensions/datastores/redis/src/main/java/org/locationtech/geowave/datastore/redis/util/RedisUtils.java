@@ -49,7 +49,7 @@ public class RedisUtils
 		return namespace + "_" + typeName + "_" + indexName;
 	}
 
-	public static RScoredSortedSet<GeoWaveRedisPersistedRow> getRowSet(
+	public static RedisScoredSetBatchWrapper<GeoWaveRedisPersistedRow> getRowSet(
 			final RedissonClient client,
 			final String setNamePrefix,
 			final byte[] partitionKey,
@@ -89,7 +89,7 @@ public class RedisUtils
 		return setNamePrefix + partitionStr;
 	}
 
-	public static RScoredSortedSet<GeoWaveRedisPersistedRow> getRowSet(
+	public static RedisScoredSetBatchWrapper<GeoWaveRedisPersistedRow> getRowSet(
 			final RedissonClient client,
 			final String setName,
 			final boolean requiresTimestamp ) {
@@ -99,7 +99,7 @@ public class RedisUtils
 
 	}
 
-	public static RScoredSortedSet<GeoWaveRedisPersistedRow> getRowSet(
+	public static RedisScoredSetBatchWrapper<GeoWaveRedisPersistedRow> getRowSet(
 			final RedissonClient client,
 			final String namespace,
 			final String typeName,
@@ -202,15 +202,15 @@ public class RedisUtils
 		return multimap.values().iterator();
 	}
 
-	public static Collection<ScoredEntry<GeoWaveRedisPersistedRow>> groupByRow(
-			final Collection<ScoredEntry<GeoWaveRedisPersistedRow>> result,
+	public static Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> groupByRow(
+			final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> result,
 			final boolean sortByTime ) {
 		final ListMultimap<Pair<Double, ByteArray>, ScoredEntry<GeoWaveRedisPersistedRow>> multimap = MultimapBuilder
 				.hashKeys()
 				.arrayListValues()
 				.build();
 		result
-				.forEach(
+				.forEachRemaining(
 						r -> multimap
 								.put(
 										Pair
@@ -230,7 +230,7 @@ public class RedisUtils
 													(List<ScoredEntry<GeoWaveRedisPersistedRow>>) v,
 													TIMESTAMP_COMPARATOR));
 		}
-		return multimap.values();
+		return multimap.values().iterator();
 	}
 
 	public static boolean isSortByTime(

@@ -105,7 +105,7 @@ public class RedisReader<T> implements
 						.stream()
 						.map(
 								p -> {
-									final Collection<ScoredEntry<GeoWaveRedisPersistedRow>> result = RedisUtils
+									final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> result = RedisUtils
 											.getRowSet(
 													client,
 													setNamePrefix,

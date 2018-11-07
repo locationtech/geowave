@@ -35,6 +35,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import org.locationtech.geowave.core.store.util.RowConsumer;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRow;
+import org.locationtech.geowave.datastore.redis.util.RedisScoredSetBatchWrapper;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.api.RFuture;
 import org.redisson.api.RScoredSortedSet;
@@ -113,7 +114,7 @@ public class BatchedRangeRead<T>
 	private final static int MAX_CONCURRENT_READ = 100;
 	private final static int MAX_BOUNDED_READS_ENQUEUED = 1000000;
 	private static ByteArray EMPTY_PARTITION_KEY = new ByteArray();
-	private final LoadingCache<ByteArray, RScoredSortedSet<GeoWaveRedisPersistedRow>> setCache = Caffeine
+	private final LoadingCache<ByteArray, RedisScoredSetBatchWrapper<GeoWaveRedisPersistedRow>> setCache = Caffeine
 			.newBuilder()
 			.build(
 					partitionKey -> getSet(
@@ -155,7 +156,7 @@ public class BatchedRangeRead<T>
 		this.isSortFinalResultsBySortKey = isSortFinalResultsBySortKey;
 	}
 
-	private RScoredSortedSet<GeoWaveRedisPersistedRow> getSet(
+	private RedisScoredSetBatchWrapper<GeoWaveRedisPersistedRow> getSet(
 			final byte[] partitionKey ) {
 		return RedisUtils
 				.getRowSet(
@@ -267,7 +268,7 @@ public class BatchedRangeRead<T>
 								final RFuture<Collection<ScoredEntry<GeoWaveRedisPersistedRow>>> f = setCache
 										.get(
 												partitionKey)
-										.entryRangeAsync(
+										.entryRange(
 												r.startScore,
 												true,
 												r.endScore,
@@ -381,7 +382,7 @@ public class BatchedRangeRead<T>
 	}
 
 	private Iterator<T> transformAndFilter(
-			final Collection<ScoredEntry<GeoWaveRedisPersistedRow>> result,
+			final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> result,
 			final byte[] partitionKey ) {
 		return rowTransformer
 				.apply(
@@ -398,8 +399,7 @@ public class BatchedRangeRead<T>
 																								result,
 																								groupByRowAndSortByTimePair
 																										.getRight())
-																						.iterator()
-																				: result.iterator(),
+																				: result,
 																		new Function<ScoredEntry<GeoWaveRedisPersistedRow>, GeoWaveRedisRow>() {
 
 																			@Override
