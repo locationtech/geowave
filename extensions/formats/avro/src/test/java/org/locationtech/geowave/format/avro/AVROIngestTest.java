@@ -99,7 +99,7 @@ public class AVROIngestTest
 			final URL file ) {
 		try (DataFileStream<AvroSimpleFeatureCollection> ds = new DataFileStream<>(
 				file.openStream(),
-				new SpecificDatumReader<AvroSimpleFeatureCollection>())) {
+				new SpecificDatumReader<AvroSimpleFeatureCollection>(AvroSimpleFeatureCollection.getClassSchema()))) {
 			if (ds.getHeader() != null) {
 				return true;
 			}

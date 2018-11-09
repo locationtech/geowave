@@ -44,7 +44,7 @@ public class AvroFeatureUtils
 			3);
 
 	private static final DecoderFactory DECODER_FACTORY = DecoderFactory.get();
-	private static final SpecificDatumReader<AvroSimpleFeature> DATUM_READER = new SpecificDatumReader<>();
+	private static final SpecificDatumReader<AvroSimpleFeature> DATUM_READER = new SpecificDatumReader<>(AvroSimpleFeature.getClassSchema());
 	private static final WKBReader WKB_READER = new WKBReader();
 
 	private AvroFeatureUtils() {}

@@ -50,7 +50,7 @@ public class RedisReader<T> implements
 				client,
 				readerParams,
 				namespace,
-				async);
+				false);
 	}
 
 	public RedisReader(
@@ -122,17 +122,17 @@ public class RedisReader<T> implements
 															.groupByRow(
 																	result,
 																	groupByRowAndSortByTime.getRight())
-															.iterator()
-													: result.iterator();
+													: result;
 									return ImmutablePair
 											.of(
 													p,
 													it);
 								});
-				iterators[i++] = streamIt
-						.flatMap(
-								p -> Streams
-										.stream(
+				iterators[i++] = 
+						Iterators
+						.concat(streamIt
+						.map(
+								p -> 
 												Iterators
 														.transform(
 																p.getRight(),
@@ -142,8 +142,7 @@ public class RedisReader<T> implements
 																		p.getLeft().getBytes(),
 																		RedisUtils
 																				.getSortKey(
-																						pr.getScore())))))
-						.iterator();
+																						pr.getScore())))).iterator());
 			}
 			return wrapResults(
 					Iterators
