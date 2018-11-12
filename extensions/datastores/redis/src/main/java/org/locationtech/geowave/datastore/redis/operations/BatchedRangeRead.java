@@ -238,148 +238,148 @@ public class BatchedRangeRead<T>
 										.iterator()));
 	}
 
-//	public CloseableIterator<T> executeQueryAsync(
-//			final List<RangeReadInfo> reads ) {
-//		// first create a list of asynchronous query executions
-//		final List<RFuture<Collection<ScoredEntry<GeoWaveRedisPersistedRow>>>> futures = Lists
-//				.newArrayListWithExpectedSize(
-//						reads.size());
-//		final BlockingQueue<Object> results = new LinkedBlockingQueue<>(
-//				MAX_BOUNDED_READS_ENQUEUED);
-//		new Thread(
-//				new Runnable() {
-//					@Override
-//					public void run() {
-//						// set it to 1 to make sure all queries are submitted in
-//						// the loop
-//						final AtomicInteger queryCount = new AtomicInteger(
-//								1);
-//						for (final RangeReadInfo r : reads) {
-//							try {
-//								ByteArray partitionKey;
-//								if ((r.partitionKey == null) || (r.partitionKey.length == 0)) {
-//									partitionKey = EMPTY_PARTITION_KEY;
-//								}
-//								else {
-//									partitionKey = new ByteArray(
-//											r.partitionKey);
-//								}
-//								readSemaphore.acquire();
-//								final RFuture<Collection<ScoredEntry<GeoWaveRedisPersistedRow>>> f = setCache
-//										.get(
-//												partitionKey)
-//										.entryRange(
-//												r.startScore,
-//												true,
-//												r.endScore,
-//												// if we don't have enough
-//												// precision we need to make
-//												// sure the end is inclusive
-//												r.endScore <= r.startScore);
-//								queryCount.incrementAndGet();
-//								f
-//										.handle(
-//												(
-//														result,
-//														throwable ) -> {
-//													if (!f.isSuccess()) {
-//														if (!f.isCancelled()) {
-//															LOGGER
-//																	.warn(
-//																			"Async Redis query failed",
-//																			throwable);
-//														}
-//														checkFinalize(
-//																readSemaphore,
-//																results,
-//																queryCount);
-//														return result;
-//													}
-//													else {
-//														try {
-//															transformAndFilter(
-//																	result,
-//																	r.partitionKey)
-//																			.forEachRemaining(
-//																					row -> {
-//																						try {
-//																							results
-//																									.put(
-//																											row);
-//																						}
-//																						catch (final InterruptedException e) {
-//																							LOGGER
-//																									.warn(
-//																											"interrupted while waiting to enqueue a redis result",
-//																											e);
-//																						}
-//																					});
-//
-//														}
-//														finally {
-//															checkFinalize(
-//																	readSemaphore,
-//																	results,
-//																	queryCount);
-//														}
-//														return result;
-//													}
-//												});
-//								synchronized (futures) {
-//
-//									futures
-//											.add(
-//													f);
-//
-//								}
-//							}
-//							catch (final InterruptedException e) {
-//								LOGGER
-//										.warn(
-//												"Exception while executing query",
-//												e);
-//								readSemaphore.release();
-//							}
-//						}
-//						// then decrement
-//						if (queryCount.decrementAndGet() <= 0) {
-//							// and if there are no queries, there may not have
-//							// been any
-//							// statements submitted
-//							try {
-//								results
-//										.put(
-//												RowConsumer.POISON);
-//							}
-//							catch (final InterruptedException e) {
-//								LOGGER
-//										.error(
-//												"Interrupted while finishing blocking queue, this may result in deadlock!");
-//							}
-//						}
-//					}
-//				},
-//				"Redis Query Executor").start();
-//		return new CloseableIteratorWrapper<>(
-//				new Closeable() {
-//					@Override
-//					public void close()
-//							throws IOException {
-//						List<RFuture<Collection<ScoredEntry<GeoWaveRedisPersistedRow>>>> newFutures;
-//						synchronized (futures) {
-//							newFutures = new ArrayList<>(
-//									futures);
-//						}
-//						for (final RFuture<Collection<ScoredEntry<GeoWaveRedisPersistedRow>>> f : newFutures) {
-//							f
-//									.cancel(
-//											true);
-//						}
-//					}
-//				},
-//				new RowConsumer<>(
-//						results));
-//	}
+	public CloseableIterator<T> executeQueryAsync(
+			final List<RangeReadInfo> reads ) {
+		// first create a list of asynchronous query executions
+		final List<RFuture<Collection<ScoredEntry<GeoWaveRedisPersistedRow>>>> futures = Lists
+				.newArrayListWithExpectedSize(
+						reads.size());
+		final BlockingQueue<Object> results = new LinkedBlockingQueue<>(
+				MAX_BOUNDED_READS_ENQUEUED);
+		new Thread(
+				new Runnable() {
+					@Override
+					public void run() {
+						// set it to 1 to make sure all queries are submitted in
+						// the loop
+						final AtomicInteger queryCount = new AtomicInteger(
+								1);
+						for (final RangeReadInfo r : reads) {
+							try {
+								ByteArray partitionKey;
+								if ((r.partitionKey == null) || (r.partitionKey.length == 0)) {
+									partitionKey = EMPTY_PARTITION_KEY;
+								}
+								else {
+									partitionKey = new ByteArray(
+											r.partitionKey);
+								}
+								readSemaphore.acquire();
+								final RFuture<Collection<ScoredEntry<GeoWaveRedisPersistedRow>>> f = setCache
+										.get(
+												partitionKey)
+										.entryRangeAsync(
+												r.startScore,
+												true,
+												r.endScore,
+												// if we don't have enough
+												// precision we need to make
+												// sure the end is inclusive
+												r.endScore <= r.startScore);
+								queryCount.incrementAndGet();
+								f
+										.handle(
+												(
+														result,
+														throwable ) -> {
+													if (!f.isSuccess()) {
+														if (!f.isCancelled()) {
+															LOGGER
+																	.warn(
+																			"Async Redis query failed",
+																			throwable);
+														}
+														checkFinalize(
+																readSemaphore,
+																results,
+																queryCount);
+														return result;
+													}
+													else {
+														try {
+															transformAndFilter(
+																	result.iterator(),
+																	r.partitionKey)
+																			.forEachRemaining(
+																					row -> {
+																						try {
+																							results
+																									.put(
+																											row);
+																						}
+																						catch (final InterruptedException e) {
+																							LOGGER
+																									.warn(
+																											"interrupted while waiting to enqueue a redis result",
+																											e);
+																						}
+																					});
+
+														}
+														finally {
+															checkFinalize(
+																	readSemaphore,
+																	results,
+																	queryCount);
+														}
+														return result;
+													}
+												});
+								synchronized (futures) {
+
+									futures
+											.add(
+													f);
+
+								}
+							}
+							catch (final InterruptedException e) {
+								LOGGER
+										.warn(
+												"Exception while executing query",
+												e);
+								readSemaphore.release();
+							}
+						}
+						// then decrement
+						if (queryCount.decrementAndGet() <= 0) {
+							// and if there are no queries, there may not have
+							// been any
+							// statements submitted
+							try {
+								results
+										.put(
+												RowConsumer.POISON);
+							}
+							catch (final InterruptedException e) {
+								LOGGER
+										.error(
+												"Interrupted while finishing blocking queue, this may result in deadlock!");
+							}
+						}
+					}
+				},
+				"Redis Query Executor").start();
+		return new CloseableIteratorWrapper<>(
+				new Closeable() {
+					@Override
+					public void close()
+							throws IOException {
+						List<RFuture<Collection<ScoredEntry<GeoWaveRedisPersistedRow>>>> newFutures;
+						synchronized (futures) {
+							newFutures = new ArrayList<>(
+									futures);
+						}
+						for (final RFuture<Collection<ScoredEntry<GeoWaveRedisPersistedRow>>> f : newFutures) {
+							f
+									.cancel(
+											true);
+						}
+					}
+				},
+				new RowConsumer<>(
+						results));
+	}
 
 	private Iterator<T> transformAndFilter(
 			final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> result,

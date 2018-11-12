@@ -7,6 +7,7 @@ import java.util.concurrent.Semaphore;
 
 import org.redisson.api.BatchOptions;
 import org.redisson.api.RBatch;
+import org.redisson.api.RFuture;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RScoredSortedSetAsync;
 import org.redisson.api.RedissonClient;
@@ -41,16 +42,7 @@ public class RedisScoredSetWrapper<V> implements
 		this.client = client;
 		this.codec = codec;
 	}
-	//
-	// public void executeAsync() {
-	// batch.getScoredSortedSet(s);
-	// }
-	//
-	// @Override
-	// public void close() {
-	// batch.executeAsync();
-	// }
-
+	
 	public boolean remove(
 			final Object o ) {
 		return getCurrentSet()
@@ -145,7 +137,6 @@ public class RedisScoredSetWrapper<V> implements
 		currentBatch = null;
 		try {
 			writeSemaphore.acquire();
-//			System.err.println(MAX_CONCURRENT_WRITE - writeSemaphore.availablePermits());
 			flushBatch
 					.executeAsync()
 					.handle(
@@ -185,16 +176,16 @@ public class RedisScoredSetWrapper<V> implements
 						MAX_CONCURRENT_WRITE);
 	}
 
-	// public Iterator<ScoredEntry<V>> entryRangeAsync(
-	// final double startScore,
-	// final boolean startScoreInclusive,
-	// final double endScore,
-	// final boolean endScoreInclusive ) {
-	// return currentSet
-	// .entryRangeAsync(
-	// startScore,
-	// startScoreInclusive,
-	// endScore,
-	// endScoreInclusive);
-	// }
+	public RFuture<Collection<ScoredEntry<V>>> entryRangeAsync(
+			final double startScore,
+			final boolean startScoreInclusive,
+			final double endScore,
+			final boolean endScoreInclusive ) {
+		return getCurrentSet()
+				.entryRangeAsync(
+						startScore,
+						startScoreInclusive,
+						endScore,
+						endScoreInclusive);
+	}
 }

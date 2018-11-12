@@ -275,6 +275,8 @@ public class LocalFileIngestDriver extends
 							requiredIndexMap,
 							indexWriters);
 
+					count++;
+
 				}
 				catch (final Exception e) {
 					throw new RuntimeException(
