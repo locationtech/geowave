@@ -246,7 +246,6 @@ public class LocalFileIngestDriver extends
 		int count = 0;
 		long dbWriteMs = 0L;
 		final Map<String, Writer> indexWriters = new HashMap<>();
-		long time = System.currentTimeMillis();
 		// Read files until EOF from the command line.
 		try (CloseableIterator<?> geowaveDataIt = plugin.toGeoWaveData(
 				file,
