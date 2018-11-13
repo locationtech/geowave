@@ -70,7 +70,9 @@ public class GeoWaveRedisRowWithTimestampCodec extends
 
 				try (final ByteBufOutputStream out = new ByteBufOutputStream(
 						buf)) {
-					GeoWaveRedisRowCodec.encodeRow(out, row);
+					GeoWaveRedisRowCodec.encodeRow(
+							out,
+							row);
 					out.writeInt((int) row.getSecondsSinceEpic());
 					out.writeInt(row.getNanoOfSecond());
 					out.flush();

@@ -48,14 +48,13 @@ public class LazyPaginatedEntryRange<V> extends
 		}
 		else {
 			currentOffset += RedisUtils.MAX_ROWS_FOR_PAGINATION;
-			currentResult = set
-					.entryRange(
-							startScore,
-							startScoreInclusive,
-							endScore,
-							endScoreInclusive,
-							currentOffset,
-							RedisUtils.MAX_ROWS_FOR_PAGINATION);
+			currentResult = set.entryRange(
+					startScore,
+					startScoreInclusive,
+					endScore,
+					endScoreInclusive,
+					currentOffset,
+					RedisUtils.MAX_ROWS_FOR_PAGINATION);
 			return currentResult.iterator();
 		}
 	}

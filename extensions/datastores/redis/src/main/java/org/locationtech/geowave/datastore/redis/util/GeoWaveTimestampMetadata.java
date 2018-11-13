@@ -55,8 +55,7 @@ public class GeoWaveTimestampMetadata extends
 		if (this == obj) {
 			return true;
 		}
-		if (!super.equals(
-				obj)) {
+		if (!super.equals(obj)) {
 			return false;
 		}
 		if (getClass() != obj.getClass()) {

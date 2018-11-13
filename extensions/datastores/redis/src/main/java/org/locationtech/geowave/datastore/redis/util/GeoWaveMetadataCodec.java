@@ -42,7 +42,7 @@ public class GeoWaveMetadataCodec extends
 		public ByteBuf encode(
 				final Object in )
 				throws IOException {
-			if (in instanceof GeoWaveMetadata) {				
+			if (in instanceof GeoWaveMetadata) {
 				return encodeMetadata((GeoWaveMetadata) in);
 			}
 			else {
@@ -51,7 +51,9 @@ public class GeoWaveMetadataCodec extends
 			}
 		}
 	};
-	protected static ByteBuf encodeMetadata( GeoWaveMetadata md) {
+
+	protected static ByteBuf encodeMetadata(
+			GeoWaveMetadata md ) {
 		final ByteBuf out = ByteBufAllocator.DEFAULT.buffer();
 		final byte[] safeVisibility = md.getVisibility() != null ? md.getVisibility() : new byte[0];
 		final byte[] safeSecondaryId = md.getSecondaryId() != null ? md.getSecondaryId() : new byte[0];

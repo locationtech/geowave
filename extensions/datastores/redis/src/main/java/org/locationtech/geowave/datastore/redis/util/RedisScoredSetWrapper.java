@@ -19,9 +19,7 @@ import org.slf4j.LoggerFactory;
 public class RedisScoredSetWrapper<V> implements
 		AutoCloseable
 {
-	private final static Logger LOGGER = LoggerFactory
-			.getLogger(
-					RedisScoredSetWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(RedisScoredSetWrapper.class);
 	private static int BATCH_SIZE = 1000;
 	private RScoredSortedSetAsync<V> currentSetBatch;
 	private RScoredSortedSet<V> currentSet;
@@ -42,12 +40,11 @@ public class RedisScoredSetWrapper<V> implements
 		this.client = client;
 		this.codec = codec;
 	}
-	
+
 	public boolean remove(
 			final Object o ) {
-		return getCurrentSet()
-				.remove(
-						o);
+		return getCurrentSet().remove(
+				o);
 	}
 
 	private RScoredSortedSet<V> getCurrentSet() {
@@ -57,10 +54,9 @@ public class RedisScoredSetWrapper<V> implements
 			synchronized (this) {
 				// check again within synchronized block
 				if (currentSet == null) {
-					currentSet = client
-							.getScoredSortedSet(
-									setName,
-									codec);
+					currentSet = client.getScoredSortedSet(
+							setName,
+							codec);
 				}
 			}
 		}
@@ -74,13 +70,10 @@ public class RedisScoredSetWrapper<V> implements
 			synchronized (this) {
 				// check again within synchronized block
 				if (currentSetBatch == null) {
-					currentBatch = client
-							.createBatch(
-									BatchOptions.defaults());
-					currentSetBatch = currentBatch
-							.getScoredSortedSet(
-									setName,
-									codec);
+					currentBatch = client.createBatch(BatchOptions.defaults());
+					currentSetBatch = currentBatch.getScoredSortedSet(
+							setName,
+							codec);
 				}
 			}
 		}
@@ -93,14 +86,13 @@ public class RedisScoredSetWrapper<V> implements
 			final double endScore,
 			final boolean endScoreInclusive ) {
 		final RScoredSortedSet<V> currentSet = getCurrentSet();
-		final Collection<ScoredEntry<V>> currentResult = currentSet
-				.entryRange(
-						startScore,
-						startScoreInclusive,
-						endScore,
-						endScoreInclusive,
-						0,
-						RedisUtils.MAX_ROWS_FOR_PAGINATION);
+		final Collection<ScoredEntry<V>> currentResult = currentSet.entryRange(
+				startScore,
+				startScoreInclusive,
+				endScore,
+				endScoreInclusive,
+				0,
+				RedisUtils.MAX_ROWS_FOR_PAGINATION);
 		if (currentResult.size() >= RedisUtils.MAX_ROWS_FOR_PAGINATION) {
 			return new LazyPaginatedEntryRange<>(
 					startScore,
@@ -124,10 +116,9 @@ public class RedisScoredSetWrapper<V> implements
 				}
 			}
 		}
-		getCurrentBatch()
-				.addAsync(
-						score,
-						object);
+		getCurrentBatch().addAsync(
+				score,
+				object);
 	}
 
 	public void flush() {
@@ -168,12 +159,8 @@ public class RedisScoredSetWrapper<V> implements
 		flush();
 		// need to wait for all asynchronous batches to finish writing
 		// before exiting close() method
-		writeSemaphore
-				.acquire(
-						MAX_CONCURRENT_WRITE);
-		writeSemaphore
-				.release(
-						MAX_CONCURRENT_WRITE);
+		writeSemaphore.acquire(MAX_CONCURRENT_WRITE);
+		writeSemaphore.release(MAX_CONCURRENT_WRITE);
 	}
 
 	public RFuture<Collection<ScoredEntry<V>>> entryRangeAsync(
@@ -181,11 +168,10 @@ public class RedisScoredSetWrapper<V> implements
 			final boolean startScoreInclusive,
 			final double endScore,
 			final boolean endScoreInclusive ) {
-		return getCurrentSet()
-				.entryRangeAsync(
-						startScore,
-						startScoreInclusive,
-						endScore,
-						endScoreInclusive);
+		return getCurrentSet().entryRangeAsync(
+				startScore,
+				startScoreInclusive,
+				endScore,
+				endScoreInclusive);
 	}
 }

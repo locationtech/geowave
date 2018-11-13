@@ -40,13 +40,10 @@ public class RedisUtils
 		// stats alaos store a timestamp because stats can be the exact same but
 		// need to still be unique (consider multiple count statistics that are
 		// exactly the same count, but need to be merged)
-		return client
-				.getScoredSortedSet(
-						namespace + "_" + metadataType.toString(),
-						MetadataType.STATS
-								.equals(
-										metadataType) ? GeoWaveMetadataWithTimestampCodec.SINGLETON
-												: GeoWaveMetadataCodec.SINGLETON);
+		return client.getScoredSortedSet(
+				namespace + "_" + metadataType.toString(),
+				MetadataType.STATS.equals(metadataType) ? GeoWaveMetadataWithTimestampCodec.SINGLETON
+						: GeoWaveMetadataCodec.SINGLETON);
 	}
 
 	public static String getRowSetPrefix(
@@ -88,9 +85,7 @@ public class RedisUtils
 			final byte[] partitionKey ) {
 		String partitionStr;
 		if ((partitionKey != null) && (partitionKey.length > 0)) {
-			partitionStr = "_" + ByteArrayUtils
-					.byteArrayToString(
-							partitionKey);
+			partitionStr = "_" + ByteArrayUtils.byteArrayToString(partitionKey);
 		}
 		else {
 			partitionStr = "";
@@ -128,14 +123,12 @@ public class RedisUtils
 
 	public static double getScore(
 			final byte[] byteArray ) {
-		return bytesToLong(
-				byteArray);
+		return bytesToLong(byteArray);
 	}
 
 	public static byte[] getSortKey(
 			final double score ) {
-		return longToBytes(
-				(long) score);
+		return longToBytes((long) score);
 	}
 
 	private static byte[] longToBytes(
@@ -259,26 +252,19 @@ public class RedisUtils
 
 	public static Iterator<GeoWaveRow> sortBySortKey(
 			final Iterator<GeoWaveRow> it ) {
-		return Streams
-				.stream(
-						it)
-				.sorted(
-						SortKeyOrder.SINGLETON)
-				.iterator();
+		return Streams.stream(
+				it).sorted(
+				SortKeyOrder.SINGLETON).iterator();
 	}
 
 	public static Pair<Boolean, Boolean> isGroupByRowAndIsSortByTime(
 			final BaseReaderParams<?> readerParams,
 			final short adapterId ) {
-		final boolean sortByTime = isSortByTime(
-				readerParams
-						.getAdapterStore()
-						.getAdapter(
-								adapterId));
-		return Pair
-				.of(
-						readerParams.isMixedVisibility() || sortByTime,
-						sortByTime);
+		final boolean sortByTime = isSortByTime(readerParams.getAdapterStore().getAdapter(
+				adapterId));
+		return Pair.of(
+				readerParams.isMixedVisibility() || sortByTime,
+				sortByTime);
 	}
 
 	private static final ReverseTimestampComparator TIMESTAMP_COMPARATOR = new ReverseTimestampComparator();
@@ -297,17 +283,15 @@ public class RedisUtils
 			final GeoWaveRedisPersistedTimestampRow row2 = (GeoWaveRedisPersistedTimestampRow) o2.getValue();
 			// we are purposely reversing the order because we want it to be
 			// sorted from most recent to least recent
-			final int compare = Long
-					.compare(
-							row2.getSecondsSinceEpic(),
-							row1.getSecondsSinceEpic());
+			final int compare = Long.compare(
+					row2.getSecondsSinceEpic(),
+					row1.getSecondsSinceEpic());
 			if (compare != 0) {
 				return compare;
 			}
-			return Integer
-					.compare(
-							row2.getNanoOfSecond(),
-							row1.getNanoOfSecond());
+			return Integer.compare(
+					row2.getNanoOfSecond(),
+					row1.getNanoOfSecond());
 		}
 
 	}
@@ -335,48 +319,40 @@ public class RedisUtils
 			byte[] otherComp = o2.getSortKey() == null ? new byte[0] : o2.getSortKey();
 			byte[] thisComp = o1.getSortKey() == null ? new byte[0] : o1.getSortKey();
 
-			int comp = UnsignedBytes
-					.lexicographicalComparator()
-					.compare(
-							thisComp,
-							otherComp);
+			int comp = UnsignedBytes.lexicographicalComparator().compare(
+					thisComp,
+					otherComp);
 			if (comp != 0) {
 				return comp;
 			}
 			otherComp = o2.getPartitionKey() == null ? new byte[0] : o2.getPartitionKey();
 			thisComp = o1.getPartitionKey() == null ? new byte[0] : o1.getPartitionKey();
 
-			comp = UnsignedBytes
-					.lexicographicalComparator()
-					.compare(
-							thisComp,
-							otherComp);
+			comp = UnsignedBytes.lexicographicalComparator().compare(
+					thisComp,
+					otherComp);
 			if (comp != 0) {
 				return comp;
 			}
-			comp = Short
-					.compare(
-							o1.getAdapterId(),
-							o2.getAdapterId());
+			comp = Short.compare(
+					o1.getAdapterId(),
+					o2.getAdapterId());
 			if (comp != 0) {
 				return comp;
 			}
 			otherComp = o2.getDataId() == null ? new byte[0] : o2.getDataId();
 			thisComp = o1.getDataId() == null ? new byte[0] : o1.getDataId();
 
-			comp = UnsignedBytes
-					.lexicographicalComparator()
-					.compare(
-							thisComp,
-							otherComp);
+			comp = UnsignedBytes.lexicographicalComparator().compare(
+					thisComp,
+					otherComp);
 
 			if (comp != 0) {
 				return comp;
 			}
-			return Integer
-					.compare(
-							o1.getNumberOfDuplicates(),
-							o2.getNumberOfDuplicates());
+			return Integer.compare(
+					o1.getNumberOfDuplicates(),
+					o2.getNumberOfDuplicates());
 		}
 
 	}

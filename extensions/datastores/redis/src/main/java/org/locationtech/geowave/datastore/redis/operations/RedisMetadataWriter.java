@@ -22,14 +22,11 @@ public class RedisMetadataWriter implements
 	@Override
 	public void write(
 			final GeoWaveMetadata metadata ) {
-		set
-				.add(
-						RedisUtils
-								.getScore(
-										metadata.getPrimaryId()),
-						requiresTimestamp ? new GeoWaveTimestampMetadata(
-								metadata,
-								System.currentTimeMillis()) : metadata);
+		set.add(
+				RedisUtils.getScore(metadata.getPrimaryId()),
+				requiresTimestamp ? new GeoWaveTimestampMetadata(
+						metadata,
+						System.currentTimeMillis()) : metadata);
 	}
 
 	@Override

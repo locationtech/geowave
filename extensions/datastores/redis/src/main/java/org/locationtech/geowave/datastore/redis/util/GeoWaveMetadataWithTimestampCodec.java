@@ -23,18 +23,10 @@ public class GeoWaveMetadataWithTimestampCodec extends
 			final byte[] secondaryId = new byte[buf.readUnsignedByte()];
 			final byte[] visibility = new byte[buf.readUnsignedByte()];
 			final byte[] value = new byte[buf.readUnsignedShort()];
-			buf
-					.readBytes(
-							primaryId);
-			buf
-					.readBytes(
-							secondaryId);
-			buf
-					.readBytes(
-							visibility);
-			buf
-					.readBytes(
-							value);
+			buf.readBytes(primaryId);
+			buf.readBytes(secondaryId);
+			buf.readBytes(visibility);
+			buf.readBytes(value);
 			return new GeoWaveTimestampMetadata(
 					primaryId,
 					secondaryId,
@@ -50,12 +42,8 @@ public class GeoWaveMetadataWithTimestampCodec extends
 				throws IOException {
 			if (in instanceof GeoWaveTimestampMetadata) {
 				final GeoWaveTimestampMetadata md = (GeoWaveTimestampMetadata) in;
-				final ByteBuf out = GeoWaveMetadataCodec
-						.encodeMetadata(
-								md);
-				out
-						.writeLong(
-								md.getMillisFromEpoch());
+				final ByteBuf out = GeoWaveMetadataCodec.encodeMetadata(md);
+				out.writeLong(md.getMillisFromEpoch());
 				return out;
 			}
 			else {
