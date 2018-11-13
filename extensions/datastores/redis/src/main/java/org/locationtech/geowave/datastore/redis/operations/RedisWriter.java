@@ -6,6 +6,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedTimestampRow;
 import org.locationtech.geowave.datastore.redis.util.RedisScoredSetWrapper;
@@ -21,6 +22,7 @@ public class RedisWriter implements
 {
 	private static ByteArray EMPTY_PARTITION_KEY = new ByteArray();
 	private final RedissonClient client;
+	private final Compression compression;
 	private final String setNamePrefix;
 	private final LoadingCache<ByteArray, RedisScoredSetWrapper<GeoWaveRedisPersistedRow>> setCache = Caffeine
 			.newBuilder()
@@ -30,12 +32,13 @@ public class RedisWriter implements
 	boolean isTimestampRequired;
 
 	public RedisWriter(
-			final RedissonClient client,
+			final RedissonClient client, final Compression compression,
 			final String namespace,
 			final String typeName,
 			final String indexName,
 			final boolean isTimestampRequired ) {
 		this.client = client;
+		this.compression = compression;
 		setNamePrefix = RedisUtils
 				.getRowSetPrefix(
 						namespace,
@@ -48,7 +51,7 @@ public class RedisWriter implements
 			final byte[] partitionKey ) {
 		return RedisUtils
 				.getRowSet(
-						client,
+						client,compression,
 						setNamePrefix,
 						partitionKey,
 						isTimestampRequired);

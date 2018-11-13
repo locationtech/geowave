@@ -73,7 +73,7 @@ public class RecalculateStatsCommand extends
 						+ "' must be instance of BaseDataStore to recalculate stats");
 				return false;
 			}
-			
+
 			final AdapterIndexMappingStore mappingStore = storeOptions.createAdapterIndexMappingStore();
 			final IndexStore indexStore = storeOptions.createIndexStore();
 

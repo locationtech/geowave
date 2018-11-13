@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.Semaphore;
 
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.redisson.api.BatchOptions;
 import org.redisson.api.RBatch;
 import org.redisson.api.RFuture;
@@ -15,6 +16,8 @@ import org.redisson.client.codec.Codec;
 import org.redisson.client.protocol.ScoredEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RedisScoredSetWrapper<V> implements
 		AutoCloseable
@@ -47,6 +50,7 @@ public class RedisScoredSetWrapper<V> implements
 				o);
 	}
 
+	@SuppressFBWarnings(justification = "This is intentional to avoid unnecessary sync")
 	private RScoredSortedSet<V> getCurrentSet() {
 		// avoid synchronization if unnecessary by checking for null outside
 		// synchronized block
@@ -63,6 +67,7 @@ public class RedisScoredSetWrapper<V> implements
 		return currentSet;
 	}
 
+	@SuppressFBWarnings(justification = "This is intentional to avoid unnecessary sync")
 	private RScoredSortedSetAsync<V> getCurrentBatch() {
 		// avoid synchronization if unnecessary by checking for null outside
 		// synchronized block
@@ -128,27 +133,15 @@ public class RedisScoredSetWrapper<V> implements
 		currentBatch = null;
 		try {
 			writeSemaphore.acquire();
-			flushBatch
-					.executeAsync()
-					.handle(
-							(
-									r,
-									t ) -> {
-								writeSemaphore.release();
-								if ((t != null) && !(t instanceof CancellationException)) {
-									LOGGER
-											.error(
-													"Exception in batched write",
-													t);
-								}
-								return r;
-							});
-		}
-		catch (final InterruptedException e) {
-			LOGGER
-					.warn(
-							"async batch write semaphore interrupted",
-							e);
+			flushBatch.executeAsync().handle((r, t) -> {
+				writeSemaphore.release();
+				if ((t != null) && !(t instanceof CancellationException)) {
+					LOGGER.error("Exception in batched write", t);
+				}
+				return r;
+			});
+		} catch (final InterruptedException e) {
+			LOGGER.warn("async batch write semaphore interrupted", e);
 			writeSemaphore.release();
 		}
 	}

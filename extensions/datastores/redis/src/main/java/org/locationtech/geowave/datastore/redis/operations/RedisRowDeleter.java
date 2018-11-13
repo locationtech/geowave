@@ -7,6 +7,7 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRow;
 import org.locationtech.geowave.datastore.redis.util.RedisScoredSetWrapper;
@@ -27,18 +28,20 @@ public class RedisRowDeleter implements
 					nameAndAdapterId -> getSet(
 							nameAndAdapterId));
 	private final RedissonClient client;
+	private final Compression compression;
 	private final PersistentAdapterStore adapterStore;
 	private final InternalAdapterStore internalAdapterStore;
 	private final String indexName;
 	private final String namespace;
 
 	public RedisRowDeleter(
-			final RedissonClient client,
+			final RedissonClient client,final Compression compression, 
 			final PersistentAdapterStore adapterStore,
 			final InternalAdapterStore internalAdapterStore,
 			final String indexName,
 			final String namespace ) {
 		this.client = client;
+		this.compression = compression;
 		this.adapterStore = adapterStore;
 		this.internalAdapterStore = internalAdapterStore;
 		this.indexName = indexName;
@@ -53,7 +56,7 @@ public class RedisRowDeleter implements
 			final Pair<String, Short> setNameAndAdapterId ) {
 		return RedisUtils
 				.getRowSet(
-						client,
+						client,compression,
 						setNameAndAdapterId.getLeft(),
 						RedisUtils
 								.isSortByTime(

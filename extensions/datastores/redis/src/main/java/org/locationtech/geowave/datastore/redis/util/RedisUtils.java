@@ -17,6 +17,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.BaseReaderParams;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.protocol.ScoredEntry;
@@ -35,15 +36,17 @@ public class RedisUtils
 
 	public static RScoredSortedSet<GeoWaveMetadata> getMetadataSet(
 			final RedissonClient client,
+			Compression compression,
 			final String namespace,
 			final MetadataType metadataType ) {
 		// stats alaos store a timestamp because stats can be the exact same but
 		// need to still be unique (consider multiple count statistics that are
 		// exactly the same count, but need to be merged)
-		return client.getScoredSortedSet(
-				namespace + "_" + metadataType.toString(),
-				MetadataType.STATS.equals(metadataType) ? GeoWaveMetadataWithTimestampCodec.SINGLETON
-						: GeoWaveMetadataCodec.SINGLETON);
+		return client
+				.getScoredSortedSet(
+						namespace + "_" + metadataType.toString(),
+						compression.getCodec(MetadataType.STATS.equals(metadataType) ? GeoWaveMetadataWithTimestampCodec.SINGLETON
+								: GeoWaveMetadataCodec.SINGLETON));
 	}
 
 	public static String getRowSetPrefix(
@@ -55,11 +58,13 @@ public class RedisUtils
 
 	public static RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getRowSet(
 			final RedissonClient client,
+			Compression compression,
 			final String setNamePrefix,
 			final byte[] partitionKey,
 			final boolean requiresTimestamp ) {
 		return getRowSet(
 				client,
+				compression,
 				getRowSetName(
 						setNamePrefix,
 						partitionKey),
@@ -95,17 +100,20 @@ public class RedisUtils
 
 	public static RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getRowSet(
 			final RedissonClient client,
+			Compression compression,
 			final String setName,
 			final boolean requiresTimestamp ) {
 		return new RedisScoredSetWrapper<>(
 				client,
 				setName,
-				requiresTimestamp ? GeoWaveRedisRowWithTimestampCodec.SINGLETON : GeoWaveRedisRowCodec.SINGLETON);
+				compression.getCodec(requiresTimestamp ? GeoWaveRedisRowWithTimestampCodec.SINGLETON
+						: GeoWaveRedisRowCodec.SINGLETON));
 
 	}
 
 	public static RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getRowSet(
 			final RedissonClient client,
+			Compression compression,
 			final String namespace,
 			final String typeName,
 			final String indexName,
@@ -113,6 +121,7 @@ public class RedisUtils
 			final boolean requiresTimestamp ) {
 		return getRowSet(
 				client,
+				compression,
 				getRowSetPrefix(
 						namespace,
 						typeName,

@@ -125,6 +125,7 @@ public class RedisOperations implements
 			final InternalDataAdapter<?> adapter ) {
 		return new RedisWriter(
 				client,
+				options.getCompression(),
 				gwNamespace,
 				adapter.getTypeName(),
 				index.getName(),
@@ -137,6 +138,7 @@ public class RedisOperations implements
 		return new RedisMetadataWriter(
 				RedisUtils.getMetadataSet(
 						client,
+						options.getCompression(),
 						gwNamespace,
 						metadataType),
 				MetadataType.STATS.equals(metadataType));
@@ -148,6 +150,7 @@ public class RedisOperations implements
 		return new RedisMetadataReader(
 				RedisUtils.getMetadataSet(
 						client,
+						options.getCompression(),
 						gwNamespace,
 						metadataType),
 				metadataType);
@@ -159,6 +162,7 @@ public class RedisOperations implements
 		return new RedisMetadataDeleter(
 				RedisUtils.getMetadataSet(
 						client,
+						options.getCompression(),
 						gwNamespace,
 						metadataType),
 				metadataType);
@@ -169,6 +173,7 @@ public class RedisOperations implements
 			final ReaderParams<T> readerParams ) {
 		return new RedisReader<>(
 				client,
+				options.getCompression(),
 				readerParams,
 				gwNamespace,
 				READER_ASYNC);
@@ -187,6 +192,7 @@ public class RedisOperations implements
 				// not work well while simultaneously deleting rows
 				new RedisReader<>(
 						client,
+						options.getCompression(),
 						readerParams,
 						gwNamespace,
 						false));
@@ -221,6 +227,7 @@ public class RedisOperations implements
 			final RecordReaderParams<T> readerParams ) {
 		return new RedisReader<>(
 				client,
+				options.getCompression(),
 				readerParams,
 				gwNamespace);
 	}
@@ -233,6 +240,7 @@ public class RedisOperations implements
 			final String... authorizations ) {
 		return new RedisRowDeleter(
 				client,
+				options.getCompression(),
 				adapterStore,
 				internalAdapterStore,
 				indexName,

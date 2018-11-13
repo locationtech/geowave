@@ -33,6 +33,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import org.locationtech.geowave.core.store.util.RowConsumer;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRow;
 import org.locationtech.geowave.datastore.redis.util.RedisScoredSetWrapper;
@@ -133,9 +134,10 @@ public class BatchedRangeRead<T>
 	private final boolean async;
 	private final Pair<Boolean, Boolean> groupByRowAndSortByTimePair;
 	private final boolean isSortFinalResultsBySortKey;
+	private final Compression compression;
 
 	protected BatchedRangeRead(
-			final RedissonClient client,
+			final RedissonClient client,final Compression compression,
 			final String setNamePrefix,
 			final short adapterId,
 			final Collection<SinglePartitionQueryRanges> ranges,
@@ -145,6 +147,7 @@ public class BatchedRangeRead<T>
 			final Pair<Boolean, Boolean> groupByRowAndSortByTimePair,
 			final boolean isSortFinalResultsBySortKey ) {
 		this.client = client;
+		this.compression = compression;
 		this.setNamePrefix = setNamePrefix;
 		this.adapterId = adapterId;
 		this.ranges = ranges;
@@ -160,7 +163,7 @@ public class BatchedRangeRead<T>
 			final byte[] partitionKey ) {
 		return RedisUtils
 				.getRowSet(
-						client,
+						client,compression,
 						setNamePrefix,
 						partitionKey,
 						groupByRowAndSortByTimePair.getRight());
@@ -188,14 +191,14 @@ public class BatchedRangeRead<T>
 			}
 
 		}
-//		if (async) {
-//			return executeQueryAsync(
-//					reads);
-//		}
-//		else {
+		if (async) {
+			return executeQueryAsync(
+					reads);
+		}
+		else {
 			return executeQuery(
 					reads);
-//		}
+		}
 	}
 
 	public CloseableIterator<T> executeQuery(
