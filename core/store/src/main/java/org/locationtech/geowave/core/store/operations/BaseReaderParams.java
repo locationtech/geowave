@@ -102,7 +102,7 @@ abstract public class BaseReaderParams<T>
 	}
 
 	public boolean isMixedVisibility() {
-		return false;
+		return isMixedVisibility;
 	}
 
 	public boolean isAggregation() {

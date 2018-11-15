@@ -39,7 +39,7 @@ public class RedisUtils
 			Compression compression,
 			final String namespace,
 			final MetadataType metadataType ) {
-		// stats alaos store a timestamp because stats can be the exact same but
+		// stats also store a timestamp because stats can be the exact same but
 		// need to still be unique (consider multiple count statistics that are
 		// exactly the same count, but need to be merged)
 		return client
