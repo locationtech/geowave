@@ -401,4 +401,9 @@ public class IngestIT extends
 				500);
 
 	}
+
+	@Override
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
+	}
 }

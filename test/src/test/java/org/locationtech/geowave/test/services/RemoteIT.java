@@ -366,4 +366,9 @@ public class RemoteIT extends
 				remoteServiceClient.version("nonexistent-store"));
 		unmuteLogging();
 	}
+
+	@Override
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
+	}
 }

@@ -71,6 +71,7 @@ import org.locationtech.geowave.test.annotation.Environments;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 import org.locationtech.geowave.test.services.ServicesTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,8 @@ import org.slf4j.LoggerFactory;
 @Environments({
 	Environment.SERVICES
 })
-public class GeoServerIT
+public class GeoServerIT extends
+		AbstractGeoWaveIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerIT.class);
 	private static final String WFS_URL_PREFIX = ServicesTestEnvironment.JETTY_BASE_URL + "/geoserver/wfs";
@@ -777,5 +779,10 @@ public class GeoServerIT
 	@Ignore
 	public void setls() {
 		// TODO: Implement this test
+	}
+
+	@Override
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
 	}
 }

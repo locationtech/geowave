@@ -459,4 +459,9 @@ public class GeoServerIngestIT extends
 
 	}
 
+	@Override
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStorePluginOptions;
+	}
+
 }
