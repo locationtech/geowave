@@ -109,7 +109,7 @@ public class GeoServerIT extends
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.REDIS
-	})
+	}, namespace = testName)
 	protected DataStorePluginOptions dataStoreOptions;
 
 	private static long startMillis;
@@ -177,24 +177,24 @@ public class GeoServerIT extends
 		success &= enableWms();
 		// create the datastore
 		configServiceClient.addStoreReRoute(
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				dataStoreOptions.getType(),
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				dataStoreOptions.getOptionsAsMap());
 		Response addDs = geoServerServiceClient.addDataStore(
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				ServicesTestEnvironment.TEST_WORKSPACE,
-				TestUtils.TEST_NAMESPACE);
+				dataStoreOptions.getGeowaveNamespace());
 		success &= (addDs.getStatus() == 201);
 		Response addDsBad = geoServerServiceClient.addDataStore(
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				ServicesTestEnvironment.TEST_WORKSPACE,
-				TestUtils.TEST_NAMESPACE);
+				dataStoreOptions.getGeowaveNamespace());
 		// Make sure that we handle duplicates correctly
 		success &= (addDsBad.getStatus() == 400);
 		// make sure the datastore exists
 		Response getDs = geoServerServiceClient.getDataStore(
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				ServicesTestEnvironment.TEST_WORKSPACE);
 		success &= (getDs.getStatus() == 201);
 		Response getDsBad = geoServerServiceClient.getDataStore(
@@ -301,8 +301,8 @@ public class GeoServerIT extends
 		try {
 			final HttpPost command = new HttpPost(
 					ServicesTestEnvironment.GEOSERVER_REST_PATH + "/workspaces/"
-							+ ServicesTestEnvironment.TEST_WORKSPACE + "/datastores/" + TestUtils.TEST_NAMESPACE
-							+ "/featuretypes");
+							+ ServicesTestEnvironment.TEST_WORKSPACE + "/datastores/"
+							+ dataStoreOptions.getGeowaveNamespace() + "/featuretypes");
 			command.setHeader(
 					"Content-type",
 					"text/xml");
