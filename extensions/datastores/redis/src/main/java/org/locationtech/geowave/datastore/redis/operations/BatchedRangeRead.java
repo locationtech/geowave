@@ -39,7 +39,6 @@ import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRow;
 import org.locationtech.geowave.datastore.redis.util.RedisScoredSetWrapper;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.api.RFuture;
-import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.protocol.ScoredEntry;
 import org.slf4j.Logger;
@@ -137,7 +136,8 @@ public class BatchedRangeRead<T>
 	private final Compression compression;
 
 	protected BatchedRangeRead(
-			final RedissonClient client,final Compression compression,
+			final RedissonClient client,
+			final Compression compression,
 			final String setNamePrefix,
 			final short adapterId,
 			final Collection<SinglePartitionQueryRanges> ranges,
