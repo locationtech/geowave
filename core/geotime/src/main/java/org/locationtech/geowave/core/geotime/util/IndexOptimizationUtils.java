@@ -1,6 +1,8 @@
 package org.locationtech.geowave.core.geotime.util;
 
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
@@ -23,6 +25,14 @@ public class IndexOptimizationUtils
 			}
 			if (dimension instanceof LongitudeField) {
 				hasLongitude = true;
+			}
+			if (dimension instanceof CustomCRSSpatialField) {
+				if (((CustomCRSSpatialDimension) dimension.getBaseDefinition()).getAxis() == 0) {
+					hasLongitude = true;
+				}
+				else {
+					hasLatitude = true;
+				}
 			}
 		}
 		return hasLatitude && hasLongitude;

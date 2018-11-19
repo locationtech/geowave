@@ -31,8 +31,6 @@ import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.locationtech.jts.geom.Geometry;
-
 public class OptimalCQLQuery implements
 		AdapterAndIndexBasedQueryConstraints,
 		QueryConstraints
@@ -196,10 +194,25 @@ public class OptimalCQLQuery implements
 				// constraints);
 				// }
 				// else {
-				baseQuery = new SpatialQuery(
-						constraints,
-						geometry,
-						extractedCompareOp);
+
+				// we have to assume the geometry was transformed to the feature
+				// type's CRS, but SpatialQuery assumes the default CRS if not
+				// specified, so specify a CRS if necessary
+				if (GeometryUtils.getDefaultCRS().equals(
+						adapter.getFeatureType().getCoordinateReferenceSystem())) {
+					baseQuery = new SpatialQuery(
+							constraints,
+							geometry,
+							extractedCompareOp);
+				}
+				else {
+					baseQuery = new SpatialQuery(
+							constraints,
+							geometry,
+							GeometryUtils.getCrsCode(adapter.getFeatureType().getCoordinateReferenceSystem()),
+							extractedCompareOp,
+							BasicQueryCompareOperation.INTERSECTS);
+				}
 
 				// ExtractGeometryFilterVisitor sets predicate to NULL when CQL
 				// expression

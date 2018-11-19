@@ -143,6 +143,7 @@ public class BaseMapReduceDataStore extends
 				internalAdapterStore,
 				indexStore,
 				indexMappingStore,
+				context,
 				minSplits,
 				maxSplits);
 	}

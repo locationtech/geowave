@@ -45,10 +45,10 @@ import org.locationtech.jts.util.Stopwatch;
 @Environments({
 	Environment.SPARK
 })
-public class GeoWaveJavaSparkSQLIT extends
+public class GeoWaveSparkSQLIT extends
 		AbstractGeoWaveBasicVectorIT
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveJavaSparkSQLIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkSQLIT.class);
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
@@ -69,7 +69,7 @@ public class GeoWaveJavaSparkSQLIT extends
 		stopwatch.start();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*  RUNNING GeoWaveJavaSparkSQLIT        *");
+		LOGGER.warn("*  RUNNING GeoWaveSparkSQLIT        *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -79,7 +79,7 @@ public class GeoWaveJavaSparkSQLIT extends
 		stopwatch.stop();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("* FINISHED GeoWaveJavaSparkSQLIT        *");
+		LOGGER.warn("* FINISHED GeoWaveSparkSQLIT        *");
 		LOGGER.warn("*         " + stopwatch.getTimeString() + " elapsed.             *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");

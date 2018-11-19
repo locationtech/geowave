@@ -29,6 +29,7 @@ import org.apache.hadoop.hbase.client.RegionLocator;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
@@ -65,6 +66,7 @@ public class HBaseSplitsProvider extends
 			final Integer maxSplits,
 			final QueryConstraints query,
 			final double[] targetResolutionPerDimensionForHierarchicalIndex,
+			final IndexMetaData[] indexMetadata,
 			final String[] authorizations )
 			throws IOException {
 
@@ -91,14 +93,16 @@ public class HBaseSplitsProvider extends
 						indexConstraints,
 						indexStrategy,
 						targetResolutionPerDimensionForHierarchicalIndex,
-						maxSplits).getCompositeQueryRanges();
+						maxSplits,
+						indexMetadata).getCompositeQueryRanges();
 			}
 			else {
 				ranges = DataStoreUtils.constraintsToQueryRanges(
 						indexConstraints,
 						indexStrategy,
 						targetResolutionPerDimensionForHierarchicalIndex,
-						-1).getCompositeQueryRanges();
+						-1,
+						indexMetadata).getCompositeQueryRanges();
 			}
 		}
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,11 +11,14 @@
 package org.locationtech.geowave.core.geotime.util;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.filter.visitor.NullFilterVisitor;
+import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.CRS;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.filter.And;
 import org.opengis.filter.ExcludeFilter;
 import org.opengis.filter.Filter;
@@ -51,31 +54,30 @@ import org.opengis.filter.spatial.Intersects;
 import org.opengis.filter.spatial.Overlaps;
 import org.opengis.filter.spatial.Touches;
 import org.opengis.filter.spatial.Within;
+import org.opengis.geometry.BoundingBox;
+import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
-
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is used to exact single query geometry and its associated
  * predicate from a CQL expression. There are three possible outcomes based on
  * the extracted results. 1) If CQL expression is simple then we are able to
  * extract query geometry and predicate successfully. 2) If CQL expression
- * combines multiple dissimilar geometric relationships (i.e.
- * "BBOX(geom,...) AND TOUCHES(geom,...)") then we wont be able combine that
- * into a single query geometry and predicate. In which case, we will only
- * return query geometry for the purpose of creating linear constraints and
- * predicate value will be null. However, we are able to combine multiple
- * geometric relationships into one query/predicate if their predicates are same
- * (i.e. "INTERSECTS(geom,...) AND INTERSECTS(geom,...)") 3) In some case, we
- * won't be able to extract query geometry and predicate at all. In that case,
- * we simply return null. This occurs if CQL expression doesn't contain any
- * geometric constraints or CQL expression has non-inclusive filter (i.e. NOT or
- * DISJOINT(...)).
- * 
+ * combines multiple dissimilar geometric relationships (i.e. "BBOX(geom,...)
+ * AND TOUCHES(geom,...)") then we wont be able combine that into a single query
+ * geometry and predicate. In which case, we will only return query geometry for
+ * the purpose of creating linear constraints and predicate value will be null.
+ * However, we are able to combine multiple geometric relationships into one
+ * query/predicate if their predicates are same (i.e. "INTERSECTS(geom,...) AND
+ * INTERSECTS(geom,...)") 3) In some case, we won't be able to extract query
+ * geometry and predicate at all. In that case, we simply return null. This
+ * occurs if CQL expression doesn't contain any geometric constraints or CQL
+ * expression has non-inclusive filter (i.e. NOT or DISJOINT(...)).
+ *
  */
 public class ExtractGeometryFilterVisitor extends
 		NullFilterVisitor
@@ -101,22 +103,22 @@ public class ExtractGeometryFilterVisitor extends
 	}
 
 	/**
-	 * 
+	 *
 	 * @param filter
 	 * @param crs
 	 * @return null if empty constraint (infinite not supported)
 	 */
 	public static ExtractGeometryFilterVisitorResult getConstraints(
 			final Filter filter,
-			CoordinateReferenceSystem crs,
-			String attributeOfInterest ) {
+			final CoordinateReferenceSystem crs,
+			final String attributeOfInterest ) {
 		final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter
 				.accept(
 						new ExtractGeometryFilterVisitor(
 								crs,
 								attributeOfInterest),
 						null);
-		Geometry geo = geoAndCompareOpData.getGeometry();
+		final Geometry geo = geoAndCompareOpData.getGeometry();
 		// empty or infinite geometry simply return null as we can't create
 		// linear constraints from
 		if ((geo == null) || geo.isEmpty()) {
@@ -132,7 +134,7 @@ public class ExtractGeometryFilterVisitor extends
 
 	/**
 	 * Produce an ReferencedEnvelope from the provided data parameter.
-	 * 
+	 *
 	 * @param data
 	 * @return ReferencedEnvelope
 	 */
@@ -142,8 +144,10 @@ public class ExtractGeometryFilterVisitor extends
 			if (data == null) {
 				return null;
 			}
+			else if (data instanceof Geometry) {
+				return (Geometry) data;
+			}
 			else if (data instanceof ReferencedEnvelope) {
-
 				return new GeometryFactory().toGeometry(((ReferencedEnvelope) data).transform(
 						crs,
 						true));
@@ -191,26 +195,41 @@ public class ExtractGeometryFilterVisitor extends
 		return GeometryUtils.infinity();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public Object visit(
 			final BBOX filter,
 			final Object data ) {
-		final Geometry bbox = bbox(data);
+		if (attributeOfInterest.equals(filter.getExpression1().toString())) {
+			final Geometry bbox = bbox(data);
+			final BoundingBox referencedBBox = filter.getBounds();
+			Geometry bounds = new GeometryFactory().toGeometry(new Envelope(
+					referencedBBox.getMinX(),
+					referencedBBox.getMaxX(),
+					referencedBBox.getMinY(),
+					referencedBBox.getMaxY()));
 
-		// consider doing reprojection here into data CRS?
-		final Envelope bounds = new Envelope(
-				filter.getMinX(),
-				filter.getMaxX(),
-				filter.getMinY(),
-				filter.getMaxY());
-		if (this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+			if ((crs != null) && (referencedBBox.getCoordinateReferenceSystem() != null)
+					&& !crs.equals(referencedBBox.getCoordinateReferenceSystem())) {
+				try {
+					bounds = JTS.transform(
+							bounds,
+							CRS.findMathTransform(
+									referencedBBox.getCoordinateReferenceSystem(),
+									crs,
+									true));
+				}
+				catch (MismatchedDimensionException | TransformException | FactoryException e) {
+					LOGGER.error(
+							"Unable to transforma bbox",
+							e);
+				}
+			}
 			if (bbox != null) {
-				return bbox.union(new GeometryFactory().toGeometry(bounds));
+				return bbox.union(bounds);
 			}
 			else {
 				return new ExtractGeometryFilterVisitorResult(
-						bbox(bounds),
+						bounds,
 						CompareOperation.INTERSECTS);
 			}
 		}
@@ -224,12 +243,12 @@ public class ExtractGeometryFilterVisitor extends
 
 	/**
 	 * Please note we are only visiting literals involved in spatial operations.
-	 * 
+	 *
 	 * @param literal
 	 *            , hopefully a Geometry or Envelope
 	 * @param data
 	 *            Incoming BoundingBox (or Envelope or CRS)
-	 * 
+	 *
 	 * @return ReferencedEnvelope updated to reflect literal
 	 */
 	@Override
@@ -370,7 +389,7 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Contains filter,
 			Object data ) {
-		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+		if (!attributeOfInterest.equals(filter.getExpression1().toString())) {
 			return new ExtractGeometryFilterVisitorResult(
 					infinity(),
 					null);
@@ -393,7 +412,7 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Crosses filter,
 			Object data ) {
-		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+		if (!attributeOfInterest.equals(filter.getExpression1().toString())) {
 			return new ExtractGeometryFilterVisitorResult(
 					infinity(),
 					null);
@@ -409,7 +428,7 @@ public class ExtractGeometryFilterVisitor extends
 	@Override
 	public Object visit(
 			final Disjoint filter,
-			Object data ) {
+			final Object data ) {
 		// disjoint does not define a rectangle, but a hole in the
 		// Cartesian plane, no way to limit it
 		return new ExtractGeometryFilterVisitorResult(
@@ -422,7 +441,7 @@ public class ExtractGeometryFilterVisitor extends
 			final DWithin filter,
 			final Object data ) {
 		final Geometry bbox = bbox(data);
-		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+		if (!attributeOfInterest.equals(filter.getExpression1().toString())) {
 			return new ExtractGeometryFilterVisitorResult(
 					infinity(),
 					null);
@@ -444,7 +463,7 @@ public class ExtractGeometryFilterVisitor extends
 			return null;
 		}
 
-		Geometry geom = geometry.evaluate(
+		final Geometry geom = geometry.evaluate(
 				null,
 				Geometry.class);
 		if (geom == null) {
@@ -460,7 +479,7 @@ public class ExtractGeometryFilterVisitor extends
 					filter.getDistanceUnits(),
 					filter.getDistance());
 		}
-		catch (TransformException e) {
+		catch (final TransformException e) {
 			LOGGER.error(
 					"Cannot transform geometry to CRS",
 					e);
@@ -484,7 +503,7 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Equals filter,
 			Object data ) {
-		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+		if (!attributeOfInterest.equals(filter.getExpression1().toString())) {
 			return new ExtractGeometryFilterVisitorResult(
 					infinity(),
 					null);
@@ -501,7 +520,7 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Intersects filter,
 			Object data ) {
-		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+		if (!attributeOfInterest.equals(filter.getExpression1().toString())) {
 			return new ExtractGeometryFilterVisitorResult(
 					infinity(),
 					null);
@@ -518,7 +537,7 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Overlaps filter,
 			Object data ) {
-		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+		if (!attributeOfInterest.equals(filter.getExpression1().toString())) {
 			return new ExtractGeometryFilterVisitorResult(
 					infinity(),
 					null);
@@ -536,7 +555,7 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Touches filter,
 			Object data ) {
-		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+		if (!attributeOfInterest.equals(filter.getExpression1().toString())) {
 			return new ExtractGeometryFilterVisitorResult(
 					infinity(),
 					null);
@@ -554,7 +573,7 @@ public class ExtractGeometryFilterVisitor extends
 	public Object visit(
 			final Within filter,
 			Object data ) {
-		if (!this.attributeOfInterest.equals(filter.getExpression1().toString())) {
+		if (!attributeOfInterest.equals(filter.getExpression1().toString())) {
 			return new ExtractGeometryFilterVisitorResult(
 					infinity(),
 					null);
