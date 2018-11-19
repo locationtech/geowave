@@ -36,12 +36,14 @@ import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatis
 import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.StatisticsQuery;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
@@ -92,6 +94,28 @@ public class SplitsProvider
 			indexIdToAdaptersMap.put(
 					indexAdapterIdPair.getKey().getName(),
 					indexAdapterIdPair.getValue());
+			QueryConstraints indexAdapterConstraints;
+			if (constraints instanceof AdapterAndIndexBasedQueryConstraints) {
+				List<Short> adapters = indexAdapterIdPair.getRight();
+				DataTypeAdapter<?> adapter = null;
+				// in practice this is used for CQL and you can't have multiple
+				// types/adapters
+				if (adapters.size() == 1) {
+					String typeName = internalAdapterStore.getTypeName(adapters.get(0));
+					if (typeName != null) {
+						adapter = adapterStore.getAdapter(typeName);
+					}
+				}
+				if (adapter == null) {
+					LOGGER.warn("Unable to find type matching an adapter dependent query");
+				}
+				indexAdapterConstraints = ((AdapterAndIndexBasedQueryConstraints) constraints).createQueryConstraints(
+						adapter,
+						indexAdapterIdPair.getLeft());
+			}
+			else {
+				indexAdapterConstraints = constraints;
+			}
 			populateIntermediateSplits(
 					splits,
 					operations,
@@ -101,7 +125,7 @@ public class SplitsProvider
 					adapterStore,
 					statsStore,
 					maxSplits,
-					constraints,
+					indexAdapterConstraints,
 					(double[]) commonOptions.getHints().get(
 							DataStoreUtils.TARGET_RESOLUTION_PER_DIMENSION_FOR_HIERARCHICAL_INDEX),
 					commonOptions.getAuthorizations());
