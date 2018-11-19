@@ -98,12 +98,12 @@ public class CassandraOperations implements
 
 	public CassandraOperations(
 			final CassandraRequiredOptions options ) {
-		if ((options.getGeowaveNamespace() == null) || options.getGeowaveNamespace().equals(
+		if ((options.getGeoWaveNamespace() == null) || options.getGeoWaveNamespace().equals(
 				"")) {
 			gwNamespace = "geowave";
 		}
 		else {
-			gwNamespace = getCassandraSafeName(options.getGeowaveNamespace());
+			gwNamespace = getCassandraSafeName(options.getGeoWaveNamespace());
 		}
 		session = SessionPool.getInstance().getSession(
 				options.getContactPoint());
@@ -648,7 +648,6 @@ public class CassandraOperations implements
 		return tableName;
 	}
 
-	@Override
 	public boolean createIndex(
 			final Index index )
 			throws IOException {

@@ -82,8 +82,6 @@ import org.slf4j.LoggerFactory;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
-
 abstract public class AbstractGeoWaveBasicVectorIT extends
 		AbstractGeoWaveIT
 {

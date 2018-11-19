@@ -108,7 +108,8 @@ public class GeoServerIT extends
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.DYNAMODB,
-		GeoWaveStoreType.REDIS
+		GeoWaveStoreType.REDIS,
+		GeoWaveStoreType.ROCKSDB
 	}, namespace = testName)
 	protected DataStorePluginOptions dataStoreOptions;
 
@@ -177,24 +178,24 @@ public class GeoServerIT extends
 		success &= enableWms();
 		// create the datastore
 		configServiceClient.addStoreReRoute(
-				dataStoreOptions.getGeowaveNamespace(),
+				dataStoreOptions.getGeoWaveNamespace(),
 				dataStoreOptions.getType(),
-				dataStoreOptions.getGeowaveNamespace(),
+				dataStoreOptions.getGeoWaveNamespace(),
 				dataStoreOptions.getOptionsAsMap());
 		Response addDs = geoServerServiceClient.addDataStore(
-				dataStoreOptions.getGeowaveNamespace(),
+				dataStoreOptions.getGeoWaveNamespace(),
 				ServicesTestEnvironment.TEST_WORKSPACE,
-				dataStoreOptions.getGeowaveNamespace());
+				dataStoreOptions.getGeoWaveNamespace());
 		success &= (addDs.getStatus() == 201);
 		Response addDsBad = geoServerServiceClient.addDataStore(
-				dataStoreOptions.getGeowaveNamespace(),
+				dataStoreOptions.getGeoWaveNamespace(),
 				ServicesTestEnvironment.TEST_WORKSPACE,
-				dataStoreOptions.getGeowaveNamespace());
+				dataStoreOptions.getGeoWaveNamespace());
 		// Make sure that we handle duplicates correctly
 		success &= (addDsBad.getStatus() == 400);
 		// make sure the datastore exists
 		Response getDs = geoServerServiceClient.getDataStore(
-				dataStoreOptions.getGeowaveNamespace(),
+				dataStoreOptions.getGeoWaveNamespace(),
 				ServicesTestEnvironment.TEST_WORKSPACE);
 		success &= (getDs.getStatus() == 201);
 		Response getDsBad = geoServerServiceClient.getDataStore(
@@ -302,7 +303,7 @@ public class GeoServerIT extends
 			final HttpPost command = new HttpPost(
 					ServicesTestEnvironment.GEOSERVER_REST_PATH + "/workspaces/"
 							+ ServicesTestEnvironment.TEST_WORKSPACE + "/datastores/"
-							+ dataStoreOptions.getGeowaveNamespace() + "/featuretypes");
+							+ dataStoreOptions.getGeoWaveNamespace() + "/featuretypes");
 			command.setHeader(
 					"Content-type",
 					"text/xml");

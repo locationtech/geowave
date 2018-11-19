@@ -44,7 +44,8 @@ import org.locationtech.geowave.test.mapreduce.MapReduceTestUtils;
 @GeoWaveTestStore({
 	GeoWaveStoreType.ACCUMULO,
 	GeoWaveStoreType.HBASE,
-	GeoWaveStoreType.REDIS
+	GeoWaveStoreType.REDIS,
+	GeoWaveStoreType.ROCKSDB
 })
 public class StoreCopyIT extends
 		AbstractGeoWaveBasicVectorIT

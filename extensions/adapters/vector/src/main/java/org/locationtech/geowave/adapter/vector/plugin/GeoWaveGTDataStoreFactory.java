@@ -175,6 +175,9 @@ public class GeoWaveGTDataStoreFactory implements
 	public boolean canProcess(
 			final Map<String, Serializable> params ) {
 		try {
+			if (params.containsKey("directory")){
+				System.err.println("stop");
+			}
 			final Map<String, String> dataStoreParams = params
 					.entrySet()
 					.stream()

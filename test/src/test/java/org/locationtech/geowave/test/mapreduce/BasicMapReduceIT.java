@@ -139,7 +139,8 @@ public class BasicMapReduceIT extends
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.REDIS
+		GeoWaveStoreType.REDIS,
+		GeoWaveStoreType.ROCKSDB
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
@@ -468,7 +469,7 @@ public class BasicMapReduceIT extends
 					dataStoreOptions);
 			job.setJarByClass(this.getClass());
 
-			job.setJobName("GeoWave Test (" + dataStoreOptions.getGeowaveNamespace() + ")");
+			job.setJobName("GeoWave Test (" + dataStoreOptions.getGeoWaveNamespace() + ")");
 			job.setInputFormatClass(SequenceFileInputFormat.class);
 			job.setMapperClass(VerifyExpectedResultsMapper.class);
 			job.setMapOutputKeyClass(NullWritable.class);

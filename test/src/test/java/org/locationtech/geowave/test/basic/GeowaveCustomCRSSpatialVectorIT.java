@@ -53,7 +53,8 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.DYNAMODB,
-		GeoWaveStoreType.REDIS
+		GeoWaveStoreType.REDIS,
+		GeoWaveStoreType.ROCKSDB
 	})
 	protected DataStorePluginOptions dataStore;
 

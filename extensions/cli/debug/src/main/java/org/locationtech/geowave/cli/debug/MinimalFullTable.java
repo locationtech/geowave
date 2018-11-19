@@ -89,7 +89,7 @@ public class MinimalFullTable extends
 						opts.getInstance(),
 						opts.getUser(),
 						opts.getPassword(),
-						opts.getGeowaveNamespace(),
+						opts.getGeoWaveNamespace(),
 						(AccumuloOptions) opts.getStoreOptions());
 
 				long results = 0;

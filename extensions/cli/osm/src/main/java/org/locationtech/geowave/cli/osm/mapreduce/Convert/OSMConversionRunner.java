@@ -168,7 +168,7 @@ public class OSMConversionRunner extends
 						accumuloOptions.getInstance(),
 						accumuloOptions.getUser(),
 						accumuloOptions.getPassword(),
-						accumuloOptions.getGeowaveNamespace(),
+						accumuloOptions.getGeoWaveNamespace(),
 						options),
 				options);
 		for (final FeatureDataAdapter fda : FeatureDefinitionSet.featureAdapters.values()) {

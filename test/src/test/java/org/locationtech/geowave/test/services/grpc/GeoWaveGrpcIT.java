@@ -31,7 +31,6 @@ import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
 import org.locationtech.geowave.core.store.operations.remote.options.BasicIndexOptions;
-import org.locationtech.geowave.service.grpc.GeoWaveGrpcServer;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.cli.StartGrpcServerCommand;
 import org.locationtech.geowave.service.grpc.cli.StartGrpcServerCommandOptions;
@@ -61,7 +60,8 @@ import org.slf4j.LoggerFactory;
 	GeoWaveStoreType.CASSANDRA,
 	GeoWaveStoreType.DYNAMODB,
 	GeoWaveStoreType.HBASE,
-	GeoWaveStoreType.REDIS
+	GeoWaveStoreType.REDIS,
+	GeoWaveStoreType.ROCKSDB
 })
 public class GeoWaveGrpcIT extends
 		AbstractGeoWaveBasicVectorIT

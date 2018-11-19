@@ -301,7 +301,6 @@ public class AccumuloOperations implements
 				authorization);
 	}
 
-	@Override
 	public boolean createIndex(
 			final Index index )
 			throws IOException {
@@ -914,7 +913,7 @@ public class AccumuloOperations implements
 				options.getInstance(),
 				options.getUser(),
 				options.getPassword(),
-				options.getGeowaveNamespace(),
+				options.getGeoWaveNamespace(),
 				(AccumuloOptions) options.getStoreOptions());
 	}
 

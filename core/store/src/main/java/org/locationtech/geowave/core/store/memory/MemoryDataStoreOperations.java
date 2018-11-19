@@ -919,13 +919,6 @@ public class MemoryDataStoreOperations implements
 	}
 
 	@Override
-	public boolean createIndex(
-			final Index index )
-			throws IOException {
-		return true;
-	}
-
-	@Override
 	public boolean metadataExists(
 			final MetadataType type )
 			throws IOException {

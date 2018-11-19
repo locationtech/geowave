@@ -48,7 +48,7 @@ abstract public class AbstractAccumuloSplitsOperation
 			final AccumuloOperations operations = AccumuloOperations.createOperations(options);
 
 			final Connector connector = operations.getConnector();
-			final String namespace = options.getGeowaveNamespace();
+			final String namespace = options.getGeoWaveNamespace();
 			final long number = splitOptions.getNumber();
 			if (splitOptions.getIndexName() == null) {
 				boolean retVal = false;

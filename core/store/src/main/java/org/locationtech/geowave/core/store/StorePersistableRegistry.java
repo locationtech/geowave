@@ -11,7 +11,6 @@
 package org.locationtech.geowave.core.store;
 
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
@@ -155,9 +154,7 @@ public class StorePersistableRegistry implements
 			new PersistableIdAndConstructor(
 					(short) 231,
 					CommonQueryOptions::new),
-//			new PersistableIdAndConstructor(
-//					(short) 232,
-//					InternalDataAdapterWrapper::new),
+//232 is available
 			new PersistableIdAndConstructor(
 					(short) 233,
 					CountAggregation::new),

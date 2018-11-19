@@ -112,7 +112,8 @@ public class LandsatIT extends
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE,
-		GeoWaveStoreType.REDIS
+		GeoWaveStoreType.REDIS,
+		GeoWaveStoreType.ROCKSDB
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 	private static final String REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected.png";
@@ -205,7 +206,7 @@ public class LandsatIT extends
 		final StringBuilder str = new StringBuilder(
 				StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION).append(
 				"=").append(
-				dataStoreOptions.getGeowaveNamespace()).append(
+				dataStoreOptions.getGeoWaveNamespace()).append(
 				";equalizeHistogramOverride=false;interpolationOverride=").append(
 				Interpolation.INTERP_NEAREST);
 

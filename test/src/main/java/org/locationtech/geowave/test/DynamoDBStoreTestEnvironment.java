@@ -18,26 +18,26 @@ import org.locationtech.geowave.datastore.dynamodb.DynamoDBOptions;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class DynamoDBTestEnvironment extends
+public class DynamoDBStoreTestEnvironment extends
 		StoreTestEnvironment
 {
 	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new DynamoDBStoreFactoryFamily()
 			.getDataStoreFactory();
 
-	private static DynamoDBTestEnvironment singletonInstance = null;
+	private static DynamoDBStoreTestEnvironment singletonInstance = null;
 
-	public static synchronized DynamoDBTestEnvironment getInstance() {
+	public static synchronized DynamoDBStoreTestEnvironment getInstance() {
 		if (singletonInstance == null) {
-			singletonInstance = new DynamoDBTestEnvironment();
+			singletonInstance = new DynamoDBStoreTestEnvironment();
 		}
 		return singletonInstance;
 	}
 
-	private final static Logger LOGGER = Logger.getLogger(DynamoDBTestEnvironment.class);
+	private final static Logger LOGGER = Logger.getLogger(DynamoDBStoreTestEnvironment.class);
 
 	protected DynamoDBLocal dynamoLocal;
 
-	private DynamoDBTestEnvironment() {}
+	private DynamoDBStoreTestEnvironment() {}
 
 	@Override
 	public void setup() {

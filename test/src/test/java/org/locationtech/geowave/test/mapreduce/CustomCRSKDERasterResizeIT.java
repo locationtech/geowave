@@ -72,7 +72,8 @@ import org.opengis.coverage.grid.GridCoverage;
 	GeoWaveStoreType.ACCUMULO,
 	GeoWaveStoreType.BIGTABLE,
 	GeoWaveStoreType.HBASE,
-	GeoWaveStoreType.REDIS
+	GeoWaveStoreType.REDIS,
+	GeoWaveStoreType.ROCKSDB
 })
 public class CustomCRSKDERasterResizeIT
 {

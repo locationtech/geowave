@@ -86,7 +86,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 				JOB_NAME,
 				formatPluginName,
 				inputFile.toString(),
-				dataStoreOptions.getGeowaveNamespace(),
+				dataStoreOptions.getGeoWaveNamespace(),
 				getIngestDescription());
 	}
 

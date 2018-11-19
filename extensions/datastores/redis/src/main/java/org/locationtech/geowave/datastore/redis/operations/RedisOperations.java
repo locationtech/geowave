@@ -47,12 +47,12 @@ public class RedisOperations implements
 
 	public RedisOperations(
 			final RedisOptions options ) {
-		if ((options.getGeowaveNamespace() == null) || options.getGeowaveNamespace().equals(
+		if ((options.getGeoWaveNamespace() == null) || options.getGeoWaveNamespace().equals(
 				"")) {
 			gwNamespace = "geowave";
 		}
 		else {
-			gwNamespace = options.getGeowaveNamespace();
+			gwNamespace = options.getGeoWaveNamespace();
 		}
 		this.options = options;
 		client = RedissonClientCache.getInstance().getClient(
@@ -66,7 +66,6 @@ public class RedisOperations implements
 		return true;
 	}
 
-	@Override
 	public boolean createIndex(
 			final Index index )
 			throws IOException {

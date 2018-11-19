@@ -79,7 +79,8 @@ public class SplitsProviderIT extends
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.REDIS
+		GeoWaveStoreType.REDIS,
+		GeoWaveStoreType.ROCKSDB
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 

@@ -78,7 +78,8 @@ public class QueryOptionsIT
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.REDIS
+		GeoWaveStoreType.REDIS,
+		GeoWaveStoreType.ROCKSDB
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 

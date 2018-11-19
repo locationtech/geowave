@@ -59,7 +59,8 @@ public class GeoWaveVectorSerializationIT extends
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.DYNAMODB,
-		GeoWaveStoreType.REDIS
+		GeoWaveStoreType.REDIS,
+		GeoWaveStoreType.ROCKSDB
 	})
 	protected DataStorePluginOptions dataStore;
 	private static long startMillis;
