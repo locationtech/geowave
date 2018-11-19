@@ -17,5 +17,5 @@ public interface InternalDataAdapter<T> extends
 {
 	public short getAdapterId();
 
-	public DataTypeAdapter<?> getAdapter();
+	public DataTypeAdapter<T> getAdapter();
 }

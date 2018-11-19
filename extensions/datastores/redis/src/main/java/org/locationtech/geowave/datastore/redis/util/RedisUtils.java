@@ -1,7 +1,6 @@
 package org.locationtech.geowave.datastore.redis.util;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -18,6 +17,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.BaseReaderParams;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.protocol.ScoredEntry;
@@ -30,16 +30,23 @@ import com.google.common.primitives.UnsignedBytes;
 
 public class RedisUtils
 {
+	protected static final int MAX_ROWS_FOR_PAGINATION = 1000000;
 	public static int REDIS_DEFAULT_MAX_RANGE_DECOMPOSITION = 250;
 	public static int REDIS_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION = 250;
 
 	public static RScoredSortedSet<GeoWaveMetadata> getMetadataSet(
 			final RedissonClient client,
+			Compression compression,
 			final String namespace,
 			final MetadataType metadataType ) {
-		return client.getScoredSortedSet(
-				namespace + "_" + metadataType.toString(),
-				GeoWaveMetadataCodec.SINGLETON);
+		// stats also store a timestamp because stats can be the exact same but
+		// need to still be unique (consider multiple count statistics that are
+		// exactly the same count, but need to be merged)
+		return client
+				.getScoredSortedSet(
+						namespace + "_" + metadataType.toString(),
+						compression.getCodec(MetadataType.STATS.equals(metadataType) ? GeoWaveMetadataWithTimestampCodec.SINGLETON
+								: GeoWaveMetadataCodec.SINGLETON));
 	}
 
 	public static String getRowSetPrefix(
@@ -49,13 +56,15 @@ public class RedisUtils
 		return namespace + "_" + typeName + "_" + indexName;
 	}
 
-	public static RScoredSortedSet<GeoWaveRedisPersistedRow> getRowSet(
+	public static RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getRowSet(
 			final RedissonClient client,
+			Compression compression,
 			final String setNamePrefix,
 			final byte[] partitionKey,
 			final boolean requiresTimestamp ) {
 		return getRowSet(
 				client,
+				compression,
 				getRowSetName(
 						setNamePrefix,
 						partitionKey),
@@ -89,18 +98,22 @@ public class RedisUtils
 		return setNamePrefix + partitionStr;
 	}
 
-	public static RScoredSortedSet<GeoWaveRedisPersistedRow> getRowSet(
+	public static RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getRowSet(
 			final RedissonClient client,
+			Compression compression,
 			final String setName,
 			final boolean requiresTimestamp ) {
-		return client.getScoredSortedSet(
+		return new RedisScoredSetWrapper<>(
+				client,
 				setName,
-				requiresTimestamp ? GeoWaveRedisRowWithTimestampCodec.SINGLETON : GeoWaveRedisRowCodec.SINGLETON);
+				compression.getCodec(requiresTimestamp ? GeoWaveRedisRowWithTimestampCodec.SINGLETON
+						: GeoWaveRedisRowCodec.SINGLETON));
 
 	}
 
-	public static RScoredSortedSet<GeoWaveRedisPersistedRow> getRowSet(
+	public static RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getRowSet(
 			final RedissonClient client,
+			Compression compression,
 			final String namespace,
 			final String typeName,
 			final String indexName,
@@ -108,6 +121,7 @@ public class RedisUtils
 			final boolean requiresTimestamp ) {
 		return getRowSet(
 				client,
+				compression,
 				getRowSetPrefix(
 						namespace,
 						typeName,
@@ -202,15 +216,15 @@ public class RedisUtils
 		return multimap.values().iterator();
 	}
 
-	public static Collection<ScoredEntry<GeoWaveRedisPersistedRow>> groupByRow(
-			final Collection<ScoredEntry<GeoWaveRedisPersistedRow>> result,
+	public static Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> groupByRow(
+			final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> result,
 			final boolean sortByTime ) {
 		final ListMultimap<Pair<Double, ByteArray>, ScoredEntry<GeoWaveRedisPersistedRow>> multimap = MultimapBuilder
 				.hashKeys()
 				.arrayListValues()
 				.build();
 		result
-				.forEach(
+				.forEachRemaining(
 						r -> multimap
 								.put(
 										Pair
@@ -230,7 +244,7 @@ public class RedisUtils
 													(List<ScoredEntry<GeoWaveRedisPersistedRow>>) v,
 													TIMESTAMP_COMPARATOR));
 		}
-		return multimap.values();
+		return multimap.values().iterator();
 	}
 
 	public static boolean isSortByTime(

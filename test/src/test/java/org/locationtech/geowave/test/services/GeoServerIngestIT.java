@@ -211,17 +211,17 @@ public class GeoServerIngestIT extends
 				201,
 				geoServerServiceClient.addWorkspace("testomatic"));
 		configServiceClient.addStoreReRoute(
-				TestUtils.TEST_NAMESPACE,
+				dataStorePluginOptions.getGeowaveNamespace(),
 				dataStorePluginOptions.getType(),
-				TestUtils.TEST_NAMESPACE,
+				dataStorePluginOptions.getGeowaveNamespace(),
 				dataStorePluginOptions.getOptionsAsMap());
 		TestUtils.assertStatusCode(
-				"Should Add " + TestUtils.TEST_NAMESPACE + " Datastore",
+				"Should Add " + dataStorePluginOptions.getGeowaveNamespace() + " Datastore",
 				201,
 				geoServerServiceClient.addDataStore(
-						TestUtils.TEST_NAMESPACE,
+						dataStorePluginOptions.getGeowaveNamespace(),
 						"testomatic",
-						TestUtils.TEST_NAMESPACE));
+						dataStorePluginOptions.getGeowaveNamespace()));
 
 		TestUtils.assertStatusCode(
 				"Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' Style",
@@ -261,7 +261,7 @@ public class GeoServerIngestIT extends
 				"Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer",
 				201,
 				geoServerServiceClient.addLayer(
-						TestUtils.TEST_NAMESPACE,
+						dataStorePluginOptions.getGeowaveNamespace(),
 						WORKSPACE,
 						null,
 						null,
@@ -272,7 +272,7 @@ public class GeoServerIngestIT extends
 				"Should return 400, that layer was already added",
 				400,
 				geoServerServiceClient.addLayer(
-						TestUtils.TEST_NAMESPACE,
+						dataStorePluginOptions.getGeowaveNamespace(),
 						WORKSPACE,
 						null,
 						null,
@@ -449,7 +449,7 @@ public class GeoServerIngestIT extends
 	public void cleanup() {
 		geoServerServiceClient.removeFeatureLayer(SimpleIngest.FEATURE_NAME);
 		geoServerServiceClient.removeDataStore(
-				TestUtils.TEST_NAMESPACE,
+				dataStorePluginOptions.getGeowaveNamespace(),
 				WORKSPACE);
 		geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE);
 		geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE);
@@ -457,6 +457,11 @@ public class GeoServerIngestIT extends
 		geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER);
 		geoServerServiceClient.removeWorkspace(WORKSPACE);
 
+	}
+
+	@Override
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStorePluginOptions;
 	}
 
 }

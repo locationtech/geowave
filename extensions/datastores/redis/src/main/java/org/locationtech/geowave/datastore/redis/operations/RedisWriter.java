@@ -6,8 +6,10 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedTimestampRow;
+import org.locationtech.geowave.datastore.redis.util.RedisScoredSetWrapper;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
@@ -20,8 +22,9 @@ public class RedisWriter implements
 {
 	private static ByteArray EMPTY_PARTITION_KEY = new ByteArray();
 	private final RedissonClient client;
+	private final Compression compression;
 	private final String setNamePrefix;
-	private final LoadingCache<ByteArray, RScoredSortedSet<GeoWaveRedisPersistedRow>> setCache = Caffeine
+	private final LoadingCache<ByteArray, RedisScoredSetWrapper<GeoWaveRedisPersistedRow>> setCache = Caffeine
 			.newBuilder()
 			.build(
 					partitionKey -> getSet(
@@ -29,12 +32,13 @@ public class RedisWriter implements
 	boolean isTimestampRequired;
 
 	public RedisWriter(
-			final RedissonClient client,
+			final RedissonClient client, final Compression compression,
 			final String namespace,
 			final String typeName,
 			final String indexName,
 			final boolean isTimestampRequired ) {
 		this.client = client;
+		this.compression = compression;
 		setNamePrefix = RedisUtils
 				.getRowSetPrefix(
 						namespace,
@@ -43,11 +47,11 @@ public class RedisWriter implements
 		this.isTimestampRequired = isTimestampRequired;
 	}
 
-	private RScoredSortedSet<GeoWaveRedisPersistedRow> getSet(
+	private RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getSet(
 			final byte[] partitionKey ) {
 		return RedisUtils
 				.getRowSet(
-						client,
+						client,compression,
 						setNamePrefix,
 						partitionKey,
 						isTimestampRequired);
@@ -95,10 +99,16 @@ public class RedisWriter implements
 	}
 
 	@Override
-	public void flush() {}
+	public void flush() {
+		setCache.asMap().forEach((k,v) -> v.flush());
+	}
 
 	@Override
 	public void close()
-			throws Exception {}
+			throws Exception {
+		for (RedisScoredSetWrapper<GeoWaveRedisPersistedRow> set : setCache.asMap().values()) {
+			set.close();
+		}
+	}
 
 }

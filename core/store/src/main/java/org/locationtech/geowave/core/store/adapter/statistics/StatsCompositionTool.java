@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
@@ -44,23 +45,41 @@ public class StatsCompositionTool<T> implements
 		Flushable
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(StatsCompositionTool.class);
-	public static final int FLUSH_STATS_THRESHOLD = 16384;
+	public static final int FLUSH_STATS_THRESHOLD = 1000000;
 
 	int updateCount = 0;
 	DataStatisticsStore statisticsStore;
 	List<DataStatisticsBuilder<T, ?, ?>> statisticsBuilders = null;
 	final Object MUTEX = new Object();
 	protected boolean skipFlush = false;
+	private boolean overwrite;
+	private short adapterId;
 
 	public StatsCompositionTool(
 			final DataStoreStatisticsProvider<T> statisticsProvider,
 			final DataStatisticsStore statisticsStore,
 			final Index index,
-			final DataTypeAdapter<T> adapter ) {
-		this.statisticsStore = statisticsStore;
-		this.init(
+			final InternalDataAdapter<T> adapter ) {
+		this(
+				statisticsProvider,
+				statisticsStore,
 				index,
 				adapter,
+				false);
+	}
+
+	public StatsCompositionTool(
+			final DataStoreStatisticsProvider<T> statisticsProvider,
+			final DataStatisticsStore statisticsStore,
+			final Index index,
+			final InternalDataAdapter<T> adapter,
+			final boolean overwrite ) {
+		this.statisticsStore = statisticsStore;
+		this.overwrite = overwrite;
+		this.adapterId = adapter.getAdapterId();
+		this.init(
+				index,
+				adapter.getAdapter(),
 				statisticsProvider);
 	}
 
@@ -141,6 +160,15 @@ public class StatsCompositionTool<T> implements
 		synchronized (MUTEX) {
 			for (final DataStatisticsBuilder<T, ?, ?> builder : statisticsBuilders) {
 				final Collection<InternalDataStatistics<T, ?, ?>> statistics = (Collection) builder.getStatistics();
+				if (overwrite) {
+					final StatisticsId id = builder.getStatisticsId();
+					// TODO how should we deal with authorizations/visibilities
+					// here
+					statisticsStore.removeStatistics(
+							adapterId,
+							id.getExtendedId(),
+							id.getType());
+				}
 				for (final InternalDataStatistics<T, ?, ?> s : statistics) {
 					// using a set and simply checking instanceof this is the
 					// simplest approach to enable per partition statistics
@@ -163,6 +191,8 @@ public class StatsCompositionTool<T> implements
 				}
 				statistics.clear();
 			}
+			// just overwrite the initial set of values
+			overwrite = false;
 		}
 	}
 
@@ -212,7 +242,7 @@ public class StatsCompositionTool<T> implements
 	}
 
 	private void checkStats() {
-		if (!skipFlush && (updateCount > FLUSH_STATS_THRESHOLD)) {
+		if (!skipFlush && (updateCount >= FLUSH_STATS_THRESHOLD)) {
 			updateCount = 0;
 			flush();
 		}

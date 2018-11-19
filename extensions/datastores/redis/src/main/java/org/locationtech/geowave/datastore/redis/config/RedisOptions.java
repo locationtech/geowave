@@ -10,7 +10,7 @@ import org.locationtech.geowave.datastore.redis.RedisStoreFactoryFamily;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.client.codec.Codec;
 import org.redisson.codec.LZ4Codec;
-import org.redisson.codec.SnappyCodecV2;
+import org.redisson.codec.SnappyCodec;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
@@ -81,7 +81,7 @@ public class RedisOptions extends
 
 	public static enum Compression {
 		SNAPPY(
-				c -> new SnappyCodecV2(
+				c -> new SnappyCodec(
 						c)),
 		L4Z(
 				c -> new LZ4Codec(

@@ -110,7 +110,7 @@ public class InternalDataAdapterWrapper<T> implements
 	}
 
 	@Override
-	public DataTypeAdapter<?> getAdapter() {
+	public DataTypeAdapter<T> getAdapter() {
 		return adapter;
 	}
 }

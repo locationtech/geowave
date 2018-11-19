@@ -373,4 +373,9 @@ public class ConfigServicesIT extends
 				"test-geoserver",
 				values.get("geoserver.url"));
 	}
+
+	@Override
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStorePluginOptions;
+	}
 }

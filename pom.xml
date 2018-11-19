@@ -70,6 +70,7 @@
 		<kafka.artifact>kafka_2.11</kafka.artifact>
 		<kafka.version>0.8.2.1</kafka.version>
 		<snappy.version>1.1.2.6</snappy.version>
+		<collections4.version>4.1</collections4.version>
 		<jcommander.version>1.48</jcommander.version>
 		<jackson.version>1.9.13</jackson.version>
 		<fasterxml.jackson.version>2.9.5</fasterxml.jackson.version>
@@ -221,6 +222,11 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>3.4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-collections4</artifactId>
+				<version>4.1</version>
 			</dependency>
 			<dependency>
 				<groupId>net.sf.json-lib</groupId>

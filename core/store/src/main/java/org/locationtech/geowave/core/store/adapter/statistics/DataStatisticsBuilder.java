@@ -72,6 +72,10 @@ public class DataStatisticsBuilder<T, R, B extends StatisticsQueryBuilder<R, B>>
 				kvs);
 	}
 
+	public StatisticsId getStatisticsId() {
+		return statisticsId;
+	}
+
 	public Collection<InternalDataStatistics<T, R, B>> getStatistics() {
 		return statisticsMap.values();
 	}

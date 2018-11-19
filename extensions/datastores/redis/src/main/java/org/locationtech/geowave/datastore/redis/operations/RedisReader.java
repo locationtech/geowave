@@ -24,6 +24,7 @@ import org.locationtech.geowave.core.store.operations.BaseReaderParams;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRow;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
@@ -43,28 +44,33 @@ public class RedisReader<T> implements
 
 	public RedisReader(
 			final RedissonClient client,
+			final Compression compression,
 			final ReaderParams<T> readerParams,
 			final String namespace,
 			final boolean async ) {
 		this.iterator = createIteratorForReader(
 				client,
+				compression,
 				readerParams,
 				namespace,
-				async);
+				false);
 	}
 
 	public RedisReader(
 			final RedissonClient client,
+			final Compression compression,
 			final RecordReaderParams<T> recordReaderParams,
 			final String namespace ) {
 		this.iterator = createIteratorForRecordReader(
 				client,
+				compression,
 				recordReaderParams,
 				namespace);
 	}
 
 	private CloseableIterator<T> createIteratorForReader(
 			final RedissonClient client,
+			final Compression compression,
 			final ReaderParams<T> readerParams,
 			final String namespace,
 			final boolean async ) {
@@ -76,6 +82,7 @@ public class RedisReader<T> implements
 		if ((ranges != null) && !ranges.isEmpty()) {
 			return createIterator(
 					client,
+					compression,
 					readerParams,
 					namespace,
 					ranges,
@@ -105,9 +112,9 @@ public class RedisReader<T> implements
 						.stream()
 						.map(
 								p -> {
-									final Collection<ScoredEntry<GeoWaveRedisPersistedRow>> result = RedisUtils
+									final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> result = RedisUtils
 											.getRowSet(
-													client,
+													client,compression,
 													setNamePrefix,
 													p.getBytes(),
 													groupByRowAndSortByTime.getRight())
@@ -122,17 +129,17 @@ public class RedisReader<T> implements
 															.groupByRow(
 																	result,
 																	groupByRowAndSortByTime.getRight())
-															.iterator()
-													: result.iterator();
+													: result;
 									return ImmutablePair
 											.of(
 													p,
 													it);
 								});
-				iterators[i++] = streamIt
-						.flatMap(
-								p -> Streams
-										.stream(
+				iterators[i++] = 
+						Iterators
+						.concat(streamIt
+						.map(
+								p -> 
 												Iterators
 														.transform(
 																p.getRight(),
@@ -142,8 +149,7 @@ public class RedisReader<T> implements
 																		p.getLeft().getBytes(),
 																		RedisUtils
 																				.getSortKey(
-																						pr.getScore())))))
-						.iterator();
+																						pr.getScore())))).iterator());
 			}
 			return wrapResults(
 					Iterators
@@ -155,7 +161,7 @@ public class RedisReader<T> implements
 	}
 
 	private CloseableIterator<T> createIterator(
-			final RedissonClient client,
+			final RedissonClient client,final Compression compression, 
 			final BaseReaderParams<T> readerParams,
 			final String namespace,
 			final Collection<SinglePartitionQueryRanges> ranges,
@@ -168,7 +174,7 @@ public class RedisReader<T> implements
 										readerParams.getAdapterIds()))
 				.map(
 						adapterId -> new BatchedRangeRead(
-								client,
+								client,compression,
 								RedisUtils
 										.getRowSetPrefix(
 												namespace,
@@ -219,6 +225,7 @@ public class RedisReader<T> implements
 
 	private CloseableIterator<T> createIteratorForRecordReader(
 			final RedissonClient client,
+			final Compression compression,
 			final RecordReaderParams<T> recordReaderParams,
 			final String namespace ) {
 		final GeoWaveRowRange range = recordReaderParams.getRowRange();
@@ -235,6 +242,7 @@ public class RedisReader<T> implements
 		final Set<String> authorizations = Sets.newHashSet(recordReaderParams.getAdditionalAuthorizations());
 		return createIterator(
 				client,
+				compression,
 				recordReaderParams,
 				namespace,
 				Collections.singleton(partitionRange),

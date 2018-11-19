@@ -8,8 +8,10 @@ import java.util.Map;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 
-public abstract class BaseServiceIT
+public abstract class BaseServiceIT extends
+		AbstractGeoWaveIT
 {
 
 	private final Map<String, Level> loggerMap = new HashMap<>();
