@@ -472,7 +472,8 @@
                    <a href="../../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisMetadataWriter.html#RedisMetadataWriter-org.redisson.api.RScoredSortedSet-">RedisMetadataWriter</a></span>(org.redisson.api.RScoredSortedSet&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;&nbsp;set)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisMetadataWriter.html#RedisMetadataWriter-org.redisson.api.RScoredSortedSet-boolean-">RedisMetadataWriter</a></span>(org.redisson.api.RScoredSortedSet&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;&nbsp;set,
+                   boolean&nbsp;requiresTimestamp)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -481,6 +482,22 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/package-summary.html">org.locationtech.geowave.datastore.redis.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/package-summary.html">org.locationtech.geowave.datastore.redis.util</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveTimestampMetadata.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveTimestampMetadata</a></span></code>
+<div class="block">To guarantee uniqueness for metadata entries, we are adding a timestamp to
+ the persistence format</div>
+</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/package-summary.html">org.locationtech.geowave.datastore.redis.util</a> that return types with arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -490,13 +507,27 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static org.redisson.api.RScoredSortedSet&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#getMetadataSet-org.redisson.api.RedissonClient-java.lang.String-org.locationtech.geowave.core.store.operations.MetadataType-">getMetadataSet</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+<td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#getMetadataSet-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-org.locationtech.geowave.core.store.operations.MetadataType-">getMetadataSet</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+              <a href="../../../../../../../org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a>&nbsp;compression,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
               <a href="../../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#groupByIds-java.lang.Iterable-">groupByIds</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;&nbsp;result)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/package-summary.html">org.locationtech.geowave.datastore.redis.util</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected static io.netty.buffer.ByteBuf</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveMetadataCodec.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveMetadataCodec.html#encodeMetadata-org.locationtech.geowave.core.store.entities.GeoWaveMetadata-">encodeMetadata</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&nbsp;md)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -510,6 +541,18 @@
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#groupByIds-java.lang.Iterable-">groupByIds</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;&nbsp;result)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/package-summary.html">org.locationtech.geowave.datastore.redis.util</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveTimestampMetadata.html#GeoWaveTimestampMetadata-org.locationtech.geowave.core.store.entities.GeoWaveMetadata-long-">GeoWaveTimestampMetadata</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&nbsp;md,
+                        long&nbsp;millisFromEpoch)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

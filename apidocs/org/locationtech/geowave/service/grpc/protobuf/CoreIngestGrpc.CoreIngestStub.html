@@ -226,14 +226,14 @@ extends io.grpc.stub.AbstractStub&lt;<a href="../../../../../../org/locationtech
 </dl>
 </li>
 </ul>
-<a name="localToMapReduceToGeowaveCommand-org.locationtech.geowave.service.grpc.protobuf.LocalToMapReduceToGeowaveCommandParameters-io.grpc.stub.StreamObserver-">
+<a name="kafkaToGeowaveCommand-org.locationtech.geowave.service.grpc.protobuf.KafkaToGeowaveCommandParameters-io.grpc.stub.StreamObserver-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>localToMapReduceToGeowaveCommand</h4>
-<pre>public&nbsp;void&nbsp;localToMapReduceToGeowaveCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/LocalToMapReduceToGeowaveCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">LocalToMapReduceToGeowaveCommandParameters</a>&nbsp;request,
-                                             io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
+<h4>kafkaToGeowaveCommand</h4>
+<pre>public&nbsp;void&nbsp;kafkaToGeowaveCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/KafkaToGeowaveCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">KafkaToGeowaveCommandParameters</a>&nbsp;request,
+                                  io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
 </li>
 </ul>
 <a name="localToGeowaveCommand-org.locationtech.geowave.service.grpc.protobuf.LocalToGeowaveCommandParameters-io.grpc.stub.StreamObserver-">
@@ -246,6 +246,16 @@ extends io.grpc.stub.AbstractStub&lt;<a href="../../../../../../org/locationtech
                                   io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
 </li>
 </ul>
+<a name="localToHdfsCommand-org.locationtech.geowave.service.grpc.protobuf.LocalToHdfsCommandParameters-io.grpc.stub.StreamObserver-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>localToHdfsCommand</h4>
+<pre>public&nbsp;void&nbsp;localToHdfsCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/LocalToHdfsCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">LocalToHdfsCommandParameters</a>&nbsp;request,
+                               io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
+</li>
+</ul>
 <a name="mapReduceToGeowaveCommand-org.locationtech.geowave.service.grpc.protobuf.MapReduceToGeowaveCommandParameters-io.grpc.stub.StreamObserver-">
 <!--   -->
 </a>
@@ -256,14 +266,14 @@ extends io.grpc.stub.AbstractStub&lt;<a href="../../../../../../org/locationtech
                                       io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
 </li>
 </ul>
-<a name="localToHdfsCommand-org.locationtech.geowave.service.grpc.protobuf.LocalToHdfsCommandParameters-io.grpc.stub.StreamObserver-">
+<a name="localToMapReduceToGeowaveCommand-org.locationtech.geowave.service.grpc.protobuf.LocalToMapReduceToGeowaveCommandParameters-io.grpc.stub.StreamObserver-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>localToHdfsCommand</h4>
-<pre>public&nbsp;void&nbsp;localToHdfsCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/LocalToHdfsCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">LocalToHdfsCommandParameters</a>&nbsp;request,
-                               io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
+<h4>localToMapReduceToGeowaveCommand</h4>
+<pre>public&nbsp;void&nbsp;localToMapReduceToGeowaveCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/LocalToMapReduceToGeowaveCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">LocalToMapReduceToGeowaveCommandParameters</a>&nbsp;request,
+                                             io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
 </li>
 </ul>
 <a name="listPluginsCommand-org.locationtech.geowave.service.grpc.protobuf.ListPluginsCommandParameters-io.grpc.stub.StreamObserver-">
@@ -276,34 +286,24 @@ extends io.grpc.stub.AbstractStub&lt;<a href="../../../../../../org/locationtech
                                io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.StringResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.StringResponse</a>&gt;&nbsp;responseObserver)</pre>
 </li>
 </ul>
-<a name="localToKafkaCommand-org.locationtech.geowave.service.grpc.protobuf.LocalToKafkaCommandParameters-io.grpc.stub.StreamObserver-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>localToKafkaCommand</h4>
-<pre>public&nbsp;void&nbsp;localToKafkaCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/LocalToKafkaCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">LocalToKafkaCommandParameters</a>&nbsp;request,
-                                io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
-</li>
-</ul>
-<a name="kafkaToGeowaveCommand-org.locationtech.geowave.service.grpc.protobuf.KafkaToGeowaveCommandParameters-io.grpc.stub.StreamObserver-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>kafkaToGeowaveCommand</h4>
-<pre>public&nbsp;void&nbsp;kafkaToGeowaveCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/KafkaToGeowaveCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">KafkaToGeowaveCommandParameters</a>&nbsp;request,
-                                  io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
-</li>
-</ul>
 <a name="sparkToGeowaveCommand-org.locationtech.geowave.service.grpc.protobuf.SparkToGeowaveCommandParameters-io.grpc.stub.StreamObserver-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>sparkToGeowaveCommand</h4>
 <pre>public&nbsp;void&nbsp;sparkToGeowaveCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SparkToGeowaveCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SparkToGeowaveCommandParameters</a>&nbsp;request,
                                   io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
+</li>
+</ul>
+<a name="localToKafkaCommand-org.locationtech.geowave.service.grpc.protobuf.LocalToKafkaCommandParameters-io.grpc.stub.StreamObserver-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>localToKafkaCommand</h4>
+<pre>public&nbsp;void&nbsp;localToKafkaCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/LocalToKafkaCommandParameters.html" title="class in org.locationtech.geowave.service.grpc.protobuf">LocalToKafkaCommandParameters</a>&nbsp;request,
+                                io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypes.VoidResponse.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypes.VoidResponse</a>&gt;&nbsp;responseObserver)</pre>
 </li>
 </ul>
 </li>

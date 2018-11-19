@@ -134,13 +134,15 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html#RedisReader-org.redisson.api.RedissonClient-org.locationtech.geowave.core.store.operations.ReaderParams-java.lang.String-boolean-">RedisReader</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html#RedisReader-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-org.locationtech.geowave.core.store.operations.ReaderParams-java.lang.String-boolean-">RedisReader</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+           <a href="../../../../../../org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a>&nbsp;compression,
            <a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html" title="type parameter in RedisReader">T</a>&gt;&nbsp;readerParams,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
            boolean&nbsp;async)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html#RedisReader-org.redisson.api.RedissonClient-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-java.lang.String-">RedisReader</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html#RedisReader-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-java.lang.String-">RedisReader</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+           <a href="../../../../../../org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a>&nbsp;compression,
            <a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html" title="type parameter in RedisReader">T</a>&gt;&nbsp;recordReaderParams,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
 </tr>
@@ -200,25 +202,27 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="RedisReader-org.redisson.api.RedissonClient-org.locationtech.geowave.core.store.operations.ReaderParams-java.lang.String-boolean-">
+<a name="RedisReader-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-org.locationtech.geowave.core.store.operations.ReaderParams-java.lang.String-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>RedisReader</h4>
 <pre>public&nbsp;RedisReader(org.redisson.api.RedissonClient&nbsp;client,
+                   <a href="../../../../../../org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a>&nbsp;compression,
                    <a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html" title="type parameter in RedisReader">T</a>&gt;&nbsp;readerParams,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
                    boolean&nbsp;async)</pre>
 </li>
 </ul>
-<a name="RedisReader-org.redisson.api.RedissonClient-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-java.lang.String-">
+<a name="RedisReader-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>RedisReader</h4>
 <pre>public&nbsp;RedisReader(org.redisson.api.RedissonClient&nbsp;client,
+                   <a href="../../../../../../org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a>&nbsp;compression,
                    <a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html" title="type parameter in RedisReader">T</a>&gt;&nbsp;recordReaderParams,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</pre>
 </li>

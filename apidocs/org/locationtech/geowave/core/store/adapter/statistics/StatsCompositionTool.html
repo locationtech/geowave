@@ -164,10 +164,17 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/cal
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html#StatsCompositionTool-org.locationtech.geowave.core.store.DataStoreStatisticsProvider-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.api.DataTypeAdapter-">StatsCompositionTool</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="class in org.locationtech.geowave.core.store">DataStoreStatisticsProvider</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;statisticsProvider,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html#StatsCompositionTool-org.locationtech.geowave.core.store.DataStoreStatisticsProvider-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-">StatsCompositionTool</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="class in org.locationtech.geowave.core.store">DataStoreStatisticsProvider</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;statisticsProvider,
                     <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
                     <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
-                    <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;adapter)</code>&nbsp;</td>
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;adapter)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html#StatsCompositionTool-org.locationtech.geowave.core.store.DataStoreStatisticsProvider-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-boolean-">StatsCompositionTool</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="class in org.locationtech.geowave.core.store">DataStoreStatisticsProvider</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;statisticsProvider,
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;adapter,
+                    boolean&nbsp;overwrite)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -280,7 +287,19 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/cal
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="StatsCompositionTool-org.locationtech.geowave.core.store.DataStoreStatisticsProvider-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.api.DataTypeAdapter-">
+<a name="StatsCompositionTool-org.locationtech.geowave.core.store.DataStoreStatisticsProvider-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>StatsCompositionTool</h4>
+<pre>public&nbsp;StatsCompositionTool(<a href="../../../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="class in org.locationtech.geowave.core.store">DataStoreStatisticsProvider</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;statisticsProvider,
+                            <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+                            <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                            <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;adapter)</pre>
+</li>
+</ul>
+<a name="StatsCompositionTool-org.locationtech.geowave.core.store.DataStoreStatisticsProvider-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -289,7 +308,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/cal
 <pre>public&nbsp;StatsCompositionTool(<a href="../../../../../../../org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="class in org.locationtech.geowave.core.store">DataStoreStatisticsProvider</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;statisticsProvider,
                             <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
                             <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
-                            <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;adapter)</pre>
+                            <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;&nbsp;adapter,
+                            boolean&nbsp;overwrite)</pre>
 </li>
 </ul>
 </li>
