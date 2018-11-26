@@ -257,6 +257,7 @@ public class GeoServerIngestIT extends
 						ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
 
+		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer",
 				201,
@@ -266,8 +267,6 @@ public class GeoServerIngestIT extends
 						null,
 						null,
 						"point"));
-
-		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should return 400, that layer was already added",
 				400,
