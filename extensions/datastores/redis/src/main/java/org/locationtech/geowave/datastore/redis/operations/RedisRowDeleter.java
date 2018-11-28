@@ -7,8 +7,10 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRow;
+import org.locationtech.geowave.datastore.redis.util.RedisScoredSetWrapper;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
@@ -20,24 +22,26 @@ public class RedisRowDeleter implements
 		RowDeleter
 {
 
-	private final LoadingCache<Pair<String, Short>, RScoredSortedSet<GeoWaveRedisPersistedRow>> setCache = Caffeine
+	private final LoadingCache<Pair<String, Short>, RedisScoredSetWrapper<GeoWaveRedisPersistedRow>> setCache = Caffeine
 			.newBuilder()
 			.build(
 					nameAndAdapterId -> getSet(
 							nameAndAdapterId));
 	private final RedissonClient client;
+	private final Compression compression;
 	private final PersistentAdapterStore adapterStore;
 	private final InternalAdapterStore internalAdapterStore;
 	private final String indexName;
 	private final String namespace;
 
 	public RedisRowDeleter(
-			final RedissonClient client,
+			final RedissonClient client,final Compression compression, 
 			final PersistentAdapterStore adapterStore,
 			final InternalAdapterStore internalAdapterStore,
 			final String indexName,
 			final String namespace ) {
 		this.client = client;
+		this.compression = compression;
 		this.adapterStore = adapterStore;
 		this.internalAdapterStore = internalAdapterStore;
 		this.indexName = indexName;
@@ -48,11 +52,11 @@ public class RedisRowDeleter implements
 	public void close()
 			throws Exception {}
 
-	private RScoredSortedSet<GeoWaveRedisPersistedRow> getSet(
+	private RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getSet(
 			final Pair<String, Short> setNameAndAdapterId ) {
 		return RedisUtils
 				.getRowSet(
-						client,
+						client,compression,
 						setNameAndAdapterId.getLeft(),
 						RedisUtils
 								.isSortByTime(
@@ -64,7 +68,7 @@ public class RedisRowDeleter implements
 	@Override
 	public void delete(
 			final GeoWaveRow row ) {
-		final RScoredSortedSet<GeoWaveRedisPersistedRow> set = setCache
+		final RedisScoredSetWrapper<GeoWaveRedisPersistedRow> set = setCache
 				.get(
 						Pair
 								.of(

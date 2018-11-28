@@ -57,7 +57,7 @@ import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({

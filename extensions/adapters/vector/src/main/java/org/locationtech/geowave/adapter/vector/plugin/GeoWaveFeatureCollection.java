@@ -50,8 +50,8 @@ import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 
 /**
  * This class is a helper for the GeoWave GeoTools data store. It represents a
@@ -141,7 +141,7 @@ public class GeoWaveFeatureCollection extends
 						stats.getMaxX(),
 						stats.getMinY(),
 						stats.getMaxY(),
-						GeometryUtils.getDefaultCRS());
+						reader.getFeatureType().getCoordinateReferenceSystem());
 			}
 			final Iterator<SimpleFeature> iterator = openIterator();
 			if (!iterator.hasNext()) {
@@ -339,7 +339,7 @@ public class GeoWaveFeatureCollection extends
 				SubsampleProcess.OUTPUT_BBOX)) {
 			return ((ReferencedEnvelope) query.getHints().get(
 					SubsampleProcess.OUTPUT_BBOX)).transform(
-					GeometryUtils.getDefaultCRS(),
+					reader.getFeatureType().getCoordinateReferenceSystem(),
 					true);
 		}
 		return null;
@@ -359,7 +359,7 @@ public class GeoWaveFeatureCollection extends
 				.getLocalName();
 		final ExtractGeometryFilterVisitorResult geoAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
 				query.getFilter(),
-				GeometryUtils.getDefaultCRS(),
+				reader.getComponents().getAdapter().getFeatureType().getCoordinateReferenceSystem(),
 				geomAtrributeName);
 		if (geoAndCompareOp == null) {
 			return reader.clipIndexedBBOXConstraints(null);

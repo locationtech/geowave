@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.spark.sparksql.udt;
 
-import com.vividsolutions.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.MultiPolygon;
 
 /**
  * Created by jwileczek on 7/20/18.

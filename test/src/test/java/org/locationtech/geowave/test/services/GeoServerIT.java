@@ -71,6 +71,7 @@ import org.locationtech.geowave.test.annotation.Environments;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 import org.locationtech.geowave.test.services.ServicesTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,8 @@ import org.slf4j.LoggerFactory;
 @Environments({
 	Environment.SERVICES
 })
-public class GeoServerIT
+public class GeoServerIT extends
+		AbstractGeoWaveIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerIT.class);
 	private static final String WFS_URL_PREFIX = ServicesTestEnvironment.JETTY_BASE_URL + "/geoserver/wfs";
@@ -107,7 +109,7 @@ public class GeoServerIT
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.REDIS
-	})
+	}, namespace = testName)
 	protected DataStorePluginOptions dataStoreOptions;
 
 	private static long startMillis;
@@ -175,24 +177,24 @@ public class GeoServerIT
 		success &= enableWms();
 		// create the datastore
 		configServiceClient.addStoreReRoute(
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				dataStoreOptions.getType(),
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				dataStoreOptions.getOptionsAsMap());
 		Response addDs = geoServerServiceClient.addDataStore(
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				ServicesTestEnvironment.TEST_WORKSPACE,
-				TestUtils.TEST_NAMESPACE);
+				dataStoreOptions.getGeowaveNamespace());
 		success &= (addDs.getStatus() == 201);
 		Response addDsBad = geoServerServiceClient.addDataStore(
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				ServicesTestEnvironment.TEST_WORKSPACE,
-				TestUtils.TEST_NAMESPACE);
+				dataStoreOptions.getGeowaveNamespace());
 		// Make sure that we handle duplicates correctly
 		success &= (addDsBad.getStatus() == 400);
 		// make sure the datastore exists
 		Response getDs = geoServerServiceClient.getDataStore(
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				ServicesTestEnvironment.TEST_WORKSPACE);
 		success &= (getDs.getStatus() == 201);
 		Response getDsBad = geoServerServiceClient.getDataStore(
@@ -299,8 +301,8 @@ public class GeoServerIT
 		try {
 			final HttpPost command = new HttpPost(
 					ServicesTestEnvironment.GEOSERVER_REST_PATH + "/workspaces/"
-							+ ServicesTestEnvironment.TEST_WORKSPACE + "/datastores/" + TestUtils.TEST_NAMESPACE
-							+ "/featuretypes");
+							+ ServicesTestEnvironment.TEST_WORKSPACE + "/datastores/"
+							+ dataStoreOptions.getGeowaveNamespace() + "/featuretypes");
 			command.setHeader(
 					"Content-type",
 					"text/xml");
@@ -777,5 +779,10 @@ public class GeoServerIT
 	@Ignore
 	public void setls() {
 		// TODO: Implement this test
+	}
+
+	@Override
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
 	}
 }

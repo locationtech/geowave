@@ -18,8 +18,8 @@ import org.locationtech.geowave.analytic.AnalyticFeature.ClusterFeatureAttribute
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 
 public class SimpleFeatureItemWrapperFactory implements
 		AnalyticItemWrapperFactory<SimpleFeature>
@@ -195,7 +195,7 @@ public class SimpleFeatureItemWrapperFactory implements
 	/*
 	 * @see
 	 * org.locationtech.geowave.analytics.tools.CentroidFactory#createNextCentroid
-	 * (java.lang.Object, com.vividsolutions.jts.geom.Coordinate,
+	 * (java.lang.Object, org.locationtech.jts.geom.Coordinate,
 	 * java.lang.String[], double[])
 	 */
 

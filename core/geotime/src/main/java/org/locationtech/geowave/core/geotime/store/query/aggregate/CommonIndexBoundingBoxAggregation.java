@@ -6,7 +6,7 @@ import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 
 public class CommonIndexBoundingBoxAggregation<P extends Persistable> extends
 		BoundingBoxAggregation<P, CommonIndexedPersistenceEncoding> implements

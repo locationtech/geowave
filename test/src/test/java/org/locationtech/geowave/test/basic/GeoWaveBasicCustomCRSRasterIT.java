@@ -43,8 +43,8 @@ import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.GeometryFactory;
 
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveBasicCustomCRSRasterIT extends
@@ -338,7 +338,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 				tileSize);
 		dataStore.addType(
 				adapter,
-				TestUtils.createCustomCRSPrimaryIndex());
+				TestUtils.createWebMercatorSpatialIndex());
 		try (Writer writer = dataStore.createWriter(adapter.getTypeName())) {
 			writer.write(createCoverageTypeDouble(
 					coverageName,
@@ -405,7 +405,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 				"test-value");
 		dataStore.addType(
 				mergeStrategyOverriddenAdapter,
-				TestUtils.createCustomCRSPrimaryIndex());
+				TestUtils.createWebMercatorSpatialIndex());
 		try (Writer writer = dataStore.createWriter(mergeStrategyOverriddenAdapter.getTypeName())) {
 			for (int r = 0; r < numRasters; r++) {
 				final WritableRaster raster = RasterUtils.createRasterTypeDouble(

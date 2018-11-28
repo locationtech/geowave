@@ -24,6 +24,8 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatsCompositionTo
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.StatisticsQuery;
+import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -79,7 +81,6 @@ public class RecalculateStatsCommand extends
 			for (final Index index : mappingStore.getIndicesForAdapter(
 					adapter.getAdapterId()).getIndices(
 					indexStore)) {
-
 				@SuppressWarnings({
 					"rawtypes",
 					"unchecked"
@@ -94,7 +95,8 @@ public class RecalculateStatsCommand extends
 						provider,
 						storeOptions.createDataStatisticsStore(),
 						index,
-						adapter)) {
+						adapter,
+						true)) {
 					try (CloseableIterator<?> entryIt = ((BaseDataStore) dataStore).query(
 							QueryBuilder.newBuilder().addTypeName(
 									adapter.getTypeName()).indexName(

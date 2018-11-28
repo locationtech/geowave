@@ -81,7 +81,8 @@ public class AvroIngestPlugin extends
 
 		try (DataFileStream<AvroSimpleFeatureCollection> ds = new DataFileStream<AvroSimpleFeatureCollection>(
 				file.openStream(),
-				new SpecificDatumReader<AvroSimpleFeatureCollection>())) {
+				new SpecificDatumReader<AvroSimpleFeatureCollection>(
+						AvroSimpleFeatureCollection.getClassSchema()))) {
 			if (ds.getHeader() != null) {
 				return true;
 			}
@@ -113,7 +114,8 @@ public class AvroIngestPlugin extends
 		try {
 			final DataFileStream<AvroSimpleFeatureCollection> reader = new DataFileStream<AvroSimpleFeatureCollection>(
 					input.openStream(),
-					new SpecificDatumReader<AvroSimpleFeatureCollection>());
+					new SpecificDatumReader<AvroSimpleFeatureCollection>(
+							AvroSimpleFeatureCollection.getClassSchema()));
 
 			return new CloseableIterator<AvroSimpleFeatureCollection>() {
 

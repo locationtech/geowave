@@ -16,7 +16,7 @@ import java.util.List;
 import org.locationtech.geowave.analytic.AnalyticItemWrapper;
 import org.locationtech.geowave.analytic.clustering.exception.MatchingCentroidNotFoundException;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 
 /**
  * Manage centroids created per batch and per group of analytic processes. There

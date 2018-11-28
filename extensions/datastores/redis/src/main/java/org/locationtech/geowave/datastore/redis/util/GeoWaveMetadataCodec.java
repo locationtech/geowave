@@ -1,6 +1,7 @@
 package org.locationtech.geowave.datastore.redis.util;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.redisson.client.codec.BaseCodec;
@@ -42,19 +43,7 @@ public class GeoWaveMetadataCodec extends
 				final Object in )
 				throws IOException {
 			if (in instanceof GeoWaveMetadata) {
-				final GeoWaveMetadata md = (GeoWaveMetadata) in;
-				final ByteBuf out = ByteBufAllocator.DEFAULT.buffer();
-				final byte[] safeVisibility = md.getVisibility() != null ? md.getVisibility() : new byte[0];
-				final byte[] safeSecondaryId = md.getSecondaryId() != null ? md.getSecondaryId() : new byte[0];
-				out.writeByte(md.getPrimaryId().length);
-				out.writeByte(safeSecondaryId.length);
-				out.writeByte(safeVisibility.length);
-				out.writeShort(md.getValue().length);
-				out.writeBytes(md.getPrimaryId());
-				out.writeBytes(safeSecondaryId);
-				out.writeBytes(safeVisibility);
-				out.writeBytes(md.getValue());
-				return out;
+				return encodeMetadata((GeoWaveMetadata) in);
 			}
 			else {
 				throw new IOException(
@@ -62,6 +51,22 @@ public class GeoWaveMetadataCodec extends
 			}
 		}
 	};
+
+	protected static ByteBuf encodeMetadata(
+			GeoWaveMetadata md ) {
+		final ByteBuf out = ByteBufAllocator.DEFAULT.buffer();
+		final byte[] safeVisibility = md.getVisibility() != null ? md.getVisibility() : new byte[0];
+		final byte[] safeSecondaryId = md.getSecondaryId() != null ? md.getSecondaryId() : new byte[0];
+		out.writeByte(md.getPrimaryId().length);
+		out.writeByte(safeSecondaryId.length);
+		out.writeByte(safeVisibility.length);
+		out.writeShort(md.getValue().length);
+		out.writeBytes(md.getPrimaryId());
+		out.writeBytes(safeSecondaryId);
+		out.writeBytes(safeVisibility);
+		out.writeBytes(md.getValue());
+		return out;
+	}
 
 	private GeoWaveMetadataCodec() {}
 

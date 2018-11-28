@@ -122,7 +122,7 @@ public class RemoteIT extends
 		configServiceClient.addStoreReRoute(
 				store_name,
 				dataStoreOptions.getType(),
-				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getGeowaveNamespace(),
 				dataStoreOptions.getOptionsAsMap());
 	}
 
@@ -365,5 +365,10 @@ public class RemoteIT extends
 				400,
 				remoteServiceClient.version("nonexistent-store"));
 		unmuteLogging();
+	}
+
+	@Override
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
 	}
 }

@@ -12,7 +12,7 @@ package org.locationtech.geowave.analytic.mapreduce.kmeans;
 
 import org.locationtech.geowave.analytic.extract.CentroidExtractor;
 
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.geom.Point;
 
 public class TestObjectExtractor implements
 		CentroidExtractor<TestObject>

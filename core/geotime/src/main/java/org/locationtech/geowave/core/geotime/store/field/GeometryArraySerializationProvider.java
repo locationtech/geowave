@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.data.field.ArrayReader.VariableSizeObjectArrayReader;
 import org.locationtech.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 public class GeometryArraySerializationProvider implements
 		FieldSerializationProviderSpi<Geometry[]>

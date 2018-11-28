@@ -33,7 +33,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 
 public class GeoToolsAttributesSubsetTest extends
 		BaseDataStoreTest

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,7 +14,6 @@ import java.util.Iterator;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexUtils;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Index;
@@ -61,7 +60,7 @@ public class NativeEntryIteratorWrapper<T> extends
 			final QueryFilter clientFilter,
 			final Index index ) {
 		Object decodedRow = null;
-		if (adapterValid && (bitPosition == null || passesSkipFilter(row))) {
+		if (adapterValid && ((bitPosition == null) || passesSkipFilter(row))) {
 			try {
 				decodedRow = BaseDataStoreUtils.decodeRow(
 						row,
@@ -77,7 +76,7 @@ public class NativeEntryIteratorWrapper<T> extends
 					incrementSkipRow(row);
 				}
 			}
-			catch (AdapterException e) {
+			catch (final AdapterException e) {
 				adapterValid = false;
 				// Attempting to decode future rows with the same adapter is
 				// pointless.
@@ -90,8 +89,8 @@ public class NativeEntryIteratorWrapper<T> extends
 
 	private boolean passesSkipFilter(
 			final GeoWaveRow row ) {
-		if ((reachedEnd == true) || ((skipUntilRow != null) && (skipUntilRow.compareTo(new ByteArray(
-				row.getSortKey()))) > 0)) {
+		if ((reachedEnd == true) || ((skipUntilRow != null) && ((skipUntilRow.compareTo(new ByteArray(
+				row.getSortKey()))) > 0))) {
 			return false;
 		}
 

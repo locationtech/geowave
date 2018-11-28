@@ -12,7 +12,7 @@ package org.locationtech.geowave.analytic.clustering;
 
 import org.locationtech.geowave.analytic.AnalyticItemWrapper;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 public class LongCentroid implements
 		AnalyticItemWrapper<Long>

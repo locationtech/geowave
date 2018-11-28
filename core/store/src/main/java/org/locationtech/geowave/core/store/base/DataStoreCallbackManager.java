@@ -70,7 +70,7 @@ public class DataStoreCallbackManager
 						statsProvider,
 						statsStore,
 						index,
-						(DataTypeAdapter<T>) writableAdapter.getAdapter()));
+						writableAdapter));
 			}
 			if (captureAdapterStats && writableAdapter.getAdapter() instanceof SecondaryIndexDataAdapter<?>) {
 				callbackList.add(new SecondaryIndexDataManager<T>(
@@ -106,7 +106,7 @@ public class DataStoreCallbackManager
 						statsProvider,
 						statsStore,
 						index,
-						(DataTypeAdapter<T>) writableAdapter.getAdapter()));
+						writableAdapter));
 			}
 			if (captureAdapterStats && writableAdapter.getAdapter() instanceof SecondaryIndexDataAdapter<?>) {
 				callbackList.add(new SecondaryIndexDataManager<T>(

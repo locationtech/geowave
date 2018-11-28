@@ -36,7 +36,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
-import com.vividsolutions.jts.util.Stopwatch;
+import org.locationtech.jts.util.Stopwatch;
 
 @GeowaveOperation(name = "sql", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "SparkSQL queries")

@@ -68,17 +68,9 @@ public class GeoWaveRedisRowCodec extends
 
 				try (final ByteBufOutputStream out = new ByteBufOutputStream(
 						buf)) {
-					out.writeByte(row.getDataId().length);
-					out.writeByte(row.getFieldMask().length);
-					out.writeByte(row.getVisibility().length);
-					Varint.writeUnsignedVarInt(
-							row.getValue().length,
-							out);
-					out.writeByte(row.getNumDuplicates());
-					out.write(row.getDataId());
-					out.write(row.getFieldMask());
-					out.write(row.getVisibility());
-					out.write(row.getValue());
+					encodeRow(
+							out,
+							row);
 					out.flush();
 					return out.buffer();
 				}
@@ -87,6 +79,23 @@ public class GeoWaveRedisRowCodec extends
 					"Encoder only supports GeoWaveRedisRow");
 		}
 	};
+
+	protected static void encodeRow(
+			ByteBufOutputStream out,
+			GeoWaveRedisPersistedRow row )
+			throws IOException {
+		out.writeByte(row.getDataId().length);
+		out.writeByte(row.getFieldMask().length);
+		out.writeByte(row.getVisibility().length);
+		Varint.writeUnsignedVarInt(
+				row.getValue().length,
+				out);
+		out.writeByte(row.getNumDuplicates());
+		out.write(row.getDataId());
+		out.write(row.getFieldMask());
+		out.write(row.getVisibility());
+		out.write(row.getValue());
+	}
 
 	private GeoWaveRedisRowCodec() {}
 

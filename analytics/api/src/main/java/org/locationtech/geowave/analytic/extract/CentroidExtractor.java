@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.extract;
 
-import com.vividsolutions.jts.geom.Point;
+import org.locationtech.jts.geom.Point;
 
 /**
  * Strategy to extract a representative centroid from some Geospatial object

@@ -5,7 +5,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQue
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsQueryBuilderImpl;
 import org.threeten.extra.Interval;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 
 public class VectorStatisticsQueryBuilderImpl<R> extends
 		StatisticsQueryBuilderImpl<R, VectorStatisticsQueryBuilder<R>> implements

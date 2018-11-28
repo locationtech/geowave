@@ -33,11 +33,12 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import org.locationtech.geowave.core.store.util.RowConsumer;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRow;
+import org.locationtech.geowave.datastore.redis.util.RedisScoredSetWrapper;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.api.RFuture;
-import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.protocol.ScoredEntry;
 import org.slf4j.Logger;
@@ -113,7 +114,7 @@ public class BatchedRangeRead<T>
 	private final static int MAX_CONCURRENT_READ = 100;
 	private final static int MAX_BOUNDED_READS_ENQUEUED = 1000000;
 	private static ByteArray EMPTY_PARTITION_KEY = new ByteArray();
-	private final LoadingCache<ByteArray, RScoredSortedSet<GeoWaveRedisPersistedRow>> setCache = Caffeine
+	private final LoadingCache<ByteArray, RedisScoredSetWrapper<GeoWaveRedisPersistedRow>> setCache = Caffeine
 			.newBuilder()
 			.build(
 					partitionKey -> getSet(
@@ -132,9 +133,11 @@ public class BatchedRangeRead<T>
 	private final boolean async;
 	private final Pair<Boolean, Boolean> groupByRowAndSortByTimePair;
 	private final boolean isSortFinalResultsBySortKey;
+	private final Compression compression;
 
 	protected BatchedRangeRead(
 			final RedissonClient client,
+			final Compression compression,
 			final String setNamePrefix,
 			final short adapterId,
 			final Collection<SinglePartitionQueryRanges> ranges,
@@ -144,6 +147,7 @@ public class BatchedRangeRead<T>
 			final Pair<Boolean, Boolean> groupByRowAndSortByTimePair,
 			final boolean isSortFinalResultsBySortKey ) {
 		this.client = client;
+		this.compression = compression;
 		this.setNamePrefix = setNamePrefix;
 		this.adapterId = adapterId;
 		this.ranges = ranges;
@@ -155,11 +159,11 @@ public class BatchedRangeRead<T>
 		this.isSortFinalResultsBySortKey = isSortFinalResultsBySortKey;
 	}
 
-	private RScoredSortedSet<GeoWaveRedisPersistedRow> getSet(
+	private RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getSet(
 			final byte[] partitionKey ) {
 		return RedisUtils
 				.getRowSet(
-						client,
+						client,compression,
 						setNamePrefix,
 						partitionKey,
 						groupByRowAndSortByTimePair.getRight());
@@ -297,7 +301,7 @@ public class BatchedRangeRead<T>
 													else {
 														try {
 															transformAndFilter(
-																	result,
+																	result.iterator(),
 																	r.partitionKey)
 																			.forEachRemaining(
 																					row -> {
@@ -381,7 +385,7 @@ public class BatchedRangeRead<T>
 	}
 
 	private Iterator<T> transformAndFilter(
-			final Collection<ScoredEntry<GeoWaveRedisPersistedRow>> result,
+			final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> result,
 			final byte[] partitionKey ) {
 		return rowTransformer
 				.apply(
@@ -398,8 +402,7 @@ public class BatchedRangeRead<T>
 																								result,
 																								groupByRowAndSortByTimePair
 																										.getRight())
-																						.iterator()
-																				: result.iterator(),
+																				: result,
 																		new Function<ScoredEntry<GeoWaveRedisPersistedRow>, GeoWaveRedisRow>() {
 
 																			@Override

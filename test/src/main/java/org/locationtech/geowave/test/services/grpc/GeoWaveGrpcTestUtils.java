@@ -13,9 +13,9 @@ package org.locationtech.geowave.test.services.grpc;
 import org.locationtech.geowave.test.ZookeeperTestEnvironment;
 import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
 
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKBWriter;
-import com.vividsolutions.jts.io.WKTReader;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKBWriter;
+import org.locationtech.jts.io.WKTReader;
 
 public class GeoWaveGrpcTestUtils
 {

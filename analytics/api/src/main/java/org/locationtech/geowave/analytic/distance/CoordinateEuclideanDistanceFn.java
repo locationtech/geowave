@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.distance;
 
-import com.vividsolutions.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Coordinate;
 
 public class CoordinateEuclideanDistanceFn implements
 		DistanceFn<Coordinate>

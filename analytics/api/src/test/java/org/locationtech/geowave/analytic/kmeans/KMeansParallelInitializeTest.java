@@ -35,7 +35,7 @@ import org.locationtech.geowave.analytic.sample.BahmanEtAlSampleProbabilityFn;
 import org.locationtech.geowave.analytic.sample.Sampler;
 import org.opengis.feature.simple.SimpleFeature;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 public class KMeansParallelInitializeTest
 {

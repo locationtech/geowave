@@ -118,8 +118,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.Timestamps;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.io.WKBWriter;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.io.WKBWriter;
 
 import io.grpc.ManagedChannel;
 import io.grpc.internal.DnsNameResolverProvider;

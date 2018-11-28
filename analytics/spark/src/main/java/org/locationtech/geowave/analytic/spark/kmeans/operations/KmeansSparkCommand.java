@@ -34,7 +34,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
-import com.vividsolutions.jts.util.Stopwatch;
+import org.locationtech.jts.util.Stopwatch;
 
 @GeowaveOperation(name = "kmeansspark", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "KMeans Clustering via Spark ML")

@@ -31,9 +31,9 @@ import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.prep.PreparedGeometry;
-import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.prep.PreparedGeometry;
+import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
 /**
  * This filter can perform fine-grained acceptance testing (intersection test

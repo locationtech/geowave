@@ -16,8 +16,8 @@ import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 import com.google.common.math.DoubleMath;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
 
 /**
  * This class wraps JTS geometry with visibility so that it can be used within
@@ -29,16 +29,16 @@ public class GeometryWrapper implements
 {
 	public final static String DEFAULT_GEOMETRY_FIELD_NAME = "default_geom_dimension";
 	private byte[] visibility;
-	private final com.vividsolutions.jts.geom.Geometry geometry;
+	private final org.locationtech.jts.geom.Geometry geometry;
 	private static final double DOUBLE_TOLERANCE = 1E-12d;
 
 	public GeometryWrapper(
-			final com.vividsolutions.jts.geom.Geometry geometry ) {
+			final org.locationtech.jts.geom.Geometry geometry ) {
 		this.geometry = geometry;
 	}
 
 	public GeometryWrapper(
-			final com.vividsolutions.jts.geom.Geometry geometry,
+			final org.locationtech.jts.geom.Geometry geometry,
 			final byte[] visibility ) {
 		this.visibility = visibility;
 		this.geometry = geometry;
@@ -55,7 +55,7 @@ public class GeometryWrapper implements
 		return visibility;
 	}
 
-	public com.vividsolutions.jts.geom.Geometry getGeometry() {
+	public org.locationtech.jts.geom.Geometry getGeometry() {
 		return geometry;
 	}
 

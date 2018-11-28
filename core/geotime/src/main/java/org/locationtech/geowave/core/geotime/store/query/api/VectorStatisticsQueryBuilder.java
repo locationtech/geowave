@@ -5,7 +5,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQue
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.threeten.extra.Interval;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 
 /**
  *

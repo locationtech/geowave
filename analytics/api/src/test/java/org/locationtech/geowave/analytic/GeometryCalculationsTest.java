@@ -15,8 +15,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import javax.measure.unit.SI;
-
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.junit.Test;
@@ -26,9 +24,11 @@ import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
+import si.uom.SI;
+
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 
 public class GeometryCalculationsTest
 {
@@ -46,10 +46,10 @@ public class GeometryCalculationsTest
 				crs);
 		List<Geometry> geos = calculator.buildSurroundingGeometries(
 				new double[] {
-					50,
-					50
+					50000,
+					50000
 				},
-				SI.KILOMETER,
+				SI.METRE,
 				new Coordinate(
 						30,
 						30));
@@ -90,10 +90,10 @@ public class GeometryCalculationsTest
 
 		geos = calculator.buildSurroundingGeometries(
 				new double[] {
-					100,
-					100
+					100000,
+					100000
 				},
-				SI.KILOMETER,
+				SI.METRE,
 				new Coordinate(
 						179.9999999996,
 						0));

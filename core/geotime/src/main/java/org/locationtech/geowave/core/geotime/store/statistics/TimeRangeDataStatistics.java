@@ -132,10 +132,12 @@ abstract public class TimeRangeDataStatistics<T> extends
 		if (isSet()) {
 			buffer.append(
 					", min=").append(
-					getMin());
+					new Date(
+							getMin()));
 			buffer.append(
 					", max=").append(
-					getMax());
+					new Date(
+							getMax()));
 		}
 		else {
 			buffer.append(", No Values");
