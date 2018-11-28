@@ -16,12 +16,8 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.cli.api.ServiceStatus;
-import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -42,7 +38,7 @@ public class GeoServerGetDatastoreCommand extends
 	private String workspace = null;
 
 	@Parameter(description = "<datastore name>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 	private String datastore = null;
 
 	@Override
@@ -70,14 +66,15 @@ public class GeoServerGetDatastoreCommand extends
 
 		final Response getStoreResponse = geoserverClient.getDatastore(
 				workspace,
-				datastore);
+				datastore,
+				false);
 
 		if (getStoreResponse.getStatus() == Status.OK.getStatusCode()) {
 			final JSONObject jsonResponse = JSONObject.fromObject(getStoreResponse.getEntity());
 			final JSONObject datastore = jsonResponse.getJSONObject("dataStore");
 			return "\nGeoServer store info for '" + datastore + "': " + datastore.toString(2);
 		}
-		String errorMessage = "Error getting GeoServer store info for '" + datastore + "': "
+		final String errorMessage = "Error getting GeoServer store info for '" + datastore + "': "
 				+ getStoreResponse.readEntity(String.class) + "\nGeoServer Response Code = "
 				+ getStoreResponse.getStatus();
 		return handleError(
