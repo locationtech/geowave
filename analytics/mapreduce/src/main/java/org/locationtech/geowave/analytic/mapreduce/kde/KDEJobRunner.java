@@ -186,7 +186,7 @@ public class KDEJobRunner extends
 			final StoreFactoryOptions options = ConfigUtils.populateOptionsFromList(
 					outputDataStoreOptions.getFactoryFamily().getDataStoreFactory().createOptionsInstance(),
 					configOptions);
-			options.setGeowaveNamespace(outputDataStoreOptions.getGeowaveNamespace() + "_tmp");
+			options.setGeowaveNamespace(outputDataStoreOptions.getGeoWaveNamespace() + "_tmp");
 			outputDataStoreOptions = new DataStorePluginOptions(
 					options);
 			kdeCoverageName = kdeCommandLineOptions.getCoverageName() + TMP_COVERAGE_SUFFIX;
@@ -322,14 +322,14 @@ public class KDEJobRunner extends
 			fs = FileSystem.get(conf);
 			fs.delete(
 					new Path(
-							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+							"/tmp/" + inputDataStoreOptions.getGeoWaveNamespace() + "_stats_"
 									+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel()
 									+ "_" + kdeCommandLineOptions.getCoverageName()),
 					true);
 			FileOutputFormat.setOutputPath(
 					job,
 					new Path(
-							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+							"/tmp/" + inputDataStoreOptions.getGeoWaveNamespace() + "_stats_"
 									+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel()
 									+ "_" + kdeCommandLineOptions.getCoverageName() + "/basic"));
 
@@ -366,21 +366,21 @@ public class KDEJobRunner extends
 				FileInputFormat.setInputPaths(
 						statsReducer,
 						new Path(
-								"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+								"/tmp/" + inputDataStoreOptions.getGeoWaveNamespace() + "_stats_"
 										+ kdeCommandLineOptions.getMinLevel() + "_"
 										+ kdeCommandLineOptions.getMaxLevel() + "_"
 										+ kdeCommandLineOptions.getCoverageName() + "/basic"));
 				setupJob2Output(
 						conf,
 						statsReducer,
-						outputDataStoreOptions.getGeowaveNamespace(),
+						outputDataStoreOptions.getGeoWaveNamespace(),
 						kdeCoverageName,
 						outputPrimaryIndex);
 				job2Success = statsReducer.waitForCompletion(true);
 				if (job2Success) {
 					postJob2Success = postJob2Actions(
 							conf,
-							outputDataStoreOptions.getGeowaveNamespace(),
+							outputDataStoreOptions.getGeoWaveNamespace(),
 							kdeCoverageName);
 				}
 			}
@@ -440,13 +440,13 @@ public class KDEJobRunner extends
 				}
 				else {
 					LOGGER.warn("Resize command error code '" + resizeStatus + "'.  Retaining temporary namespace '"
-							+ outputDataStoreOptions.getGeowaveNamespace() + "' with tile size of 1.");
+							+ outputDataStoreOptions.getGeoWaveNamespace() + "' with tile size of 1.");
 				}
 			}
 
 			fs.delete(
 					new Path(
-							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+							"/tmp/" + inputDataStoreOptions.getGeoWaveNamespace() + "_stats_"
 									+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel()
 									+ "_" + kdeCommandLineOptions.getCoverageName()),
 					true);
@@ -527,13 +527,13 @@ public class KDEJobRunner extends
 	}
 
 	protected String getJob2Name() {
-		return inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")"
+		return inputDataStoreOptions.getGeoWaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")"
 				+ " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel()
 				+ " Ingest";
 	}
 
 	protected String getJob1Name() {
-		return inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")"
+		return inputDataStoreOptions.getGeoWaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")"
 				+ " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel()
 				+ " Calculation";
 	}

@@ -11,6 +11,7 @@
 package org.locationtech.geowave.test.services;
 
 import java.awt.image.BufferedImage;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,18 +76,19 @@ public class GeoServerIngestIT extends
 	private static final String WMS_URL_PREFIX = "/geoserver/wms";
 	private static final String REFERENCE_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid.gif";
 
+	private final static String testName = "GeoServerIngestIT";
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.DYNAMODB,
-		GeoWaveStoreType.REDIS
-	})
+		GeoWaveStoreType.REDIS,
+		GeoWaveStoreType.ROCKSDB
+	}, namespace = testName)
 	protected DataStorePluginOptions dataStorePluginOptions;
 
 	private static long startMillis;
-	private final static String testName = "GeoServerIngestIT";
 
 	@BeforeClass
 	public static void setup() {
@@ -211,17 +213,17 @@ public class GeoServerIngestIT extends
 				201,
 				geoServerServiceClient.addWorkspace("testomatic"));
 		configServiceClient.addStoreReRoute(
-				dataStorePluginOptions.getGeowaveNamespace(),
+				dataStorePluginOptions.getGeoWaveNamespace(),
 				dataStorePluginOptions.getType(),
-				dataStorePluginOptions.getGeowaveNamespace(),
+				dataStorePluginOptions.getGeoWaveNamespace(),
 				dataStorePluginOptions.getOptionsAsMap());
 		TestUtils.assertStatusCode(
-				"Should Add " + dataStorePluginOptions.getGeowaveNamespace() + " Datastore",
+				"Should Add " + dataStorePluginOptions.getGeoWaveNamespace() + " Datastore",
 				201,
 				geoServerServiceClient.addDataStore(
-						dataStorePluginOptions.getGeowaveNamespace(),
+						dataStorePluginOptions.getGeoWaveNamespace(),
 						"testomatic",
-						dataStorePluginOptions.getGeowaveNamespace()));
+						dataStorePluginOptions.getGeoWaveNamespace()));
 
 		TestUtils.assertStatusCode(
 				"Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' Style",
@@ -256,28 +258,34 @@ public class GeoServerIngestIT extends
 				geoServerServiceClient.addStyle(
 						ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
-
-		muteLogging();
 		TestUtils.assertStatusCode(
 				"Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer",
 				201,
 				geoServerServiceClient.addLayer(
-						dataStorePluginOptions.getGeowaveNamespace(),
+						dataStorePluginOptions.getGeoWaveNamespace(),
 						WORKSPACE,
 						null,
 						null,
 						"point"));
-		TestUtils.assertStatusCode(
-				"Should return 400, that layer was already added",
-				400,
-				geoServerServiceClient.addLayer(
-						dataStorePluginOptions.getGeowaveNamespace(),
-						WORKSPACE,
-						null,
-						null,
-						"point"));
-		unmuteLogging();
-
+		if (!(ds instanceof Closeable)) {
+			// this is kinda hacky, but its only for the integration test - the
+			// problem is that GeoServer and this thread have different class
+			// loaders so the RocksDB "singleton" instances are not shared in
+			// this JVM and GeoServer currently has a lock on the datastore
+			// after the previous addlayer - add layer tries to lookup adapters
+			// while it does not have the lock and therefore fails
+			muteLogging();
+			TestUtils.assertStatusCode(
+					"Should return 400, that layer was already added",
+					400,
+					geoServerServiceClient.addLayer(
+							dataStorePluginOptions.getGeoWaveNamespace(),
+							WORKSPACE,
+							null,
+							null,
+							"point"));
+			unmuteLogging();
+		}
 		final BufferedImage biDirectRender = getWMSSingleTile(
 				env.getMinX(),
 				env.getMaxX(),
@@ -448,7 +456,7 @@ public class GeoServerIngestIT extends
 	public void cleanup() {
 		geoServerServiceClient.removeFeatureLayer(SimpleIngest.FEATURE_NAME);
 		geoServerServiceClient.removeDataStore(
-				dataStorePluginOptions.getGeowaveNamespace(),
+				dataStorePluginOptions.getGeoWaveNamespace(),
 				WORKSPACE);
 		geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE);
 		geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE);

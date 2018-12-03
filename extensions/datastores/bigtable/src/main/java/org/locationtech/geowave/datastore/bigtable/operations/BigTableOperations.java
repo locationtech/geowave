@@ -39,7 +39,7 @@ public class BigTableOperations extends
 				BigTableConnectionPool.getInstance().getConnection(
 						options.getProjectId(),
 						options.getInstanceId()),
-				options.getGeowaveNamespace(),
+				options.getGeoWaveNamespace(),
 				options.getHBaseOptions());
 	}
 

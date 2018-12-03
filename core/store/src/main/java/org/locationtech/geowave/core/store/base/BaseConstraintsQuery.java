@@ -11,6 +11,7 @@
 package org.locationtech.geowave.core.store.base;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -119,16 +120,17 @@ public class BaseConstraintsQuery extends
 		this.aggregation = aggregation;
 		this.indexMetaData = indexMetaData != null ? indexMetaData : new IndexMetaData[] {};
 		this.index = index;
-		final SplitFilterLists lists = splitList(queryFilters);
-		final List<QueryFilter> clientFilters = lists.clientFilters;
 		if ((duplicateCounts != null) && !duplicateCounts.isAnyEntryHaveDuplicates()) {
 			clientDedupeFilter = null;
 		}
-		distributableFilters = lists.distributableFilters;
 		if (clientDedupeFilter != null) {
-			clientFilters.add(clientDedupeFilter);
+			clientFilters = new ArrayList<>(
+					Collections.singleton(clientDedupeFilter));
 		}
-		this.clientFilters = clientFilters;
+		else {
+			clientFilters = new ArrayList<>();
+		}
+		distributableFilters = queryFilters;
 
 		queryFiltersEnabled = true;
 	}
@@ -216,7 +218,7 @@ public class BaseConstraintsQuery extends
 						GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
 						false)) {
 					Object mergedAggregationResult = null;
-					Aggregation<?, Object, Object> agg = (Aggregation<?, Object, Object>) aggregation.getValue();
+					final Aggregation<?, Object, Object> agg = (Aggregation<?, Object, Object>) aggregation.getValue();
 					if ((reader == null) || !reader.hasNext()) {
 						return new CloseableIterator.Empty();
 					}
@@ -336,40 +338,5 @@ public class BaseConstraintsQuery extends
 				targetResolutionPerDimensionForHierarchicalIndex,
 				maxRangeDecomposition,
 				indexMetaData);
-	}
-
-	private SplitFilterLists splitList(
-			final List<QueryFilter> allFilters ) {
-		final List<QueryFilter> distributableFilters = new ArrayList<>();
-		final List<QueryFilter> clientFilters = new ArrayList<>();
-		if ((allFilters == null) || allFilters.isEmpty()) {
-			return new SplitFilterLists(
-					distributableFilters,
-					clientFilters);
-		}
-		for (final QueryFilter filter : allFilters) {
-			if (filter instanceof QueryFilter) {
-				distributableFilters.add(filter);
-			}
-			else {
-				clientFilters.add(filter);
-			}
-		}
-		return new SplitFilterLists(
-				distributableFilters,
-				clientFilters);
-	}
-
-	private static class SplitFilterLists
-	{
-		private final List<QueryFilter> distributableFilters;
-		private final List<QueryFilter> clientFilters;
-
-		public SplitFilterLists(
-				final List<QueryFilter> distributableFilters,
-				final List<QueryFilter> clientFilters ) {
-			this.distributableFilters = distributableFilters;
-			this.clientFilters = clientFilters;
-		}
 	}
 }

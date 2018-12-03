@@ -56,7 +56,7 @@ public class GeoWaveDedupeJobRunner extends
 			final Job job )
 			throws Exception {
 
-		job.setJobName("GeoWave Dedupe (" + dataStoreOptions.getGeowaveNamespace() + ")");
+		job.setJobName("GeoWave Dedupe (" + dataStoreOptions.getGeoWaveNamespace() + ")");
 
 		job.setMapperClass(GeoWaveDedupeMapper.class);
 		job.setCombinerClass(GeoWaveDedupeCombiner.class);
@@ -94,7 +94,7 @@ public class GeoWaveDedupeJobRunner extends
 
 	public Path getHdfsOutputPath() {
 		return new Path(
-				getHdfsOutputBase() + "/" + dataStoreOptions.getGeowaveNamespace() + "_dedupe");
+				getHdfsOutputBase() + "/" + dataStoreOptions.getGeoWaveNamespace() + "_dedupe");
 	}
 
 	protected Class<? extends OutputFormat> getOutputFormatClass() {

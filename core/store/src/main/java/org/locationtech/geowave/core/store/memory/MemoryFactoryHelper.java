@@ -39,12 +39,12 @@ public class MemoryFactoryHelper implements
 	public DataStoreOperations createOperations(
 			final StoreFactoryOptions options ) {
 		synchronized (OPERATIONS_CACHE) {
-			DataStoreOperations operations = OPERATIONS_CACHE.get(options.getGeowaveNamespace());
+			DataStoreOperations operations = OPERATIONS_CACHE.get(options.getGeoWaveNamespace());
 			if (operations == null) {
 				operations = new MemoryDataStoreOperations(
 						options.getStoreOptions());
 				OPERATIONS_CACHE.put(
-						options.getGeowaveNamespace(),
+						options.getGeoWaveNamespace(),
 						operations);
 			}
 			return operations;

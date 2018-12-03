@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -20,10 +20,12 @@ public abstract class MergeableGeoWaveRow implements
 		GeoWaveRow
 {
 
-	final List<GeoWaveValue> attributeValues;
+	protected List<GeoWaveValue> attributeValues;
+
+	public MergeableGeoWaveRow() {}
 
 	public MergeableGeoWaveRow(
-			GeoWaveValue[] attributeValues ) {
+			final GeoWaveValue[] attributeValues ) {
 		this.attributeValues = Lists.newArrayList(attributeValues);
 	}
 
@@ -33,7 +35,7 @@ public abstract class MergeableGeoWaveRow implements
 	}
 
 	public void mergeRow(
-			MergeableGeoWaveRow row ) {
+			final MergeableGeoWaveRow row ) {
 		Collections.addAll(
 				attributeValues,
 				row.getFieldValues());
@@ -42,17 +44,17 @@ public abstract class MergeableGeoWaveRow implements
 
 	// In case any extending classes want to do something when rows are merged
 	protected void mergeRowInternal(
-			MergeableGeoWaveRow row ) {};
+			final MergeableGeoWaveRow row ) {};
 
 	public boolean shouldMerge(
-			GeoWaveRow row ) {
-		return (this.getAdapterId() == row.getAdapterId()) && Arrays.equals(
-				this.getDataId(),
+			final GeoWaveRow row ) {
+		return (getAdapterId() == row.getAdapterId()) && Arrays.equals(
+				getDataId(),
 				row.getDataId()) && Arrays.equals(
-				this.getPartitionKey(),
+				getPartitionKey(),
 				row.getPartitionKey()) && Arrays.equals(
-				this.getSortKey(),
-				row.getSortKey()) && (this.getNumberOfDuplicates() == row.getNumberOfDuplicates());
+				getSortKey(),
+				row.getSortKey()) && (getNumberOfDuplicates() == row.getNumberOfDuplicates());
 	}
 
 }

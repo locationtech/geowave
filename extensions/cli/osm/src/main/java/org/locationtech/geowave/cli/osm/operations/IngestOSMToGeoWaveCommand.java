@@ -161,7 +161,7 @@ public class IngestOSMToGeoWaveCommand extends
 		ingestOptions.setHdfsBasePath(basePath);
 		ingestOptions.setNameNode(hdfsHostPort);
 
-		if (inputStoreOptions.getGeowaveNamespace() == null) {
+		if (inputStoreOptions.getGeoWaveNamespace() == null) {
 			inputStoreOptions.getFactoryOptions().setGeowaveNamespace(
 					"osmnamespace");
 		}
@@ -172,7 +172,7 @@ public class IngestOSMToGeoWaveCommand extends
 		}
 
 		// This is needed by a method in OSMIngsetCommandArgs.
-		ingestOptions.setOsmNamespace(inputStoreOptions.getGeowaveNamespace());
+		ingestOptions.setOsmNamespace(inputStoreOptions.getGeoWaveNamespace());
 
 		final List<String> outputs = new ArrayList<>();
 

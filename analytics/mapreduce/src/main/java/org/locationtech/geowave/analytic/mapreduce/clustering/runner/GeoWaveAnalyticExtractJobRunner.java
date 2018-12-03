@@ -122,7 +122,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 										ExtractParameters.Extract.DATA_NAMESPACE_URI)),
 						dimensionExtractorClass));
 
-		job.setJobName("GeoWave Extract (" + dataStoreOptions.getGeowaveNamespace() + ")");
+		job.setJobName("GeoWave Extract (" + dataStoreOptions.getGeoWaveNamespace() + ")");
 		job.setReduceSpeculativeExecution(false);
 
 	}
@@ -145,7 +145,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 	@Override
 	public Path getHdfsOutputPath() {
 		return new Path(
-				getHdfsOutputBase() + "/" + dataStoreOptions.getGeowaveNamespace() + "_dedupe");
+				getHdfsOutputBase() + "/" + dataStoreOptions.getGeoWaveNamespace() + "_dedupe");
 	}
 
 	@Override

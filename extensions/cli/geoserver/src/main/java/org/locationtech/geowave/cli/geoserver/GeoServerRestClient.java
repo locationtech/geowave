@@ -25,6 +25,7 @@ import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstant
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_PROVIDER;
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_TYPE;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,9 +70,8 @@ import org.locationtech.geowave.core.cli.operations.config.security.crypto.BaseE
 import org.locationtech.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import org.locationtech.geowave.core.cli.utils.FileUtils;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
@@ -1290,7 +1290,7 @@ public class GeoServerRestClient
 
 		storeConfigMap.put(
 				"gwNamespace",
-				inputStoreOptions.getGeowaveNamespace());
+				inputStoreOptions.getGeoWaveNamespace());
 
 		final String cvgStoreXml = createCoverageXml(
 				storeConfigMap,
@@ -1746,29 +1746,31 @@ public class GeoServerRestClient
 			final String adapterId ) {
 		final DataStorePluginOptions dsPlugin = getStorePlugin(storeName);
 
-		final AdapterStore adapterStore = dsPlugin.createAdapterStore();
+		final DataStore dataStore = dsPlugin.createDataStore();
 
 		final ArrayList<DataAdapterInfo> adapterInfoList = new ArrayList<>();
 
 		LOGGER.debug("Adapter list for " + storeName + " with adapterId = " + adapterId + ": ");
 
-		try (final CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters()) {
-			while (it.hasNext()) {
-				final DataTypeAdapter<?> adapter = it.next();
+		for (final DataTypeAdapter<?> adapter : dataStore.getTypes()) {
+			final DataAdapterInfo info = getAdapterInfo(
+					adapterId,
+					adapter);
 
-				final DataAdapterInfo info = getAdapterInfo(
-						adapterId,
-						adapter);
-
-				if (info != null) {
-					adapterInfoList.add(info);
-					LOGGER.debug("> '" + info.typeName + "' adapter passed filter");
-				}
+			if (info != null) {
+				adapterInfoList.add(info);
+				LOGGER.debug("> '" + info.typeName + "' adapter passed filter");
 			}
-
 		}
 		LOGGER.debug("getStoreAdapterInfo(" + storeName + ") got " + adapterInfoList.size() + " ids");
-
+		if (dataStore instanceof Closeable) {
+			try {
+				((Closeable) dataStore).close();
+			}
+			catch (final IOException e) {
+				LOGGER.error("Unable to close datastore");
+			}
+		}
 		return adapterInfoList;
 	}
 

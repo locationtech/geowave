@@ -213,7 +213,7 @@ public class HBaseOperations implements
 			throws IOException {
 		return new HBaseOperations(
 				options.getZookeeper(),
-				options.getGeowaveNamespace(),
+				options.getGeoWaveNamespace(),
 				(HBaseOptions) options.getStoreOptions());
 	}
 
@@ -1901,7 +1901,6 @@ public class HBaseOperations implements
 		return version;
 	}
 
-	@Override
 	public boolean createIndex(
 			final Index index )
 			throws IOException {

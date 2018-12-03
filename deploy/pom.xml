@@ -124,6 +124,11 @@
 				</dependency>
 				<dependency>
 					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-datastore-rocksdb</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-cli-osm</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -299,6 +304,11 @@
 				<dependency>
 					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-redis</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-datastore-rocksdb</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>

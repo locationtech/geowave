@@ -26,10 +26,6 @@ public interface DataStoreOperations
 			String indexName )
 			throws IOException;
 
-	boolean createIndex(
-			Index index )
-			throws IOException;
-
 	boolean metadataExists(
 			MetadataType type )
 			throws IOException;

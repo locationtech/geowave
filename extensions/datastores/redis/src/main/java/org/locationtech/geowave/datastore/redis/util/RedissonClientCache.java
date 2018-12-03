@@ -34,7 +34,7 @@ public class RedissonClientCache
 
 	protected RedissonClientCache() {}
 
-	public synchronized RedissonClient getClient(
+	public RedissonClient getClient(
 			final String address ) {
 		return clientCache
 				.get(

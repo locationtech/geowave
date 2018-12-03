@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.adapter.vector.plugin;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -35,14 +36,12 @@ import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransac
 import org.locationtech.geowave.adapter.vector.plugin.transaction.MemoryTransactionsAllocator;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityManagementHelper;
-import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
-import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
@@ -152,10 +151,10 @@ public class GeoWaveGTDataStore extends
 	}
 
 	private Index[] filterIndices(
-			Index[] unfiltered,
-			boolean spatialOnly ) {
+			final Index[] unfiltered,
+			final boolean spatialOnly ) {
 		if (spatialOnly) {
-			List<Index> filtered = Lists.newArrayList();
+			final List<Index> filtered = Lists.newArrayList();
 			for (int i = 0; i < unfiltered.length; i++) {
 				if (SpatialDimensionalityTypeProvider.isSpatial(unfiltered[i])) {
 					filtered.add(unfiltered[i]);
@@ -241,14 +240,14 @@ public class GeoWaveGTDataStore extends
 	protected List<Name> createTypeNames()
 			throws IOException {
 		final List<Name> names = new ArrayList<>();
-		final CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters();
-		while (adapters.hasNext()) {
-			final InternalDataAdapter<?> adapter = adapters.next();
-			if (adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter) {
-				names.add(((GeotoolsFeatureDataAdapter) adapter.getAdapter()).getFeatureType().getName());
+		try (final CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters()) {
+			while (adapters.hasNext()) {
+				final InternalDataAdapter<?> adapter = adapters.next();
+				if (adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter) {
+					names.add(((GeotoolsFeatureDataAdapter) adapter.getAdapter()).getFeatureType().getName());
+				}
 			}
 		}
-		adapters.close();
 		return names;
 	}
 
@@ -291,6 +290,20 @@ public class GeoWaveGTDataStore extends
 		return getFeatureSource(
 				typeName.getLocalPart(),
 				Transaction.AUTO_COMMIT);
+	}
+
+	@Override
+	public void dispose() {
+		if (dataStore instanceof Closeable) {
+			try {
+				((Closeable) dataStore).close();
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Unable to close geowave datastore",
+						e);
+			}
+		}
 	}
 
 	@Override

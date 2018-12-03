@@ -48,7 +48,6 @@ import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.ReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.RowReader;
-import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -70,7 +69,8 @@ public class GeoWaveBasicRasterIT extends
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.HBASE,
-		GeoWaveStoreType.REDIS
+		GeoWaveStoreType.REDIS,
+		GeoWaveStoreType.ROCKSDB
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
@@ -201,7 +201,7 @@ public class GeoWaveBasicRasterIT extends
 				numBands,
 				numRasters,
 				new SummingExpectedValue());
-
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
 	@Test
@@ -288,7 +288,6 @@ public class GeoWaveBasicRasterIT extends
 		queryNoDataMergeStrategy(
 				noDataCoverageName,
 				noDataTileSize);
-
 		queryGeneralPurpose(
 				sumAndAveragingCoverageName,
 				sumAndAveragingTileSize,

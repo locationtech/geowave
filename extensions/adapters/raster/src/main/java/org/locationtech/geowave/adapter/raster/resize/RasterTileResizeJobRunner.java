@@ -128,7 +128,7 @@ public class RasterTileResizeJobRunner extends
 		if (adapter == null) {
 			throw new IllegalArgumentException(
 					"Adapter for coverage '" + rasterResizeOptions.getInputCoverageName()
-							+ "' does not exist in namespace '" + inputStoreOptions.getGeowaveNamespace() + "'");
+							+ "' does not exist in namespace '" + inputStoreOptions.getGeoWaveNamespace() + "'");
 		}
 
 		final RasterDataAdapter newAdapter = new RasterDataAdapter(
@@ -153,7 +153,7 @@ public class RasterTileResizeJobRunner extends
 			}
 			if (index == null) {
 				throw new IllegalArgumentException(
-						"Index does not exist in namespace '" + inputStoreOptions.getGeowaveNamespace() + "'");
+						"Index does not exist in namespace '" + inputStoreOptions.getGeoWaveNamespace() + "'");
 			}
 		}
 		GeoWaveOutputFormat.setStoreOptions(

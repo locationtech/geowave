@@ -71,7 +71,8 @@ import org.locationtech.jts.geom.Point;
 	GeoWaveStoreType.ACCUMULO,
 	GeoWaveStoreType.CASSANDRA,
 	GeoWaveStoreType.HBASE,
-	GeoWaveStoreType.REDIS
+	GeoWaveStoreType.REDIS,
+	GeoWaveStoreType.ROCKSDB
 })
 public class SpatialTemporalQueryIT
 {

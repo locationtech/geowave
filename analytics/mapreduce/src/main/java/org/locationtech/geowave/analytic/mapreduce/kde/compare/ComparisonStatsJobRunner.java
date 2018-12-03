@@ -118,14 +118,14 @@ public class ComparisonStatsJobRunner extends
 		try (final FileSystem fs = FileSystem.get(conf)) {
 			fs.delete(
 					new Path(
-							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+							"/tmp/" + inputDataStoreOptions.getGeoWaveNamespace() + "_stats_"
 									+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel()
 									+ "_" + kdeCommandLineOptions.getCoverageName() + "/basic"),
 					true);
 			final Job combiner = new Job(
 					conf);
 			combiner.setJarByClass(this.getClass());
-			combiner.setJobName(inputDataStoreOptions.getGeowaveNamespace() + "("
+			combiner.setJobName(inputDataStoreOptions.getGeoWaveNamespace() + "("
 					+ kdeCommandLineOptions.getCoverageName() + ")" + " levels " + kdeCommandLineOptions.getMinLevel()
 					+ "-" + kdeCommandLineOptions.getMaxLevel() + " combining seasons");
 			combiner.setMapperClass(ComparisonCombiningStatsMapper.class);
@@ -139,21 +139,21 @@ public class ComparisonStatsJobRunner extends
 			FileOutputFormat.setOutputPath(
 					combiner,
 					new Path(
-							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+							"/tmp/" + inputDataStoreOptions.getGeoWaveNamespace() + "_stats_"
 									+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel()
 									+ "_" + kdeCommandLineOptions.getCoverageName() + "/combined_pct"));
 
 			FileInputFormat.setInputPaths(
 					combiner,
 					new Path(
-							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+							"/tmp/" + inputDataStoreOptions.getGeoWaveNamespace() + "_stats_"
 									+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel()
 									+ "_" + kdeCommandLineOptions.getCoverageName() + "/percentiles"));
 			if (combiner.waitForCompletion(true)) {
 
 				fs.delete(
 						new Path(
-								"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+								"/tmp/" + inputDataStoreOptions.getGeoWaveNamespace() + "_stats_"
 										+ kdeCommandLineOptions.getMinLevel() + "_"
 										+ kdeCommandLineOptions.getMaxLevel() + "_"
 										+ kdeCommandLineOptions.getCoverageName() + "/percentiles"),
@@ -169,7 +169,7 @@ public class ComparisonStatsJobRunner extends
 				final Job ingester = new Job(
 						conf);
 				ingester.setJarByClass(this.getClass());
-				ingester.setJobName(inputDataStoreOptions.getGeowaveNamespace() + "("
+				ingester.setJobName(inputDataStoreOptions.getGeoWaveNamespace() + "("
 						+ kdeCommandLineOptions.getCoverageName() + ")" + " levels "
 						+ kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions + " Ingest");
 				ingester.setMapperClass(ComparisonIdentityMapper.class);
@@ -187,7 +187,7 @@ public class ComparisonStatsJobRunner extends
 				FileInputFormat.setInputPaths(
 						ingester,
 						new Path(
-								"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+								"/tmp/" + inputDataStoreOptions.getGeoWaveNamespace() + "_stats_"
 										+ kdeCommandLineOptions.getMinLevel() + "_"
 										+ kdeCommandLineOptions.getMaxLevel() + "_"
 										+ kdeCommandLineOptions.getCoverageName() + "/combined_pct"));
@@ -257,7 +257,7 @@ public class ComparisonStatsJobRunner extends
 
 	@Override
 	protected String getJob2Name() {
-		return inputDataStoreOptions.getGeowaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")"
+		return inputDataStoreOptions.getGeoWaveNamespace() + "(" + kdeCommandLineOptions.getCoverageName() + ")"
 				+ " levels " + kdeCommandLineOptions.getMinLevel() + "-" + kdeCommandLineOptions.getMaxLevel()
 				+ " Percentile Calculation by season";
 	}
@@ -297,7 +297,7 @@ public class ComparisonStatsJobRunner extends
 		FileOutputFormat.setOutputPath(
 				statsReducer,
 				new Path(
-						"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
+						"/tmp/" + inputDataStoreOptions.getGeoWaveNamespace() + "_stats_"
 								+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel() + "_"
 								+ kdeCommandLineOptions.getCoverageName() + "/percentiles"));
 	}
