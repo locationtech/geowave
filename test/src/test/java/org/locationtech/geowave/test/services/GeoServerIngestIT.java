@@ -208,9 +208,6 @@ public class GeoServerIngestIT extends
 				.fieldName(
 						sft.getGeometryDescriptor().getLocalName())
 				.build());
-		if (ds instanceof Closeable) {
-			((Closeable) ds).close();
-		}
 		TestUtils.assertStatusCode(
 				"Should Create 'testomatic' Workspace",
 				201,
