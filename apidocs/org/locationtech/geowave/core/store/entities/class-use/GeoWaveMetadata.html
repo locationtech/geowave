@@ -126,6 +126,14 @@
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.redis.util">org.locationtech.geowave.datastore.redis.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.rocksdb.operations">org.locationtech.geowave.datastore.rocksdb.operations</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.rocksdb.util">org.locationtech.geowave.datastore.rocksdb.util</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -553,6 +561,109 @@
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveTimestampMetadata.html#GeoWaveTimestampMetadata-org.locationtech.geowave.core.store.entities.GeoWaveMetadata-long-">GeoWaveTimestampMetadata</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&nbsp;md,
                         long&nbsp;millisFromEpoch)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.rocksdb.operations">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/package-summary.html">org.locationtech.geowave.datastore.rocksdb.operations</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/package-summary.html">org.locationtech.geowave.datastore.rocksdb.operations</a> that return types with arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBMetadataReader.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBMetadataReader.html#query-org.locationtech.geowave.core.store.operations.MetadataQuery-">query</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html" title="class in org.locationtech.geowave.core.store.operations">MetadataQuery</a>&nbsp;query)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBMetadataReader.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBMetadataReader.html#query-org.locationtech.geowave.core.store.operations.MetadataQuery-boolean-">query</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html" title="class in org.locationtech.geowave.core.store.operations">MetadataQuery</a>&nbsp;query,
+     boolean&nbsp;mergeStats)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/package-summary.html">org.locationtech.geowave.datastore.rocksdb.operations</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBMetadataWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBMetadataWriter.html#write-org.locationtech.geowave.core.store.entities.GeoWaveMetadata-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&nbsp;metadata)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.rocksdb.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/package-summary.html">org.locationtech.geowave.datastore.rocksdb.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/package-summary.html">org.locationtech.geowave.datastore.rocksdb.util</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBGeoWaveMetadata.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBGeoWaveMetadata</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/package-summary.html">org.locationtech.geowave.datastore.rocksdb.util</a> that return <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBMetadataIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBMetadataIterator.html#readRow-byte:A-byte:A-">readRow</a></span>(byte[]&nbsp;key,
+       byte[]&nbsp;value)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/package-summary.html">org.locationtech.geowave.datastore.rocksdb.util</a> that return types with arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBMetadataTable.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBMetadataTable.html#iterator--">iterator</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBMetadataTable.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBMetadataTable.html#iterator-byte:A-">iterator</a></span>(byte[]&nbsp;primaryId)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBMetadataTable.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBMetadataTable.html#iterator-byte:A-byte:A-">iterator</a></span>(byte[]&nbsp;primaryId,
+        byte[]&nbsp;secondaryId)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/package-summary.html">org.locationtech.geowave.datastore.rocksdb.util</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBMetadataTable.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBMetadataTable.html#add-org.locationtech.geowave.core.store.entities.GeoWaveMetadata-">add</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

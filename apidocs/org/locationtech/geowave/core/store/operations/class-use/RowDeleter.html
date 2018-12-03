@@ -114,6 +114,10 @@
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.redis.operations">org.locationtech.geowave.datastore.redis.operations</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.rocksdb.operations">org.locationtech.geowave.datastore.rocksdb.operations</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -357,6 +361,40 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></code></td>
 <td class="colLast"><span class="typeNameLabel">RedisOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisOperations.html#createRowDeleter-java.lang.String-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-java.lang.String...-">createRowDeleter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.rocksdb.operations">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/package-summary.html">org.locationtech.geowave.datastore.rocksdb.operations</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/package-summary.html">org.locationtech.geowave.datastore.rocksdb.operations</a> that implement <a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBRowDeleter.html" title="class in org.locationtech.geowave.datastore.rocksdb.operations">RocksDBRowDeleter</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/package-summary.html">org.locationtech.geowave.datastore.rocksdb.operations</a> that return <a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBOperations.html#createRowDeleter-java.lang.String-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-java.lang.String...-">createRowDeleter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
                 <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                 <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>

@@ -110,6 +110,10 @@
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.redis.util">org.locationtech.geowave.datastore.redis.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.rocksdb.util">org.locationtech.geowave.datastore.rocksdb.util</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -129,6 +133,19 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValueImpl.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveValueImpl</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../org/locationtech/geowave/core/store/entities/package-summary.html">org.locationtech.geowave.core.store.entities</a> with type parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">MergeableGeoWaveRow.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/MergeableGeoWaveRow.html#attributeValues">attributeValues</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -355,6 +372,27 @@
                                  <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value,
                                  long&nbsp;secondsSinceEpic,
                                  int&nbsp;nanoOfSecond)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.rocksdb.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/package-summary.html">org.locationtech.geowave.datastore.rocksdb.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/package-summary.html">org.locationtech.geowave.datastore.rocksdb.util</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBIndexTable.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBIndexTable.html#add-byte:A-byte:A-short-org.locationtech.geowave.core.store.entities.GeoWaveValue-">add</a></span>(byte[]&nbsp;sortKey,
+   byte[]&nbsp;dataId,
+   short&nbsp;numDuplicates,
+   <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

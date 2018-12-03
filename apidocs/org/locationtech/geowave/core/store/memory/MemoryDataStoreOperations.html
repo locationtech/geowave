@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -182,74 +182,70 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#createDeleter-org.locationtech.geowave.core.store.operations.ReaderParams-">createDeleter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#createIndex-org.locationtech.geowave.core.store.api.Index-">createIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">MetadataDeleter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#createMetadataDeleter-org.locationtech.geowave.core.store.operations.MetadataType-">createMetadataDeleter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataReader.html" title="interface in org.locationtech.geowave.core.store.operations">MetadataReader</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#createMetadataReader-org.locationtech.geowave.core.store.operations.MetadataType-">createMetadataReader</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataWriter.html" title="interface in org.locationtech.geowave.core.store.operations">MetadataWriter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#createMetadataWriter-org.locationtech.geowave.core.store.operations.MetadataType-">createMetadataWriter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#createReader-org.locationtech.geowave.core.store.operations.ReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#createRowDeleter-java.lang.String-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-java.lang.String...-">createRowDeleter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
                 <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                 <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowWriter.html" title="interface in org.locationtech.geowave.core.store.operations">RowWriter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#createWriter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-">createWriter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
             <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#deleteAll--">deleteAll</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#deleteAll-java.lang.String-java.lang.String-java.lang.Short-java.lang.String...-">deleteAll</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#ensureAuthorizations-java.lang.String-java.lang.String...-">ensureAuthorizations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;clientUser,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.MemoryStoreEntry.html" title="class in org.locationtech.geowave.core.store.memory">MemoryDataStoreOperations.MemoryStoreEntry</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#getRowsForIndex-java.lang.String-">getRowsForIndex</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;id)</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#indexExists-java.lang.String-">indexExists</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#mergeData-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-">mergeData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
          <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
          <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
          <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#mergeStats-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">mergeStats</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
           <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/memory/MemoryDataStoreOperations.html#metadataExists-org.locationtech.geowave.core.store.operations.MetadataType-">metadataExists</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;type)</code>&nbsp;</td>
 </tr>
@@ -481,22 +477,6 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html#mergeStats-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">mergeStats</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="createIndex-org.locationtech.geowave.core.store.api.Index-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createIndex</h4>
-<pre>public&nbsp;boolean&nbsp;createIndex(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)
-                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html#createIndex-org.locationtech.geowave.core.store.api.Index-">createIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a></code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>
 </li>
 </ul>
