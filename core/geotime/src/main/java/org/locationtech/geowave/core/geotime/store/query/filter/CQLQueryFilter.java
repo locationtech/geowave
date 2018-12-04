@@ -170,6 +170,7 @@ public class CQLQueryFilter implements
 			}
 			catch (final Exception e) {
 				throw new IllegalArgumentException(
+						"Unable to read adapter from CQL filter binary",
 						e);
 			}
 		}

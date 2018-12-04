@@ -96,6 +96,29 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 			+ "tornado_tracks_test_case/";
 	protected static final String TORNADO_TRACKS_SHAPEFILE_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
 			+ "tornado_tracks.shp";
+	protected static final String HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
+			+ "hail-box-temporal-filter.shp";
+	protected static final String HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
+			+ "hail-polygon-temporal-filter.shp";
+	protected static final String TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
+			+ "tornado_tracks-box-temporal-filter.shp";
+	protected static final String TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
+			+ "tornado_tracks-polygon-temporal-filter.shp";
+	protected static final String TEST_BOX_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Temporal-Filter.shp";
+	protected static final String TEST_POLYGON_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE
+			+ "Polygon-Temporal-Filter.shp";
+	protected static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
+			+ "hail-box-filter.shp";
+	protected static final String HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
+			+ "hail-polygon-filter.shp";
+
+	protected static final String TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
+			+ "tornado_tracks-box-filter.shp";
+	protected static final String TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
+			+ "tornado_tracks-polygon-filter.shp";
+
+	protected static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
+	protected static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
 
 	@BeforeClass
 	public static void extractTestFiles()

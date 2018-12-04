@@ -115,7 +115,7 @@ public class ExplicitCQLQuery implements
 		final int baseQueryBytesLength = bytes.length - filterBytesLength - 4;
 		if (filterBytesLength > 0) {
 			final byte[] filterBytes = new byte[filterBytesLength];
-
+			buf.get(filterBytes);
 			filter = new CQLQueryFilter();
 			filter.fromBinary(filterBytes);
 		}
@@ -125,12 +125,13 @@ public class ExplicitCQLQuery implements
 		}
 		if (baseQueryBytesLength > 0) {
 			final byte[] baseQueryBytes = new byte[baseQueryBytesLength];
-
+			buf.get(baseQueryBytes);
 			try {
 				baseQuery = (QueryConstraints) PersistenceUtils.fromBinary(baseQueryBytes);
 			}
 			catch (final Exception e) {
 				throw new IllegalArgumentException(
+						"Unable to read base query from binary",
 						e);
 			}
 		}

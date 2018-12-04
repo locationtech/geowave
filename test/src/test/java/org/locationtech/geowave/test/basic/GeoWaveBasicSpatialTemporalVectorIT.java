@@ -49,17 +49,6 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		AbstractGeoWaveBasicVectorIT
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicSpatialTemporalVectorIT.class);
-
-	private static final String HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
-			+ "hail-box-temporal-filter.shp";
-	private static final String HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
-			+ "hail-polygon-temporal-filter.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks-box-temporal-filter.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks-polygon-temporal-filter.shp";
-	private static final String TEST_BOX_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Temporal-Filter.shp";
-	private static final String TEST_POLYGON_TEMPORAL_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Temporal-Filter.shp";
 	private static final String TEST_EXPORT_DIRECTORY = "export";
 	private static final String TEST_BASE_EXPORT_FILE_NAME = "basicIT-export.avro";
 

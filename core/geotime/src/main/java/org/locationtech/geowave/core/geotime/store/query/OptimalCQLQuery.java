@@ -3,7 +3,6 @@ package org.locationtech.geowave.core.geotime.store.query;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
@@ -19,24 +18,20 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWr
 import org.locationtech.geowave.core.geotime.util.IndexOptimizationUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
-import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
-import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
-import org.locationtech.geowave.core.store.query.filter.QueryFilter;
+import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.locationtech.jts.geom.Geometry;
 
 public class OptimalCQLQuery implements
 		AdapterAndIndexBasedQueryConstraints,
@@ -201,10 +196,25 @@ public class OptimalCQLQuery implements
 				// constraints);
 				// }
 				// else {
-				baseQuery = new SpatialQuery(
-						constraints,
-						geometry,
-						extractedCompareOp);
+
+				// we have to assume the geometry was transformed to the feature
+				// type's CRS, but SpatialQuery assumes the default CRS if not
+				// specified, so specify a CRS if necessary
+				if (GeometryUtils.getDefaultCRS().equals(
+						adapter.getFeatureType().getCoordinateReferenceSystem())) {
+					baseQuery = new SpatialQuery(
+							constraints,
+							geometry,
+							extractedCompareOp);
+				}
+				else {
+					baseQuery = new SpatialQuery(
+							constraints,
+							geometry,
+							GeometryUtils.getCrsCode(adapter.getFeatureType().getCoordinateReferenceSystem()),
+							extractedCompareOp,
+							BasicQueryCompareOperation.INTERSECTS);
+				}
 
 				// ExtractGeometryFilterVisitor sets predicate to NULL when CQL
 				// expression

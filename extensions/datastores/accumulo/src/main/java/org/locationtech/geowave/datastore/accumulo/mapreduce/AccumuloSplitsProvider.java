@@ -27,6 +27,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
@@ -66,6 +67,7 @@ public class AccumuloSplitsProvider extends
 			final Integer maxSplits,
 			final QueryConstraints constraints,
 			final double[] targetResolutionPerDimensionForHierarchicalIndex,
+			final IndexMetaData[] indexMetadata,
 			final String[] authorizations )
 			throws IOException {
 
@@ -110,14 +112,16 @@ public class AccumuloSplitsProvider extends
 						indexConstraints,
 						indexStrategy,
 						targetResolutionPerDimensionForHierarchicalIndex,
-						maxSplits).getCompositeQueryRanges());
+						maxSplits,
+						indexMetadata).getCompositeQueryRanges());
 			}
 			else {
 				ranges = AccumuloUtils.byteArrayRangesToAccumuloRanges(DataStoreUtils.constraintsToQueryRanges(
 						indexConstraints,
 						indexStrategy,
 						targetResolutionPerDimensionForHierarchicalIndex,
-						-1).getCompositeQueryRanges());
+						-1,
+						indexMetadata).getCompositeQueryRanges());
 			}
 			if (ranges.size() == 1) {
 				final Range range = ranges.first();
