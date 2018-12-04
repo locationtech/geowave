@@ -36,6 +36,11 @@ public class GeoServerRestClientTest
 				webTarget.path(Mockito.anyString())).thenReturn(
 				webTarget);
 		Mockito.when(
+				webTarget.queryParam(
+						Mockito.eq("quietOnNotFound"),
+						Mockito.anyBoolean())).thenReturn(
+				webTarget);
+		Mockito.when(
 				webTarget.request()).thenReturn(
 				invBuilder);
 
