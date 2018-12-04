@@ -32,7 +32,7 @@ public class GeoServerGetFeatureLayerCommand extends
 		GeoServerCommand<String>
 {
 	@Parameter(description = "<layer name>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String layerName = null;
 
 	@Override

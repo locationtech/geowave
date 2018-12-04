@@ -32,7 +32,7 @@ public class GeoServerGetStyleCommand extends
 		GeoServerCommand<String>
 {
 	@Parameter(description = "<style name>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String style = null;
 
 	@Override
