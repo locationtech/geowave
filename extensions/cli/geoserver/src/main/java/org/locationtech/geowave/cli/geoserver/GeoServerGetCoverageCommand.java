@@ -16,13 +16,8 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.cli.api.ServiceStatus;
-import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
-import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -78,13 +73,14 @@ public class GeoServerGetCoverageCommand extends
 		final Response getCvgResponse = geoserverClient.getCoverage(
 				workspace,
 				cvgstore,
-				cvgName);
+				cvgName,
+				false);
 
 		if (getCvgResponse.getStatus() == Status.OK.getStatusCode()) {
 			final JSONObject jsonResponse = JSONObject.fromObject(getCvgResponse.getEntity());
 			return "\nGeoServer coverage info for '" + cvgName + "': " + jsonResponse.toString(2);
 		}
-		String errorMessage = "Error getting GeoServer coverage info for " + cvgName + ": "
+		final String errorMessage = "Error getting GeoServer coverage info for " + cvgName + ": "
 				+ getCvgResponse.readEntity(String.class) + "\nGeoServer Response Code = " + getCvgResponse.getStatus();
 		return handleError(
 				getCvgResponse,

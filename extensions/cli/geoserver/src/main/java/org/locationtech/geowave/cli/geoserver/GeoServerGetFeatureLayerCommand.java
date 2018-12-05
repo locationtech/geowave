@@ -16,13 +16,8 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.cli.api.ServiceStatus;
-import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
-import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -59,13 +54,15 @@ public class GeoServerGetFeatureLayerCommand extends
 
 		layerName = parameters.get(0);
 
-		final Response getLayerResponse = geoserverClient.getFeatureLayer(layerName);
+		final Response getLayerResponse = geoserverClient.getFeatureLayer(
+				layerName,
+				false);
 
 		if (getLayerResponse.getStatus() == Status.OK.getStatusCode()) {
 			final JSONObject jsonResponse = JSONObject.fromObject(getLayerResponse.getEntity());
 			return "\nGeoServer layer info for '" + layerName + "': " + jsonResponse.toString(2);
 		}
-		String errorMessage = "Error getting GeoServer layer info for '" + layerName + "': "
+		final String errorMessage = "Error getting GeoServer layer info for '" + layerName + "': "
 				+ getLayerResponse.readEntity(String.class) + "\nGeoServer Response Code = "
 				+ getLayerResponse.getStatus();
 		return handleError(

@@ -18,13 +18,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.cli.api.ServiceStatus;
-import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
-import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -58,13 +53,15 @@ public class GeoServerGetStyleCommand extends
 		}
 		style = parameters.get(0);
 
-		final Response getStyleResponse = geoserverClient.getStyle(style);
+		final Response getStyleResponse = geoserverClient.getStyle(
+				style,
+				false);
 
 		if (getStyleResponse.getStatus() == Status.OK.getStatusCode()) {
 			final String styleInfo = IOUtils.toString((InputStream) getStyleResponse.getEntity());
 			return "\nGeoServer style info for '" + style + "': " + styleInfo;
 		}
-		String errorMessage = "Error getting GeoServer style info for '" + style + "': "
+		final String errorMessage = "Error getting GeoServer style info for '" + style + "': "
 				+ getStyleResponse.readEntity(String.class) + "\nGeoServer Response Code = "
 				+ getStyleResponse.getStatus();
 		return handleError(

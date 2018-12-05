@@ -16,13 +16,8 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.cli.api.ServiceStatus;
-import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
-import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -71,14 +66,15 @@ public class GeoServerGetCoverageStoreCommand extends
 
 		final Response getCvgStoreResponse = geoserverClient.getCoverageStore(
 				workspace,
-				csName);
+				csName,
+				false);
 
 		if (getCvgStoreResponse.getStatus() == Status.OK.getStatusCode()) {
 			final JSONObject jsonResponse = JSONObject.fromObject(getCvgStoreResponse.getEntity());
 			final JSONObject cvgstore = jsonResponse.getJSONObject("coverageStore");
 			return "\nGeoServer coverage store info for '" + csName + "': " + cvgstore.toString(2);
 		}
-		String errorMessage = "Error getting GeoServer coverage store info for '" + csName + "': "
+		final String errorMessage = "Error getting GeoServer coverage store info for '" + csName + "': "
 				+ getCvgStoreResponse.readEntity(String.class) + "\nGeoServer Response Code = "
 				+ getCvgStoreResponse.getStatus();
 		return handleError(

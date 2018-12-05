@@ -410,7 +410,8 @@ public class GeoServerRestClient
 				// verify coverage store exists
 				final Response getCsResponse = getCoverageStore(
 						workspaceName,
-						cvgStoreName);
+						cvgStoreName,
+						true);
 				if (getCsResponse.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 					final Response addCsResponse = addCoverageStore(
 							workspaceName,
@@ -455,7 +456,8 @@ public class GeoServerRestClient
 				final Response getCvResponse = getCoverage(
 						workspaceName,
 						cvgStoreName,
-						dataAdapterInfo.typeName);
+						dataAdapterInfo.typeName,
+						true);
 				if (getCvResponse.getStatus() == Status.OK.getStatusCode()) {
 					LOGGER.debug(dataAdapterInfo.typeName + " layer already exists");
 					retStatus = 400;
@@ -497,7 +499,8 @@ public class GeoServerRestClient
 				// verify datastore exists
 				final Response getDsResponse = getDatastore(
 						workspaceName,
-						dataStoreName);
+						dataStoreName,
+						true);
 				if (getDsResponse.getStatus() == Status.NOT_FOUND.getStatusCode()) {
 					final Response addDsResponse = addDatastore(
 							workspaceName,
@@ -536,7 +539,9 @@ public class GeoServerRestClient
 				LOGGER.debug("Checking for existing feature layer: " + dataAdapterInfo.typeName);
 
 				// See if the feature layer already exists
-				final Response getFlResponse = getFeatureLayer(dataAdapterInfo.typeName);
+				final Response getFlResponse = getFeatureLayer(
+						dataAdapterInfo.typeName,
+						true);
 				if (getFlResponse.getStatus() == Status.OK.getStatusCode()) {
 					LOGGER.debug(dataAdapterInfo.typeName + " layer already exists");
 					retStatus = 400;
@@ -732,9 +737,12 @@ public class GeoServerRestClient
 	 */
 	public Response getDatastore(
 			final String workspaceName,
-			final String datastoreName ) {
+			final String datastoreName,
+			final boolean quietOnNotFound ) {
 		final Response resp = getWebTarget().path(
-				"rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + ".json").request().get();
+				"rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + ".json").queryParam(
+				"quietOnNotFound",
+				quietOnNotFound).request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -846,9 +854,12 @@ public class GeoServerRestClient
 	 * @return
 	 */
 	public Response getFeatureLayer(
-			final String layerName ) {
+			final String layerName,
+			final boolean quietOnNotFound ) {
 		final Response resp = getWebTarget().path(
-				"rest/layers/" + layerName + ".json").request().get();
+				"rest/layers/" + layerName + ".json").queryParam(
+				"quietOnNotFound",
+				quietOnNotFound).request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			final JSONObject layer = JSONObject.fromObject(resp.readEntity(String.class));
@@ -916,7 +927,8 @@ public class GeoServerRestClient
 						"name");
 
 				final String layer = (String) getFeatureLayer(
-						name).getEntity();
+						name,
+						false).getEntity();
 
 				// get the workspace and name for each datastore
 				String ws = null;
@@ -937,7 +949,8 @@ public class GeoServerRestClient
 						final JSONObject datastore = JSONObject.fromObject(
 								getDatastore(
 										ds,
-										ws).getEntity()).getJSONObject(
+										ws,
+										false).getEntity()).getJSONObject(
 								"dataStore");
 
 						// only process GeoWave layers
@@ -1112,10 +1125,13 @@ public class GeoServerRestClient
 	 */
 	public Response getStyle(
 			@PathParam("styleName")
-			final String styleName ) {
+			final String styleName,
+			final boolean quietOnNotFound ) {
 
 		final Response resp = getWebTarget().path(
-				"rest/styles/" + styleName + ".sld").request().get();
+				"rest/styles/" + styleName + ".sld").queryParam(
+				"quietOnNotFound",
+				quietOnNotFound).request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			final InputStream inStream = (InputStream) resp.getEntity();
@@ -1211,9 +1227,12 @@ public class GeoServerRestClient
 	 */
 	public Response getCoverageStore(
 			final String workspaceName,
-			final String coverageName ) {
+			final String coverageName,
+			final boolean quietOnNotFound ) {
 		final Response resp = getWebTarget().path(
-				"rest/workspaces/" + workspaceName + "/coveragestores/" + coverageName + ".json").request().get();
+				"rest/workspaces/" + workspaceName + "/coveragestores/" + coverageName + ".json").queryParam(
+				"quietOnNotFound",
+				quietOnNotFound).request().get();
 
 		if (resp.getStatus() == Status.OK.getStatusCode()) {
 			resp.bufferEntity();
@@ -1374,11 +1393,15 @@ public class GeoServerRestClient
 	public Response getCoverage(
 			final String workspaceName,
 			final String cvgStoreName,
-			final String coverageName ) {
+			final String coverageName,
+			final boolean quietOnNotFound ) {
 		final Response resp = getWebTarget()
 				.path(
 						"rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages/"
 								+ coverageName + ".json")
+				.queryParam(
+						"quietOnNotFound",
+						quietOnNotFound)
 				.request()
 				.get();
 

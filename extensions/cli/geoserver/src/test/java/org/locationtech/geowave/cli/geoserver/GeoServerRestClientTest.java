@@ -10,19 +10,16 @@
  ******************************************************************************/
 package org.locationtech.geowave.cli.geoserver;
 
-import org.apache.hadoop.yarn.security.client.ClientTimelineSecurityInfo;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.locationtech.geowave.cli.geoserver.GeoServerConfig;
-import org.locationtech.geowave.cli.geoserver.GeoServerRestClient;
-import org.mockito.Mockito;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 public class GeoServerRestClientTest
 {
@@ -31,12 +28,17 @@ public class GeoServerRestClientTest
 	GeoServerRestClient client;
 
 	private WebTarget mockedWebTarget() {
-		WebTarget webTarget = Mockito.mock(WebTarget.class);
-		Invocation.Builder invBuilder = Mockito.mock(Invocation.Builder.class);
-		Response response = Mockito.mock(Response.class);
+		final WebTarget webTarget = Mockito.mock(WebTarget.class);
+		final Invocation.Builder invBuilder = Mockito.mock(Invocation.Builder.class);
+		final Response response = Mockito.mock(Response.class);
 
 		Mockito.when(
 				webTarget.path(Mockito.anyString())).thenReturn(
+				webTarget);
+		Mockito.when(
+				webTarget.queryParam(
+						Mockito.eq("quietOnNotFound"),
+						Mockito.anyBoolean())).thenReturn(
 				webTarget);
 		Mockito.when(
 				webTarget.request()).thenReturn(
@@ -72,7 +74,9 @@ public class GeoServerRestClientTest
 
 	@Test
 	public void testGetFeatureLayer() {
-		client.getFeatureLayer("some_layer");
+		client.getFeatureLayer(
+				"some_layer",
+				false);
 		Mockito.verify(
 				webTarget).path(
 				"rest/layers/some_layer.json");
@@ -80,7 +84,7 @@ public class GeoServerRestClientTest
 
 	@Test
 	public void testGetConfig() {
-		GeoServerConfig returnedConfig = client.getConfig();
+		final GeoServerConfig returnedConfig = client.getConfig();
 		Assert.assertEquals(
 				config,
 				returnedConfig);
@@ -91,7 +95,8 @@ public class GeoServerRestClientTest
 		client.getCoverage(
 				"some_workspace",
 				"some_cvgStore",
-				"some_coverage");
+				"some_coverage",
+				false);
 		Mockito.verify(
 				webTarget).path(
 				"rest/workspaces/some_workspace/coveragestores/some_cvgStore/coverages/some_coverage.json");
@@ -119,7 +124,8 @@ public class GeoServerRestClientTest
 	public void testGetDatastore() {
 		client.getDatastore(
 				"some_workspace",
-				"some_datastore");
+				"some_datastore",
+				false);
 		Mockito.verify(
 				webTarget).path(
 				"rest/workspaces/some_workspace/datastores/some_datastore.json");
@@ -127,7 +133,9 @@ public class GeoServerRestClientTest
 
 	@Test
 	public void testGetStyle() {
-		client.getStyle("some_style");
+		client.getStyle(
+				"some_style",
+				false);
 		Mockito.verify(
 				webTarget).path(
 				"rest/styles/some_style.sld");
