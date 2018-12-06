@@ -18,6 +18,7 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +82,8 @@ public class BBOXQuery extends
 			final String typeName,
 			final String indexName,
 			final DataStore dataStore,
-			final boolean debug ) {
+			final boolean debug,
+			DataStorePluginOptions pluginOptions ) {
 		final StopWatch stopWatch = new StopWatch();
 
 		getBoxGeom();

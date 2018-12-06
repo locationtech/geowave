@@ -15,6 +15,7 @@ import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,8 @@ public class FullTableScan extends
 			final String typeName,
 			final String indexName,
 			final DataStore dataStore,
-			final boolean debug ) {
+			final boolean debug,
+			DataStorePluginOptions pluginOptions ) {
 		long count = 0;
 		try (final CloseableIterator<Object> it = dataStore.query(QueryBuilder.newBuilder().addTypeName(
 				typeName).indexName(

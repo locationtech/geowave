@@ -17,6 +17,7 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,8 @@ public class CQLQuery extends
 			final String typeName,
 			final String indexName,
 			final DataStore dataStore,
-			final boolean debug ) {
+			final boolean debug,
+			DataStorePluginOptions pluginOptions ) {
 		long count = 0;
 		if (useAggregation) {
 			final VectorAggregationQueryBuilder<Persistable, Long> bldr = (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder

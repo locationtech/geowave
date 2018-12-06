@@ -17,6 +17,7 @@ import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
@@ -54,7 +55,8 @@ public class ClientSideCQLQuery extends
 			final String typeName,
 			final String indexName,
 			final DataStore dataStore,
-			final boolean debug ) {
+			final boolean debug,
+			DataStorePluginOptions pluginOptions ) {
 		getFilter();
 
 		long count = 0;
