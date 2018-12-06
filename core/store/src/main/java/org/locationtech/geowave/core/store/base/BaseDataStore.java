@@ -135,6 +135,11 @@ public class BaseDataStore implements
 		return statisticsStore;
 	}
 
+	public Short getAdapterId(
+			String typeName ) {
+		return internalAdapterStore.getAdapterId(typeName);
+	}
+
 	private <T> Writer<T> createWriter(
 			final InternalDataAdapter<T> adapter,
 			final Index... indices ) {
@@ -198,16 +203,6 @@ public class BaseDataStore implements
 				true);
 	}
 
-	@Override
-	public <T> CloseableIterator<T> query(
-			final Query<T> query,
-			final boolean filterDuplicates ) {
-		return internalQuery(
-				query,
-				false,
-				filterDuplicates);
-	}
-
 	protected <T> CloseableIterator<T> internalQuery(
 			final Query<T> query,
 			final boolean delete,
@@ -257,19 +252,11 @@ public class BaseDataStore implements
 			final QueryConstraints constraints,
 			final BaseQueryOptions queryOptions,
 			final boolean delete,
-			final boolean filterDuplicates ) {
-
-		// Note: filterDuplicates has a different effect depending if delete is
-		// true or not.
-		// If delete is false and filterDuplicates is true, the query will
-		// return
-		// just the entries from the tables corresponding to the specified range
-		// If delete is false and filterDuplicates is false, the query will
-		// return all the entries (duplicates included)
-		// if delete is true and filterDuplicates is true, the query will filter
-		// duplicates, but the duplicate deletion callback WILL NOT BE added
-		// if delete is true and filterDuplicates is false, the query will
-		// filter duplicates, but the duplicate deletion callback WILL BE added
+			final boolean deleteDuplicates ) {
+		// Note: The deleteDuplicates option is provided to avoid recursively
+		// adding DuplicateDeletionCallbacks when actual duplicates are removed
+		// via the DuplicateDeletionCallback. The callback should only be added
+		// during the initial deletion query.
 
 		final List<CloseableIterator<Object>> results = new ArrayList<>();
 
@@ -302,7 +289,7 @@ public class BaseDataStore implements
 		final boolean isConstraintsAdapterIndexSpecific = sanitizedConstraints instanceof AdapterAndIndexBasedQueryConstraints;
 		final boolean isAggregationAdapterIndexSpecific = (queryOptions.getAggregation() != null)
 				&& (queryOptions.getAggregation().getRight() instanceof AdapterAndIndexBasedAggregation);
-		final DedupeFilter filter = filterDuplicates ? new DedupeFilter() : null;
+		final DedupeFilter filter = new DedupeFilter();
 		MemoryPersistentAdapterStore tempAdapterStore;
 		final List<DataStoreCallbackManager> deleteCallbacks = new ArrayList<>();
 
@@ -332,14 +319,20 @@ public class BaseDataStore implements
 								statisticsStore,
 								secondaryIndexDataStore,
 								queriedAdapters.add(adapter.getAdapterId()));
-						callbackCache.setPersistStats(baseOptions.isPersistDataStatistics());
+
+						// the duplicate deletion callback utilizes insertion id
+						// query to clean up the dupes, in this case we do not
+						// want the stats to change
+						if (!(constraints instanceof InsertionIdQuery))
+							callbackCache.setPersistStats(baseOptions.isPersistDataStatistics());
+						else
+							callbackCache.setPersistStats(false);
+
 						deleteCallbacks.add(callbackCache);
 						final ScanCallback callback = queryOptions.getScanCallback();
 
 						final Index index = indexAdapterPair.getLeft();
-
-						// if the filt
-						if (!filterDuplicates) {
+						if (!deleteDuplicates) {
 							DeleteCallbackList<T, GeoWaveRow> delList = (DeleteCallbackList<T, GeoWaveRow>) callbackCache
 									.getDeleteCallback(
 											adapter,

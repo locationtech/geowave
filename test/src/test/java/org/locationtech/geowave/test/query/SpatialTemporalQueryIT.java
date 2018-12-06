@@ -13,7 +13,6 @@ package org.locationtech.geowave.test.query;
 import java.io.Closeable;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -46,12 +45,14 @@ import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
+import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.base.BaseDataStore;
+import org.locationtech.geowave.core.store.callback.DuplicateCountCallback;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
@@ -299,9 +300,7 @@ public class SpatialTemporalQueryIT
 			timeWriters.write(feature);
 
 			// Ingest data for duplicate deletion, should not overlap time
-			// ranges
-			// from other tests, see
-			//
+			// ranges from other tests
 			ingestTimeRangeDataForDuplicateDeletion(
 					cal,
 					rangeWriters,
@@ -309,7 +308,7 @@ public class SpatialTemporalQueryIT
 					DUPLICATE_DELETION_YEAR_MIN,
 					DUPLICATE_DELETION_YEAR_MAX,
 					Calendar.YEAR,
-					"year");
+					"ranged_year");
 		}
 		finally {
 			timeWriters.close();
@@ -472,7 +471,6 @@ public class SpatialTemporalQueryIT
 			final String name )
 			throws IOException {
 		final GeometryFactory geomFactory = new GeometryFactory();
-		final int midPoint = (int) Math.floor((min + max) / 2.0);
 		cal.set(
 				field,
 				min);
@@ -801,12 +799,18 @@ public class SpatialTemporalQueryIT
 	@Test
 	public void testTimeRangeDuplicateDeletion()
 			throws IOException {
-		VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+
+		// create an internal data adapter wrapper for use in methods below
+		final short typeId = ((BaseDataStore) dataStore).getAdapterId(timeRangeAdapter.getTypeName());
+
+		// setup the vector query builder
+		final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
 		bldr.indexName(YEAR_INDEX.getName());
 		bldr.setTypeNames(new String[] {
 			timeRangeAdapter.getTypeName()
 		});
 
+		// Create the query over the range (1970-1974)
 		currentGeotoolsIndex = YEAR_INDEX;
 		final Calendar cal = getInitialYearCalendar();
 
@@ -820,7 +824,6 @@ public class SpatialTemporalQueryIT
 				DUPLICATE_DELETION_YEAR_MAX);
 		Date endOfQuery = cal.getTime();
 
-		// the query over the entire year range
 		SpatialTemporalQuery fullRangeQuery = new SpatialTemporalQuery(
 				startOfQuery,
 				endOfQuery,
@@ -852,7 +855,9 @@ public class SpatialTemporalQueryIT
 						-1,
 						1)));
 
-		// Delete everything from the beginning to one year after
+		// Create deletion query to remove a single entry (1970-1971). Even
+		// though we are requesting to delete within a single year, this should
+		// remove all duplicates
 		cal.set(
 				Calendar.YEAR,
 				DUPLICATE_DELETION_YEAR_MIN);
@@ -863,9 +868,6 @@ public class SpatialTemporalQueryIT
 				DUPLICATE_DELETION_YEAR_MIN + 1);
 		endOfQuery = cal.getTime();
 
-		// Even though we are requesting to delete within a 1 year range from
-		// the min year
-		// this should remove all duplicates
 		SpatialTemporalQuery deletionQuery = new SpatialTemporalQuery(
 				startOfQuery,
 				endOfQuery,
@@ -875,75 +877,111 @@ public class SpatialTemporalQueryIT
 						-1,
 						1)));
 
-		// first check to make sure our number of entries match what we expect
-		int count = 0;
-		int numExpectedEntries = (DUPLICATE_DELETION_YEAR_MAX - DUPLICATE_DELETION_YEAR_MIN) + 1;
-		ArrayList<Short> adapters = new ArrayList<Short>();
-
 		// Sanity count number of entries that have nothing to do with
 		// the deletion query (after the deletion we will query again and see
-		// if count == sanity_count
-		int sanity_count = 0;
-		try (CloseableIterator<?> dataIt = dataStore.query(
-				bldr.constraints(
-						sanityQuery).build(),
-				false)) {
+		// if count == sanity_count, we also want to make sure we don't delete
+		// any of the 'untouched' duplicates for the entries as well.
+		long sanity_count = 0;
+		long sanity_duplicates = 0;
+		try (CloseableIterator<?> dataIt = dataStore.query(bldr.constraints(
+				sanityQuery).build())) {
 			while (dataIt.hasNext()) {
-				dataIt.next();
+				SimpleFeature f = (SimpleFeature) dataIt.next();
 				sanity_count++;
 			}
+			dataIt.close();
 		}
 
-		try (CloseableIterator<?> dataIt = dataStore.query(
+		DuplicateCountCallback<SimpleFeature> dupeCounter = new DuplicateCountCallback<SimpleFeature>();
+		try (CloseableIterator<?> dataIt = ((BaseDataStore) dataStore).query(
 				bldr.constraints(
-						fullRangeQuery).build(),
-				false)) {
+						sanityQuery).build(),
+				dupeCounter)) {
 			while (dataIt.hasNext()) {
-				SimpleFeature feat = (SimpleFeature) dataIt.next();
-				count++;
+				dataIt.next();
 			}
 		}
+		sanity_duplicates = dupeCounter.getDuplicateCount();
+
+		// there should be four entries with duplicates 1980-1987, 1987-1995,
+		// 1980-1995, 1970-1974
+		long numExpectedEntries = 4;
+		// there should be four duplicates for the range 1970-1974 (one for each
+		// year after 1970)
+		long numExpectedDuplicates = (DUPLICATE_DELETION_YEAR_MAX - DUPLICATE_DELETION_YEAR_MIN);
+
+		// check and count the number of entries with duplicates
+		DuplicateEntryCount dupeEntryCount = DuplicateEntryCount.getDuplicateCounts(
+				YEAR_INDEX,
+				Collections.singletonList(typeId),
+				((BaseDataStore) dataStore).getStatisticsStore());
+
 		Assert.assertEquals(
 				numExpectedEntries,
-				count);
+				dupeEntryCount.getEntriesWithDuplicatesCount());
 
-		// perform the delete for a single year
+		// check and count the duplicates for 1970-1974
+		dupeCounter = new DuplicateCountCallback<SimpleFeature>();
+		try (CloseableIterator<?> dataIt = ((BaseDataStore) dataStore).query(
+				bldr.constraints(
+						fullRangeQuery).build(),
+				dupeCounter)) {
+			while (dataIt.hasNext()) {
+				dataIt.next();
+			}
+		}
+
+		Assert.assertEquals(
+				numExpectedDuplicates,
+				dupeCounter.getDuplicateCount());
+
+		// perform the delete for a single year (1970-1971)
 		dataStore.delete(bldr.constraints(
 				deletionQuery).build());
 
-		// if delete works, it should have removed the duplicate entries for the
-		// full time range
-		// and this query should return a count of 0
-		count = 0;
-		try (CloseableIterator<?> dataIt = dataStore.query(
+		// if the delete works there should be no more duplicates for this
+		// entry...
+		dupeCounter = new DuplicateCountCallback<SimpleFeature>();
+		try (CloseableIterator<?> dataIt = ((BaseDataStore) dataStore).query(
 				bldr.constraints(
 						fullRangeQuery).build(),
-				false)) {
+				dupeCounter)) {
 			while (dataIt.hasNext()) {
 				dataIt.next();
-				count++;
 			}
 		}
-		numExpectedEntries = 0;
 		Assert.assertEquals(
-				numExpectedEntries,
-				count);
+				0,
+				dupeCounter.getDuplicateCount());
 
-		// Perform sanity query to make sure there were no unintended deltions
-		count = 0;
-		try (CloseableIterator<?> dataIt = dataStore.query(
-				bldr.constraints(
-						sanityQuery).build(),
-				false)) {
-			while (dataIt.hasNext()) {
-				dataIt.next();
-				count++;
-			}
-		}
+		// ..and it should not count the entry as having any duplicates i.e. the
+		// number of entries with duplicates should match the sanity query count
+		// 3(1980-1987, 1987-1995, 1980-1990)
+		dupeEntryCount = DuplicateEntryCount.getDuplicateCounts(
+				YEAR_INDEX,
+				Collections.singletonList(typeId),
+				((BaseDataStore) dataStore).getStatisticsStore());
+
+		// if delete works, it should not count the entry as having any
+		// duplicates and the number of entries with duplicates should match the
+		// sanity query count 3(1980-1987, 1987-1995, 1980-1990)
 		Assert.assertEquals(
 				sanity_count,
-				count);
+				dupeEntryCount.getEntriesWithDuplicatesCount());
 
+		// finally check we didn't accidentally delete any duplicates of the
+		// sanity query range
+		dupeCounter = new DuplicateCountCallback<SimpleFeature>();
+		try (CloseableIterator<?> dataIt = ((BaseDataStore) dataStore).query(
+				bldr.constraints(
+						sanityQuery).build(),
+				dupeCounter)) {
+			while (dataIt.hasNext()) {
+				dataIt.next();
+			}
+		}
+		Assert.assertEquals(
+				sanity_duplicates,
+				dupeCounter.getDuplicateCount());
 	}
-
 }

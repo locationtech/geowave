@@ -1914,6 +1914,9 @@ public class HBaseOperations implements
 	public <T> Deleter<T> createDeleter(
 			final ReaderParams<T> readerParams ) {
 
+		// Currently, the InsertionIdQueryFilter is incompatible with the hbase
+		// bulk deleter when the MultiRowRangeFilter is present. This check
+		// prevents the situation by deferring to a single row delete.
 		boolean isSingleRowFilter = false;
 		if (readerParams.getFilter() instanceof InsertionIdQueryFilter) {
 			isSingleRowFilter = true;
