@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import org.locationtech.geowave.core.index.VarintUtils;
+
 /**
  * Dynamic Histogram:
  *
@@ -416,18 +418,23 @@ public class MinimalBinDistanceHistogram implements
 
 	@Override
 	public int bufferSize() {
-		// 20 = 8 bytes for total count, 4 bytes for number of used bins, 4
-		// bytes for number of bins, 8 bytes for maxValue
-		return (bins.size() * Bin.bufferSize()) + 24;
+		return VarintUtils.unsignedLongByteLength(totalCount) + VarintUtils.unsignedIntByteLength(nbins)
+				+ VarintUtils.unsignedIntByteLength(bins.size()) + (bins.size() * Bin.bufferSize()) + 8;
 	}
 
 	@Override
 	public void toBinary(
 			final ByteBuffer buffer ) {
-		buffer.putLong(totalCount);
+		VarintUtils.writeUnsignedLong(
+				totalCount,
+				buffer);
 		buffer.putDouble(maxValue);
-		buffer.putInt(nbins);
-		buffer.putInt(bins.size());
+		VarintUtils.writeUnsignedInt(
+				nbins,
+				buffer);
+		VarintUtils.writeUnsignedInt(
+				bins.size(),
+				buffer);
 		for (final Bin bin : bins) {
 			bin.toBuffer(buffer);
 		}
@@ -436,10 +443,10 @@ public class MinimalBinDistanceHistogram implements
 	@Override
 	public void fromBinary(
 			final ByteBuffer buffer ) {
-		totalCount = buffer.getLong();
+		totalCount = VarintUtils.readUnsignedLong(buffer);
 		maxValue = buffer.getDouble();
-		nbins = buffer.getInt();
-		final int usedBinCount = buffer.getInt();
+		nbins = VarintUtils.readUnsignedInt(buffer);
+		final int usedBinCount = VarintUtils.readUnsignedInt(buffer);
 		bins.clear();
 		bins.ensureCapacity(nbins);
 		for (int i = 0; i < usedBinCount; i++) {

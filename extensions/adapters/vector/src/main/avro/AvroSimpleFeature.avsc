@@ -23,6 +23,11 @@
                         "items" : "string"
                     }
                 ]
+            },
+            {
+            	"name" : "serializationVersion",
+            	"type" : "bytes",
+            	"default" : "\u0000"
             }
          ]
     },

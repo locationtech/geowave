@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.locationtech.geowave.core.index.VarintUtils;
+
 public class TemporalConstraints
 {
 	private LinkedList<TemporalRange> constraints = new LinkedList<TemporalRange>();
@@ -214,11 +216,17 @@ public class TemporalConstraints
 	}
 
 	public byte[] toBinary() {
-		final ByteBuffer buffer = ByteBuffer.allocate(4 + (constraints.size() * TemporalRange.getBufferSize()));
-		buffer.putInt(constraints.size());
+		int bufferSize = VarintUtils.unsignedIntByteLength(constraints.size());
+		for (final TemporalRange range : constraints) {
+			bufferSize += range.getBufferSize();
+		}
+		final ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+		VarintUtils.writeUnsignedInt(
+				constraints.size(),
+				buffer);
 
 		for (final TemporalRange range : constraints) {
-			buffer.put(range.toBinary());
+			range.toBinary(buffer);
 		}
 
 		return buffer.array();
@@ -228,12 +236,10 @@ public class TemporalConstraints
 			final byte[] data ) {
 		final ByteBuffer buffer = ByteBuffer.wrap(data);
 
-		final int s = buffer.getInt();
-		final byte[] rangeBuf = new byte[TemporalRange.getBufferSize()];
+		final int s = VarintUtils.readUnsignedInt(buffer);
 		for (int i = 0; i < s; i++) {
-			buffer.get(rangeBuf);
 			final TemporalRange range = new TemporalRange();
-			range.fromBinary(rangeBuf);
+			range.fromBinary(buffer);
 			add(range);
 		}
 

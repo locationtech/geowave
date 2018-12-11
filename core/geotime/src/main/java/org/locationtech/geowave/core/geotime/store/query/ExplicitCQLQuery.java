@@ -20,6 +20,7 @@ import org.locationtech.geowave.core.geotime.store.query.filter.CQLQueryFilter;
 import org.locationtech.geowave.core.geotime.util.PropertyConstraintSet;
 import org.locationtech.geowave.core.geotime.util.PropertyFilterVisitor;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
@@ -100,8 +101,11 @@ public class ExplicitCQLQuery implements
 			filterBytes = new byte[] {};
 		}
 
-		final ByteBuffer buf = ByteBuffer.allocate(filterBytes.length + baseQueryBytes.length + 4);
-		buf.putInt(filterBytes.length);
+		final ByteBuffer buf = ByteBuffer.allocate(filterBytes.length + baseQueryBytes.length
+				+ VarintUtils.unsignedIntByteLength(filterBytes.length));
+		VarintUtils.writeUnsignedInt(
+				filterBytes.length,
+				buf);
 		buf.put(filterBytes);
 		buf.put(baseQueryBytes);
 		return buf.array();
@@ -111,8 +115,7 @@ public class ExplicitCQLQuery implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int filterBytesLength = buf.getInt();
-		final int baseQueryBytesLength = bytes.length - filterBytesLength - 4;
+		final int filterBytesLength = VarintUtils.readUnsignedInt(buf);
 		if (filterBytesLength > 0) {
 			final byte[] filterBytes = new byte[filterBytesLength];
 			buf.get(filterBytes);
@@ -123,6 +126,8 @@ public class ExplicitCQLQuery implements
 			LOGGER.warn("CQL filter is empty bytes");
 			filter = null;
 		}
+
+		final int baseQueryBytesLength = buf.remaining();
 		if (baseQueryBytesLength > 0) {
 			final byte[] baseQueryBytes = new byte[baseQueryBytesLength];
 			buf.get(baseQueryBytes);

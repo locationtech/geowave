@@ -31,6 +31,8 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
+import com.clearspring.analytics.util.Varint;
+
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKBReader;
@@ -167,10 +169,14 @@ public class FeatureWritable implements
 				output.writeShort((Short) value);
 			}
 			else if ((binding == Integer.class) || (binding == int.class)) {
-				output.writeInt((Integer) value);
+				Varint.writeSignedVarInt(
+						(Integer) value,
+						output);
 			}
 			else if ((binding == Long.class) || (binding == long.class)) {
-				output.writeLong((Long) value);
+				Varint.writeSignedVarLong(
+						(Long) value,
+						output);
 			}
 			else if ((binding == Float.class) || (binding == float.class)) {
 				output.writeFloat((Float) value);
@@ -183,13 +189,16 @@ public class FeatureWritable implements
 			}
 			else if ((binding == java.sql.Date.class) || (binding == java.sql.Time.class)
 					|| (binding == java.sql.Timestamp.class) || (binding == java.util.Date.class)) {
-				output.writeLong(((Date) value).getTime());
+				Varint.writeUnsignedVarLong(
+						((Date) value).getTime(),
+						output);
 			}
 			else if (Geometry.class.isAssignableFrom(binding)) {
 				final WKBWriter writer = new WKBWriter();
 				final byte[] buffer = writer.write((Geometry) value);
-				final int length = buffer.length;
-				output.writeInt(length);
+				Varint.writeUnsignedVarInt(
+						buffer.length,
+						output);
 				output.write(buffer);
 			}
 			else {
@@ -201,7 +210,9 @@ public class FeatureWritable implements
 				oos.writeObject(value);
 				oos.flush();
 				final byte[] bytes = bos.toByteArray();
-				output.writeInt(bytes.length);
+				Varint.writeUnsignedVarInt(
+						bytes.length,
+						output);
 				output.write(bytes);
 			}
 		}
@@ -234,10 +245,10 @@ public class FeatureWritable implements
 				return input.readShort();
 			}
 			else if ((binding == Integer.class) || (binding == int.class)) {
-				return input.readInt();
+				return Varint.readSignedVarInt(input);
 			}
 			else if ((binding == Long.class) || (binding == long.class)) {
-				return input.readLong();
+				return Varint.readSignedVarLong(input);
 			}
 			else if ((binding == Float.class) || (binding == float.class)) {
 				return input.readFloat();
@@ -250,23 +261,23 @@ public class FeatureWritable implements
 			}
 			else if (binding == java.sql.Date.class) {
 				return new java.sql.Date(
-						input.readLong());
+						Varint.readUnsignedVarLong(input));
 			}
 			else if (binding == java.sql.Time.class) {
 				return new java.sql.Time(
-						input.readLong());
+						Varint.readUnsignedVarLong(input));
 			}
 			else if (binding == java.sql.Timestamp.class) {
 				return new java.sql.Timestamp(
-						input.readLong());
+						Varint.readUnsignedVarLong(input));
 			}
 			else if (binding == java.util.Date.class) {
 				return new java.util.Date(
-						input.readLong());
+						Varint.readUnsignedVarLong(input));
 			}
 			else if (Geometry.class.isAssignableFrom(binding)) {
 				final WKBReader reader = new WKBReader();
-				final int length = input.readInt();
+				final int length = Varint.readUnsignedVarInt(input);
 				final byte[] buffer = new byte[length];
 				input.readFully(buffer);
 				try {
@@ -279,7 +290,7 @@ public class FeatureWritable implements
 				}
 			}
 			else {
-				final int length = input.readInt();
+				final int length = Varint.readUnsignedVarInt(input);
 				final byte[] buffer = new byte[length];
 				input.readFully(buffer);
 				final ByteArrayInputStream bis = new ByteArrayInputStream(

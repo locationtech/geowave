@@ -26,6 +26,7 @@ import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,15 +132,19 @@ public class SingleEntryFilterIterator extends
 
 	public static final String encodeIDs(
 			final List<ByteArray> dataIds ) {
-		int size = 4;
+		int size = VarintUtils.unsignedIntByteLength(dataIds.size());
 		for (final ByteArray id : dataIds) {
-			size += id.getBytes().length + 4;
+			size += id.getBytes().length + VarintUtils.unsignedIntByteLength(id.getBytes().length);
 		}
 		final ByteBuffer buffer = ByteBuffer.allocate(size);
-		buffer.putInt(dataIds.size());
+		VarintUtils.writeUnsignedInt(
+				dataIds.size(),
+				buffer);
 		for (final ByteArray id : dataIds) {
 			final byte[] sId = id.getBytes();
-			buffer.putInt(sId.length);
+			VarintUtils.writeUnsignedInt(
+					sId.length,
+					buffer);
 			buffer.put(sId);
 		}
 
@@ -150,9 +155,9 @@ public class SingleEntryFilterIterator extends
 			final String dataIdsString ) {
 		final ByteBuffer buf = ByteBuffer.wrap(ByteArrayUtils.byteArrayFromString(dataIdsString));
 		final List<byte[]> list = new ArrayList<byte[]>();
-		int count = buf.getInt();
+		int count = VarintUtils.readUnsignedInt(buf);
 		while (count > 0) {
-			final byte[] tempByte = new byte[buf.getInt()];
+			final byte[] tempByte = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(tempByte);
 			list.add(tempByte);
 			count--;

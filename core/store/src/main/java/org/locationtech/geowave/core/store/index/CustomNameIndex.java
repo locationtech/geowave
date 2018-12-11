@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 
 public class CustomNameIndex extends
 		PrimaryIndex
@@ -43,8 +44,11 @@ public class CustomNameIndex extends
 	public byte[] toBinary() {
 		final byte[] selfBinary = super.toBinary();
 		final byte[] idBinary = StringUtils.stringToBinary(name);
-		final ByteBuffer buf = ByteBuffer.allocate(4 + idBinary.length + selfBinary.length);
-		buf.putInt(selfBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(selfBinary.length)
+				+ idBinary.length + selfBinary.length);
+		VarintUtils.writeUnsignedInt(
+				selfBinary.length,
+				buf);
 		buf.put(selfBinary);
 		buf.put(idBinary);
 		return buf.array();
@@ -54,12 +58,12 @@ public class CustomNameIndex extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int selfBinaryLength = buf.getInt();
+		final int selfBinaryLength = VarintUtils.readUnsignedInt(buf);
 		final byte[] selfBinary = new byte[selfBinaryLength];
 		buf.get(selfBinary);
 
 		super.fromBinary(selfBinary);
-		final byte[] nameBinary = new byte[bytes.length - selfBinaryLength - 4];
+		final byte[] nameBinary = new byte[buf.remaining()];
 		buf.get(nameBinary);
 		name = StringUtils.stringFromBinary(nameBinary);
 	}

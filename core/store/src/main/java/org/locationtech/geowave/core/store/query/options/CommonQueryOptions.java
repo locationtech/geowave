@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.slf4j.Logger;
@@ -119,13 +120,15 @@ public class CommonQueryOptions implements
 			int i = 0;
 			for (final Entry<HintKey<?>, Object> e : hints.entrySet()) {
 				final byte[] keyBinary = e.getKey().toBinary();
+				ByteBuffer lengthBytes = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(keyBinary.length));
+				VarintUtils.writeUnsignedInt(
+						keyBinary.length,
+						lengthBytes);
 				hintsBinary[i] = Bytes.concat(
-						ByteBuffer.allocate(
-								4).putInt(
-								keyBinary.length).array(),
+						lengthBytes.array(),
 						keyBinary,
 						((Function<Object, byte[]>) e.getKey().writer).apply(e.getValue()));
-				hintsLength += hintsBinary[i].length;
+				hintsLength += hintsBinary[i].length + VarintUtils.unsignedIntByteLength(hintsBinary[i].length);
 				i++;
 			}
 		}
@@ -136,13 +139,23 @@ public class CommonQueryOptions implements
 		else {
 			authsBinary = StringUtils.stringsToBinary(authorizations);
 		}
-		final ByteBuffer buf = ByteBuffer.allocate((hintsBinary.length * 4) + 12 + authsBinary.length + hintsLength);
-		buf.putInt(limitForBinary);
-		buf.putInt(authsBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(limitForBinary)
+				+ VarintUtils.unsignedIntByteLength(authsBinary.length)
+				+ VarintUtils.unsignedIntByteLength(hintsBinary.length) + authsBinary.length + hintsLength);
+		VarintUtils.writeUnsignedInt(
+				limitForBinary,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				authsBinary.length,
+				buf);
 		buf.put(authsBinary);
-		buf.putInt(hintsBinary.length);
+		VarintUtils.writeUnsignedInt(
+				hintsBinary.length,
+				buf);
 		for (final byte[] h : hintsBinary) {
-			buf.putInt(h.length);
+			VarintUtils.writeUnsignedInt(
+					h.length,
+					buf);
 			buf.put(h);
 		}
 		return buf.array();
@@ -152,14 +165,14 @@ public class CommonQueryOptions implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int limit = buf.getInt();
+		final int limit = VarintUtils.readUnsignedInt(buf);
 		if (limit <= 0) {
 			this.limit = null;
 		}
 		else {
 			this.limit = limit;
 		}
-		int authLength = buf.getInt();
+		int authLength = VarintUtils.readUnsignedInt(buf);
 		if (authLength > 0) {
 			final byte[] authBytes = new byte[authLength];
 
@@ -169,19 +182,19 @@ public class CommonQueryOptions implements
 		else {
 			authorizations = new String[0];
 		}
-		final int hintsLength = hints.size();
+		final int hintsLength = VarintUtils.readUnsignedInt(buf);
 		final Map<HintKey<?>, Object> hints = new HashMap<>(
 				hintsLength);
 		for (int i = 0; i < hintsLength; i++) {
-			final int l = buf.getInt();
+			final int l = VarintUtils.readUnsignedInt(buf);
 			final byte[] hBytes = new byte[l];
 			buf.get(hBytes);
 			final ByteBuffer hBuf = ByteBuffer.wrap(hBytes);
-			final byte[] keyBytes = new byte[hBuf.getInt()];
+			final byte[] keyBytes = new byte[VarintUtils.readUnsignedInt(hBuf)];
 			hBuf.get(keyBytes);
 			final HintKey<?> key = new HintKey<>();
 			key.fromBinary(keyBytes);
-			final byte[] vBytes = new byte[hBytes.length - 4 - keyBytes.length];
+			final byte[] vBytes = new byte[hBuf.remaining()];
 			hBuf.get(vBytes);
 			hints.put(
 					key,

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 
 /**
@@ -138,17 +139,21 @@ public class BasicNumericDataset implements
 
 	@Override
 	public byte[] toBinary() {
-		int totalBytes = 4;
+		int totalBytes = VarintUtils.unsignedIntByteLength(dataPerDimension.length);
 		final List<byte[]> serializedData = new ArrayList<byte[]>();
 		for (final NumericData data : dataPerDimension) {
 			final byte[] binary = PersistenceUtils.toBinary(data);
-			totalBytes += (binary.length + 4);
+			totalBytes += (binary.length + VarintUtils.unsignedIntByteLength(binary.length));
 			serializedData.add(binary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(totalBytes);
-		buf.putInt(dataPerDimension.length);
+		VarintUtils.writeUnsignedInt(
+				dataPerDimension.length,
+				buf);
 		for (final byte[] binary : serializedData) {
-			buf.putInt(binary.length);
+			VarintUtils.writeUnsignedInt(
+					binary.length,
+					buf);
 			buf.put(binary);
 		}
 		return buf.array();
@@ -158,10 +163,10 @@ public class BasicNumericDataset implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int numDimensions = buf.getInt();
+		final int numDimensions = VarintUtils.readUnsignedInt(buf);
 		dataPerDimension = new NumericData[numDimensions];
 		for (int d = 0; d < numDimensions; d++) {
-			final byte[] binary = new byte[buf.getInt()];
+			final byte[] binary = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(binary);
 			dataPerDimension[d] = (NumericData) PersistenceUtils.fromBinary(binary);
 		}

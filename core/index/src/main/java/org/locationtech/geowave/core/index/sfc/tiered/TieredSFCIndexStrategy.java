@@ -37,6 +37,7 @@ import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -480,32 +481,48 @@ public class TieredSFCIndexStrategy implements
 
 	@Override
 	public byte[] toBinary() {
-		int byteBufferLength = 20 + (2 * orderedSfcIndexToTierId.size());
+		int byteBufferLength = (2 * orderedSfcIndexToTierId.size());
+		byteBufferLength += VarintUtils.unsignedIntByteLength(orderedSfcs.length);
 		final List<byte[]> orderedSfcBinaries = new ArrayList<byte[]>(
 				orderedSfcs.length);
+		byteBufferLength += VarintUtils.unsignedIntByteLength(baseDefinitions.length);
 		final List<byte[]> dimensionBinaries = new ArrayList<byte[]>(
 				baseDefinitions.length);
+		byteBufferLength += VarintUtils.unsignedIntByteLength(orderedSfcIndexToTierId.size());
+		byteBufferLength += VarintUtils.unsignedLongByteLength(maxEstimatedDuplicateIdsPerDimension);
 		for (final SpaceFillingCurve sfc : orderedSfcs) {
 			final byte[] sfcBinary = PersistenceUtils.toBinary(sfc);
-			byteBufferLength += (4 + sfcBinary.length);
+			byteBufferLength += (VarintUtils.unsignedIntByteLength(sfcBinary.length) + sfcBinary.length);
 			orderedSfcBinaries.add(sfcBinary);
 		}
 		for (final NumericDimensionDefinition dimension : baseDefinitions) {
 			final byte[] dimensionBinary = PersistenceUtils.toBinary(dimension);
-			byteBufferLength += (4 + dimensionBinary.length);
+			byteBufferLength += (VarintUtils.unsignedIntByteLength(dimensionBinary.length) + dimensionBinary.length);
 			dimensionBinaries.add(dimensionBinary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferLength);
-		buf.putInt(orderedSfcs.length);
-		buf.putInt(baseDefinitions.length);
-		buf.putInt(orderedSfcIndexToTierId.size());
-		buf.putLong(maxEstimatedDuplicateIdsPerDimension);
+		VarintUtils.writeUnsignedInt(
+				orderedSfcs.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				baseDefinitions.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				orderedSfcIndexToTierId.size(),
+				buf);
+		VarintUtils.writeUnsignedLong(
+				maxEstimatedDuplicateIdsPerDimension,
+				buf);
 		for (final byte[] sfcBinary : orderedSfcBinaries) {
-			buf.putInt(sfcBinary.length);
+			VarintUtils.writeUnsignedInt(
+					sfcBinary.length,
+					buf);
 			buf.put(sfcBinary);
 		}
 		for (final byte[] dimensionBinary : dimensionBinaries) {
-			buf.putInt(dimensionBinary.length);
+			VarintUtils.writeUnsignedInt(
+					dimensionBinary.length,
+					buf);
 			buf.put(dimensionBinary);
 		}
 		for (final Entry<Integer, Byte> entry : orderedSfcIndexToTierId.entrySet()) {
@@ -520,19 +537,19 @@ public class TieredSFCIndexStrategy implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int numSfcs = buf.getInt();
-		final int numDimensions = buf.getInt();
-		final int mappingSize = buf.getInt();
-		maxEstimatedDuplicateIdsPerDimension = buf.getLong();
+		final int numSfcs = VarintUtils.readUnsignedInt(buf);
+		final int numDimensions = VarintUtils.readUnsignedInt(buf);
+		final int mappingSize = VarintUtils.readUnsignedInt(buf);
+		maxEstimatedDuplicateIdsPerDimension = VarintUtils.readUnsignedLong(buf);
 		orderedSfcs = new SpaceFillingCurve[numSfcs];
 		baseDefinitions = new NumericDimensionDefinition[numDimensions];
 		for (int i = 0; i < numSfcs; i++) {
-			final byte[] sfc = new byte[buf.getInt()];
+			final byte[] sfc = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(sfc);
 			orderedSfcs[i] = (SpaceFillingCurve) PersistenceUtils.fromBinary(sfc);
 		}
 		for (int i = 0; i < numDimensions; i++) {
-			final byte[] dim = new byte[buf.getInt()];
+			final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(dim);
 			baseDefinitions[i] = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dim);
 		}
@@ -643,10 +660,18 @@ public class TieredSFCIndexStrategy implements
 
 		@Override
 		public byte[] toBinary() {
-			final ByteBuffer buffer = ByteBuffer.allocate(4 + (tierCounts.length * 4));
-			buffer.putInt(tierCounts.length);
+			int bufferSize = VarintUtils.unsignedIntByteLength(tierCounts.length);
 			for (final int count : tierCounts) {
-				buffer.putInt(count);
+				bufferSize += VarintUtils.unsignedIntByteLength(count);
+			}
+			final ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+			VarintUtils.writeUnsignedInt(
+					tierCounts.length,
+					buffer);
+			for (final int count : tierCounts) {
+				VarintUtils.writeUnsignedInt(
+						count,
+						buffer);
 			}
 			// do not use orderedTierIdToSfcIndex on query
 			// for (final Entry<Byte,Integer > entry :
@@ -661,9 +686,9 @@ public class TieredSFCIndexStrategy implements
 		public void fromBinary(
 				final byte[] bytes ) {
 			final ByteBuffer buffer = ByteBuffer.wrap(bytes);
-			tierCounts = new int[buffer.getInt()];
+			tierCounts = new int[VarintUtils.readUnsignedInt(buffer)];
 			for (int i = 0; i < tierCounts.length; i++) {
-				tierCounts[i] = buffer.getInt();
+				tierCounts[i] = VarintUtils.readUnsignedInt(buffer);
 			}
 			// do not use orderedTierIdToSfcIndex on query
 			// final Builder<Byte,Integer> bimapBuilder =

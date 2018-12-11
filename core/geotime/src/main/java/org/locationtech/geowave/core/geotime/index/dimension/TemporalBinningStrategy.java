@@ -19,6 +19,7 @@ import java.util.TimeZone;
 
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.dimension.bin.BinValue;
 import org.locationtech.geowave.core.index.dimension.bin.BinningStrategy;
@@ -447,8 +448,11 @@ public class TemporalBinningStrategy implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] timeZone = StringUtils.stringToBinary(timezone);
-		final ByteBuffer binary = ByteBuffer.allocate(timezone.length() + 4);
-		binary.putInt(unit.calendarEnum);
+		final ByteBuffer binary = ByteBuffer.allocate(timezone.length()
+				+ VarintUtils.signedIntByteLength(unit.calendarEnum));
+		VarintUtils.writeSignedInt(
+				unit.calendarEnum,
+				binary);
 		binary.put(timeZone);
 		return binary.array();
 	}
@@ -457,8 +461,8 @@ public class TemporalBinningStrategy implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		final int unitCalendarEnum = buffer.getInt();
-		final byte[] timeZoneName = new byte[bytes.length - 4];
+		final int unitCalendarEnum = VarintUtils.readSignedInt(buffer);
+		final byte[] timeZoneName = new byte[buffer.remaining()];
 		buffer.get(timeZoneName);
 		unit = Unit.getUnit(unitCalendarEnum);
 		timezone = StringUtils.stringFromBinary(timeZoneName);

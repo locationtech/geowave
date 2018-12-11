@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FieldUtils
 {
+	public static final byte SERIALIZATION_VERSION = 0x1;
 	private static final Logger LOGGER = LoggerFactory.getLogger(FieldUtils.class);
 	private static Map<Class<?>, FieldReader<?>> fieldReaderRegistry = null;
 	private static Map<Class<?>, FieldWriter<?, ?>> fieldWriterRegistry = null;

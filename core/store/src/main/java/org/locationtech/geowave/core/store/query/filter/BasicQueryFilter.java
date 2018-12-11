@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset;
@@ -270,20 +271,24 @@ public class BasicQueryFilter implements
 
 	@Override
 	public byte[] toBinary() {
-		int byteBufferLength = 8;
+		int byteBufferLength = VarintUtils.unsignedIntByteLength(this.compareOp.ordinal());
 		final int dimensions = Math.min(
 				constraints.getDimensionCount(),
 				dimensionFields.length);
+		byteBufferLength += VarintUtils.unsignedIntByteLength(dimensions);
 		final byte[][] lengthDimensionAndQueryBinaries = new byte[dimensions][];
 		final NumericData[] dataPerDimension = constraints.getDataPerDimension();
 		for (int d = 0; d < dimensions; d++) {
 			final NumericDimensionField<?> dimension = dimensionFields[d];
 			final NumericData data = dataPerDimension[d];
 			final byte[] dimensionBinary = PersistenceUtils.toBinary(dimension);
-			final int currentDimensionByteBufferLength = (20 + dimensionBinary.length);
+			final int currentDimensionByteBufferLength = (16 + dimensionBinary.length + VarintUtils
+					.unsignedIntByteLength(dimensionBinary.length));
 
 			final ByteBuffer buf = ByteBuffer.allocate(currentDimensionByteBufferLength);
-			buf.putInt(dimensionBinary.length);
+			VarintUtils.writeUnsignedInt(
+					dimensionBinary.length,
+					buf);
 			buf.putDouble(data.getMin());
 			buf.putDouble(data.getMax());
 			buf.put(dimensionBinary);
@@ -291,8 +296,12 @@ public class BasicQueryFilter implements
 			lengthDimensionAndQueryBinaries[d] = buf.array();
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferLength);
-		buf.putInt(this.compareOp.ordinal());
-		buf.putInt(dimensions);
+		VarintUtils.writeUnsignedInt(
+				this.compareOp.ordinal(),
+				buf);
+		VarintUtils.writeUnsignedInt(
+				dimensions,
+				buf);
 		for (final byte[] binary : lengthDimensionAndQueryBinaries) {
 			buf.put(binary);
 		}
@@ -303,12 +312,12 @@ public class BasicQueryFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		this.compareOp = BasicQueryCompareOperation.values()[buf.getInt()];
-		final int numDimensions = buf.getInt();
+		this.compareOp = BasicQueryCompareOperation.values()[VarintUtils.readUnsignedInt(buf)];
+		final int numDimensions = VarintUtils.readUnsignedInt(buf);
 		dimensionFields = new NumericDimensionField<?>[numDimensions];
 		final NumericData[] data = new NumericData[numDimensions];
 		for (int d = 0; d < numDimensions; d++) {
-			final byte[] field = new byte[buf.getInt()];
+			final byte[] field = new byte[VarintUtils.readUnsignedInt(buf)];
 			data[d] = new NumericRange(
 					buf.getDouble(),
 					buf.getDouble());

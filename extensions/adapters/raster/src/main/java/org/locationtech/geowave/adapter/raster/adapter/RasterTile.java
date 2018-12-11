@@ -11,40 +11,15 @@
 package org.locationtech.geowave.adapter.raster.adapter;
 
 import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
-import java.awt.image.DataBufferDouble;
-import java.awt.image.DataBufferFloat;
-import java.awt.image.DataBufferInt;
-import java.awt.image.DataBufferShort;
-import java.awt.image.DataBufferUShort;
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos;
-import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.ByteDataBuffer;
-import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.DoubleArray;
-import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.DoubleDataBuffer;
-import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.FloatArray;
-import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.FloatDataBuffer;
-import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.SignedIntArray;
-import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.SignedIntDataBuffer;
 import org.locationtech.geowave.adapter.raster.util.DataBufferPersistenceUtils;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.primitives.Doubles;
-import com.google.common.primitives.Floats;
-import com.google.common.primitives.Ints;
-import com.google.protobuf.ByteString;
-
-import me.lemire.integercompression.differential.IntegratedIntCompressor;
 
 public class RasterTile<T extends Persistable> implements
 		Mergeable
@@ -82,8 +57,11 @@ public class RasterTile<T extends Persistable> implements
 		else {
 			metadataBytes = new byte[] {};
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(metadataBytes.length + dataBufferBinary.length + 4);
-		buf.putInt(metadataBytes.length);
+		final ByteBuffer buf = ByteBuffer.allocate(metadataBytes.length + dataBufferBinary.length
+				+ VarintUtils.unsignedIntByteLength(metadataBytes.length));
+		VarintUtils.writeUnsignedInt(
+				metadataBytes.length,
+				buf);
 		buf.put(metadataBytes);
 		buf.put(dataBufferBinary);
 		return buf.array();
@@ -94,13 +72,13 @@ public class RasterTile<T extends Persistable> implements
 			final byte[] bytes ) {
 		try {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
-			final int metadataLength = buf.getInt();
+			final int metadataLength = VarintUtils.readUnsignedInt(buf);
 			if (metadataLength > 0) {
 				final byte[] metadataBytes = new byte[metadataLength];
 				buf.get(metadataBytes);
 				metadata = (T) PersistenceUtils.fromBinary(metadataBytes);
 			}
-			final byte[] dataBufferBytes = new byte[bytes.length - metadataLength - 4];
+			final byte[] dataBufferBytes = new byte[buf.remaining()];
 			buf.get(dataBufferBytes);
 			dataBuffer = DataBufferPersistenceUtils.getDataBuffer(dataBufferBytes);
 		}

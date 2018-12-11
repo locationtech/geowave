@@ -30,12 +30,18 @@ public interface FieldReader<FieldType> extends
 	 */
 	public FieldType readField(
 			byte[] fieldData );
+	
+	public default FieldType readField(
+			byte[] fieldData,
+			byte serializationVersion) {
+		return readField(fieldData);
+	}
 
 	@Override
 	default FieldType apply(
 			final byte[] fieldData ) {
 		return readField(
-				fieldData);
+				fieldData, FieldUtils.SERIALIZATION_VERSION);
 	}
 
 }

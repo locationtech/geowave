@@ -23,6 +23,7 @@ import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilt
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
@@ -456,11 +457,23 @@ public class SpatialQuery extends
 		final byte[] crsBinary = isDefaultCrs(crsCode) ? new byte[0] : StringUtils.stringToBinary(crsCode);
 		final byte[] superBinary = super.toBinary();
 		final byte[] geometryBinary = new WKBWriter().write(queryGeometry);
-		final ByteBuffer buf = ByteBuffer.allocate(superBinary.length + geometryBinary.length + crsBinary.length + 16);
-		buf.putInt(compareOp.ordinal());
-		buf.putInt(nonSpatialCompareOp.ordinal());
-		buf.putInt(crsBinary.length);
-		buf.putInt(superBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(superBinary.length + geometryBinary.length + crsBinary.length
+				+ VarintUtils.unsignedIntByteLength(compareOp.ordinal())
+				+ VarintUtils.unsignedIntByteLength(nonSpatialCompareOp.ordinal())
+				+ VarintUtils.unsignedIntByteLength(crsBinary.length)
+				+ VarintUtils.unsignedIntByteLength(superBinary.length));
+		VarintUtils.writeUnsignedInt(
+				compareOp.ordinal(),
+				buf);
+		VarintUtils.writeUnsignedInt(
+				nonSpatialCompareOp.ordinal(),
+				buf);
+		VarintUtils.writeUnsignedInt(
+				crsBinary.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				superBinary.length,
+				buf);
 		buf.put(crsBinary);
 		buf.put(superBinary);
 		buf.put(geometryBinary);
@@ -472,16 +485,16 @@ public class SpatialQuery extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		compareOp = CompareOperation.values()[buf.getInt()];
-		nonSpatialCompareOp = BasicQueryCompareOperation.values()[buf.getInt()];
+		compareOp = CompareOperation.values()[VarintUtils.readUnsignedInt(buf)];
+		nonSpatialCompareOp = BasicQueryCompareOperation.values()[VarintUtils.readUnsignedInt(buf)];
 
-		final byte[] crsBinary = new byte[buf.getInt()];
-		final byte[] superBinary = new byte[buf.getInt()];
+		final byte[] crsBinary = new byte[VarintUtils.readUnsignedInt(buf)];
+		final byte[] superBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(crsBinary);
 		crsCode = crsBinary.length > 0 ? StringUtils.stringFromBinary(crsBinary) : null;
 		buf.get(superBinary);
 		super.fromBinary(superBinary);
-		final byte[] geometryBinary = new byte[bytes.length - superBinary.length - crsBinary.length - 16];
+		final byte[] geometryBinary = new byte[buf.remaining()];
 		buf.get(geometryBinary);
 		try {
 			queryGeometry = new WKBReader().read(geometryBinary);

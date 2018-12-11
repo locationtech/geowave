@@ -21,6 +21,7 @@ import java.util.List;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.ByteArrayRange.MergeOperation;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
@@ -523,16 +524,20 @@ public class XZOrderSFC implements
 	public byte[] toBinary() {
 		final List<byte[]> dimensionDefBinaries = new ArrayList<byte[]>(
 				dimensionDefs.length);
-		int bufferLength = 4;
+		int bufferLength = VarintUtils.unsignedIntByteLength(dimensionDefs.length);
 		for (final SFCDimensionDefinition sfcDimension : dimensionDefs) {
 			final byte[] sfcDimensionBinary = PersistenceUtils.toBinary(sfcDimension);
-			bufferLength += (sfcDimensionBinary.length + 4);
+			bufferLength += (sfcDimensionBinary.length + VarintUtils.unsignedIntByteLength(sfcDimensionBinary.length));
 			dimensionDefBinaries.add(sfcDimensionBinary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(bufferLength);
-		buf.putInt(dimensionDefs.length);
+		VarintUtils.writeUnsignedInt(
+				dimensionDefs.length,
+				buf);
 		for (final byte[] dimensionDefBinary : dimensionDefBinaries) {
-			buf.putInt(dimensionDefBinary.length);
+			VarintUtils.writeUnsignedInt(
+					dimensionDefBinary.length,
+					buf);
 			buf.put(dimensionDefBinary);
 		}
 		return buf.array();
@@ -542,10 +547,10 @@ public class XZOrderSFC implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int numDimensions = buf.getInt();
+		final int numDimensions = VarintUtils.readUnsignedInt(buf);
 		dimensionDefs = new SFCDimensionDefinition[numDimensions];
 		for (int i = 0; i < numDimensions; i++) {
-			final byte[] dim = new byte[buf.getInt()];
+			final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(dim);
 			dimensionDefs[i] = (SFCDimensionDefinition) PersistenceUtils.fromBinary(dim);
 		}

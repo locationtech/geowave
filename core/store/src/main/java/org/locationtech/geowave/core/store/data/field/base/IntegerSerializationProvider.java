@@ -12,8 +12,10 @@ package org.locationtech.geowave.core.store.data.field.base;
 
 import java.nio.ByteBuffer;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
+import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
 public class IntegerSerializationProvider implements
@@ -36,11 +38,26 @@ public class IntegerSerializationProvider implements
 		@Override
 		public Integer readField(
 				final byte[] fieldData ) {
-			if ((fieldData == null) || (fieldData.length < 4)) {
+			if ((fieldData == null) || (fieldData.length == 0)) {
 				return null;
 			}
-			return ByteBuffer.wrap(
-					fieldData).getInt();
+			return VarintUtils.readSignedInt(ByteBuffer.wrap(fieldData));
+		}
+
+		@Override
+		public Integer readField(
+				final byte[] fieldData,
+				final byte serializationVersion ) {
+			if ((fieldData == null) || (fieldData.length == 0)) {
+				return null;
+			}
+			if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
+				return ByteBuffer.wrap(
+						fieldData).getInt();
+			}
+			else {
+				return readField(fieldData);
+			}
 		}
 
 	}
@@ -55,8 +72,10 @@ public class IntegerSerializationProvider implements
 				return new byte[] {};
 			}
 
-			final ByteBuffer buf = ByteBuffer.allocate(4);
-			buf.putInt(fieldValue);
+			final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.signedIntByteLength(fieldValue));
+			VarintUtils.writeSignedInt(
+					fieldValue,
+					buf);
 			return buf.array();
 		}
 	}

@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -144,8 +145,11 @@ public class TimeField implements
 	public byte[] toBinary() {
 		final byte[] dimensionBinary = PersistenceUtils.toBinary(baseDefinition);
 		final byte[] fieldNameBytes = StringUtils.stringToBinary(fieldName);
-		final ByteBuffer buf = ByteBuffer.allocate(dimensionBinary.length + fieldNameBytes.length + 4);
-		buf.putInt(fieldNameBytes.length);
+		final ByteBuffer buf = ByteBuffer.allocate(dimensionBinary.length + fieldNameBytes.length
+				+ VarintUtils.unsignedIntByteLength(fieldNameBytes.length));
+		VarintUtils.writeUnsignedInt(
+				fieldNameBytes.length,
+				buf);
 		buf.put(fieldNameBytes);
 		buf.put(dimensionBinary);
 		return buf.array();
@@ -155,12 +159,12 @@ public class TimeField implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int fieldNameLength = buf.getInt();
+		final int fieldNameLength = VarintUtils.readUnsignedInt(buf);
 		final byte[] fieldNameBinary = new byte[fieldNameLength];
 		buf.get(fieldNameBinary);
 		fieldName = StringUtils.stringFromBinary(fieldNameBinary);
 
-		final byte[] dimensionBinary = new byte[bytes.length - fieldNameLength - 4];
+		final byte[] dimensionBinary = new byte[buf.remaining()];
 		buf.get(dimensionBinary);
 		baseDefinition = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dimensionBinary);
 	}

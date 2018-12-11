@@ -17,6 +17,7 @@ import java.util.Iterator;
 import org.apache.commons.lang.ArrayUtils;
 import org.locationtech.geowave.adapter.vector.AvroFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
@@ -73,11 +74,16 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 		final byte[] typeNameBinary = typeNameProvider.toBinary();
 		final byte[] simpBinary = simpOptionProvider.toBinary();
 		final byte[] backingBuffer = new byte[filterBinary.length + typeNameBinary.length + simpBinary.length
-				+ (Integer.BYTES * 2)];
+				+ VarintUtils.unsignedIntByteLength(filterBinary.length)
+				+ VarintUtils.unsignedIntByteLength(typeNameBinary.length)];
 		final ByteBuffer buf = ByteBuffer.wrap(backingBuffer);
-		buf.putInt(filterBinary.length);
+		VarintUtils.writeUnsignedInt(
+				filterBinary.length,
+				buf);
 		buf.put(filterBinary);
-		buf.putInt(typeNameBinary.length);
+		VarintUtils.writeUnsignedInt(
+				typeNameBinary.length,
+				buf);
 		buf.put(typeNameBinary);
 		buf.put(simpBinary);
 
@@ -100,16 +106,15 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 			bytes[0]
 		};
 		final ByteBuffer buf = ByteBuffer.wrap(otherBytes);
-		final int filterBinaryLength = buf.getInt();
+		final int filterBinaryLength = VarintUtils.readUnsignedInt(buf);
 		final byte[] filterBinary = new byte[filterBinaryLength];
 		buf.get(filterBinary);
 
-		final int typeNameBinaryLength = buf.getInt();
+		final int typeNameBinaryLength = VarintUtils.readUnsignedInt(buf);
 		final byte[] typeNameBinary = new byte[typeNameBinaryLength];
 		buf.get(typeNameBinary);
 
-		final byte[] geometrySimpBinary = new byte[otherBytes.length - filterBinary.length - typeNameBinary.length
-				- (Integer.BYTES * 2)];
+		final byte[] geometrySimpBinary = new byte[buf.remaining()];
 		buf.get(geometrySimpBinary);
 
 		serializationFormatOptionProvider = new FeatureSerializationOptionProvider();

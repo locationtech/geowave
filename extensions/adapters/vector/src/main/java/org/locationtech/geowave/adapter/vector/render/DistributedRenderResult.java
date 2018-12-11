@@ -21,6 +21,7 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.geoserver.wms.map.ImageUtils;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 
 public class DistributedRenderResult implements
 		Mergeable
@@ -105,7 +106,7 @@ public class DistributedRenderResult implements
 			}
 			final List<byte[]> styleBinaries = new ArrayList<>(
 					orderedStyles.size());
-			int bufferSize = compositeBinary.length + 8;
+			int bufferSize = compositeBinary.length + VarintUtils.unsignedIntByteLength(compositeBinary.length);
 			for (final Pair<PersistableRenderedImage, PersistableComposite> style : orderedStyles) {
 				byte[] styleBinary;
 				if (style != null) {
@@ -124,8 +125,10 @@ public class DistributedRenderResult implements
 						styleImageBinary = new byte[] {};
 					}
 					final ByteBuffer styleBuf = ByteBuffer.allocate(styleCompositeBinary.length
-							+ styleImageBinary.length + 4);
-					styleBuf.putInt(styleCompositeBinary.length);
+							+ styleImageBinary.length + VarintUtils.unsignedIntByteLength(styleCompositeBinary.length));
+					VarintUtils.writeUnsignedInt(
+							styleCompositeBinary.length,
+							styleBuf);
 					if (styleCompositeBinary.length > 0) {
 						styleBuf.put(styleCompositeBinary);
 					}
@@ -140,16 +143,23 @@ public class DistributedRenderResult implements
 				}
 
 				styleBinaries.add(styleBinary);
-				bufferSize += (styleBinary.length + 4);
+				bufferSize += (styleBinary.length + VarintUtils.unsignedIntByteLength(styleBinary.length));
 			}
+			bufferSize += VarintUtils.unsignedIntByteLength(styleBinaries.size());
 			final ByteBuffer buf = ByteBuffer.allocate(bufferSize);
-			buf.putInt(compositeBinary.length);
+			VarintUtils.writeUnsignedInt(
+					compositeBinary.length,
+					buf);
 			if (compositeBinary.length > 0) {
 				buf.put(compositeBinary);
 			}
-			buf.putInt(styleBinaries.size());
+			VarintUtils.writeUnsignedInt(
+					styleBinaries.size(),
+					buf);
 			for (final byte[] styleBinary : styleBinaries) {
-				buf.putInt(styleBinary.length);
+				VarintUtils.writeUnsignedInt(
+						styleBinary.length,
+						buf);
 				buf.put(styleBinary);
 			}
 			return buf.array();
@@ -159,7 +169,7 @@ public class DistributedRenderResult implements
 		public void fromBinary(
 				final byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
-			final byte[] compositeBinary = new byte[buf.getInt()];
+			final byte[] compositeBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 			if (compositeBinary.length > 0) {
 				buf.get(compositeBinary);
 				composite = new PersistableComposite();
@@ -168,17 +178,17 @@ public class DistributedRenderResult implements
 			else {
 				composite = null;
 			}
-			final int styleLength = buf.getInt();
+			final int styleLength = VarintUtils.readUnsignedInt(buf);
 			orderedStyles = new ArrayList<>(
 					styleLength);
 			for (int i = 0; i < styleLength; i++) {
 
-				final int styleBinaryLength = buf.getInt();
+				final int styleBinaryLength = VarintUtils.readUnsignedInt(buf);
 				if (styleBinaryLength > 0) {
 					final byte[] styleBinary = new byte[styleBinaryLength];
 					buf.get(styleBinary);
 					final ByteBuffer styleBuf = ByteBuffer.wrap(styleBinary);
-					final int styleCompositeBinaryLength = styleBuf.getInt();
+					final int styleCompositeBinaryLength = VarintUtils.readUnsignedInt(styleBuf);
 					PersistableComposite styleComposite;
 					if (styleCompositeBinaryLength > 0) {
 						final byte[] styleCompositeBinary = new byte[styleCompositeBinaryLength];
@@ -189,7 +199,7 @@ public class DistributedRenderResult implements
 					else {
 						styleComposite = null;
 					}
-					final int styleImageBinaryLength = styleBinary.length - styleCompositeBinaryLength - 4;
+					final int styleImageBinaryLength = styleBuf.remaining();
 					PersistableRenderedImage styleImage;
 					if (styleImageBinaryLength > 0) {
 						final byte[] styleImageBinary = new byte[styleImageBinaryLength];
@@ -316,19 +326,27 @@ public class DistributedRenderResult implements
 		// 4 bytes for the length as an int, and 4 bytes for the size of
 		// parentImage
 		final byte[] parentImageBinary = parentImage.toBinary();
-		int byteSize = 8 + parentImageBinary.length;
-		final List<byte[]> compositeBinaries = new ArrayList<>();
+		int byteSize = VarintUtils.unsignedIntByteLength(parentImageBinary.length) + parentImageBinary.length
+				+ VarintUtils.unsignedIntByteLength(orderedComposites.size());
+		final List<byte[]> compositeBinaries = new ArrayList<>(
+				orderedComposites.size());
 		for (final CompositeGroupResult compositeGroup : orderedComposites) {
 			final byte[] compositeGroupBinary = compositeGroup.toBinary();
-			byteSize += (compositeGroupBinary.length + 4);
+			byteSize += (compositeGroupBinary.length + VarintUtils.unsignedIntByteLength(compositeGroupBinary.length));
 			compositeBinaries.add(compositeGroupBinary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteSize);
-		buf.putInt(parentImageBinary.length);
+		VarintUtils.writeUnsignedInt(
+				parentImageBinary.length,
+				buf);
 		buf.put(parentImageBinary);
-		buf.putInt(orderedComposites.size());
+		VarintUtils.writeUnsignedInt(
+				orderedComposites.size(),
+				buf);
 		for (final byte[] compositeGroupBinary : compositeBinaries) {
-			buf.putInt(compositeGroupBinary.length);
+			VarintUtils.writeUnsignedInt(
+					compositeGroupBinary.length,
+					buf);
 			buf.put(compositeGroupBinary);
 		}
 		return buf.array();
@@ -338,15 +356,15 @@ public class DistributedRenderResult implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final byte[] parentImageBinary = new byte[buf.getInt()];
+		final byte[] parentImageBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(parentImageBinary);
 		parentImage = new PersistableRenderedImage();
 		parentImage.fromBinary(parentImageBinary);
-		final int numCompositeGroups = buf.getInt();
+		final int numCompositeGroups = VarintUtils.readUnsignedInt(buf);
 		orderedComposites = new ArrayList<>(
 				numCompositeGroups);
 		for (int i = 0; i < numCompositeGroups; i++) {
-			final byte[] compositeGroupBinary = new byte[buf.getInt()];
+			final byte[] compositeGroupBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(compositeGroupBinary);
 			final CompositeGroupResult compositeGroup = new CompositeGroupResult();
 			compositeGroup.fromBinary(compositeGroupBinary);

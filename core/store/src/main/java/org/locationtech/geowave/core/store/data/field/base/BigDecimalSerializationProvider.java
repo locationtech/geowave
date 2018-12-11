@@ -14,8 +14,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
+import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
 public class BigDecimalSerializationProvider implements
@@ -37,17 +39,39 @@ public class BigDecimalSerializationProvider implements
 		@Override
 		public BigDecimal readField(
 				final byte[] fieldData ) {
-			if ((fieldData == null) || (fieldData.length < 5)) {
+			if ((fieldData == null) || (fieldData.length < 2)) {
 				return null;
 			}
 			final ByteBuffer bb = ByteBuffer.wrap(fieldData);
-			final int scale = bb.getInt();
-			final byte[] unscaled = new byte[fieldData.length - 4];
+			final int scale = VarintUtils.readSignedInt(bb);
+			final byte[] unscaled = new byte[bb.remaining()];
 			bb.get(unscaled);
 			return new BigDecimal(
 					new BigInteger(
 							unscaled),
 					scale);
+		}
+
+		@Override
+		public BigDecimal readField(
+				final byte[] fieldData,
+				final byte serializationVersion ) {
+			if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
+				if ((fieldData == null) || (fieldData.length < 2)) {
+					return null;
+				}
+				final ByteBuffer bb = ByteBuffer.wrap(fieldData);
+				final int scale = bb.getInt();
+				final byte[] unscaled = new byte[bb.remaining()];
+				bb.get(unscaled);
+				return new BigDecimal(
+						new BigInteger(
+								unscaled),
+						scale);
+			}
+			else {
+				return readField(fieldData);
+			}
 		}
 	}
 
@@ -61,8 +85,11 @@ public class BigDecimalSerializationProvider implements
 				return new byte[] {};
 			}
 			final byte[] unscaled = fieldValue.unscaledValue().toByteArray();
-			final ByteBuffer buf = ByteBuffer.allocate(4 + unscaled.length);
-			buf.putInt(fieldValue.scale());
+			final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.signedIntByteLength(fieldValue.scale())
+					+ unscaled.length);
+			VarintUtils.writeSignedInt(
+					fieldValue.scale(),
+					buf);
 			buf.put(unscaled);
 			return buf.array();
 		}

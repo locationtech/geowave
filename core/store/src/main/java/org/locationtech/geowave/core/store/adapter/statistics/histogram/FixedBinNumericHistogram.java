@@ -31,6 +31,7 @@ package org.locationtech.geowave.core.store.adapter.statistics.histogram;
 import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.FloatCompareUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -223,29 +224,40 @@ public class FixedBinNumericHistogram implements
 	}
 
 	public int bufferSize() {
-		return 28 + (8 * count.length);
+		int bufferSize = VarintUtils.unsignedLongByteLength(totalCount)
+				+ VarintUtils.unsignedIntByteLength(count.length) + 16;
+		for (int i = 0; i < count.length; i++) {
+			bufferSize += VarintUtils.unsignedLongByteLength(count[i]);
+		}
+		return bufferSize;
 	}
 
 	public void toBinary(
 			ByteBuffer buffer ) {
-		buffer.putLong(totalCount);
+		VarintUtils.writeUnsignedLong(
+				totalCount,
+				buffer);
 		buffer.putDouble(minValue);
 		buffer.putDouble(maxValue);
-		buffer.putInt(count.length);
+		VarintUtils.writeUnsignedInt(
+				count.length,
+				buffer);
 		for (int i = 0; i < count.length; i++) {
-			buffer.putLong(count[i]);
+			VarintUtils.writeUnsignedLong(
+					count[i],
+					buffer);
 		}
 	}
 
 	public void fromBinary(
 			ByteBuffer buffer ) {
-		totalCount = buffer.getLong();
+		totalCount = VarintUtils.readUnsignedLong(buffer);
 		minValue = buffer.getDouble();
 		maxValue = buffer.getDouble();
-		final int s = buffer.getInt();
+		final int s = VarintUtils.readUnsignedInt(buffer);
 		count = new long[s];
 		for (int i = 0; i < s; i++) {
-			count[i] = buffer.getLong();
+			count[i] = VarintUtils.readUnsignedLong(buffer);
 		}
 	}
 

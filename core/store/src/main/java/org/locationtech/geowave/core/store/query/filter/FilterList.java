@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -67,19 +68,23 @@ public class FilterList implements
 
 	@Override
 	public byte[] toBinary() {
-		int byteBufferLength = 8;
+		int byteBufferLength = VarintUtils.unsignedIntByteLength(filters.size()) + 1;
 		final List<byte[]> filterBinaries = new ArrayList<byte[]>(
 				filters.size());
 		for (final QueryFilter filter : filters) {
 			final byte[] filterBinary = PersistenceUtils.toBinary(filter);
-			byteBufferLength += (4 + filterBinary.length);
+			byteBufferLength += (VarintUtils.unsignedIntByteLength(filterBinary.length) + filterBinary.length);
 			filterBinaries.add(filterBinary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferLength);
-		buf.putInt(logicalAnd ? 1 : 0);
-		buf.putInt(filters.size());
+		buf.put((byte) (logicalAnd ? 1 : 0));
+		VarintUtils.writeUnsignedInt(
+				filters.size(),
+				buf);
 		for (final byte[] filterBinary : filterBinaries) {
-			buf.putInt(filterBinary.length);
+			VarintUtils.writeUnsignedInt(
+					filterBinary.length,
+					buf);
 			buf.put(filterBinary);
 		}
 		return buf.array();
@@ -89,12 +94,12 @@ public class FilterList implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		logicalAnd = buf.getInt() > 0;
-		final int numFilters = buf.getInt();
+		logicalAnd = buf.get() > 0;
+		final int numFilters = VarintUtils.readUnsignedInt(buf);
 		filters = new ArrayList<>(
 				numFilters);
 		for (int i = 0; i < numFilters; i++) {
-			final byte[] filter = new byte[buf.getInt()];
+			final byte[] filter = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(filter);
 			filters.add((QueryFilter) PersistenceUtils.fromBinary(filter));
 		}

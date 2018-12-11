@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
@@ -121,8 +122,10 @@ public class FeatureCountMinSketchStatistics extends
 	@Override
 	public byte[] toBinary() {
 		final byte[] data = CountMinSketch.serialize(sketch);
-		final ByteBuffer buffer = super.binaryBuffer(4 + data.length);
-		buffer.putInt(data.length);
+		final ByteBuffer buffer = super.binaryBuffer(VarintUtils.unsignedIntByteLength(data.length) + data.length);
+		VarintUtils.writeUnsignedInt(
+				data.length,
+				buffer);
 		buffer.put(data);
 		return buffer.array();
 	}
@@ -131,7 +134,7 @@ public class FeatureCountMinSketchStatistics extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
-		final byte[] data = new byte[buffer.getInt()];
+		final byte[] data = new byte[VarintUtils.readUnsignedInt(buffer)];
 		buffer.get(data);
 		sketch = CountMinSketch.deserialize(data);
 	}

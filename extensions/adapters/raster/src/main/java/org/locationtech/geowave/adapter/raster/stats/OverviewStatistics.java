@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.Resolution;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsQueryBuilder;
@@ -52,18 +53,27 @@ public class OverviewStatistics extends
 		synchronized (this) {
 			final List<byte[]> resolutionBinaries = new ArrayList<>(
 					resolutions.length);
-			int byteCount = 4; // an int for the list size
+			int byteCount = 0; // an int for the list size
 			for (final Resolution res : resolutions) {
 				final byte[] resBinary = PersistenceUtils.toBinary(res);
 				resolutionBinaries.add(resBinary);
-				byteCount += (resBinary.length + 4); // an int for the binary
-														// size
+				byteCount += (resBinary.length + VarintUtils.unsignedIntByteLength(resBinary.length)); // an
+																										// int
+																										// for
+																										// the
+																										// binary
+																										// size
 			}
+			byteCount += VarintUtils.unsignedIntByteLength(resolutionBinaries.size());
 
 			final ByteBuffer buf = super.binaryBuffer(byteCount);
-			buf.putInt(resolutionBinaries.size());
+			VarintUtils.writeUnsignedInt(
+					resolutionBinaries.size(),
+					buf);
 			for (final byte[] resBinary : resolutionBinaries) {
-				buf.putInt(resBinary.length);
+				VarintUtils.writeUnsignedInt(
+						resBinary.length,
+						buf);
 				buf.put(resBinary);
 			}
 			return buf.array();
@@ -74,11 +84,11 @@ public class OverviewStatistics extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = super.binaryBuffer(bytes);
-		final int resLength = buf.getInt();
+		final int resLength = VarintUtils.readUnsignedInt(buf);
 		synchronized (this) {
 			resolutions = new Resolution[resLength];
 			for (int i = 0; i < resolutions.length; i++) {
-				final byte[] resBytes = new byte[buf.getInt()];
+				final byte[] resBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 				buf.get(resBytes);
 				resolutions[i] = (Resolution) PersistenceUtils.fromBinary(resBytes);
 			}

@@ -25,6 +25,7 @@ import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.IndexConstraints;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -184,6 +185,7 @@ public class BasicQuery implements
 			if (constraintsPerTypeOfDimensionDefinition.isEmpty()) {
 				return new BasicNumericDataset();
 			}
+
 			final NumericDimensionDefinition[] dimensionDefinitions = indexStrategy.getOrderedDimensionDefinitions();
 			final NumericData[] dataPerDimension = new NumericData[dimensionDefinitions.length];
 			// all or nothing...for now
@@ -257,26 +259,30 @@ public class BasicQuery implements
 		public byte[] toBinary() {
 			final List<byte[]> bytes = new ArrayList<>(
 					constraintsPerTypeOfDimensionDefinition.size());
-			int totalBytes = 4;
+			int totalBytes = VarintUtils.unsignedIntByteLength(bytes.size());
 			for (final Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> c : constraintsPerTypeOfDimensionDefinition
 					.entrySet()) {
 				final byte[] className = StringUtils.stringToBinary(c.getKey().getName());
 				final double min = c.getValue().range.getMin();
 				final double max = c.getValue().range.getMax();
-				final int entryLength = className.length + 22;
-				final short isDefault = (short) (c.getValue().isDefault ? 1 : 0);
+				final int entryLength = className.length + 17 + VarintUtils.unsignedIntByteLength(className.length);
+				final byte isDefault = (byte) (c.getValue().isDefault ? 1 : 0);
 				final ByteBuffer entryBuf = ByteBuffer.allocate(entryLength);
-				entryBuf.putInt(className.length);
+				VarintUtils.writeUnsignedInt(
+						className.length,
+						entryBuf);
 				entryBuf.put(className);
 				entryBuf.putDouble(min);
 				entryBuf.putDouble(max);
-				entryBuf.putShort(isDefault);
+				entryBuf.put(isDefault);
 				bytes.add(entryBuf.array());
 				totalBytes += entryLength;
 			}
 
 			final ByteBuffer buf = ByteBuffer.allocate(totalBytes);
-			buf.putInt(bytes.size());
+			VarintUtils.writeUnsignedInt(
+					bytes.size(),
+					buf);
 			for (final byte[] entryBytes : bytes) {
 				buf.put(entryBytes);
 			}
@@ -286,16 +292,16 @@ public class BasicQuery implements
 		public void fromBinary(
 				final byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
-			final int numEntries = buf.getInt();
+			final int numEntries = VarintUtils.readUnsignedInt(buf);
 			final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerTypeOfDimensionDefinition = new HashMap<>(
 					numEntries);
 			for (int i = 0; i < numEntries; i++) {
-				final int classNameLength = buf.getInt();
+				final int classNameLength = VarintUtils.readUnsignedInt(buf);
 				final byte[] className = new byte[classNameLength];
 				buf.get(className);
 				final double min = buf.getDouble();
 				final double max = buf.getDouble();
-				final boolean isDefault = buf.getShort() > 0;
+				final boolean isDefault = buf.get() > 0;
 				final String classNameStr = StringUtils.stringFromBinary(className);
 				try {
 					final Class<? extends NumericDimensionDefinition> cls = (Class<? extends NumericDimensionDefinition>) Class

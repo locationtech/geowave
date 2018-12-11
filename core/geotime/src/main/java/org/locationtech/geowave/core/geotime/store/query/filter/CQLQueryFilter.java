@@ -18,6 +18,7 @@ import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.FilterToCQLTool;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -122,8 +123,11 @@ public class CQLQueryFilter implements
 			LOGGER.warn("Feature Data Adapter is null");
 			adapterBytes = new byte[] {};
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(filterBytes.length + adapterBytes.length + 4);
-		buf.putInt(filterBytes.length);
+		final ByteBuffer buf = ByteBuffer.allocate(filterBytes.length + adapterBytes.length
+				+ VarintUtils.unsignedIntByteLength(filterBytes.length));
+		VarintUtils.writeUnsignedInt(
+				filterBytes.length,
+				buf);
 		buf.put(filterBytes);
 		buf.put(adapterBytes);
 		return buf.array();
@@ -141,8 +145,7 @@ public class CQLQueryFilter implements
 					e);
 		}
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int filterBytesLength = buf.getInt();
-		final int adapterBytesLength = bytes.length - filterBytesLength - 4;
+		final int filterBytesLength = VarintUtils.readUnsignedInt(buf);
 		if (filterBytesLength > 0) {
 			final byte[] filterBytes = new byte[filterBytesLength];
 			buf.get(filterBytes);
@@ -161,6 +164,7 @@ public class CQLQueryFilter implements
 			filter = null;
 		}
 
+		final int adapterBytesLength = buf.remaining();
 		if (adapterBytesLength > 0) {
 			final byte[] adapterBytes = new byte[adapterBytesLength];
 			buf.get(adapterBytes);

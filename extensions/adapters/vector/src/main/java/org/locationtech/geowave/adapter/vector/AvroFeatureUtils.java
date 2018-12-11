@@ -153,6 +153,10 @@ public class AvroFeatureUtils
 		final List<ByteBuffer> values = new ArrayList<>(
 				sft.getAttributeCount());
 
+		attributeValue.setSerializationVersion(ByteBuffer.wrap(new byte[] {
+			FieldUtils.SERIALIZATION_VERSION
+		}));
+
 		attributeValue.setFid(sf.getID());
 
 		for (final AttributeDescriptor attr : sft.getAttributeDescriptors()) {
@@ -233,6 +237,7 @@ public class AvroFeatureUtils
 
 		// null values should still take a place in the array - check
 		Preconditions.checkArgument(attributeTypes.size() == attributeValues.getValues().size());
+		byte serializationVersion = attributeValues.getSerializationVersion().get();
 		for (int i = 0; i < attributeValues.getValues().size(); i++) {
 			final ByteBuffer val = attributeValues.getValues().get(
 					i);
@@ -245,7 +250,9 @@ public class AvroFeatureUtils
 			else {
 				final FieldReader<?> fr = FieldUtils.getDefaultReaderForClass(Class
 						.forName(jtsCompatibility(attributeTypes.get(i))));
-				sfb.add(fr.readField(val.array()));
+				sfb.add(fr.readField(
+						val.array(),
+						serializationVersion));
 			}
 		}
 

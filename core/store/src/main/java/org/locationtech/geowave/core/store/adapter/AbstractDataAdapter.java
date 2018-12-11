@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -316,8 +317,11 @@ abstract public class AbstractDataAdapter<T> implements
 
 		final byte[] defaultTypeDataBinary = defaultTypeDataToBinary();
 		final byte[] persistablesBytes = PersistenceUtils.toBinary(persistables);
-		final ByteBuffer buf = ByteBuffer.allocate(defaultTypeDataBinary.length + persistablesBytes.length + 4);
-		buf.putInt(defaultTypeDataBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(defaultTypeDataBinary.length + persistablesBytes.length
+				+ VarintUtils.unsignedIntByteLength(defaultTypeDataBinary.length));
+		VarintUtils.writeUnsignedInt(
+				defaultTypeDataBinary.length,
+				buf);
 		buf.put(defaultTypeDataBinary);
 		buf.put(persistablesBytes);
 		return buf.array();
@@ -327,21 +331,21 @@ abstract public class AbstractDataAdapter<T> implements
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		if ((bytes == null) || (bytes.length < 4)) {
+		if ((bytes == null) || (bytes.length == 0)) {
 			LOGGER.warn("Unable to deserialize data adapter.  Binary is incomplete.");
 			return;
 		}
 		final List<IndexFieldHandler<T, CommonIndexValue, Object>> indexFieldHandlers = new ArrayList<IndexFieldHandler<T, CommonIndexValue, Object>>();
 		final List<NativeFieldHandler<T, Object>> nativeFieldHandlers = new ArrayList<NativeFieldHandler<T, Object>>();
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final byte[] defaultTypeDataBinary = new byte[buf.getInt()];
+		final byte[] defaultTypeDataBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		Object defaultTypeData = null;
 		if (defaultTypeDataBinary.length > 0) {
 			buf.get(defaultTypeDataBinary);
 			defaultTypeData = defaultTypeDataFromBinary(defaultTypeDataBinary);
 		}
 
-		final byte[] persistablesBytes = new byte[bytes.length - defaultTypeDataBinary.length - 4];
+		final byte[] persistablesBytes = new byte[buf.remaining()];
 		if (persistablesBytes.length > 0) {
 			buf.get(persistablesBytes);
 			final List<Persistable> persistables = PersistenceUtils.fromBinaryAsList(persistablesBytes);

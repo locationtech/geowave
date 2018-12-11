@@ -12,11 +12,11 @@ package org.locationtech.geowave.core.store.data.field.base;
 
 import java.math.BigInteger;
 
+import org.locationtech.geowave.core.store.data.field.ArrayReader;
+import org.locationtech.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.data.field.ArrayReader.VariableSizeObjectArrayReader;
-import org.locationtech.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
 import org.locationtech.geowave.core.store.data.field.base.BigIntegerSerializationProvider.BigIntegerReader;
 import org.locationtech.geowave.core.store.data.field.base.BigIntegerSerializationProvider.BigIntegerWriter;
 
@@ -34,7 +34,7 @@ public class BigIntegerArraySerializationProvider implements
 	}
 
 	private static class BigIntegerArrayReader extends
-			VariableSizeObjectArrayReader<BigInteger>
+			ArrayReader<BigInteger>
 	{
 		public BigIntegerArrayReader() {
 			super(

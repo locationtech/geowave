@@ -43,6 +43,7 @@ import org.geotools.styling.Style;
 import org.locationtech.geowave.adapter.vector.util.FeatureGeometryUtils;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -472,21 +473,23 @@ public class DistributedRenderOptions implements
 		final double maxX = envelope.getMaxX();
 		final double maxY = envelope.getMaxY();
 		// required bytes include 32 for envelope doubles,
-		// 8 for map width and height ints, and 2 for the bitset, and 4 for
-		// maxFilters
-		int bufferSize = 46;
-
+		// 8 for map width and height ints, and 2 for the bitset
+		int bufferSize = 32 + 2 + VarintUtils.unsignedIntByteLength(mapWidth)
+				+ VarintUtils.unsignedIntByteLength(mapHeight);
 		final byte[] wktBinary;
 		if (storeCRS) {
 			final String wkt = envelope.getCoordinateReferenceSystem().toWKT();
 			wktBinary = StringUtils.stringToBinary(wkt);
-			bufferSize += (wktBinary.length + 4);
+			bufferSize += (wktBinary.length + VarintUtils.unsignedIntByteLength(wktBinary.length));
 		}
 		else {
 			wktBinary = null;
 		}
 		if (storeInterpolationOrdinals) {
-			bufferSize += (4 * interpolationOrdinals.size()) + 4;
+			for (Integer ordinal : interpolationOrdinals) {
+				bufferSize += VarintUtils.unsignedIntByteLength(ordinal);
+			}
+			bufferSize += VarintUtils.unsignedIntByteLength(interpolationOrdinals.size());
 		}
 
 		final byte[] paletteBinary;
@@ -504,22 +507,22 @@ public class DistributedRenderOptions implements
 						e);
 			}
 			paletteBinary = baos.toByteArray();
-			bufferSize += (paletteBinary.length + 4);
+			bufferSize += (paletteBinary.length + VarintUtils.unsignedIntByteLength(paletteBinary.length));
 		}
 		else {
 			paletteBinary = null;
 		}
 		if (maxRenderTime > 0) {
-			bufferSize += 4;
+			bufferSize += VarintUtils.unsignedIntByteLength(maxRenderTime);
 		}
 		if (maxErrors > 0) {
-			bufferSize += 4;
+			bufferSize += VarintUtils.unsignedIntByteLength(maxErrors);
 		}
 		if (angle != 0) {
 			bufferSize += 8;
 		}
 		if (buffer > 0) {
-			bufferSize += 4;
+			bufferSize += VarintUtils.unsignedIntByteLength(buffer);
 		}
 		if (bgColor != null) {
 			bufferSize += 4;
@@ -544,7 +547,7 @@ public class DistributedRenderOptions implements
 						e);
 			}
 			styleBinary = baos.toByteArray();
-			bufferSize += (styleBinary.length + 4);
+			bufferSize += (styleBinary.length + VarintUtils.unsignedIntByteLength(styleBinary.length));
 		}
 		else {
 			styleBinary = null;
@@ -555,39 +558,59 @@ public class DistributedRenderOptions implements
 		byteBuffer.putDouble(minY);
 		byteBuffer.putDouble(maxX);
 		byteBuffer.putDouble(maxY);
-		byteBuffer.putInt(mapWidth);
-		byteBuffer.putInt(mapHeight);
+		VarintUtils.writeUnsignedInt(
+				mapWidth,
+				byteBuffer);
+		VarintUtils.writeUnsignedInt(
+				mapHeight,
+				byteBuffer);
 		if (wktBinary != null) {
-			byteBuffer.putInt(wktBinary.length);
+			VarintUtils.writeUnsignedInt(
+					wktBinary.length,
+					byteBuffer);
 			byteBuffer.put(wktBinary);
 		}
 		if (storeInterpolationOrdinals) {
-			byteBuffer.putInt(interpolationOrdinals.size());
+			VarintUtils.writeUnsignedInt(
+					interpolationOrdinals.size(),
+					byteBuffer);
 			for (final Integer interpOrd : interpolationOrdinals) {
-				byteBuffer.putInt(interpOrd);
+				VarintUtils.writeUnsignedInt(
+						interpOrd,
+						byteBuffer);
 			}
 		}
 		if (paletteBinary != null) {
-			byteBuffer.putInt(paletteBinary.length);
+			VarintUtils.writeUnsignedInt(
+					paletteBinary.length,
+					byteBuffer);
 			byteBuffer.put(paletteBinary);
 		}
 		if (maxRenderTime > 0) {
-			byteBuffer.putInt(maxRenderTime);
+			VarintUtils.writeUnsignedInt(
+					maxRenderTime,
+					byteBuffer);
 		}
 		if (maxErrors > 0) {
-			byteBuffer.putInt(maxErrors);
+			VarintUtils.writeUnsignedInt(
+					maxErrors,
+					byteBuffer);
 		}
 		if (angle != 0) {
 			byteBuffer.putDouble(angle);
 		}
 		if (buffer > 0) {
-			byteBuffer.putInt(buffer);
+			VarintUtils.writeUnsignedInt(
+					buffer,
+					byteBuffer);
 		}
 		if (bgColor != null) {
 			byteBuffer.putInt(bgColor.getRGB());
 		}
 		if (styleBinary != null) {
-			byteBuffer.putInt(styleBinary.length);
+			VarintUtils.writeUnsignedInt(
+					styleBinary.length,
+					byteBuffer);
 			byteBuffer.put(styleBinary);
 		}
 		return byteBuffer.array();
@@ -621,10 +644,10 @@ public class DistributedRenderOptions implements
 		final double minY = buf.getDouble();
 		final double maxX = buf.getDouble();
 		final double maxY = buf.getDouble();
-		mapWidth = buf.getInt();
-		mapHeight = buf.getInt();
+		mapWidth = VarintUtils.readUnsignedInt(buf);
+		mapHeight = VarintUtils.readUnsignedInt(buf);
 		if (crsStored) {
-			final byte[] wktBinary = new byte[buf.getInt()];
+			final byte[] wktBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(wktBinary);
 			final String wkt = StringUtils.stringFromBinary(wktBinary);
 			try {
@@ -647,18 +670,18 @@ public class DistributedRenderOptions implements
 				maxY,
 				crs);
 		if (interpolationOrdinalsStored) {
-			final int interpolationsLength = buf.getInt();
+			final int interpolationsLength = VarintUtils.readUnsignedInt(buf);
 			interpolationOrdinals = new ArrayList<>(
 					interpolationsLength);
 			for (int i = 0; i < interpolationsLength; i++) {
-				interpolationOrdinals.add(buf.getInt());
+				interpolationOrdinals.add(VarintUtils.readUnsignedInt(buf));
 			}
 		}
 		else {
 			interpolationOrdinals = Collections.emptyList();
 		}
 		if (paletteStored) {
-			final byte[] colorModelBinary = new byte[buf.getInt()];
+			final byte[] colorModelBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(colorModelBinary);
 			try {
 				final ByteArrayInputStream bais = new ByteArrayInputStream(
@@ -682,13 +705,13 @@ public class DistributedRenderOptions implements
 			palette = null;
 		}
 		if (maxRenderTimeStored) {
-			maxRenderTime = buf.getInt();
+			maxRenderTime = VarintUtils.readUnsignedInt(buf);
 		}
 		else {
 			maxRenderTime = 0;
 		}
 		if (maxErrorsStored) {
-			maxErrors = buf.getInt();
+			maxErrors = VarintUtils.readUnsignedInt(buf);
 		}
 		else {
 			maxErrors = 0;
@@ -700,7 +723,7 @@ public class DistributedRenderOptions implements
 			angle = 0;
 		}
 		if (bufferStored) {
-			buffer = buf.getInt();
+			buffer = VarintUtils.readUnsignedInt(buf);
 		}
 		else {
 			buffer = 0;
@@ -713,7 +736,7 @@ public class DistributedRenderOptions implements
 			bgColor = null;
 		}
 		if (styleStored) {
-			final byte[] styleBinary = new byte[buf.getInt()];
+			final byte[] styleBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(styleBinary);
 			final SLDParser parser = new SLDParser(
 					CommonFactoryFinder.getStyleFactory(null),

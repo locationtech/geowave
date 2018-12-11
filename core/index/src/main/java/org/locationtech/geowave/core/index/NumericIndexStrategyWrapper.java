@@ -42,8 +42,11 @@ public class NumericIndexStrategyWrapper implements
 	public byte[] toBinary() {
 		final byte[] idBinary = StringUtils.stringToBinary(id);
 		final byte[] delegateBinary = PersistenceUtils.toBinary(indexStrategy);
-		final ByteBuffer buf = ByteBuffer.allocate(4 + idBinary.length + delegateBinary.length);
-		buf.putInt(idBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(idBinary.length) + idBinary.length
+				+ delegateBinary.length);
+		VarintUtils.writeUnsignedInt(
+				idBinary.length,
+				buf);
 		buf.put(idBinary);
 		buf.put(delegateBinary);
 		return buf.array();
@@ -53,10 +56,10 @@ public class NumericIndexStrategyWrapper implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int idBinaryLength = buf.getInt();
+		final int idBinaryLength = VarintUtils.readUnsignedInt(buf);
 		final byte[] idBinary = new byte[idBinaryLength];
-		final byte[] delegateBinary = new byte[bytes.length - idBinaryLength - 4];
 		buf.get(idBinary);
+		final byte[] delegateBinary = new byte[buf.remaining()];
 		buf.get(delegateBinary);
 		id = StringUtils.stringFromBinary(idBinary);
 		indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(delegateBinary);

@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data.field.base;
 
+import org.locationtech.geowave.core.store.data.field.ArrayReader;
+import org.locationtech.geowave.core.store.data.field.ArrayWriter.FixedSizeObjectArrayWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.data.field.ArrayReader.FixedSizeObjectArrayReader;
-import org.locationtech.geowave.core.store.data.field.ArrayWriter.FixedSizeObjectArrayWriter;
 import org.locationtech.geowave.core.store.data.field.base.FloatSerializationProvider.FloatReader;
 import org.locationtech.geowave.core.store.data.field.base.FloatSerializationProvider.FloatWriter;
 
@@ -33,7 +33,7 @@ public class FloatArraySerializationProvider implements
 	}
 
 	private static class FloatArrayReader extends
-			FixedSizeObjectArrayReader<Float>
+			ArrayReader<Float>
 	{
 		public FloatArrayReader() {
 			super(

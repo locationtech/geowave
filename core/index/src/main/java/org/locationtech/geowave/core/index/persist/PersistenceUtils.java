@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,18 +33,22 @@ public class PersistenceUtils
 		if (persistables.isEmpty()) {
 			return new byte[] {};
 		}
-		int byteCount = 4;
+		int byteCount = VarintUtils.unsignedIntByteLength(persistables.size());
 
 		final List<byte[]> persistableBinaries = new ArrayList<byte[]>();
 		for (final Persistable persistable : persistables) {
 			final byte[] binary = toBinary(persistable);
-			byteCount += (4 + binary.length);
+			byteCount += (VarintUtils.unsignedIntByteLength(binary.length) + binary.length);
 			persistableBinaries.add(binary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteCount);
-		buf.putInt(persistables.size());
+		VarintUtils.writeUnsignedInt(
+				persistables.size(),
+				buf);
 		for (final byte[] binary : persistableBinaries) {
-			buf.putInt(binary.length);
+			VarintUtils.writeUnsignedInt(
+					binary.length,
+					buf);
 			buf.put(binary);
 		}
 		return buf.array();
@@ -117,15 +122,15 @@ public class PersistenceUtils
 	public static List<Persistable> fromBinaryAsList(
 			final byte[] bytes ) {
 		final List<Persistable> persistables = new ArrayList<Persistable>();
-		if ((bytes == null) || (bytes.length < 4)) {
+		if ((bytes == null) || (bytes.length == 0)) {
 			// the original binary didn't even contain the size of the
 			// array, assume that nothing was persisted
 			return persistables;
 		}
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int size = buf.getInt();
+		final int size = VarintUtils.readUnsignedInt(buf);
 		for (int i = 0; i < size; i++) {
-			final byte[] persistableBinary = new byte[buf.getInt()];
+			final byte[] persistableBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(persistableBinary);
 			persistables.add(fromBinary(persistableBinary));
 		}

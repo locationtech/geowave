@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -93,8 +94,11 @@ public class NumberRangeFilter implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] fieldNameBytes = StringUtils.stringToBinary(fieldName);
-		final ByteBuffer bb = ByteBuffer.allocate(4 + fieldNameBytes.length + 16);
-		bb.putInt(fieldNameBytes.length);
+		final ByteBuffer bb = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(fieldNameBytes.length)
+				+ fieldNameBytes.length + 16);
+		VarintUtils.writeUnsignedInt(
+				fieldNameBytes.length,
+				bb);
 		bb.put(fieldNameBytes);
 		bb.putDouble(lowerValue.doubleValue());
 		bb.putDouble(upperValue.doubleValue());
@@ -105,7 +109,7 @@ public class NumberRangeFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer bb = ByteBuffer.wrap(bytes);
-		final byte[] fieldNameBytes = new byte[bb.getInt()];
+		final byte[] fieldNameBytes = new byte[VarintUtils.readUnsignedInt(bb)];
 		bb.get(fieldNameBytes);
 		fieldName = StringUtils.stringFromBinary(fieldNameBytes);
 		lowerValue = new Double(

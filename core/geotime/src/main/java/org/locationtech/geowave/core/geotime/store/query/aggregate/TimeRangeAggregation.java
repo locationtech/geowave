@@ -3,6 +3,7 @@ package org.locationtech.geowave.core.geotime.store.query.aggregate;
 import java.nio.ByteBuffer;
 import java.time.Instant;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.threeten.extra.Interval;
@@ -73,17 +74,20 @@ abstract public class TimeRangeAggregation<P extends Persistable, T> implements
 	@Override
 	public byte[] resultToBinary(
 			final Interval result ) {
-		final ByteBuffer buffer = ByteBuffer.allocate(16);
-		if (result == null) {
-			buffer.putLong(Long.MAX_VALUE);
-			buffer.putLong(Long.MIN_VALUE);
+		long start = Long.MAX_VALUE;
+		long end = Long.MIN_VALUE;
+		if (result != null) {
+			start = result.getStart().toEpochMilli();
+			end = result.getEnd().toEpochMilli();
 		}
-		else {
-			buffer.putLong(result.getStart().toEpochMilli());
-			buffer.putLong(
-
-			result.getEnd().toEpochMilli());
-		}
+		final ByteBuffer buffer = ByteBuffer.allocate(VarintUtils.timeByteLength(start)
+				+ VarintUtils.timeByteLength(end));
+		VarintUtils.writeTime(
+				start,
+				buffer);
+		VarintUtils.writeTime(
+				end,
+				buffer);
 		return buffer.array();
 	}
 
@@ -91,8 +95,8 @@ abstract public class TimeRangeAggregation<P extends Persistable, T> implements
 	public Interval resultFromBinary(
 			final byte[] binary ) {
 		final ByteBuffer buffer = ByteBuffer.wrap(binary);
-		final long minTime = buffer.getLong();
-		final long maxTime = buffer.getLong();
+		final long minTime = VarintUtils.readTime(buffer);
+		final long maxTime = VarintUtils.readTime(buffer);
 		if ((min == Long.MAX_VALUE) || (max == Long.MIN_VALUE)) {
 			return null;
 		}

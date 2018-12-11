@@ -13,6 +13,7 @@ package org.locationtech.geowave.adapter.vector.ingest;
 import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 
@@ -49,12 +50,16 @@ public class GeometrySimpOptionProvider implements
 
 	@Override
 	public byte[] toBinary() {
-		final byte[] backingBuffer = new byte[Integer.BYTES * 2 + Double.BYTES];
+		final byte[] backingBuffer = new byte[VarintUtils.unsignedIntByteLength(maxVertices)
+				+ VarintUtils.unsignedIntByteLength(simpVertMin) + Double.BYTES];
 		ByteBuffer buf = ByteBuffer.wrap(backingBuffer);
-		buf.putInt(
-				maxVertices).putInt(
-				simpVertMin).putDouble(
-				tolerance);
+		VarintUtils.writeUnsignedInt(
+				maxVertices,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				simpVertMin,
+				buf);
+		buf.putDouble(tolerance);
 		return backingBuffer;
 	}
 
@@ -62,8 +67,8 @@ public class GeometrySimpOptionProvider implements
 	public void fromBinary(
 			byte[] bytes ) {
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
-		maxVertices = buf.getInt();
-		simpVertMin = buf.getInt();
+		maxVertices = VarintUtils.readUnsignedInt(buf);
+		simpVertMin = VarintUtils.readUnsignedInt(buf);
 		tolerance = buf.getDouble();
 	}
 

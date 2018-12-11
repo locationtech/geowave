@@ -31,6 +31,7 @@ import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
@@ -303,32 +304,39 @@ public class XZHierarchicalIndexStrategy implements
 
 		final List<byte[]> dimensionDefBinaries = new ArrayList<byte[]>(
 				baseDefinitions.length);
-		int bufferLength = 4;
+		int bufferLength = VarintUtils.unsignedIntByteLength(baseDefinitions.length);
 		for (final NumericDimensionDefinition dimension : baseDefinitions) {
 			final byte[] sfcDimensionBinary = PersistenceUtils.toBinary(dimension);
-			bufferLength += (sfcDimensionBinary.length + 4);
+			bufferLength += (sfcDimensionBinary.length + VarintUtils.unsignedIntByteLength(sfcDimensionBinary.length));
 			dimensionDefBinaries.add(sfcDimensionBinary);
 		}
 
-		bufferLength += 4;
 		final byte[] rasterStrategyBinary = PersistenceUtils.toBinary(rasterStrategy);
-		bufferLength += rasterStrategyBinary.length;
+		bufferLength += VarintUtils.unsignedIntByteLength(rasterStrategyBinary.length) + rasterStrategyBinary.length;
 
-		bufferLength += 4;
+		bufferLength += VarintUtils.unsignedIntByteLength(maxBitsPerDimension.length);
 		bufferLength += maxBitsPerDimension.length * 4;
 
 		final ByteBuffer buf = ByteBuffer.allocate(bufferLength);
 
-		buf.putInt(baseDefinitions.length);
+		VarintUtils.writeUnsignedInt(
+				baseDefinitions.length,
+				buf);
 		for (final byte[] dimensionDefBinary : dimensionDefBinaries) {
-			buf.putInt(dimensionDefBinary.length);
+			VarintUtils.writeUnsignedInt(
+					dimensionDefBinary.length,
+					buf);
 			buf.put(dimensionDefBinary);
 		}
 
-		buf.putInt(rasterStrategyBinary.length);
+		VarintUtils.writeUnsignedInt(
+				rasterStrategyBinary.length,
+				buf);
 		buf.put(rasterStrategyBinary);
 
-		buf.putInt(maxBitsPerDimension.length);
+		VarintUtils.writeUnsignedInt(
+				maxBitsPerDimension.length,
+				buf);
 		for (final int dimBits : maxBitsPerDimension) {
 			buf.putInt(dimBits);
 		}
@@ -342,21 +350,21 @@ public class XZHierarchicalIndexStrategy implements
 
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 
-		final int numDimensions = buf.getInt();
+		final int numDimensions = VarintUtils.readUnsignedInt(buf);
 
 		baseDefinitions = new NumericDimensionDefinition[numDimensions];
 		for (int i = 0; i < numDimensions; i++) {
-			final byte[] dim = new byte[buf.getInt()];
+			final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(dim);
 			baseDefinitions[i] = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dim);
 		}
 
-		final int rasterStrategySize = buf.getInt();
+		final int rasterStrategySize = VarintUtils.readUnsignedInt(buf);
 		final byte[] rasterStrategyBinary = new byte[rasterStrategySize];
 		buf.get(rasterStrategyBinary);
 		rasterStrategy = (TieredSFCIndexStrategy) PersistenceUtils.fromBinary(rasterStrategyBinary);
 
-		final int bitsPerDimensionLength = buf.getInt();
+		final int bitsPerDimensionLength = VarintUtils.readUnsignedInt(buf);
 		maxBitsPerDimension = new int[bitsPerDimensionLength];
 		for (int i = 0; i < bitsPerDimensionLength; i++) {
 			maxBitsPerDimension[i] = buf.getInt();
@@ -468,11 +476,16 @@ public class XZHierarchicalIndexStrategy implements
 
 		@Override
 		public byte[] toBinary() {
-			final ByteBuffer buffer = ByteBuffer.allocate(2 + (4 * 2));
+			final ByteBuffer buffer = ByteBuffer.allocate(2 + VarintUtils.unsignedIntByteLength(pointCurveCount)
+					+ VarintUtils.unsignedIntByteLength(xzCurveCount));
 			buffer.put(pointCurveMultiDimensionalId);
 			buffer.put(xzCurveMultiDimensionalId);
-			buffer.putInt(pointCurveCount);
-			buffer.putInt(xzCurveCount);
+			VarintUtils.writeUnsignedInt(
+					pointCurveCount,
+					buffer);
+			VarintUtils.writeUnsignedInt(
+					xzCurveCount,
+					buffer);
 			return buffer.array();
 		}
 
@@ -482,8 +495,8 @@ public class XZHierarchicalIndexStrategy implements
 			final ByteBuffer buffer = ByteBuffer.wrap(bytes);
 			pointCurveMultiDimensionalId = buffer.get();
 			xzCurveMultiDimensionalId = buffer.get();
-			pointCurveCount = buffer.getInt();
-			xzCurveCount = buffer.getInt();
+			pointCurveCount = VarintUtils.readUnsignedInt(buffer);
+			xzCurveCount = VarintUtils.readUnsignedInt(buffer);
 		}
 
 		@Override

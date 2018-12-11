@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.index.SecondaryIndexType;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -156,13 +157,22 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 		byte[] attributesBytes = StringUtils.stringsToBinary(attributes.toArray(new String[0]));
 		byte secondaryIndexTypeByte = (byte) secondaryIndexType.ordinal();
 		byte[] fieldIdsBytes = StringUtils.stringsToBinary(fieldIds.toArray(new String[0]));
-		ByteBuffer buf = ByteBuffer.allocate(13 + clazzBytes.length + attributesBytes.length + fieldIdsBytes.length);
-		buf.putInt(clazzBytes.length);
+		ByteBuffer buf = ByteBuffer.allocate(1 + VarintUtils.unsignedIntByteLength(clazzBytes.length)
+				+ clazzBytes.length + VarintUtils.unsignedIntByteLength(attributesBytes.length)
+				+ attributesBytes.length + VarintUtils.unsignedIntByteLength(fieldIdsBytes.length)
+				+ fieldIdsBytes.length);
+		VarintUtils.writeUnsignedInt(
+				clazzBytes.length,
+				buf);
 		buf.put(clazzBytes);
 		buf.put(secondaryIndexTypeByte);
-		buf.putInt(attributesBytes.length);
+		VarintUtils.writeUnsignedInt(
+				attributesBytes.length,
+				buf);
 		buf.put(attributesBytes);
-		buf.putInt(fieldIdsBytes.length);
+		VarintUtils.writeUnsignedInt(
+				fieldIdsBytes.length,
+				buf);
 		buf.put(fieldIdsBytes);
 		return buf.array();
 	}
@@ -171,12 +181,12 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 	public void fromBinary(
 			byte[] bytes ) {
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
-		byte[] clazzBytes = new byte[buf.getInt()];
+		byte[] clazzBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(clazzBytes);
-		byte[] attributesBytes = new byte[buf.getInt()];
-		buf.get(attributesBytes);
 		byte secondaryIndexTypeByte = buf.get();
-		byte[] fieldIdsBytes = new byte[buf.getInt()];
+		byte[] attributesBytes = new byte[VarintUtils.readUnsignedInt(buf)];
+		buf.get(attributesBytes);
+		byte[] fieldIdsBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(fieldIdsBytes);
 		try {
 			clazz = (Class<T>) Class.forName(StringUtils.stringFromBinary(clazzBytes));

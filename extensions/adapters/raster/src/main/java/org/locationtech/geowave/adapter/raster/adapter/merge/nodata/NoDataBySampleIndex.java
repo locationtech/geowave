@@ -14,6 +14,8 @@ import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.locationtech.geowave.core.index.VarintUtils;
+
 public class NoDataBySampleIndex implements
 		NoDataMetadata
 {
@@ -30,11 +32,26 @@ public class NoDataBySampleIndex implements
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(noDataIndexSet.size() * 12);
+		int byteLength = 0;
 		for (final SampleIndex i : noDataIndexSet) {
-			buf.putInt(i.getX());
-			buf.putInt(i.getY());
-			buf.putInt(i.getBand());
+			byteLength += VarintUtils.unsignedIntByteLength(i.getX()) + VarintUtils.unsignedIntByteLength(i.getY())
+					+ VarintUtils.unsignedIntByteLength(i.getBand());
+		}
+		byteLength += VarintUtils.unsignedIntByteLength(noDataIndexSet.size());
+		final ByteBuffer buf = ByteBuffer.allocate(byteLength);
+		VarintUtils.writeUnsignedInt(
+				noDataIndexSet.size(),
+				buf);
+		for (final SampleIndex i : noDataIndexSet) {
+			VarintUtils.writeUnsignedInt(
+					i.getX(),
+					buf);
+			VarintUtils.writeUnsignedInt(
+					i.getY(),
+					buf);
+			VarintUtils.writeUnsignedInt(
+					i.getBand(),
+					buf);
 		}
 		return buf.array();
 	}
@@ -43,13 +60,13 @@ public class NoDataBySampleIndex implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int size = bytes.length / 12;
+		final int size = VarintUtils.readUnsignedInt(buf);
 		noDataIndexSet = new HashSet<SampleIndex>(
 				size);
 		for (int i = 0; i < size; i++) {
-			final int x = buf.getInt();
-			final int y = buf.getInt();
-			final int b = buf.getInt();
+			final int x = VarintUtils.readUnsignedInt(buf);
+			final int y = VarintUtils.readUnsignedInt(buf);
+			final int b = VarintUtils.readUnsignedInt(buf);
 			noDataIndexSet.add(new SampleIndex(
 					x,
 					y,
