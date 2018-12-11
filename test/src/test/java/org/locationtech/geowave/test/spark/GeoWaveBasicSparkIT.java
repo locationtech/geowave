@@ -147,7 +147,7 @@ public class GeoWaveBasicSparkIT extends
 		// ingest test points
 		TestUtils.testLocalIngest(
 				dataStore,
-				DimensionalityType.SPATIAL_TEMPORAL,
+				DimensionalityType.ALL,
 				HAIL_SHAPEFILE_FILE,
 				1);
 		verifyQuery(
