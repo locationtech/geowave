@@ -37,6 +37,7 @@ public class CQLQueryFilter implements
 	private final static Logger LOGGER = LoggerFactory.getLogger(CQLQueryFilter.class);
 	private GeotoolsFeatureDataAdapter adapter;
 	private Filter filter;
+
 	public CQLQueryFilter() {
 		super();
 	}

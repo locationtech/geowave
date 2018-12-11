@@ -106,68 +106,62 @@ public class GeoWaveBasicSparkIT extends
 
 		TestUtils.deleteAll(dataStore);
 		// test spatial temporal queries with spatial index for tornado tracks
-		// TestUtils
-		// .testLocalIngest(
-		// dataStore,
-		// DimensionalityType.SPATIAL,
-		// TORNADO_TRACKS_SHAPEFILE_FILE,
-		// 1);
-		// verifyQuery(
-		// context,
-		// TEST_BOX_TEMPORAL_FILTER_FILE,
-		// TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE,
-		// "bounding box tornado tracks spatial-temporal query with spatial only index",
-		// true);
-		// verifyQuery(
-		// context,
-		// TEST_POLYGON_TEMPORAL_FILTER_FILE,
-		// TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE,
-		// "polygon tornado tracks spatial-temporal query with spatial only index",
-		// false);
-		// TestUtils
-		// .deleteAll(
-		// dataStore);
+		TestUtils.testLocalIngest(
+				dataStore,
+				DimensionalityType.SPATIAL,
+				TORNADO_TRACKS_SHAPEFILE_FILE,
+				1);
+		verifyQuery(
+				context,
+				TEST_BOX_TEMPORAL_FILTER_FILE,
+				TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE,
+				"bounding box tornado tracks spatial-temporal query with spatial only index",
+				true);
+		verifyQuery(
+				context,
+				TEST_POLYGON_TEMPORAL_FILTER_FILE,
+				TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE,
+				"polygon tornado tracks spatial-temporal query with spatial only index",
+				false);
+		TestUtils.deleteAll(dataStore);
 
 		// test spatial queries with spatial temporal index for tornado tracks
-		// TestUtils
-		// .testLocalIngest(
-		// dataStore,
-		// DimensionalityType.SPATIAL_TEMPORAL,
-		// TORNADO_TRACKS_SHAPEFILE_FILE,
-		// 1);
-		// verifyQuery(
-		// context,
-		// TEST_BOX_FILTER_FILE,
-		// TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE,
-		// "bounding box tornado tracks spatial query with spatial temporal index only",
-		// true);
-		// verifyQuery(
-		// context,
-		// TEST_POLYGON_FILTER_FILE,
-		// TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE,
-		// "polygon tornado tracks spatial query with spatial temporal index only",
-		// true);
-		// TestUtils
-		// .deleteAll(
-		// dataStore);
+		TestUtils.testLocalIngest(
+				dataStore,
+				DimensionalityType.SPATIAL_TEMPORAL,
+				TORNADO_TRACKS_SHAPEFILE_FILE,
+				1);
+		verifyQuery(
+				context,
+				TEST_BOX_FILTER_FILE,
+				TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE,
+				"bounding box tornado tracks spatial query with spatial temporal index only",
+				true);
+		verifyQuery(
+				context,
+				TEST_POLYGON_FILTER_FILE,
+				TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE,
+				"polygon tornado tracks spatial query with spatial temporal index only",
+				true);
+		TestUtils.deleteAll(dataStore);
 		// ingest test points
 		TestUtils.testLocalIngest(
 				dataStore,
 				DimensionalityType.SPATIAL_TEMPORAL,
 				HAIL_SHAPEFILE_FILE,
 				1);
-		// verifyQuery(
-		// context,
-		// TEST_BOX_FILTER_FILE,
-		// HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE,
-		// "bounding box hail spatial query",
-		// true);
-		// verifyQuery(
-		// context,
-		// TEST_POLYGON_FILTER_FILE,
-		// HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE,
-		// "polygon hail spatial query",
-		// true);
+		verifyQuery(
+				context,
+				TEST_BOX_FILTER_FILE,
+				HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE,
+				"bounding box hail spatial query",
+				true);
+		verifyQuery(
+				context,
+				TEST_POLYGON_FILTER_FILE,
+				HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE,
+				"polygon hail spatial query",
+				true);
 		verifyQuery(
 				context,
 				TEST_BOX_TEMPORAL_FILTER_FILE,
