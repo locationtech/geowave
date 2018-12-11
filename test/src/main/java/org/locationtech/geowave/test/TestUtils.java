@@ -79,6 +79,7 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.And;
+import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.spatial.SpatialOperator;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -618,17 +619,20 @@ public class TestUtils
 		return featureToQuery(
 				resourceToFeature(filterResource),
 				null,
-				null);
+				null,
+				true);
 	}
 
 	public static QueryConstraints resourceToQuery(
 			final URL filterResource,
-			final Pair<String, String> optimalCqlQueryGeometryAndTimeFields )
+			final Pair<String, String> optimalCqlQueryGeometryAndTimeFields,
+			final boolean useDuring )
 			throws IOException {
 		return featureToQuery(
 				resourceToFeature(filterResource),
 				optimalCqlQueryGeometryAndTimeFields,
-				null);
+				null,
+				useDuring);
 	}
 
 	public static SimpleFeature resourceToFeature(
@@ -669,7 +673,8 @@ public class TestUtils
 	public static QueryConstraints featureToQuery(
 			final SimpleFeature savedFilter,
 			final Pair<String, String> optimalCqlQueryGeometryAndTimeField,
-			final String crsCode ) {
+			final String crsCode,
+			final boolean useDuring ) {
 		final Geometry filterGeometry = (Geometry) savedFilter.getDefaultGeometry();
 		final Object startObj = savedFilter.getAttribute(TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
 		final Object endObj = savedFilter.getAttribute(TEST_FILTER_END_TIME_ATTRIBUTE_NAME);
@@ -693,22 +698,36 @@ public class TestUtils
 			if ((startDate != null) && (endDate != null)) {
 				if (optimalCqlQueryGeometryAndTimeField != null) {
 					final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
-					final Position ip1 = new DefaultPosition(
-							startDate);
-					final Position ip2 = new DefaultPosition(
-							endDate);
-					final Period period = new DefaultPeriod(
-							new DefaultInstant(
-									ip1),
-							new DefaultInstant(
-									ip2));
+					Filter timeConstraint;
+					if (useDuring) {
+						final Position ip1 = new DefaultPosition(
+								startDate);
+						final Position ip2 = new DefaultPosition(
+								endDate);
+						final Period period = new DefaultPeriod(
+								new DefaultInstant(
+										ip1),
+								new DefaultInstant(
+										ip2));
+						timeConstraint = factory.during(
+								factory.property(optimalCqlQueryGeometryAndTimeField.getRight()),
+								factory.literal(period));
+					}
+					else {
+						timeConstraint = factory.and(
+								factory.greaterOrEqual(
+										factory.property(optimalCqlQueryGeometryAndTimeField.getRight()),
+										factory.literal(startDate)),
+								factory.lessOrEqual(
+										factory.property(optimalCqlQueryGeometryAndTimeField.getRight()),
+										factory.literal(endDate)));
+					}
+
 					final And expression = factory.and(
 							geometryToSpatialOperator(
 									filterGeometry,
 									optimalCqlQueryGeometryAndTimeField),
-							factory.during(
-									factory.property(optimalCqlQueryGeometryAndTimeField.getRight()),
-									factory.literal(period)));
+							timeConstraint);
 					return new OptimalCQLQuery(
 							expression);
 				}

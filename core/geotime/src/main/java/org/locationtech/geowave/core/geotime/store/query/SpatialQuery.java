@@ -237,7 +237,7 @@ public class SpatialQuery extends
 				queryGeometry,
 				Collections.emptyMap(),
 				null,
-				compareOp,
+				compareOp == null ? CompareOperation.INTERSECTS : compareOp,
 				nonSpatialCompareOp);
 	}
 
