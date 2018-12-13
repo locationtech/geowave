@@ -13,11 +13,13 @@ package org.locationtech.geowave.datastore.hbase.mapreduce;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.TreeSet;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -31,6 +33,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
+import org.locationtech.geowave.core.index.ByteArrayRange.MergeOperation;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -84,6 +87,13 @@ public class HBaseSplitsProvider extends
 
 		final String tableName = hbaseOperations.getQualifiedTableName(index.getName());
 
+		final Map<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> binnedRanges = new HashMap<>();
+		final RegionLocator regionLocator = hbaseOperations.getRegionLocator(tableName);
+
+		if (regionLocator == null) {
+			LOGGER.error("Unable to retrieve RegionLocator for " + tableName);
+			return splits;
+		}
 		// Build list of row ranges from query
 		List<ByteArrayRange> ranges = null;
 		if (query != null) {
@@ -106,28 +116,20 @@ public class HBaseSplitsProvider extends
 			}
 		}
 
-		final Map<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> binnedRanges = new HashMap<>();
-		final RegionLocator regionLocator = hbaseOperations.getRegionLocator(tableName);
-
-		if (regionLocator == null) {
-			LOGGER.error("Unable to retrieve RegionLocator for " + tableName);
-			return splits;
-		}
-
-		final PartitionStatistics<?> statistics = getPartitionStats(
-				index,
-				adapterIds,
-				statsStore,
-				authorizations);
 
 		if (ranges == null) { // get partition ranges from stats
+			final PartitionStatistics<?> statistics = getPartitionStats(
+					index,
+					adapterIds,
+					statsStore,
+					authorizations);
 			if (statistics != null) {
 				ranges = new ArrayList();
 
 				ByteArray prevKey = new ByteArray(
 						HConstants.EMPTY_BYTE_ARRAY);
-
-				for (final ByteArray partitionKey : statistics.getPartitionKeys()) {
+				TreeSet<ByteArray> sortedPartitions = new TreeSet<>(statistics.getPartitionKeys());
+				for (final ByteArray partitionKey : sortedPartitions) {
 					final ByteArrayRange range = new ByteArrayRange(
 							prevKey,
 							partitionKey);
@@ -162,7 +164,6 @@ public class HBaseSplitsProvider extends
 						regionLocator);
 			}
 		}
-
 		for (final Entry<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> locationEntry : binnedRanges
 				.entrySet()) {
 			final String hostname = locationEntry.getKey().getHostname();
@@ -172,7 +173,7 @@ public class HBaseSplitsProvider extends
 				final List<RangeLocationPair> rangeList = new ArrayList<>();
 
 				for (final ByteArrayRange range : regionEntry.getValue()) {
-					final GeoWaveRowRange gwRange = fromHBaseRange(
+					final GeoWaveRowRange gwRange = toRowRange(
 							range,
 							partitionKeyLength);
 
@@ -206,7 +207,6 @@ public class HBaseSplitsProvider extends
 				}
 			}
 		}
-
 		return splits;
 	}
 
@@ -341,104 +341,4 @@ public class HBaseSplitsProvider extends
 				true,
 				false);
 	}
-
-	public static ByteArrayRange toHBaseRange(
-			final GeoWaveRowRange range ) {
-
-		if ((range.getPartitionKey() == null) || (range.getPartitionKey().length == 0)) {
-			final byte[] startKey = (range.getStartSortKey() == null) ? HConstants.EMPTY_BYTE_ARRAY : range
-					.getStartSortKey();
-			final byte[] endKey = (range.getEndSortKey() == null) ? HConstants.EMPTY_BYTE_ARRAY : range.getEndSortKey();
-
-			return new ByteArrayRange(
-					new ByteArray(
-							startKey),
-					new ByteArray(
-							endKey));
-		}
-		else {
-			final byte[] startKey = (range.getStartSortKey() == null) ? range.getPartitionKey() : ArrayUtils.addAll(
-					range.getPartitionKey(),
-					range.getStartSortKey());
-
-			final byte[] endKey = (range.getEndSortKey() == null) ? ByteArray.getNextPrefix(range.getPartitionKey())
-					: ArrayUtils.addAll(
-							range.getPartitionKey(),
-							range.getEndSortKey());
-
-			return new ByteArrayRange(
-					new ByteArray(
-							startKey),
-					new ByteArray(
-							endKey));
-		}
-	}
-
-	public static GeoWaveRowRange fromHBaseRange(
-			final ByteArrayRange range,
-			final int partitionKeyLength ) {
-		final byte[] startRow = Bytes.equals(
-				range.getStart().getBytes(),
-				HConstants.EMPTY_BYTE_ARRAY) ? null : range.getStart().getBytes();
-
-		final byte[] stopRow = Bytes.equals(
-				range.getEnd().getBytes(),
-				HConstants.EMPTY_BYTE_ARRAY) ? null : range.getEnd().getBytes();
-
-		if (partitionKeyLength <= 0) {
-			return new GeoWaveRowRange(
-					null,
-					startRow,
-					stopRow,
-					true,
-					false);
-		}
-		else {
-			byte[] partitionKey;
-			boolean partitionKeyDiffers = false;
-			if ((startRow == null) && (stopRow == null)) {
-				return new GeoWaveRowRange(
-						null,
-						null,
-						null,
-						true,
-						true);
-			}
-			else if (startRow != null) {
-				partitionKey = ArrayUtils.subarray(
-						startRow,
-						0,
-						partitionKeyLength);
-				if (stopRow != null) {
-					partitionKeyDiffers = !Arrays.equals(
-							partitionKey,
-							ArrayUtils.subarray(
-									stopRow,
-									0,
-									partitionKeyLength));
-				}
-			}
-			else {
-				partitionKey = ArrayUtils.subarray(
-						stopRow,
-						0,
-						partitionKeyLength);
-			}
-			return new GeoWaveRowRange(
-					partitionKey,
-					startRow == null ? null : (partitionKeyLength == startRow.length ? null : ArrayUtils.subarray(
-							startRow,
-							partitionKeyLength,
-							startRow.length)),
-					partitionKeyDiffers ? null : (stopRow == null ? null : (partitionKeyLength == stopRow.length ? null
-							: ArrayUtils.subarray(
-									stopRow,
-									partitionKeyLength,
-									stopRow.length))),
-					true,
-					partitionKeyDiffers);
-
-		}
-	}
-
 }

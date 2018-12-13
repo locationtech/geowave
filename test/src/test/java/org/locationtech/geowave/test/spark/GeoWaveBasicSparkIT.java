@@ -416,7 +416,6 @@ public class GeoWaveBasicSparkIT extends
 					dataStore,
 					queryOpts);
 			final JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
-
 			final long count = javaRdd.count();
 			LOGGER.warn("DataStore loaded into RDD with " + count + " features.");
 

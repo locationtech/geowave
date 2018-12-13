@@ -42,6 +42,7 @@ import org.locationtech.geowave.datastore.hbase.filters.HBaseNumericIndexStrateg
 import org.locationtech.geowave.datastore.hbase.mapreduce.HBaseSplitsProvider;
 import org.locationtech.geowave.datastore.hbase.util.HBaseUtils;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
+import org.locationtech.geowave.mapreduce.splits.SplitsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,8 +138,8 @@ public class HBaseReader<T> implements
 
 	protected void initRecordScanner() {
 		final FilterList filterList = new FilterList();
-		final ByteArrayRange range = HBaseSplitsProvider
-				.toHBaseRange(
+		final ByteArrayRange range = SplitsProvider
+				.fromRowRange(
 						recordReaderParams.getRowRange());
 
 		final Scan rscanner = scanProvider.get();
@@ -154,7 +155,7 @@ public class HBaseReader<T> implements
 		}
 		else {
 			rscanner
-					.setStartRow(
+					.withStartRow(
 							range.getStart().getBytes());
 
 			if (recordReaderParams.getRowRange().isEndSortKeyInclusive()) {
@@ -163,12 +164,12 @@ public class HBaseReader<T> implements
 								range.getEnd().getBytes());
 
 				rscanner
-						.setStopRow(
+						.withStopRow(
 								stopRowInclusive);
 			}
 			else {
 				rscanner
-						.setStopRow(
+						.withStopRow(
 								range.getEnd().getBytes());
 			}
 		}
