@@ -52,9 +52,10 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
-import org.locationtech.geowave.core.store.callback.DuplicateCountCallback;
+import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
@@ -883,14 +884,6 @@ public class SpatialTemporalQueryIT
 		// any of the 'untouched' duplicates for the entries as well.
 		long sanity_count = 0;
 		long sanity_duplicates = 0;
-		try (CloseableIterator<?> dataIt = dataStore.query(bldr.constraints(
-				sanityQuery).build())) {
-			while (dataIt.hasNext()) {
-				SimpleFeature f = (SimpleFeature) dataIt.next();
-				sanity_count++;
-			}
-			dataIt.close();
-		}
 
 		DuplicateCountCallback<SimpleFeature> dupeCounter = new DuplicateCountCallback<SimpleFeature>();
 		try (CloseableIterator<?> dataIt = ((BaseDataStore) dataStore).query(
@@ -898,8 +891,10 @@ public class SpatialTemporalQueryIT
 						sanityQuery).build(),
 				dupeCounter)) {
 			while (dataIt.hasNext()) {
+				sanity_count++;
 				dataIt.next();
 			}
+			dataIt.close();
 		}
 		sanity_duplicates = dupeCounter.getDuplicateCount();
 
@@ -929,6 +924,7 @@ public class SpatialTemporalQueryIT
 			while (dataIt.hasNext()) {
 				dataIt.next();
 			}
+			dataIt.close();
 		}
 
 		Assert.assertEquals(
@@ -949,6 +945,7 @@ public class SpatialTemporalQueryIT
 			while (dataIt.hasNext()) {
 				dataIt.next();
 			}
+			dataIt.close();
 		}
 		Assert.assertEquals(
 				0,
@@ -983,5 +980,38 @@ public class SpatialTemporalQueryIT
 		Assert.assertEquals(
 				sanity_duplicates,
 				dupeCounter.getDuplicateCount());
+	}
+
+	/**
+	 * This callback finds the duplicates for each scanned entry, and sums them.
+	 * It is used by the duplicate deletion IT.
+	 */
+	static private class DuplicateCountCallback<T> implements
+			ScanCallback<T, GeoWaveRow>,
+			Closeable
+	{
+		private long numDuplicates;
+
+		public DuplicateCountCallback() {
+
+			numDuplicates = 0;
+		}
+
+		public long getDuplicateCount() {
+			return numDuplicates;
+		}
+
+		@Override
+		public void close()
+				throws IOException {
+
+		}
+
+		@Override
+		public void entryScanned(
+				final T entry,
+				GeoWaveRow row ) {
+			numDuplicates += row.getNumberOfDuplicates();
+		}
 	}
 }

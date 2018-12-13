@@ -96,6 +96,12 @@ public class BaseDataStore implements
 	protected final DataStoreOptions baseOptions;
 	protected final InternalAdapterStore internalAdapterStore;
 
+	protected enum DeletionMode {
+		DONT_DELETE,
+		DELETE,
+		DELETE_WITH_DUPLICATES;
+	}
+
 	public BaseDataStore(
 			final IndexStore indexStore,
 			final PersistentAdapterStore adapterStore,
@@ -189,8 +195,7 @@ public class BaseDataStore implements
 			final ScanCallback<T, R> scanCallback ) {
 		return internalQuery(
 				query,
-				false,
-				true,
+				DeletionMode.DONT_DELETE,
 				scanCallback);
 	}
 
@@ -199,18 +204,15 @@ public class BaseDataStore implements
 			final Query<T> query ) {
 		return internalQuery(
 				query,
-				false,
-				true);
+				DeletionMode.DONT_DELETE);
 	}
 
 	protected <T> CloseableIterator<T> internalQuery(
 			final Query<T> query,
-			final boolean delete,
-			final boolean filterDuplicates ) {
+			final DeletionMode delete ) {
 		return internalQuery(
 				query,
 				delete,
-				filterDuplicates,
 				null);
 	}
 
@@ -227,8 +229,7 @@ public class BaseDataStore implements
 	 */
 	protected <T> CloseableIterator<T> internalQuery(
 			Query<T> query,
-			final boolean delete,
-			final boolean filterDuplicates,
+			final DeletionMode delete,
 			final ScanCallback<T, ?> scanCallback ) {
 		if (query == null) {
 			query = (Query) QueryBuilder.newBuilder().build();
@@ -244,19 +245,18 @@ public class BaseDataStore implements
 		return internalQuery(
 				query.getQueryConstraints(),
 				queryOptions,
-				delete,
-				filterDuplicates);
+				delete);
 	}
 
 	protected <T> CloseableIterator<T> internalQuery(
 			final QueryConstraints constraints,
 			final BaseQueryOptions queryOptions,
-			final boolean delete,
-			final boolean deleteDuplicates ) {
-		// Note: The deleteDuplicates option is provided to avoid recursively
+			final DeletionMode deleteMode ) {
+		// Note: The DeletionMode option is provided to avoid recursively
 		// adding DuplicateDeletionCallbacks when actual duplicates are removed
 		// via the DuplicateDeletionCallback. The callback should only be added
 		// during the initial deletion query.
+		final boolean delete = (deleteMode == DeletionMode.DELETE || deleteMode == DeletionMode.DELETE_WITH_DUPLICATES);
 
 		final List<CloseableIterator<Object>> results = new ArrayList<>();
 
@@ -332,7 +332,7 @@ public class BaseDataStore implements
 						final ScanCallback callback = queryOptions.getScanCallback();
 
 						final Index index = indexAdapterPair.getLeft();
-						if (!deleteDuplicates) {
+						if (deleteMode == DeletionMode.DELETE_WITH_DUPLICATES) {
 							DeleteCallbackList<T, GeoWaveRow> delList = (DeleteCallbackList<T, GeoWaveRow>) callbackCache
 									.getDeleteCallback(
 											adapter,
@@ -523,8 +523,7 @@ public class BaseDataStore implements
 		else {
 			try (CloseableIterator<?> dataIt = internalQuery(
 					query,
-					true,
-					!deleteDuplicates,
+					deleteDuplicates ? DeletionMode.DELETE_WITH_DUPLICATES : DeletionMode.DELETE,
 					scanCallback)) {
 				while (dataIt.hasNext()) {
 					dataIt.next();
@@ -1066,8 +1065,7 @@ public class BaseDataStore implements
 						query,
 						adapterStore,
 						internalAdapterStore),
-				false,
-				true)) {
+				DeletionMode.DONT_DELETE)) {
 			while (resultsIt.hasNext()) {
 				final R next = resultsIt.next();
 				if (results == null) {
