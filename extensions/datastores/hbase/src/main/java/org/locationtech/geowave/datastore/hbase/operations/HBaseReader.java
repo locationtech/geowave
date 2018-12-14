@@ -144,35 +144,17 @@ public class HBaseReader<T> implements
 
 		final Scan rscanner = scanProvider.get();
 
-		// Use this instead of setStartRow/setStopRow for single rowkeys
-		if (Bytes
-				.equals(
-						range.getStart().getBytes(),
-						range.getEnd().getBytes())) {
-			rscanner
-					.setRowPrefixFilter(
-							range.getStart().getBytes());
-		}
-		else {
-			rscanner
-					.withStartRow(
-							range.getStart().getBytes());
-
-			if (recordReaderParams.getRowRange().isEndSortKeyInclusive()) {
-				final byte[] stopRowInclusive = HBaseUtils
-						.getInclusiveEndKey(
-								range.getEnd().getBytes());
-
-				rscanner
-						.withStopRow(
-								stopRowInclusive);
-			}
-			else {
-				rscanner
-						.withStopRow(
-								range.getEnd().getBytes());
-			}
-		}
+		// TODO all datastores that use the default splitsprovider seem to
+		// ignore range.isEndInclusive()
+		// and use next prefix for the end of the scan range - this seems likely
+		// to be overly inclusive, but doesn't seem to produce extra results for
+		// the other datastores within GeoWaveBasicSparkIT, however it does for
+		// HBase
+		rscanner
+				.withStartRow(
+						range.getStart().getBytes())
+				.withStopRow(
+						range.getEndAsNextPrefix().getBytes());
 
 		if (operations.isServerSideLibraryEnabled()) {
 			// Add distributable filters if requested, this has to be last

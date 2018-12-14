@@ -118,7 +118,12 @@ public class SplitsProvider
 						adapter,
 						indexAdapterIdPair.getLeft());
 				// make sure we pass along the new constraints to the record
-				// reader
+				// reader - for spark on YARN (not localy though), job
+				// configuration is immutable so while picking up the
+				// appropriate constraint from the configuration is more
+				// efficient, also do a check for
+				// AdapterAndIndexBasedQueryConstraints within the Record Reader
+				// itself
 				GeoWaveInputFormat.setQueryConstraints(
 						context.getConfiguration(),
 						indexAdapterConstraints);

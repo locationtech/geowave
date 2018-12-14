@@ -93,8 +93,13 @@ public class SparkQuery extends
 
 		SparkSession session = GeoWaveSparkConf.createDefaultSession(addonOptions);
 		long count = 0;
-		VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder().addTypeName(
-				typeName);
+		VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+		if (typeName != null) {
+			bldr.addTypeName(typeName);
+		}
+		if (indexName != null) {
+			bldr.indexName(indexName);
+		}
 		RDDOptions rddOptions = new RDDOptions();
 		rddOptions.setQuery(bldr.constraints(
 				bldr.constraintsFactory().cqlConstraints(
@@ -106,8 +111,9 @@ public class SparkQuery extends
 					rddOptions).getRawRDD().count();
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.warn(
+					"Unable to load RDD",
+					e);
 		}
 		return count;
 	}

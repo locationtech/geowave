@@ -12,28 +12,22 @@ package org.locationtech.geowave.datastore.hbase.mapreduce;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.TreeSet;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.client.RegionLocator;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
-import org.locationtech.geowave.core.index.ByteArrayRange.MergeOperation;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -116,7 +110,6 @@ public class HBaseSplitsProvider extends
 			}
 		}
 
-
 		if (ranges == null) { // get partition ranges from stats
 			final PartitionStatistics<?> statistics = getPartitionStats(
 					index,
@@ -128,7 +121,8 @@ public class HBaseSplitsProvider extends
 
 				ByteArray prevKey = new ByteArray(
 						HConstants.EMPTY_BYTE_ARRAY);
-				TreeSet<ByteArray> sortedPartitions = new TreeSet<>(statistics.getPartitionKeys());
+				final TreeSet<ByteArray> sortedPartitions = new TreeSet<>(
+						statistics.getPartitionKeys());
 				for (final ByteArray partitionKey : sortedPartitions) {
 					final ByteArrayRange range = new ByteArrayRange(
 							prevKey,

@@ -33,6 +33,7 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStoreWrapper;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.base.BaseQueryOptions;
@@ -41,6 +42,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransforme
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.ReaderClosableWrapper;
 import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.filter.FilterList;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
@@ -159,6 +161,28 @@ public class GeoWaveRecordReader<T> extends
 			final SplitInfo splitInfo = split.getInfo(i);
 			List<QueryFilter> queryFilters = null;
 			if (constraints != null) {
+				// do a check for AdapterAndIndexBasedQueryConstraints in case
+				// the splits provider was unable to set it
+				if (constraints instanceof AdapterAndIndexBasedQueryConstraints) {
+					final short[] adapters = sanitizedQueryOptions.getAdapterIds(internalAdapterStore);
+					DataTypeAdapter<?> adapter = null;
+					// in practice this is used for CQL and you can't have
+					// multiple
+					// types/adapters
+					if (adapters.length == 1) {
+						final String typeName = internalAdapterStore.getTypeName(adapters[0]);
+						if (typeName != null) {
+							adapter = adapterStore.getAdapter(typeName);
+						}
+					}
+					if (adapter == null) {
+						LOGGER.warn("Unable to find type matching an adapter dependent query");
+					}
+					this.constraints = ((AdapterAndIndexBasedQueryConstraints) constraints).createQueryConstraints(
+							adapter,
+							splitInfo.getIndex());
+				}
+
 				queryFilters = constraints.createFilters(splitInfo.getIndex());
 			}
 			for (final RangeLocationPair r : splitInfo.getRangeLocationPairs()) {
