@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.geotime.store.field;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
+import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
 import org.locationtech.jts.geom.Geometry;
@@ -39,7 +40,21 @@ public class GeometrySerializationProvider implements
 			if ((fieldData == null) || (fieldData.length < 1)) {
 				return null;
 			}
-			return GeometryUtils.geometryFromBinary(fieldData);
+			return GeometryUtils.geometryFromBinary(
+					fieldData,
+					FieldUtils.SERIALIZATION_VERSION);
+		}
+
+		@Override
+		public Geometry readField(
+				final byte[] fieldData,
+				final byte serializationVersion ) {
+			if ((fieldData == null) || (fieldData.length < 1)) {
+				return null;
+			}
+			return GeometryUtils.geometryFromBinary(
+					fieldData,
+					serializationVersion);
 		}
 	}
 

@@ -123,7 +123,9 @@ public class GridCoverageWritable implements
 			final DataOutput output )
 			throws IOException {
 		final byte[] rasterTileBinary = rasterTile.toBinary();
-		Varint.writeUnsignedVarInt(rasterTileBinary.length, output);
+		Varint.writeUnsignedVarInt(
+				rasterTileBinary.length,
+				output);
 		output.write(rasterTileBinary);
 		output.writeDouble(minX);
 		output.writeDouble(maxX);
@@ -131,7 +133,9 @@ public class GridCoverageWritable implements
 		output.writeDouble(maxY);
 		String crsStr = crs == null || GeometryUtils.getDefaultCRS().equals(
 				crs) ? "" : CRS.toSRS(crs);
-		Varint.writeUnsignedVarInt(crsStr.length(), output);
+		Varint.writeUnsignedVarInt(
+				crsStr.length(),
+				output);
 		output.write(StringUtils.stringToBinary(crsStr));
 	}
 

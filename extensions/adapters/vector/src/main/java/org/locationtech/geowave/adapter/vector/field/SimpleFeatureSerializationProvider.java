@@ -87,7 +87,9 @@ public class SimpleFeatureSerializationProvider
 					ByteBuffer lengthBytes;
 					if (attr == null) {
 						lengthBytes = ByteBuffer.allocate(VarintUtils.signedIntByteLength(-1));
-						VarintUtils.writeSignedInt(-1, lengthBytes);
+						VarintUtils.writeSignedInt(
+								-1,
+								lengthBytes);
 						output.write(lengthBytes.array());
 
 						continue;
@@ -95,7 +97,9 @@ public class SimpleFeatureSerializationProvider
 					FieldWriter writer = FieldUtils.getDefaultWriterForClass(attr.getClass());
 					byte[] binary = writer.writeField(attr);
 					lengthBytes = ByteBuffer.allocate(VarintUtils.signedIntByteLength(binary.length));
-					VarintUtils.writeSignedInt(binary.length, lengthBytes);
+					VarintUtils.writeSignedInt(
+							binary.length,
+							lengthBytes);
 					output.write(lengthBytes.array());
 					output.write(binary);
 				}

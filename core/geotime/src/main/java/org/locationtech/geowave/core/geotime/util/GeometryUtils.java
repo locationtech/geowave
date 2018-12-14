@@ -46,6 +46,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
@@ -60,7 +61,6 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKBReader;
-import org.locationtech.jts.io.WKBWriter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -373,14 +373,7 @@ public class GeometryUtils
 	public static byte[] geometryToBinary(
 			final Geometry geometry ) {
 
-		int dimensions = DEFAULT_DIMENSIONALITY;
-
-		if (!geometry.isEmpty()) {
-			dimensions = Double.isNaN(geometry.getCoordinate().getZ()) ? 2 : 3;
-		}
-
-		return new WKBWriter(
-				dimensions).write(geometry);
+		return new TWKBWriter().write(geometry);
 	}
 
 	/**
@@ -393,7 +386,7 @@ public class GeometryUtils
 	public static Geometry geometryFromBinary(
 			final byte[] binary ) {
 		try {
-			return new WKBReader().read(binary);
+			return new TWKBReader().read(binary);
 		}
 		catch (final ParseException e) {
 			LOGGER.warn(
@@ -401,6 +394,30 @@ public class GeometryUtils
 					e);
 		}
 		return null;
+	}
+
+	/**
+	 * Converts a byte array as well-known binary to a JTS geometry
+	 *
+	 * @param binary
+	 *            The well known binary
+	 * @return The JTS geometry
+	 */
+	public static Geometry geometryFromBinary(
+			final byte[] binary,
+			final byte serializationVersion ) {
+		if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
+			try {
+				return new WKBReader().read(binary);
+			}
+			catch (final ParseException e) {
+				LOGGER.warn(
+						"Unable to deserialize geometry data",
+						e);
+			}
+		}
+
+		return geometryFromBinary(binary);
 	}
 
 	/**

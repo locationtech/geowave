@@ -27,16 +27,15 @@ import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
+import org.locationtech.geowave.core.geotime.util.TWKBReader;
+import org.locationtech.geowave.core.geotime.util.TWKBWriter;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
 import com.clearspring.analytics.util.Varint;
-
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKBReader;
-import org.locationtech.jts.io.WKBWriter;
 
 /**
  * This class is used by FeatureDataAdapter to persist SimpleFeature and its
@@ -194,7 +193,7 @@ public class FeatureWritable implements
 						output);
 			}
 			else if (Geometry.class.isAssignableFrom(binding)) {
-				final WKBWriter writer = new WKBWriter();
+				final TWKBWriter writer = new TWKBWriter();
 				final byte[] buffer = writer.write((Geometry) value);
 				Varint.writeUnsignedVarInt(
 						buffer.length,
@@ -276,7 +275,7 @@ public class FeatureWritable implements
 						Varint.readUnsignedVarLong(input));
 			}
 			else if (Geometry.class.isAssignableFrom(binding)) {
-				final WKBReader reader = new WKBReader();
+				final TWKBReader reader = new TWKBReader();
 				final int length = Varint.readUnsignedVarInt(input);
 				final byte[] buffer = new byte[length];
 				input.readFully(buffer);

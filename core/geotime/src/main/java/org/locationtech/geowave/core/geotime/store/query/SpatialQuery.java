@@ -22,6 +22,8 @@ import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.TWKBReader;
+import org.locationtech.geowave.core.geotime.util.TWKBWriter;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -32,6 +34,8 @@ import org.locationtech.geowave.core.store.index.FilterableConstraints;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -39,11 +43,6 @@ import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKBReader;
-import org.locationtech.jts.io.WKBWriter;
 
 /**
  * The Spatial Query class represents a query in two dimensions. The constraint
@@ -456,7 +455,7 @@ public class SpatialQuery extends
 	public byte[] toBinary() {
 		final byte[] crsBinary = isDefaultCrs(crsCode) ? new byte[0] : StringUtils.stringToBinary(crsCode);
 		final byte[] superBinary = super.toBinary();
-		final byte[] geometryBinary = new WKBWriter().write(queryGeometry);
+		final byte[] geometryBinary = new TWKBWriter().write(queryGeometry);
 		final ByteBuffer buf = ByteBuffer.allocate(superBinary.length + geometryBinary.length + crsBinary.length
 				+ VarintUtils.unsignedIntByteLength(compareOp.ordinal())
 				+ VarintUtils.unsignedIntByteLength(nonSpatialCompareOp.ordinal())
@@ -497,7 +496,7 @@ public class SpatialQuery extends
 		final byte[] geometryBinary = new byte[buf.remaining()];
 		buf.get(geometryBinary);
 		try {
-			queryGeometry = new WKBReader().read(geometryBinary);
+			queryGeometry = new TWKBReader().read(geometryBinary);
 		}
 		catch (final ParseException e) {
 			LOGGER.warn(
