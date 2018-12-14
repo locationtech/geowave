@@ -24,7 +24,6 @@ import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.IndexUtils;
@@ -39,7 +38,6 @@ import org.locationtech.geowave.datastore.hbase.HBaseRow;
 import org.locationtech.geowave.datastore.hbase.filters.FixedCardinalitySkippingFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
-import org.locationtech.geowave.datastore.hbase.mapreduce.HBaseSplitsProvider;
 import org.locationtech.geowave.datastore.hbase.util.HBaseUtils;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.locationtech.geowave.mapreduce.splits.SplitsProvider;
@@ -151,9 +149,9 @@ public class HBaseReader<T> implements
 		// the other datastores within GeoWaveBasicSparkIT, however it does for
 		// HBase
 		rscanner
-				.withStartRow(
+				.setStartRow(
 						range.getStart().getBytes())
-				.withStopRow(
+				.setStopRow(
 						range.getEndAsNextPrefix().getBytes());
 
 		if (operations.isServerSideLibraryEnabled()) {
