@@ -51,9 +51,9 @@ import scala.Tuple2;
 @Environments({
 	Environment.SPARK
 })
-public class GeoWaveJavaSparkKMeansIT
+public class GeoWaveSparkKMeansIT
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveJavaSparkKMeansIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkKMeansIT.class);
 
 	protected static final String HAIL_TEST_CASE_PACKAGE = TestUtils.TEST_CASE_BASE + "hail_test_case/";
 	protected static final String HAIL_SHAPEFILE_FILE = HAIL_TEST_CASE_PACKAGE + "hail.shp";
@@ -77,7 +77,7 @@ public class GeoWaveJavaSparkKMeansIT
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*  RUNNING GeoWaveJavaSparkKMeansIT     *");
+		LOGGER.warn("*  RUNNING GeoWaveSparkKMeansIT     *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -86,7 +86,7 @@ public class GeoWaveJavaSparkKMeansIT
 	public static void reportTestFinish() {
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("* FINISHED GeoWaveJavaSparkKMeansIT     *");
+		LOGGER.warn("* FINISHED GeoWaveSparkKMeansIT     *");
 		LOGGER
 				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
 						+ "s elapsed.                 *");

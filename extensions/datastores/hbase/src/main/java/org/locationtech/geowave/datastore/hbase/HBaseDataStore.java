@@ -82,7 +82,6 @@ public class HBaseDataStore extends
 				operations,
 				options,
 				adapterMappingStore);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -119,4 +118,5 @@ public class HBaseDataStore extends
 			}
 		}
 	}
+
 }

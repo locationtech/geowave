@@ -25,6 +25,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +98,8 @@ abstract public class AbstractGeoWaveQuery extends
 				typeName,
 				indexName,
 				dataStore,
-				debug);
+				debug,
+				storeOptions.getDataStorePlugin());
 		stopWatch.stop();
 		System.out.println("Got " + results + " results in " + stopWatch.toString());
 	}
@@ -107,7 +109,8 @@ abstract public class AbstractGeoWaveQuery extends
 			final String typeName,
 			final String indexName,
 			DataStore dataStore,
-			boolean debug );
+			boolean debug,
+			DataStorePluginOptions pluginOptions );
 
 	public static class StringToByteArrayConverter extends
 			GeoWaveBaseConverter<ByteArray>

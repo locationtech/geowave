@@ -24,7 +24,6 @@ import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.IndexUtils;
@@ -39,9 +38,9 @@ import org.locationtech.geowave.datastore.hbase.HBaseRow;
 import org.locationtech.geowave.datastore.hbase.filters.FixedCardinalitySkippingFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
-import org.locationtech.geowave.datastore.hbase.mapreduce.HBaseSplitsProvider;
 import org.locationtech.geowave.datastore.hbase.util.HBaseUtils;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
+import org.locationtech.geowave.mapreduce.splits.SplitsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,41 +136,23 @@ public class HBaseReader<T> implements
 
 	protected void initRecordScanner() {
 		final FilterList filterList = new FilterList();
-		final ByteArrayRange range = HBaseSplitsProvider
-				.toHBaseRange(
+		final ByteArrayRange range = SplitsProvider
+				.fromRowRange(
 						recordReaderParams.getRowRange());
 
 		final Scan rscanner = scanProvider.get();
 
-		// Use this instead of setStartRow/setStopRow for single rowkeys
-		if (Bytes
-				.equals(
-						range.getStart().getBytes(),
-						range.getEnd().getBytes())) {
-			rscanner
-					.setRowPrefixFilter(
-							range.getStart().getBytes());
-		}
-		else {
-			rscanner
-					.setStartRow(
-							range.getStart().getBytes());
-
-			if (recordReaderParams.getRowRange().isEndSortKeyInclusive()) {
-				final byte[] stopRowInclusive = HBaseUtils
-						.getInclusiveEndKey(
-								range.getEnd().getBytes());
-
-				rscanner
-						.setStopRow(
-								stopRowInclusive);
-			}
-			else {
-				rscanner
-						.setStopRow(
-								range.getEnd().getBytes());
-			}
-		}
+		// TODO all datastores that use the default splitsprovider seem to
+		// ignore range.isEndInclusive()
+		// and use next prefix for the end of the scan range - this seems likely
+		// to be overly inclusive, but doesn't seem to produce extra results for
+		// the other datastores within GeoWaveBasicSparkIT, however it does for
+		// HBase
+		rscanner
+				.setStartRow(
+						range.getStart().getBytes())
+				.setStopRow(
+						range.getEndAsNextPrefix().getBytes());
 
 		if (operations.isServerSideLibraryEnabled()) {
 			// Add distributable filters if requested, this has to be last

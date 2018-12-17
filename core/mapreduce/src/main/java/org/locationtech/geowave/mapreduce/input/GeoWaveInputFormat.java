@@ -181,7 +181,7 @@ public class GeoWaveInputFormat<T> extends
 
 	protected static QueryConstraints getQueryConstraints(
 			final JobContext context ) {
-		return GeoWaveInputConfigurator.getQueryCosntraints(
+		return GeoWaveInputConfigurator.getQueryConstraints(
 				CLASS,
 				context);
 	}

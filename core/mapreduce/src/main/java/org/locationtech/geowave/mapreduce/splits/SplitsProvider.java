@@ -23,8 +23,10 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -36,17 +38,21 @@ import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatis
 import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.StatisticsQuery;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
+import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
 import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
+import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,6 +78,7 @@ public class SplitsProvider
 			final InternalAdapterStore internalAdapterStore,
 			final IndexStore indexStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final JobContext context,
 			final Integer minSplits,
 			final Integer maxSplits )
 			throws IOException,
@@ -92,6 +99,50 @@ public class SplitsProvider
 			indexIdToAdaptersMap.put(
 					indexAdapterIdPair.getKey().getName(),
 					indexAdapterIdPair.getValue());
+			QueryConstraints indexAdapterConstraints;
+			if (constraints instanceof AdapterAndIndexBasedQueryConstraints) {
+				final List<Short> adapters = indexAdapterIdPair.getRight();
+				DataTypeAdapter<?> adapter = null;
+				// in practice this is used for CQL and you can't have multiple
+				// types/adapters
+				if (adapters.size() == 1) {
+					final String typeName = internalAdapterStore.getTypeName(adapters.get(0));
+					if (typeName != null) {
+						adapter = adapterStore.getAdapter(typeName);
+					}
+				}
+				if (adapter == null) {
+					LOGGER.warn("Unable to find type matching an adapter dependent query");
+				}
+				indexAdapterConstraints = ((AdapterAndIndexBasedQueryConstraints) constraints).createQueryConstraints(
+						adapter,
+						indexAdapterIdPair.getLeft());
+				// make sure we pass along the new constraints to the record
+				// reader - for spark on YARN (not localy though), job
+				// configuration is immutable so while picking up the
+				// appropriate constraint from the configuration is more
+				// efficient, also do a check for
+				// AdapterAndIndexBasedQueryConstraints within the Record Reader
+				// itself
+				GeoWaveInputFormat.setQueryConstraints(
+						context.getConfiguration(),
+						indexAdapterConstraints);
+			}
+			else {
+				indexAdapterConstraints = constraints;
+			}
+			IndexMetaData[] indexMetadata;
+			if (indexAdapterConstraints != null) {
+
+				indexMetadata = IndexMetaDataSet.getIndexMetadata(
+						indexAdapterIdPair.getLeft(),
+						indexAdapterIdPair.getRight(),
+						statsStore,
+						commonOptions.getAuthorizations());
+			}
+			else {
+				indexMetadata = null;
+			}
 			populateIntermediateSplits(
 					splits,
 					operations,
@@ -101,9 +152,10 @@ public class SplitsProvider
 					adapterStore,
 					statsStore,
 					maxSplits,
-					constraints,
+					indexAdapterConstraints,
 					(double[]) commonOptions.getHints().get(
 							DataStoreUtils.TARGET_RESOLUTION_PER_DIMENSION_FOR_HIERARCHICAL_INDEX),
+					indexMetadata,
 					commonOptions.getAuthorizations());
 		}
 
@@ -179,6 +231,7 @@ public class SplitsProvider
 			final Integer maxSplits,
 			final QueryConstraints constraints,
 			final double[] targetResolutionPerDimensionForHierarchicalIndex,
+			final IndexMetaData[] indexMetadata,
 			final String[] authorizations )
 			throws IOException {
 
@@ -194,14 +247,16 @@ public class SplitsProvider
 						indexConstraints,
 						indexStrategy,
 						targetResolutionPerDimensionForHierarchicalIndex,
-						maxSplits).getCompositeQueryRanges();
+						maxSplits,
+						indexMetadata).getCompositeQueryRanges();
 			}
 			else {
 				ranges = DataStoreUtils.constraintsToQueryRanges(
 						indexConstraints,
 						indexStrategy,
 						targetResolutionPerDimensionForHierarchicalIndex,
-						-1).getCompositeQueryRanges();
+						-1,
+						indexMetadata).getCompositeQueryRanges();
 			}
 		}
 		final List<RangeLocationPair> rangeList = new ArrayList<>();

@@ -237,7 +237,7 @@ public class SpatialQuery extends
 				queryGeometry,
 				Collections.emptyMap(),
 				null,
-				compareOp,
+				compareOp == null ? CompareOperation.INTERSECTS : compareOp,
 				nonSpatialCompareOp);
 	}
 
@@ -456,7 +456,7 @@ public class SpatialQuery extends
 		final byte[] crsBinary = isDefaultCrs(crsCode) ? new byte[0] : StringUtils.stringToBinary(crsCode);
 		final byte[] superBinary = super.toBinary();
 		final byte[] geometryBinary = new WKBWriter().write(queryGeometry);
-		final ByteBuffer buf = ByteBuffer.allocate(superBinary.length + geometryBinary.length + 16);
+		final ByteBuffer buf = ByteBuffer.allocate(superBinary.length + geometryBinary.length + crsBinary.length + 16);
 		buf.putInt(compareOp.ordinal());
 		buf.putInt(nonSpatialCompareOp.ordinal());
 		buf.putInt(crsBinary.length);

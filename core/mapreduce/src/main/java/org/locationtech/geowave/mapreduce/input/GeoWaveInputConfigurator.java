@@ -147,7 +147,7 @@ public class GeoWaveInputConfigurator extends
 		return null;
 	}
 
-	public static QueryConstraints getQueryCosntraints(
+	public static QueryConstraints getQueryConstraints(
 			final Class<?> implementingClass,
 			final JobContext context ) {
 		return getQueryConstraintsInternal(

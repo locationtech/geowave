@@ -16,11 +16,6 @@ import java.io.IOException;
 
 public class RangeLocationPair
 {
-	// Type of 'range' is the only difference between this and the Accumulo
-	// version
-
-	// Should change to a generic type and reuse
-
 	private GeoWaveRowRange range;
 	private String location;
 	private double cardinality;

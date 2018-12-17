@@ -34,17 +34,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 		AbstractGeoWaveBasicVectorIT
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeowaveCustomCRSSpatialVectorIT.class);
-	private static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-box-filter.shp";
-	private static final String HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
-			+ "hail-polygon-filter.shp";
 
-	private static final String TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks-box-filter.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks-polygon-filter.shp";
-
-	private static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
-	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
 	private static final String CQL_DELETE_STR = "STATE = 'TX'";
 
 	@GeoWaveTestStore(value = {

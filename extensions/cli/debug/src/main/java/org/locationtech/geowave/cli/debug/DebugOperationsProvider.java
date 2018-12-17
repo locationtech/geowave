@@ -22,7 +22,8 @@ public class DebugOperationsProvider implements
 		ClientSideCQLQuery.class,
 		CQLQuery.class,
 		FullTableScan.class,
-		MinimalFullTable.class
+		MinimalFullTable.class,
+		SparkQuery.class
 	};
 
 	@Override

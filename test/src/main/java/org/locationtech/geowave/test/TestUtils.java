@@ -32,14 +32,20 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.geometry.jts.JTS;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
+import org.geotools.temporal.object.DefaultInstant;
+import org.geotools.temporal.object.DefaultPeriod;
+import org.geotools.temporal.object.DefaultPosition;
 import org.junit.Assert;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
@@ -47,8 +53,9 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypePro
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
+import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
+import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
@@ -67,20 +74,25 @@ import org.locationtech.geowave.core.store.cli.remote.ListStatsCommand;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.filter.And;
+import org.opengis.filter.Filter;
+import org.opengis.filter.FilterFactory2;
+import org.opengis.filter.spatial.SpatialOperator;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import org.opengis.temporal.Period;
+import org.opengis.temporal.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.ParameterException;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -246,7 +258,12 @@ public class TestUtils
 			final IndexPluginOptions indexOption = new IndexPluginOptions();
 			indexOption.selectPlugin(indexType);
 			if (crsCode != null) {
-				((SpatialOptions) indexOption.getDimensionalityOptions()).setCrs(crsCode);
+				if (indexOption.getDimensionalityOptions() instanceof SpatialOptions) {
+					((SpatialOptions) indexOption.getDimensionalityOptions()).setCrs(crsCode);
+				}
+				else {
+					((SpatialTemporalOptions) indexOption.getDimensionalityOptions()).setCrs(crsCode);
+				}
 			}
 			indexOptions.add(indexOption);
 		}
@@ -599,7 +616,23 @@ public class TestUtils
 	public static QueryConstraints resourceToQuery(
 			final URL filterResource )
 			throws IOException {
-		return featureToQuery(resourceToFeature(filterResource));
+		return featureToQuery(
+				resourceToFeature(filterResource),
+				null,
+				null,
+				true);
+	}
+
+	public static QueryConstraints resourceToQuery(
+			final URL filterResource,
+			final Pair<String, String> optimalCqlQueryGeometryAndTimeFields,
+			final boolean useDuring )
+			throws IOException {
+		return featureToQuery(
+				resourceToFeature(filterResource),
+				optimalCqlQueryGeometryAndTimeFields,
+				null,
+				useDuring);
 	}
 
 	public static SimpleFeature resourceToFeature(
@@ -637,8 +670,11 @@ public class TestUtils
 		return savedFilter;
 	}
 
-	protected static QueryConstraints featureToQuery(
-			final SimpleFeature savedFilter ) {
+	public static QueryConstraints featureToQuery(
+			final SimpleFeature savedFilter,
+			final Pair<String, String> optimalCqlQueryGeometryAndTimeField,
+			final String crsCode,
+			final boolean useDuring ) {
 		final Geometry filterGeometry = (Geometry) savedFilter.getDefaultGeometry();
 		final Object startObj = savedFilter.getAttribute(TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
 		final Object endObj = savedFilter.getAttribute(TEST_FILTER_END_TIME_ATTRIBUTE_NAME);
@@ -660,15 +696,78 @@ public class TestUtils
 				endDate = (Date) endObj;
 			}
 			if ((startDate != null) && (endDate != null)) {
+				if (optimalCqlQueryGeometryAndTimeField != null) {
+					final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
+					Filter timeConstraint;
+					if (useDuring) {
+						final Position ip1 = new DefaultPosition(
+								startDate);
+						final Position ip2 = new DefaultPosition(
+								endDate);
+						final Period period = new DefaultPeriod(
+								new DefaultInstant(
+										ip1),
+								new DefaultInstant(
+										ip2));
+						timeConstraint = factory.during(
+								factory.property(optimalCqlQueryGeometryAndTimeField.getRight()),
+								factory.literal(period));
+					}
+					else {
+						timeConstraint = factory.and(
+								factory.greaterOrEqual(
+										factory.property(optimalCqlQueryGeometryAndTimeField.getRight()),
+										factory.literal(startDate)),
+								factory.lessOrEqual(
+										factory.property(optimalCqlQueryGeometryAndTimeField.getRight()),
+										factory.literal(endDate)));
+					}
+
+					final And expression = factory.and(
+							geometryToSpatialOperator(
+									filterGeometry,
+									optimalCqlQueryGeometryAndTimeField),
+							timeConstraint);
+					return new OptimalCQLQuery(
+							expression);
+				}
 				return new SpatialTemporalQuery(
 						startDate,
 						endDate,
-						filterGeometry);
+						filterGeometry,
+						crsCode);
 			}
+		}
+		if (optimalCqlQueryGeometryAndTimeField != null) {
+			return new OptimalCQLQuery(
+					geometryToSpatialOperator(
+							filterGeometry,
+							optimalCqlQueryGeometryAndTimeField));
+
 		}
 		// otherwise just return a spatial query
 		return new SpatialQuery(
-				filterGeometry);
+				filterGeometry,
+				crsCode);
+	}
+
+	private static SpatialOperator geometryToSpatialOperator(
+			final Geometry jtsGeom,
+			final Pair<String, String> optimalCqlQueryGeometryAndTimeField ) {
+		final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
+		if (jtsGeom.equalsTopo(jtsGeom.getEnvelope())) {
+			return factory.bbox(
+					factory.property(optimalCqlQueryGeometryAndTimeField.getLeft()),
+					new ReferencedEnvelope(
+							jtsGeom.getEnvelopeInternal(),
+							GeometryUtils.getDefaultCRS()));
+		}
+		// there apparently is no way to associate a CRS with a poly
+		// intersection operation so it will have to assume the same CRS as the
+		// feature type
+		return factory.intersects(
+				factory.property(optimalCqlQueryGeometryAndTimeField.getLeft()),
+				factory.literal(jtsGeom));
 	}
 
 	static protected void replaceParameters(

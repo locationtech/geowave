@@ -39,9 +39,9 @@ import org.locationtech.geowave.test.services.GeoServerIngestIT;
 import org.locationtech.geowave.test.services.IngestIT;
 import org.locationtech.geowave.test.services.RemoteIT;
 import org.locationtech.geowave.test.services.grpc.GeoWaveGrpcIT;
-import org.locationtech.geowave.test.spark.GeoWaveJavaSparkIT;
-import org.locationtech.geowave.test.spark.GeoWaveJavaSparkKMeansIT;
-import org.locationtech.geowave.test.spark.GeoWaveJavaSparkSQLIT;
+import org.locationtech.geowave.test.spark.GeoWaveBasicSparkIT;
+import org.locationtech.geowave.test.spark.GeoWaveSparkKMeansIT;
+import org.locationtech.geowave.test.spark.GeoWaveSparkSQLIT;
 import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
@@ -68,9 +68,9 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 	PolygonDataIdQueryIT.class,
 	ConfigCacheIT.class,
 	DBScanIT.class,
-	GeoWaveJavaSparkIT.class,
-	GeoWaveJavaSparkKMeansIT.class,
-	GeoWaveJavaSparkSQLIT.class,
+	GeoWaveBasicSparkIT.class,
+	GeoWaveSparkKMeansIT.class,
+	GeoWaveSparkSQLIT.class,
 	GeoWaveSparkSpatialJoinIT.class,
 	ConfigServicesIT.class,
 	GeoServerIngestIT.class,
