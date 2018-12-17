@@ -124,17 +124,16 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
  predicate from a CQL expression. There are three possible outcomes based on
  the extracted results. 1) If CQL expression is simple then we are able to
  extract query geometry and predicate successfully. 2) If CQL expression
- combines multiple dissimilar geometric relationships (i.e.
- "BBOX(geom,...) AND TOUCHES(geom,...)") then we wont be able combine that
- into a single query geometry and predicate. In which case, we will only
- return query geometry for the purpose of creating linear constraints and
- predicate value will be null. However, we are able to combine multiple
- geometric relationships into one query/predicate if their predicates are same
- (i.e. "INTERSECTS(geom,...) AND INTERSECTS(geom,...)") 3) In some case, we
- won't be able to extract query geometry and predicate at all. In that case,
- we simply return null. This occurs if CQL expression doesn't contain any
- geometric constraints or CQL expression has non-inclusive filter (i.e. NOT or
- DISJOINT(...)).</div>
+ combines multiple dissimilar geometric relationships (i.e. "BBOX(geom,...)
+ AND TOUCHES(geom,...)") then we wont be able combine that into a single query
+ geometry and predicate. In which case, we will only return query geometry for
+ the purpose of creating linear constraints and predicate value will be null.
+ However, we are able to combine multiple geometric relationships into one
+ query/predicate if their predicates are same (i.e. "INTERSECTS(geom,...) AND
+ INTERSECTS(geom,...)") 3) In some case, we won't be able to extract query
+ geometry and predicate at all. In that case, we simply return null. This
+ occurs if CQL expression doesn't contain any geometric constraints or CQL
+ expression has non-inclusive filter (i.e. NOT or DISJOINT(...)).</div>
 </li>
 </ul>
 </div>

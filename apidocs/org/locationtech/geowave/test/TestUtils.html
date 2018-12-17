@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":41,"i1":41,"i2":41,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9};
+var methods = {"i0":41,"i1":41,"i2":41,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -289,8 +289,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#deleteAll-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">deleteAll</a></span>(<a href="../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;dataStore)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>protected static <a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#featureToQuery-org.opengis.feature.simple.SimpleFeature-">featureToQuery</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;savedFilter)</code>&nbsp;</td>
+<td class="colFirst"><code>static <a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#featureToQuery-org.opengis.feature.simple.SimpleFeature-org.apache.commons.lang3.tuple.Pair-java.lang.String-boolean-">featureToQuery</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;savedFilter,
+              org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;optimalCqlQueryGeometryAndTimeField,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode,
+              boolean&nbsp;useDuring)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
@@ -363,19 +366,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#resourceToQuery-java.net.URL-">resourceToQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;filterResource)</code>&nbsp;</td>
 </tr>
 <tr id="i23" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#resourceToQuery-java.net.URL-org.apache.commons.lang3.tuple.Pair-boolean-">resourceToQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;filterResource,
+               org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;optimalCqlQueryGeometryAndTimeFields,
+               boolean&nbsp;useDuring)</code>&nbsp;</td>
+</tr>
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#testLocalIngest-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.test.TestUtils.DimensionalityType-java.lang.String-">testLocalIngest</a></span>(<a href="../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;dataStore,
                <a href="../../../../org/locationtech/geowave/test/TestUtils.DimensionalityType.html" title="enum in org.locationtech.geowave.test">TestUtils.DimensionalityType</a>&nbsp;dimensionalityType,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ingestFilePath)</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#testLocalIngest-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.test.TestUtils.DimensionalityType-java.lang.String-int-">testLocalIngest</a></span>(<a href="../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;dataStore,
                <a href="../../../../org/locationtech/geowave/test/TestUtils.DimensionalityType.html" title="enum in org.locationtech.geowave.test">TestUtils.DimensionalityType</a>&nbsp;dimensionalityType,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ingestFilePath,
                int&nbsp;nthreads)</code>&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#testLocalIngest-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.test.TestUtils.DimensionalityType-java.lang.String-java.lang.String-int-">testLocalIngest</a></span>(<a href="../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;dataStore,
                <a href="../../../../org/locationtech/geowave/test/TestUtils.DimensionalityType.html" title="enum in org.locationtech.geowave.test">TestUtils.DimensionalityType</a>&nbsp;dimensionalityType,
@@ -383,7 +392,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;format,
                int&nbsp;nthreads)</code>&nbsp;</td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#testLocalIngest-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.test.TestUtils.DimensionalityType-java.lang.String-java.lang.String-java.lang.String-int-">testLocalIngest</a></span>(<a href="../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;dataStore,
                <a href="../../../../org/locationtech/geowave/test/TestUtils.DimensionalityType.html" title="enum in org.locationtech.geowave.test">TestUtils.DimensionalityType</a>&nbsp;dimensionalityType,
@@ -392,7 +401,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;format,
                int&nbsp;nthreads)</code>&nbsp;</td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#testS3LocalIngest-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.test.TestUtils.DimensionalityType-java.lang.String-java.lang.String-java.lang.String-int-">testS3LocalIngest</a></span>(<a href="../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;dataStore,
                  <a href="../../../../org/locationtech/geowave/test/TestUtils.DimensionalityType.html" title="enum in org.locationtech.geowave.test">TestUtils.DimensionalityType</a>&nbsp;dimensionalityType,
@@ -401,13 +410,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;format,
                  int&nbsp;nthreads)</code>&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#testSparkIngest-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.test.TestUtils.DimensionalityType-java.lang.String-">testSparkIngest</a></span>(<a href="../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;dataStore,
                <a href="../../../../org/locationtech/geowave/test/TestUtils.DimensionalityType.html" title="enum in org.locationtech.geowave.test">TestUtils.DimensionalityType</a>&nbsp;dimensionalityType,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;format)</code>&nbsp;</td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#testSparkIngest-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.test.TestUtils.DimensionalityType-java.lang.String-java.lang.String-java.lang.String-">testSparkIngest</a></span>(<a href="../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;dataStore,
                <a href="../../../../org/locationtech/geowave/test/TestUtils.DimensionalityType.html" title="enum in org.locationtech.geowave.test">TestUtils.DimensionalityType</a>&nbsp;dimensionalityType,
@@ -415,14 +424,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ingestFilePath,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;format)</code>&nbsp;</td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#testTileAgainstReference-java.awt.image.BufferedImage-java.awt.image.BufferedImage-double-double-">testTileAgainstReference</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a>&nbsp;actual,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html?is-external=true" title="class or interface in java.awt.image">BufferedImage</a>&nbsp;expected,
                         double&nbsp;minPctError,
                         double&nbsp;maxPctError)</code>&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>static org.opengis.referencing.operation.MathTransform</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/test/TestUtils.html#transformFromCrs-org.opengis.referencing.crs.CoordinateReferenceSystem-">transformFromCrs</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>&nbsp;</td>
 </tr>
@@ -878,6 +887,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="resourceToQuery-java.net.URL-org.apache.commons.lang3.tuple.Pair-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>resourceToQuery</h4>
+<pre>public static&nbsp;<a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;resourceToQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;filterResource,
+                                               org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;optimalCqlQueryGeometryAndTimeFields,
+                                               boolean&nbsp;useDuring)
+                                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="resourceToFeature-java.net.URL-">
 <!--   -->
 </a>
@@ -892,13 +917,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="featureToQuery-org.opengis.feature.simple.SimpleFeature-">
+<a name="featureToQuery-org.opengis.feature.simple.SimpleFeature-org.apache.commons.lang3.tuple.Pair-java.lang.String-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>featureToQuery</h4>
-<pre>protected static&nbsp;<a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;featureToQuery(org.opengis.feature.simple.SimpleFeature&nbsp;savedFilter)</pre>
+<pre>public static&nbsp;<a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;featureToQuery(org.opengis.feature.simple.SimpleFeature&nbsp;savedFilter,
+                                              org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;optimalCqlQueryGeometryAndTimeField,
+                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode,
+                                              boolean&nbsp;useDuring)</pre>
 </li>
 </ul>
 <a name="replaceParameters-java.util.Map-java.io.File-">
