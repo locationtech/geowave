@@ -88,7 +88,7 @@ public class GeometryUtilsTest
 		Assert.assertTrue(Double.isNaN(convCoords.getZ()));
 	}
 
-	// @Test TWKB does not yet support Z and M dimensions on coordinates.
+	@Test
 	public void test3DGeometryBinaryConversion() {
 
 		// convert 3D point to binary representation

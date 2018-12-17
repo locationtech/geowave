@@ -43,6 +43,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypePro
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -173,6 +174,7 @@ public class KSamplerMapReduceTest
 		// should this initialization be handled by the runner class rather than
 		// externally such as in the test?
 		final DataStore dataStore = store.getDataStoreOptions().createDataStore();
+		final InternalAdapterStore internalAdapterStore = store.getDataStoreOptions().createInternalAdapterStore();
 		dataStore.addType(
 				adapter,
 				new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
@@ -183,8 +185,8 @@ public class KSamplerMapReduceTest
 						SampleParameters.Sample.SAMPLE_RANK_FUNCTION),
 				TestSamplingMidRankFunction.class,
 				SamplingRankFunction.class);
-		internalAdapterId = InternalAdapterStoreImpl.getInitialAdapterId(testObjectAdapter.getTypeName());
-		other = InternalAdapterStoreImpl.getInitialAdapterId(adapter.getTypeName());
+		internalAdapterId = internalAdapterStore.getInitialAdapterId(testObjectAdapter.getTypeName());
+		other = internalAdapterStore.getInitialAdapterId(adapter.getTypeName());
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
 				testObjectAdapter);

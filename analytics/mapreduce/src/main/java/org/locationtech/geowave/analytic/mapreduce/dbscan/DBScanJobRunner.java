@@ -170,7 +170,7 @@ public class DBScanJobRunner extends
 		JobContextInternalAdapterStore.addTypeName(
 				config,
 				adapterID,
-				InternalAdapterStoreImpl.getInitialAdapterId(adapterID));
+				InternalAdapterStoreImpl.getLazyInitialAdapterId(adapterID));
 
 		final Projection<?> projectionFunction = runTimeProperties.getClassInstance(
 				HullParameters.Hull.PROJECTION_CLASS,

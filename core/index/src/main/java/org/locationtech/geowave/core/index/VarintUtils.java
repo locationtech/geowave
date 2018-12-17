@@ -88,6 +88,25 @@ public class VarintUtils
 		buffer.put((byte) (value & 0x7F));
 	}
 
+	public static void writeUnsignedIntReversed(
+			int value,
+			ByteBuffer buffer ) {
+		int startPosition = buffer.position();
+		int byteLength = VarintUtils.unsignedIntByteLength(value);
+		int position = startPosition + byteLength - 1;
+		while ((value & 0xFFFFFF80) != 0) {
+			buffer.put(
+					position,
+					(byte) (value & 0x7F | 0x80));
+			value >>>= 7;
+			position--;
+		}
+		buffer.put(
+				position,
+				(byte) (value & 0x7F));
+		buffer.position(startPosition + byteLength);
+	}
+
 	public static int readSignedInt(
 			ByteBuffer buffer ) {
 		return unsignedToSignedInt(readUnsignedInt(buffer));
@@ -101,6 +120,23 @@ public class VarintUtils
 		while (((currByte = buffer.get()) & 0x80) != 0) {
 			value |= (currByte & 0x7F) << i;
 			i += 7;
+		}
+		return value | (currByte << i);
+	}
+
+	public static int readUnsignedIntReversed(
+			ByteBuffer buffer ) {
+		int value = 0;
+		int i = 0;
+		int currByte;
+		int position = buffer.position();
+		while (((currByte = buffer.get(position)) & 0x80) != 0) {
+			value |= (currByte & 0x7F) << i;
+			i += 7;
+			position--;
+		}
+		if (position > 0) {
+			buffer.position(position - 1);
 		}
 		return value | (currByte << i);
 	}

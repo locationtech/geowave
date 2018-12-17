@@ -9,6 +9,46 @@ import org.junit.Test;
 
 public class VarintUtilsTest
 {
+
+	@Test
+	public void testVarintEncodeDecodeUnsignedIntReversed() {
+		testEncodeDecodeUnsignedIntReversed(0);
+		testEncodeDecodeUnsignedIntReversed(123456);
+		testEncodeDecodeUnsignedIntReversed(Byte.MAX_VALUE);
+		testEncodeDecodeUnsignedIntReversed(Integer.MAX_VALUE);
+
+		int length = VarintUtils.unsignedIntByteLength(15) + VarintUtils.unsignedIntByteLength(Byte.MAX_VALUE);
+		ByteBuffer buffer = ByteBuffer.allocate(length);
+		VarintUtils.writeUnsignedIntReversed(
+				15,
+				buffer);
+		VarintUtils.writeUnsignedIntReversed(
+				Byte.MAX_VALUE,
+				buffer);
+		buffer.position(buffer.limit() - 1);
+		Assert.assertEquals(
+				Byte.MAX_VALUE,
+				VarintUtils.readUnsignedIntReversed(buffer));
+		Assert.assertEquals(
+				15,
+				VarintUtils.readUnsignedIntReversed(buffer));
+
+	}
+
+	private void testEncodeDecodeUnsignedIntReversed(
+			int value ) {
+		int length = VarintUtils.unsignedIntByteLength(value);
+		ByteBuffer buffer = ByteBuffer.allocate(length);
+		VarintUtils.writeUnsignedIntReversed(
+				value,
+				buffer);
+		buffer.position(buffer.limit() - 1);
+		int decoded = VarintUtils.readUnsignedIntReversed(buffer);
+		Assert.assertEquals(
+				value,
+				decoded);
+	}
+
 	@Test
 	public void testVarintSignedUnsignedInt() {
 		testSignedUnsignedIntValue(0);

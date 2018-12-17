@@ -13,6 +13,12 @@ public class TWKBUtils
 	public static final byte EXTENDED_DIMENSIONS = 1 << 3;
 	public static final byte EMPTY_GEOMETRY = 1 << 4;
 
+	public static final byte MAX_COORD_PRECISION = 7;
+	public static final byte MIN_COORD_PRECISION = -8;
+
+	public static final byte MAX_EXTENDED_PRECISION = 3;
+	public static final byte MIN_EXTENDED_PRECISION = -4;
+
 	public static int zigZagEncode(
 			int value ) {
 		return (value << 1) ^ (value >> 31);

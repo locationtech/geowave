@@ -27,6 +27,9 @@ public interface InternalAdapterStore
 	public Short getAdapterId(
 			String typeName );
 
+	public short getInitialAdapterId(
+			String typeName );
+
 	/**
 	 * If an adapter is already associated with an internal Adapter returns
 	 * false. Adapter can only be associated with internal adapter once.
