@@ -8,11 +8,6 @@
  */
 package org.locationtech.geowave.format.landsat8;
 
-import com.beust.jcommander.ParameterException;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import it.geosolutions.jaiext.range.RangeFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -63,6 +58,11 @@ import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import com.beust.jcommander.ParameterException;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import it.geosolutions.jaiext.range.RangeFactory;
 
 public class RasterIngestRunner extends DownloadRunner {
   private static final double LANDSAT8_NO_DATA_VALUE_BQA = 1;
@@ -318,7 +318,8 @@ public class RasterIngestRunner extends DownloadRunner {
             index,
             dataStorePluginOptions.createAdapterStore(),
             dataStorePluginOptions.createInternalAdapterStore(),
-            dataStorePluginOptions.createAdapterIndexMappingStore())) {
+            dataStorePluginOptions.createAdapterIndexMappingStore(),
+            dataStorePluginOptions.getFactoryOptions().getStoreOptions().getMaxRangeDecomposition())) {
           System.out.println(
               "Successfully merged overlapping tiles within index '" + index.getName() + "'");
         } else {

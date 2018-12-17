@@ -31,12 +31,14 @@ public class FieldNameStatisticVisibility<T> implements EntryVisibilityHandler<T
   public byte[] getVisibility(final T entry, final GeoWaveRow... kvs) {
     for (final GeoWaveRow r : kvs) {
       for (final GeoWaveValue v : r.getFieldValues()) {
-        final List<Integer> positions = BitmaskUtils.getFieldPositions(v.getFieldMask());
-        if (positions.contains(bitPosition)) {
-          return v.getVisibility();
+        if ((v.getFieldMask() != null) && (v.getFieldMask().length > 0)) {
+          final List<Integer> positions = BitmaskUtils.getFieldPositions(v.getFieldMask());
+          if (positions.contains(bitPosition)) {
+            return v.getVisibility();
+          }
         }
       }
     }
-    return null;
+    return new byte[0];
   }
 }

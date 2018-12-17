@@ -28,10 +28,6 @@
 			<artifactId>redisson</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.ben-manes.caffeine</groupId>
-			<artifactId>caffeine</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.clearspring.analytics</groupId>
 			<artifactId>stream</artifactId>
 		</dependency>

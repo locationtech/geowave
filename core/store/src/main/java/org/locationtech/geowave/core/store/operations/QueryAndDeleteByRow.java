@@ -26,7 +26,7 @@ public class QueryAndDeleteByRow<T> implements Deleter<T> {
   }
 
   @Override
-  public void close() throws Exception {
+  public void close() {
     reader.close();
     rowDeleter.close();
   }
@@ -49,7 +49,7 @@ public class QueryAndDeleteByRow<T> implements Deleter<T> {
   private static class EmptyReader<T> implements RowReader<T> {
 
     @Override
-    public void close() throws Exception {}
+    public void close() {}
 
     @Override
     public boolean hasNext() {

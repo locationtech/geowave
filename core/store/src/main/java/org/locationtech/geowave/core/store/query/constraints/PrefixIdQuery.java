@@ -12,7 +12,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
@@ -20,21 +19,21 @@ import org.locationtech.geowave.core.store.query.filter.PrefixIdQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class PrefixIdQuery implements QueryConstraints {
-  private ByteArray sortKeyPrefix;
-  private ByteArray partitionKey;
+  private byte[] sortKeyPrefix;
+  private byte[] partitionKey;
 
   public PrefixIdQuery() {}
 
-  public PrefixIdQuery(final ByteArray partitionKey, final ByteArray sortKeyPrefix) {
+  public PrefixIdQuery(final byte[] partitionKey, final byte[] sortKeyPrefix) {
     this.partitionKey = partitionKey;
     this.sortKeyPrefix = sortKeyPrefix;
   }
 
-  public ByteArray getPartitionKey() {
+  public byte[] getPartitionKey() {
     return partitionKey;
   }
 
-  public ByteArray getSortKeyPrefix() {
+  public byte[] getSortKeyPrefix() {
     return sortKeyPrefix;
   }
 
@@ -54,12 +53,12 @@ public class PrefixIdQuery implements QueryConstraints {
   public byte[] toBinary() {
     byte[] sortKeyPrefixBinary, partitionKeyBinary;
     if (partitionKey != null) {
-      partitionKeyBinary = partitionKey.getBytes();
+      partitionKeyBinary = partitionKey;
     } else {
       partitionKeyBinary = new byte[0];
     }
     if (sortKeyPrefix != null) {
-      sortKeyPrefixBinary = sortKeyPrefix.getBytes();
+      sortKeyPrefixBinary = sortKeyPrefix;
     } else {
       sortKeyPrefixBinary = new byte[0];
     }
@@ -82,14 +81,14 @@ public class PrefixIdQuery implements QueryConstraints {
       partitionKey = null;
     } else {
       buf.get(partitionKeyBinary);
-      partitionKey = new ByteArray(partitionKeyBinary);
+      partitionKey = partitionKeyBinary;
     }
     final byte[] sortKeyPrefixBinary = new byte[buf.remaining()];
     if (sortKeyPrefixBinary.length == 0) {
       sortKeyPrefix = null;
     } else {
       buf.get(sortKeyPrefixBinary);
-      sortKeyPrefix = new ByteArray(sortKeyPrefixBinary);
+      sortKeyPrefix = sortKeyPrefixBinary;
     }
   }
 }

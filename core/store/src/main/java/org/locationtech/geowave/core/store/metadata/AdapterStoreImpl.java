@@ -58,6 +58,9 @@ public class AdapterStoreImpl extends AbstractGeoWavePersistence<InternalDataAda
   protected InternalDataAdapter<?> fromValue(final GeoWaveMetadata entry) {
     final DataTypeAdapter<?> adapter =
         (DataTypeAdapter<?>) PersistenceUtils.fromBinary(entry.getValue());
+    if (adapter instanceof InternalDataAdapter) {
+      return (InternalDataAdapter<?>) adapter;
+    }
     return new InternalDataAdapterWrapper<>(
         adapter,
         ByteArrayUtils.byteArrayToShort(entry.getPrimaryId()));

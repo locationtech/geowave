@@ -33,7 +33,7 @@ public class RewritingMergingEntryIterator<T> extends MergingEntryIterator<T> {
       final Map<Short, RowMergingDataAdapter> mergingAdapters,
       final RowWriter writer,
       final RowDeleter deleter) {
-    super(adapterStore, index, scannerIt, null, null, mergingAdapters, null);
+    super(adapterStore, index, scannerIt, null, null, mergingAdapters, null, null);
     this.writer = writer;
     this.deleter = deleter;
   }
@@ -47,7 +47,7 @@ public class RewritingMergingEntryIterator<T> extends MergingEntryIterator<T> {
     }
     deleter.delete(singleRow);
     deleter.flush();
-    GeoWaveRow merged = super.mergeSingleRowValues(singleRow, rowTransform);
+    final GeoWaveRow merged = super.mergeSingleRowValues(singleRow, rowTransform);
     writer.write(merged);
     return merged;
   }

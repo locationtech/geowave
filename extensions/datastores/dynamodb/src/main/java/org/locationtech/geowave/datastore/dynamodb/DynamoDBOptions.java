@@ -8,6 +8,10 @@
  */
 package org.locationtech.geowave.datastore.dynamodb;
 
+import org.locationtech.geowave.core.store.BaseDataStoreOptions;
+import org.locationtech.geowave.core.store.DataStoreOptions;
+import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
+import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.regions.Regions;
@@ -15,10 +19,6 @@ import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
-import org.locationtech.geowave.core.store.BaseDataStoreOptions;
-import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
-import org.locationtech.geowave.core.store.StoreFactoryOptions;
 
 /** Jcommander helper class for AWS Region */
 class RegionConvertor implements IStringConverter<Regions> {
@@ -91,20 +91,25 @@ public class DynamoDBOptions extends StoreFactoryOptions {
     public boolean isServerSideLibraryEnabled() {
       return false;
     }
+
+    @Override
+    protected int defaultDataIndexBatchSize() {
+      return 100;
+    }
   };
 
   public DynamoDBOptions() {}
 
   public DynamoDBOptions(
-      String endpoint,
-      Regions region,
-      long writeCapacity,
-      long readCapacity,
-      int maxConnections,
-      Protocol protocol,
-      boolean enableCacheResponseMetadata,
-      String gwNamespace,
-      BaseDataStoreOptions baseOptions) {
+      final String endpoint,
+      final Regions region,
+      final long writeCapacity,
+      final long readCapacity,
+      final int maxConnections,
+      final Protocol protocol,
+      final boolean enableCacheResponseMetadata,
+      final String gwNamespace,
+      final BaseDataStoreOptions baseOptions) {
     super(gwNamespace);
     this.endpoint = endpoint;
     this.region = region;

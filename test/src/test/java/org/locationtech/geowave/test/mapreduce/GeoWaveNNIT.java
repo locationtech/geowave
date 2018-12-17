@@ -39,7 +39,7 @@ import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import org.locationtech.geowave.analytic.store.PersistableStore;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -124,7 +124,7 @@ public class GeoWaveNNIT extends AbstractGeoWaveIT {
     TestUtils.deleteAll(dataStorePluginOptions);
     dataGenerator.setIncludePolygons(false);
     ingest(dataStorePluginOptions.createDataStore());
-    runNN(new SpatialQuery(dataGenerator.getBoundingRegion()));
+    runNN(new ExplicitSpatialQuery(dataGenerator.getBoundingRegion()));
     TestUtils.deleteAll(dataStorePluginOptions);
   }
 

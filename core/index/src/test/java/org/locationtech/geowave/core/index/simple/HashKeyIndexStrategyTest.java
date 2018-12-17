@@ -61,7 +61,7 @@ public class HashKeyIndexStrategyTest {
 
   @Test
   public void testDistribution() {
-    final Map<ByteArray, Long> counts = new HashMap<ByteArray, Long>();
+    final Map<ByteArray, Long> counts = new HashMap<>();
     int total = 0;
     for (double x = 90; x < 180; x += 0.05) {
       for (double y = 50; y < 90; y += 0.5) {
@@ -69,10 +69,10 @@ public class HashKeyIndexStrategyTest {
         final NumericRange dimension2Range = new NumericRange(y - 0.002, y);
         final MultiDimensionalNumericData sfcIndexedRange =
             new BasicNumericDataset(new NumericData[] {dimension1Range, dimension2Range});
-        for (final ByteArray id : hashIdexStrategy.getInsertionPartitionKeys(sfcIndexedRange)) {
-          final Long count = counts.get(id);
+        for (final byte[] id : hashIdexStrategy.getInsertionPartitionKeys(sfcIndexedRange)) {
+          final Long count = counts.get(new ByteArray(id));
           final long nextcount = count == null ? 1 : count + 1;
-          counts.put(id, nextcount);
+          counts.put(new ByteArray(id), nextcount);
           total++;
         }
       }
@@ -111,7 +111,7 @@ public class HashKeyIndexStrategyTest {
         new BasicNumericDataset(new NumericData[] {dimension1Range, dimension2Range});
     final InsertionIds id = compoundIndexStrategy.getInsertionIds(sfcIndexedRange);
     for (final SinglePartitionInsertionIds partitionKey : id.getPartitionKeys()) {
-      for (final ByteArray sortKey : partitionKey.getSortKeys()) {
+      for (final byte[] sortKey : partitionKey.getSortKeys()) {
         final MultiDimensionalCoordinates coords =
             compoundIndexStrategy.getCoordinatesPerDimension(
                 partitionKey.getPartitionKey(),
@@ -124,7 +124,7 @@ public class HashKeyIndexStrategyTest {
     assertTrue(it.hasNext());
     final SinglePartitionInsertionIds partitionId = it.next();
     assertTrue(!it.hasNext());
-    for (final ByteArray sortKey : partitionId.getSortKeys()) {
+    for (final byte[] sortKey : partitionId.getSortKeys()) {
       final MultiDimensionalNumericData nd =
           compoundIndexStrategy.getRangeForId(partitionId.getPartitionKey(), sortKey);
       assertEquals(20.02, nd.getMaxValuesPerDimension()[0], 0.01);
@@ -141,12 +141,8 @@ public class HashKeyIndexStrategyTest {
     final List<ByteArrayRange> ranges = new ArrayList<>();
     for (int i = 0; i < 3; i++) {
       for (final ByteArrayRange r2 : sfcIndexRanges) {
-        final ByteArray start =
-            new ByteArray(
-                ByteArrayUtils.combineArrays(new byte[] {(byte) i}, r2.getStart().getBytes()));
-        final ByteArray end =
-            new ByteArray(
-                ByteArrayUtils.combineArrays(new byte[] {(byte) i}, r2.getEnd().getBytes()));
+        final byte[] start = ByteArrayUtils.combineArrays(new byte[] {(byte) i}, r2.getStart());
+        final byte[] end = ByteArrayUtils.combineArrays(new byte[] {(byte) i}, r2.getEnd());
         ranges.add(new ByteArrayRange(start, end));
       }
     }

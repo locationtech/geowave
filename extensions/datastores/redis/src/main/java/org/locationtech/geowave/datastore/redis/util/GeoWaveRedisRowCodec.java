@@ -8,11 +8,6 @@
  */
 package org.locationtech.geowave.datastore.redis.util;
 
-import com.clearspring.analytics.util.Varint;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
 import java.io.IOException;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.redisson.client.codec.BaseCodec;
@@ -21,29 +16,43 @@ import org.redisson.client.protocol.Decoder;
 import org.redisson.client.protocol.Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.clearspring.analytics.util.Varint;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
 
 public class GeoWaveRedisRowCodec extends BaseCodec {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveRedisRowCodec.class);
-  protected static GeoWaveRedisRowCodec SINGLETON = new GeoWaveRedisRowCodec();
+  protected static GeoWaveRedisRowCodec SINGLETON_WITH_VISIBILITY = new GeoWaveRedisRowCodec(true);
+  protected static GeoWaveRedisRowCodec SINGLETON_WITHOUT_VISIBILITY =
+      new GeoWaveRedisRowCodec(true);
   private final Decoder<Object> decoder = new Decoder<Object>() {
     @Override
     public Object decode(final ByteBuf buf, final State state) throws IOException {
       try (final ByteBufInputStream in = new ByteBufInputStream(buf)) {
         final byte[] dataId = new byte[in.readUnsignedByte()];
         final byte[] fieldMask = new byte[in.readUnsignedByte()];
-        final byte[] visibility = new byte[in.readUnsignedByte()];
+        final byte[] visibility;
+        if (visibilityEnabled) {
+          visibility = new byte[in.readUnsignedByte()];
+        } else {
+          visibility = new byte[0];
+        }
         final byte[] value = new byte[Varint.readUnsignedVarInt(in)];
         final int numDuplicates = in.readUnsignedByte();
-        if (in.read(dataId) != dataId.length) {
+        if ((dataId.length > 0) && (in.read(dataId) != dataId.length)) {
           LOGGER.warn("unable to read data ID");
         }
-        if (in.read(fieldMask) != fieldMask.length) {
+        if ((fieldMask.length > 0) && (in.read(fieldMask) != fieldMask.length)) {
           LOGGER.warn("unable to read fieldMask");
         }
-        if (in.read(visibility) != visibility.length) {
+        if (visibilityEnabled
+            && (visibility.length > 0)
+            && (in.read(visibility) != visibility.length)) {
           LOGGER.warn("unable to read visibility");
         }
-        if (in.read(value) != value.length) {
+        if ((value.length > 0) && (in.read(value) != value.length)) {
           LOGGER.warn("unable to read value");
         }
         return new GeoWaveRedisPersistedRow(
@@ -61,7 +70,7 @@ public class GeoWaveRedisRowCodec extends BaseCodec {
         final ByteBuf buf = ByteBufAllocator.DEFAULT.buffer();
 
         try (final ByteBufOutputStream out = new ByteBufOutputStream(buf)) {
-          encodeRow(out, row);
+          encodeRow(out, row, visibilityEnabled);
           out.flush();
           return out.buffer();
         }
@@ -70,20 +79,30 @@ public class GeoWaveRedisRowCodec extends BaseCodec {
     }
   };
 
-  protected static void encodeRow(ByteBufOutputStream out, GeoWaveRedisPersistedRow row)
-      throws IOException {
+  protected static void encodeRow(
+      final ByteBufOutputStream out,
+      final GeoWaveRedisPersistedRow row,
+      final boolean visibilityEnabled) throws IOException {
     out.writeByte(row.getDataId().length);
     out.writeByte(row.getFieldMask().length);
-    out.writeByte(row.getVisibility().length);
+    if (visibilityEnabled) {
+      out.writeByte(row.getVisibility().length);
+    }
     Varint.writeUnsignedVarInt(row.getValue().length, out);
     out.writeByte(row.getNumDuplicates());
     out.write(row.getDataId());
     out.write(row.getFieldMask());
-    out.write(row.getVisibility());
+    if (visibilityEnabled) {
+      out.write(row.getVisibility());
+    }
     out.write(row.getValue());
   }
 
-  private GeoWaveRedisRowCodec() {}
+  private final boolean visibilityEnabled;
+
+  private GeoWaveRedisRowCodec(final boolean visibilityEnabled) {
+    this.visibilityEnabled = visibilityEnabled;
+  }
 
   @Override
   public Decoder<Object> getValueDecoder() {

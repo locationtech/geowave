@@ -182,6 +182,7 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroGpxTr
           indexNames,
           gpxTrack.getTrackid() == null ? "" : gpxTrack.getTrackid().toString(),
           getAdditionalData(gpxTrack),
+          gpxTrack.getTimestamp(),
           false, // waypoints, even dups, are unique, due to QGis
           // behavior
           globalVisibility,

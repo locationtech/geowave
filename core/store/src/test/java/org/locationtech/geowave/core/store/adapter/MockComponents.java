@@ -8,14 +8,11 @@
  */
 package org.locationtech.geowave.core.store.adapter;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.apache.commons.lang3.Range;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.CoordinateRange;
 import org.locationtech.geowave.core.index.IndexMetaData;
@@ -24,6 +21,7 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -42,6 +40,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -49,6 +48,7 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import com.google.common.collect.Lists;
 
 public class MockComponents {
   // Mock class instantiating abstract class so we can test logic
@@ -93,7 +93,12 @@ public class MockComponents {
       }
 
       @Override
-      public void fromBinary(byte[] bytes) {}
+      public void fromBinary(final byte[] bytes) {}
+
+      @Override
+      public TestIndexFieldType toIndexValue(PersistentDataset<Object> adapterPersistenceEncoding) {
+        return new TestIndexFieldType((Integer) adapterPersistenceEncoding.getValue(INTEGER));
+      }
     }
 
     protected static final String INTEGER = "TestInteger";
@@ -114,8 +119,8 @@ public class MockComponents {
     }
 
     @Override
-    public ByteArray getDataId(final Integer entry) {
-      return new ByteArray("DataID" + entry.toString());
+    public byte[] getDataId(final Integer entry) {
+      return StringUtils.stringToBinary("DataID" + entry.toString());
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -168,7 +173,7 @@ public class MockComponents {
         }
 
         @Override
-        public Integer buildRow(final ByteArray dataId) {
+        public Integer buildRow(final byte[] dataId) {
           return new Integer(intValue);
         }
       };
@@ -405,6 +410,12 @@ public class MockComponents {
 
     @Override
     public void fromBinary(final byte[] bytes) {}
+
+    @Override
+    public TestIndexFieldType toIndexValue(PersistentDataset<Object> adapterPersistenceEncoding) {
+      return toIndexValue(
+          (Integer) adapterPersistenceEncoding.getValue(MockAbstractDataAdapter.INTEGER));
+    }
   }
 
   // *************************************************************************
@@ -540,9 +551,9 @@ public class MockComponents {
 
     @Override
     public InsertionIds getInsertionIds(final MultiDimensionalNumericData indexedData) {
-      final List<ByteArray> ids = new ArrayList<>();
+      final List<byte[]> ids = new ArrayList<>();
       for (final NumericData data : indexedData.getDataPerDimension()) {
-        ids.add(new ByteArray(Double.toString(data.getCentroid()).getBytes()));
+        ids.add(Double.toString(data.getCentroid()).getBytes());
       }
       return new InsertionIds(ids);
     }
@@ -594,19 +605,18 @@ public class MockComponents {
 
     @Override
     public MultiDimensionalNumericData getRangeForId(
-        final ByteArray partitionKey,
-        final ByteArray sortKey) {
+        final byte[] partitionKey,
+        final byte[] sortKey) {
       return null;
     }
 
     @Override
-    public Set<ByteArray> getInsertionPartitionKeys(
-        final MultiDimensionalNumericData insertionData) {
+    public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
       return null;
     }
 
     @Override
-    public Set<ByteArray> getQueryPartitionKeys(
+    public byte[][] getQueryPartitionKeys(
         final MultiDimensionalNumericData queryData,
         final IndexMetaData... hints) {
       // TODO Auto-generated method stub
@@ -615,25 +625,17 @@ public class MockComponents {
 
     @Override
     public MultiDimensionalCoordinates getCoordinatesPerDimension(
-        final ByteArray partitionKey,
-        final ByteArray sortKey) {
+        final byte[] partitionKey,
+        final byte[] sortKey) {
       return new MultiDimensionalCoordinates(
           new byte[] {},
           new Coordinate[] {
-              new Coordinate(
-                  (long) Double.parseDouble(new String(sortKey.getBytes())),
-                  new byte[] {})});
+              new Coordinate((long) Double.parseDouble(new String(sortKey)), new byte[] {})});
     }
 
     @Override
     public int getPartitionKeyLength() {
       return 0;
-    }
-
-    @Override
-    public Set<ByteArray> getPredefinedSplits() {
-      // TODO Auto-generated method stub
-      return null;
     }
   }
 

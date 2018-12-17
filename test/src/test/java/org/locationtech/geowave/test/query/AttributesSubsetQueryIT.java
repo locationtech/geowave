@@ -28,7 +28,7 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.util.FeatureTranslatingIterator;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -94,7 +94,7 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
   private static final Coordinate ATLANTA = new Coordinate(-84.3900, 33.7550);
 
   private final QueryConstraints spatialQuery =
-      new SpatialQuery(
+      new ExplicitSpatialQuery(
           GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(GUADALAJARA, ATLANTA)));
 
   private static long startMillis;
@@ -148,7 +148,8 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
         QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName()).indexName(
             TestUtils.DEFAULT_SPATIAL_INDEX.getName()).subsetFields(
                 dataAdapter.getTypeName(),
-                CITY_ATTRIBUTE);
+                CITY_ATTRIBUTE,
+                GEOMETRY_ATTRIBUTE);
 
     CloseableIterator<SimpleFeature> results =
         (CloseableIterator<SimpleFeature>) dataStore.createDataStore().query(

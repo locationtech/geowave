@@ -24,7 +24,6 @@ import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
-import org.locationtech.geowave.core.store.metadata.SecondaryIndexStoreImpl;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
@@ -40,7 +39,6 @@ public class CassandraDataStore extends BaseMapReduceDataStore {
         new AdapterStoreImpl(operations, options),
         new DataStatisticsStoreImpl(operations, options),
         new AdapterIndexMappingStoreImpl(operations, options),
-        new SecondaryIndexStoreImpl(),
         operations,
         options,
         new InternalAdapterStoreImpl(operations));

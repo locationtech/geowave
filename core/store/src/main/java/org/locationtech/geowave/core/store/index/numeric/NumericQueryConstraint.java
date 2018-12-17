@@ -70,8 +70,8 @@ public class NumericQueryConstraint implements FilterableConstraints {
   public QueryRanges getQueryRanges() {
     return new QueryRanges(
         new ByteArrayRange(
-            new ByteArray(NumericFieldIndexStrategy.toIndexByte(lowerValue.doubleValue())),
-            new ByteArray(NumericFieldIndexStrategy.toIndexByte(upperValue.doubleValue()))));
+            NumericFieldIndexStrategy.toIndexByte(lowerValue.doubleValue()),
+            NumericFieldIndexStrategy.toIndexByte(upperValue.doubleValue())));
   }
 
   /**

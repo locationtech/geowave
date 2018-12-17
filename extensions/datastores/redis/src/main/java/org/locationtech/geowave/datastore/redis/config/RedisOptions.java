@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.datastore.redis.config;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.function.Function;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.core.store.DataStoreOptions;
@@ -21,6 +18,9 @@ import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.client.codec.Codec;
 import org.redisson.codec.LZ4Codec;
 import org.redisson.codec.SnappyCodec;
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class RedisOptions extends StoreFactoryOptions {
   @Parameter(names = "--address", required = true, description = "The address to connect to.")
@@ -47,6 +47,11 @@ public class RedisOptions extends StoreFactoryOptions {
     @Override
     protected int defaultAggregationMaxRangeDecomposition() {
       return RedisUtils.REDIS_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION;
+    }
+
+    @Override
+    protected boolean defaultEnableVisibility() {
+      return false;
     }
   };
 

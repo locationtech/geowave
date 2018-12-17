@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.test.mapreduce;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
@@ -71,6 +70,7 @@ import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.MAP_REDUCE})
@@ -141,7 +141,7 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     return dataStorePluginOptions;
   }
 
-  @Test
+  // @Test
   public void testIngestAndQueryGeneralGpx() throws Exception {
     TestUtils.deleteAll(dataStorePluginOptions);
     MapReduceTestUtils.testMapReduceIngest(
@@ -269,10 +269,20 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
 
   private void testMapReduceExportAndReingest(final DimensionalityType dimensionalityType)
       throws Exception {
+    testMapReduceExportAndReingest(
+        dataStorePluginOptions,
+        dataStorePluginOptions,
+        dimensionalityType);
+  }
+
+  public static void testMapReduceExportAndReingest(
+      final DataStorePluginOptions inputStorePluginOptions,
+      final DataStorePluginOptions outputStorePluginOptions,
+      final DimensionalityType dimensionalityType) throws Exception {
     final VectorMRExportCommand exportCommand = new VectorMRExportCommand();
     final VectorMRExportOptions options = exportCommand.getMrOptions();
 
-    exportCommand.setStoreOptions(dataStorePluginOptions);
+    exportCommand.setStoreOptions(inputStorePluginOptions);
 
     final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
     final String exportPath = env.getHdfsBaseDirectory() + "/" + TEST_EXPORT_DIRECTORY;
@@ -303,10 +313,10 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     final int res =
         ToolRunner.run(conf, exportCommand.createRunner(env.getOperationParams()), new String[] {});
     Assert.assertTrue("Export Vector Data map reduce job failed", res == 0);
-    TestUtils.deleteAll(dataStorePluginOptions);
+    TestUtils.deleteAll(inputStorePluginOptions);
     MapReduceTestUtils.testMapReduceIngest(
-        dataStorePluginOptions,
-        DimensionalityType.ALL,
+        outputStorePluginOptions,
+        dimensionalityType,
         "avro",
         TestUtils.TEMP_DIR
             + File.separator

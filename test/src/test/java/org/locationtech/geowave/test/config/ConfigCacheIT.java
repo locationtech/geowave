@@ -102,7 +102,7 @@ public class ConfigCacheIT {
     final DataStorePluginOptions options = command.getPluginOptions();
 
     final MemoryRequiredOptions opts = (MemoryRequiredOptions) options.getFactoryOptions();
-    opts.setGeowaveNamespace("namespace");
+    opts.setGeoWaveNamespace("namespace");
 
     command.execute(operationParams);
 
@@ -131,7 +131,7 @@ public class ConfigCacheIT {
     final DataStorePluginOptions options = command.getPluginOptions();
 
     final MemoryRequiredOptions opts = (MemoryRequiredOptions) options.getFactoryOptions();
-    opts.setGeowaveNamespace("namespace2");
+    opts.setGeoWaveNamespace("namespace2");
 
     command.execute(operationParams);
 

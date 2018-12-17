@@ -8,17 +8,22 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.util;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import java.io.Closeable;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map.Entry;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
+import org.rocksdb.RocksDBException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 public class RocksDBClient implements Closeable {
+  private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBClient.class);
 
   private static class CacheKey {
     protected final String directory;
@@ -60,8 +65,7 @@ public class RocksDBClient implements Closeable {
     }
   }
 
-  private static class IndexCacheKey extends CacheKey {
-    protected final short adapterId;
+  private static class IndexCacheKey extends DataIndexCacheKey {
     protected final byte[] partition;
 
     public IndexCacheKey(
@@ -69,9 +73,54 @@ public class RocksDBClient implements Closeable {
         final short adapterId,
         final byte[] partition,
         final boolean requiresTimestamp) {
+      super(directory, requiresTimestamp, adapterId);
+      this.partition = partition;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = super.hashCode();
+      result = (prime * result) + adapterId;
+      result = (prime * result) + Arrays.hashCode(partition);
+      return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (!super.equals(obj)) {
+        return false;
+      }
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+      final IndexCacheKey other = (IndexCacheKey) obj;
+      if (adapterId != other.adapterId) {
+        return false;
+      }
+      if (!Arrays.equals(partition, other.partition)) {
+        return false;
+      }
+      return true;
+    }
+  }
+  private static class DataIndexCacheKey extends CacheKey {
+    protected final short adapterId;
+
+    public DataIndexCacheKey(final String directory, final short adapterId) {
+      super(directory, false);
+      this.adapterId = adapterId;
+    }
+
+    private DataIndexCacheKey(
+        final String directory,
+        final boolean requiresTimestamp,
+        final short adapterId) {
       super(directory, requiresTimestamp);
       this.adapterId = adapterId;
-      this.partition = partition;
     }
 
     @Override
@@ -103,30 +152,53 @@ public class RocksDBClient implements Closeable {
 
   private final Cache<String, CacheKey> keyCache = Caffeine.newBuilder().build();
   private final LoadingCache<IndexCacheKey, RocksDBIndexTable> indexTableCache =
-      Caffeine.newBuilder().build(key -> {
-        return new RocksDBIndexTable(
-            indexWriteOptions,
-            indexReadOptions,
-            key.directory,
-            key.adapterId,
-            key.partition,
-            key.requiresTimestamp);
-      });
+      Caffeine.newBuilder().build(key -> loadIndexTable(key));
+
+  private final LoadingCache<DataIndexCacheKey, RocksDBDataIndexTable> dataIndexTableCache =
+      Caffeine.newBuilder().build(key -> loadDataIndexTable(key));
   private final LoadingCache<CacheKey, RocksDBMetadataTable> metadataTableCache =
-      Caffeine.newBuilder().build(key -> {
-        new File(key.directory).mkdirs();
-        return new RocksDBMetadataTable(
-            RocksDB.open(metadataOptions, key.directory),
-            key.requiresTimestamp);
-      });
+      Caffeine.newBuilder().build(key -> loadMetadataTable(key));
   private final String subDirectory;
+  private final boolean visibilityEnabled;
 
   protected static Options indexWriteOptions = null;
   protected static Options indexReadOptions = null;
   protected static Options metadataOptions = null;
 
-  public RocksDBClient(final String subDirectory) {
+  public RocksDBClient(final String subDirectory, final boolean visibilityEnabled) {
     this.subDirectory = subDirectory;
+    this.visibilityEnabled = visibilityEnabled;
+  }
+
+  private RocksDBMetadataTable loadMetadataTable(final CacheKey key) throws RocksDBException {
+    final File dir = new File(key.directory);
+    if (!dir.exists() && !dir.mkdirs()) {
+      LOGGER.error("Unable to create directory for rocksdb store '" + key.directory + "'");
+    }
+    return new RocksDBMetadataTable(
+        RocksDB.open(metadataOptions, key.directory),
+        key.requiresTimestamp,
+        visibilityEnabled);
+  }
+
+  private RocksDBIndexTable loadIndexTable(final IndexCacheKey key) {
+    return new RocksDBIndexTable(
+        indexWriteOptions,
+        indexReadOptions,
+        key.directory,
+        key.adapterId,
+        key.partition,
+        key.requiresTimestamp,
+        visibilityEnabled);
+  }
+
+  private RocksDBDataIndexTable loadDataIndexTable(final DataIndexCacheKey key) {
+    return new RocksDBDataIndexTable(
+        indexWriteOptions,
+        indexReadOptions,
+        key.directory,
+        key.adapterId,
+        visibilityEnabled);
   }
 
   public String getSubDirectory() {
@@ -152,6 +224,21 @@ public class RocksDBClient implements Closeable {
             d -> new IndexCacheKey(d, adapterId, partition, requiresTimestamp)));
   }
 
+  public synchronized RocksDBDataIndexTable getDataIndexTable(
+      final String tableName,
+      final short adapterId) {
+    if (indexWriteOptions == null) {
+      RocksDB.loadLibrary();
+      final int cores = Runtime.getRuntime().availableProcessors();
+      indexWriteOptions =
+          new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
+      indexReadOptions = new Options().setIncreaseParallelism(cores);
+    }
+    final String directory = subDirectory + "/" + tableName;
+    return dataIndexTableCache.get(
+        (DataIndexCacheKey) keyCache.get(directory, d -> new DataIndexCacheKey(d, adapterId)));
+  }
+
   public synchronized RocksDBMetadataTable getMetadataTable(final MetadataType type) {
     if (metadataOptions == null) {
       RocksDB.loadLibrary();
@@ -172,8 +259,8 @@ public class RocksDBClient implements Closeable {
     }
     // this could have been created by a different process so check the
     // directory listing
-    String[] listing = new File(subDirectory).list((dir, name) -> name.contains(indexName));
-    return listing != null && listing.length > 0;
+    final String[] listing = new File(subDirectory).list((dir, name) -> name.contains(indexName));
+    return (listing != null) && (listing.length > 0);
   }
 
   public boolean metadataTableExists(final MetadataType type) {
@@ -189,7 +276,10 @@ public class RocksDBClient implements Closeable {
       final String key = e.getKey();
       if (key.substring(subDirectory.length()).startsWith(prefix)) {
         keyCache.invalidate(key);
-        final RocksDBIndexTable indexTable = indexTableCache.getIfPresent(e.getValue());
+        AbstractRocksDBTable indexTable = indexTableCache.getIfPresent(e.getValue());
+        if (indexTable == null) {
+          indexTable = dataIndexTableCache.getIfPresent(e.getValue());
+        }
         if (indexTable != null) {
           indexTableCache.invalidate(e.getValue());
           indexTable.close();
@@ -198,11 +288,17 @@ public class RocksDBClient implements Closeable {
     }
   }
 
+  public boolean isVisibilityEnabled() {
+    return visibilityEnabled;
+  }
+
   @Override
   public void close() {
     keyCache.invalidateAll();
     indexTableCache.asMap().values().forEach(db -> db.close());
     indexTableCache.invalidateAll();
+    dataIndexTableCache.asMap().values().forEach(db -> db.close());
+    dataIndexTableCache.invalidateAll();
     metadataTableCache.asMap().values().forEach(db -> db.close());
     metadataTableCache.invalidateAll();
   }

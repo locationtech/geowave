@@ -33,14 +33,14 @@ public class MapReduceTestUtils {
   public static final int MIN_INPUT_SPLITS = 3;
   public static final int MAX_INPUT_SPLITS = 5;
 
-  protected static void testMapReduceIngest(
+  public static void testMapReduceIngest(
       final DataStorePluginOptions dataStore,
       final DimensionalityType dimensionalityType,
       final String ingestFilePath) throws Exception {
     testMapReduceIngest(dataStore, dimensionalityType, "gpx", ingestFilePath);
   }
 
-  protected static void testMapReduceIngest(
+  public static void testMapReduceIngest(
       final DataStorePluginOptions dataStore,
       final DimensionalityType dimensionalityType,
       final String format,

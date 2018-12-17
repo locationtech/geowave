@@ -39,6 +39,9 @@ public class LongitudeDefinition extends BasicDimensionDefinition {
    */
   @Override
   public BinRange[] getNormalizedRanges(final NumericData range) {
+    if (range == null) {
+      return new BinRange[0];
+    }
     // if the range is a single value, clamp at -180, 180
     if (FloatCompareUtils.checkDoublesEqual(range.getMin(), range.getMax())) {
 

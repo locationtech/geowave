@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.store.operations;
 
-import java.util.Iterator;
+import org.locationtech.geowave.core.store.CloseableIterator;
 
-public interface RowReader<T> extends AutoCloseable, Iterator<T> {
+public interface RowReader<T> extends CloseableIterator<T> {
 }

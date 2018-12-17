@@ -15,6 +15,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
@@ -28,8 +29,8 @@ public class SpatialQueryTest {
   @Test
   public void test() {
     final GeometryFactory factory = new GeometryFactory();
-    final SpatialQuery query =
-        new SpatialQuery(
+    final ExplicitSpatialQuery query =
+        new ExplicitSpatialQuery(
             factory.createPolygon(
                 new Coordinate[] {
                     new Coordinate(24, 33),
@@ -37,7 +38,7 @@ public class SpatialQueryTest {
                     new Coordinate(28, 31),
                     new Coordinate(24, 31),
                     new Coordinate(24, 33)}));
-    final SpatialQuery queryCopy = new SpatialQuery();
+    final ExplicitSpatialQuery queryCopy = new ExplicitSpatialQuery();
     queryCopy.fromBinary(query.toBinary());
     assertEquals(queryCopy.getQueryGeometry(), query.getQueryGeometry());
   }
@@ -49,9 +50,9 @@ public class SpatialQueryTest {
 
     return new IndexedPersistenceEncoding(
         (short) 1,
-        new ByteArray("1"),
-        new ByteArray("1"),
-        new ByteArray("1"),
+        StringUtils.stringToBinary("1"),
+        StringUtils.stringToBinary("1"),
+        StringUtils.stringToBinary("1"),
         1,
         commonData,
         new PersistentDataset<byte[]>());
@@ -68,9 +69,10 @@ public class SpatialQueryTest {
             new Coordinate(24, 37),
             new Coordinate(24, 33)};
     // create spatial query object with geometric relationship operator
-    final SpatialQuery query = new SpatialQuery(factory.createPolygon(queryCoord), op);
+    final ExplicitSpatialQuery query =
+        new ExplicitSpatialQuery(factory.createPolygon(queryCoord), op);
 
-    final SpatialQuery queryCopy = new SpatialQuery();
+    final ExplicitSpatialQuery queryCopy = new ExplicitSpatialQuery();
     queryCopy.fromBinary(query.toBinary());
 
     // This line is crossing query polygon

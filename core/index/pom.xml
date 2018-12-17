@@ -28,5 +28,9 @@
 			<classifier>jdk15</classifier>
 			<version>2.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+		</dependency>
 	</dependencies>
 </project>

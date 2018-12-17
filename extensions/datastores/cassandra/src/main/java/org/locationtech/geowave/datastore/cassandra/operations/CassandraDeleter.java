@@ -31,5 +31,5 @@ public class CassandraDeleter implements RowDeleter {
   }
 
   @Override
-  public void close() throws Exception {}
+  public void close() {}
 }

@@ -13,18 +13,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class SinglePartitionQueryRanges {
-  private final ByteArray partitionKey;
+  private final byte[] partitionKey;
 
   private final Collection<ByteArrayRange> sortKeyRanges;
 
   public SinglePartitionQueryRanges(
-      final ByteArray partitionKey,
+      final byte[] partitionKey,
       final Collection<ByteArrayRange> sortKeyRanges) {
     this.partitionKey = partitionKey;
     this.sortKeyRanges = sortKeyRanges;
   }
 
-  public SinglePartitionQueryRanges(final ByteArray partitionKey) {
+  public SinglePartitionQueryRanges(final byte[] partitionKey) {
     this.partitionKey = partitionKey;
     sortKeyRanges = null;
   }
@@ -39,7 +39,7 @@ public class SinglePartitionQueryRanges {
     partitionKey = null;
   }
 
-  public ByteArray getPartitionKey() {
+  public byte[] getPartitionKey() {
     return partitionKey;
   }
 
@@ -48,14 +48,14 @@ public class SinglePartitionQueryRanges {
   }
 
   public ByteArrayRange getSingleRange() {
-    ByteArray start = null;
-    ByteArray end = null;
+    byte[] start = null;
+    byte[] end = null;
 
     for (final ByteArrayRange range : sortKeyRanges) {
-      if ((start == null) || (range.getStart().compareTo(start) < 0)) {
+      if ((start == null) || (ByteArrayUtils.compare(range.getStart(), start) < 0)) {
         start = range.getStart();
       }
-      if ((end == null) || (range.getEnd().compareTo(end) > 0)) {
+      if ((end == null) || (ByteArrayUtils.compare(range.getEnd(), end) > 0)) {
         end = range.getEnd();
       }
     }

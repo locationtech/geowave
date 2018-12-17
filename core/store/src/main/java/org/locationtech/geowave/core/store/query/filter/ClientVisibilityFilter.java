@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.core.store.query.filter;
 
-import com.google.common.base.Predicate;
 import java.util.Set;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.util.VisibilityExpression;
+import com.google.common.base.Predicate;
 
 /**
  * Provides a visibility filter for UNMERGED rows. The filter only operates on the first
@@ -22,15 +22,15 @@ import org.locationtech.geowave.core.store.util.VisibilityExpression;
 public class ClientVisibilityFilter implements Predicate<GeoWaveRow> {
   private final Set<String> auths;
 
-  public ClientVisibilityFilter(Set<String> auths) {
+  public ClientVisibilityFilter(final Set<String> auths) {
     this.auths = auths;
   }
 
   @Override
-  public boolean apply(GeoWaveRow input) {
+  public boolean apply(final GeoWaveRow input) {
     String visibility = "";
-    GeoWaveValue[] fieldValues = input.getFieldValues();
-    if (fieldValues.length > 0 && fieldValues[0].getVisibility() != null) {
+    final GeoWaveValue[] fieldValues = input.getFieldValues();
+    if ((fieldValues.length > 0) && (fieldValues[0].getVisibility() != null)) {
       visibility = StringUtils.stringFromBinary(input.getFieldValues()[0].getVisibility());
     }
     return VisibilityExpression.evaluate(visibility, auths);

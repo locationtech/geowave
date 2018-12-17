@@ -9,56 +9,118 @@
 package org.locationtech.geowave.core.store.util;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
-public class NativeEntryIteratorWrapper<T> extends EntryIteratorWrapper<T> {
+public class NativeEntryIteratorWrapper<T> implements Iterator<T> {
   private final byte[] fieldSubsetBitmask;
   private final boolean decodePersistenceEncoding;
   private Integer bitPosition = null;
   private ByteArray skipUntilRow;
   private boolean reachedEnd = false;
   private boolean adapterValid = true;
+  protected final DataIndexRetrieval dataIndexRetrieval;
+  protected final PersistentAdapterStore adapterStore;
+  protected final Index index;
+  protected final Iterator<GeoWaveRow> scannerIt;
+  protected final QueryFilter[] clientFilters;
+  protected final ScanCallback<T, ? extends GeoWaveRow> scanCallback;
+
+  protected T nextValue;
 
   public NativeEntryIteratorWrapper(
       final PersistentAdapterStore adapterStore,
       final Index index,
       final Iterator<GeoWaveRow> scannerIt,
-      final QueryFilter clientFilter,
+      final QueryFilter[] clientFilters,
       final ScanCallback<T, ? extends GeoWaveRow> scanCallback,
       final byte[] fieldSubsetBitmask,
       final double[] maxResolutionSubsamplingPerDimension,
-      final boolean decodePersistenceEncoding) {
-    super(adapterStore, index, scannerIt, clientFilter, scanCallback);
+      final boolean decodePersistenceEncoding,
+      final DataIndexRetrieval dataIndexRetrieval) {
+    this.adapterStore = adapterStore;
+    this.index = index;
+    this.scannerIt = scannerIt;
+    this.clientFilters = clientFilters;
+    this.scanCallback = scanCallback;
     this.fieldSubsetBitmask = fieldSubsetBitmask;
     this.decodePersistenceEncoding = decodePersistenceEncoding;
-
+    this.dataIndexRetrieval = dataIndexRetrieval;
     initializeBitPosition(maxResolutionSubsamplingPerDimension);
   }
 
-  @SuppressWarnings("unchecked")
+
+  protected void findNext() {
+    while ((nextValue == null) && hasNextScannedResult()) {
+      final GeoWaveRow row = getNextEncodedResult();
+      final T decodedValue = decodeRow(row, clientFilters, index);
+      if (decodedValue != null) {
+        nextValue = decodedValue;
+        return;
+      }
+    }
+  }
+
+  protected boolean hasNextScannedResult() {
+    return scannerIt.hasNext();
+  }
+
+  protected GeoWaveRow getNextEncodedResult() {
+    return scannerIt.next();
+  }
+
   @Override
-  protected T decodeRow(final GeoWaveRow row, final QueryFilter clientFilter, final Index index) {
+  public boolean hasNext() {
+    findNext();
+    return nextValue != null;
+  }
+
+  @Override
+  public T next() throws NoSuchElementException {
+    if (nextValue == null) {
+      findNext();
+    }
+    final T previousNext = nextValue;
+    if (nextValue == null) {
+      throw new NoSuchElementException();
+    }
+    nextValue = null;
+    return previousNext;
+  }
+
+  @Override
+  public void remove() {
+    scannerIt.remove();
+  }
+
+  @SuppressWarnings("unchecked")
+  protected T decodeRow(
+      final GeoWaveRow row,
+      final QueryFilter[] clientFilters,
+      final Index index) {
     Object decodedRow = null;
     if (adapterValid && ((bitPosition == null) || passesSkipFilter(row))) {
       try {
         decodedRow =
             BaseDataStoreUtils.decodeRow(
                 row,
-                clientFilter,
+                clientFilters,
                 null,
                 adapterStore,
                 index,
                 scanCallback,
                 fieldSubsetBitmask,
-                decodePersistenceEncoding);
+                decodePersistenceEncoding,
+                dataIndexRetrieval);
 
         if (decodedRow != null) {
           incrementSkipRow(row);

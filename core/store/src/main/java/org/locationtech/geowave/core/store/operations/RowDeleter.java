@@ -8,10 +8,14 @@
  */
 package org.locationtech.geowave.core.store.operations;
 
+import java.io.Closeable;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-public interface RowDeleter extends AutoCloseable {
-  public void delete(GeoWaveRow row);
+public interface RowDeleter extends Closeable {
+  void delete(GeoWaveRow row);
 
-  public void flush();
+  void flush();
+
+  @Override
+  void close();
 }

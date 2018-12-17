@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.analytic.spark;
 
-import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,10 +27,15 @@ import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Lists;
 import scala.Tuple2;
 
 public class GeoWaveIndexedRDD implements Serializable {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private static Logger LOGGER = LoggerFactory.getLogger(GeoWaveIndexedRDD.class);
   private final GeoWaveRDD geowaveRDD;
   private JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> rawFeatureRDD = null;
@@ -48,16 +52,16 @@ public class GeoWaveIndexedRDD implements Serializable {
   }
 
   public void reset() {
-    this.rawFeatureRDD = null;
-    this.rawGeometryRDD = null;
+    rawFeatureRDD = null;
+    rawGeometryRDD = null;
   }
 
   public void reindex(final Broadcast<? extends NumericIndexStrategy> newIndexStrategy) {
     // Remove original indexing strategy
-    if (this.indexStrategy != null) {
-      this.indexStrategy.unpersist();
+    if (indexStrategy != null) {
+      indexStrategy.unpersist();
     }
-    this.indexStrategy = (Broadcast<NumericIndexStrategy>) newIndexStrategy;
+    indexStrategy = (Broadcast<NumericIndexStrategy>) newIndexStrategy;
     reset();
   }
 
@@ -66,35 +70,40 @@ public class GeoWaveIndexedRDD implements Serializable {
   }
 
   public JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> getIndexedFeatureRDD(
-      double bufferAmount) {
+      final double bufferAmount) {
     verifyParameters();
     if (!geowaveRDD.isLoaded()) {
       LOGGER.error("Must provide a loaded RDD.");
       return null;
     }
     if (rawFeatureRDD == null) {
-      JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> indexedData =
+      final JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> indexedData =
           geowaveRDD.getRawRDD().flatMapToPair(
               new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>() {
+                /**
+                 *
+                 */
+                private static final long serialVersionUID = 1L;
+
                 @Override
                 public Iterator<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>> call(
-                    Tuple2<GeoWaveInputKey, SimpleFeature> t) throws Exception {
+                    final Tuple2<GeoWaveInputKey, SimpleFeature> t) throws Exception {
 
                   // Flattened output array.
-                  List<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>> result =
+                  final List<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>> result =
                       new ArrayList<>();
 
                   // Pull feature to index from tuple
-                  SimpleFeature inputFeature = t._2;
+                  final SimpleFeature inputFeature = t._2;
                   // If we are dealing with null or empty
                   // geometry we can't properly compare this
                   // feature.
-                  Geometry geom = (Geometry) inputFeature.getDefaultGeometry();
+                  final Geometry geom = (Geometry) inputFeature.getDefaultGeometry();
                   if (geom == null) {
                     return Collections.emptyIterator();
                   }
 
-                  Envelope internalEnvelope = geom.getEnvelopeInternal();
+                  final Envelope internalEnvelope = geom.getEnvelopeInternal();
                   if (internalEnvelope.isNull()) {
                     return Collections.emptyIterator();
                   }
@@ -103,10 +112,10 @@ public class GeoWaveIndexedRDD implements Serializable {
                   internalEnvelope.expandBy(bufferAmount);
 
                   // Get data range from expanded envelope
-                  MultiDimensionalNumericData boundsRange =
+                  final MultiDimensionalNumericData boundsRange =
                       GeometryUtils.getBoundsFromEnvelope(internalEnvelope);
 
-                  NumericIndexStrategy index = indexStrategy.value();
+                  final NumericIndexStrategy index = indexStrategy.value();
                   InsertionIds insertIds = index.getInsertionIds(boundsRange, 80);
 
                   // If we didnt expand the envelope for
@@ -116,16 +125,14 @@ public class GeoWaveIndexedRDD implements Serializable {
                     insertIds = RDDUtils.trimIndexIds(insertIds, geom, index);
                   }
 
-                  for (Iterator<ByteArray> iter =
+                  for (final Iterator<byte[]> iter =
                       insertIds.getCompositeInsertionIds().iterator(); iter.hasNext();) {
-                    ByteArray id = iter.next();
+                    final byte[] id = iter.next();
 
-                    Tuple2<GeoWaveInputKey, SimpleFeature> valuePair =
+                    final Tuple2<GeoWaveInputKey, SimpleFeature> valuePair =
                         new Tuple2<>(t._1, inputFeature);
-                    Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> indexPair =
-                        new Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>(
-                            id,
-                            valuePair);
+                    final Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> indexPair =
+                        new Tuple2<>(new ByteArray(id), valuePair);
                     result.add(indexPair);
                   }
 
@@ -143,41 +150,46 @@ public class GeoWaveIndexedRDD implements Serializable {
   }
 
   public JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> getIndexedGeometryRDD(
-      double bufferAmount,
-      boolean recalculate) {
+      final double bufferAmount,
+      final boolean recalculate) {
     verifyParameters();
 
     if (!geowaveRDD.isLoaded()) {
       LOGGER.error("Must provide a loaded RDD.");
       return null;
     }
-    if (rawGeometryRDD == null || recalculate) {
+    if ((rawGeometryRDD == null) || recalculate) {
       rawGeometryRDD =
           geowaveRDD.getRawRDD().filter(
-              t -> (t._2.getDefaultGeometry() != null
+              t -> ((t._2.getDefaultGeometry() != null)
                   && !((Geometry) t._2.getDefaultGeometry()).getEnvelopeInternal().isNull())).flatMapToPair(
                       new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArray, Tuple2<GeoWaveInputKey, Geometry>>() {
+                        /**
+                         *
+                         */
+                        private static final long serialVersionUID = 1L;
+
                         @Override
                         public Iterator<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>> call(
-                            Tuple2<GeoWaveInputKey, SimpleFeature> t) throws Exception {
+                            final Tuple2<GeoWaveInputKey, SimpleFeature> t) throws Exception {
 
                           // Pull feature to index from tuple
-                          SimpleFeature inputFeature = t._2;
+                          final SimpleFeature inputFeature = t._2;
                           // If we are dealing with null or empty
                           // geometry we can't properly compare this
                           // feature.
-                          Geometry geom = (Geometry) inputFeature.getDefaultGeometry();
+                          final Geometry geom = (Geometry) inputFeature.getDefaultGeometry();
 
-                          Envelope internalEnvelope = geom.getEnvelopeInternal();
+                          final Envelope internalEnvelope = geom.getEnvelopeInternal();
                           // If we have to buffer geometry for
                           // predicate expand bounds
                           internalEnvelope.expandBy(bufferAmount);
 
                           // Get data range from expanded envelope
-                          MultiDimensionalNumericData boundsRange =
+                          final MultiDimensionalNumericData boundsRange =
                               GeometryUtils.getBoundsFromEnvelope(internalEnvelope);
 
-                          NumericIndexStrategy index = indexStrategy.value();
+                          final NumericIndexStrategy index = indexStrategy.value();
                           InsertionIds insertIds = index.getInsertionIds(boundsRange, 80);
 
                           // If we didnt expand the envelope for
@@ -188,18 +200,17 @@ public class GeoWaveIndexedRDD implements Serializable {
                           }
 
                           // Flattened output array.
-                          List<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>> result =
+                          final List<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>> result =
                               Lists.newArrayListWithCapacity(insertIds.getSize());
 
-                          for (Iterator<ByteArray> iter =
+                          for (final Iterator<byte[]> iter =
                               insertIds.getCompositeInsertionIds().iterator(); iter.hasNext();) {
-                            ByteArray id = iter.next();
+                            final byte[] id = iter.next();
 
-                            Tuple2<GeoWaveInputKey, Geometry> valuePair = new Tuple2<>(t._1, geom);
-                            Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> indexPair =
-                                new Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>(
-                                    id,
-                                    valuePair);
+                            final Tuple2<GeoWaveInputKey, Geometry> valuePair =
+                                new Tuple2<>(t._1, geom);
+                            final Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> indexPair =
+                                new Tuple2<>(new ByteArray(id), valuePair);
                             result.add(indexPair);
                           }
 

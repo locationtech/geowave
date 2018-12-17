@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.util;
 import java.util.Iterator;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
@@ -19,39 +20,43 @@ import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 public class NativeEntryTransformer<T> implements GeoWaveRowIteratorTransformer<T> {
   private final PersistentAdapterStore adapterStore;
   private final Index index;
-  private final QueryFilter clientFilter;
+  private final QueryFilter[] clientFilters;
   private final ScanCallback<T, ? extends GeoWaveRow> scanCallback;
   private final byte[] fieldSubsetBitmask;
   private final double[] maxResolutionSubsamplingPerDimension;
   private final boolean decodePersistenceEncoding;
+  private final DataIndexRetrieval dataIndexRetrieval;
 
   public NativeEntryTransformer(
       final PersistentAdapterStore adapterStore,
       final Index index,
-      final QueryFilter clientFilter,
+      final QueryFilter[] clientFilters,
       final ScanCallback<T, ? extends GeoWaveRow> scanCallback,
       final byte[] fieldSubsetBitmask,
       final double[] maxResolutionSubsamplingPerDimension,
-      final boolean decodePersistenceEncoding) {
+      final boolean decodePersistenceEncoding,
+      final DataIndexRetrieval dataIndexRetrieval) {
     this.adapterStore = adapterStore;
     this.index = index;
-    this.clientFilter = clientFilter;
+    this.clientFilters = clientFilters;
     this.scanCallback = scanCallback;
     this.fieldSubsetBitmask = fieldSubsetBitmask;
     this.decodePersistenceEncoding = decodePersistenceEncoding;
     this.maxResolutionSubsamplingPerDimension = maxResolutionSubsamplingPerDimension;
+    this.dataIndexRetrieval = dataIndexRetrieval;
   }
 
   @Override
-  public Iterator<T> apply(Iterator<GeoWaveRow> rowIter) {
-    return new NativeEntryIteratorWrapper<T>(
+  public Iterator<T> apply(final Iterator<GeoWaveRow> rowIter) {
+    return GeoWaveRowIteratorFactory.iterator(
         adapterStore,
         index,
         rowIter,
-        clientFilter,
+        clientFilters,
         scanCallback,
         fieldSubsetBitmask,
         maxResolutionSubsamplingPerDimension,
-        decodePersistenceEncoding);
+        decodePersistenceEncoding,
+        dataIndexRetrieval);
   }
 }

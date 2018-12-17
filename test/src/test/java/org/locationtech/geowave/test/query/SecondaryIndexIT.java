@@ -1,715 +1,328 @@
-/**
- * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- *
- * <p> See the NOTICE file distributed with this work for additional information regarding copyright
- * ownership. All rights reserved. This program and the accompanying materials are made available
- * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
- * available at http://www.apache.org/licenses/LICENSE-2.0.txt
- */
 package org.locationtech.geowave.test.query;
 
+import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.net.URL;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.Scanner;
-import org.apache.accumulo.core.client.TableNotFoundException;
-import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Range;
-import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.security.Authorizations;
-// import org.apache.hadoop.hbase.TableName;
-// import org.apache.hadoop.hbase.client.Connection;
-// import org.apache.hadoop.hbase.client.Result;
-// import org.apache.hadoop.hbase.client.ResultScanner;
-// import org.apache.hadoop.hbase.client.Scan;
-// import org.apache.hadoop.hbase.client.Table;
-import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
-import org.geotools.data.DataUtilities;
-import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.junit.After;
-import org.junit.AfterClass;
+import java.util.function.BiConsumer;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration;
-import org.locationtech.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration;
-import org.locationtech.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
-import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.StoreFactoryOptions;
+import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.DataStore;
-import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.FilterableConstraints;
-import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
-import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
-import org.locationtech.geowave.core.store.index.SecondaryIndexType;
-import org.locationtech.geowave.core.store.index.SecondaryIndexUtils;
-import org.locationtech.geowave.core.store.index.numeric.NumericGreaterThanConstraint;
-import org.locationtech.geowave.core.store.index.temporal.TemporalQueryConstraint;
-import org.locationtech.geowave.core.store.index.text.TextQueryConstraint;
-import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
-import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
-import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
-import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
-import org.locationtech.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
-import org.locationtech.geowave.datastore.accumulo.util.ConnectorPool;
+import org.locationtech.geowave.core.store.config.ConfigUtils;
+import org.locationtech.geowave.core.store.data.VisibilityWriter;
+import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
+import org.locationtech.geowave.test.TestUtils.DimensionalityType;
+import org.locationtech.geowave.test.annotation.Environments;
+import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
+import org.locationtech.geowave.test.basic.GeoWaveVisibilityIT;
+import org.locationtech.geowave.test.mapreduce.BasicMapReduceIT;
+import org.locationtech.geowave.test.spark.SparkTestEnvironment;
+import org.locationtech.geowave.test.spark.SparkUtils;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.aol.cyclops.util.function.TriConsumer;
 
 @RunWith(GeoWaveITRunner.class)
-public class SecondaryIndexIT {
-  @GeoWaveTestStore({GeoWaveStoreType.ACCUMULO
-      // HBase's VisibilityController isn't compatible with
-      // this test. We'll leave HBase out until the *real*
-      // secondary index implementation is complete.
-      // GeoWaveStoreType.HBASE
-  })
+@Environments({Environment.MAP_REDUCE, Environment.SPARK})
+public class SecondaryIndexIT extends AbstractGeoWaveBasicVectorIT {
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecondaryIndexIT.class);
+
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB},
+      options = {"enableSecondaryIndex=true", "enableVisibility=true"})
   protected DataStorePluginOptions dataStoreOptions;
 
-  private FeatureDataAdapter dataAdapter;
-  private Index index;
-  private DataStore dataStore;
-  private SecondaryIndexDataStore secondaryDataStore;
-  private InternalAdapterStore internalAdapterStore;
-  private final List<ByteArray> allIndexIds = new ArrayList<>();
-  private final List<String> allDataIds = new ArrayList<>();
-  private int numAttributes;
-  private List<SecondaryIndexImpl<SimpleFeature>> allSecondaryIndices;
-  private QueryConstraints query;
-  private Point expectedPoint;
-  private String expectedDataId;
+  private static final int TOTAL_FEATURES_FOR_VISIBILITY_TEST = 400;
 
-  private static final Logger LOGGER = Logger.getLogger(SecondaryIndexIT.class);
-  private static long startMillis;
-
-  @BeforeClass
-  public static void startTimer() {
-    startMillis = System.currentTimeMillis();
-    LOGGER.warn("-----------------------------------------");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("*    RUNNING SecondaryIndexIT           *");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("-----------------------------------------");
-  }
-
-  @AfterClass
-  public static void reportTest() {
-    LOGGER.warn("-----------------------------------------");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("*    FINISHED SecondaryIndexIT          *");
-    LOGGER.warn(
-        "*         "
-            + ((System.currentTimeMillis() - startMillis) / 1000)
-            + "s elapsed.                 *");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("-----------------------------------------");
+  @Test
+  public void testLocalIngestAndQuerySpatial() throws Exception {
+    testIngestAndQuery(DimensionalityType.SPATIAL, false);
   }
 
   @Test
-  public void testSecondaryIndicesManually() throws AccumuloException, AccumuloSecurityException,
-      TableNotFoundException, ParseException, IOException {
-    Assert.assertTrue(allIndexIds.size() == 3);
-
-    if (dataStoreOptions.getType().equals("accumulo")) {
-
-      final AccumuloRequiredOptions options =
-          (AccumuloRequiredOptions) dataStoreOptions.getFactoryOptions();
-
-      final Connector connector =
-          ConnectorPool.getInstance().getConnector(
-              options.getZookeeper(),
-              options.getInstance(),
-              options.getUser(),
-              options.getPassword());
-
-      numericJoinAccumulo(connector);
-      textJoinAccumulo(connector);
-      temporalJoinAccumulo(connector);
-      numericFullAccumulo(connector);
-      textFullAccumulo(connector);
-      temporalFullAccumulo(connector);
-      numericPartialAccumulo(connector);
-      textPartialAccumulo(connector);
-      temporalPartialAccumulo(connector);
-    } else if (dataStoreOptions.getType().equals("hbase")) {
-
-      // final HBaseRequiredOptions options = (HBaseRequiredOptions)
-      // dataStoreOptions.getFactoryOptions();
-      //
-      // final Connection connection =
-      // ConnectionPool.getInstance().getConnection(
-      // options.getZookeeper());
-
-      // numericJoinHBase(connection);
-      // textJoinHBase(connection);
-      // temporalJoinHBase(connection);
-      // numericFullHBase(connection);
-      // textFullHBase(connection);
-      // temporalFullHBase(connection);
-      // numericPartialHBase(connection);
-      // textPartialHBase(connection);
-      // temporalPartialHBase(connection);
-    }
+  public void testLocalIngestAndQuerySpatialTemporal() throws Exception {
+    testIngestAndQuery(DimensionalityType.SPATIAL_TEMPORAL, false);
   }
 
   @Test
-  public void testSecondaryIndicesViaDirectQuery() throws IOException {
-    Assert.assertTrue(secondaryDataStore != null);
+  public void testLocalIngestAndQuerySpatialAndSpatialTemporal() throws Exception {
+    testIngestAndQuery(DimensionalityType.ALL, false);
+  }
 
-    if (dataStoreOptions.getType().equals("accumulo")) {
-      Assert.assertTrue(secondaryDataStore instanceof AccumuloSecondaryIndexDataStore);
-    } else if (dataStoreOptions.getType().equals("hbase")) {
-      // Assert.assertTrue(secondaryDataStore instanceof
-      // HBaseSecondaryIndexDataStore);
+  @Test
+  public void testDistributedIngestAndQuerySpatial() throws Exception {
+    testIngestAndQuery(DimensionalityType.SPATIAL, true);
+  }
+
+  @Test
+  public void testDistributedIngestAndQuerySpatialTemporal() throws Exception {
+    testIngestAndQuery(DimensionalityType.SPATIAL_TEMPORAL, true);
+  }
+
+  @Test
+  public void testDistributedIngestAndQuerySpatialAndSpatialTemporal() throws Exception {
+    testIngestAndQuery(DimensionalityType.ALL, true);
+  }
+
+  @Test
+  public void testVisibility() {
+    GeoWaveVisibilityIT.testIngestAndQueryVisibilityFields(
+        dataStoreOptions,
+        getFeatureVisWriter(),
+        (differingVisibilities) -> Assert.assertEquals(
+            "No entries should have differing visibility",
+            0,
+            differingVisibilities.getEntriesWithDifferingFieldVisibilities()),
+        (store, statsStore, internalAdapterId, spatial) -> {
+          try {
+            testQuery(store, statsStore, internalAdapterId, spatial);
+          } catch (final IOException e) {
+            LOGGER.warn("Unable to test visibility query", e);
+            Assert.fail(e.getMessage());
+          }
+        },
+        TOTAL_FEATURES_FOR_VISIBILITY_TEST);
+  }
+
+  private static void testQuery(
+      final DataStore store,
+      final DataStatisticsStore statsStore,
+      final short internalAdapterId,
+      final boolean spatial) throws IOException {
+    // you have to at least be able to see the geometry field which is wide
+    // open for exactly (total_Features / 4)
+    testQuery(
+        store,
+        statsStore,
+        internalAdapterId,
+        new String[] {},
+        spatial,
+        (TOTAL_FEATURES_FOR_VISIBILITY_TEST) / 4);
+
+    for (final String auth : new String[] {"a", "b", "c"}) {
+      testQuery(
+          store,
+          statsStore,
+          internalAdapterId,
+          new String[] {auth},
+          spatial,
+          (2 * TOTAL_FEATURES_FOR_VISIBILITY_TEST) / 4);
     }
 
-    Assert.assertTrue(allSecondaryIndices.size() == 9);
+    // order shouldn't matter, but let's make sure here
+    for (final String[] auths : new String[][] {
+        new String[] {"a", "b"},
+        new String[] {"b", "a"},
+        new String[] {"a", "c"},
+        new String[] {"c", "a"},
+        new String[] {"b", "c"},
+        new String[] {"c", "b"}}) {
+      testQuery(
+          store,
+          statsStore,
+          internalAdapterId,
+          auths,
+          spatial,
+          (3 * TOTAL_FEATURES_FOR_VISIBILITY_TEST) / 4);
+    }
 
-    final InternalDataAdapter<SimpleFeature> internalDataAdapter =
-        new InternalDataAdapterWrapper(
-            dataAdapter,
-            internalAdapterStore.getAdapterId(dataAdapter.getTypeName()));
+    testQuery(
+        store,
+        statsStore,
+        internalAdapterId,
+        new String[] {"a", "b", "c"},
+        spatial,
+        TOTAL_FEATURES_FOR_VISIBILITY_TEST);
+  }
 
-    for (final SecondaryIndexImpl<SimpleFeature> secondaryIndex : allSecondaryIndices) {
+  private static void testQuery(
+      final DataStore store,
+      final DataStatisticsStore statsStore,
+      final short internalAdapterId,
+      final String[] auths,
+      final boolean spatial,
+      final int expectedResultCount) throws IOException {
+    // this doesn't use mixed visibilities so all attributes should be non-null
+    GeoWaveVisibilityIT.testQuery(
+        store,
+        statsStore,
+        internalAdapterId,
+        auths,
+        spatial,
+        expectedResultCount,
+        expectedResultCount * 4);
+  }
 
-      final List<SimpleFeature> queryResults = new ArrayList<>();
-      try (final CloseableIterator<SimpleFeature> results =
-          secondaryDataStore.query(
-              secondaryIndex,
-              secondaryIndex.getFieldName(),
-              internalDataAdapter,
-              index,
-              query,
-              DEFAULT_AUTHORIZATIONS)) {
+  private VisibilityWriter<SimpleFeature> getFeatureVisWriter() {
+    return new VisibilityWriter<SimpleFeature>() {
+      @Override
+      public FieldVisibilityHandler<SimpleFeature, Object> getFieldVisibilityHandler(
+          final String fieldId) {
+        return new FieldVisibilityHandler<SimpleFeature, Object>() {
 
-        while (results.hasNext()) {
-          queryResults.add(results.next());
+          @Override
+          public byte[] getVisibility(
+              final SimpleFeature rowValue,
+              final String fieldId,
+              final Object fieldValue) {
+            final int fieldValueInt = Integer.parseInt(rowValue.getID());
+            // make them all the same because secondary indexing does not support mixed
+            // visibilities
+
+            // make some no bytes, some a, some
+            // b, and some c
+            final int switchValue = fieldValueInt % 4;
+            switch (switchValue) {
+              case 0:
+                return new ByteArray("a").getBytes();
+
+              case 1:
+                return new ByteArray("b").getBytes();
+
+              case 2:
+                return new ByteArray("c").getBytes();
+
+              case 3:
+              default:
+                return new byte[] {};
+            }
+          }
+        };
+      }
+    };
+  }
+
+  @Override
+  protected DataStorePluginOptions getDataStorePluginOptions() {
+    return dataStoreOptions;
+  }
+
+  private void testIngestAndQuery(
+      final DimensionalityType dimensionality,
+      final boolean distributed) throws Exception {
+    // ingest both lines and points
+    if (distributed) {
+      testIngestAndQuery(dimensionality, (d, f) -> {
+        try {
+          testMapReduceExportAndReingest(dataStoreOptions, d, f);
+        } catch (final Exception e) {
+          LOGGER.warn("Unable to ingest map-reduce", e);
+          Assert.fail(e.getMessage());
         }
-      }
-
-      final int numResults = queryResults.size();
-      Assert.assertTrue(
-          secondaryIndex.getName() + " returned " + numResults + " results (should have been 1)",
-          numResults == 1);
-
-      final SimpleFeature result = queryResults.get(0);
-
-      // verify dataId match
-      Assert.assertTrue(result.getID().equals(expectedDataId));
-
-      // verify geometry match
-      Assert.assertTrue(result.getAttribute(GEOMETRY_FIELD).equals(expectedPoint));
-    }
-
-    // test delete
-    final QueryConstraints deleteQuery = new DataIdQuery(new ByteArray(expectedDataId));
-    dataStore.delete(
-        QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName()).indexName(
-            index.getName()).constraints(deleteQuery).build());
-
-    for (final SecondaryIndexImpl<SimpleFeature> secondaryIndex : allSecondaryIndices) {
-
-      int numResults = 0;
-      try (final CloseableIterator<SimpleFeature> results =
-          secondaryDataStore.query(
-              secondaryIndex,
-              secondaryIndex.getFieldName(),
-              internalDataAdapter,
-              index,
-              query,
-              DEFAULT_AUTHORIZATIONS)) {
-
-        while (results.hasNext()) {
-          results.next();
-          numResults++;
+      },
+          (input, expected, description) -> SparkUtils.verifyQuery(
+              dataStoreOptions,
+              SparkTestEnvironment.getInstance().getDefaultSession().sparkContext(),
+              input,
+              expected,
+              description,
+              null,
+              false),
+          (dimensionalityType, urls) -> {
+            // no-op on verify stats because the "expected" stats that are calculated are off by an
+            // epsilon (ie. problem with the test, not the actual results)
+          });
+    } else {
+      testIngestAndQuery(dimensionality, (d, f) -> {
+        try {
+          TestUtils.testLocalIngest(dataStoreOptions, dimensionality, f, 1);
+        } catch (final Exception e) {
+          LOGGER.warn("Unable to ingest locally", e);
+          Assert.fail(e.getMessage());
         }
-      }
-      Assert.assertTrue(
-          secondaryIndex.getName() + " returned " + numResults + " results (should have been 0)",
-          numResults == 0);
+      }, (input, expected, description) -> {
+        try {
+          testQuery(input, expected, description);
+        } catch (final Exception e) {
+          LOGGER.warn("Unable to query locally", e);
+          Assert.fail(e.getMessage());
+        }
+      }, (dimensionalityType, urls) -> testStats(urls, false, dimensionality.getDefaultIndices()));
     }
   }
 
-  private static final String NUMERIC_JOIN_TABLE =
-      TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_NUMERIC_JOIN";
-  private static final String TEXT_JOIN_TABLE =
-      TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEXT_JOIN";
-  private static final String TEMPORAL_JOIN_TABLE =
-      TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEMPORAL_JOIN";
-  private static final String NUMERIC_FULL_TABLE =
-      TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_NUMERIC_FULL";
-  private static final String TEXT_FULL_TABLE =
-      TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEXT_FULL";
-  private static final String TEMPORAL_FULL_TABLE =
-      TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEMPORAL_FULL";
-  private static final String NUMERIC_PARTIAL_TABLE =
-      TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_NUMERIC_PARTIAL";
-  private static final String TEXT_PARTIAL_TABLE =
-      TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEXT_PARTIAL";
-  private static final String TEMPORAL_PARTIAL_TABLE =
-      TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEMPORAL_PARTIAL";
-  private static final String GEOMETRY_FIELD = "geometryField";
-  private static final String NUMERIC_JOIN_FIELD = "doubleField";
-  private static final String TEMPORAL_JOIN_FIELD = "dateField";
-  private static final String TEXT_JOIN_FIELD = "stringField";
-  private static final String NUMERIC_FULL_FIELD = "doubleField2";
-  private static final String TEMPORAL_FULL_FIELD = "dateField2";
-  private static final String TEXT_FULL_FIELD = "stringField2";
-  private static final String NUMERIC_PARTIAL_FIELD = "doubleField3";
-  private static final String TEMPORAL_PARTIAL_FIELD = "dateField3";
-  private static final String TEXT_PARTIAL_FIELD = "stringField3";
-  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
-  private static final ByteArray GEOMETRY_FIELD_ID =
-      new ByteArray(GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME.getBytes());
-  private static final String[] DEFAULT_AUTHORIZATIONS = new String[] {};
-  private static final Authorizations DEFAULT_ACCUMULO_AUTHORIZATIONS =
-      new Authorizations(DEFAULT_AUTHORIZATIONS);
-  private static final List<String> PARTIAL_LIST =
-      Arrays.asList(StringUtils.stringFromBinary(GEOMETRY_FIELD_ID.getBytes()));
+  private static void testMapReduceExportAndReingest(
+      final DataStorePluginOptions dataStoreOptions,
+      final DimensionalityType dimensionality,
+      final String file) throws Exception {
+    final Map<String, String> configOptions = dataStoreOptions.getOptionsAsMap();
+    final StoreFactoryOptions options =
+        ConfigUtils.populateOptionsFromList(
+            dataStoreOptions.getFactoryFamily().getDataStoreFactory().createOptionsInstance(),
+            configOptions);
+    options.setGeoWaveNamespace(dataStoreOptions.getGeoWaveNamespace() + "_tmp");
 
-  @Before
-  public void initTest()
-      throws SchemaException, MismatchedIndexToAdapterMapping, IOException, ParseException {
+    final DataStorePluginOptions tempStore = new DataStorePluginOptions(options);
+    TestUtils.testLocalIngest(tempStore, dimensionality, file, 1);
+    BasicMapReduceIT.testMapReduceExportAndReingest(tempStore, dataStoreOptions, dimensionality);
+  }
+
+  private void testIngestAndQuery(
+      final DimensionalityType dimensionality,
+      final BiConsumer<DimensionalityType, String> ingestFunction,
+      final TriConsumer<URL, URL[], String> queryFunction,
+      final BiConsumer<DimensionalityType, URL[]> verifyStats) throws Exception {
+    ingestFunction.accept(dimensionality, HAIL_SHAPEFILE_FILE);
+    ingestFunction.accept(dimensionality, TORNADO_TRACKS_SHAPEFILE_FILE);
+    queryFunction.accept(
+        new File(TEST_BOX_FILTER_FILE).toURI().toURL(),
+        new URL[] {
+            new File(HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),
+            new File(TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()},
+        "bounding box");
+    queryFunction.accept(
+        new File(TEST_POLYGON_FILTER_FILE).toURI().toURL(),
+        new URL[] {
+            new File(HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL(),
+            new File(TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()},
+        "polygon constraint");
+    queryFunction.accept(
+        new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
+        new URL[] {
+            new File(HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+            new File(TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()},
+        "bounding box and time range");
+    queryFunction.accept(
+        new File(TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(),
+        new URL[] {
+            new File(HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+            new File(TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()},
+        "polygon constraint and time range");
+    final URL[] urls =
+        new URL[] {
+            new File(HAIL_SHAPEFILE_FILE).toURI().toURL(),
+            new File(TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()};
+    verifyStats.accept(dimensionality, urls);
+    testSpatialTemporalLocalExportAndReingestWithCQL(
+        new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
+        1,
+        false,
+        dimensionality);
+    testDeleteDataId(
+        new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
+        dimensionality.getDefaultIndices()[0]);
+    testDeleteCQL(CQL_DELETE_STR, null);
+
+    testDeleteByBasicQuery(new File(TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(), null);
+    testDeleteByBasicQuery(new File(TEST_POLYGON_FILTER_FILE).toURI().toURL(), null);
     TestUtils.deleteAll(dataStoreOptions);
-
-    // mark attributes for secondary indexing
-    final List<SimpleFeatureUserDataConfiguration> configs = new ArrayList<>();
-
-    // JOIN
-    configs.add(
-        new NumericSecondaryIndexConfiguration(NUMERIC_JOIN_FIELD, SecondaryIndexType.JOIN));
-    configs.add(
-        new TemporalSecondaryIndexConfiguration(TEMPORAL_JOIN_FIELD, SecondaryIndexType.JOIN));
-    configs.add(new TextSecondaryIndexConfiguration(TEXT_JOIN_FIELD, SecondaryIndexType.JOIN));
-
-    // FULL
-    configs.add(
-        new NumericSecondaryIndexConfiguration(NUMERIC_FULL_FIELD, SecondaryIndexType.FULL));
-    configs.add(
-        new TemporalSecondaryIndexConfiguration(TEMPORAL_FULL_FIELD, SecondaryIndexType.FULL));
-    configs.add(new TextSecondaryIndexConfiguration(TEXT_FULL_FIELD, SecondaryIndexType.FULL));
-
-    // PARTIAL
-    configs.add(
-        new NumericSecondaryIndexConfiguration(
-            NUMERIC_PARTIAL_FIELD,
-            SecondaryIndexType.PARTIAL,
-            PARTIAL_LIST));
-    configs.add(
-        new TemporalSecondaryIndexConfiguration(
-            TEMPORAL_PARTIAL_FIELD,
-            SecondaryIndexType.PARTIAL,
-            PARTIAL_LIST));
-    configs.add(
-        new TextSecondaryIndexConfiguration(
-            TEXT_PARTIAL_FIELD,
-            SecondaryIndexType.PARTIAL,
-            PARTIAL_LIST));
-
-    // update schema with configs
-    final SimpleFeatureType schema =
-        DataUtilities.createType(
-            "record",
-            GEOMETRY_FIELD
-                + ":Geometry,"
-                + NUMERIC_JOIN_FIELD
-                + ":Double,"
-                + NUMERIC_FULL_FIELD
-                + ":Double,"
-                + NUMERIC_PARTIAL_FIELD
-                + ":Double,"
-                + TEMPORAL_JOIN_FIELD
-                + ":Date,"
-                + TEMPORAL_FULL_FIELD
-                + ":Date,"
-                + TEMPORAL_PARTIAL_FIELD
-                + ":Date,"
-                + TEXT_JOIN_FIELD
-                + ":String,"
-                + TEXT_FULL_FIELD
-                + ":String,"
-                + TEXT_PARTIAL_FIELD
-                + ":String");
-    numAttributes = schema.getAttributeCount();
-    final SimpleFeatureUserDataConfigurationSet config =
-        new SimpleFeatureUserDataConfigurationSet(schema, configs);
-    config.updateType(schema);
-
-    // build features
-    final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(schema);
-    final List<SimpleFeature> features = new ArrayList<>();
-
-    features.add(
-        buildSimpleFeature(builder, -180d, -90d, DATE_FORMAT.parse("11-11-2012"), 1d, "aaa"));
-    features.add(buildSimpleFeature(builder, 0d, 0d, DATE_FORMAT.parse("11-30-2013"), 10d, "bbb"));
-
-    // Create a feature and collect verification data from it
-    final SimpleFeature feat =
-        buildSimpleFeature(builder, 180d, 90d, DATE_FORMAT.parse("12-25-2015"), 100d, "ccc");
-    expectedPoint = (Point) feat.getAttribute(GEOMETRY_FIELD);
-    expectedDataId = feat.getID();
-    features.add(feat);
-
-    // ingest data
-    dataStore = dataStoreOptions.createDataStore();
-    secondaryDataStore = dataStoreOptions.createSecondaryIndexStore();
-    secondaryDataStore.setDataStore(dataStore);
-    dataAdapter = new FeatureDataAdapter(schema);
-    index = TestUtils.DEFAULT_SPATIAL_INDEX;
-    dataAdapter.init(index);
-    dataStore.addType(dataAdapter, index);
-    try (@SuppressWarnings("unchecked")
-    final Writer<SimpleFeature> writer = dataStore.createWriter(dataAdapter.getTypeName())) {
-      for (final SimpleFeature aFeature : features) {
-        allIndexIds.addAll(writer.write(aFeature).getCompositeInsertionIds());
-      }
-    }
-
-    internalAdapterStore = dataStoreOptions.createInternalAdapterStore();
-    allSecondaryIndices = dataAdapter.getSupportedSecondaryIndices();
-
-    final Map<String, FilterableConstraints> additionalConstraints = new HashMap<>();
-
-    final Number number = 25d;
-    additionalConstraints.put(
-        NUMERIC_JOIN_FIELD,
-        new NumericGreaterThanConstraint(NUMERIC_JOIN_FIELD, number));
-    additionalConstraints.put(
-        NUMERIC_FULL_FIELD,
-        new NumericGreaterThanConstraint(NUMERIC_FULL_FIELD, number));
-    additionalConstraints.put(
-        NUMERIC_PARTIAL_FIELD,
-        new NumericGreaterThanConstraint(NUMERIC_PARTIAL_FIELD, number));
-
-    final String matchValue = "ccc";
-    additionalConstraints.put(
-        TEXT_JOIN_FIELD,
-        new TextQueryConstraint(TEXT_JOIN_FIELD, matchValue, true));
-    additionalConstraints.put(
-        TEXT_FULL_FIELD,
-        new TextQueryConstraint(TEXT_FULL_FIELD, matchValue, true));
-    additionalConstraints.put(
-        TEXT_PARTIAL_FIELD,
-        new TextQueryConstraint(TEXT_PARTIAL_FIELD, matchValue, true));
-
-    final Date start = DATE_FORMAT.parse("12-24-2015");
-    final Date end = DATE_FORMAT.parse("12-26-2015");
-    additionalConstraints.put(
-        TEMPORAL_JOIN_FIELD,
-        new TemporalQueryConstraint(TEMPORAL_JOIN_FIELD, start, end));
-    additionalConstraints.put(
-        TEMPORAL_FULL_FIELD,
-        new TemporalQueryConstraint(TEMPORAL_FULL_FIELD, start, end));
-    additionalConstraints.put(
-        TEMPORAL_PARTIAL_FIELD,
-        new TemporalQueryConstraint(TEMPORAL_PARTIAL_FIELD, start, end));
-
-    query =
-        new SpatialQuery(
-            GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(-180d, 180d, -90d, 90d)),
-            additionalConstraints);
-  }
-
-  /** @throws IOException */
-  @After
-  public void deleteTestData() throws IOException {
-    TestUtils.deleteAll(dataStoreOptions);
-  }
-
-  /**
-   * @param connector
-   * @throws TableNotFoundException
-   */
-  private void numericJoinAccumulo(final Connector connector) throws TableNotFoundException {
-    final Scanner scanner =
-        connector.createScanner(NUMERIC_JOIN_TABLE, DEFAULT_ACCUMULO_AUTHORIZATIONS);
-
-    scanner.setRange(
-        new Range(
-            new Text(Lexicoders.DOUBLE.toByteArray(0d)),
-            new Text(Lexicoders.DOUBLE.toByteArray(20d))));
-
-    scanner.fetchColumnFamily(
-        new Text(
-            SecondaryIndexUtils.constructColumnFamily(
-                dataAdapter.getTypeName(),
-                NUMERIC_JOIN_FIELD)));
-    int numResults = 0;
-
-    for (final Entry<Key, Value> entry : scanner) {
-      numResults += 1;
-      final ByteArray primaryRowId =
-          SecondaryIndexUtils.getPrimaryRowId(
-              entry.getKey().getColumnQualifierData().getBackingArray());
-      if (numResults == 1) {
-        Assert.assertTrue(primaryRowId.equals(allIndexIds.get(0)));
-      } else if (numResults == 2) {
-        Assert.assertTrue(primaryRowId.equals(allIndexIds.get(1)));
-      }
-    }
-    scanner.close();
-    Assert.assertTrue(numResults == 2);
-  }
-
-  private void textJoinAccumulo(final Connector connector) throws TableNotFoundException {
-    final Scanner scanner =
-        connector.createScanner(TEXT_JOIN_TABLE, DEFAULT_ACCUMULO_AUTHORIZATIONS);
-    scanner.setRange(new Range(new Text(new ByteArray("bbb").getBytes())));
-    scanner.fetchColumnFamily(
-        new Text(
-            SecondaryIndexUtils.constructColumnFamily(dataAdapter.getTypeName(), TEXT_JOIN_FIELD)));
-    int numResults = 0;
-    for (final Entry<Key, Value> entry : scanner) {
-      numResults += 1;
-      final ByteArray primaryRowId =
-          SecondaryIndexUtils.getPrimaryRowId(
-              entry.getKey().getColumnQualifierData().getBackingArray());
-      Assert.assertTrue(primaryRowId.equals(allIndexIds.get(1)));
-    }
-    scanner.close();
-    Assert.assertTrue(numResults == 1);
-  }
-
-  private void temporalJoinAccumulo(final Connector connector)
-      throws TableNotFoundException, ParseException {
-    final Scanner scanner =
-        connector.createScanner(TEMPORAL_JOIN_TABLE, DEFAULT_ACCUMULO_AUTHORIZATIONS);
-    final Text startText =
-        new Text(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse("11-30-2012").getTime()));
-    final Text stopText =
-        new Text(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse("11-30-2014").getTime()));
-
-    scanner.setRange(new Range(startText, stopText));
-    final byte[] colFam =
-        SecondaryIndexUtils.constructColumnFamily(dataAdapter.getTypeName(), TEMPORAL_JOIN_FIELD);
-
-    scanner.fetchColumnFamily(new Text(colFam));
-    int numResults = 0;
-    for (final Entry<Key, Value> entry : scanner) {
-      numResults += 1;
-      final ByteArray primaryRowId =
-          SecondaryIndexUtils.getPrimaryRowId(
-              entry.getKey().getColumnQualifierData().getBackingArray());
-      Assert.assertTrue(primaryRowId.equals(allIndexIds.get(1)));
-    }
-    scanner.close();
-    Assert.assertTrue(numResults == 1);
-  }
-
-  private void numericFullAccumulo(final Connector connector) throws TableNotFoundException {
-    final Scanner scanner =
-        connector.createScanner(NUMERIC_FULL_TABLE, DEFAULT_ACCUMULO_AUTHORIZATIONS);
-    scanner.setRange(
-        new Range(
-            new Text(Lexicoders.DOUBLE.toByteArray(0d)),
-            new Text(Lexicoders.DOUBLE.toByteArray(20d))));
-    scanner.fetchColumnFamily(
-        new Text(
-            SecondaryIndexUtils.constructColumnFamily(
-                dataAdapter.getTypeName(),
-                NUMERIC_FULL_FIELD)));
-    int numResults = 0;
-    for (final Entry<Key, Value> entry : scanner) {
-      final String dataId =
-          SecondaryIndexUtils.getDataId(entry.getKey().getColumnQualifierData().getBackingArray());
-      if ((numResults / numAttributes) == 0) {
-        Assert.assertTrue(dataId.equals(allDataIds.get(0)));
-      } else if ((numResults / numAttributes) == 1) {
-        Assert.assertTrue(dataId.equals(allDataIds.get(1)));
-      }
-      numResults += 1;
-    }
-    scanner.close();
-    Assert.assertTrue(numResults == (2 * numAttributes));
-  }
-
-  private void textFullAccumulo(final Connector connector) throws TableNotFoundException {
-    final Scanner scanner =
-        connector.createScanner(TEXT_FULL_TABLE, DEFAULT_ACCUMULO_AUTHORIZATIONS);
-    scanner.setRange(new Range(new Text(new ByteArray("bbb").getBytes())));
-    scanner.fetchColumnFamily(
-        new Text(
-            SecondaryIndexUtils.constructColumnFamily(dataAdapter.getTypeName(), TEXT_FULL_FIELD)));
-    int numResults = 0;
-    for (final Entry<Key, Value> entry : scanner) {
-      numResults += 1;
-      final String dataId =
-          SecondaryIndexUtils.getDataId(entry.getKey().getColumnQualifierData().getBackingArray());
-      Assert.assertTrue(dataId.equals(allDataIds.get(1)));
-    }
-    scanner.close();
-    Assert.assertTrue(numResults == numAttributes);
-  }
-
-  private void temporalFullAccumulo(final Connector connector)
-      throws TableNotFoundException, ParseException {
-    final Scanner scanner =
-        connector.createScanner(TEMPORAL_FULL_TABLE, DEFAULT_ACCUMULO_AUTHORIZATIONS);
-    scanner.setRange(
-        new Range(
-            new Text(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse("11-30-2012").getTime())),
-            new Text(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse("11-30-2014").getTime()))));
-    scanner.fetchColumnFamily(
-        new Text(
-            SecondaryIndexUtils.constructColumnFamily(
-                dataAdapter.getTypeName(),
-                TEMPORAL_FULL_FIELD)));
-    int numResults = 0;
-    for (final Entry<Key, Value> entry : scanner) {
-      numResults += 1;
-      final String dataId =
-          SecondaryIndexUtils.getDataId(entry.getKey().getColumnQualifierData().getBackingArray());
-      Assert.assertTrue(dataId.equals(allDataIds.get(1)));
-    }
-    scanner.close();
-    Assert.assertTrue(numResults == numAttributes);
-  }
-
-  private void numericPartialAccumulo(final Connector connector) throws TableNotFoundException {
-    final Scanner scanner =
-        connector.createScanner(NUMERIC_PARTIAL_TABLE, DEFAULT_ACCUMULO_AUTHORIZATIONS);
-    scanner.setRange(
-        new Range(
-            new Text(Lexicoders.DOUBLE.toByteArray(0d)),
-            new Text(Lexicoders.DOUBLE.toByteArray(20d))));
-    scanner.fetchColumnFamily(
-        new Text(
-            SecondaryIndexUtils.constructColumnFamily(
-                dataAdapter.getTypeName(),
-                NUMERIC_PARTIAL_FIELD)));
-    int numResults = 0;
-    for (final Entry<Key, Value> entry : scanner) {
-      numResults += 1;
-      final byte[] cq = entry.getKey().getColumnQualifierData().getBackingArray();
-      final String fieldId = SecondaryIndexUtils.getFieldName(cq);
-      Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
-      final String dataId =
-          SecondaryIndexUtils.getDataId(entry.getKey().getColumnQualifierData().getBackingArray());
-      if (numResults == 1) {
-        Assert.assertTrue(dataId.equals(allDataIds.get(0)));
-      } else if (numResults == 2) {
-        Assert.assertTrue(dataId.equals(allDataIds.get(1)));
-      }
-    }
-    scanner.close();
-    Assert.assertTrue(numResults == 2);
-  }
-
-  private void textPartialAccumulo(final Connector connector) throws TableNotFoundException {
-    final Scanner scanner =
-        connector.createScanner(TEXT_PARTIAL_TABLE, DEFAULT_ACCUMULO_AUTHORIZATIONS);
-    scanner.setRange(new Range(new Text(new ByteArray("bbb").getBytes())));
-    scanner.fetchColumnFamily(
-        new Text(
-            SecondaryIndexUtils.constructColumnFamily(
-                dataAdapter.getTypeName(),
-                TEXT_PARTIAL_FIELD)));
-    int numResults = 0;
-    for (final Entry<Key, Value> entry : scanner) {
-      numResults += 1;
-      final byte[] cq = entry.getKey().getColumnQualifierData().getBackingArray();
-      final String fieldId = SecondaryIndexUtils.getFieldName(cq);
-      Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
-      final String dataId = SecondaryIndexUtils.getDataId(cq);
-      Assert.assertTrue(dataId.equals(allDataIds.get(1)));
-    }
-    scanner.close();
-    Assert.assertTrue(numResults == 1);
-  }
-
-  private void temporalPartialAccumulo(final Connector connector)
-      throws TableNotFoundException, ParseException {
-    final Scanner scanner =
-        connector.createScanner(TEMPORAL_PARTIAL_TABLE, DEFAULT_ACCUMULO_AUTHORIZATIONS);
-    scanner.setRange(
-        new Range(
-            new Text(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse("11-30-2012").getTime())),
-            new Text(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse("11-30-2014").getTime()))));
-    scanner.fetchColumnFamily(
-        new Text(
-            SecondaryIndexUtils.constructColumnFamily(
-                dataAdapter.getTypeName(),
-                TEMPORAL_PARTIAL_FIELD)));
-    int numResults = 0;
-    for (final Entry<Key, Value> entry : scanner) {
-      numResults += 1;
-      final byte[] cq = entry.getKey().getColumnQualifierData().getBackingArray();
-      final String fieldId = SecondaryIndexUtils.getFieldName(cq);
-      Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
-      final String dataId = SecondaryIndexUtils.getDataId(cq);
-      Assert.assertTrue(dataId.equals(allDataIds.get(1)));
-    }
-    scanner.close();
-    Assert.assertTrue(numResults == 1);
-  }
-
-  /**
-   * @param builder SimpleFeature builder to be used
-   * @param lng - coordinate longitude
-   * @param lat - coordinate latitude
-   * @param dateField -
-   * @param doubleField
-   * @param stringField
-   * @return
-   */
-  private SimpleFeature buildSimpleFeature(
-      final SimpleFeatureBuilder builder,
-      final double lng,
-      final double lat,
-      final Date dateField,
-      final double doubleField,
-      final String stringField) {
-    builder.set(
-        GEOMETRY_FIELD,
-        GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(lng, lat)));
-    builder.set(TEMPORAL_JOIN_FIELD, dateField);
-    builder.set(TEMPORAL_FULL_FIELD, dateField);
-    builder.set(TEMPORAL_PARTIAL_FIELD, dateField);
-    builder.set(NUMERIC_JOIN_FIELD, doubleField);
-    builder.set(NUMERIC_FULL_FIELD, doubleField);
-    builder.set(NUMERIC_PARTIAL_FIELD, doubleField);
-    builder.set(TEXT_JOIN_FIELD, stringField);
-    builder.set(TEXT_FULL_FIELD, stringField);
-    builder.set(TEXT_PARTIAL_FIELD, stringField);
-    final String dataId = UUID.randomUUID().toString();
-    allDataIds.add(dataId);
-    return builder.buildFeature(dataId);
   }
 }

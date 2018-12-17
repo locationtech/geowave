@@ -29,20 +29,20 @@ public class SimpleParallelDecoder<T> extends ParallelDecoder<T> {
   private static final int CONSUMED_ROW_BUFFER_SIZE = 10000;
 
   public SimpleParallelDecoder(
-      GeoWaveRowIteratorTransformer<T> rowTransformer,
-      Iterator<GeoWaveRow> sourceIterator) {
+      final GeoWaveRowIteratorTransformer<T> rowTransformer,
+      final Iterator<GeoWaveRow> sourceIterator) {
     super(rowTransformer);
-    consumedRows = new ArrayBlockingQueue<GeoWaveRow>(CONSUMED_ROW_BUFFER_SIZE);
+    consumedRows = new ArrayBlockingQueue<>(CONSUMED_ROW_BUFFER_SIZE);
     consumerThread = new Thread(new Runnable() {
       @Override
       public void run() {
         while (sourceIterator.hasNext()) {
-          GeoWaveRow next = sourceIterator.next();
+          final GeoWaveRow next = sourceIterator.next();
           while (!consumedRows.offer(next)) {
             // queue is full, wait for space
             try {
               Thread.sleep(1);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
               isTerminating = true;
               return;
             }
@@ -61,7 +61,7 @@ public class SimpleParallelDecoder<T> extends ParallelDecoder<T> {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close() {
     if (consumerThread.isAlive()) {
       consumerThread.interrupt();
     }
@@ -70,10 +70,10 @@ public class SimpleParallelDecoder<T> extends ParallelDecoder<T> {
 
   @Override
   protected List<RowProvider> getRowProviders() throws Exception {
-    int numThreads = getNumThreads();
-    List<RowProvider> rowProviders = new ArrayList<RowProvider>(numThreads);
+    final int numThreads = getNumThreads();
+    final List<RowProvider> rowProviders = new ArrayList<>(numThreads);
     for (int i = 0; i < numThreads; i++) {
-      rowProviders.add(new BlockingQueueRowProvider<T>(this));
+      rowProviders.add(new BlockingQueueRowProvider<>(this));
     }
     return rowProviders;
   }
@@ -85,7 +85,7 @@ public class SimpleParallelDecoder<T> extends ParallelDecoder<T> {
 
     private final SimpleParallelDecoder<T> source;
 
-    public BlockingQueueRowProvider(SimpleParallelDecoder<T> source) {
+    public BlockingQueueRowProvider(final SimpleParallelDecoder<T> source) {
       this.source = source;
     }
 
@@ -104,7 +104,7 @@ public class SimpleParallelDecoder<T> extends ParallelDecoder<T> {
         }
         try {
           Thread.sleep(1);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           return;
         }
       }
@@ -123,7 +123,7 @@ public class SimpleParallelDecoder<T> extends ParallelDecoder<T> {
       if (next == null) {
         computeNext();
       }
-      GeoWaveRow retVal = next;
+      final GeoWaveRow retVal = next;
       next = null;
       return retVal;
     }

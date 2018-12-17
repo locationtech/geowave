@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.store.adapter.MockComponents.TestNativeFiel
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestPersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.index.IndexImpl;
 
 public class AbstractDataAdapterTest {
 
@@ -36,11 +36,10 @@ public class AbstractDataAdapterTest {
     // To instantiate MockAbstractDataAdapter, need to create
     // array of indexFieldHandlers and array of nativeFieldHandlers.
     final ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>> indexFieldHandlers =
-        new ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>>();
+        new ArrayList<>();
     indexFieldHandlers.add(new MockComponents.TestPersistentIndexFieldHandler());
 
-    final ArrayList<NativeFieldHandler<Integer, Object>> nativeFieldHandlers =
-        new ArrayList<NativeFieldHandler<Integer, Object>>();
+    final ArrayList<NativeFieldHandler<Integer, Object>> nativeFieldHandlers = new ArrayList<>();
     nativeFieldHandlers.add(new MockComponents.TestNativeFieldHandler());
 
     final MockComponents.MockAbstractDataAdapter mockAbstractDataAdapter =
@@ -60,7 +59,7 @@ public class AbstractDataAdapterTest {
                 testEncoding.getCommonData(),
                 new PersistentDataset<byte[]>(),
                 testEncoding.getAdapterExtendedData()),
-            new PrimaryIndex(null, testIndexModel));
+            new IndexImpl(null, testIndexModel));
 
     Assert.assertEquals("EncodeDecode_test", beforeValue, afterValue);
   }
@@ -68,11 +67,10 @@ public class AbstractDataAdapterTest {
   @Test
   public void testAbstractDataAdapterPersistance() {
     final ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>> indexFieldHandlers =
-        new ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>>();
+        new ArrayList<>();
     indexFieldHandlers.add(new TestPersistentIndexFieldHandler());
 
-    final ArrayList<NativeFieldHandler<Integer, Object>> nativeFieldHandlers =
-        new ArrayList<NativeFieldHandler<Integer, Object>>();
+    final ArrayList<NativeFieldHandler<Integer, Object>> nativeFieldHandlers = new ArrayList<>();
     nativeFieldHandlers.add(new TestNativeFieldHandler());
 
     final MockAbstractDataAdapter mockAbstractDataAdapter =

@@ -22,7 +22,7 @@ import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEnco
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
@@ -59,6 +59,10 @@ public class CQLQueryFilter implements QueryFilter {
             indexModel);
         final PersistentDataset<Object> existingExtValues =
             ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
+
+        if (persistenceEncoding.isAsync()) {
+          return false;
+        }
         if (existingExtValues != null) {
           adapterExtendedValues.addValues(existingExtValues.getValues());
         }
@@ -77,7 +81,7 @@ public class CQLQueryFilter implements QueryFilter {
       final SimpleFeature feature =
           adapter.decode(
               encoding,
-              new PrimaryIndex(
+              new IndexImpl(
                   null, // because we
                   // know the
                   // feature data

@@ -14,7 +14,6 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 
 public interface StoreFactoryFamilySpi extends GenericFactory {
@@ -29,8 +28,6 @@ public interface StoreFactoryFamilySpi extends GenericFactory {
   public GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory();
 
   public GenericStoreFactory<InternalAdapterStore> getInternalAdapterStoreFactory();
-
-  public GenericStoreFactory<SecondaryIndexDataStore> getSecondaryIndexDataStore();
 
   public GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory();
 }

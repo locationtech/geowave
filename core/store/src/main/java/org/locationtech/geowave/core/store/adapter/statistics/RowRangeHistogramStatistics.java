@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
@@ -34,14 +34,14 @@ public class RowRangeHistogramStatistics<T> extends
     super();
   }
 
-  public RowRangeHistogramStatistics(final String indexName, final ByteArray partitionKey) {
+  public RowRangeHistogramStatistics(final String indexName, final byte[] partitionKey) {
     this(null, indexName, partitionKey);
   }
 
   public RowRangeHistogramStatistics(
       final Short internalDataAdapterId,
       final String indexName,
-      final ByteArray partitionKey) {
+      final byte[] partitionKey) {
     super(
         internalDataAdapterId,
         STATS_TYPE,
@@ -55,7 +55,7 @@ public class RowRangeHistogramStatistics<T> extends
 
   @Override
   public InternalDataStatistics<T, NumericHistogram, PartitionStatisticsQueryBuilder<NumericHistogram>> duplicate() {
-    final Pair<String, ByteArray> pair =
+    final Pair<String, byte[]> pair =
         PartitionStatisticsQueryBuilder.decomposeIndexAndPartitionFromId(extendedId);
     return new RowRangeHistogramStatistics<>(
         adapterId,
@@ -142,13 +142,12 @@ public class RowRangeHistogramStatistics<T> extends
   @Override
   public String toString() {
     final StringBuffer buffer = new StringBuffer();
-    final Pair<String, ByteArray> indexAndPartition =
+    final Pair<String, byte[]> indexAndPartition =
         PartitionStatisticsQueryBuilder.decomposeIndexAndPartitionFromId(extendedId);
     buffer.append("histogram[index=").append(indexAndPartition.getLeft());
-    if ((indexAndPartition.getRight() != null)
-        && (indexAndPartition.getRight().getBytes() != null)
-        && (indexAndPartition.getRight().getBytes().length > 0)) {
-      buffer.append(", partitionAsHex=").append(indexAndPartition.getRight().getHexString());
+    if ((indexAndPartition.getRight() != null) && (indexAndPartition.getRight().length > 0)) {
+      buffer.append(", partitionAsHex=").append(
+          ByteArrayUtils.getHexString(indexAndPartition.getRight()));
     }
     if (histogram != null) {
       buffer.append(", quantiles={");
@@ -176,11 +175,11 @@ public class RowRangeHistogramStatistics<T> extends
 
   @Override
   protected Object resultsValue() {
-    final Pair<String, ByteArray> indexAndPartition =
+    final Pair<String, byte[]> indexAndPartition =
         PartitionStatisticsQueryBuilder.decomposeIndexAndPartitionFromId(extendedId);
     final Map<String, Object> retVal = new HashMap<>();
     retVal.put("index", indexAndPartition.getLeft());
-    retVal.put("partitionAsHex", indexAndPartition.getRight().getHexString());
+    retVal.put("partitionAsHex", ByteArrayUtils.getHexString(indexAndPartition.getRight()));
     if (histogram != null) {
       final Map<String, Object> histogramMap = new HashMap<>();
       histogramMap.put("min", Double.toString(histogram.getMinValue()));

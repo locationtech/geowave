@@ -12,7 +12,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
@@ -20,30 +19,27 @@ import org.locationtech.geowave.core.store.query.filter.InsertionIdQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class InsertionIdQuery implements QueryConstraints {
-  private ByteArray partitionKey;
-  private ByteArray sortKey;
-  private ByteArray dataId;
+  private byte[] partitionKey;
+  private byte[] sortKey;
+  private byte[] dataId;
 
   public InsertionIdQuery() {}
 
-  public InsertionIdQuery(
-      final ByteArray partitionKey,
-      final ByteArray sortKey,
-      final ByteArray dataId) {
+  public InsertionIdQuery(final byte[] partitionKey, final byte[] sortKey, final byte[] dataId) {
     this.partitionKey = partitionKey;
     this.sortKey = sortKey;
     this.dataId = dataId;
   }
 
-  public ByteArray getPartitionKey() {
+  public byte[] getPartitionKey() {
     return partitionKey;
   }
 
-  public ByteArray getSortKey() {
+  public byte[] getSortKey() {
     return sortKey;
   }
 
-  public ByteArray getDataId() {
+  public byte[] getDataId() {
     return dataId;
   }
 
@@ -63,17 +59,17 @@ public class InsertionIdQuery implements QueryConstraints {
   public byte[] toBinary() {
     byte[] sortKeyBinary, partitionKeyBinary, dataIdBinary;
     if (partitionKey != null) {
-      partitionKeyBinary = partitionKey.getBytes();
+      partitionKeyBinary = partitionKey;
     } else {
       partitionKeyBinary = new byte[0];
     }
     if (sortKey != null) {
-      sortKeyBinary = sortKey.getBytes();
+      sortKeyBinary = sortKey;
     } else {
       sortKeyBinary = new byte[0];
     }
     if (dataId != null) {
-      dataIdBinary = dataId.getBytes();
+      dataIdBinary = dataId;
     } else {
       dataIdBinary = new byte[0];
     }
@@ -99,21 +95,21 @@ public class InsertionIdQuery implements QueryConstraints {
       partitionKey = null;
     } else {
       buf.get(partitionKeyBinary);
-      partitionKey = new ByteArray(partitionKeyBinary);
+      partitionKey = partitionKeyBinary;
     }
     final byte[] sortKeyBinary = new byte[VarintUtils.readUnsignedInt(buf)];
     if (sortKeyBinary.length == 0) {
       sortKey = null;
     } else {
       buf.get(sortKeyBinary);
-      sortKey = new ByteArray(sortKeyBinary);
+      sortKey = sortKeyBinary;
     }
     final byte[] dataIdBinary = new byte[buf.remaining()];
     if (dataIdBinary.length == 0) {
       dataId = null;
     } else {
       buf.get(dataIdBinary);
-      dataId = new ByteArray(dataIdBinary);
+      dataId = dataIdBinary;
     }
   }
 }

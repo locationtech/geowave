@@ -131,7 +131,7 @@ public class NNJobRunnerTest {
     pluginOptions.selectPlugin("memory");
     MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
-    opts.setGeowaveNamespace(namespace);
+    opts.setGeoWaveNamespace(namespace);
     PersistableStore store = new PersistableStore(pluginOptions);
 
     runTimeProperties.store(StoreParam.INPUT_STORE, store);

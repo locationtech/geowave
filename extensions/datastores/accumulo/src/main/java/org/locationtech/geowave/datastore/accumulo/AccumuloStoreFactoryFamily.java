@@ -11,8 +11,6 @@ package org.locationtech.geowave.datastore.accumulo;
 import org.locationtech.geowave.core.store.BaseDataStoreFamily;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.api.DataStore;
-import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
-import org.locationtech.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStoreFactory;
 
 public class AccumuloStoreFactoryFamily extends BaseDataStoreFamily {
   public static final String TYPE = "accumulo";
@@ -25,13 +23,5 @@ public class AccumuloStoreFactoryFamily extends BaseDataStoreFamily {
   @Override
   public GenericStoreFactory<DataStore> getDataStoreFactory() {
     return new AccumuloDataStoreFactory(TYPE, DESCRIPTION, new AccumuloFactoryHelper());
-  }
-
-  @Override
-  public GenericStoreFactory<SecondaryIndexDataStore> getSecondaryIndexDataStore() {
-    return new AccumuloSecondaryIndexDataStoreFactory(
-        TYPE,
-        DESCRIPTION,
-        new AccumuloFactoryHelper());
   }
 }

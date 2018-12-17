@@ -57,7 +57,7 @@ public class HBaseMetadataWriter implements MetadataWriter {
 
     put.addColumn(metadataTypeBytes, secondaryBytes, metadata.getValue());
 
-    if (metadata.getVisibility() != null) {
+    if ((metadata.getVisibility() != null) && (metadata.getVisibility().length > 0)) {
       put.setCellVisibility(
           new CellVisibility(StringUtils.stringFromBinary(metadata.getVisibility())));
     }

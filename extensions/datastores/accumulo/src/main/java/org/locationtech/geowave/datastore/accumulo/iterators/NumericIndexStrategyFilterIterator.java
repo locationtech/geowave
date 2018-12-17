@@ -18,7 +18,6 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
@@ -144,11 +143,14 @@ public class NumericIndexStrategyFilterIterator implements SortedKeyValueIterato
 
   private boolean inBounds(final Key k) {
     k.getRow(row);
-    final GeoWaveKeyImpl key = new GeoWaveKeyImpl(row.getBytes(), partitionKeyLength);
+    final GeoWaveKeyImpl key =
+        new GeoWaveKeyImpl(row.getBytes(), partitionKeyLength, row.getLength());
     final MultiDimensionalCoordinates coordinates =
-        indexStrategy.getCoordinatesPerDimension(
-            new ByteArray(key.getPartitionKey()),
-            new ByteArray(key.getSortKey()));
+        indexStrategy.getCoordinatesPerDimension(key.getPartitionKey(), key.getSortKey());
+    if (coordinates == null) {
+      // this is a filter, so caution should be on the side of accepting values that can't be parsed
+      return true;
+    }
     return rangeCache.inBounds(coordinates);
   }
 }

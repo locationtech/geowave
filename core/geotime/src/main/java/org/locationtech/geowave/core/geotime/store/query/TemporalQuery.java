@@ -1,62 +1,81 @@
-/**
- * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- *
- * <p> See the NOTICE file distributed with this work for additional information regarding copyright
- * ownership. All rights reserved. This program and the accompanying materials are made available
- * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
- * available at http://www.apache.org/licenses/LICENSE-2.0.txt
- */
 package org.locationtech.geowave.core.geotime.store.query;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
-import org.threeten.extra.Interval;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import org.geotools.factory.CommonFactoryFinder;
+import org.locationtech.geowave.core.geotime.ingest.TemporalDimensionalityTypeProvider.TemporalIndexBuilder;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.util.IndexOptimizationUtils;
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
+import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.opengis.filter.Filter;
 
-/**
- * The Spatial Temporal Query class represents a query in three dimensions. The constraint that is
- * applied represents an intersection operation on the query geometry AND a date range intersection
- * based on startTime and endTime.
- */
-public class TemporalQuery extends BasicQuery {
-  public TemporalQuery(final Interval[] intervals) {
-    super(createTemporalConstraints(intervals));
-  }
-
-  public TemporalQuery(final TemporalConstraints contraints) {
-    super(createTemporalConstraints(contraints));
-  }
+public class TemporalQuery extends AbstractVectorConstraints<ExplicitTemporalQuery> {
 
   public TemporalQuery() {
     super();
   }
 
-  private static Constraints createTemporalConstraints(
-      final TemporalConstraints temporalConstraints) {
-    final List<ConstraintSet> constraints = new ArrayList<>();
-    for (final TemporalRange range : temporalConstraints.getRanges()) {
-      constraints.add(
-          new ConstraintSet(
-              TimeDefinition.class,
-              new ConstraintData(
-                  new NumericRange(range.getStartTime().getTime(), range.getEndTime().getTime()),
-                  false)));
-    }
-    return new Constraints(constraints);
+  public TemporalQuery(final ExplicitTemporalQuery delegateConstraints) {
+    super(delegateConstraints);
   }
 
-  private static Constraints createTemporalConstraints(final Interval[] intervals) {
-    final List<ConstraintSet> constraints = new ArrayList<>();
-    for (final Interval range : intervals) {
-      constraints.add(
-          new ConstraintSet(
-              TimeDefinition.class,
-              new ConstraintData(
-                  new NumericRange(range.getStart().toEpochMilli(), range.getEnd().toEpochMilli()),
-                  false)));
+  @Override
+  protected ExplicitTemporalQuery newConstraints() {
+    return new ExplicitTemporalQuery();
+  }
+
+  @Override
+  protected boolean isSupported(final Index index, final GeotoolsFeatureDataAdapter adapter) {
+    return IndexOptimizationUtils.hasTime(index, adapter);
+  }
+
+  @Override
+  protected Filter getFilter(final GeotoolsFeatureDataAdapter adapter) {
+    return getFilter(adapter, delegateConstraints);
+  }
+
+  protected static Filter getFilter(
+      final GeotoolsFeatureDataAdapter adapter,
+      final QueryConstraints delegateConstraints) {
+    final List<MultiDimensionalNumericData> constraints =
+        delegateConstraints.getIndexConstraints(new TemporalIndexBuilder().createIndex());
+    if (adapter.getTimeDescriptors().getTime() != null) {
+      return constraintsToFilter(
+          constraints,
+          data -> TimeUtils.toDuringFilter(
+              (long) data.getMinValuesPerDimension()[0],
+              (long) data.getMaxValuesPerDimension()[0],
+              adapter.getTimeDescriptors().getTime().getLocalName()));
+    } else if ((adapter.getTimeDescriptors().getStartRange() != null)
+        && (adapter.getTimeDescriptors().getEndRange() != null)) {
+      return constraintsToFilter(
+          constraints,
+          data -> TimeUtils.toFilter(
+              (long) data.getMinValuesPerDimension()[0],
+              (long) data.getMaxValuesPerDimension()[0],
+              adapter.getTimeDescriptors().getStartRange().getLocalName(),
+              adapter.getTimeDescriptors().getEndRange().getLocalName()));
     }
-    return new Constraints(constraints);
+    return null;
+  }
+
+  private static Filter constraintsToFilter(
+      final List<MultiDimensionalNumericData> constraints,
+      final Function<MultiDimensionalNumericData, Filter> dataToFilter) {
+    if (!constraints.isEmpty()) {
+      final List<Filter> filters =
+          constraints.stream().map(dataToFilter).collect(Collectors.toList());
+      if (filters.size() > 1) {
+        return CommonFactoryFinder.getFilterFactory2().or(filters);
+      } else {
+        return filters.get(0);
+      }
+    } else {
+      return null;
+    }
   }
 }

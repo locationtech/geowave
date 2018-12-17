@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.util;
 
-import com.google.common.collect.Streams;
-import com.google.common.primitives.UnsignedBytes;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -22,14 +20,18 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.operations.BaseReaderParams;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.core.store.operations.RangeReaderParams;
+import com.google.common.collect.Streams;
+import com.google.common.primitives.UnsignedBytes;
 
 public class RocksDBUtils {
   protected static final int MAX_ROWS_FOR_PAGINATION = 1000000;
   public static int ROCKSDB_DEFAULT_MAX_RANGE_DECOMPOSITION = 250;
   public static int ROCKSDB_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION = 250;
+  public static ByteArray EMPTY_PARTITION_KEY = new ByteArray();
 
   public static RocksDBMetadataTable getMetadataTable(
       final RocksDBClient client,
@@ -42,6 +44,15 @@ public class RocksDBUtils {
 
   public static String getTablePrefix(final String typeName, final String indexName) {
     return typeName + "_" + indexName;
+  }
+
+  public static RocksDBDataIndexTable getDataIndexTable(
+      final RocksDBClient client,
+      final String typeName,
+      final short adapterId) {
+    return client.getDataIndexTable(
+        getTablePrefix(typeName, DataIndexUtils.DATA_ID_INDEX.getName()),
+        adapterId);
   }
 
   public static RocksDBIndexTable getIndexTableFromPrefix(
@@ -61,7 +72,6 @@ public class RocksDBUtils {
   public static String getTableName(
       final String typeName,
       final String indexName,
-      final short adapterId,
       final byte[] partitionKey) {
     return getTableName(getTablePrefix(typeName, indexName), partitionKey);
   }
@@ -113,7 +123,7 @@ public class RocksDBUtils {
     return adapter.getAdapter() instanceof RowMergingDataAdapter;
   }
 
-  public static boolean isSortByKeyRequired(final BaseReaderParams<?> params) {
+  public static boolean isSortByKeyRequired(final RangeReaderParams<?> params) {
     // subsampling needs to be sorted by sort key to work properly
     return (params.getMaxResolutionSubsamplingPerDimension() != null)
         && (params.getMaxResolutionSubsamplingPerDimension().length > 0);
@@ -124,7 +134,7 @@ public class RocksDBUtils {
   }
 
   public static Pair<Boolean, Boolean> isGroupByRowAndIsSortByTime(
-      final BaseReaderParams<?> readerParams,
+      final RangeReaderParams<?> readerParams,
       final short adapterId) {
     final boolean sortByTime = isSortByTime(readerParams.getAdapterStore().getAdapter(adapterId));
     return Pair.of(readerParams.isMixedVisibility() || sortByTime, sortByTime);

@@ -13,7 +13,7 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 
-public class CustomNameIndex extends PrimaryIndex {
+public class CustomNameIndex extends IndexImpl {
   private String name;
 
   public CustomNameIndex() {

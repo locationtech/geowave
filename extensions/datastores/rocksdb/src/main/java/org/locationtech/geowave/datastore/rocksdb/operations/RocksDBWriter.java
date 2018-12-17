@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.operations;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
@@ -17,16 +15,17 @@ import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBClient;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBIndexTable;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBUtils;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 public class RocksDBWriter implements RowWriter {
-  private static ByteArray EMPTY_PARTITION_KEY = new ByteArray();
   private final RocksDBClient client;
   private final String indexNamePrefix;
 
   private final short adapterId;
   private final LoadingCache<ByteArray, RocksDBIndexTable> tableCache =
       Caffeine.newBuilder().build(partitionKey -> getTable(partitionKey.getBytes()));
-  boolean isTimestampRequired;
+  private final boolean isTimestampRequired;
 
   public RocksDBWriter(
       final RocksDBClient client,
@@ -60,7 +59,7 @@ public class RocksDBWriter implements RowWriter {
   public void write(final GeoWaveRow row) {
     ByteArray partitionKey;
     if ((row.getPartitionKey() == null) || (row.getPartitionKey().length == 0)) {
-      partitionKey = EMPTY_PARTITION_KEY;
+      partitionKey = RocksDBUtils.EMPTY_PARTITION_KEY;
     } else {
       partitionKey = new ByteArray(row.getPartitionKey());
     }

@@ -38,7 +38,7 @@ import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.index.IndexImpl;
 
 /**
  * Basic support class for Partitioners (e.g {@link Paritioner}
@@ -78,7 +78,7 @@ public abstract class AbstractPartitioner<T> implements Partitioner<T> {
 
   @Override
   public List<PartitionData> getCubeIdentifiers(final T entry) {
-    final Set<PartitionData> partitionIdSet = new HashSet<PartitionData>();
+    final Set<PartitionData> partitionIdSet = new HashSet<>();
 
     final NumericDataHolder numericData = getNumericData(entry);
     if (numericData == null) {
@@ -95,7 +95,7 @@ public abstract class AbstractPartitioner<T> implements Partitioner<T> {
           getIndex().getIndexStrategy().getInsertionIds(expansionData),
           false);
     }
-    return new ArrayList<PartitionData>(partitionIdSet);
+    return new ArrayList<>(partitionIdSet);
   }
 
   @Override
@@ -107,9 +107,12 @@ public abstract class AbstractPartitioner<T> implements Partitioner<T> {
     final InsertionIds primaryIds =
         getIndex().getIndexStrategy().getInsertionIds(numericData.primary);
     for (final SinglePartitionInsertionIds partitionInsertionIds : primaryIds.getPartitionKeys()) {
-      for (final ByteArray sortKey : partitionInsertionIds.getSortKeys()) {
+      for (final byte[] sortKey : partitionInsertionIds.getSortKeys()) {
         callback.partitionWith(
-            new PartitionData(partitionInsertionIds.getPartitionKey(), sortKey, true));
+            new PartitionData(
+                new ByteArray(partitionInsertionIds.getPartitionKey()),
+                new ByteArray(sortKey),
+                true));
       }
     }
 
@@ -117,9 +120,12 @@ public abstract class AbstractPartitioner<T> implements Partitioner<T> {
       final InsertionIds expansionIds =
           getIndex().getIndexStrategy().getInsertionIds(expansionData);
       for (final SinglePartitionInsertionIds partitionInsertionIds : expansionIds.getPartitionKeys()) {
-        for (final ByteArray sortKey : partitionInsertionIds.getSortKeys()) {
+        for (final byte[] sortKey : partitionInsertionIds.getSortKeys()) {
           callback.partitionWith(
-              new PartitionData(partitionInsertionIds.getPartitionKey(), sortKey, false));
+              new PartitionData(
+                  new ByteArray(partitionInsertionIds.getPartitionKey()),
+                  new ByteArray(sortKey),
+                  false));
         }
       }
     }
@@ -134,8 +140,8 @@ public abstract class AbstractPartitioner<T> implements Partitioner<T> {
 
   public MultiDimensionalNumericData getRangesForPartition(final PartitionData partitionData) {
     return index.getIndexStrategy().getRangeForId(
-        partitionData.getPartitionKey(),
-        partitionData.getSortKey());
+        partitionData.getPartitionKey().getBytes(),
+        partitionData.getSortKey().getBytes());
   }
 
   protected void addPartitions(
@@ -143,9 +149,12 @@ public abstract class AbstractPartitioner<T> implements Partitioner<T> {
       final InsertionIds insertionIds,
       final boolean isPrimary) {
     for (final SinglePartitionInsertionIds partitionInsertionIds : insertionIds.getPartitionKeys()) {
-      for (final ByteArray sortKey : partitionInsertionIds.getSortKeys()) {
+      for (final byte[] sortKey : partitionInsertionIds.getSortKeys()) {
         masterList.add(
-            new PartitionData(partitionInsertionIds.getPartitionKey(), sortKey, isPrimary));
+            new PartitionData(
+                new ByteArray(partitionInsertionIds.getPartitionKey()),
+                new ByteArray(sortKey),
+                isPrimary));
       }
     }
   }
@@ -254,7 +263,7 @@ public abstract class AbstractPartitioner<T> implements Partitioner<T> {
     // For now, just setting to a non-zero reasonable value
     indexStrategy.setMaxEstimatedDuplicateIdsPerDimension(2);
 
-    index = new PrimaryIndex(indexStrategy, indexModel);
+    index = new IndexImpl(indexStrategy, indexModel);
   }
 
   @Override

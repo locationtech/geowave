@@ -8,14 +8,14 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Maps;
 
 public class DynamoDBDeleter implements RowDeleter {
   private final DynamoDBOperations operations;
@@ -27,7 +27,7 @@ public class DynamoDBDeleter implements RowDeleter {
   }
 
   @Override
-  public void close() throws Exception {}
+  public void close() {}
 
   @Override
   public void delete(final GeoWaveRow row) {

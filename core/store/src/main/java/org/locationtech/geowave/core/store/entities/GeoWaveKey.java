@@ -22,7 +22,11 @@ public interface GeoWaveKey {
 
   public int getNumberOfDuplicates();
 
-  public static byte[] getCompositeId(GeoWaveKey key) {
+  public static byte[] getCompositeId(final GeoWaveKey key) {
+    if ((key.getSortKey() == null) && (key.getPartitionKey() == null)) {
+      // this is a data ID key
+      return key.getDataId();
+    }
     final ByteBuffer buffer =
         ByteBuffer.allocate(
             key.getPartitionKey().length

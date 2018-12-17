@@ -20,6 +20,15 @@ public class BaseDataStoreOptions implements DataStoreOptions {
   @Parameter(names = "--enableServerSideLibrary", arity = 1)
   protected boolean enableServerSideLibrary = true;
 
+  @Parameter(names = "--enableSecondaryIndexing")
+  protected boolean enableSecondaryIndex = false;
+
+  @Parameter(names = "--enableVisibility", arity = 1)
+  protected Boolean configuredEnableVisibility = null;
+
+  @Parameter(names = "--dataIndexBatchSize")
+  protected int configuredDataIndexBatchSize = Integer.MIN_VALUE;
+
   @Parameter(names = "--maxRangeDecomposition", arity = 1)
   protected int configuredMaxRangeDecomposition = Integer.MIN_VALUE;
 
@@ -36,6 +45,16 @@ public class BaseDataStoreOptions implements DataStoreOptions {
   }
 
   @Override
+  public boolean isSecondaryIndexing() {
+    return enableSecondaryIndex;
+  }
+
+  @Override
+  public void setSecondaryIndexing(final boolean enableSecondaryIndex) {
+    this.enableSecondaryIndex = enableSecondaryIndex;
+  }
+
+  @Override
   public boolean isEnableBlockCache() {
     return enableBlockCache;
   }
@@ -46,7 +65,7 @@ public class BaseDataStoreOptions implements DataStoreOptions {
 
   @Override
   public boolean isServerSideLibraryEnabled() {
-    return enableServerSideLibrary;
+    return enableServerSideLibrary && !enableSecondaryIndex;
   }
 
   public void setServerSideLibraryEnabled(final boolean enableServerSideLibrary) {
@@ -63,8 +82,12 @@ public class BaseDataStoreOptions implements DataStoreOptions {
     return 2000;
   }
 
+  protected boolean defaultEnableVisibility() {
+    return true;
+  }
+
   public void setMaxRangeDecomposition(final int maxRangeDecomposition) {
-    this.configuredMaxRangeDecomposition = maxRangeDecomposition;
+    configuredMaxRangeDecomposition = maxRangeDecomposition;
   }
 
   @Override
@@ -74,11 +97,33 @@ public class BaseDataStoreOptions implements DataStoreOptions {
         : configuredAggregationMaxRangeDecomposition;
   }
 
+  @Override
+  public int getDataIndexBatchSize() {
+    return isSecondaryIndexing()
+        ? (configuredDataIndexBatchSize == Integer.MIN_VALUE ? defaultDataIndexBatchSize()
+            : configuredDataIndexBatchSize)
+        : Integer.MIN_VALUE;
+  }
+
+  protected int defaultDataIndexBatchSize() {
+    return 2000;
+  }
+
   protected int defaultAggregationMaxRangeDecomposition() {
     return 10;
   }
 
   public void setAggregationMaxRangeDecomposition(final int aggregationMaxRangeDecomposition) {
-    this.configuredAggregationMaxRangeDecomposition = aggregationMaxRangeDecomposition;
+    configuredAggregationMaxRangeDecomposition = aggregationMaxRangeDecomposition;
+  }
+
+  @Override
+  public boolean isVisibilityEnabled() {
+    return configuredEnableVisibility == null ? defaultEnableVisibility()
+        : configuredEnableVisibility;
+  }
+
+  public void setEnableVisibility(final boolean configuredEnableVisibility) {
+    this.configuredEnableVisibility = configuredEnableVisibility;
   }
 }

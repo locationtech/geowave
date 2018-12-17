@@ -26,7 +26,6 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.config.ConfigOption;
 import org.locationtech.geowave.core.store.config.ConfigUtils;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,18 +113,6 @@ public class GeoWaveStoreFinder {
             configOptions));
   }
 
-  public static SecondaryIndexDataStore createSecondaryIndexDataStore(
-      final Map<String, String> configOptions) {
-    final StoreFactoryFamilySpi factory = findStoreFamily(configOptions);
-    if (factory == null) {
-      return null;
-    }
-    return factory.getSecondaryIndexDataStore().createStore(
-        ConfigUtils.populateOptionsFromList(
-            factory.getSecondaryIndexDataStore().createOptionsInstance(),
-            configOptions));
-  }
-
   private static List<String> getMissingRequiredOptions(
       final StoreFactoryFamilySpi factory,
       final Map<String, String> configOptions) {
@@ -133,7 +120,7 @@ public class GeoWaveStoreFinder {
         ConfigUtils.createConfigOptionsFromJCommander(
             factory.getDataStoreFactory().createOptionsInstance(),
             false);
-    final List<String> missing = new ArrayList<String>();
+    final List<String> missing = new ArrayList<>();
     for (final ConfigOption option : options) {
       if (!option.isOptional()
           && (!configOptions.containsKey(option.getName())
@@ -151,7 +138,7 @@ public class GeoWaveStoreFinder {
         ConfigUtils.createConfigOptionsFromJCommander(
             factory.getDataStoreFactory().createOptionsInstance(),
             false);
-    final List<String> matching = new ArrayList<String>();
+    final List<String> matching = new ArrayList<>();
     for (final ConfigOption option : options) {
       if (!option.isOptional()
           && (configOptions.containsKey(option.getName())
@@ -238,7 +225,7 @@ public class GeoWaveStoreFinder {
   }
 
   private static String getStoreNames() {
-    final Set<String> uniqueNames = new HashSet<String>();
+    final Set<String> uniqueNames = new HashSet<>();
     uniqueNames.addAll(getRegisteredStoreFactoryFamilies().keySet());
     return ConfigUtils.getOptions(uniqueNames).toString();
   }
@@ -262,7 +249,7 @@ public class GeoWaveStoreFinder {
       }
     }
     // next ensure that all params match an available option
-    final Set<String> availableOptions = new HashSet<String>();
+    final Set<String> availableOptions = new HashSet<>();
     for (final ConfigOption option : GeoWaveStoreFinder.getAllOptions(
         geowaveStoreFactoryFamily,
         true)) {
@@ -297,8 +284,8 @@ public class GeoWaveStoreFinder {
 
   public static synchronized ConfigOption[] getAllOptions(
       final StoreFactoryFamilySpi storeFactoryFamily,
-      boolean includeHidden) {
-    final List<ConfigOption> allOptions = new ArrayList<ConfigOption>();
+      final boolean includeHidden) {
+    final List<ConfigOption> allOptions = new ArrayList<>();
     allOptions.addAll(
         Arrays.asList(
             ConfigUtils.createConfigOptionsFromJCommander(
@@ -322,7 +309,7 @@ public class GeoWaveStoreFinder {
 
   public static synchronized ConfigOption[] getRequiredOptions(
       final StoreFactoryFamilySpi storeFactoryFamily) {
-    final List<ConfigOption> requiredOptions = new ArrayList<ConfigOption>();
+    final List<ConfigOption> requiredOptions = new ArrayList<>();
     for (final ConfigOption option : getAllOptions(storeFactoryFamily, false)) {
       if (!option.isOptional()) {
         requiredOptions.add(option);
@@ -335,7 +322,7 @@ public class GeoWaveStoreFinder {
       final Class<T> cls,
       Map<String, T> registeredFactories) {
     if (registeredFactories == null) {
-      registeredFactories = new HashMap<String, T>();
+      registeredFactories = new HashMap<>();
       final Iterator<T> storeFactories = new SPIServiceRegistry(GeoWaveStoreFinder.class).load(cls);
       while (storeFactories.hasNext()) {
         final T storeFactory = storeFactories.next();

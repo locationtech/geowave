@@ -22,17 +22,19 @@ public class ByteArrayRangeTest {
 
   @Test
   public void testUnion() {
-    ByteArrayRange bar1 = new ByteArrayRange(new ByteArray("232"), new ByteArray("332"));
-    ByteArrayRange bar2 = new ByteArrayRange(new ByteArray("282"), new ByteArray("300"));
-    ByteArrayRange bar3 = new ByteArrayRange(new ByteArray("272"), new ByteArray("340"));
-    ByteArrayRange bar4 = new ByteArrayRange(new ByteArray("392"), new ByteArray("410"));
+    final ByteArrayRange bar1 =
+        new ByteArrayRange(new ByteArray("232").getBytes(), new ByteArray("332").getBytes());
+    final ByteArrayRange bar2 =
+        new ByteArrayRange(new ByteArray("282").getBytes(), new ByteArray("300").getBytes());
+    final ByteArrayRange bar3 =
+        new ByteArrayRange(new ByteArray("272").getBytes(), new ByteArray("340").getBytes());
+    final ByteArrayRange bar4 =
+        new ByteArrayRange(new ByteArray("392").getBytes(), new ByteArray("410").getBytes());
 
-    Collection<ByteArrayRange> l1 =
-        new ArrayList<ByteArrayRange>(Arrays.asList(bar4, bar3, bar1, bar2));
+    Collection<ByteArrayRange> l1 = new ArrayList<>(Arrays.asList(bar4, bar3, bar1, bar2));
     l1 = ByteArrayRange.mergeIntersections(l1, MergeOperation.UNION);
 
-    Collection<ByteArrayRange> l2 =
-        new ArrayList<ByteArrayRange>(Arrays.asList(bar1, bar4, bar2, bar3));
+    Collection<ByteArrayRange> l2 = new ArrayList<>(Arrays.asList(bar1, bar4, bar2, bar3));
     l2 = ByteArrayRange.mergeIntersections(l2, MergeOperation.UNION);
 
     assertEquals(2, l1.size());
@@ -40,26 +42,28 @@ public class ByteArrayRangeTest {
     assertEquals(l1, l2);
 
     assertEquals(
-        new ByteArrayRange(new ByteArray("232"), new ByteArray("340")),
+        new ByteArrayRange(new ByteArray("232").getBytes(), new ByteArray("340").getBytes()),
         ((ArrayList<ByteArrayRange>) l1).get(0));
     assertEquals(
-        new ByteArrayRange(new ByteArray("392"), new ByteArray("410")),
+        new ByteArrayRange(new ByteArray("392").getBytes(), new ByteArray("410").getBytes()),
         ((ArrayList<ByteArrayRange>) l1).get(1));
   }
 
   @Test
   public void testIntersection() {
-    ByteArrayRange bar1 = new ByteArrayRange(new ByteArray("232"), new ByteArray("332"));
-    ByteArrayRange bar2 = new ByteArrayRange(new ByteArray("282"), new ByteArray("300"));
-    ByteArrayRange bar3 = new ByteArrayRange(new ByteArray("272"), new ByteArray("340"));
-    ByteArrayRange bar4 = new ByteArrayRange(new ByteArray("392"), new ByteArray("410"));
+    final ByteArrayRange bar1 =
+        new ByteArrayRange(new ByteArray("232").getBytes(), new ByteArray("332").getBytes());
+    final ByteArrayRange bar2 =
+        new ByteArrayRange(new ByteArray("282").getBytes(), new ByteArray("300").getBytes());
+    final ByteArrayRange bar3 =
+        new ByteArrayRange(new ByteArray("272").getBytes(), new ByteArray("340").getBytes());
+    final ByteArrayRange bar4 =
+        new ByteArrayRange(new ByteArray("392").getBytes(), new ByteArray("410").getBytes());
 
-    Collection<ByteArrayRange> l1 =
-        new ArrayList<ByteArrayRange>(Arrays.asList(bar4, bar3, bar1, bar2));
+    Collection<ByteArrayRange> l1 = new ArrayList<>(Arrays.asList(bar4, bar3, bar1, bar2));
     l1 = ByteArrayRange.mergeIntersections(l1, MergeOperation.INTERSECTION);
 
-    Collection<ByteArrayRange> l2 =
-        new ArrayList<ByteArrayRange>(Arrays.asList(bar1, bar4, bar2, bar3));
+    Collection<ByteArrayRange> l2 = new ArrayList<>(Arrays.asList(bar1, bar4, bar2, bar3));
     l2 = ByteArrayRange.mergeIntersections(l2, MergeOperation.INTERSECTION);
 
     assertEquals(2, l1.size());
@@ -67,24 +71,24 @@ public class ByteArrayRangeTest {
     assertEquals(l1, l2);
 
     assertEquals(
-        new ByteArrayRange(new ByteArray("282"), new ByteArray("300")),
+        new ByteArrayRange(new ByteArray("282").getBytes(), new ByteArray("300").getBytes()),
         ((ArrayList<ByteArrayRange>) l1).get(0));
     assertEquals(
-        new ByteArrayRange(new ByteArray("392"), new ByteArray("410")),
+        new ByteArrayRange(new ByteArray("392").getBytes(), new ByteArray("410").getBytes()),
         ((ArrayList<ByteArrayRange>) l1).get(1));
   }
 
   final Random random = new Random();
 
-  public String increment(String id) {
+  public String increment(final String id) {
     int v = (int) (Math.abs(random.nextDouble()) * 10000);
-    StringBuffer buf = new StringBuffer();
+    final StringBuffer buf = new StringBuffer();
     int pos = id.length() - 1;
     int r = 0;
     while (v > 0) {
-      int m = (v - ((v >> 8) << 8));
-      int c = id.charAt(pos);
-      int n = c + m + r;
+      final int m = (v - ((v >> 8) << 8));
+      final int c = id.charAt(pos);
+      final int n = c + m + r;
       buf.append((char) (n % 255));
       r = n / 255;
       v >>= 8;
@@ -98,11 +102,14 @@ public class ByteArrayRangeTest {
 
   @Test
   public void bigTest() {
-    List<ByteArrayRange> l2 = new ArrayList<ByteArrayRange>();
+    final List<ByteArrayRange> l2 = new ArrayList<>();
     for (int i = 0; i < 3000; i++) {
       String seed = UUID.randomUUID().toString();
       for (int j = 0; j < 500; j++) {
-        l2.add(new ByteArrayRange(new ByteArray(seed), new ByteArray(increment(seed))));
+        l2.add(
+            new ByteArrayRange(
+                new ByteArray(seed).getBytes(),
+                new ByteArray(increment(seed)).getBytes()));
         seed = increment(seed);
       }
     }

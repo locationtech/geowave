@@ -80,7 +80,7 @@ public class AccumuloReader<T> implements RowReader<T> {
   }
 
   @Override
-  public void close() throws Exception {
+  public void close() {
     scanner.close();
     if (parallelDecoder != null) {
       parallelDecoder.close();

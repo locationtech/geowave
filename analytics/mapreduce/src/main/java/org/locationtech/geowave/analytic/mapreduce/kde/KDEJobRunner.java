@@ -178,7 +178,7 @@ public class KDEJobRunner extends Configured implements Tool {
           ConfigUtils.populateOptionsFromList(
               outputDataStoreOptions.getFactoryFamily().getDataStoreFactory().createOptionsInstance(),
               configOptions);
-      options.setGeowaveNamespace(outputDataStoreOptions.getGeoWaveNamespace() + "_tmp");
+      options.setGeoWaveNamespace(outputDataStoreOptions.getGeoWaveNamespace() + "_tmp");
       outputDataStoreOptions = new DataStorePluginOptions(options);
       kdeCoverageName = kdeCommandLineOptions.getCoverageName() + TMP_COVERAGE_SUFFIX;
     } else {

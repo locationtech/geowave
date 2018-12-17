@@ -15,7 +15,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
@@ -66,7 +66,7 @@ public class GeowaveRDDExample {
             final Geometry bbox =
                 new GeometryFactory().toGeometry(new Envelope(west, south, east, north));
 
-            query = new SpatialQuery(bbox);
+            query = new ExplicitSpatialQuery(bbox);
           }
         }
       } else if (args[1].equals("--bbox")) {
@@ -83,7 +83,7 @@ public class GeowaveRDDExample {
         final Geometry bbox =
             new GeometryFactory().toGeometry(new Envelope(west, south, east, north));
 
-        query = new SpatialQuery(bbox);
+        query = new ExplicitSpatialQuery(bbox);
       } else {
         System.err.println("USAGE: storename --splits min max --bbox west south east north");
         return false;

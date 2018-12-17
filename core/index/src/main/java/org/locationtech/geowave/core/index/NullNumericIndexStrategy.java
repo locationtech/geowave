@@ -8,10 +8,8 @@
  */
 package org.locationtech.geowave.core.index;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
@@ -76,8 +74,8 @@ public class NullNumericIndexStrategy implements NumericIndexStrategy {
 
   @Override
   public MultiDimensionalNumericData getRangeForId(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
+      final byte[] partitionKey,
+      final byte[] sortKey) {
     // a null return here should be interpreted as negative to positive
     // infinite
     return null;
@@ -91,8 +89,8 @@ public class NullNumericIndexStrategy implements NumericIndexStrategy {
 
   @Override
   public MultiDimensionalCoordinates getCoordinatesPerDimension(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
+      final byte[] partitionKey,
+      final byte[] sortKey) {
     // there are no dimensions so return an empty array
     return new MultiDimensionalCoordinates();
   }
@@ -102,9 +100,7 @@ public class NullNumericIndexStrategy implements NumericIndexStrategy {
       final MultiDimensionalNumericData indexedData,
       final int maxDuplicateInsertionIds) {
     // return a single empty sort key as the ID
-    final List<ByteArray> retVal = new ArrayList<ByteArray>();
-    retVal.add(new ByteArray(new byte[] {}));
-    return new InsertionIds(null, retVal);
+    return new InsertionIds(null, Collections.singletonList(new byte[0]));
   }
 
   @Override
@@ -125,19 +121,14 @@ public class NullNumericIndexStrategy implements NumericIndexStrategy {
   }
 
   @Override
-  public Set<ByteArray> getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
+  public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
     return null;
   }
 
   @Override
-  public Set<ByteArray> getQueryPartitionKeys(
+  public byte[][] getQueryPartitionKeys(
       final MultiDimensionalNumericData queryData,
       final IndexMetaData... hints) {
     return null;
-  }
-
-  @Override
-  public Set<ByteArray> getPredefinedSplits() {
-    return Collections.EMPTY_SET;
   }
 }

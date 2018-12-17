@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin;
 
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Sets;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.io.Closeable;
@@ -44,7 +42,7 @@ import org.locationtech.geowave.adapter.vector.util.QueryIndexHelper;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
@@ -52,7 +50,7 @@ import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWrapper;
-import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -74,6 +72,8 @@ import org.opengis.referencing.operation.MathTransform2D;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Sets;
 
 /**
  * This class wraps a geotools data store as well as one for statistics (for example to display
@@ -470,10 +470,10 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       final Integer limit) {
     if (filter instanceof FidFilterImpl) {
       final Set<String> fids = ((FidFilterImpl) filter).getIDs();
-      final ByteArray[] ids = new ByteArray[fids.size()];
+      final byte[][] ids = new byte[fids.size()][];
       int i = 0;
       for (final String fid : fids) {
-        ids[i++] = new ByteArray(fid);
+        ids[i++] = StringUtils.stringToBinary(fid);
       }
 
       final Index[] writeIndices = components.getAdapterIndices();
@@ -553,7 +553,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     // temporalConstraints));
     // }
     // else {
-    return new SpatialQuery(
+    return new ExplicitSpatialQuery(
         geoConstraints.getConstraints().merge(temporalConstraints),
         geoConstraints.getGeometry(),
         GeometryUtils.getCrsCode(

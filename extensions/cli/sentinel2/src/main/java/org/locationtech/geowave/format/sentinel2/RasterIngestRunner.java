@@ -323,7 +323,8 @@ public class RasterIngestRunner extends DownloadRunner {
             index,
             dataStorePluginOptions.createAdapterStore(),
             dataStorePluginOptions.createInternalAdapterStore(),
-            dataStorePluginOptions.createAdapterIndexMappingStore())) {
+            dataStorePluginOptions.createAdapterIndexMappingStore(),
+            dataStorePluginOptions.getFactoryOptions().getStoreOptions().getMaxRangeDecomposition())) {
           System.out.println(
               "Successfully merged overlapping tiles within index '" + index.getName() + "'");
         } else {

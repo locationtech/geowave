@@ -26,7 +26,7 @@ public class DedupeFilter implements QueryFilter {
   private boolean dedupAcrossIndices = false;
 
   public DedupeFilter() {
-    adapterIdToVisitedDataIdMap = new HashMap<Short, Set<ByteArray>>();
+    adapterIdToVisitedDataIdMap = new HashMap<>();
   }
 
   @Override
@@ -46,11 +46,11 @@ public class DedupeFilter implements QueryFilter {
       return true;
     }
     final short adapterId = persistenceEncoding.getInternalAdapterId();
-    final ByteArray dataId = persistenceEncoding.getDataId();
+    final ByteArray dataId = new ByteArray(persistenceEncoding.getDataId());
     synchronized (adapterIdToVisitedDataIdMap) {
       Set<ByteArray> visitedDataIds = adapterIdToVisitedDataIdMap.get(adapterId);
       if (visitedDataIds == null) {
-        visitedDataIds = new HashSet<ByteArray>();
+        visitedDataIds = new HashSet<>();
         adapterIdToVisitedDataIdMap.put(adapterId, visitedDataIds);
       } else if (visitedDataIds.contains(dataId)) {
         return false;
@@ -60,7 +60,7 @@ public class DedupeFilter implements QueryFilter {
     }
   }
 
-  public void setDedupAcrossIndices(boolean dedupAcrossIndices) {
+  public void setDedupAcrossIndices(final boolean dedupAcrossIndices) {
     this.dedupAcrossIndices = dedupAcrossIndices;
   }
 

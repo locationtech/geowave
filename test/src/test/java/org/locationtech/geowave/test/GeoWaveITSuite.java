@@ -19,7 +19,7 @@ import org.locationtech.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
 import org.locationtech.geowave.test.basic.GeoWaveGeometryPrecisionIT;
 import org.locationtech.geowave.test.basic.GeoWaveVectorSerializationIT;
 import org.locationtech.geowave.test.basic.GeoWaveVisibilityIT;
-import org.locationtech.geowave.test.basic.GeowaveCustomCRSSpatialVectorIT;
+import org.locationtech.geowave.test.basic.GeoWaveCustomCRSSpatialVectorIT;
 import org.locationtech.geowave.test.config.ConfigCacheIT;
 import org.locationtech.geowave.test.kafka.BasicKafkaIT;
 import org.locationtech.geowave.test.landsat.CustomCRSLandsatIT;
@@ -46,7 +46,7 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
     GeoWaveVisibilityIT.class,
-    GeowaveCustomCRSSpatialVectorIT.class,
+    GeoWaveCustomCRSSpatialVectorIT.class,
     GeoWaveBasicSpatialTemporalVectorIT.class,
     GeoWaveGeometryPrecisionIT.class,
     // TODO need to mock up S3

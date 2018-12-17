@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.query.constraints;
 
-import com.google.common.math.DoubleMath;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import org.locationtech.geowave.core.index.ByteArrayRange;
-import org.locationtech.geowave.core.index.IndexConstraints;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
@@ -32,14 +29,13 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.FilterableConstraints;
-import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.locationtech.geowave.core.store.query.filter.FilterList;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.math.DoubleMath;
 
 /**
  * The Basic Query class represent a hyper-cube(s) query across all dimensions that match the
@@ -478,8 +474,6 @@ public class BasicQuery implements QueryConstraints {
   }
 
   private Constraints constraints;
-  // field Id to constraint
-  private Map<String, FilterableConstraints> additionalConstraints = Collections.emptyMap();
   BasicQueryCompareOperation compareOp = BasicQueryCompareOperation.INTERSECTS;
 
   public BasicQuery() {}
@@ -488,24 +482,11 @@ public class BasicQuery implements QueryConstraints {
     this(constraints, BasicQueryCompareOperation.INTERSECTS);
   }
 
+
   public BasicQuery(final Constraints constraints, final BasicQueryCompareOperation compareOp) {
-    this(constraints, compareOp, Collections.emptyMap());
-  }
-
-  public BasicQuery(
-      final Constraints constraints,
-      final Map<String, FilterableConstraints> additionalConstraints) {
-    this(constraints, BasicQueryCompareOperation.INTERSECTS, additionalConstraints);
-  }
-
-  protected BasicQuery(
-      final Constraints constraints,
-      final BasicQueryCompareOperation compareOp,
-      final Map<String, FilterableConstraints> additionalConstraints) {
     super();
     this.constraints = constraints;
     this.compareOp = compareOp;
-    this.additionalConstraints = additionalConstraints;
   }
 
   @Override
@@ -532,13 +513,6 @@ public class BasicQuery implements QueryConstraints {
     return new BasicQueryFilter(constraints, orderedConstrainedDimensionFields, compareOp);
   }
 
-  public boolean secondaryIndexSupports(final SecondaryIndexImpl index) {
-    if (additionalConstraints.containsKey(index.getFieldName())) {
-      return true;
-    }
-    return false;
-  }
-
   @Override
   public List<MultiDimensionalNumericData> getIndexConstraints(final Index primaryIndex) {
     return constraints.getIndexConstraints(primaryIndex.getIndexStrategy());
@@ -547,18 +521,18 @@ public class BasicQuery implements QueryConstraints {
   @Override
   public byte[] toBinary() {
     final List<byte[]> bytes = new ArrayList<>(constraints.constraintsSets.size());
-    int totalBytes = 4;
+    int totalBytes = 0;
     for (final ConstraintSet c : constraints.constraintsSets) {
       bytes.add(c.toBinary());
-      totalBytes += (bytes.get(bytes.size() - 1).length + 4);
+      final int length = bytes.get(bytes.size() - 1).length;
+      totalBytes += (length + VarintUtils.unsignedIntByteLength(length));
     }
 
-    // TODO; additionalConstraints
-
-    final ByteBuffer buf = ByteBuffer.allocate(totalBytes);
-    buf.putInt(bytes.size());
+    final ByteBuffer buf =
+        ByteBuffer.allocate(totalBytes + VarintUtils.unsignedIntByteLength(bytes.size()));
+    VarintUtils.writeUnsignedInt(bytes.size(), buf);
     for (final byte[] entryBytes : bytes) {
-      buf.putInt(entryBytes.length);
+      VarintUtils.writeUnsignedInt(entryBytes.length, buf);
       buf.put(entryBytes);
     }
     return buf.array();
@@ -567,53 +541,16 @@ public class BasicQuery implements QueryConstraints {
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    final int numEntries = buf.getInt();
+    final int numEntries = VarintUtils.readUnsignedInt(buf);
     final List<ConstraintSet> sets = new LinkedList<>();
     for (int i = 0; i < numEntries; i++) {
-      final byte[] d = new byte[buf.getInt()];
+      final byte[] d = new byte[VarintUtils.readUnsignedInt(buf)];
       buf.get(d);
       final ConstraintSet cs = new ConstraintSet();
       cs.fromBinary(d);
       sets.add(cs);
     }
     constraints = new Constraints(sets);
-    // TODO; additionalConstraints
-  }
-
-  @SuppressWarnings("unchecked")
-  public List<ByteArrayRange> getSecondaryIndexConstraints(final SecondaryIndexImpl<?> index) {
-    final List<ByteArrayRange> allRanges = new ArrayList<>();
-    final List<FilterableConstraints> queryConstraints = getSecondaryIndexQueryConstraints(index);
-    for (final IndexConstraints queryConstraint : queryConstraints) {
-      // TODO figure out what to do about partitions with secondard index
-      // constraints (probably not the correct approach to just always
-      // carry along the composite ranges and lose track of partitions if
-      // it makes sense to partition secondary indicies too)
-      allRanges.addAll(
-          index.getIndexStrategy().getQueryRanges(queryConstraint).getCompositeQueryRanges());
-    }
-    return allRanges;
-  }
-
-  public List<QueryFilter> getSecondaryQueryFilter(final SecondaryIndexImpl<?> index) {
-    final List<QueryFilter> allFilters = new ArrayList<>();
-    final List<FilterableConstraints> queryConstraints = getSecondaryIndexQueryConstraints(index);
-    for (final FilterableConstraints queryConstraint : queryConstraints) {
-      final QueryFilter filter = queryConstraint.getFilter();
-      if (filter != null) {
-        allFilters.add(filter);
-      }
-    }
-    return allFilters;
-  }
-
-  public List<FilterableConstraints> getSecondaryIndexQueryConstraints(
-      final SecondaryIndexImpl<?> index) {
-    final List<FilterableConstraints> constraints = new ArrayList<>();
-    if (additionalConstraints.get(index.getFieldName()) != null) {
-      constraints.add(additionalConstraints.get(index.getFieldName()));
-    }
-    return constraints;
   }
 
   public boolean isExact() {

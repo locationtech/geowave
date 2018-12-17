@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.store.index.text;
 
+import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -23,7 +24,9 @@ public class TextIndexStrategyTest {
   @Test
   public void testInsertions() {
     final InsertionIds insertionIds = strategy.getInsertionIds(value);
-    Assert.assertTrue(insertionIds.getCompositeInsertionIds().contains(new ByteArray(value)));
+    Assert.assertTrue(
+        insertionIds.getCompositeInsertionIds().stream().map(i -> new ByteArray(i)).collect(
+            Collectors.toSet()).contains(new ByteArray(value)));
     Assert.assertTrue(insertionIds.getCompositeInsertionIds().size() == 1);
   }
 
@@ -34,6 +37,6 @@ public class TextIndexStrategyTest {
     Assert.assertTrue(ranges.getCompositeQueryRanges().size() == 1);
     Assert.assertTrue(
         ranges.getCompositeQueryRanges().get(0).equals(
-            new ByteArrayRange(new ByteArray(value), new ByteArray(value))));
+            new ByteArrayRange(new ByteArray(value).getBytes(), new ByteArray(value).getBytes())));
   }
 }

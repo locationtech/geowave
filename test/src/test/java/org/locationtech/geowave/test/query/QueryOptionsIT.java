@@ -23,7 +23,7 @@ import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -60,7 +60,7 @@ public class QueryOptionsIT {
   private static final Coordinate ATLANTA = new Coordinate(-84.3900, 33.7550);
 
   private final QueryConstraints spatialQuery =
-      new SpatialQuery(
+      new ExplicitSpatialQuery(
           GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(GUADALAJARA, ATLANTA)));
   private static Index index =
       new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
@@ -69,6 +69,8 @@ public class QueryOptionsIT {
       GeoWaveStoreType.ACCUMULO,
       GeoWaveStoreType.HBASE,
       GeoWaveStoreType.BIGTABLE,
+      GeoWaveStoreType.CASSANDRA,
+      GeoWaveStoreType.DYNAMODB,
       GeoWaveStoreType.REDIS,
       GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;

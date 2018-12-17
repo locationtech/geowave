@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.export;
 
-import com.beust.jcommander.JCommander;
 import java.io.IOException;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapreduce.AvroJob;
@@ -38,6 +37,7 @@ import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.JCommander;
 
 public class VectorMRExportJobRunner extends Configured implements Tool {
   private static final Logger LOGGER = LoggerFactory.getLogger(VectorMRExportCommand.class);
@@ -74,8 +74,8 @@ public class VectorMRExportJobRunner extends Configured implements Tool {
     final String[] typeNames = mrOptions.getTypeNames();
     final PersistentAdapterStore adapterStore = storeOptions.createAdapterStore();
     final InternalAdapterStore internalAdapterStore = storeOptions.createInternalAdapterStore();
-    VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
-    if ((typeNames != null) && typeNames.length > 0) {
+    final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+    if ((typeNames != null) && (typeNames.length > 0)) {
       bldr.setTypeNames(typeNames);
       // options.setAdapters(Lists.transform(
       // typeNames,
@@ -92,7 +92,7 @@ public class VectorMRExportJobRunner extends Configured implements Tool {
       // }));
     }
     conf.setInt(BATCH_SIZE_KEY, mrOptions.getBatchSize());
-    IndexStore indexStore = storeOptions.createIndexStore();
+    final IndexStore indexStore = storeOptions.createIndexStore();
     if (mrOptions.getIndexName() != null) {
       final Index index = indexStore.getIndex(mrOptions.getIndexName());
       if (index == null) {

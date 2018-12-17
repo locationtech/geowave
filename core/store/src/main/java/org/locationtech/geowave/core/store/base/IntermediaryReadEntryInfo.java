@@ -11,14 +11,9 @@ package org.locationtech.geowave.core.store.base;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 
 class IntermediaryReadEntryInfo<T> {
-  private final PersistentDataset<CommonIndexValue> indexData =
-      new PersistentDataset<CommonIndexValue>();
-  private final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
-  private final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
   private final boolean decodeRow;
   private final Index index;
 
@@ -83,6 +78,10 @@ class IntermediaryReadEntryInfo<T> {
     return this.adapterVerified;
   }
 
+  public boolean adapterSupportsDataIndex() {
+    return DataIndexUtils.adapterSupportsDataIndex(getDataAdapter());
+  }
+
   public boolean hasDataAdapter() {
     return this.dataAdapter != null;
   }
@@ -97,17 +96,5 @@ class IntermediaryReadEntryInfo<T> {
     }
 
     return null;
-  }
-
-  public PersistentDataset<CommonIndexValue> getIndexData() {
-    return indexData;
-  }
-
-  public PersistentDataset<Object> getExtendedData() {
-    return extendedData;
-  }
-
-  public PersistentDataset<byte[]> getUnknownData() {
-    return unknownData;
   }
 }

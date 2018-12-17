@@ -59,5 +59,5 @@ public interface SortedIndexStrategy<QueryRangeType extends IndexConstraints, En
    * @return the range that the given insertion ID represents, inclusive on the start and exclusive
    *         on the end for the range
    */
-  public EntryRangeType getRangeForId(ByteArray partitionKey, ByteArray sortKey);
+  public EntryRangeType getRangeForId(byte[] partitionKey, byte[] sortKey);
 }

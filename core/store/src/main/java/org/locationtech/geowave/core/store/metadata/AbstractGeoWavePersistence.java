@@ -44,7 +44,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
   // updating and looking up objects simultaneously that would require some
   // locking/synchronization mechanism, and even possibly update
   // notifications?
-  protected static final int MAX_ENTRIES = 100;
+  protected static final int MAX_ENTRIES = 1000;
   public static final String METADATA_TABLE = "GEOWAVE_METADATA";
   protected final DataStoreOperations operations;
   protected final DataStoreOptions options;

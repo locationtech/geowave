@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.query.constraints;
 
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.store.api.QueryConstraintsFactory;
@@ -20,12 +19,12 @@ public class QueryConstraintsFactoryImpl implements QueryConstraintsFactory {
       new QueryConstraintsFactoryImpl();
 
   @Override
-  public QueryConstraints dataIds(final ByteArray[] dataIds) {
+  public QueryConstraints dataIds(final byte[]... dataIds) {
     return new DataIdQuery(dataIds);
   }
 
   @Override
-  public QueryConstraints prefix(final ByteArray partitionKey, final ByteArray sortKeyPrefix) {
+  public QueryConstraints prefix(final byte[] partitionKey, final byte[] sortKeyPrefix) {
     return new PrefixIdQuery(partitionKey, sortKeyPrefix);
   }
 

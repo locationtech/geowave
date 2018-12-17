@@ -80,6 +80,7 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
 
   XMLEventReader eventReader;
   GeoWaveData<SimpleFeature> nextFeature = null;
+  private final Long backupTimestamp;
 
   /**
    * @param fileStream
@@ -96,6 +97,7 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
       final String[] indexNames,
       final String inputID,
       final Map<String, Map<String, String>> additionalData,
+      final Long backTimestamp,
       final boolean uniqueWayPoints,
       final String globalVisibility,
       final double maxLength) {
@@ -107,6 +109,7 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
     this.additionalData = additionalData;
     this.globalVisibility = globalVisibility;
     this.maxLength = maxLength;
+    backupTimestamp = backTimestamp;
     top = new GPXDataElement("gpx", this.maxLength);
     pointBuilder = new SimpleFeatureBuilder(pointType);
     waypointBuilder = new SimpleFeatureBuilder(waypointType);
@@ -505,7 +508,10 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
       return (maxTime > 0) ? Long.valueOf(maxTime) : null;
     }
 
-    public boolean build(final SimpleFeatureBuilder builder) {
+    public boolean build(
+        final SimpleFeatureBuilder builder,
+        final Long backupTimestamp,
+        final boolean timeRange) {
       if ((lon != null) && (lat != null)) {
         final Coordinate p = getCoordinate();
         builder.set("geometry", GeometryUtils.GEOMETRY_FACTORY.createPoint(p));
@@ -535,6 +541,8 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
       setAttribute(builder, "Symbol", sym);
       if (timestamp != null) {
         setAttribute(builder, "Timestamp", new Date(timestamp));
+      } else if ((backupTimestamp != null) && !timeRange) {
+        setAttribute(builder, "Timestamp", new Date(backupTimestamp));
       }
       if (children != null) {
 
@@ -563,12 +571,16 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
         final Long minTime = getStartTime();
         if (minTime != null) {
           builder.set("StartTimeStamp", new Date(minTime));
+        } else if ((backupTimestamp != null) && timeRange) {
+          builder.set("StartTimeStamp", new Date(timestamp));
         } else {
           setDuration = false;
         }
         final Long maxTime = getEndTime();
         if (maxTime != null) {
           builder.set("EndTimeStamp", new Date(maxTime));
+        } else if ((backupTimestamp != null) && timeRange) {
+          builder.set("EndTimeStamp", new Date(timestamp));
         } else {
           setDuration = false;
         }
@@ -584,7 +596,7 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
 
     switch (element.elementType) {
       case "trk": {
-        if ((element.children != null) && element.build(trackBuilder)) {
+        if ((element.children != null) && element.build(trackBuilder, backupTimestamp, true)) {
           trackBuilder.set(
               "TrackId",
               inputID.length() > 0 ? inputID : element.composeID("", false, true));
@@ -598,7 +610,7 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
         break;
       }
       case "rte": {
-        if ((element.children != null) && element.build(routeBuilder)) {
+        if ((element.children != null) && element.build(routeBuilder, backupTimestamp, true)) {
           trackBuilder.set(
               "TrackId",
               inputID.length() > 0 ? inputID : element.composeID("", false, true));
@@ -612,7 +624,7 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
         break;
       }
       case "wpt": {
-        if (element.build(waypointBuilder)) {
+        if (element.build(waypointBuilder, backupTimestamp, false)) {
           return buildGeoWaveDataInstance(
               element.composeID(uniqueWayPoints ? "" : inputID, true, !uniqueWayPoints),
               indexNames,
@@ -623,7 +635,7 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
         break;
       }
       case "rtept": {
-        if (element.build(waypointBuilder)) {
+        if (element.build(waypointBuilder, backupTimestamp, false)) {
           return buildGeoWaveDataInstance(
               element.composeID(inputID, true, true),
               indexNames,
@@ -637,8 +649,8 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
         break;
       }
       case "trkpt": {
-        if (element.build(pointBuilder)) {
-          if (element.timestamp == null) {
+        if (element.build(pointBuilder, backupTimestamp, false)) {
+          if ((element.timestamp == null) && (backupTimestamp == null)) {
             pointBuilder.set("Timestamp", null);
           }
           return buildGeoWaveDataInstance(

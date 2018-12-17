@@ -8,16 +8,15 @@
  */
 package org.locationtech.geowave.core.index;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
+import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.ByteArrayRange.MergeOperation;
 
 public class QueryRanges {
@@ -30,28 +29,25 @@ public class QueryRanges {
     partitionRanges = null;
   }
 
-  public QueryRanges(final Set<ByteArray> partitionKeys, final QueryRanges queryRanges) {
+  public QueryRanges(final byte[][] partitionKeys, final QueryRanges queryRanges) {
     if ((queryRanges == null)
         || (queryRanges.partitionRanges == null)
         || queryRanges.partitionRanges.isEmpty()) {
       partitionRanges = fromPartitionKeys(partitionKeys);
-    } else if ((partitionKeys == null) || partitionKeys.isEmpty()) {
+    } else if ((partitionKeys == null) || (partitionKeys.length == 0)) {
       partitionRanges = queryRanges.partitionRanges;
     } else {
-      partitionRanges = new ArrayList<>(partitionKeys.size() * queryRanges.partitionRanges.size());
-      for (final ByteArray partitionKey : partitionKeys) {
+      partitionRanges = new ArrayList<>(partitionKeys.length * queryRanges.partitionRanges.size());
+      for (final byte[] partitionKey : partitionKeys) {
         for (final SinglePartitionQueryRanges sortKeyRange : queryRanges.partitionRanges) {
-          ByteArray newPartitionKey;
+          byte[] newPartitionKey;
           if (partitionKey == null) {
             newPartitionKey = sortKeyRange.getPartitionKey();
           } else if (sortKeyRange.getPartitionKey() == null) {
             newPartitionKey = partitionKey;
           } else {
             newPartitionKey =
-                new ByteArray(
-                    ByteArrayUtils.combineArrays(
-                        partitionKey.getBytes(),
-                        sortKeyRange.getPartitionKey().getBytes()));
+                ByteArrayUtils.combineArrays(partitionKey, sortKeyRange.getPartitionKey());
           }
           partitionRanges.add(
               new SinglePartitionQueryRanges(newPartitionKey, sortKeyRange.getSortKeyRanges()));
@@ -65,9 +61,12 @@ public class QueryRanges {
     final Map<ByteArray, Collection<ByteArrayRange>> sortRangesPerPartition = new HashMap<>();
     for (final QueryRanges qr : queryRangesList) {
       for (final SinglePartitionQueryRanges r : qr.getPartitionQueryRanges()) {
-        final Collection<ByteArrayRange> ranges = sortRangesPerPartition.get(r.getPartitionKey());
+        final Collection<ByteArrayRange> ranges =
+            sortRangesPerPartition.get(new ByteArray(r.getPartitionKey()));
         if (ranges == null) {
-          sortRangesPerPartition.put(r.getPartitionKey(), new ArrayList<>(r.getSortKeyRanges()));
+          sortRangesPerPartition.put(
+              new ByteArray(r.getPartitionKey()),
+              new ArrayList<>(r.getSortKeyRanges()));
         } else {
           ranges.addAll(r.getSortKeyRanges());
         }
@@ -81,7 +80,7 @@ public class QueryRanges {
       } else {
         mergedRanges = null;
       }
-      partitionRanges.add(new SinglePartitionQueryRanges(e.getKey(), mergedRanges));
+      partitionRanges.add(new SinglePartitionQueryRanges(e.getKey().getBytes(), mergedRanges));
     }
   }
 
@@ -93,23 +92,17 @@ public class QueryRanges {
     partitionRanges = Collections.singletonList(new SinglePartitionQueryRanges(singleSortKeyRange));
   }
 
-  public QueryRanges(final Set<ByteArray> partitionKeys) {
+  public QueryRanges(final byte[][] partitionKeys) {
     partitionRanges = fromPartitionKeys(partitionKeys);
   }
 
   private static Collection<SinglePartitionQueryRanges> fromPartitionKeys(
-      final Set<ByteArray> partitionKeys) {
+      final byte[][] partitionKeys) {
     if (partitionKeys == null) {
       return null;
     }
-    return Collections2.transform(
-        partitionKeys,
-        new Function<ByteArray, SinglePartitionQueryRanges>() {
-          @Override
-          public SinglePartitionQueryRanges apply(final ByteArray input) {
-            return new SinglePartitionQueryRanges(input);
-          }
-        });
+    return Arrays.stream(partitionKeys).map(input -> new SinglePartitionQueryRanges(input)).collect(
+        Collectors.toList());
   }
 
   public Collection<SinglePartitionQueryRanges> getPartitionQueryRanges() {
@@ -131,21 +124,17 @@ public class QueryRanges {
     for (final SinglePartitionQueryRanges partition : partitionRanges) {
       if ((partition.getSortKeyRanges() == null) || partition.getSortKeyRanges().isEmpty()) {
         internalQueryRanges.add(
-            new ByteArrayRange(partition.getPartitionKey(), partition.getPartitionKey(), true));
+            new ByteArrayRange(partition.getPartitionKey(), partition.getPartitionKey()));
       } else if (partition.getPartitionKey() == null) {
         internalQueryRanges.addAll(partition.getSortKeyRanges());
       } else {
         for (final ByteArrayRange sortKeyRange : partition.getSortKeyRanges()) {
           internalQueryRanges.add(
               new ByteArrayRange(
-                  new ByteArray(
-                      ByteArrayUtils.combineArrays(
-                          partition.getPartitionKey().getBytes(),
-                          sortKeyRange.getStart().getBytes())),
-                  new ByteArray(
-                      ByteArrayUtils.combineArrays(
-                          partition.getPartitionKey().getBytes(),
-                          sortKeyRange.getEnd().getBytes())),
+                  ByteArrayUtils.combineArrays(
+                      partition.getPartitionKey(),
+                      sortKeyRange.getStart()),
+                  ByteArrayUtils.combineArrays(partition.getPartitionKey(), sortKeyRange.getEnd()),
                   sortKeyRange.singleValue));
         }
       }

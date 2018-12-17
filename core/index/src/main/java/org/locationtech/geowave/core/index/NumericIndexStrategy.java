@@ -25,8 +25,8 @@ public interface NumericIndexStrategy
    *         that dimension is continuous
    */
   public MultiDimensionalCoordinates getCoordinatesPerDimension(
-      ByteArray partitionKey,
-      ByteArray sortKey);
+      byte[] partitionKey,
+      byte[] sortKey);
 
   /**
    * Return an integer coordinate range in each dimension for the given data range plus a bin ID if

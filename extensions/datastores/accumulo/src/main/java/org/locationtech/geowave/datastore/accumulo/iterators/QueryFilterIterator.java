@@ -21,7 +21,6 @@ import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
@@ -131,8 +130,7 @@ public class QueryFilterIterator extends Filter {
   @Override
   public boolean accept(final Key key, final Value value) {
     if (isSet()) {
-      final PersistentDataset<CommonIndexValue> commonData =
-          new PersistentDataset<CommonIndexValue>();
+      final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<>();
 
       final FlattenedUnreadData unreadData = aggregateFieldData(key, value, commonData);
       return applyRowFilter(key.getRow(currentRow), commonData, unreadData);
@@ -185,9 +183,9 @@ public class QueryFilterIterator extends Filter {
     final GeoWaveKeyImpl rowId = new GeoWaveKeyImpl(currentRow.copyBytes(), partitionKeyLength);
     return new DeferredReadCommonIndexedPersistenceEncoding(
         rowId.getAdapterId(),
-        new ByteArray(rowId.getDataId()),
-        new ByteArray(rowId.getPartitionKey()),
-        new ByteArray(rowId.getSortKey()),
+        rowId.getDataId(),
+        rowId.getPartitionKey(),
+        rowId.getSortKey(),
         rowId.getNumberOfDuplicates(),
         commonData,
         unreadData);

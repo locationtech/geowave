@@ -41,6 +41,7 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.index.IndexStore;
@@ -68,14 +69,11 @@ public class AccumuloUtils {
 
   public static Range byteArrayRangeToAccumuloRange(final ByteArrayRange byteArrayRange) {
     if (byteArrayRange.isSingleValue()) {
-      return Range.exact(new Text(byteArrayRange.getStart().getBytes()));
+      return Range.exact(new Text(byteArrayRange.getStart()));
     }
     final Text start =
-        byteArrayRange.getStart().getBytes() == null ? null
-            : new Text(byteArrayRange.getStart().getBytes());
-    final Text end =
-        byteArrayRange.getEnd().getBytes() == null ? null
-            : new Text(byteArrayRange.getEnd().getBytes());
+        byteArrayRange.getStart() == null ? null : new Text(byteArrayRange.getStart());
+    final Text end = byteArrayRange.getEnd() == null ? null : new Text(byteArrayRange.getEnd());
     if ((start != null) && (end != null) && (start.compareTo(end) > 0)) {
       return null;
     }
@@ -196,8 +194,8 @@ public class AccumuloUtils {
     final RoundRobinKeyIndexStrategy partitions = new RoundRobinKeyIndexStrategy(randomPartitions);
 
     operations.createTable(index.getName(), true, true);
-    for (final ByteArray p : partitions.getPartitionKeys()) {
-      operations.ensurePartition(p, index.getName());
+    for (final byte[] p : partitions.getPartitionKeys()) {
+      operations.ensurePartition(new ByteArray(p), index.getName());
     }
   }
 
@@ -419,13 +417,13 @@ public class AccumuloUtils {
     final AccumuloOperations operations = new AccumuloOperations(connector, namespace, options);
     final IndexStore indexStore = new IndexStoreImpl(operations, options);
     if (indexStore.indexExists(index.getName())) {
-      final CloseableIterator<?> iterator =
-          new AccumuloDataStore(operations, options).query(null, null);
-      while (iterator.hasNext()) {
-        counter++;
-        iterator.next();
+      try (final CloseableIterator<?> iterator =
+          new AccumuloDataStore(operations, options).query(QueryBuilder.newBuilder().build())) {
+        while (iterator.hasNext()) {
+          counter++;
+          iterator.next();
+        }
       }
-      iterator.close();
     }
     return counter;
   }
@@ -450,7 +448,11 @@ public class AccumuloUtils {
       scanner.addScanIterator(iteratorSettings);
 
       final Iterator<Entry<Key, Value>> it =
-          new IteratorWrapper(adapterStore, index, scanner.iterator(), new DedupeFilter());
+          new IteratorWrapper(
+              adapterStore,
+              index,
+              scanner.iterator(),
+              new QueryFilter[] {new DedupeFilter()});
 
       iterator = new CloseableIteratorWrapper<>(new ScannerClosableWrapper(scanner), it);
     }
@@ -462,25 +464,25 @@ public class AccumuloUtils {
     private final Iterator<Entry<Key, Value>> scannerIt;
     private final PersistentAdapterStore adapterStore;
     private final Index index;
-    private final QueryFilter clientFilter;
+    private final QueryFilter[] clientFilters;
     private Entry<Key, Value> nextValue;
 
     public IteratorWrapper(
         final PersistentAdapterStore adapterStore,
         final Index index,
         final Iterator<Entry<Key, Value>> scannerIt,
-        final QueryFilter clientFilter) {
+        final QueryFilter[] clientFilters) {
       this.adapterStore = adapterStore;
       this.index = index;
       this.scannerIt = scannerIt;
-      this.clientFilter = clientFilter;
+      this.clientFilters = clientFilters;
       findNext();
     }
 
     private void findNext() {
       while (scannerIt.hasNext()) {
         final Entry<Key, Value> row = scannerIt.next();
-        final Object decodedValue = decodeRow(row, clientFilter, index);
+        final Object decodedValue = decodeRow(row, clientFilters, index);
         if (decodedValue != null) {
           nextValue = row;
           return;
@@ -491,7 +493,7 @@ public class AccumuloUtils {
 
     private Object decodeRow(
         final Entry<Key, Value> row,
-        final QueryFilter clientFilter,
+        final QueryFilter[] clientFilters,
         final Index index) {
       try {
         final List<Map<Key, Value>> fieldValueMapList = new ArrayList();
@@ -502,13 +504,14 @@ public class AccumuloUtils {
                 index.getIndexStrategy().getPartitionKeyLength(),
                 fieldValueMapList,
                 false),
-            clientFilter,
+            clientFilters,
             null,
             adapterStore,
             index,
             null,
             null,
-            true);
+            true,
+            null);
       } catch (final IOException | AdapterException e) {
         // May need to address repeating adaptor log in this class, or
         // calling class.

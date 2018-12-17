@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.core.store.adapter;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterators;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 
 /**
  * Given a transient store and a internal adapter store to use to map between internal IDs and
@@ -39,9 +39,13 @@ public class AdapterStoreWrapper implements PersistentAdapterStore {
     if (adapterId == null) {
       return null;
     }
-    return new InternalDataAdapterWrapper<>(
-        (DataTypeAdapter<?>) adapterStore.getAdapter(internalAdapterStore.getTypeName(adapterId)),
-        adapterId);
+    final DataTypeAdapter<?> adapter =
+        adapterStore.getAdapter(internalAdapterStore.getTypeName(adapterId));
+
+    if (adapter instanceof InternalDataAdapter) {
+      return (InternalDataAdapter<?>) adapter;
+    }
+    return new InternalDataAdapterWrapper<>(adapter, adapterId);
   }
 
   @Override
@@ -60,10 +64,13 @@ public class AdapterStoreWrapper implements PersistentAdapterStore {
         Iterators.transform(it, new Function<DataTypeAdapter<?>, InternalDataAdapter<?>>() {
 
           @Override
-          public InternalDataAdapter<?> apply(final DataTypeAdapter<?> input) {
+          public InternalDataAdapter<?> apply(final DataTypeAdapter<?> adapter) {
+            if (adapter instanceof InternalDataAdapter) {
+              return (InternalDataAdapter<?>) adapter;
+            }
             return new InternalDataAdapterWrapper<>(
-                (DataTypeAdapter<?>) input,
-                internalAdapterStore.getAdapterId(input.getTypeName()));
+                adapter,
+                internalAdapterStore.getAdapterId(adapter.getTypeName()));
           }
         }));
   }

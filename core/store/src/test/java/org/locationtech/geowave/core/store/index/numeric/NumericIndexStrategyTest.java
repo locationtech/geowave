@@ -8,7 +8,8 @@
  */
 package org.locationtech.geowave.core.store.index.numeric;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -25,7 +26,9 @@ public class NumericIndexStrategyTest {
   @Test
   public void testInsertions() {
     final InsertionIds insertionIds = strategy.getInsertionIds(number);
-    final List<ByteArray> compositieInsertionIds = insertionIds.getCompositeInsertionIds();
+    final Set<ByteArray> compositieInsertionIds =
+        insertionIds.getCompositeInsertionIds().stream().map(i -> new ByteArray(i)).collect(
+            Collectors.toSet());
     Assert.assertTrue(
         compositieInsertionIds.contains(
             new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number))));
@@ -40,8 +43,8 @@ public class NumericIndexStrategyTest {
     Assert.assertTrue(
         ranges.getCompositeQueryRanges().get(0).equals(
             new ByteArrayRange(
-                new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number)),
-                new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number)))));
+                Lexicoders.DOUBLE.toByteArray((double) number),
+                Lexicoders.DOUBLE.toByteArray((double) number))));
   }
 
   @Test
@@ -52,9 +55,8 @@ public class NumericIndexStrategyTest {
     Assert.assertTrue(
         ranges.getCompositeQueryRanges().get(0).equals(
             new ByteArrayRange(
-                new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number)),
-                new ByteArray(
-                    Lexicoders.DOUBLE.toByteArray((double) Lexicoders.DOUBLE.getMaximumValue())))));
+                Lexicoders.DOUBLE.toByteArray((double) number),
+                Lexicoders.DOUBLE.toByteArray((double) Lexicoders.DOUBLE.getMaximumValue()))));
   }
 
   @Test
@@ -67,8 +69,7 @@ public class NumericIndexStrategyTest {
     Assert.assertTrue(
         ranges.getCompositeQueryRanges().get(0).equals(
             new ByteArrayRange(
-                new ByteArray(
-                    Lexicoders.DOUBLE.toByteArray((double) Lexicoders.DOUBLE.getMinimumValue())),
-                new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number)))));
+                Lexicoders.DOUBLE.toByteArray((double) Lexicoders.DOUBLE.getMinimumValue()),
+                Lexicoders.DOUBLE.toByteArray((double) number))));
   }
 }

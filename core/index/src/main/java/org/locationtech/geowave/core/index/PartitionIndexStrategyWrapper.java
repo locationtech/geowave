@@ -9,7 +9,6 @@
 package org.locationtech.geowave.core.index;
 
 import java.util.List;
-import java.util.Set;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -57,8 +56,8 @@ public class PartitionIndexStrategyWrapper implements NumericIndexStrategy {
 
   @Override
   public MultiDimensionalNumericData getRangeForId(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
+      final byte[] partitionKey,
+      final byte[] sortKey) {
     // TODO Auto-generated method stub
     return null;
   }
@@ -87,8 +86,8 @@ public class PartitionIndexStrategyWrapper implements NumericIndexStrategy {
 
   @Override
   public MultiDimensionalCoordinates getCoordinatesPerDimension(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
+      final byte[] partitionKey,
+      final byte[] sortKey) {
     return new MultiDimensionalCoordinates();
   }
 
@@ -115,19 +114,19 @@ public class PartitionIndexStrategyWrapper implements NumericIndexStrategy {
   }
 
   @Override
-  public Set<ByteArray> getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
+  public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
     return partitionIndexStrategy.getInsertionPartitionKeys(insertionData);
   }
 
   @Override
-  public Set<ByteArray> getQueryPartitionKeys(
+  public byte[][] getQueryPartitionKeys(
       final MultiDimensionalNumericData queryData,
       final IndexMetaData... hints) {
     return partitionIndexStrategy.getQueryPartitionKeys(queryData, hints);
   }
 
   @Override
-  public Set<ByteArray> getPredefinedSplits() {
+  public byte[][] getPredefinedSplits() {
     return partitionIndexStrategy.getPredefinedSplits();
   }
 }

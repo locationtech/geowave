@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.raster.adapter;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -89,7 +88,6 @@ import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
@@ -142,6 +140,7 @@ import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.InternationalString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
     IndexDependentDataAdapter<GridCoverage>, HadoopDataAdapter<GridCoverage, GridCoverageWritable>,
@@ -579,7 +578,7 @@ public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
     LOGGER.warn(
         "Strategy is not an instance of HierarchicalNumericIndexStrategy : "
             + index.getIndexStrategy().getClass().getName());
-    return Collections.<GridCoverage>emptyList().iterator();
+    return Collections.<GridCoverage>emptyIterator();
   }
 
   private static class MosaicPerPyramidLevelBuilder
@@ -613,7 +612,7 @@ public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
     public Iterator<GridCoverage> convert(final SubStrategy pyramidLevel) {
       // get all pairs of partition/sort keys for insertionIds that
       // represent the original bounds at this pyramid level
-      final Iterator<Pair<ByteArray, ByteArray>> insertionIds =
+      final Iterator<Pair<byte[], byte[]>> insertionIds =
           pyramidLevel.getIndexStrategy().getInsertionIds(
               originalBounds).getPartitionKeys().stream().flatMap(
                   partition -> partition.getSortKeys().stream().map(
@@ -627,7 +626,7 @@ public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
 
         @Override
         public GridCoverage next() {
-          Pair<ByteArray, ByteArray> insertionId = insertionIds.next();
+          Pair<byte[], byte[]> insertionId = insertionIds.next();
           if (insertionId == null) {
             return null;
           }
@@ -862,8 +861,8 @@ public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
   }
 
   @Override
-  public ByteArray getDataId(final GridCoverage entry) {
-    return new ByteArray(new byte[] {});
+  public byte[] getDataId(final GridCoverage entry) {
+    return new byte[0];
   }
 
   @Override
@@ -881,8 +880,8 @@ public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
 
   public GridCoverage getCoverageFromRasterTile(
       final RasterTile rasterTile,
-      final ByteArray partitionKey,
-      final ByteArray sortKey,
+      final byte[] partitionKey,
+      final byte[] sortKey,
       final Index index) {
     final MultiDimensionalNumericData indexRange =
         index.getIndexStrategy().getRangeForId(partitionKey, sortKey);
@@ -1117,7 +1116,7 @@ public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
     if (entry instanceof FitToIndexGridCoverage) {
       encoding =
           new FitToIndexPersistenceEncoding(
-              new ByteArray(new byte[] {}),
+              new byte[0],
               new PersistentDataset<CommonIndexValue>(),
               adapterExtendedData,
               ((FitToIndexGridCoverage) entry).getPartitionKey(),
@@ -1127,7 +1126,7 @@ public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
       LOGGER.warn("Grid coverage is not fit to the index");
       encoding =
           new AdapterPersistenceEncoding(
-              new ByteArray(new byte[] {}),
+              new byte[0],
               new PersistentDataset<CommonIndexValue>(),
               adapterExtendedData);
     }

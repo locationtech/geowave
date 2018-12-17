@@ -78,6 +78,10 @@ class IntermediaryWriteEntryInfo {
     return insertionIds;
   }
 
+  public boolean isDataIdIndex() {
+    return insertionIds == null;
+  }
+
   public byte[] getDataId() {
     return dataId;
   }
@@ -87,6 +91,13 @@ class IntermediaryWriteEntryInfo {
   }
 
   public GeoWaveRow[] getRows() {
+    if (isDataIdIndex()) {
+      return new GeoWaveRow[] {
+          // intentionally make the data ID as the sort Key and the data ID empty
+          new GeoWaveRowImpl(
+              new GeoWaveKeyImpl(dataId, internalAdapterId, new byte[0], new byte[0], 0),
+              entryValues)};
+    }
     final GeoWaveKey[] keys = GeoWaveKeyImpl.createKeys(insertionIds, dataId, internalAdapterId);
     return Arrays.stream(keys).map(k -> new GeoWaveRowImpl(k, entryValues)).toArray(
         new ArrayGenerator());

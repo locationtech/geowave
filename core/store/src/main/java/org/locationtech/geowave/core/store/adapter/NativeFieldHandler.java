@@ -9,7 +9,6 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import java.util.Map;
-import org.locationtech.geowave.core.index.ByteArray;
 
 /**
  * This is used by the AbstractDataAdapter to get individual field values from the row
@@ -55,6 +54,6 @@ public interface NativeFieldHandler<RowType, FieldType> {
      * @param dataId the unique data ID for the row
      * @return the row
      */
-    public RowType buildRow(ByteArray dataId);
+    public RowType buildRow(byte[] dataId);
   }
 }

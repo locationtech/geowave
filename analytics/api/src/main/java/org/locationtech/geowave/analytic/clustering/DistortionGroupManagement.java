@@ -223,8 +223,8 @@ public class DistortionGroupManagement {
       this.distortionValue = distortionValue;
     }
 
-    private DistortionEntry(final ByteArray dataId, final Double distortionValue) {
-      final String dataIdStr = StringUtils.stringFromBinary(dataId.getBytes());
+    private DistortionEntry(final byte[] dataId, final Double distortionValue) {
+      final String dataIdStr = StringUtils.stringFromBinary(dataId);
       final String[] split = dataIdStr.split("/");
       batchId = split[0];
       groupId = split[1];
@@ -244,8 +244,8 @@ public class DistortionGroupManagement {
       return distortionValue;
     }
 
-    private ByteArray getDataId() {
-      return new ByteArray(batchId + "/" + groupId + "/" + clusterCount);
+    private byte[] getDataId() {
+      return StringUtils.stringToBinary(batchId + "/" + groupId + "/" + clusterCount);
     }
 
     @Override
@@ -324,7 +324,7 @@ public class DistortionGroupManagement {
     }
 
     @Override
-    public ByteArray getDataId(final DistortionEntry entry) {
+    public byte[] getDataId(final DistortionEntry entry) {
       return entry.getDataId();
     }
 

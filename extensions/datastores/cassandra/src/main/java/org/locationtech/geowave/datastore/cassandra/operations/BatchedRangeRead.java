@@ -8,19 +8,6 @@
  */
 package org.locationtech.geowave.datastore.cassandra.operations;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.ResultSetFuture;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Statement;
-import com.datastax.driver.core.TypeCodec;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -45,8 +32,22 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import org.locationtech.geowave.core.store.util.RowConsumer;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow.CassandraField;
+import org.locationtech.geowave.datastore.cassandra.util.CassandraUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.ResultSetFuture;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.Statement;
+import com.datastax.driver.core.TypeCodec;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
 
 public class BatchedRangeRead<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(BatchedRangeRead.class);
@@ -57,6 +58,7 @@ public class BatchedRangeRead<T> {
   private final Collection<SinglePartitionQueryRanges> ranges;
   private final short[] adapterIds;
   private final GeoWaveRowIteratorTransformer<T> rowTransformer;
+  private final boolean rowMerging;
   Predicate<GeoWaveRow> filter;
 
   // only allow so many outstanding async reads or writes, use this semaphore
@@ -68,12 +70,14 @@ public class BatchedRangeRead<T> {
       final CassandraOperations operations,
       final short[] adapterIds,
       final Collection<SinglePartitionQueryRanges> ranges,
+      final boolean rowMerging,
       final GeoWaveRowIteratorTransformer<T> rowTransformer,
       final Predicate<GeoWaveRow> filter) {
     this.preparedRead = preparedRead;
     this.operations = operations;
     this.adapterIds = adapterIds;
     this.ranges = ranges;
+    this.rowMerging = rowMerging;
     this.rowTransformer = rowTransformer;
     this.filter = filter;
   }
@@ -81,11 +85,15 @@ public class BatchedRangeRead<T> {
   public CloseableIterator<T> results() {
     final List<BoundStatement> statements = new ArrayList<>();
     for (final SinglePartitionQueryRanges r : ranges) {
+      final byte[] partitionKey =
+          ((r.getPartitionKey() == null) || (r.getPartitionKey().length == 0))
+              ? CassandraUtils.EMPTY_PARTITION_KEY
+              : r.getPartitionKey();
       for (final ByteArrayRange range : r.getSortKeyRanges()) {
         final BoundStatement boundRead = new BoundStatement(preparedRead);
-        final byte[] start = range.getStart() != null ? range.getStart().getBytes() : new byte[0];
+        final byte[] start = range.getStart() != null ? range.getStart() : new byte[0];
         final byte[] end =
-            range.getEnd() != null ? range.getEndAsNextPrefix().getBytes()
+            range.getEnd() != null ? range.getEndAsNextPrefix()
                 : new byte[] {
                     (byte) 0xFF,
                     (byte) 0xFF,
@@ -105,7 +113,7 @@ public class BatchedRangeRead<T> {
             ByteBuffer.class);
         boundRead.set(
             CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
-            ByteBuffer.wrap(r.getPartitionKey().getBytes()),
+            ByteBuffer.wrap(partitionKey),
             ByteBuffer.class);
 
         boundRead.set(
@@ -136,7 +144,13 @@ public class BatchedRangeRead<T> {
             futures.add(f);
             Futures.addCallback(
                 f,
-                new QueryCallback(queryCount, results, rowTransformer, filter, readSemaphore),
+                new QueryCallback(
+                    queryCount,
+                    results,
+                    rowTransformer,
+                    filter,
+                    rowMerging,
+                    readSemaphore),
                 CassandraOperations.READ_RESPONSE_THREADS);
           } catch (final InterruptedException e) {
             LOGGER.warn("Exception while executing query", e);
@@ -172,6 +186,7 @@ public class BatchedRangeRead<T> {
     private final Semaphore semaphore;
     private final BlockingQueue<Object> resultQueue;
     private final AtomicInteger queryCount;
+    private final boolean rowMerging;
 
     private final GeoWaveRowIteratorTransformer<T> rowTransform;
     Predicate<GeoWaveRow> filter;
@@ -181,35 +196,40 @@ public class BatchedRangeRead<T> {
         final BlockingQueue<Object> resultQueue,
         final GeoWaveRowIteratorTransformer<T> rowTransform,
         final Predicate<GeoWaveRow> filter,
+        final boolean rowMerging,
         final Semaphore semaphore) {
       this.queryCount = queryCount;
       this.queryCount.incrementAndGet();
       this.resultQueue = resultQueue;
       this.rowTransform = rowTransform;
       this.filter = filter;
+      this.rowMerging = rowMerging;
       this.semaphore = semaphore;
     }
 
     @Override
     public void onSuccess(final ResultSet result) {
       try {
-        rowTransform.apply(
-            (Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<>(
-                Iterators.filter(
-                    Iterators.transform(result.iterator(), new Function<Row, CassandraRow>() {
 
-                      @Override
-                      public CassandraRow apply(final Row row) {
-                        return new CassandraRow(row);
-                      }
-                    }),
-                    filter))).forEachRemaining(row -> {
-                      try {
-                        resultQueue.put(row);
-                      } catch (final InterruptedException e) {
-                        LOGGER.warn("interrupted while waiting to enqueue a cassandra result", e);
-                      }
-                    });
+        final Iterator<GeoWaveRow> iterator =
+            Iterators.filter(
+                Iterators.transform(result.iterator(), new Function<Row, CassandraRow>() {
+
+                  @Override
+                  public CassandraRow apply(final Row row) {
+                    return new CassandraRow(row);
+                  }
+                }),
+                filter);
+        rowTransform.apply(
+            rowMerging ? new GeoWaveRowMergingIterator(iterator) : iterator).forEachRemaining(
+                row -> {
+                  try {
+                    resultQueue.put(row);
+                  } catch (final InterruptedException e) {
+                    LOGGER.warn("interrupted while waiting to enqueue a cassandra result", e);
+                  }
+                });
 
       } finally {
         checkFinalize();

@@ -43,11 +43,12 @@ public class RowRangeHistogramStatisticsSet<T> extends
   }
 
   private synchronized RowRangeHistogramStatistics<T> getPartitionStatistic(
-      final ByteArray partitionKey) {
-    RowRangeHistogramStatistics<T> histogram = histogramPerPartition.get(partitionKey);
+      final byte[] partitionKey) {
+    final ByteArray partitionKeyObj = getPartitionKey(partitionKey);
+    RowRangeHistogramStatistics<T> histogram = histogramPerPartition.get(partitionKeyObj);
     if (histogram == null) {
       histogram = new RowRangeHistogramStatistics<>(adapterId, extendedId, partitionKey);
-      histogramPerPartition.put(partitionKey, histogram);
+      histogramPerPartition.put(partitionKeyObj, histogram);
     }
     return histogram;
   }
@@ -72,7 +73,7 @@ public class RowRangeHistogramStatisticsSet<T> extends
     if (rows != null) {
       // call entry ingested once per row
       for (final GeoWaveRow row : rows) {
-        getPartitionStatistic(getPartitionKey(row.getPartitionKey())).entryIngested(entry, row);
+        getPartitionStatistic(row.getPartitionKey()).entryIngested(entry, row);
       }
     }
   }

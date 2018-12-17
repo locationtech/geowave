@@ -9,59 +9,60 @@
 package org.locationtech.geowave.mapreduce.input;
 
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializationTool;
 
 /**
- * This is used internally to translate Accumulo rows into native objects (using the appropriate
- * data adapter). It also performs any client-side filtering. It will peek at the next entry in the
- * accumulo iterator to always maintain a reference to the next value. It maintains the adapter ID,
- * data ID, and original accumulo key in the GeoWaveInputKey for use by the GeoWaveInputFormat.
+ * This is used internally to translate GeoWave rows into native objects (using the appropriate data
+ * adapter). It also performs any client-side filtering. It will peek at the next entry in the
+ * underlying datastore iterator to always maintain a reference to the next value.
  *
  * @param <T> The type for the entry
  */
-public class InputFormatIteratorWrapper<T> implements Iterator<Entry<GeoWaveInputKey, T>> {
-  private final RowReader<GeoWaveRow> reader;
-  private final QueryFilter queryFilter;
+public class InputFormatIteratorWrapper<T> implements Iterator<Pair<GeoWaveInputKey, T>> {
+  protected final Iterator<GeoWaveRow> reader;
+  private final QueryFilter[] queryFilters;
   private final HadoopWritableSerializationTool serializationTool;
   private final boolean isOutputWritable;
-  private Entry<GeoWaveInputKey, T> nextEntry;
+  protected Pair<GeoWaveInputKey, T> nextEntry;
   private final Index index;
+  private final DataIndexRetrieval dataIndexRetrieval;
 
   public InputFormatIteratorWrapper(
-      final RowReader<GeoWaveRow> reader,
-      final QueryFilter queryFilter,
+      final Iterator<GeoWaveRow> reader,
+      final QueryFilter[] queryFilters,
       final TransientAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
       final Index index,
-      final boolean isOutputWritable) {
+      final boolean isOutputWritable,
+      final DataIndexRetrieval dataIndexRetrieval) {
     this.reader = reader;
-    this.queryFilter = queryFilter;
+    this.queryFilters = queryFilters;
     this.index = index;
     this.serializationTool =
         new HadoopWritableSerializationTool(adapterStore, internalAdapterStore);
     this.isOutputWritable = isOutputWritable;
+    this.dataIndexRetrieval = dataIndexRetrieval;
   }
 
-  private void findNext() {
+  protected void findNext() {
     while ((this.nextEntry == null) && reader.hasNext()) {
       final GeoWaveRow nextRow = reader.next();
       if (nextRow != null) {
-        final Entry<GeoWaveInputKey, T> decodedValue =
-            decodeRow(
+        final Pair<GeoWaveInputKey, T> decodedValue =
+            decodeRowToEntry(
                 nextRow,
-                queryFilter,
+                queryFilters,
                 (InternalDataAdapter<T>) serializationTool.getInternalAdapter(
                     nextRow.getAdapterId()),
                 index);
@@ -74,28 +75,54 @@ public class InputFormatIteratorWrapper<T> implements Iterator<Entry<GeoWaveInpu
   }
 
   @SuppressWarnings("unchecked")
-  private Entry<GeoWaveInputKey, T> decodeRow(
+  protected Object decodeRowToValue(
       final GeoWaveRow row,
-      final QueryFilter clientFilter,
+      final QueryFilter[] clientFilters,
       final InternalDataAdapter<T> adapter,
       final Index index) {
     Object value = null;
     try {
       value =
-          BaseDataStoreUtils.decodeRow(row, clientFilter, adapter, null, index, null, null, true);
-    } catch (AdapterException e) {
+          BaseDataStoreUtils.decodeRow(
+              row,
+              clientFilters,
+              adapter,
+              null,
+              index,
+              null,
+              null,
+              true,
+              dataIndexRetrieval);
+    } catch (final AdapterException e) {
       return null;
     }
     if (value == null) {
       return null;
     }
+    return value;
+  }
+
+  @SuppressWarnings("unchecked")
+  protected Pair<GeoWaveInputKey, T> decodeRowToEntry(
+      final GeoWaveRow row,
+      final QueryFilter[] clientFilters,
+      final InternalDataAdapter<T> adapter,
+      final Index index) {
+    final Object value = decodeRowToValue(row, clientFilters, adapter, index);
+    if (value == null) {
+      return null;
+    }
+    return valueToEntry(row, value);
+  }
+
+  protected Pair<GeoWaveInputKey, T> valueToEntry(final GeoWaveRow row, final Object value) {
     final short adapterId = row.getAdapterId();
     final T result =
         (T) (isOutputWritable
             ? serializationTool.getHadoopWritableSerializerForAdapter(adapterId).toWritable(value)
             : value);
     final GeoWaveInputKey key = new GeoWaveInputKey(row, index.getName());
-    return new GeoWaveInputFormatEntry(key, result);
+    return Pair.of(key, result);
   }
 
   @Override
@@ -105,8 +132,8 @@ public class InputFormatIteratorWrapper<T> implements Iterator<Entry<GeoWaveInpu
   }
 
   @Override
-  public Entry<GeoWaveInputKey, T> next() throws NoSuchElementException {
-    final Entry<GeoWaveInputKey, T> previousNext = nextEntry;
+  public Pair<GeoWaveInputKey, T> next() throws NoSuchElementException {
+    final Pair<GeoWaveInputKey, T> previousNext = nextEntry;
     if (nextEntry == null) {
       throw new NoSuchElementException();
     }
@@ -117,32 +144,5 @@ public class InputFormatIteratorWrapper<T> implements Iterator<Entry<GeoWaveInpu
   @Override
   public void remove() {
     reader.remove();
-  }
-
-  private final class GeoWaveInputFormatEntry implements Map.Entry<GeoWaveInputKey, T> {
-    private final GeoWaveInputKey key;
-    private T value;
-
-    public GeoWaveInputFormatEntry(final GeoWaveInputKey key, final T value) {
-      this.key = key;
-      this.value = value;
-    }
-
-    @Override
-    public GeoWaveInputKey getKey() {
-      return key;
-    }
-
-    @Override
-    public T getValue() {
-      return value;
-    }
-
-    @Override
-    public T setValue(final T value) {
-      final T old = this.value;
-      this.value = value;
-      return old;
-    }
   }
 }

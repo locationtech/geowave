@@ -11,7 +11,6 @@ package org.locationtech.geowave.format.stanag4676.image;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 
 public class ImageChipUtils {
@@ -52,19 +51,19 @@ public class ImageChipUtils {
     return bi;
   }
 
-  public static ByteArray getDataId(
+  public static byte[] getDataId(
       final String mission,
       final String trackId,
       final long timeMillis) {
-    return new ByteArray(mission + "/" + trackId + "/" + timeMillis);
+    return StringUtils.stringToBinary(mission + "/" + trackId + "/" + timeMillis);
   }
 
-  public static ByteArray getTrackDataIdPrefix(final String mission, final String trackId) {
-    return new ByteArray(mission + "/" + trackId + "/");
+  public static byte[] getTrackDataIdPrefix(final String mission, final String trackId) {
+    return StringUtils.stringToBinary(mission + "/" + trackId + "/");
   }
 
-  public static ImageChip fromDataIdAndValue(final ByteArray dataId, final byte[] value) {
-    final String dataIdStr = StringUtils.stringFromBinary(dataId.getBytes());
+  public static ImageChip fromDataIdAndValue(final byte[] dataId, final byte[] value) {
+    final String dataIdStr = StringUtils.stringFromBinary(dataId);
     final String[] split = dataIdStr.split("/");
     return new ImageChip(split[0], split[1], Long.parseLong(split[2]), value);
   }

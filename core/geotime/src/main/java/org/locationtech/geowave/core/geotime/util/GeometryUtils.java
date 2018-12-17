@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.util;
 
-import com.google.uzaygezen.core.BitSetMath;
 import java.awt.geom.Point2D;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
@@ -26,9 +25,11 @@ import javax.annotation.Nullable;
 import javax.measure.Unit;
 import javax.measure.quantity.Length;
 import org.apache.commons.lang3.tuple.Pair;
+import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.factory.GeoTools;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.geometry.jts.JTS;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
@@ -62,6 +63,8 @@ import org.locationtech.jts.io.WKBReader;
 import org.locationtech.jts.io.WKBWriter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.FilterFactory2;
+import org.opengis.filter.spatial.SpatialOperator;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.CoordinateSystem;
@@ -70,6 +73,7 @@ import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.uzaygezen.core.BitSetMath;
 import si.uom.NonSI;
 import si.uom.SI;
 import systems.uom.common.USCustomary;
@@ -94,6 +98,21 @@ public class GeometryUtils {
 
   public static final Integer MAX_GEOMETRY_PRECISION =
       Integer.valueOf(TWKBUtils.MAX_COORD_PRECISION);
+
+  public static SpatialOperator geometryToSpatialOperator(
+      final Geometry jtsGeom,
+      final String geometryAttributeName) {
+    final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
+    if (jtsGeom.equalsTopo(jtsGeom.getEnvelope())) {
+      return factory.bbox(
+          factory.property(geometryAttributeName),
+          new ReferencedEnvelope(jtsGeom.getEnvelopeInternal(), GeometryUtils.getDefaultCRS()));
+    }
+    // there apparently is no way to associate a CRS with a poly
+    // intersection operation so it will have to assume the same CRS as the
+    // feature type
+    return factory.intersects(factory.property(geometryAttributeName), factory.literal(jtsGeom));
+  }
 
   @edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
   public static CoordinateReferenceSystem getDefaultCRS() {
@@ -467,7 +486,7 @@ public class GeometryUtils {
   }
 
   public static Unit<Length> lookup(final String name) {
-    String lowerCaseName = name.toLowerCase();
+    final String lowerCaseName = name.toLowerCase();
 
     Unit<Length> unit = lookup(SI.class, lowerCaseName);
     if (unit != null) {
@@ -483,7 +502,7 @@ public class GeometryUtils {
       return lookup(lowerCaseName.substring(0, lowerCaseName.length() - 1));
     }
     if (lowerCaseName.startsWith("kilo") && (lowerCaseName.length() > 4)) {
-      Unit<Length> u = lookup(lowerCaseName.substring(4));
+      final Unit<Length> u = lookup(lowerCaseName.substring(4));
       if (u != null) {
         return u.multiply(1000);
       }
@@ -494,7 +513,7 @@ public class GeometryUtils {
     }
     // if we get here, try some aliases
     if (lowerCaseName.equals("meter")) {
-      return SI.METRE;
+      return Units.METRE;
     }
     if (lowerCaseName.equals("unity")) {
       return (Unit) AbstractUnit.ONE;

@@ -58,9 +58,12 @@ public class HadoopWritableSerializationTool {
   }
 
   public InternalDataAdapter<?> getInternalAdapter(final short adapterId) {
-    return new InternalDataAdapterWrapper(
-        (DataTypeAdapter) adapterStore.getAdapter(internalAdapterStore.getTypeName(adapterId)),
-        adapterId);
+    final DataTypeAdapter<?> adapter =
+        adapterStore.getAdapter(internalAdapterStore.getTypeName(adapterId));
+    if (adapter instanceof InternalDataAdapter) {
+      return (InternalDataAdapter<?>) adapter;
+    }
+    return new InternalDataAdapterWrapper<>(adapter, adapterId);
   }
 
   public DataTypeAdapter<?> getAdapter(final String typeName) {

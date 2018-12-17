@@ -9,29 +9,31 @@
 package org.locationtech.geowave.core.store.query.filter;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
 public class DataIdQueryFilter implements QueryFilter {
-  private Collection<ByteArray> dataIds;
+  private Set<ByteArray> dataIds;
 
   public DataIdQueryFilter() {}
 
-  public DataIdQueryFilter(final ByteArray[] dataIds) {
-    this.dataIds = Arrays.asList(dataIds);
+  public DataIdQueryFilter(final byte[][] dataIds) {
+    this.dataIds = Arrays.stream(dataIds).map(i -> new ByteArray(i)).collect(Collectors.toSet());
   }
 
   @Override
   public boolean accept(
       final CommonIndexModel indexModel,
       final IndexedPersistenceEncoding persistenceEncoding) {
-    return dataIds.contains(persistenceEncoding.getDataId());
+    return dataIds.contains(new ByteArray(persistenceEncoding.getDataId()));
   }
+
 
   @Override
   public byte[] toBinary() {
@@ -53,7 +55,7 @@ public class DataIdQueryFilter implements QueryFilter {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int size = VarintUtils.readUnsignedInt(buf);
-    dataIds = new ArrayList<>(size);
+    dataIds = new HashSet<>(size);
     for (int i = 0; i < size; i++) {
       final int bsize = VarintUtils.readUnsignedInt(buf);
       final byte[] dataIdBytes = new byte[bsize];

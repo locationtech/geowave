@@ -11,10 +11,12 @@ package org.locationtech.geowave.adapter.vector;
 import java.util.Arrays;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.TimeRange;
+import org.locationtech.geowave.core.geotime.store.dimension.Time.Timestamp;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.opengis.feature.simple.SimpleFeature;
@@ -73,6 +75,15 @@ public class FeatureTimeRangeHandler implements IndexFieldHandler<SimpleFeature,
     } else {
       visibility = new byte[] {};
     }
+    if (startObj == null) {
+      if (endObj != null) {
+        return new Timestamp(TimeUtils.getTimeMillis(endObj), visibility);
+      }
+      return null;
+    }
+    if (endObj == null) {
+      return new Timestamp(TimeUtils.getTimeMillis(startObj), visibility);
+    }
     return new TimeRange(
         TimeUtils.getTimeMillis(startObj),
         TimeUtils.getTimeMillis(endObj),
@@ -88,7 +99,17 @@ public class FeatureTimeRangeHandler implements IndexFieldHandler<SimpleFeature,
     final Class<?> endBindingClass = nativeEndTimeHandler.attrDesc.getType().getBinding();
     final Object endObj = TimeUtils.getTimeValue(endBindingClass, (long) value.getMax());
     return new PersistentValue[] {
-        new PersistentValue<Object>(nativeStartTimeHandler.getFieldName(), startObj),
-        new PersistentValue<Object>(nativeEndTimeHandler.getFieldName(), endObj),};
+        new PersistentValue<>(nativeStartTimeHandler.getFieldName(), startObj),
+        new PersistentValue<>(nativeEndTimeHandler.getFieldName(), endObj),};
+  }
+
+  @Override
+  public Time toIndexValue(final PersistentDataset<Object> adapterPersistenceEncoding) {
+    final Object startObj =
+        adapterPersistenceEncoding.getValue(nativeStartTimeHandler.getFieldName());
+    final Object endObj = adapterPersistenceEncoding.getValue(nativeEndTimeHandler.getFieldName());
+    // visibility is unnecessary because this only happens after the geometry is read (its only used
+    // in reconstructing common index values when using a secondary index)
+    return new TimeRange(TimeUtils.getTimeMillis(startObj), TimeUtils.getTimeMillis(endObj), null);
   }
 }

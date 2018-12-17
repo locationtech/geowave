@@ -18,21 +18,22 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
-public class ReaderParamsBuilder<T> extends BaseReaderParamsBuilder<T, ReaderParamsBuilder<T>> {
+public class ReaderParamsBuilder<T> extends RangeReaderParamsBuilder<T, ReaderParamsBuilder<T>> {
 
   protected boolean isServersideAggregation = false;
-  protected boolean isClientsideRowMerging = false;
   protected QueryRanges queryRanges = null;
   protected QueryFilter filter = null;
   protected List<MultiDimensionalCoordinateRangesArray> coordinateRanges = null;
   protected List<MultiDimensionalNumericData> constraints = null;
+  protected GeoWaveRowIteratorTransformer<T> rowTransformer;
 
   public ReaderParamsBuilder(
       final Index index,
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
       final GeoWaveRowIteratorTransformer<T> rowTransformer) {
-    super(index, adapterStore, internalAdapterStore, rowTransformer);
+    super(index, adapterStore, internalAdapterStore);
+    this.rowTransformer = rowTransformer;
   }
 
   @Override
@@ -42,11 +43,6 @@ public class ReaderParamsBuilder<T> extends BaseReaderParamsBuilder<T, ReaderPar
 
   public ReaderParamsBuilder<T> isServersideAggregation(final boolean isServersideAggregation) {
     this.isServersideAggregation = isServersideAggregation;
-    return builder();
-  }
-
-  public ReaderParamsBuilder<T> isClientsideRowMerging(final boolean isClientsideRowMerging) {
-    this.isClientsideRowMerging = isClientsideRowMerging;
     return builder();
   }
 
@@ -71,6 +67,10 @@ public class ReaderParamsBuilder<T> extends BaseReaderParamsBuilder<T, ReaderPar
     return builder();
   }
 
+  public GeoWaveRowIteratorTransformer<T> getRowTransformer() {
+    return rowTransformer;
+  }
+
   public ReaderParams<T> build() {
     if (queryRanges == null) {
       queryRanges = new QueryRanges();
@@ -78,7 +78,7 @@ public class ReaderParamsBuilder<T> extends BaseReaderParamsBuilder<T, ReaderPar
     if (additionalAuthorizations == null) {
       additionalAuthorizations = new String[0];
     }
-    return new ReaderParams<T>(
+    return new ReaderParams<>(
         index,
         adapterStore,
         internalAdapterStore,

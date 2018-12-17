@@ -14,14 +14,10 @@ import java.util.Collections;
 import java.util.List;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.filter.CQLQueryFilter;
-import org.locationtech.geowave.core.geotime.util.PropertyConstraintSet;
-import org.locationtech.geowave.core.geotime.util.PropertyFilterVisitor;
-import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.TypeConstraintQuery;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
@@ -126,20 +122,6 @@ public class ExplicitCQLQuery implements QueryConstraints, TypeConstraintQuery {
       // base query can be null, no reason to log a warning
       baseQuery = null;
     }
-  }
-
-  public List<ByteArrayRange> getSecondaryIndexConstraints(final SecondaryIndexImpl<?> index) {
-    final PropertyFilterVisitor visitor = new PropertyFilterVisitor();
-    final PropertyConstraintSet constraints =
-        (PropertyConstraintSet) cqlFilter.accept(visitor, null);
-    return constraints.getRangesFor(index);
-  }
-
-  public List<QueryFilter> getSecondaryQueryFilter(final SecondaryIndexImpl<?> index) {
-    final PropertyFilterVisitor visitor = new PropertyFilterVisitor();
-    final PropertyConstraintSet constraints =
-        (PropertyConstraintSet) cqlFilter.accept(visitor, null);
-    return constraints.getFiltersFor(index);
   }
 
   @Override

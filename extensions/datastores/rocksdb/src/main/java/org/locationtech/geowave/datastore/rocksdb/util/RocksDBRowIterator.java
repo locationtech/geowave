@@ -16,22 +16,24 @@ public class RocksDBRowIterator extends AbstractRocksDBIterator<GeoWaveRow> {
   private final short adapterId;
   private final byte[] partition;
   private final boolean containsTimestamp;
+  private final boolean visibilityEnabled;
 
   public RocksDBRowIterator(
-      Object mutex,
       final ReadOptions options,
       final RocksIterator it,
       final short adapterId,
       final byte[] partition,
-      final boolean containsTimestamp) {
+      final boolean containsTimestamp,
+      final boolean visiblityEnabled) {
     super(options, it);
     this.adapterId = adapterId;
     this.partition = partition;
     this.containsTimestamp = containsTimestamp;
+    visibilityEnabled = visiblityEnabled;
   }
 
   @Override
   protected GeoWaveRow readRow(final byte[] key, final byte[] value) {
-    return new RocksDBRow(adapterId, partition, key, value, containsTimestamp);
+    return new RocksDBRow(adapterId, partition, key, value, containsTimestamp, visibilityEnabled);
   }
 }

@@ -11,7 +11,6 @@ package org.locationtech.geowave.adapter.vector.index;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import com.beust.jcommander.internal.Maps;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,6 +46,7 @@ import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constrai
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.opengis.feature.simple.SimpleFeature;
+import com.beust.jcommander.internal.Maps;
 
 public class ChooseBestMatchIndexQueryStrategyTest {
   final Index IMAGE_CHIP_INDEX1 = new NullIndex("IMAGERY_CHIPS1");
@@ -117,8 +117,8 @@ public class ChooseBestMatchIndexQueryStrategyTest {
                 new GeoWaveKeyImpl(
                     new byte[] {1},
                     (short) 1,
-                    range.getPartitionKey().getBytes(),
-                    range.getSortKeys().get(0).getBytes(),
+                    range.getPartitionKey(),
+                    range.getSortKeys().get(0),
                     0),
                 new GeoWaveValue[] {}));
       }
@@ -144,8 +144,8 @@ public class ChooseBestMatchIndexQueryStrategyTest {
                 new GeoWaveKeyImpl(
                     new byte[] {1},
                     (short) 1,
-                    range.getPartitionKey().getBytes(),
-                    range.getSortKeys().get(0).getBytes(),
+                    range.getPartitionKey(),
+                    range.getSortKeys().get(0),
                     0),
                 new GeoWaveValue[] {}));
       }

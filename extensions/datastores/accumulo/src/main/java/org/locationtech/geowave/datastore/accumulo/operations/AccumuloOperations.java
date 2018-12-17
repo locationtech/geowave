@@ -8,12 +8,6 @@
  */
 package org.locationtech.geowave.datastore.accumulo.operations;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +25,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -68,6 +63,7 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -77,18 +73,23 @@ import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStor
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
-import org.locationtech.geowave.core.store.operations.BaseReaderParams;
+import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
 import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
 import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
+import org.locationtech.geowave.core.store.operations.RangeReaderParams;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.operations.RowReaderWrapper;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.server.BasicOptionProvider;
@@ -98,6 +99,7 @@ import org.locationtech.geowave.core.store.server.ServerOpHelper;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
 import org.locationtech.geowave.core.store.util.DataAdapterAndIndexCache;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
+import org.locationtech.geowave.core.store.util.TriFunction;
 import org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import org.locationtech.geowave.datastore.accumulo.IteratorConfig;
 import org.locationtech.geowave.datastore.accumulo.MergingCombiner;
@@ -118,6 +120,12 @@ import org.locationtech.geowave.datastore.accumulo.util.ConnectorPool;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * This class holds all parameters necessary for establishing Accumulo connections and provides
@@ -506,6 +514,57 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     return new ClientSideIteratorScanner(createScanner(tableName, additionalAuthorizations));
   }
 
+  public Iterator<GeoWaveRow> getDataIndexResults(
+      final byte[][] rows,
+      final short adapterId,
+      final String... additionalAuthorizations) {
+    if ((rows == null) || (rows.length == 0)) {
+      return Collections.emptyIterator();
+    }
+    final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
+    try (final BatchScanner batchScanner =
+        createBatchScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations)) {
+      batchScanner.setRanges(
+          Arrays.stream(rows).map(r -> Range.exact(new Text(r))).collect(Collectors.toList()));
+      batchScanner.fetchColumnFamily(new Text(family));
+      final Map<ByteArray, byte[]> results = new HashMap<>();
+      batchScanner.iterator().forEachRemaining(
+          entry -> results.put(
+              new ByteArray(entry.getKey().getRow().getBytes()),
+              entry.getValue().get()));
+      return Arrays.stream(rows).map(
+          r -> DataIndexUtils.deserializeDataIndexRow(
+              r,
+              adapterId,
+              results.get(new ByteArray(r)),
+              false)).iterator();
+    } catch (final TableNotFoundException e) {
+      LOGGER.error("unable to find data index table", e);
+    }
+    return Collections.emptyIterator();
+  }
+
+  @Override
+  public RowWriter createDataIndexWriter(final InternalDataAdapter<?> adapter) {
+    return internalCreateWriter(
+        DataIndexUtils.DATA_ID_INDEX,
+        adapter,
+        (batchWriter, operations, tableName) -> new AccumuloDataIndexWriter(
+            batchWriter,
+            operations,
+            tableName));
+  }
+
+  @Override
+  public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
+    return new RowReaderWrapper<>(
+        new Wrapper<>(
+            getDataIndexResults(
+                readerParams.getDataIds(),
+                readerParams.getAdapterId(),
+                readerParams.getAdditionalAuthorizations())));
+  }
+
   public Scanner createScanner(final String tableName, final String... additionalAuthorizations)
       throws TableNotFoundException {
     return connector.createScanner(
@@ -821,7 +880,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
         }
         final ByteArrayRange r = ranges.get(0);
         if (r.isSingleValue()) {
-          ((Scanner) scanner).setRange(Range.exact(new Text(r.getStart().getBytes())));
+          ((Scanner) scanner).setRange(Range.exact(new Text(r.getStart())));
         } else {
           ((Scanner) scanner).setRange(AccumuloUtils.byteArrayRangeToAccumuloRange(r));
         }
@@ -832,12 +891,23 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
           ((Scanner) scanner).setBatchSize(Math.min(1024, params.getLimit()));
         }
       } else {
-        if (delete) {
-          scanner = createBatchDeleter(tableName, params.getAdditionalAuthorizations());
-          ((BatchDeleter) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
+        if (options.isServerSideLibraryEnabled()) {
+          if (delete) {
+            scanner = createBatchDeleter(tableName, params.getAdditionalAuthorizations());
+            ((BatchDeleter) scanner).setRanges(
+                AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
+          } else {
+            scanner = createBatchScanner(tableName, params.getAdditionalAuthorizations());
+            ((BatchScanner) scanner).setRanges(
+                AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
+          }
         } else {
-          scanner = createBatchScanner(tableName, params.getAdditionalAuthorizations());
-          ((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
+          scanner = createClientScanner(tableName, params.getAdditionalAuthorizations());
+          if (ranges != null) {
+            ((Scanner) scanner).setRange(
+                AccumuloUtils.byteArrayRangeToAccumuloRange(ByteArrayUtils.getSingleRange(ranges)));
+
+          }
         }
       }
       if (params.getMaxResolutionSubsamplingPerDimension() != null) {
@@ -882,7 +952,23 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   }
 
   protected <T> void addConstraintsScanIteratorSettings(
-      final BaseReaderParams<T> params,
+      final RecordReaderParams params,
+      final ScannerBase scanner,
+      final DataStoreOptions options) {
+    addFieldSubsettingToIterator(params, scanner);
+    if (params.isMixedVisibility()) {
+      // we have to at least use a whole row iterator
+      final IteratorSetting iteratorSettings =
+          new IteratorSetting(
+              QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+              QueryFilterIterator.QUERY_ITERATOR_NAME,
+              WholeRowIterator.class);
+      scanner.addScanIterator(iteratorSettings);
+    }
+  }
+
+  protected <T> void addConstraintsScanIteratorSettings(
+      final ReaderParams<T> params,
       final ScannerBase scanner,
       final DataStoreOptions options) {
     addFieldSubsettingToIterator(params, scanner);
@@ -921,7 +1007,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
     boolean usingDistributableFilter = false;
 
-    if (params.getFilter() != null) {
+    if ((params.getFilter() != null) && !options.isSecondaryIndexing()) {
       usingDistributableFilter = true;
       if (iteratorSettings == null) {
         if (params.isMixedVisibility()) {
@@ -959,7 +1045,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
               QueryFilterIterator.QUERY_ITERATOR_NAME,
               WholeRowIterator.class);
     }
-    if (!usingDistributableFilter) {
+    if (!usingDistributableFilter && (!options.isSecondaryIndexing())) {
       // it ends up being duplicative and slower to add both a
       // distributable query and the index constraints, but one of the two
       // is important to limit client-side filtering
@@ -971,7 +1057,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   }
 
   protected <T> void addIndexFilterToIterator(
-      final BaseReaderParams<T> params,
+      final ReaderParams<T> params,
       final ScannerBase scanner) {
     final List<MultiDimensionalCoordinateRangesArray> coords = params.getCoordinateRanges();
     if ((coords != null) && !coords.isEmpty()) {
@@ -996,7 +1082,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   }
 
   protected <T> void addFieldSubsettingToIterator(
-      final BaseReaderParams<T> params,
+      final RangeReaderParams<T> params,
       final ScannerBase scanner) {
     if ((params.getFieldSubsets() != null) && !params.isAggregation()) {
       final String[] fieldNames = params.getFieldSubsets().getLeft();
@@ -1049,7 +1135,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
         true);
   }
 
-  protected <T> Scanner getScanner(final RecordReaderParams<T> params) {
+  protected <T> Scanner getScanner(final RecordReaderParams params) {
     final GeoWaveRowRange range = params.getRowRange();
     final String tableName = params.getIndex().getName();
     Scanner scanner;
@@ -1112,15 +1198,15 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
   @SuppressWarnings("unchecked")
   @Override
-  public <T> RowReader<T> createReader(final RecordReaderParams<T> readerParams) {
+  public RowReader<GeoWaveRow> createReader(final RecordReaderParams readerParams) {
     final ScannerBase scanner = getScanner(readerParams);
     addConstraintsScanIteratorSettings(readerParams, scanner, options);
     return new AccumuloReader<>(
         scanner,
-        readerParams.getRowTransformer(),
+        GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
         readerParams.getIndex().getIndexStrategy().getPartitionKeyLength(),
-        readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(),
-        false,
+        readerParams.isMixedVisibility(),
+        readerParams.isClientsideRowMerging(),
         false);
   }
 
@@ -1140,6 +1226,19 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
   @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
+    return internalCreateWriter(
+        index,
+        adapter,
+        (batchWriter, operations, tableName) -> new AccumuloWriter(
+            batchWriter,
+            operations,
+            tableName));
+  }
+
+  public RowWriter internalCreateWriter(
+      final Index index,
+      final InternalDataAdapter<?> adapter,
+      final TriFunction<BatchWriter, AccumuloOperations, String, RowWriter> rowWriterSupplier) {
     final String tableName = index.getName();
     if (createTable(
         tableName,
@@ -1156,10 +1255,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     }
 
     try {
-      return new org.locationtech.geowave.datastore.accumulo.operations.AccumuloWriter(
-          createBatchWriter(tableName),
-          this,
-          tableName);
+      return rowWriterSupplier.apply(createBatchWriter(tableName), this, tableName);
     } catch (final TableNotFoundException e) {
       LOGGER.error("Table does not exist", e);
     }
@@ -1223,13 +1319,14 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final Index index,
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
-      final AdapterIndexMappingStore adapterIndexMappingStore) {
+      final AdapterIndexMappingStore adapterIndexMappingStore,
+      final Integer maxRangeDecomposition) {
     if (options.isServerSideLibraryEnabled()) {
       return compactTable(index.getName());
     } else {
       return DataStoreUtils.mergeData(
           this,
-          options,
+          maxRangeDecomposition,
           index,
           adapterStore,
           internalAdapterStore,
@@ -1462,7 +1559,9 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
 
     final ScannerBase scanner = getScanner(readerParams, true);
-    if (readerParams.isMixedVisibility() || (scanner == null)) {
+    if (readerParams.isMixedVisibility()
+        || (scanner == null)
+        || !options.isServerSideLibraryEnabled()) {
       // currently scanner shouldn't be null, but in the future this could
       // be used to imply that range or bulk delete is unnecessary and we
       // instead simply delete by row ID
@@ -1501,5 +1600,22 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
         readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(),
         readerParams.isClientsideRowMerging(),
         true);
+  }
+
+  @Override
+  public void delete(final DataIndexReaderParams readerParams) {
+    deleteRowsFromDataIndex(readerParams.getDataIds(), readerParams.getAdapterId());
+  }
+
+  public void deleteRowsFromDataIndex(final byte[][] rows, final short adapterId) {
+    try (final BatchDeleter deleter = createBatchDeleter(DataIndexUtils.DATA_ID_INDEX.getName())) {
+      deleter.fetchColumnFamily(new Text(ByteArrayUtils.shortToString(adapterId)));
+      deleter.setRanges(
+          Arrays.stream(rows).map(r -> Range.exact(new Text(r))).collect(Collectors.toList()));
+
+      deleter.delete();
+    } catch (final TableNotFoundException | MutationsRejectedException e) {
+      LOGGER.warn("Unable to delete from data index", e);
+    }
   }
 }

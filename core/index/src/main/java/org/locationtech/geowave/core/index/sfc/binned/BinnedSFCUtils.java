@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.CoordinateRange;
@@ -39,8 +38,7 @@ public class BinnedSFCUtils {
       final SpaceFillingCurve sfc,
       final int maxRanges,
       final byte tier) {
-    final List<SinglePartitionQueryRanges> queryRanges =
-        new ArrayList<SinglePartitionQueryRanges>();
+    final List<SinglePartitionQueryRanges> queryRanges = new ArrayList<>();
 
     int maxRangeDecompositionPerBin = maxRanges;
     if ((maxRanges > 1) && (binnedQueries.size() > 1)) {
@@ -56,9 +54,7 @@ public class BinnedSFCUtils {
       }, binnedQuery.getBinId());
 
       queryRanges.add(
-          new SinglePartitionQueryRanges(
-              new ByteArray(tierAndBinId),
-              Arrays.asList(rangeDecomp.getRanges())));
+          new SinglePartitionQueryRanges(tierAndBinId, Arrays.asList(rangeDecomp.getRanges())));
     }
     return queryRanges;
   }
@@ -106,9 +102,7 @@ public class BinnedSFCUtils {
         }
       }
       if (singleId != null) {
-        return new SinglePartitionInsertionIds(
-            new ByteArray(tierAndBinId),
-            new ByteArray(singleId));
+        return new SinglePartitionInsertionIds(tierAndBinId, singleId);
       }
     }
     return null;
@@ -120,6 +114,9 @@ public class BinnedSFCUtils {
       final SpaceFillingCurve sfc) {
     final SFCIdAndBinInfo sfcIdAndBinInfo = getSFCIdAndBinInfo(rowId, baseDefinitions);
     final long[] coordinateValues = sfc.getCoordinates(sfcIdAndBinInfo.sfcId);
+    if (coordinateValues == null) {
+      return null;
+    }
     final Coordinate[] retVal = new Coordinate[coordinateValues.length];
     for (int i = 0; i < coordinateValues.length; i++) {
       final byte[] bin = sfcIdAndBinInfo.binIds.get(i);
@@ -158,7 +155,7 @@ public class BinnedSFCUtils {
       final byte[] rowId,
       final NumericDimensionDefinition[] baseDefinitions) {
 
-    final Map<Integer, byte[]> binIds = new HashMap<Integer, byte[]>();
+    final Map<Integer, byte[]> binIds = new HashMap<>();
     // one for the tier
     int rowIdOffset = 1;
     for (int dimensionIdx = 0; dimensionIdx < baseDefinitions.length; dimensionIdx++) {

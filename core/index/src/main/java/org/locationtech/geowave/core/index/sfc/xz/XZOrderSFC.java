@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayRange.MergeOperation;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -40,8 +39,9 @@ public class XZOrderSFC implements SpaceFillingCurve {
   // indicator that we have searched a full level of the 2^dim tree
   private XElement LevelTerminator;
 
-  // TODO magic number; have to determine most appropriate value?
-  private static int g = 12;
+  // TODO magic number; have to determine most appropriate value (12 seems to have potential
+  // issues)?
+  private static int g = 11;
 
   private SFCDimensionDefinition[] dimensionDefs;
   private int dimensionCount;
@@ -49,7 +49,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
 
   public XZOrderSFC() {}
 
-  public XZOrderSFC(SFCDimensionDefinition[] dimensionDefs) {
+  public XZOrderSFC(final SFCDimensionDefinition[] dimensionDefs) {
     this.dimensionDefs = dimensionDefs;
     init();
   }
@@ -58,11 +58,11 @@ public class XZOrderSFC implements SpaceFillingCurve {
     dimensionCount = dimensionDefs.length;
     nthPowerOfTwo = (int) Math.pow(2, dimensionCount);
 
-    double[] mins = new double[dimensionCount];
+    final double[] mins = new double[dimensionCount];
     Arrays.fill(mins, 0.0);
-    double[] maxes = new double[dimensionCount];
+    final double[] maxes = new double[dimensionCount];
     Arrays.fill(maxes, 1.0);
-    double[] negativeOnes = new double[dimensionCount];
+    final double[] negativeOnes = new double[dimensionCount];
     Arrays.fill(negativeOnes, -1.0);
     LevelOneElements = new XElement(mins, maxes, 1.0).children();
     LevelTerminator = new XElement(negativeOnes, negativeOnes, 0.0);
@@ -74,7 +74,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
     if (values.length == dimensionCount) {
       // We have a point, not a bounding box
       int boxCount = 0;
-      double[] boxedValues = new double[dimensionCount * 2];
+      final double[] boxedValues = new double[dimensionCount * 2];
       for (int i = 0; i < dimensionCount; i++) {
         boxedValues[boxCount++] = values[i];
         boxedValues[boxCount++] = values[i];
@@ -82,7 +82,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
       values = boxedValues;
     }
 
-    if (values.length != dimensionCount * 2) {
+    if (values.length != (dimensionCount * 2)) {
       LOGGER.error(
           "Point or bounding box value count does not match number of indexed dimensions.");
       return null;
@@ -98,13 +98,13 @@ public class XZOrderSFC implements SpaceFillingCurve {
 
     // l1 (el-one) is a bit confusing to read, but corresponds with the
     // paper's definitions
-    int l1 = (int) Math.floor(Math.log(maxDim) / LOG_POINT_FIVE);
+    final int l1 = (int) Math.floor(Math.log(maxDim) / LOG_POINT_FIVE);
 
     // the length will either be (l1) or (l1 + 1)
     int length = g;
 
     if (l1 < g) {
-      double w2 = Math.pow(0.5, l1 + 1); // width of an element at
+      final double w2 = Math.pow(0.5, l1 + 1); // width of an element at
       // resolution l2 (l1 + 1)
 
       length = l1 + 1;
@@ -116,7 +116,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
       }
     }
 
-    double[] minValues = new double[values.length / 2];
+    final double[] minValues = new double[values.length / 2];
     for (int i = 0; (i + 1) < values.length; i += 2) {
       minValues[i / 2] = values[i];
     }
@@ -126,51 +126,50 @@ public class XZOrderSFC implements SpaceFillingCurve {
 
   // predicate for checking how many axis the polygon intersects
   // math.floor(min / w2) * w2 == start of cell containing min
-  private boolean predicate(double min, double max, double w2) {
-    return max <= (Math.floor(min / w2) * w2) + (2 * w2);
+  private boolean predicate(final double min, final double max, final double w2) {
+    return max <= ((Math.floor(min / w2) * w2) + (2 * w2));
   }
 
   /** Normalize user space values to [0,1] */
-  private void normalize(double[] values) {
+  private void normalize(final double[] values) {
     for (int i = 0; i < values.length; i++) {
       values[i] = dimensionDefs[i / 2].normalize(values[i]);
     }
   }
 
-  private byte[] sequenceCode(double[] minValues, int length) {
+  private byte[] sequenceCode(final double[] minValues, final int length) {
 
-    double[] minsPerDimension = new double[dimensionCount];
+    final double[] minsPerDimension = new double[dimensionCount];
     Arrays.fill(minsPerDimension, 0.0);
 
-    double[] maxesPerDimension = new double[dimensionCount];
+    final double[] maxesPerDimension = new double[dimensionCount];
     Arrays.fill(maxesPerDimension, 1.0);
 
     long cs = 0L;
 
     for (int i = 0; i < length; i++) {
 
-      double[] centers = new double[dimensionCount];
+      final double[] centers = new double[dimensionCount];
       for (int j = 0; j < dimensionCount; j++) {
         centers[j] = (minsPerDimension[j] + maxesPerDimension[j]) / 2.0;
       }
 
-      BitSet bits = new BitSet(dimensionCount);
+      final BitSet bits = new BitSet(dimensionCount);
       for (int j = dimensionCount - 1; j >= 0; j--) {
         if (minValues[j] >= centers[j]) {
           bits.set(j);
         }
       }
       long bTerm = 0L;
-      long[] longs = bits.toLongArray();
+      final long[] longs = bits.toLongArray();
       if (longs.length > 0) {
         bTerm = longs[0];
       }
 
       cs +=
           1L
-              + bTerm
-                  * (((long) (Math.pow(nthPowerOfTwo, g - i))) - 1L)
-                  / ((long) nthPowerOfTwo - 1);
+              + ((bTerm * (((long) (Math.pow(nthPowerOfTwo, g - i))) - 1L))
+                  / ((long) nthPowerOfTwo - 1));
 
       for (int j = 0; j < dimensionCount; j++) {
         if (minValues[j] < centers[j]) {
@@ -203,7 +202,10 @@ public class XZOrderSFC implements SpaceFillingCurve {
     private final int dimensionCount;
     private final int nthPowerOfTwo;
 
-    public XElement(double[] minsPerDimension, double[] maxesPerDimension, double length) {
+    public XElement(
+        final double[] minsPerDimension,
+        final double[] maxesPerDimension,
+        final double length) {
       this.minsPerDimension = minsPerDimension;
       this.maxesPerDimension = maxesPerDimension;
       this.length = length;
@@ -212,7 +214,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
       extendedBounds = new Double[dimensionCount];
     }
 
-    public XElement(XElement xElement) {
+    public XElement(final XElement xElement) {
       this(
           Arrays.copyOf(xElement.minsPerDimension, xElement.minsPerDimension.length),
           Arrays.copyOf(xElement.maxesPerDimension, xElement.maxesPerDimension.length),
@@ -220,7 +222,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
     }
 
     // lazy-evaluated extended bounds
-    public double getExtendedBound(int dimension) {
+    public double getExtendedBound(final int dimension) {
       if (extendedBounds[dimension] == null) {
         extendedBounds[dimension] = maxesPerDimension[dimension] + length;
       }
@@ -229,7 +231,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
 
     public boolean isContained(final double[] windowMins, final double[] windowMaxes) {
       for (int i = 0; i < dimensionCount; i++) {
-        if (windowMins[i] > minsPerDimension[i] || windowMaxes[i] < getExtendedBound(i)) {
+        if ((windowMins[i] > minsPerDimension[i]) || (windowMaxes[i] < getExtendedBound(i))) {
           return false;
         }
       }
@@ -238,7 +240,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
 
     public boolean overlaps(final double[] windowMins, final double[] windowMaxes) {
       for (int i = 0; i < dimensionCount; i++) {
-        if (windowMaxes[i] < minsPerDimension[i] || windowMins[i] > getExtendedBound(i)) {
+        if ((windowMaxes[i] < minsPerDimension[i]) || (windowMins[i] > getExtendedBound(i))) {
           return false;
         }
       }
@@ -247,16 +249,16 @@ public class XZOrderSFC implements SpaceFillingCurve {
 
     public XElement[] children() {
       if (children == null) {
-        double[] centers = new double[dimensionCount];
+        final double[] centers = new double[dimensionCount];
         for (int i = 0; i < dimensionCount; i++) {
           centers[i] = (minsPerDimension[i] + maxesPerDimension[i]) / 2.0;
         }
 
-        double len = length / 2.0;
+        final double len = length / 2.0;
 
         children = new XElement[nthPowerOfTwo];
         for (int i = 0; i < children.length; i++) {
-          XElement child = new XElement(this);
+          final XElement child = new XElement(this);
 
           child.length = len;
 
@@ -290,19 +292,19 @@ public class XZOrderSFC implements SpaceFillingCurve {
   }
 
   @Override
-  public RangeDecomposition decomposeRangeFully(MultiDimensionalNumericData query) {
+  public RangeDecomposition decomposeRangeFully(final MultiDimensionalNumericData query) {
     return decomposeRange(query, true, -1);
   }
 
   @Override
   public RangeDecomposition decomposeRange(
-      MultiDimensionalNumericData query,
-      boolean overInclusiveOnEdge,
-      int maxRanges) {
+      final MultiDimensionalNumericData query,
+      final boolean overInclusiveOnEdge,
+      final int maxRanges) {
 
     // normalize query values
-    double[] queryMins = query.getMinValuesPerDimension();
-    double[] queryMaxes = query.getMaxValuesPerDimension();
+    final double[] queryMins = query.getMinValuesPerDimension();
+    final double[] queryMaxes = query.getMaxValuesPerDimension();
     for (int i = 0; i < dimensionCount; i++) {
       queryMins[i] = dimensionDefs[i].normalize(queryMins[i]);
       queryMaxes[i] = dimensionDefs[i].normalize(queryMaxes[i]);
@@ -310,14 +312,14 @@ public class XZOrderSFC implements SpaceFillingCurve {
 
     // stores our results - initial size of 100 in general saves us some
     // re-allocation
-    ArrayList<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>(100);
+    final ArrayList<ByteArrayRange> ranges = new ArrayList<>(100);
 
     // values remaining to process - initial size of 100 in general saves us
     // some re-allocation
-    ArrayDeque<XElement> remaining = new ArrayDeque<XElement>(100);
+    final ArrayDeque<XElement> remaining = new ArrayDeque<>(100);
 
     // initial level
-    for (XElement levelOneEl : LevelOneElements) {
+    for (final XElement levelOneEl : LevelOneElements) {
       remaining.add(levelOneEl);
     }
     remaining.add(LevelTerminator);
@@ -325,8 +327,10 @@ public class XZOrderSFC implements SpaceFillingCurve {
     // level of recursion
     short level = 1;
 
-    while (level < g && !remaining.isEmpty() && (maxRanges < 1 || ranges.size() < maxRanges)) {
-      XElement next = remaining.poll();
+    while ((level < g)
+        && !remaining.isEmpty()
+        && ((maxRanges < 1) || (ranges.size() < maxRanges))) {
+      final XElement next = remaining.poll();
       if (next.equals(LevelTerminator)) {
         // we've fully processed a level, increment our state
         if (!remaining.isEmpty()) {
@@ -341,11 +345,11 @@ public class XZOrderSFC implements SpaceFillingCurve {
     // bottom out and get all the ranges that partially overlapped but we
     // didn't fully process
     while (!remaining.isEmpty()) {
-      XElement next = remaining.poll();
+      final XElement next = remaining.poll();
       if (next.equals(LevelTerminator)) {
         level = (short) (level + 1);
       } else {
-        ByteArrayRange range = sequenceInterval(next.minsPerDimension, level, false);
+        final ByteArrayRange range = sequenceInterval(next.minsPerDimension, level, false);
         ranges.add(range);
       }
     }
@@ -354,7 +358,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
     // overlapping values
     // note: we don't bother reducing the ranges as in the XZ paper, as
     // accumulo handles lots of ranges fairly well
-    ArrayList<ByteArrayRange> result =
+    final ArrayList<ByteArrayRange> result =
         (ArrayList<ByteArrayRange>) ByteArrayRange.mergeIntersections(ranges, MergeOperation.UNION);
 
     return new RangeDecomposition(result.toArray(new ByteArrayRange[result.size()]));
@@ -366,22 +370,22 @@ public class XZOrderSFC implements SpaceFillingCurve {
   // adds it to our results as partial matching and queues up it's children
   // for further processing
   private void checkValue(
-      XElement value,
-      Short level,
-      double[] queryMins,
-      double[] queryMaxes,
-      ArrayList<ByteArrayRange> ranges,
-      ArrayDeque<XElement> remaining) {
+      final XElement value,
+      final Short level,
+      final double[] queryMins,
+      final double[] queryMaxes,
+      final ArrayList<ByteArrayRange> ranges,
+      final ArrayDeque<XElement> remaining) {
     if (value.isContained(queryMins, queryMaxes)) {
       // whole range matches, happy day
-      ByteArrayRange range = sequenceInterval(value.minsPerDimension, level, false);
+      final ByteArrayRange range = sequenceInterval(value.minsPerDimension, level, false);
       ranges.add(range);
     } else if (value.overlaps(queryMins, queryMaxes)) {
       // some portion of this range is excluded
       // add the partial match and queue up each sub-range for processing
-      ByteArrayRange range = sequenceInterval(value.minsPerDimension, level, true);
+      final ByteArrayRange range = sequenceInterval(value.minsPerDimension, level, true);
       ranges.add(range);
-      for (XElement child : value.children()) {
+      for (final XElement child : value.children()) {
         remaining.add(child);
       }
     }
@@ -398,10 +402,10 @@ public class XZOrderSFC implements SpaceFillingCurve {
    * @return
    */
   private ByteArrayRange sequenceInterval(
-      double[] minsPerDimension,
-      short length,
-      boolean partial) {
-    byte[] min = sequenceCode(minsPerDimension, length);
+      final double[] minsPerDimension,
+      final short length,
+      final boolean partial) {
+    final byte[] min = sequenceCode(minsPerDimension, length);
     // if a partial match, we just use the single sequence code as an
     // interval
     // if a full match, we have to match all sequence codes starting with
@@ -414,15 +418,15 @@ public class XZOrderSFC implements SpaceFillingCurve {
       max =
           ByteArrayUtils.longToByteArray(
               ByteArrayUtils.byteArrayToLong(min)
-                  + (((long) (Math.pow(nthPowerOfTwo, g - length + 1))) - 1L)
-                      / ((long) (nthPowerOfTwo - 1)));
+                  + ((((long) (Math.pow(nthPowerOfTwo, (g - length) + 1))) - 1L)
+                      / (nthPowerOfTwo - 1)));
     }
-    return new ByteArrayRange(new ByteArray(min), new ByteArray(max));
+    return new ByteArrayRange(min, max);
   }
 
   @Override
   public byte[] toBinary() {
-    final List<byte[]> dimensionDefBinaries = new ArrayList<byte[]>(dimensionDefs.length);
+    final List<byte[]> dimensionDefBinaries = new ArrayList<>(dimensionDefs.length);
     int bufferLength = VarintUtils.unsignedIntByteLength(dimensionDefs.length);
     for (final SFCDimensionDefinition sfcDimension : dimensionDefs) {
       final byte[] sfcDimensionBinary = PersistenceUtils.toBinary(sfcDimension);
@@ -456,9 +460,9 @@ public class XZOrderSFC implements SpaceFillingCurve {
 
   @Override
   public double[] getInsertionIdRangePerDimension() {
-    double normalizedSize = Math.pow(0.5, g);
+    final double normalizedSize = Math.pow(0.5, g);
 
-    double[] rangesPerDimension = new double[dimensionCount];
+    final double[] rangesPerDimension = new double[dimensionCount];
     for (int i = 0; i < dimensionCount; i++) {
       rangesPerDimension[i] = dimensionDefs[i].denormalize(normalizedSize);
     }
@@ -466,31 +470,31 @@ public class XZOrderSFC implements SpaceFillingCurve {
   }
 
   @Override
-  public BigInteger getEstimatedIdCount(MultiDimensionalNumericData data) {
+  public BigInteger getEstimatedIdCount(final MultiDimensionalNumericData data) {
     // TODO Replace hard-coded value with real implementation?
     return BigInteger.ONE;
   }
 
   // TODO Backwords (sfc-space to user-space) conversion??
   @Override
-  public MultiDimensionalNumericData getRanges(byte[] id) {
+  public MultiDimensionalNumericData getRanges(final byte[] id) {
     // use max range per dimension for now
     // to avoid false negatives
-    NumericData[] dataPerDimension = new NumericData[dimensionCount];
+    final NumericData[] dataPerDimension = new NumericData[dimensionCount];
     int i = 0;
-    for (SFCDimensionDefinition dim : dimensionDefs) {
+    for (final SFCDimensionDefinition dim : dimensionDefs) {
       dataPerDimension[i++] = dim.getFullRange();
     }
     return new BasicNumericDataset(dataPerDimension);
   }
 
   @Override
-  public long[] getCoordinates(byte[] id) {
+  public long[] getCoordinates(final byte[] id) {
     return null;
   }
 
   @Override
-  public long[] normalizeRange(double minValue, double maxValue, int dimension) {
+  public long[] normalizeRange(final double minValue, final double maxValue, final int dimension) {
     // TODO Auto-generated method stub
     return null;
   }

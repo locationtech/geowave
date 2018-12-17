@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.remote.options;
 
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.Map;
 import org.locationtech.geowave.core.cli.api.DefaultPluginOptions;
 import org.locationtech.geowave.core.cli.api.PluginOptions;
@@ -23,8 +21,9 @@ import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStor
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.config.ConfigUtils;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.ParametersDelegate;
 
 /**
  * Class is used to facilitate loading of a DataStore from options specified on the command line.
@@ -94,7 +93,7 @@ public class DataStorePluginOptions extends DefaultPluginOptions implements Plug
     this.factoryOptions = factoryOptions;
   }
 
-  public void setFactoryFamily(StoreFactoryFamilySpi factoryPlugin) {
+  public void setFactoryFamily(final StoreFactoryFamilySpi factoryPlugin) {
     this.factoryPlugin = factoryPlugin;
   }
 
@@ -120,10 +119,6 @@ public class DataStorePluginOptions extends DefaultPluginOptions implements Plug
 
   public DataStatisticsStore createDataStatisticsStore() {
     return getFactoryFamily().getDataStatisticsStoreFactory().createStore(getFactoryOptions());
-  }
-
-  public SecondaryIndexDataStore createSecondaryIndexStore() {
-    return getFactoryFamily().getSecondaryIndexDataStore().createStore(getFactoryOptions());
   }
 
   public AdapterIndexMappingStore createAdapterIndexMappingStore() {

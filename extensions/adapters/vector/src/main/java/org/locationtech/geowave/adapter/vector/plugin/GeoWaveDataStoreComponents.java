@@ -17,7 +17,6 @@ import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransac
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
@@ -110,8 +109,8 @@ public class GeoWaveDataStoreComponents {
     queryHints.put(
         QueryHint.MAX_RANGE_DECOMPOSITION,
         gtStore.getDataStoreOptions().getMaxRangeDecomposition());
-    Index[] indices = gtStore.getIndicesForAdapter(adapter, spatialOnly);
-    if (spatialOnly && indices.length == 0) {
+    final Index[] indices = gtStore.getIndicesForAdapter(adapter, spatialOnly);
+    if (spatialOnly && (indices.length == 0)) {
       throw new UnsupportedOperationException("Query required spatial index, but none were found.");
     }
     return gtStore.getIndexQueryStrategy().getIndices(stats, query, indices, queryHints);
@@ -124,8 +123,7 @@ public class GeoWaveDataStoreComponents {
     dataStore.delete(
         bldr.setAuthorizations(transaction.composeAuthorizations()).addTypeName(
             adapter.getTypeName()).constraints(
-                bldr.constraintsFactory().dataIds(
-                    new ByteArray[] {adapter.getDataId(feature)})).build());
+                bldr.constraintsFactory().dataIds(adapter.getDataId(feature))).build());
   }
 
   public void remove(final String fid, final GeoWaveTransaction transaction) throws IOException {
@@ -135,8 +133,7 @@ public class GeoWaveDataStoreComponents {
     dataStore.delete(
         bldr.setAuthorizations(transaction.composeAuthorizations()).addTypeName(
             adapter.getTypeName()).constraints(
-                bldr.constraintsFactory().dataIds(
-                    new ByteArray[] {new ByteArray(StringUtils.stringToBinary(fid))})).build());
+                bldr.constraintsFactory().dataIds(StringUtils.stringToBinary(fid))).build());
   }
 
   @SuppressWarnings("unchecked")

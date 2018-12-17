@@ -14,13 +14,11 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreFactory;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreFactory;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreFactory;
 import org.locationtech.geowave.core.store.metadata.IndexStoreFactory;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreFactory;
-import org.locationtech.geowave.core.store.metadata.SecondaryIndexStoreFactory;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.DataStoreOperationsFactory;
 
@@ -72,11 +70,6 @@ public class BaseDataStoreFamily implements StoreFactoryFamilySpi {
   @Override
   public GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory() {
     return new AdapterIndexMappingStoreFactory(typeName, description, helper);
-  }
-
-  @Override
-  public GenericStoreFactory<SecondaryIndexDataStore> getSecondaryIndexDataStore() {
-    return new SecondaryIndexStoreFactory(typeName, description, helper);
   }
 
   @Override

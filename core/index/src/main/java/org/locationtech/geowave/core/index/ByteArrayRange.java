@@ -9,14 +9,15 @@
 package org.locationtech.geowave.core.index;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 /** * Defines a unit interval on a number line */
 public class ByteArrayRange implements Comparable<ByteArrayRange> {
-  protected ByteArray start;
-  protected ByteArray end;
+  protected byte[] start;
+  protected byte[] end;
   protected boolean singleValue;
 
   /**
@@ -25,7 +26,7 @@ public class ByteArrayRange implements Comparable<ByteArrayRange> {
    * @param start start of unit interval
    * @param end end of unit interval
    */
-  public ByteArrayRange(final ByteArray start, final ByteArray end) {
+  public ByteArrayRange(final byte[] start, final byte[] end) {
     this(start, end, false);
   }
 
@@ -35,22 +36,22 @@ public class ByteArrayRange implements Comparable<ByteArrayRange> {
    * @param start start of unit interval
    * @param end end of unit interval
    */
-  public ByteArrayRange(final ByteArray start, final ByteArray end, final boolean singleValue) {
+  public ByteArrayRange(final byte[] start, final byte[] end, final boolean singleValue) {
     this.start = start;
     this.end = end;
     this.singleValue = singleValue;
   }
 
-  public ByteArray getStart() {
+  public byte[] getStart() {
     return start;
   }
 
-  public ByteArray getEnd() {
+  public byte[] getEnd() {
     return end;
   }
 
-  public ByteArray getEndAsNextPrefix() {
-    return new ByteArray(end.getNextPrefix());
+  public byte[] getEndAsNextPrefix() {
+    return ByteArrayUtils.getNextPrefix(end);
   }
 
   public boolean isSingleValue() {
@@ -61,9 +62,9 @@ public class ByteArrayRange implements Comparable<ByteArrayRange> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = (prime * result) + ((end == null) ? 0 : end.hashCode());
+    result = (prime * result) + ((end == null) ? 0 : Arrays.hashCode(end));
     result = (prime * result) + (singleValue ? 1231 : 1237);
-    result = (prime * result) + ((start == null) ? 0 : start.hashCode());
+    result = (prime * result) + ((start == null) ? 0 : Arrays.hashCode(start));
     return result;
   }
 
@@ -83,7 +84,7 @@ public class ByteArrayRange implements Comparable<ByteArrayRange> {
       if (other.end != null) {
         return false;
       }
-    } else if (!end.equals(other.end)) {
+    } else if (!Arrays.equals(end, other.end)) {
       return false;
     }
     if (singleValue != other.singleValue) {
@@ -93,7 +94,7 @@ public class ByteArrayRange implements Comparable<ByteArrayRange> {
       if (other.start != null) {
         return false;
       }
-    } else if (!start.equals(other.start)) {
+    } else if (!Arrays.equals(start, other.start)) {
       return false;
     }
     return true;
@@ -102,30 +103,33 @@ public class ByteArrayRange implements Comparable<ByteArrayRange> {
   public boolean intersects(final ByteArrayRange other) {
     if (isSingleValue()) {
       if (other.isSingleValue()) {
-        return getStart().equals(other.getStart());
+        return Arrays.equals(getStart(), other.getStart());
       }
       return false;
     }
-    return (((getStart().compareTo(other.getEndAsNextPrefix())) < 0)
-        && ((getEndAsNextPrefix().compareTo(other.getStart())) > 0));
+    return ((ByteArrayUtils.compare(getStart(), other.getEndAsNextPrefix()) < 0)
+        && (ByteArrayUtils.compare(getEndAsNextPrefix(), other.getStart()) > 0));
   }
 
   public ByteArrayRange intersection(final ByteArrayRange other) {
     return new ByteArrayRange(
-        start.compareTo(other.start) <= 0 ? other.start : start,
-        getEndAsNextPrefix().compareTo(other.getEndAsNextPrefix()) >= 0 ? other.end : end);
+        ByteArrayUtils.compare(start, other.start) <= 0 ? other.start : start,
+        ByteArrayUtils.compare(getEndAsNextPrefix(), other.getEndAsNextPrefix()) >= 0 ? other.end
+            : end);
   }
 
   public ByteArrayRange union(final ByteArrayRange other) {
     return new ByteArrayRange(
-        start.compareTo(other.start) <= 0 ? start : other.start,
-        getEndAsNextPrefix().compareTo(other.getEndAsNextPrefix()) >= 0 ? end : other.end);
+        ByteArrayUtils.compare(start, other.start) <= 0 ? start : other.start,
+        ByteArrayUtils.compare(getEndAsNextPrefix(), other.getEndAsNextPrefix()) >= 0 ? end
+            : other.end);
   }
 
   @Override
   public int compareTo(final ByteArrayRange other) {
-    final int diff = getStart().compareTo(other.getStart());
-    return diff != 0 ? diff : getEndAsNextPrefix().compareTo(other.getEndAsNextPrefix());
+    final int diff = ByteArrayUtils.compare(getStart(), other.getStart());
+    return diff != 0 ? diff
+        : ByteArrayUtils.compare(getEndAsNextPrefix(), other.getEndAsNextPrefix());
   }
 
   public static enum MergeOperation {
@@ -135,10 +139,10 @@ public class ByteArrayRange implements Comparable<ByteArrayRange> {
   public static final Collection<ByteArrayRange> mergeIntersections(
       final Collection<ByteArrayRange> ranges,
       final MergeOperation op) {
-    List<ByteArrayRange> rangeList = new ArrayList<>(ranges);
+    final List<ByteArrayRange> rangeList = new ArrayList<>(ranges);
     // sort order so the first range can consume following ranges
     Collections.<ByteArrayRange>sort(rangeList);
-    final List<ByteArrayRange> result = new ArrayList<ByteArrayRange>();
+    final List<ByteArrayRange> result = new ArrayList<>();
     for (int i = 0; i < rangeList.size();) {
       ByteArrayRange r1 = rangeList.get(i);
       int j = i + 1;

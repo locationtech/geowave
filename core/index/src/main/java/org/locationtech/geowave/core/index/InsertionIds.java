@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.index;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,25 +17,27 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 
 public class InsertionIds implements Persistable {
   private Collection<SinglePartitionInsertionIds> partitionKeys;
-  private List<ByteArray> compositeInsertionIds;
+  private List<byte[]> compositeInsertionIds;
   private int size = -1;
 
   public InsertionIds() {
-    partitionKeys = new ArrayList<SinglePartitionInsertionIds>();
+    partitionKeys = new ArrayList<>();
   }
 
-  public InsertionIds(final List<ByteArray> sortKeys) {
+  public InsertionIds(final List<byte[]> sortKeys) {
     this(new SinglePartitionInsertionIds(null, sortKeys));
   }
 
-  public InsertionIds(final ByteArray partitionKey) {
+  public InsertionIds(final byte[] partitionKey) {
     this(new SinglePartitionInsertionIds(partitionKey));
   }
 
-  public InsertionIds(final ByteArray partitionKey, final List<ByteArray> sortKeys) {
+  public InsertionIds(final byte[] partitionKey, final List<byte[]> sortKeys) {
     this(new SinglePartitionInsertionIds(partitionKey, sortKeys));
   }
 
@@ -94,7 +94,7 @@ public class InsertionIds implements Persistable {
     }
     int internalSize = 0;
     for (final SinglePartitionInsertionIds k : partitionKeys) {
-      final List<ByteArray> i = k.getCompositeInsertionIds();
+      final List<byte[]> i = k.getCompositeInsertionIds();
       if ((i != null) && !i.isEmpty()) {
         internalSize += i.size();
       }
@@ -114,9 +114,9 @@ public class InsertionIds implements Persistable {
                     input.getPartitionKey(),
                     Collections2.transform(
                         input.getSortKeys(),
-                        new Function<ByteArray, ByteArrayRange>() {
+                        new Function<byte[], ByteArrayRange>() {
                           @Override
-                          public ByteArrayRange apply(final ByteArray input) {
+                          public ByteArrayRange apply(final byte[] input) {
                             return new ByteArrayRange(input, input, false);
                           }
                         }));
@@ -124,16 +124,16 @@ public class InsertionIds implements Persistable {
             }));
   }
 
-  public List<ByteArray> getCompositeInsertionIds() {
+  public List<byte[]> getCompositeInsertionIds() {
     if (compositeInsertionIds != null) {
       return compositeInsertionIds;
     }
     if ((partitionKeys == null) || partitionKeys.isEmpty()) {
       return Collections.EMPTY_LIST;
     }
-    final List<ByteArray> internalCompositeInsertionIds = new ArrayList<>();
+    final List<byte[]> internalCompositeInsertionIds = new ArrayList<>();
     for (final SinglePartitionInsertionIds k : partitionKeys) {
-      final List<ByteArray> i = k.getCompositeInsertionIds();
+      final List<byte[]> i = k.getCompositeInsertionIds();
       if ((i != null) && !i.isEmpty()) {
         internalCompositeInsertionIds.addAll(i);
       }
@@ -142,32 +142,15 @@ public class InsertionIds implements Persistable {
     return compositeInsertionIds;
   }
 
-  public boolean contains(final ByteArray partitionKey, final ByteArray sortKey) {
-    for (final SinglePartitionInsertionIds p : partitionKeys) {
-      if (((partitionKey == null) && (p.getPartitionKey() == null))
-          || ((partitionKey != null) && partitionKey.equals(p.getPartitionKey()))) {
-        // partition key matches find out if sort key is contained
-        if (sortKey == null) {
-          return true;
-        }
-        if ((p.getSortKeys() != null) && p.getSortKeys().contains(sortKey)) {
-          return true;
-        }
-        return false;
-      }
-    }
-    return false;
-  }
-
-  public Pair<ByteArray, ByteArray> getFirstPartitionAndSortKeyPair() {
+  public Pair<byte[], byte[]> getFirstPartitionAndSortKeyPair() {
     if (partitionKeys == null) {
       return null;
     }
     for (final SinglePartitionInsertionIds p : partitionKeys) {
       if ((p.getSortKeys() != null) && !p.getSortKeys().isEmpty()) {
-        return new ImmutablePair<ByteArray, ByteArray>(p.getPartitionKey(), p.getSortKeys().get(0));
+        return new ImmutablePair<>(p.getPartitionKey(), p.getSortKeys().get(0));
       } else if ((p.getPartitionKey() != null)) {
-        return new ImmutablePair<ByteArray, ByteArray>(p.getPartitionKey(), null);
+        return new ImmutablePair<>(p.getPartitionKey(), null);
       }
     }
     return null;

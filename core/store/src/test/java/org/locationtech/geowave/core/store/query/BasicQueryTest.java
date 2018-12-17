@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
@@ -27,6 +26,7 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -166,9 +166,9 @@ public class BasicQueryTest {
             model,
             new CommonIndexedPersistenceEncoding(
                 (short) 1,
-                new ByteArray("data"),
-                new ByteArray("partition"),
-                new ByteArray("sort"),
+                StringUtils.stringToBinary("data"),
+                StringUtils.stringToBinary("partition"),
+                StringUtils.stringToBinary("sort"),
                 1, // duplicate count
                 new PersistentDataset(fieldIdToValueMap),
                 null)));
@@ -178,9 +178,9 @@ public class BasicQueryTest {
             model,
             new CommonIndexedPersistenceEncoding(
                 (short) 1,
-                new ByteArray("data"),
-                new ByteArray("partition"),
-                new ByteArray("sort"),
+                StringUtils.stringToBinary("data"),
+                StringUtils.stringToBinary("partition"),
+                StringUtils.stringToBinary("sort"),
                 1, // duplicate count
                 new PersistentDataset(fieldIdToValueMap),
                 null)));
@@ -192,9 +192,9 @@ public class BasicQueryTest {
             model,
             new CommonIndexedPersistenceEncoding(
                 (short) 1,
-                new ByteArray("data"),
-                new ByteArray("partition"),
-                new ByteArray("sort"),
+                StringUtils.stringToBinary("data"),
+                StringUtils.stringToBinary("partition"),
+                StringUtils.stringToBinary("sort"),
                 1, // duplicate count
                 new PersistentDataset(fieldIdToValueMap),
                 null)));
@@ -206,9 +206,9 @@ public class BasicQueryTest {
             model,
             new CommonIndexedPersistenceEncoding(
                 (short) 1,
-                new ByteArray("data"),
-                new ByteArray("partition"),
-                new ByteArray("sort"),
+                StringUtils.stringToBinary("data"),
+                StringUtils.stringToBinary("partition"),
+                StringUtils.stringToBinary("sort"),
                 1, // duplicate count
                 new PersistentDataset(fieldIdToValueMap),
                 null)));
@@ -282,19 +282,18 @@ public class BasicQueryTest {
 
     @Override
     public MultiDimensionalNumericData getRangeForId(
-        final ByteArray partitionKey,
-        final ByteArray sortKey) {
+        final byte[] partitionKey,
+        final byte[] sortKey) {
       return null;
     }
 
     @Override
-    public Set<ByteArray> getInsertionPartitionKeys(
-        final MultiDimensionalNumericData insertionData) {
+    public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
       return null;
     }
 
     @Override
-    public Set<ByteArray> getQueryPartitionKeys(
+    public byte[][] getQueryPartitionKeys(
         final MultiDimensionalNumericData queryData,
         final IndexMetaData... hints) {
       return null;
@@ -302,20 +301,14 @@ public class BasicQueryTest {
 
     @Override
     public MultiDimensionalCoordinates getCoordinatesPerDimension(
-        final ByteArray partitionKey,
-        final ByteArray sortKey) {
+        final byte[] partitionKey,
+        final byte[] sortKey) {
       return null;
     }
 
     @Override
     public int getPartitionKeyLength() {
       return 0;
-    }
-
-    @Override
-    public Set<ByteArray> getPredefinedSplits() {
-      // TODO Auto-generated method stub
-      return null;
     }
   }
 

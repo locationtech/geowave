@@ -8,6 +8,18 @@
  */
 package org.locationtech.geowave.core.index.sfc.hilbert;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
+import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
+import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
+import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.uzaygezen.core.BacktrackingQueryBuilder;
@@ -23,19 +35,6 @@ import com.google.uzaygezen.core.SimpleRegionInspector;
 import com.google.uzaygezen.core.ZoomingSpaceVisitorAdapter;
 import com.google.uzaygezen.core.ranges.BigIntegerRange;
 import com.google.uzaygezen.core.ranges.BigIntegerRangeHome;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.ByteArrayRange;
-import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
-import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 /**
  * This supports Compact Hilbert SFC operations using a BigInteger internally to represent
@@ -69,7 +68,7 @@ public class UnboundedHilbertSFCOperations implements HilbertSFCOperations {
       final CompactHilbertCurve compactHilbertCurve,
       final SFCDimensionDefinition[] dimensionDefinitions) {
 
-    final List<BigInteger> dimensionValues = new ArrayList<BigInteger>();
+    final List<BigInteger> dimensionValues = new ArrayList<>();
 
     // Compare the number of dimensions to the number of values sent in
     if (dimensionDefinitions.length != values.length) {
@@ -267,12 +266,11 @@ public class UnboundedHilbertSFCOperations implements HilbertSFCOperations {
     // and
     // maximum
     // values
-    final List<BigInteger> minRangeList = new ArrayList<BigInteger>();
-    final List<BigInteger> maxRangeList = new ArrayList<BigInteger>();
+    final List<BigInteger> minRangeList = new ArrayList<>();
+    final List<BigInteger> maxRangeList = new ArrayList<>();
 
     final BigIntegerContent zero = new BigIntegerContent(BigInteger.valueOf(0L));
-    final List<BigIntegerRange> region =
-        new ArrayList<BigIntegerRange>(dimensionDefinitions.length);
+    final List<BigIntegerRange> region = new ArrayList<>(dimensionDefinitions.length);
     for (int d = 0; d < dimensionDefinitions.length; d++) {
 
       final BigInteger normalizedMin =
@@ -311,8 +309,7 @@ public class UnboundedHilbertSFCOperations implements HilbertSFCOperations {
             zero);
 
     final PlainFilterCombiner<BigIntegerRange, BigInteger, BigIntegerContent, BigIntegerRange> intervalCombiner =
-        new PlainFilterCombiner<BigIntegerRange, BigInteger, BigIntegerContent, BigIntegerRange>(
-            BigIntegerRange.of(0, 1));
+        new PlainFilterCombiner<>(BigIntegerRange.of(0, 1));
 
     final QueryBuilder<BigIntegerRange, BigIntegerRange> queryBuilder =
         BacktrackingQueryBuilder.create(
@@ -336,8 +333,7 @@ public class UnboundedHilbertSFCOperations implements HilbertSFCOperations {
     if (expectedByteCount <= 0) {
       // special case for no precision
       return new RangeDecomposition(
-          new ByteArrayRange[] {
-              new ByteArrayRange(new ByteArray(new byte[] {}), new ByteArray(new byte[] {}))});
+          new ByteArrayRange[] {new ByteArrayRange(new byte[0], new byte[0])});
     }
     for (int i = 0; i < hilbertRanges.size(); i++) {
       final FilteredIndexRange<BigIntegerRange, BigIntegerRange> range = hilbertRanges.get(i);
@@ -357,7 +353,7 @@ public class UnboundedHilbertSFCOperations implements HilbertSFCOperations {
 
       // make sure its padded if necessary
       final byte[] end = HilbertSFC.fitExpectedByteCount(expectedByteCount, endValue.toByteArray());
-      sfcRanges[i] = new ByteArrayRange(new ByteArray(start), new ByteArray(end));
+      sfcRanges[i] = new ByteArrayRange(start, end);
     }
 
     final RangeDecomposition rangeDecomposition = new RangeDecomposition(sfcRanges);

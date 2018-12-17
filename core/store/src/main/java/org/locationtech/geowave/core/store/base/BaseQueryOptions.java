@@ -151,10 +151,10 @@ public class BaseQueryOptions {
         final String typeName = ((AggregateTypeQueryOptions) typeOptions).getTypeNames()[0];
         final Short adapterId = internalAdapterStore.getAdapterId(typeName);
         if (adapterId != null) {
-          final DataTypeAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+          final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
           aggregationAdapterPair =
               new ImmutablePair<>(
-                  new InternalDataAdapterWrapper<>(adapter, adapterId),
+                  adapter,
                   ((AggregateTypeQueryOptions) typeOptions).getAggregation());
         } else {
           throw new IllegalArgumentException("Type name " + typeName + " does not exist");
@@ -173,11 +173,11 @@ public class BaseQueryOptions {
       if (typeName != null) {
         final Short adapterId = internalAdapterStore.getAdapterId(typeName);
         if (adapterId != null) {
-          final DataTypeAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+          final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
           fieldIdsAdapterPair =
               new ImmutablePair<>(
                   ((FilterByTypeQueryOptions) typeOptions).getFieldNames(),
-                  new InternalDataAdapterWrapper<>(adapter, adapterId));
+                  adapter);
         } else {
           throw new IllegalArgumentException("Type name " + typeName + " does not exist");
         }

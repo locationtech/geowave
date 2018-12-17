@@ -8,10 +8,11 @@
  */
 package org.locationtech.geowave.mapreduce;
 
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 
 public interface MapReduceDataStoreOperations extends DataStoreOperations {
-  <T> RowReader<T> createReader(RecordReaderParams<T> readerParams);
+  RowReader<GeoWaveRow> createReader(RecordReaderParams readerParams);
 }

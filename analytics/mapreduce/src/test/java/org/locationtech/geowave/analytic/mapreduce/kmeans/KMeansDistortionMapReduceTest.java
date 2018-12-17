@@ -136,7 +136,7 @@ public class KMeansDistortionMapReduceTest {
     pluginOptions.selectPlugin("memory");
     final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
-    opts.setGeowaveNamespace(namespace);
+    opts.setGeoWaveNamespace(namespace);
     final PersistableStore store = new PersistableStore(pluginOptions);
 
     propManagement.store(StoreParam.INPUT_STORE, store);

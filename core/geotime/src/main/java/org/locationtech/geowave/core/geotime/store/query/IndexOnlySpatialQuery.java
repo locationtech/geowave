@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.jts.geom.Geometry;
 
-public class IndexOnlySpatialQuery extends SpatialQuery {
+public class IndexOnlySpatialQuery extends ExplicitSpatialQuery {
   public IndexOnlySpatialQuery() {
     super();
   }

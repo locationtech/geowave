@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
  * useful to access the data by row ID. Because it has no dimensions, range scans will result in
  * full table scans.
  */
-public class NullIndex extends PrimaryIndex {
+public class NullIndex extends IndexImpl {
 
   public NullIndex() {
     super();

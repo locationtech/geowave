@@ -8,13 +8,11 @@
  */
 package org.locationtech.geowave.core.index;
 
-import java.util.Set;
-
 public interface PartitionIndexStrategy<QueryRangeType extends IndexConstraints, EntryRangeType>
     extends IndexStrategy {
-  public Set<ByteArray> getInsertionPartitionKeys(EntryRangeType insertionData);
+  byte[][] getInsertionPartitionKeys(EntryRangeType insertionData);
 
-  public Set<ByteArray> getQueryPartitionKeys(QueryRangeType queryData, IndexMetaData... hints);
+  byte[][] getQueryPartitionKeys(QueryRangeType queryData, IndexMetaData... hints);
 
   /**
    * * Get the offset in bytes before the dimensional index. This can accounts for tier IDs and bin
@@ -22,7 +20,9 @@ public interface PartitionIndexStrategy<QueryRangeType extends IndexConstraints,
    *
    * @return the byte offset prior to the dimensional index
    */
-  public int getPartitionKeyLength();
+  int getPartitionKeyLength();
 
-  public Set<ByteArray> getPredefinedSplits();
+  default byte[][] getPredefinedSplits() {
+    return new byte[0][];
+  }
 }

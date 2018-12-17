@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.types.stanag4676.service.rest;
 
-import com.google.common.io.Files;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,7 +49,6 @@ import org.jcodec.containers.mkv.muxer.MKVMuxer;
 import org.jcodec.containers.mkv.muxer.MKVMuxerTrack;
 import org.jcodec.scale.AWTUtil;
 import org.jcodec.scale.RgbToYuv420p;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -63,6 +61,7 @@ import org.locationtech.geowave.format.stanag4676.image.ImageChipDataAdapter;
 import org.locationtech.geowave.format.stanag4676.image.ImageChipUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.io.Files;
 
 @Path("stanag4676")
 public class Stanag4676ImageryChipService {
@@ -105,13 +104,12 @@ public class Stanag4676ImageryChipService {
                 Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getName()).constraints(
                     bldr.constraintsFactory().prefix(
                         null,
-                        new ByteArray(
-                            ByteArrayUtils.combineArrays(
-                                StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
-                                ImageChipUtils.getDataId(
-                                    mission,
-                                    track,
-                                    cal.getTimeInMillis()).getBytes())))).build())) {
+                        ByteArrayUtils.combineArrays(
+                            StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
+                            ImageChipUtils.getDataId(
+                                mission,
+                                track,
+                                cal.getTimeInMillis())))).build())) {
 
       imageChip = (imageChipIt.hasNext()) ? imageChipIt.next() : null;
     }
@@ -166,12 +164,9 @@ public class Stanag4676ImageryChipService {
                 Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getName()).constraints(
                     bldr.constraintsFactory().prefix(
                         null,
-                        new ByteArray(
-                            ByteArrayUtils.combineArrays(
-                                StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
-                                ImageChipUtils.getTrackDataIdPrefix(
-                                    mission,
-                                    track).getBytes())))).build())) {
+                        ByteArrayUtils.combineArrays(
+                            StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
+                            ImageChipUtils.getTrackDataIdPrefix(mission, track)))).build())) {
 
       while (imageChipIt.hasNext()) {
         final Object imageChipObj = imageChipIt.next();

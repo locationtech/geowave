@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.core.store.cli.remote.options;
 
-import com.beust.jcommander.Parameter;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Properties;
+import org.locationtech.geowave.core.cli.api.DefaultPluginOptions;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import org.locationtech.geowave.core.cli.utils.JCommanderParameterUtils;
@@ -24,9 +24,9 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
 
 /**
  * This is a convenience class which sets up some obvious values in the OperationParams based on the
@@ -42,7 +42,7 @@ public class StoreLoader {
 
   /** Constructor */
   public StoreLoader(final String store) {
-    this.storeName = store;
+    storeName = store;
   }
 
   /**
@@ -51,9 +51,9 @@ public class StoreLoader {
    * @param configFile
    * @return
    */
-  public boolean loadFromConfig(File configFile) {
+  public boolean loadFromConfig(final File configFile) {
 
-    String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
+    final String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
 
     return loadFromConfig(
         ConfigOptions.loadProperties(configFile, "^" + namespace),
@@ -67,7 +67,10 @@ public class StoreLoader {
    * @param configFile
    * @return
    */
-  public boolean loadFromConfig(Properties props, String namespace, File configFile) {
+  public boolean loadFromConfig(
+      final Properties props,
+      final String namespace,
+      final File configFile) {
 
     dataStorePlugin = new DataStorePluginOptions();
 
@@ -79,25 +82,25 @@ public class StoreLoader {
 
     // knowing the datastore plugin options and class type, get all fields
     // and parameters in order to detect which are password fields
-    if (configFile != null && dataStorePlugin.getFactoryOptions() != null) {
+    if ((configFile != null) && (dataStorePlugin.getFactoryOptions() != null)) {
       File tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(configFile);
-      Field[] fields = dataStorePlugin.getFactoryOptions().getClass().getDeclaredFields();
-      for (Field field : fields) {
-        for (Annotation annotation : field.getAnnotations()) {
+      final Field[] fields = dataStorePlugin.getFactoryOptions().getClass().getDeclaredFields();
+      for (final Field field : fields) {
+        for (final Annotation annotation : field.getAnnotations()) {
           if (annotation.annotationType() == Parameter.class) {
-            Parameter parameter = (Parameter) annotation;
+            final Parameter parameter = (Parameter) annotation;
             if (JCommanderParameterUtils.isPassword(parameter)) {
-              String storeFieldName =
-                  (namespace != null && !"".equals(namespace.trim()))
-                      ? namespace + "." + DataStorePluginOptions.OPTS + "." + field.getName()
+              final String storeFieldName =
+                  ((namespace != null) && !"".equals(namespace.trim()))
+                      ? namespace + "." + DefaultPluginOptions.OPTS + "." + field.getName()
                       : field.getName();
               if (props.containsKey(storeFieldName)) {
-                String value = props.getProperty(storeFieldName);
+                final String value = props.getProperty(storeFieldName);
                 String decryptedValue = value;
                 try {
                   decryptedValue =
                       SecurityUtils.decryptHexEncodedValue(value, tokenFile.getAbsolutePath());
-                } catch (Exception e) {
+                } catch (final Exception e) {
                   LOGGER.error(
                       "An error occurred encrypting specified password value: "
                           + e.getLocalizedMessage(),
@@ -123,7 +126,7 @@ public class StoreLoader {
     return dataStorePlugin;
   }
 
-  public void setDataStorePlugin(DataStorePluginOptions dataStorePlugin) {
+  public void setDataStorePlugin(final DataStorePluginOptions dataStorePlugin) {
     this.dataStorePlugin = dataStorePlugin;
   }
 
@@ -157,10 +160,6 @@ public class StoreLoader {
 
   public DataStatisticsStore createDataStatisticsStore() {
     return dataStorePlugin.createDataStatisticsStore();
-  }
-
-  public SecondaryIndexDataStore createSecondaryIndexStore() {
-    return dataStorePlugin.createSecondaryIndexStore();
   }
 
   public AdapterIndexMappingStore createAdapterIndexMappingStore() {

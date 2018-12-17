@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.service.grpc.services;
 
-import com.beust.jcommander.ParameterException;
-import com.google.protobuf.util.Timestamps;
-import io.grpc.BindableService;
-import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -31,7 +27,6 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
 import org.locationtech.geowave.core.geotime.store.query.api.SpatialTemporalConstraintsBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
-import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -45,8 +40,8 @@ import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import org.locationtech.geowave.service.grpc.protobuf.CQLQueryParametersProtos;
-import org.locationtech.geowave.service.grpc.protobuf.FeatureProtos;
 import org.locationtech.geowave.service.grpc.protobuf.FeatureAttributeProtos;
+import org.locationtech.geowave.service.grpc.protobuf.FeatureProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos;
 import org.locationtech.geowave.service.grpc.protobuf.SpatialQueryParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.SpatialTemporalQueryParametersProtos;
@@ -62,6 +57,10 @@ import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.extra.Interval;
+import com.beust.jcommander.ParameterException;
+import com.google.protobuf.util.Timestamps;
+import io.grpc.BindableService;
+import io.grpc.stub.StreamObserver;
 
 public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
     implements GeoWaveGrpcServiceSpi {
@@ -291,7 +290,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
           };
         }
         final SimpleFeature sf = featureBuilder.buildFeature(String.valueOf(totalCount));
-        final InsertionIds ids = writer.write(sf);
+        writer.write(sf);
 
         // The writer is finally flushed and closed in the methods for
         // onComplete and onError

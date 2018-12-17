@@ -11,7 +11,7 @@ package org.locationtech.geowave.adapter.vector;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -29,8 +29,8 @@ public class FeatureRowBuilder implements RowBuilder<SimpleFeature, Object> {
   }
 
   @Override
-  public SimpleFeature buildRow(final ByteArray dataId) {
-    return builder.buildFeature(dataId.getString());
+  public SimpleFeature buildRow(final byte[] dataId) {
+    return builder.buildFeature(StringUtils.stringFromBinary(dataId));
   }
 
   @Override

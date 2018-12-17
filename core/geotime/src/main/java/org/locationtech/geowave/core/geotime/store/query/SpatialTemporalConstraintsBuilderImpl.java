@@ -101,12 +101,13 @@ public class SpatialTemporalConstraintsBuilderImpl implements SpatialTemporalCon
       // its at least spatial
       if (timeRanges.length > 0) {
         // its spatial-temporal
-        return new SpatialTemporalQuery(timeRanges, geometry, crsCode, spatialCompareOp);
+        return new SpatialTemporalQuery(
+            new ExplicitSpatialTemporalQuery(timeRanges, geometry, crsCode, spatialCompareOp));
       }
-      return new SpatialQuery(geometry, crsCode, spatialCompareOp);
+      return new SpatialQuery(new ExplicitSpatialQuery(geometry, crsCode, spatialCompareOp));
     } else if (timeRanges.length > 0) {
       // its temporal only
-      return new TemporalQuery(timeRanges);
+      return new TemporalQuery(new ExplicitTemporalQuery(timeRanges));
     }
     return new EverythingQuery();
   }

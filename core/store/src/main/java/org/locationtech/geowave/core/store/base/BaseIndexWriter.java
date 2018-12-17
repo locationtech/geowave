@@ -11,11 +11,11 @@ package org.locationtech.geowave.core.store.base;
 import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;
-import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.WriteResults;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
@@ -59,28 +59,36 @@ class BaseIndexWriter<T> implements Writer<T> {
   }
 
   @Override
-  public InsertionIds write(final T entry) {
+  public WriteResults write(final T entry) {
     return write(entry, DataStoreUtils.UNCONSTRAINED_VISIBILITY);
   }
 
   @Override
-  public InsertionIds write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter) {
+  public WriteResults write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter) {
     IntermediaryWriteEntryInfo entryInfo;
     synchronized (this) {
       ensureOpen();
 
       if (writer == null) {
         LOGGER.error("Null writer - empty list returned");
-        return new InsertionIds();
+        return new WriteResults();
       }
-      entryInfo = BaseDataStoreUtils.getWriteInfo(entry, adapter, index, fieldVisibilityWriter);
+      entryInfo =
+          BaseDataStoreUtils.getWriteInfo(
+              entry,
+              adapter,
+              index,
+              fieldVisibilityWriter,
+              options.isSecondaryIndexing(),
+              false,
+              options.isVisibilityEnabled());
       verifyVisibility(fieldVisibilityWriter, entryInfo);
       final GeoWaveRow[] rows = entryInfo.getRows();
 
       writer.write(rows);
       callback.entryIngested(entry, rows);
     }
-    return entryInfo.getInsertionIds();
+    return new WriteResults(index.getName(), entryInfo.getInsertionIds());
   }
 
   @Override

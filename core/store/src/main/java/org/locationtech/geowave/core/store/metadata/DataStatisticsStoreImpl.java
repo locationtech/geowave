@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.store.metadata;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Iterators;
-import com.google.common.primitives.Bytes;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,6 +25,9 @@ import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Iterators;
+import com.google.common.primitives.Bytes;
 
 /**
  * This class will persist Index objects within an Accumulo table for GeoWave metadata. The adapters
@@ -63,7 +63,7 @@ public class DataStatisticsStoreImpl extends
 
   private String getCombinedAuths(final String[] authorizations) {
     final StringBuilder sb = new StringBuilder();
-    if (authorizations != null) {
+    if ((authorizations != null) && (authorizations.length > 0)) {
       Arrays.sort(authorizations);
       for (int i = 0; i < authorizations.length; i++) {
         sb.append(authorizations[i]);

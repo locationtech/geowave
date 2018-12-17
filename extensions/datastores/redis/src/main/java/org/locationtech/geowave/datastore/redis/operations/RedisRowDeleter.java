@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.datastore.redis.operations;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import java.util.Arrays;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -22,6 +20,8 @@ import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRow;
 import org.locationtech.geowave.datastore.redis.util.RedisScoredSetWrapper;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.api.RedissonClient;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 public class RedisRowDeleter implements RowDeleter {
 
@@ -33,6 +33,7 @@ public class RedisRowDeleter implements RowDeleter {
   private final InternalAdapterStore internalAdapterStore;
   private final String indexName;
   private final String namespace;
+  private final boolean visibilityEnabled;
 
   public RedisRowDeleter(
       final RedissonClient client,
@@ -40,17 +41,19 @@ public class RedisRowDeleter implements RowDeleter {
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
       final String indexName,
-      final String namespace) {
+      final String namespace,
+      final boolean visibilityEnabled) {
     this.client = client;
     this.compression = compression;
     this.adapterStore = adapterStore;
     this.internalAdapterStore = internalAdapterStore;
     this.indexName = indexName;
     this.namespace = namespace;
+    this.visibilityEnabled = visibilityEnabled;
   }
 
   @Override
-  public void close() throws Exception {}
+  public void close() {}
 
   private RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getSet(
       final Pair<String, Short> setNameAndAdapterId) {
@@ -58,7 +61,8 @@ public class RedisRowDeleter implements RowDeleter {
         client,
         compression,
         setNameAndAdapterId.getLeft(),
-        RedisUtils.isSortByTime(adapterStore.getAdapter(setNameAndAdapterId.getRight())));
+        RedisUtils.isSortByTime(adapterStore.getAdapter(setNameAndAdapterId.getRight())),
+        visibilityEnabled);
   }
 
   @Override
