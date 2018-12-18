@@ -140,4 +140,60 @@ public class AdapterIndexMappingStoreImpl extends
 		super.remove(new ByteArray(
 				ByteArrayUtils.shortToByteArray(internalAdapterId)));
 	}
+
+	@Override
+	public boolean remove(
+			final short internalAdapterId,
+			final String indexName ) {
+		final ByteArray adapterId = new ByteArray(
+				ByteArrayUtils.shortToByteArray(internalAdapterId));
+		if (!objectExists(
+				adapterId,
+				null)) {
+			return false;
+		}
+
+		final AdapterToIndexMapping oldMapping = super.getObject(
+				adapterId,
+				null,
+				null);
+
+		boolean found = false;
+		String[] indexNames = oldMapping.getIndexNames();
+		for (int i = 0; i < indexNames.length; i++) {
+			if (indexNames[i].compareTo(indexName) == 0) {
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) {
+			return false;
+		}
+
+		if (indexNames.length > 1) {
+			// update the mapping and reset it
+			String[] newIndices = new String[indexNames.length - 1];
+			int count = 0;
+			for (int i = 0; i < indexNames.length; i++) {
+				if (indexNames[i].compareTo(indexName) == 0) {
+					continue;
+				}
+				else {
+					newIndices[count] = indexNames[i];
+					count++;
+				}
+			}
+			remove(adapterId);
+			addObject(new AdapterToIndexMapping(
+					internalAdapterId,
+					newIndices));
+		}
+		else {
+			// otherwise just remove the mapping
+			remove(adapterId);
+		}
+
+		return true;
+	}
 }

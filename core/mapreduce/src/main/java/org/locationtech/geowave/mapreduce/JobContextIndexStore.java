@@ -95,6 +95,12 @@ public class JobContextIndexStore implements
 	}
 
 	@Override
+	public void removeIndex(
+			String indexName ) {
+		indexCache.remove(indexName);
+	}
+
+	@Override
 	public CloseableIterator<Index> getIndices() {
 		final CloseableIterator<Index> it = persistentIndexStore.getIndices();
 		// cache any results

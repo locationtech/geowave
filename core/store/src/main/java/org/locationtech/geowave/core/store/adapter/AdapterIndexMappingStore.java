@@ -41,5 +41,16 @@ public interface AdapterIndexMappingStore
 	public void remove(
 			short adapterId );
 
+	/**
+	 * Remove an index for the specified adapter mapping. The method should
+	 * return false if the adapter, or index for the adapter does not exist.
+	 *
+	 * @param adapterId
+	 * @param indexName
+	 */
+	public boolean remove(
+			short adapterId,
+			String indexName );
+
 	public void removeAll();
 }

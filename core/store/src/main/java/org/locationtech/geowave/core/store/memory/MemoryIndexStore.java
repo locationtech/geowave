@@ -71,4 +71,12 @@ public class MemoryIndexStore implements
 		indexMap.clear();
 	}
 
+	@Override
+	public void removeIndex(
+			String indexName ) {
+		if (indexExists(indexName)) {
+			indexMap.remove(indexName);
+		}
+	}
+
 }

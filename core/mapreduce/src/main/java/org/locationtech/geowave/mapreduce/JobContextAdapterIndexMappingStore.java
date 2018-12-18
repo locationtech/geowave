@@ -15,6 +15,8 @@ import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 
@@ -104,6 +106,57 @@ public class JobContextAdapterIndexMappingStore implements
 	public void remove(
 			final short internalAdapterId ) {
 		adapterCache.remove(internalAdapterId);
+	}
+
+	@Override
+	public boolean remove(
+			final short internalAdapterId,
+			String indexName ) {
+
+		adapterCache.remove(internalAdapterId);
+
+		if (!adapterCache.containsKey(internalAdapterId)) return false;
+
+		AdapterToIndexMapping mapping = adapterCache.get(internalAdapterId);
+		final String[] indexNames = mapping.getIndexNames();
+		boolean found = false;
+		for (int i = 0; i < indexNames.length; i++) {
+			if (indexNames[i].compareTo(indexName) == 0) {
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) {
+			return false;
+		}
+
+		if (indexNames.length > 1) {
+			// update the mapping and reset it
+			String[] newIndices = new String[indexNames.length - 1];
+			int count = 0;
+			for (int i = 0; i < indexNames.length; i++) {
+				if (indexNames[i].compareTo(indexName) == 0) {
+					continue;
+				}
+				else {
+					newIndices[count] = indexNames[i];
+					count++;
+				}
+			}
+			adapterCache.remove(internalAdapterId);
+			adapterCache.put(
+					mapping.getAdapterId(),
+					new AdapterToIndexMapping(
+							internalAdapterId,
+							newIndices));
+		}
+		else {
+			// otherwise just remove the mapping
+			adapterCache.remove(internalAdapterId);
+		}
+
+		return true;
 	}
 
 }
