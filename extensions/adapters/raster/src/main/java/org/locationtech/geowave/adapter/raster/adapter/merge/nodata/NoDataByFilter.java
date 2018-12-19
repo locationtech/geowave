@@ -109,7 +109,9 @@ public class NoDataByFilter implements
 			geometryBinary = new byte[0];
 		}
 		else {
-			geometryBinary = GeometryUtils.geometryToBinary(shape);
+			geometryBinary = GeometryUtils.geometryToBinary(
+					shape,
+					GeometryUtils.MAX_GEOMETRY_PRECISION);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(geometryBinary.length + noDataBinary.length
 				+ VarintUtils.unsignedIntByteLength(noDataBinary.length));
@@ -142,7 +144,9 @@ public class NoDataByFilter implements
 		}
 		if (geometryBinary.length > 0) {
 			buf.get(geometryBinary);
-			shape = GeometryUtils.geometryFromBinary(geometryBinary);
+			shape = GeometryUtils.geometryFromBinary(
+					geometryBinary,
+					GeometryUtils.MAX_GEOMETRY_PRECISION);
 		}
 		else {
 			shape = null;

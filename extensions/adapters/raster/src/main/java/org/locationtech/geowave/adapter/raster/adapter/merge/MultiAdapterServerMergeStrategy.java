@@ -229,7 +229,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 
 		for (final Entry<Short, Integer> entry : adapterIdToSampleModelKey.entrySet()) {
 			if (successfullySerializedModelIds.contains(entry.getValue())) {
-				byteCount += 2;
+				byteCount += VarintUtils.unsignedShortByteLength(entry.getKey());
 				byteCount += VarintUtils.unsignedIntByteLength(entry.getValue());
 				successfullySerializedModelAdapters++;
 			}
@@ -256,7 +256,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 
 		for (final Entry<Short, Integer> entry : adapterIdToChildMergeStrategyKey.entrySet()) {
 			if (successfullySerializedMergeIds.contains(entry.getValue())) {
-				byteCount += 2;
+				byteCount += VarintUtils.unsignedShortByteLength(entry.getKey());
 				byteCount += VarintUtils.unsignedIntByteLength(entry.getValue());
 				successfullySerializedMergeAdapters++;
 			}
@@ -283,7 +283,9 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 				buf);
 		for (final Entry<Short, Integer> entry : adapterIdToSampleModelKey.entrySet()) {
 			if (successfullySerializedModelIds.contains(entry.getValue())) {
-				buf.putShort(entry.getKey());
+				VarintUtils.writeUnsignedShort(
+						entry.getKey(),
+						buf);
 				VarintUtils.writeUnsignedInt(
 						entry.getValue(),
 						buf);
@@ -308,7 +310,9 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 				buf);
 		for (final Entry<Short, Integer> entry : adapterIdToChildMergeStrategyKey.entrySet()) {
 			if (successfullySerializedModelIds.contains(entry.getValue())) {
-				buf.putShort(entry.getKey());
+				VarintUtils.writeUnsignedShort(
+						entry.getKey(),
+						buf);
 				VarintUtils.writeUnsignedInt(
 						entry.getValue(),
 						buf);
@@ -350,7 +354,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 				sampleModelAdapterIdSize);
 		for (int i = 0; i < sampleModelAdapterIdSize; i++) {
 			adapterIdToSampleModelKey.put(
-					buf.getShort(),
+					VarintUtils.readUnsignedShort(buf),
 					VarintUtils.readUnsignedInt(buf));
 		}
 
@@ -386,7 +390,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 				mergeStrategyAdapterIdSize);
 		for (int i = 0; i < mergeStrategyAdapterIdSize; i++) {
 			adapterIdToChildMergeStrategyKey.put(
-					buf.getShort(),
+					VarintUtils.readUnsignedShort(buf),
 					VarintUtils.readUnsignedInt(buf));
 		}
 	}

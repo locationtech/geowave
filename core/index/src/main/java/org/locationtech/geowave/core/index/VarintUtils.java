@@ -70,6 +70,11 @@ public class VarintUtils
 		return numBytes;
 	}
 
+	public static int unsignedShortByteLength(
+			short value ) {
+		return unsignedIntByteLength(value & 0xFFFF);
+	}
+
 	public static void writeSignedInt(
 			int value,
 			ByteBuffer buffer ) {
@@ -86,6 +91,14 @@ public class VarintUtils
 			value >>>= 7;
 		}
 		buffer.put((byte) (value & 0x7F));
+	}
+
+	public static void writeUnsignedShort(
+			short value,
+			ByteBuffer buffer ) {
+		writeUnsignedInt(
+				value & 0xFFFF,
+				buffer);
 	}
 
 	public static void writeUnsignedIntReversed(
@@ -122,6 +135,13 @@ public class VarintUtils
 			i += 7;
 		}
 		return value | (currByte << i);
+	}
+
+	public static short readUnsignedShort(
+			ByteBuffer buffer ) {
+		int value = readUnsignedInt(buffer);
+		return (short) (value & 0xFFFF);
+
 	}
 
 	public static int readUnsignedIntReversed(

@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
@@ -36,7 +37,8 @@ public class GeometryWrapperTest
 	@Test
 	public void testLatitutde() {
 		NumericDimensionField[] fields = new NumericDimensionField[] {
-			new LatitudeField()
+			new LatitudeField(
+					GeometryUtils.MAX_GEOMETRY_PRECISION)
 		};
 
 		Geometry geo = factory.createLineString(new Coordinate[] {
@@ -93,7 +95,8 @@ public class GeometryWrapperTest
 	@Test
 	public void testLongitude() {
 		NumericDimensionField[] fields = new NumericDimensionField[] {
-			new LongitudeField()
+			new LongitudeField(
+					GeometryUtils.MAX_GEOMETRY_PRECISION)
 		};
 
 		Geometry geo = factory.createLineString(new Coordinate[] {

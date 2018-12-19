@@ -14,13 +14,11 @@ import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStra
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.Bias;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.BiasConverter;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.UnitConverter;
-import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.store.spi.DimensionalityTypeOptions;
 
 import com.beust.jcommander.Parameter;
 
-public class SpatialTemporalOptions implements
-		DimensionalityTypeOptions
+public class SpatialTemporalOptions extends
+		CommonSpatialOptions
 {
 	protected static Unit DEFAULT_PERIODICITY = Unit.YEAR;
 
@@ -38,17 +36,6 @@ public class SpatialTemporalOptions implements
 		"--maxDuplicates"
 	}, required = false, description = "The max number of duplicates per dimension range.  The default is 2 per range (for example lines and polygon timestamp data would be up to 4 because its 2 dimensions, and line/poly time range data would be 8).")
 	protected long maxDuplicates = -1;
-
-	@Parameter(names = {
-		"-c",
-		"--crs"
-	}, required = false, description = "The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.")
-	protected String crs = GeometryUtils.DEFAULT_CRS_STR;
-
-	public void setCrs(
-			String crs ) {
-		this.crs = crs;
-	}
 
 	public Bias getBias() {
 		return this.bias;

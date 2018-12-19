@@ -399,7 +399,9 @@ public class SpatialQueryFilter extends
 				final PreparedGeometry preparedGeometry ) {
 			super();
 			this.preparedGeometry = preparedGeometry;
-			geometryBinary = GeometryUtils.geometryToBinary(preparedGeometry.getGeometry());
+			geometryBinary = GeometryUtils.geometryToBinary(
+					preparedGeometry.getGeometry(),
+					null);
 		}
 
 		public GeometryImage(
@@ -410,7 +412,9 @@ public class SpatialQueryFilter extends
 
 		public synchronized void init() {
 			if (preparedGeometry == null) {
-				preparedGeometry = FACTORY.create(GeometryUtils.geometryFromBinary(geometryBinary));
+				preparedGeometry = FACTORY.create(GeometryUtils.geometryFromBinary(
+						geometryBinary,
+						null));
 			}
 		}
 

@@ -75,17 +75,55 @@ public class VarintUtilsTest
 		testEncodeDecodeUnsignedIntValue(123456);
 		testEncodeDecodeUnsignedIntValue(Byte.MAX_VALUE);
 		testEncodeDecodeUnsignedIntValue(Integer.MAX_VALUE);
+
+		// negative values are inefficient in this encoding, but should still
+		// work.
+		testEncodeDecodeUnsignedIntValue(-123456);
+		testEncodeDecodeUnsignedIntValue(Byte.MIN_VALUE);
+		testEncodeDecodeUnsignedIntValue(Integer.MIN_VALUE);
 	}
 
 	private void testEncodeDecodeUnsignedIntValue(
 			int value ) {
 		int length = VarintUtils.unsignedIntByteLength(value);
+		// should never use more than 5 bytes
+		Assert.assertTrue(length <= 5);
 		ByteBuffer buffer = ByteBuffer.allocate(length);
 		VarintUtils.writeUnsignedInt(
 				value,
 				buffer);
 		buffer.position(0);
 		int decoded = VarintUtils.readUnsignedInt(buffer);
+		Assert.assertEquals(
+				value,
+				decoded);
+	}
+
+	@Test
+	public void testVarintEncodeDecodeUnsignedShort() {
+		testEncodeDecodeUnsignedShortValue((short) 0);
+		testEncodeDecodeUnsignedShortValue((short) 12345);
+		testEncodeDecodeUnsignedShortValue(Byte.MAX_VALUE);
+		testEncodeDecodeUnsignedShortValue(Short.MAX_VALUE);
+
+		// negative values are inefficient in this encoding, but should still
+		// work.
+		testEncodeDecodeUnsignedShortValue((short) -12345);
+		testEncodeDecodeUnsignedShortValue(Byte.MIN_VALUE);
+		testEncodeDecodeUnsignedShortValue(Short.MIN_VALUE);
+	}
+
+	private void testEncodeDecodeUnsignedShortValue(
+			short value ) {
+		int length = VarintUtils.unsignedShortByteLength(value);
+		// should never use more than 3 bytes
+		Assert.assertTrue(length <= 3);
+		ByteBuffer buffer = ByteBuffer.allocate(length);
+		VarintUtils.writeUnsignedShort(
+				value,
+				buffer);
+		buffer.position(0);
+		int decoded = VarintUtils.readUnsignedShort(buffer);
 		Assert.assertEquals(
 				value,
 				decoded);
@@ -145,6 +183,13 @@ public class VarintUtilsTest
 		testEncodeDecodeUnsignedLongValue(Byte.MAX_VALUE);
 		testEncodeDecodeUnsignedLongValue(Integer.MAX_VALUE);
 		testEncodeDecodeUnsignedLongValue(Long.MAX_VALUE);
+
+		// negative values are inefficient in this encoding, but should still
+		// work.
+		testEncodeDecodeUnsignedLongValue(-123456L);
+		testEncodeDecodeUnsignedLongValue(Byte.MIN_VALUE);
+		testEncodeDecodeUnsignedLongValue(Integer.MIN_VALUE);
+		testEncodeDecodeUnsignedLongValue(Long.MIN_VALUE);
 	}
 
 	private void testEncodeDecodeUnsignedLongValue(

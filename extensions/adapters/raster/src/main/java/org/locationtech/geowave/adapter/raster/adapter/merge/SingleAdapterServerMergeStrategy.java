@@ -58,13 +58,16 @@ public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
 		final byte[] mergeStrategyBinary = PersistenceUtils.toBinary(mergeStrategy);
 
 		final int byteCount = sampleModelBinary.length + VarintUtils.unsignedIntByteLength(sampleModelBinary.length)
-				+ 2 + mergeStrategyBinary.length + VarintUtils.unsignedIntByteLength(mergeStrategyBinary.length);
+				+ VarintUtils.unsignedShortByteLength(internalAdapterId) + mergeStrategyBinary.length
+				+ VarintUtils.unsignedIntByteLength(mergeStrategyBinary.length);
 		final ByteBuffer buf = ByteBuffer.allocate(byteCount);
 		VarintUtils.writeUnsignedInt(
 				sampleModelBinary.length,
 				buf);
 		buf.put(sampleModelBinary);
-		buf.putShort(internalAdapterId);
+		VarintUtils.writeUnsignedShort(
+				internalAdapterId,
+				buf);
 		VarintUtils.writeUnsignedInt(
 				mergeStrategyBinary.length,
 				buf);
@@ -93,7 +96,7 @@ public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
 			LOGGER.warn("Sample model binary is empty, unable to deserialize");
 		}
 
-		internalAdapterId = buf.getShort();
+		internalAdapterId = VarintUtils.readUnsignedShort(buf);
 
 		final byte[] mergeStrategyBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (mergeStrategyBinary.length > 0) {

@@ -15,7 +15,6 @@ import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-
 import org.locationtech.jts.geom.Geometry;
 
 public class GeometrySerializationProvider implements
@@ -42,6 +41,7 @@ public class GeometrySerializationProvider implements
 			}
 			return GeometryUtils.geometryFromBinary(
 					fieldData,
+					GeometryUtils.MAX_GEOMETRY_PRECISION,
 					FieldUtils.SERIALIZATION_VERSION);
 		}
 
@@ -54,6 +54,7 @@ public class GeometrySerializationProvider implements
 			}
 			return GeometryUtils.geometryFromBinary(
 					fieldData,
+					GeometryUtils.MAX_GEOMETRY_PRECISION,
 					serializationVersion);
 		}
 	}
@@ -67,7 +68,9 @@ public class GeometrySerializationProvider implements
 			if (fieldValue == null) {
 				return new byte[] {};
 			}
-			return GeometryUtils.geometryToBinary(fieldValue);
+			return GeometryUtils.geometryToBinary(
+					fieldValue,
+					GeometryUtils.MAX_GEOMETRY_PRECISION);
 		}
 	}
 

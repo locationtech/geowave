@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.geotime.store.dimension;
 
+import javax.annotation.Nullable;
+
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -23,23 +25,31 @@ import org.locationtech.geowave.core.index.sfc.data.NumericData;
 public class LongitudeField extends
 		SpatialField
 {
-	public LongitudeField() {
+	public LongitudeField() {}
+
+	public LongitudeField(
+			final @Nullable Integer geometryPrecision ) {
 		this(
+				geometryPrecision,
 				GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
 	}
 
 	public LongitudeField(
+			final @Nullable Integer geometryPrecision,
 			final String fieldName ) {
 		this(
 				new LongitudeDefinition(),
+				geometryPrecision,
 				fieldName);
 	}
 
 	public LongitudeField(
 			final NumericDimensionDefinition baseDefinition,
+			final @Nullable Integer geometryPrecision,
 			final String fieldName ) {
 		super(
 				baseDefinition,
+				geometryPrecision,
 				fieldName);
 	}
 

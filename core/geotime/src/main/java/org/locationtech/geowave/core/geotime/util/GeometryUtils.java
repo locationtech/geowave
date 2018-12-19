@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nullable;
 import javax.measure.Unit;
 import javax.measure.quantity.Length;
 
@@ -61,6 +62,7 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKBReader;
+import org.locationtech.jts.io.WKBWriter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -96,6 +98,8 @@ public class GeometryUtils
 	public static final String DEFAULT_CRS_STR = "EPSG:4326";
 	private static CoordinateReferenceSystem defaultCrsSingleton;
 	private static Set<ClassLoader> initializedClassLoaders = new HashSet<>();
+
+	public static final Integer MAX_GEOMETRY_PRECISION = Integer.valueOf(TWKBUtils.MAX_COORD_PRECISION);
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
 	public static CoordinateReferenceSystem getDefaultCRS() {
@@ -371,9 +375,13 @@ public class GeometryUtils
 	 * @return The binary representation of the geometry
 	 */
 	public static byte[] geometryToBinary(
-			final Geometry geometry ) {
-
-		return new TWKBWriter().write(geometry);
+			final Geometry geometry,
+			final @Nullable Integer precision ) {
+		if (precision == null) {
+			return new WKBWriter().write(geometry);
+		}
+		return new TWKBWriter(
+				precision).write(geometry);
 	}
 
 	/**
@@ -384,8 +392,12 @@ public class GeometryUtils
 	 * @return The JTS geometry
 	 */
 	public static Geometry geometryFromBinary(
-			final byte[] binary ) {
+			final byte[] binary,
+			final @Nullable Integer precision ) {
 		try {
+			if (precision == null) {
+				return new WKBReader().read(binary);
+			}
 			return new TWKBReader().read(binary);
 		}
 		catch (final ParseException e) {
@@ -405,6 +417,7 @@ public class GeometryUtils
 	 */
 	public static Geometry geometryFromBinary(
 			final byte[] binary,
+			final @Nullable Integer precision,
 			final byte serializationVersion ) {
 		if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
 			try {
@@ -417,7 +430,9 @@ public class GeometryUtils
 			}
 		}
 
-		return geometryFromBinary(binary);
+		return geometryFromBinary(
+				binary,
+				precision);
 	}
 
 	/**

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.geotime.store.dimension;
 
+import javax.annotation.Nullable;
+
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -23,39 +25,51 @@ import org.locationtech.geowave.core.index.sfc.data.NumericData;
 public class LatitudeField extends
 		SpatialField
 {
-	public LatitudeField() {
+	public LatitudeField() {}
+
+	public LatitudeField(
+			final @Nullable Integer geometryPrecision ) {
 		this(
+				geometryPrecision,
 				GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
 	}
 
 	public LatitudeField(
+			final @Nullable Integer geometryPrecision,
 			final boolean useHalfRange ) {
 		this(
+				geometryPrecision,
 				useHalfRange,
 				GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
 	}
 
 	public LatitudeField(
+			final @Nullable Integer geometryPrecision,
 			final String fieldName ) {
 		this(
+				geometryPrecision,
 				false,
 				fieldName);
 	}
 
 	public LatitudeField(
+			final @Nullable Integer geometryPrecision,
 			final boolean useHalfRange,
 			final String fieldName ) {
 		this(
 				new LatitudeDefinition(
 						useHalfRange),
+				geometryPrecision,
 				fieldName);
 	}
 
 	public LatitudeField(
 			final NumericDimensionDefinition baseDefinition,
+			final @Nullable Integer geometryPrecision,
 			final String fieldName ) {
 		super(
 				baseDefinition,
+				geometryPrecision,
 				fieldName);
 	}
 

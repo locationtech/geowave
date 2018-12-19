@@ -12,6 +12,8 @@ package org.locationtech.geowave.core.geotime.ingest;
 
 import java.util.Locale;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
@@ -56,13 +58,6 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 	// TODO should we use different default IDs for all the different
 	// options, for now lets just use one
-	public final static NumericDimensionField[] SPATIAL_TEMPORAL_FIELDS = new NumericDimensionField[] {
-		new LongitudeField(),
-		new LatitudeField(
-				true),
-		new TimeField(
-				SpatialTemporalOptions.DEFAULT_PERIODICITY)
-	};
 	public final static NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
 		new LatitudeDefinition(
@@ -70,6 +65,20 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		new TimeDefinition(
 				SpatialTemporalOptions.DEFAULT_PERIODICITY)
 	};
+
+	@SuppressWarnings("rawtypes")
+	public static NumericDimensionField[] getSpatialTemporalFields(
+			final @Nullable Integer geometryPrecision ) {
+		return new NumericDimensionField[] {
+			new LongitudeField(
+					geometryPrecision),
+			new LatitudeField(
+					geometryPrecision,
+					true),
+			new TimeField(
+					SpatialTemporalOptions.DEFAULT_PERIODICITY)
+		};
+	}
 
 	public SpatialTemporalDimensionalityTypeProvider() {}
 
@@ -109,11 +118,12 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		CoordinateReferenceSystem crs = null;
 		boolean isDefaultCRS;
 		String crsCode = null;
+		Integer geometryPrecision = options.getGeometryPrecision();
 
 		if ((options.crs == null) || options.crs.isEmpty()
 				|| options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
 			dimensions = SPATIAL_TEMPORAL_DIMENSIONS;
-			fields = SPATIAL_TEMPORAL_FIELDS;
+			fields = getSpatialTemporalFields(geometryPrecision);
 			isDefaultCRS = true;
 			crsCode = "EPSG:4326";
 		}
@@ -132,7 +142,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 						csa.getMinimumValue(),
 						csa.getMaximumValue());
 				fields[d] = new CustomCRSSpatialField(
-						(CustomCRSBoundedSpatialDimension) dimensions[d]);
+						(CustomCRSBoundedSpatialDimension) dimensions[d],
+						geometryPrecision);
 			}
 
 			dimensions[dimensions.length - 1] = new TimeDefinition(

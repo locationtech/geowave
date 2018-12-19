@@ -72,7 +72,7 @@ public class GeoWaveKeyImpl implements
 		this.internalAdapterId = (short) VarintUtils.readUnsignedIntReversed(buf);
 		int readLength = buf.limit() - 1 - buf.position();
 
-		buf.position(0);
+		buf.position(offset);
 		final byte[] sortKey = new byte[length - readLength - partitionKeyLength];
 		final byte[] partitionKey = new byte[partitionKeyLength];
 		buf.get(partitionKey);

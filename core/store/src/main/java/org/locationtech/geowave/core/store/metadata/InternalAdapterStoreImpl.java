@@ -171,10 +171,16 @@ public class InternalAdapterStoreImpl implements
 		}
 	}
 
+	/**
+	 * This method has a chance of producing a conflicting adapter ID. Whenever
+	 * possible, {@link #getInitialAdapterId(String)} should be used.
+	 * 
+	 * @param typeName
+	 * @return
+	 */
 	public static short getLazyInitialAdapterId(
 			final String typeName ) {
-		// keep it to 2 bytes
-		return (short) (Math.abs((typeName.hashCode() % 16383)));
+		return (short) (Math.abs((typeName.hashCode() % 127)));
 	}
 
 	@Override
