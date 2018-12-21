@@ -1199,16 +1199,212 @@ public class BaseDataStore implements
 	public void copyTo(
 			final DataStore other ) {
 
+		final DataTypeAdapter<?>[] sourceTypes = getTypes();
+
+		// add all the types that the destination store doesn't have yet
+		final DataTypeAdapter<?>[] destTypes = other.getTypes();
+		for (int i = 0; i < sourceTypes.length; i++) {
+			boolean found = false;
+			for (int k = 0; k < destTypes.length; k++) {
+				if (destTypes[k].getTypeName().compareTo(
+						sourceTypes[i].getTypeName()) == 0) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				other.addType(sourceTypes[i]);
+			}
+		}
+
+		// add the indices for each type
+		for (int i = 0; i < sourceTypes.length; i++) {
+			final String typeName = sourceTypes[i].getTypeName();
+			final short adapterId = internalAdapterStore.getAdapterId(typeName);
+			final AdapterToIndexMapping indicesForAdapter = indexMappingStore.getIndicesForAdapter(adapterId);
+			final Index[] indices = indicesForAdapter.getIndices(indexStore);
+			other.addIndex(
+					typeName,
+					indices);
+
+			// copy the data over for the given adapter type / indices
+			for (int k = 0; k < indices.length; k++) {
+				QueryBuilder<?, ?> qb = QueryBuilder.newBuilder().addTypeName(
+						typeName).indexName(
+						indices[k].getName());
+				try (CloseableIterator<?> it = query(qb.build())) {
+					Writer writer = other.createWriter(typeName);
+					while (it.hasNext()) {
+						writer.write(it.next());
+					}
+					writer.close();
+					it.close();
+				}
+			}
+		}
 	}
 
 	@Override
 	public void copyTo(
 			final DataStore other,
 			final Query<?> query ) {
+
+		// check for 'everything' query
 		if (query == null) {
 			copyTo(other);
+			return;
 		}
-		// TODO issue #1440 addresses filling out this method
+
+		final String[] typeNames = query.getDataTypeQueryOptions().getTypeNames();
+		final String indexName = query.getIndexQueryOptions().getIndexName();
+		final boolean isAllIndices = query.getIndexQueryOptions().isAllIndicies();
+
+		// if typeNames are not specified, then it means 'everything' as well
+		if (typeNames == null || typeNames.length == 0) {
+			copyTo(other);
+			return;
+		}
+
+		// make sure the types requested exist in the source store (this) before
+		// trying to copy!
+		final DataTypeAdapter<?>[] sourceTypes = getTypes();
+		final ArrayList<DataTypeAdapter<?>> typesToCopy = new ArrayList<DataTypeAdapter<?>>();
+
+		for (int i = 0; i < typeNames.length; i++) {
+			boolean found = false;
+			for (int k = 0; k < sourceTypes.length; k++) {
+				if (sourceTypes[k].getTypeName().compareTo(
+						typeNames[i]) == 0) {
+					found = true;
+					typesToCopy.add(sourceTypes[k]);
+					break;
+				}
+			}
+			if (!found) {
+				throw new IllegalArgumentException(
+						"Some type names specified in the query do not exist in the source database and thus cannot be copied.");
+			}
+		}
+
+		// if there is an index requested in the query, make sure it exists in
+		// the source store before trying to copy as well!
+		final Index[] sourceIndices = getIndices();
+		Index indexToCopy = null;
+
+		if (!isAllIndices) {
+			// just add the one index specified by the query
+			// first make sure source index exists though
+			boolean found = false;
+			for (int i = 0; i < sourceIndices.length; i++) {
+				if (sourceIndices[i].getName().compareTo(
+						indexName) == 0) {
+					found = true;
+					indexToCopy = sourceIndices[i];
+					break;
+				}
+			}
+			if (!found) {
+				throw new IllegalArgumentException(
+						"The index specified in the query does not exist in the source database and thus cannot be copied.");
+			}
+
+			// also make sure the types/index mapping for the query are legit
+			for (int i = 0; i < typeNames.length; i++) {
+				final short adapterId = internalAdapterStore.getAdapterId(typeNames[i]);
+				final AdapterToIndexMapping indexMap = indexMappingStore.getIndicesForAdapter(adapterId);
+				final String[] mapIndexNames = indexMap.getIndexNames();
+				found = false;
+				for (int k = 0; k < mapIndexNames.length; k++) {
+					if (mapIndexNames[k].compareTo(indexName) == 0) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					throw new IllegalArgumentException(
+							"The index " + indexName + " and the type " + typeNames[i]
+									+ " specified by the query are not associated in the source database");
+				}
+			}
+		}
+
+		// add all the types that the destination store doesn't have yet
+		final DataTypeAdapter<?>[] destTypes = other.getTypes();
+		for (int i = 0; i < typesToCopy.size(); i++) {
+			boolean found = false;
+			for (int k = 0; k < destTypes.length; k++) {
+				if (destTypes[k].getTypeName().compareTo(
+						typesToCopy.get(
+								i).getTypeName()) == 0) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				other.addType(typesToCopy.get(i));
+			}
+		}
+
+		// add all the indices that the destination store doesn't have yet
+		if (isAllIndices) {
+			// in this case, all indices from the types requested by the query
+			for (int i = 0; i < typesToCopy.size(); i++) {
+				final String typeName = typesToCopy.get(
+						i).getTypeName();
+				final short adapterId = internalAdapterStore.getAdapterId(typeName);
+				final AdapterToIndexMapping indicesForAdapter = indexMappingStore.getIndicesForAdapter(adapterId);
+				final Index[] indices = indicesForAdapter.getIndices(indexStore);
+				other.addIndex(
+						typeName,
+						indices);
+
+				// copy the data over for the given adapter type / indices
+				for (int k = 0; k < indices.length; k++) {
+					QueryBuilder<?, ?> qb = QueryBuilder.newBuilder().addTypeName(
+							typeName).indexName(
+							indices[k].getName()).constraints(
+							query.getQueryConstraints());
+					try (CloseableIterator<?> it = query(qb.build())) {
+						Writer writer = other.createWriter(typeName);
+						while (it.hasNext()) {
+							writer.write(it.next());
+						}
+						writer.close();
+						it.close();
+					}
+				}
+			}
+		}
+		else {
+			// otherwise, add just the one index to the types specified by the
+			// query
+			for (int i = 0; i < typesToCopy.size(); i++) {
+				other.addIndex(
+						typesToCopy.get(
+								i).getTypeName(),
+						indexToCopy);
+			}
+
+			// Write out / copy the data. We must do this on a per-type basis so
+			// we can write appropriately
+			for (int k = 0; k < typesToCopy.size(); k++) {
+				final InternalDataAdapter<?> adapter = adapterStore.getAdapter(internalAdapterStore
+						.getAdapterId(typesToCopy.get(
+								k).getTypeName()));
+				final QueryBuilder<?, ?> qb = QueryBuilder.newBuilder().addTypeName(
+						adapter.getTypeName()).indexName(
+						indexToCopy.getName()).constraints(
+						query.getQueryConstraints());
+				try (CloseableIterator<?> it = query(qb.build())) {
+					Writer writer = other.createWriter(adapter.getTypeName());
+					while (it.hasNext()) {
+						writer.write(it.next());
+					}
+					writer.close();
+					it.close();
+				}
+			}
+		}
 	}
 
 	@Override
