@@ -113,9 +113,9 @@ public class JobContextAdapterIndexMappingStore implements
 			final short internalAdapterId,
 			String indexName ) {
 
-		adapterCache.remove(internalAdapterId);
-
-		if (!adapterCache.containsKey(internalAdapterId)) return false;
+		if (!adapterCache.containsKey(internalAdapterId)) {
+			return false;
+		}
 
 		AdapterToIndexMapping mapping = adapterCache.get(internalAdapterId);
 		final String[] indexNames = mapping.getIndexNames();
