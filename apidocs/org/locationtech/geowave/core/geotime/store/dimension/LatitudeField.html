@@ -158,18 +158,25 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField--">LatitudeField</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-boolean-">LatitudeField</a></span>(boolean&nbsp;useHalfRange)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-java.lang.Integer-">LatitudeField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-boolean-java.lang.String-">LatitudeField</a></span>(boolean&nbsp;useHalfRange,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-java.lang.Integer-boolean-">LatitudeField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision,
+             boolean&nbsp;useHalfRange)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-java.lang.Integer-boolean-java.lang.String-">LatitudeField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision,
+             boolean&nbsp;useHalfRange,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-java.lang.Integer-java.lang.String-">LatitudeField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-java.lang.String-">LatitudeField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;baseDefinition,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-java.lang.Integer-java.lang.String-">LatitudeField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;baseDefinition,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html#LatitudeField-java.lang.String-">LatitudeField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -230,41 +237,59 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>public&nbsp;LatitudeField()</pre>
 </li>
 </ul>
-<a name="LatitudeField-boolean-">
+<a name="LatitudeField-java.lang.Integer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>LatitudeField</h4>
-<pre>public&nbsp;LatitudeField(boolean&nbsp;useHalfRange)</pre>
+<pre>public&nbsp;LatitudeField(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</pre>
 </li>
 </ul>
-<a name="LatitudeField-java.lang.String-">
+<a name="LatitudeField-java.lang.Integer-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>LatitudeField</h4>
-<pre>public&nbsp;LatitudeField(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<pre>public&nbsp;LatitudeField(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision,
+                     boolean&nbsp;useHalfRange)</pre>
 </li>
 </ul>
-<a name="LatitudeField-boolean-java.lang.String-">
+<a name="LatitudeField-java.lang.Integer-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>LatitudeField</h4>
-<pre>public&nbsp;LatitudeField(boolean&nbsp;useHalfRange,
+<pre>public&nbsp;LatitudeField(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 </li>
 </ul>
-<a name="LatitudeField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-java.lang.String-">
+<a name="LatitudeField-java.lang.Integer-boolean-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LatitudeField</h4>
+<pre>public&nbsp;LatitudeField(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision,
+                     boolean&nbsp;useHalfRange,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+</li>
+</ul>
+<a name="LatitudeField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-java.lang.Integer-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LatitudeField</h4>
 <pre>public&nbsp;LatitudeField(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;baseDefinition,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 </li>
 </ul>
@@ -362,6 +387,6 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>

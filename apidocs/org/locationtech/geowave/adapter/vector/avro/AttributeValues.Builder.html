@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -167,59 +167,83 @@ implements org.apache.avro.data.RecordBuilder&lt;<a href="../../../../../../org/
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#clearSerializationVersion--">clearSerializationVersion</a></span>()</code>
+<div class="block">Clears the value of the 'serializationVersion' field</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#clearValues--">clearValues</a></span>()</code>
 <div class="block">Clears the value of the 'values' field</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#getClassifications--">getClassifications</a></span>()</code>
 <div class="block">Gets the value of the 'classifications' field</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#getFid--">getFid</a></span>()</code>
 <div class="block">Gets the value of the 'fid' field</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#getSerializationVersion--">getSerializationVersion</a></span>()</code>
+<div class="block">Gets the value of the 'serializationVersion' field</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#getValues--">getValues</a></span>()</code>
 <div class="block">Gets the value of the 'values' field</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#hasClassifications--">hasClassifications</a></span>()</code>
 <div class="block">Checks whether the 'classifications' field has been set</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#hasFid--">hasFid</a></span>()</code>
 <div class="block">Checks whether the 'fid' field has been set</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#hasSerializationVersion--">hasSerializationVersion</a></span>()</code>
+<div class="block">Checks whether the 'serializationVersion' field has been set</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#hasValues--">hasValues</a></span>()</code>
 <div class="block">Checks whether the 'values' field has been set</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#setClassifications-java.util.List-">setClassifications</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;value)</code>
 <div class="block">Sets the value of the 'classifications' field</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#setFid-java.lang.String-">setFid</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'fid' field</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#setSerializationVersion-java.nio.ByteBuffer-">setSerializationVersion</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;value)</code>
+<div class="block">Sets the value of the 'serializationVersion' field</div>
+</td>
+</tr>
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html#setValues-java.util.List-">setValues</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&gt;&nbsp;value)</code>
 <div class="block">Sets the value of the 'values' field</div>
@@ -374,6 +398,46 @@ implements org.apache.avro.data.RecordBuilder&lt;<a href="../../../../../../org/
 <div class="block">Clears the value of the 'classifications' field</div>
 </li>
 </ul>
+<a name="getSerializationVersion--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSerializationVersion</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;getSerializationVersion()</pre>
+<div class="block">Gets the value of the 'serializationVersion' field</div>
+</li>
+</ul>
+<a name="setSerializationVersion-java.nio.ByteBuffer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSerializationVersion</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a>&nbsp;setSerializationVersion(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;value)</pre>
+<div class="block">Sets the value of the 'serializationVersion' field</div>
+</li>
+</ul>
+<a name="hasSerializationVersion--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasSerializationVersion</h4>
+<pre>public&nbsp;boolean&nbsp;hasSerializationVersion()</pre>
+<div class="block">Checks whether the 'serializationVersion' field has been set</div>
+</li>
+</ul>
+<a name="clearSerializationVersion--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clearSerializationVersion</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a>&nbsp;clearSerializationVersion()</pre>
+<div class="block">Clears the value of the 'serializationVersion' field</div>
+</li>
+</ul>
 <a name="build--">
 <!--   -->
 </a>
@@ -456,6 +520,6 @@ implements org.apache.avro.data.RecordBuilder&lt;<a href="../../../../../../org/
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>

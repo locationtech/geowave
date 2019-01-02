@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -163,6 +163,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <div class="block">Deserializes the field from binary data</div>
 </td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/field/DateSerializationProvider.DateReader.html#readField-byte:A-byte-">readField</a></span>(byte[]&nbsp;fieldData,
+         byte&nbsp;serializationVersion)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -219,7 +224,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <a name="readField-byte:A-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>readField</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;readField(byte[]&nbsp;fieldData)</pre>
@@ -232,6 +237,20 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <dd><code>fieldData</code> - The binary serialization of the data object</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The deserialization of the entry</dd>
+</dl>
+</li>
+</ul>
+<a name="readField-byte:A-byte-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>readField</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;readField(byte[]&nbsp;fieldData,
+                      byte&nbsp;serializationVersion)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html#readField-byte:A-byte-">readField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -304,6 +323,6 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>

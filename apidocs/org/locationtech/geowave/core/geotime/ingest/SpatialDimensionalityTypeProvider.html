@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":9};
+var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":9,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.SpatialIndexBuilder.html" title="class in org.locationtech.geowave.core.geotime.ingest"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -169,14 +169,6 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#SPATIAL_DIMENSIONS">SPATIAL_DIMENSIONS</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#SPATIAL_FIELDS">SPATIAL_FIELDS</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#SPATIAL_TEMPORAL_FIELDS">SPATIAL_TEMPORAL_FIELDS</a></span></code>&nbsp;</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -256,10 +248,18 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 </td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getSpatialFields-java.lang.Integer-">getSpatialFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getSpatialTemporalFields-java.lang.Integer-">getSpatialTemporalFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#isSpatial-org.locationtech.geowave.core.store.api.Index-">isSpatial</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#isSpatial-org.locationtech.geowave.core.index.NumericIndexStrategy-">isSpatial</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
@@ -327,28 +327,10 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <a name="SPATIAL_DIMENSIONS">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>SPATIAL_DIMENSIONS</h4>
 <pre>public static final&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[] SPATIAL_DIMENSIONS</pre>
-</li>
-</ul>
-<a name="SPATIAL_FIELDS">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>SPATIAL_FIELDS</h4>
-<pre>public static final&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[] SPATIAL_FIELDS</pre>
-</li>
-</ul>
-<a name="SPATIAL_TEMPORAL_FIELDS">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>SPATIAL_TEMPORAL_FIELDS</h4>
-<pre>public static final&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[] SPATIAL_TEMPORAL_FIELDS</pre>
 </li>
 </ul>
 </li>
@@ -376,6 +358,26 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getSpatialFields-java.lang.Integer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSpatialFields</h4>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[]&nbsp;getSpatialFields(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</pre>
+</li>
+</ul>
+<a name="getSpatialTemporalFields-java.lang.Integer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSpatialTemporalFields</h4>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[]&nbsp;getSpatialTemporalFields(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</pre>
+</li>
+</ul>
 <a name="getDimensionalityTypeName--">
 <!--   -->
 </a>
@@ -541,7 +543,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.SpatialIndexBuilder.html" title="class in org.locationtech.geowave.core.geotime.ingest"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -582,6 +584,6 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>

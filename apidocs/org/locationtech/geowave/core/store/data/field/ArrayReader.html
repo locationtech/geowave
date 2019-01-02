@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.FixedSizeObjectArrayReader.html" title="class in org.locationtech.geowave.core.store.data.field"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayWriter.html" title="class in org.locationtech.geowave.core.store.data.field"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/data/field/ArrayReader.html" target="_top">Frames</a></li>
@@ -74,7 +74,7 @@ var activeTableTab = "activeTableTab";
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -111,10 +111,6 @@ var activeTableTab = "activeTableTab";
 <dt>All Implemented Interfaces:</dt>
 <dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;byte[],FieldType[]&gt;, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;FieldType[]&gt;</dd>
 </dl>
-<dl>
-<dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.FixedSizeObjectArrayReader.html" title="class in org.locationtech.geowave.core.store.data.field">ArrayReader.FixedSizeObjectArrayReader</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.VariableSizeObjectArrayReader.html" title="class in org.locationtech.geowave.core.store.data.field">ArrayReader.VariableSizeObjectArrayReader</a></dd>
-</dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">ArrayReader&lt;FieldType&gt;</span>
@@ -127,29 +123,6 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="nested.class.summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
-<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.FixedSizeObjectArrayReader.html" title="class in org.locationtech.geowave.core.store.data.field">ArrayReader.FixedSizeObjectArrayReader</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.FixedSizeObjectArrayReader.html" title="type parameter in ArrayReader.FixedSizeObjectArrayReader">FieldType</a>&gt;</span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.VariableSizeObjectArrayReader.html" title="class in org.locationtech.geowave.core.store.data.field">ArrayReader.VariableSizeObjectArrayReader</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.VariableSizeObjectArrayReader.html" title="type parameter in ArrayReader.VariableSizeObjectArrayReader">FieldType</a>&gt;</span></code>&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -186,12 +159,19 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html#readFixedSizeField-byte:A-">readFixedSizeField</a></span>(byte[]&nbsp;fieldData)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html#readField-byte:A-byte-">readField</a></span>(byte[]&nbsp;fieldData,
+         byte&nbsp;serializationVersion)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html#readVariableSizeField-byte:A-">readVariableSizeField</a></span>(byte[]&nbsp;fieldData)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html#readFixedSizeField-byte:A-org.locationtech.geowave.core.store.data.field.ArrayReader.SerializationHelper-">readFixedSizeField</a></span>(byte[]&nbsp;fieldData,
+                  org.locationtech.geowave.core.store.data.field.ArrayReader.SerializationHelper&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>&gt;&nbsp;serializationHelper)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html#readVariableSizeField-byte:A-org.locationtech.geowave.core.store.data.field.ArrayReader.SerializationHelper-">readVariableSizeField</a></span>(byte[]&nbsp;fieldData,
+                     org.locationtech.geowave.core.store.data.field.ArrayReader.SerializationHelper&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>&gt;&nbsp;serializationHelper)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -265,22 +245,38 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 </dl>
 </li>
 </ul>
-<a name="readFixedSizeField-byte:A-">
+<a name="readField-byte:A-byte-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readField</h4>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>[]&nbsp;readField(byte[]&nbsp;fieldData,
+                             byte&nbsp;serializationVersion)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html#readField-byte:A-byte-">readField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>[]&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="readFixedSizeField-byte:A-org.locationtech.geowave.core.store.data.field.ArrayReader.SerializationHelper-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>readFixedSizeField</h4>
-<pre>protected&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>[]&nbsp;readFixedSizeField(byte[]&nbsp;fieldData)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>[]&nbsp;readFixedSizeField(byte[]&nbsp;fieldData,
+                                         org.locationtech.geowave.core.store.data.field.ArrayReader.SerializationHelper&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>&gt;&nbsp;serializationHelper)</pre>
 </li>
 </ul>
-<a name="readVariableSizeField-byte:A-">
+<a name="readVariableSizeField-byte:A-org.locationtech.geowave.core.store.data.field.ArrayReader.SerializationHelper-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>readVariableSizeField</h4>
-<pre>protected&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>[]&nbsp;readVariableSizeField(byte[]&nbsp;fieldData)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>[]&nbsp;readVariableSizeField(byte[]&nbsp;fieldData,
+                                            org.locationtech.geowave.core.store.data.field.ArrayReader.SerializationHelper&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.html" title="type parameter in ArrayReader">FieldType</a>&gt;&nbsp;serializationHelper)</pre>
 </li>
 </ul>
 </li>
@@ -312,7 +308,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayReader.FixedSizeObjectArrayReader.html" title="class in org.locationtech.geowave.core.store.data.field"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/ArrayWriter.html" title="class in org.locationtech.geowave.core.store.data.field"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/data/field/ArrayReader.html" target="_top">Frames</a></li>
@@ -336,7 +332,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -352,6 +348,6 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>

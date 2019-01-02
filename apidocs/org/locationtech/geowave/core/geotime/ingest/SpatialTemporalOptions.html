@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -100,7 +100,12 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">org.locationtech.geowave.core.geotime.ingest.CommonSpatialOptions</a></li>
+<li>
+<ul class="inheritance">
 <li>org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -114,8 +119,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">SpatialTemporalOptions</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in org.locationtech.geowave.core.store.spi">DimensionalityTypeOptions</a></pre>
+extends <a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">CommonSpatialOptions</a></pre>
 </li>
 </ul>
 </div>
@@ -139,22 +143,25 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialTemporalOptions.html#bias">bias</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialTemporalOptions.html#crs">crs</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected static <a href="../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in org.locationtech.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialTemporalOptions.html#DEFAULT_PERIODICITY">DEFAULT_PERIODICITY</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialTemporalOptions.html#maxDuplicates">maxDuplicates</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in org.locationtech.geowave.core.geotime.index.dimension">TemporalBinningStrategy.Unit</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialTemporalOptions.html#periodicity">periodicity</a></span></code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.geotime.ingest.CommonSpatialOptions">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.geotime.ingest.<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">CommonSpatialOptions</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html#crs">crs</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html#fullGeometryPrecision">fullGeometryPrecision</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html#geometryPrecision">geometryPrecision</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -194,11 +201,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialTemporalOptions.html#getMaxDuplicates--">getMaxDuplicates</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialTemporalOptions.html#setCrs-java.lang.String-">setCrs</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crs)</code>&nbsp;</td>
-</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.geotime.ingest.CommonSpatialOptions">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.geotime.ingest.<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">CommonSpatialOptions</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html#getGeometryPrecision--">getGeometryPrecision</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html#setCrs-java.lang.String-">setCrs</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html#setGeometryPrecision-java.lang.Integer-">setGeometryPrecision</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -250,19 +260,10 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <a name="maxDuplicates">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>maxDuplicates</h4>
 <pre>protected&nbsp;long maxDuplicates</pre>
-</li>
-</ul>
-<a name="crs">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>crs</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> crs</pre>
 </li>
 </ul>
 </li>
@@ -290,15 +291,6 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="setCrs-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setCrs</h4>
-<pre>public&nbsp;void&nbsp;setCrs(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crs)</pre>
-</li>
-</ul>
 <a name="getBias--">
 <!--   -->
 </a>
@@ -386,6 +378,6 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>

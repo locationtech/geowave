@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -134,7 +134,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperWriter.html#GeometryWrapperWriter--">GeometryWrapperWriter</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperWriter.html#GeometryWrapperWriter-java.lang.Integer-">GeometryWrapperWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -160,6 +160,10 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperWriter.html#setPrecision-java.lang.Integer-">setPrecision</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperWriter.html#writeField-org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper-">writeField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapper.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">GeometryWrapper</a>&nbsp;geometry)</code>
 <div class="block">Serializes the entry into binary data that will be stored as the value
@@ -202,13 +206,14 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GeometryWrapperWriter--">
+<a name="GeometryWrapperWriter-java.lang.Integer-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeometryWrapperWriter</h4>
-<pre>public&nbsp;GeometryWrapperWriter()</pre>
+<pre>public&nbsp;GeometryWrapperWriter(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</pre>
 </li>
 </ul>
 </li>
@@ -219,6 +224,16 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="setPrecision-java.lang.Integer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPrecision</h4>
+<pre>public&nbsp;void&nbsp;setPrecision(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</pre>
+</li>
+</ul>
 <a name="writeField-org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper-">
 <!--   -->
 </a>
@@ -333,6 +348,6 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>

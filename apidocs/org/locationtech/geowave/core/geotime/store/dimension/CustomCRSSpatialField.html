@@ -156,10 +156,15 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialField.html#CustomCRSSpatialField--">CustomCRSSpatialField</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialField.html#CustomCRSSpatialField-org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension-">CustomCRSSpatialField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialDimension.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">CustomCRSSpatialDimension</a>&nbsp;baseDefinition)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialField.html#CustomCRSSpatialField-org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension-java.lang.Integer-">CustomCRSSpatialField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialDimension.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">CustomCRSSpatialDimension</a>&nbsp;baseDefinition,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialField.html#CustomCRSSpatialField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-java.lang.String-">CustomCRSSpatialField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;baseDefinition,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialField.html#CustomCRSSpatialField-java.lang.Integer-">CustomCRSSpatialField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialField.html#CustomCRSSpatialField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-java.lang.Integer-java.lang.String-">CustomCRSSpatialField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;baseDefinition,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </table>
@@ -221,22 +226,36 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>public&nbsp;CustomCRSSpatialField()</pre>
 </li>
 </ul>
-<a name="CustomCRSSpatialField-org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension-">
+<a name="CustomCRSSpatialField-java.lang.Integer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>CustomCRSSpatialField</h4>
-<pre>public&nbsp;CustomCRSSpatialField(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialDimension.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">CustomCRSSpatialDimension</a>&nbsp;baseDefinition)</pre>
+<pre>public&nbsp;CustomCRSSpatialField(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</pre>
 </li>
 </ul>
-<a name="CustomCRSSpatialField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-java.lang.String-">
+<a name="CustomCRSSpatialField-org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension-java.lang.Integer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>CustomCRSSpatialField</h4>
+<pre>public&nbsp;CustomCRSSpatialField(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialDimension.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">CustomCRSSpatialDimension</a>&nbsp;baseDefinition,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</pre>
+</li>
+</ul>
+<a name="CustomCRSSpatialField-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-java.lang.Integer-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CustomCRSSpatialField</h4>
 <pre>public&nbsp;CustomCRSSpatialField(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;baseDefinition,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 </li>
 </ul>
@@ -334,6 +353,6 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>

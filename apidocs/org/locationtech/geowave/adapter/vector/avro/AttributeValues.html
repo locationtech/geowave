@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":9,"i7":9,"i8":9,"i9":10,"i10":10,"i11":10,"i12":10};
+var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":9,"i9":9,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -177,6 +177,12 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#SCHEMA:D">SCHEMA$</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#serializationVersion">serializationVersion</a></span></code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#values">values</a></span></code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
@@ -202,9 +208,10 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#AttributeValues-java.lang.String-java.util.List-java.util.List-">AttributeValues</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fid,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#AttributeValues-java.lang.String-java.util.List-java.util.List-java.nio.ByteBuffer-">AttributeValues</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fid,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&gt;&nbsp;values,
-               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;classifications)</code>
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;classifications,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;serializationVersion)</code>
 <div class="block">All-args constructor.</div>
 </td>
 </tr>
@@ -248,49 +255,61 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#getSchema--">getSchema</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#getSerializationVersion--">getSerializationVersion</a></span>()</code>
+<div class="block">Gets the value of the 'serializationVersion' field.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#getValues--">getValues</a></span>()</code>
 <div class="block">Gets the value of the 'values' field.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#newBuilder--">newBuilder</a></span>()</code>
 <div class="block">Creates a new AttributeValues RecordBuilder</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#newBuilder-org.locationtech.geowave.adapter.vector.avro.AttributeValues.Builder-">newBuilder</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a>&nbsp;other)</code>
 <div class="block">Creates a new AttributeValues RecordBuilder by copying an existing
  Builder</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#newBuilder-org.locationtech.geowave.adapter.vector.avro.AttributeValues-">newBuilder</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues</a>&nbsp;other)</code>
 <div class="block">Creates a new AttributeValues RecordBuilder by copying an existing
  AttributeValues instance</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#put-int-java.lang.Object-">put</a></span>(int&nbsp;field$,
    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value$)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#setClassifications-java.util.List-">setClassifications</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;value)</code>
 <div class="block">Sets the value of the 'classifications' field.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#setFid-java.lang.String-">setFid</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'fid' field.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#setSerializationVersion-java.nio.ByteBuffer-">setSerializationVersion</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;value)</code>
+<div class="block">Sets the value of the 'serializationVersion' field.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html#setValues-java.util.List-">setValues</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&gt;&nbsp;value)</code>
 <div class="block">Sets the value of the 'values' field.</div>
@@ -359,11 +378,22 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
 <a name="classifications">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>classifications</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
 public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; classifications</pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
+</li>
+</ul>
+<a name="serializationVersion">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>serializationVersion</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
+public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a> serializationVersion</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </li>
 </ul>
@@ -387,7 +417,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
  <code>newBuilder()</code>.</div>
 </li>
 </ul>
-<a name="AttributeValues-java.lang.String-java.util.List-java.util.List-">
+<a name="AttributeValues-java.lang.String-java.util.List-java.util.List-java.nio.ByteBuffer-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -395,7 +425,8 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
 <h4>AttributeValues</h4>
 <pre>public&nbsp;AttributeValues(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fid,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&gt;&nbsp;values,
-                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;classifications)</pre>
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;classifications,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;serializationVersion)</pre>
 <div class="block">All-args constructor.</div>
 </li>
 </ul>
@@ -534,6 +565,30 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
 </dl>
 </li>
 </ul>
+<a name="getSerializationVersion--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSerializationVersion</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;getSerializationVersion()</pre>
+<div class="block">Gets the value of the 'serializationVersion' field.</div>
+</li>
+</ul>
+<a name="setSerializationVersion-java.nio.ByteBuffer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSerializationVersion</h4>
+<pre>public&nbsp;void&nbsp;setSerializationVersion(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;value)</pre>
+<div class="block">Sets the value of the 'serializationVersion' field.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - the value to set.</dd>
+</dl>
+</li>
+</ul>
 <a name="newBuilder--">
 <!--   -->
 </a>
@@ -635,6 +690,6 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>

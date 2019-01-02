@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -134,7 +134,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperReader.html#GeometryWrapperReader--">GeometryWrapperReader</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperReader.html#GeometryWrapperReader-java.lang.Integer-">GeometryWrapperReader</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -157,6 +157,10 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <div class="block">Deserializes the field from binary data</div>
 </td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/GeometryWrapperReader.html#setPrecision-java.lang.Integer-">setPrecision</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -170,7 +174,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.data.field.<a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html#apply-byte:A-">apply</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html#apply-byte:A-">apply</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html#readField-byte:A-byte-">readField</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.util.function.Function">
@@ -193,13 +197,14 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GeometryWrapperReader--">
+<a name="GeometryWrapperReader-java.lang.Integer-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeometryWrapperReader</h4>
-<pre>public&nbsp;GeometryWrapperReader()</pre>
+<pre>public&nbsp;GeometryWrapperReader(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</pre>
 </li>
 </ul>
 </li>
@@ -210,6 +215,16 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="setPrecision-java.lang.Integer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPrecision</h4>
+<pre>public&nbsp;void&nbsp;setPrecision(<a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;geometryPrecision)</pre>
+</li>
+</ul>
 <a name="readField-byte:A-">
 <!--   -->
 </a>
@@ -298,6 +313,6 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>
