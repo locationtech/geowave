@@ -78,4 +78,11 @@ public class IndexStoreImpl extends
 		return getObjects();
 	}
 
+	@Override
+	public void removeIndex(
+			final String indexName ) {
+		remove(new ByteArray(
+				indexName));
+	}
+
 }

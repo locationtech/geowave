@@ -60,7 +60,9 @@ import org.locationtech.geowave.core.store.callback.IngestCallbackList;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
+import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
@@ -68,6 +70,13 @@ import org.locationtech.geowave.core.store.index.writer.IndependentAdapterIndexW
 import org.locationtech.geowave.core.store.index.writer.IndexCompositeWriter;
 import org.locationtech.geowave.core.store.memory.MemoryPersistentAdapterStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.operations.MetadataQuery;
+import org.locationtech.geowave.core.store.operations.MetadataReader;
+import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.core.store.operations.MetadataWriter;
+import org.locationtech.geowave.core.store.operations.ReaderParamsBuilder;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.aggregate.AdapterAndIndexBasedAggregation;
 import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
@@ -470,6 +479,38 @@ public class BaseDataStore implements
 		return Arrays.equals(
 				internalAdapterStore.getTypeNames(),
 				typeNames);
+	}
+
+	private Short[] getAdaptersForIndex(
+			final String indexName ) {
+
+		final ArrayList<Short> markedAdapters = new ArrayList<>();
+		// remove the given index for all types
+		try (final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
+
+			while (it.hasNext()) {
+
+				final InternalDataAdapter<?> dataAdapter = it.next();
+				final AdapterToIndexMapping adapterIndexMap = indexMappingStore.getIndicesForAdapter(dataAdapter
+						.getAdapterId());
+				final String[] indexNames = adapterIndexMap.getIndexNames();
+				for (int i = 0; i < indexNames.length; i++) {
+					if (indexNames[i].equals(indexName)) {
+						// check if it is the only index for the current adapter
+						if (indexNames.length == 1) {
+							throw new IllegalStateException(
+									"Index removal failed. Adapters require at least one index.");
+						}
+						else {
+							// mark the index for removal
+							markedAdapters.add(adapterIndexMap.getAdapterId());
+						}
+					}
+				}
+			}
+		}
+		final Short[] adapters = new Short[markedAdapters.size()];
+		return markedAdapters.toArray(adapters);
 	}
 
 	public <T> boolean delete(
@@ -1224,39 +1265,387 @@ public class BaseDataStore implements
 	@Override
 	public void copyTo(
 			final DataStore other ) {
+		if (other instanceof BaseDataStore) {
+			// if we have access to datastoreoperations for "other" we can more
+			// efficiently copy underlying GeoWaveRow and GeoWaveMetadata
+			for (final MetadataType metadataType : MetadataType.values()) {
+				try (MetadataWriter writer = ((BaseDataStore) other).baseOperations.createMetadataWriter(metadataType)) {
+					final MetadataReader reader = baseOperations.createMetadataReader(metadataType);
+					try (CloseableIterator<GeoWaveMetadata> it = reader.query(new MetadataQuery(
+							null,
+							null))) {
+						while (it.hasNext()) {
+							writer.write(it.next());
+						}
+					}
+				}
+				catch (final Exception e) {
+					LOGGER.error(
+							"Unable to write metadata on copy",
+							e);
+				}
+			}
+			try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
+				while (it.hasNext()) {
+					final InternalDataAdapter<?> adapter = it.next();
+					for (final Index index : indexMappingStore.getIndicesForAdapter(
+							adapter.getAdapterId()).getIndices(
+							indexStore)) {
+						final ReaderParamsBuilder bldr = new ReaderParamsBuilder(
+								index,
+								adapterStore,
+								internalAdapterStore,
+								GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
+						bldr.adapterIds(new short[] {
+							adapter.getAdapterId()
+						});
+						try (RowReader<GeoWaveRow> reader = ((BaseDataStore) other).baseOperations.createReader(bldr
+								.build())) {
+							try (RowWriter writer = ((BaseDataStore) other).baseOperations.createWriter(
+									index,
+									adapter)) {
+								while (reader.hasNext()) {
+									writer.write(reader.next());
+								}
+							}
+						}
+						catch (final Exception e) {
+							LOGGER.error(
+									"Unable to write metadata on copy",
+									e);
+						}
+					}
+				}
+			}
+		}
+		else {
+			final DataTypeAdapter<?>[] sourceTypes = getTypes();
 
+			// add all the types that the destination store doesn't have yet
+			final DataTypeAdapter<?>[] destTypes = other.getTypes();
+			for (int i = 0; i < sourceTypes.length; i++) {
+				boolean found = false;
+				for (int k = 0; k < destTypes.length; k++) {
+					if (destTypes[k].getTypeName().compareTo(
+							sourceTypes[i].getTypeName()) == 0) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					other.addType(sourceTypes[i]);
+				}
+			}
+
+			// add the indices for each type
+			for (int i = 0; i < sourceTypes.length; i++) {
+				final String typeName = sourceTypes[i].getTypeName();
+				final short adapterId = internalAdapterStore.getAdapterId(typeName);
+				final AdapterToIndexMapping indicesForAdapter = indexMappingStore.getIndicesForAdapter(adapterId);
+				final Index[] indices = indicesForAdapter.getIndices(indexStore);
+				other.addIndex(
+						typeName,
+						indices);
+
+				final QueryBuilder<?, ?> qb = QueryBuilder.newBuilder().addTypeName(
+						typeName);
+				try (CloseableIterator<?> it = query(qb.build())) {
+					try (final Writer writer = other.createWriter(typeName)) {
+						while (it.hasNext()) {
+							writer.write(it.next());
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
 	public void copyTo(
 			final DataStore other,
 			final Query<?> query ) {
+		// check for 'everything' query
 		if (query == null) {
 			copyTo(other);
+			return;
 		}
-		// TODO issue #1440 addresses filling out this method
+
+		final String[] typeNames = query.getDataTypeQueryOptions().getTypeNames();
+		final String indexName = query.getIndexQueryOptions().getIndexName();
+		final boolean isAllIndices = query.getIndexQueryOptions().isAllIndicies();
+		final List<DataTypeAdapter<?>> typesToCopy;
+
+		// if typeNames are not specified, then it means 'everything' as well
+		if (((typeNames == null) || (typeNames.length == 0))) {
+			if ((query.getQueryConstraints() == null) || (query.getQueryConstraints() instanceof EverythingQuery)) {
+				copyTo(other);
+				return;
+			}
+			else {
+				typesToCopy = Arrays.asList(getTypes());
+			}
+		}
+		else {
+			// make sure the types requested exist in the source store (this)
+			// before trying to copy!
+			final DataTypeAdapter<?>[] sourceTypes = getTypes();
+			typesToCopy = new ArrayList<>();
+			for (int i = 0; i < typeNames.length; i++) {
+				boolean found = false;
+				for (int k = 0; k < sourceTypes.length; k++) {
+					if (sourceTypes[k].getTypeName().compareTo(
+							typeNames[i]) == 0) {
+						found = true;
+						typesToCopy.add(sourceTypes[k]);
+						break;
+					}
+				}
+				if (!found) {
+					throw new IllegalArgumentException(
+							"Some type names specified in the query do not exist in the source database and thus cannot be copied.");
+				}
+			}
+		}
+
+		// if there is an index requested in the query, make sure it exists in
+		// the source store before trying to copy as well!
+		final Index[] sourceIndices = getIndices();
+		Index indexToCopy = null;
+
+		if (!isAllIndices) {
+			// just add the one index specified by the query
+			// first make sure source index exists though
+			boolean found = false;
+			for (int i = 0; i < sourceIndices.length; i++) {
+				if (sourceIndices[i].getName().compareTo(
+						indexName) == 0) {
+					found = true;
+					indexToCopy = sourceIndices[i];
+					break;
+				}
+			}
+			if (!found) {
+				throw new IllegalArgumentException(
+						"The index specified in the query does not exist in the source database and thus cannot be copied.");
+			}
+
+			// also make sure the types/index mapping for the query are legit
+			for (int i = 0; i < typeNames.length; i++) {
+				final short adapterId = internalAdapterStore.getAdapterId(typeNames[i]);
+				final AdapterToIndexMapping indexMap = indexMappingStore.getIndicesForAdapter(adapterId);
+				final String[] mapIndexNames = indexMap.getIndexNames();
+				found = false;
+				for (int k = 0; k < mapIndexNames.length; k++) {
+					if (mapIndexNames[k].compareTo(indexName) == 0) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					throw new IllegalArgumentException(
+							"The index " + indexName + " and the type " + typeNames[i]
+									+ " specified by the query are not associated in the source database");
+				}
+			}
+		}
+
+		// add all the types that the destination store doesn't have yet
+		final DataTypeAdapter<?>[] destTypes = other.getTypes();
+		for (int i = 0; i < typesToCopy.size(); i++) {
+			boolean found = false;
+			for (int k = 0; k < destTypes.length; k++) {
+				if (destTypes[k].getTypeName().compareTo(
+						typesToCopy.get(
+								i).getTypeName()) == 0) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				other.addType(typesToCopy.get(i));
+			}
+		}
+
+		// add all the indices that the destination store doesn't have yet
+		if (isAllIndices) {
+			// in this case, all indices from the types requested by the query
+			for (int i = 0; i < typesToCopy.size(); i++) {
+				final String typeName = typesToCopy.get(
+						i).getTypeName();
+				final short adapterId = internalAdapterStore.getAdapterId(typeName);
+				final AdapterToIndexMapping indicesForAdapter = indexMappingStore.getIndicesForAdapter(adapterId);
+				final Index[] indices = indicesForAdapter.getIndices(indexStore);
+				other.addIndex(
+						typeName,
+						indices);
+
+				final QueryBuilder<?, ?> qb = QueryBuilder.newBuilder().addTypeName(
+						typeName).constraints(
+						query.getQueryConstraints());
+				try (CloseableIterator<?> it = query(qb.build())) {
+					try (Writer writer = other.createWriter(typeName)) {
+						while (it.hasNext()) {
+							writer.write(it.next());
+						}
+					}
+				}
+
+			}
+		}
+		else {
+			// otherwise, add just the one index to the types specified by the
+			// query
+			for (int i = 0; i < typesToCopy.size(); i++) {
+				other.addIndex(
+						typesToCopy.get(
+								i).getTypeName(),
+						indexToCopy);
+			}
+
+			// Write out / copy the data. We must do this on a per-type basis so
+			// we can write appropriately
+			for (int k = 0; k < typesToCopy.size(); k++) {
+				final InternalDataAdapter<?> adapter = adapterStore.getAdapter(internalAdapterStore
+						.getAdapterId(typesToCopy.get(
+								k).getTypeName()));
+				final QueryBuilder<?, ?> qb = QueryBuilder.newBuilder().addTypeName(
+						adapter.getTypeName()).indexName(
+						indexToCopy.getName()).constraints(
+						query.getQueryConstraints());
+				try (CloseableIterator<?> it = query(qb.build())) {
+					try (Writer writer = other.createWriter(adapter.getTypeName())) {
+						while (it.hasNext()) {
+							writer.write(it.next());
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
 	public void removeIndex(
 			final String indexName ) {
-		// TODO Auto-generated method stub
+		// remove the given index for all types
 
+		// this is a little convoluted and requires iterating over all the
+		// adapters, getting each adapter's index map, checking if the index is
+		// there, and
+		// then mark it for removal from both the map and from the index store.
+		// If this index is the only index remaining for a given type, then we
+		// need
+		// to throw an exception first (no deletion will occur).
+
+		final ArrayList<Short> markedAdapters = new ArrayList<>();
+		try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
+			while (it.hasNext()) {
+
+				final InternalDataAdapter<?> dataAdapter = it.next();
+				final AdapterToIndexMapping adapterIndexMap = indexMappingStore.getIndicesForAdapter(dataAdapter
+						.getAdapterId());
+				final String[] indexNames = adapterIndexMap.getIndexNames();
+				for (int i = 0; i < indexNames.length; i++) {
+					if (indexNames[i].equals(indexName)) {
+						// check if it is the only index for the current adapter
+						if (indexNames.length == 1) {
+							throw new IllegalStateException(
+									"Index removal failed. Adapters require at least one index.");
+						}
+						else {
+							// mark the index for removal and continue looking
+							// for
+							// others
+							markedAdapters.add(adapterIndexMap.getAdapterId());
+							continue;
+						}
+					}
+				}
+			}
+		}
+
+		// take out the index from the data statistics, and mapping
+		for (int i = 0; i < markedAdapters.size(); i++) {
+			final short adapterId = markedAdapters.get(i);
+			baseOperations.deleteAll(
+					indexName,
+					internalAdapterStore.getTypeName(adapterId),
+					adapterId);
+			statisticsStore.removeAllStatistics(adapterId);
+			indexMappingStore.remove(
+					adapterId,
+					indexName);
+		}
+		// remove the actual index
+		indexStore.removeIndex(indexName);
 	}
 
 	@Override
 	public void removeIndex(
 			final String typeName,
-			final String indexName ) {
-		// TODO Auto-generated method stub
+			final String indexName )
+			throws IllegalStateException {
 
+		// First make sure the adapter exists and that this is not the only
+		// index left for the given adapter. If it is, we should throw an
+		// exception.
+		final short adapterId = internalAdapterStore.getAdapterId(typeName);
+		final AdapterToIndexMapping adapterIndexMap = indexMappingStore.getIndicesForAdapter(adapterId);
+
+		if (adapterIndexMap == null) {
+			throw new IllegalArgumentException(
+					"No adapter with typeName " + typeName + "could be found.");
+		}
+
+		final String[] indexNames = adapterIndexMap.getIndexNames();
+		if (indexNames.length == 1) {
+			throw new IllegalStateException(
+					"Index removal failed. Adapters require at least one index.");
+		}
+
+		// Remove all the data for the adapter and index
+		baseOperations.deleteAll(
+				indexName,
+				typeName,
+				adapterId);
+
+		// If this is the last adapter/type associated with the index, then we
+		// can remove the actual index too.
+		final Short[] adapters = getAdaptersForIndex(indexName);
+		if (adapters.length == 1) {
+			indexStore.removeIndex(indexName);
+		}
+
+		// Finally, remove the mapping
+		indexMappingStore.remove(
+				adapterId,
+				indexName);
 	}
 
 	@Override
 	public void removeType(
 			final String typeName ) {
-		// TODO Auto-generated method stub
+		// Removing a type requires removing the data associated with the type,
+		// the index mapping for the type, and we also need to remove stats for
+		// the type.
+		final Short adapterId = internalAdapterStore.getAdapterId(typeName);
 
+		if (adapterId != -1) {
+			final AdapterToIndexMapping mapping = indexMappingStore.getIndicesForAdapter(adapterId);
+			final String[] indexNames = mapping.getIndexNames();
+
+			// remove all the data for each index paired to this adapter
+			for (int i = 0; i < indexNames.length; i++) {
+				baseOperations.deleteAll(
+						indexNames[i],
+						typeName,
+						adapterId);
+			}
+
+			statisticsStore.removeAllStatistics(adapterId);
+			indexMappingStore.remove(adapterId);
+			internalAdapterStore.remove(adapterId);
+			adapterStore.removeAdapter(adapterId);
+		}
 	}
 
 	@Override
