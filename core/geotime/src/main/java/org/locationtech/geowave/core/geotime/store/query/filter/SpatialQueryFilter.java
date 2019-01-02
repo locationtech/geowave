@@ -20,6 +20,7 @@ import java.util.Set;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
@@ -327,11 +328,19 @@ public class SpatialQueryFilter extends
 		final byte[] geometryBinary = preparedGeometryImage.geometryBinary;
 		final byte[] geometryFieldNamesBytes = StringUtils.stringsToBinary(geometryFieldNames.toArray(new String[0]));
 		final byte[] theRest = super.toBinary();
-		final ByteBuffer buf = ByteBuffer.allocate(12 + geometryBinary.length + geometryFieldNamesBytes.length
-				+ theRest.length);
-		buf.putInt(compareOperation.ordinal());
-		buf.putInt(geometryBinary.length);
-		buf.putInt(geometryFieldNamesBytes.length);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(compareOperation.ordinal())
+				+ VarintUtils.unsignedIntByteLength(geometryBinary.length)
+				+ VarintUtils.unsignedIntByteLength(geometryFieldNamesBytes.length) + geometryBinary.length
+				+ geometryFieldNamesBytes.length + theRest.length);
+		VarintUtils.writeUnsignedInt(
+				compareOperation.ordinal(),
+				buf);
+		VarintUtils.writeUnsignedInt(
+				geometryBinary.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				geometryFieldNamesBytes.length,
+				buf);
 		buf.put(geometryBinary);
 		buf.put(geometryFieldNamesBytes);
 		buf.put(theRest);
@@ -342,14 +351,14 @@ public class SpatialQueryFilter extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		compareOperation = CompareOperation.values()[buf.getInt()];
-		final byte[] geometryBinary = new byte[buf.getInt()];
-		final byte[] geometryFieldNamesBytes = new byte[buf.getInt()];
-		final byte[] theRest = new byte[bytes.length - geometryBinary.length - geometryFieldNamesBytes.length - 12];
+		compareOperation = CompareOperation.values()[VarintUtils.readUnsignedInt(buf)];
+		final byte[] geometryBinary = new byte[VarintUtils.readUnsignedInt(buf)];
+		final byte[] geometryFieldNamesBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(geometryBinary);
 		buf.get(geometryFieldNamesBytes);
 		geometryFieldNames = new HashSet<>(
 				Arrays.asList(StringUtils.stringsFromBinary(geometryFieldNamesBytes)));
+		final byte[] theRest = new byte[buf.remaining()];
 		buf.get(theRest);
 		preparedGeometryImage = geometryImageInterner.intern(new GeometryImage(
 				geometryBinary));
@@ -390,7 +399,9 @@ public class SpatialQueryFilter extends
 				final PreparedGeometry preparedGeometry ) {
 			super();
 			this.preparedGeometry = preparedGeometry;
-			geometryBinary = GeometryUtils.geometryToBinary(preparedGeometry.getGeometry());
+			geometryBinary = GeometryUtils.geometryToBinary(
+					preparedGeometry.getGeometry(),
+					null);
 		}
 
 		public GeometryImage(
@@ -401,7 +412,9 @@ public class SpatialQueryFilter extends
 
 		public synchronized void init() {
 			if (preparedGeometry == null) {
-				preparedGeometry = FACTORY.create(GeometryUtils.geometryFromBinary(geometryBinary));
+				preparedGeometry = FACTORY.create(GeometryUtils.geometryFromBinary(
+						geometryBinary,
+						null));
 			}
 		}
 

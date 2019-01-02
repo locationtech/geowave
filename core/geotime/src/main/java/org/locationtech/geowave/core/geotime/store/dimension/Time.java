@@ -12,6 +12,7 @@ package org.locationtech.geowave.core.geotime.store.dimension;
 
 import java.nio.ByteBuffer;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
@@ -44,6 +45,13 @@ public interface Time extends
 
 		public TimeRange(
 				final long startTime,
+				final long endTime ) {
+			this.startTime = startTime;
+			this.endTime = endTime;
+		}
+
+		public TimeRange(
+				final long startTime,
 				final long endTime,
 				final byte[] visibility ) {
 			this.startTime = startTime;
@@ -71,9 +79,14 @@ public interface Time extends
 
 		@Override
 		public byte[] toBinary() {
-			final ByteBuffer bytes = ByteBuffer.allocate(16);
-			bytes.putLong(startTime);
-			bytes.putLong(endTime);
+			final ByteBuffer bytes = ByteBuffer.allocate(VarintUtils.timeByteLength(startTime)
+					+ VarintUtils.timeByteLength(endTime));
+			VarintUtils.writeTime(
+					startTime,
+					bytes);
+			VarintUtils.writeTime(
+					endTime,
+					bytes);
 			return bytes.array();
 		}
 
@@ -81,8 +94,8 @@ public interface Time extends
 		public void fromBinary(
 				final byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
-			startTime = buf.getLong();
-			endTime = buf.getLong();
+			startTime = VarintUtils.readTime(buf);
+			endTime = VarintUtils.readTime(buf);
 		}
 
 		@Override
@@ -111,6 +124,11 @@ public interface Time extends
 		public Timestamp() {}
 
 		public Timestamp(
+				final long time ) {
+			this.time = time;
+		}
+
+		public Timestamp(
 				final long time,
 				final byte[] visibility ) {
 			this.time = time;
@@ -136,8 +154,10 @@ public interface Time extends
 
 		@Override
 		public byte[] toBinary() {
-			final ByteBuffer bytes = ByteBuffer.allocate(8);
-			bytes.putLong(time);
+			final ByteBuffer bytes = ByteBuffer.allocate(VarintUtils.timeByteLength(time));
+			VarintUtils.writeTime(
+					time,
+					bytes);
 			return bytes.array();
 		}
 
@@ -145,7 +165,7 @@ public interface Time extends
 		public void fromBinary(
 				final byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
-			time = buf.getLong();
+			time = VarintUtils.readTime(buf);
 		}
 
 		@Override

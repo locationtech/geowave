@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.store;
 import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
 public class AdapterMapping implements
@@ -67,9 +68,12 @@ public class AdapterMapping implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] adapterIdBytes = this.adapterId.getBytes();
-		final ByteBuffer buf = ByteBuffer.allocate(adapterIdBytes.length + 2);
+		final ByteBuffer buf = ByteBuffer.allocate(adapterIdBytes.length
+				+ VarintUtils.unsignedShortByteLength(internalAdapterId));
 		buf.put(adapterIdBytes);
-		buf.putShort(internalAdapterId);
+		VarintUtils.writeUnsignedShort(
+				internalAdapterId,
+				buf);
 		return buf.array();
 	}
 
@@ -77,8 +81,8 @@ public class AdapterMapping implements
 	public void fromBinary(
 			byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		buf.getShort(internalAdapterId);
-		final byte[] adapterIdBytes = new byte[bytes.length - 2];
+		this.internalAdapterId = VarintUtils.readUnsignedShort(buf);
+		final byte[] adapterIdBytes = new byte[buf.remaining()];
 		buf.get(adapterIdBytes);
 		this.adapterId = new ByteArray(
 				adapterIdBytes);

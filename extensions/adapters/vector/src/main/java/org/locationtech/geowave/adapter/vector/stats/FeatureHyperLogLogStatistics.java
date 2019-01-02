@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
@@ -119,8 +120,10 @@ public class FeatureHyperLogLogStatistics extends
 		try {
 			final byte[] data = loglog.getBytes();
 
-			final ByteBuffer buffer = super.binaryBuffer(4 + data.length);
-			buffer.putInt(data.length);
+			final ByteBuffer buffer = super.binaryBuffer(VarintUtils.unsignedIntByteLength(data.length) + data.length);
+			VarintUtils.writeUnsignedInt(
+					data.length,
+					buffer);
 			buffer.put(data);
 			return buffer.array();
 		}
@@ -136,7 +139,7 @@ public class FeatureHyperLogLogStatistics extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
-		final byte[] data = new byte[buffer.getInt()];
+		final byte[] data = new byte[VarintUtils.readUnsignedInt(buffer)];
 		buffer.get(data);
 		try {
 			loglog = HyperLogLogPlus.Builder.build(data);
@@ -238,16 +241,17 @@ public class FeatureHyperLogLogStatistics extends
 
 		@Override
 		public byte[] toBinary() {
-			return ByteBuffer.allocate(
-					4).putInt(
-					precision).array();
+			ByteBuffer buffer = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(precision));
+			VarintUtils.writeUnsignedInt(
+					precision,
+					buffer);
+			return buffer.array();
 		}
 
 		@Override
 		public void fromBinary(
 				final byte[] bytes ) {
-			precision = ByteBuffer.wrap(
-					bytes).getInt();
+			precision = VarintUtils.readUnsignedInt(ByteBuffer.wrap(bytes));
 		}
 	}
 }

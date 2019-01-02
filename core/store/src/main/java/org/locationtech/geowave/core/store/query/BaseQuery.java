@@ -2,6 +2,7 @@ package org.locationtech.geowave.core.store.query;
 
 import java.nio.ByteBuffer;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
@@ -73,13 +74,22 @@ public abstract class BaseQuery<T, O extends DataTypeQueryOptions<T>> implements
 		else {
 			queryConstraintsBinary = new byte[0];
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(12 + commonQueryOptionsBinary.length
-				+ dataTypeQueryOptionsBinary.length + indexQueryOptionsBinary.length + queryConstraintsBinary.length);
-		buf.putInt(commonQueryOptionsBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(commonQueryOptionsBinary.length + dataTypeQueryOptionsBinary.length
+				+ indexQueryOptionsBinary.length + queryConstraintsBinary.length
+				+ VarintUtils.unsignedIntByteLength(commonQueryOptionsBinary.length)
+				+ VarintUtils.unsignedIntByteLength(dataTypeQueryOptionsBinary.length)
+				+ VarintUtils.unsignedIntByteLength(indexQueryOptionsBinary.length));
+		VarintUtils.writeUnsignedInt(
+				commonQueryOptionsBinary.length,
+				buf);
 		buf.put(commonQueryOptionsBinary);
-		buf.putInt(dataTypeQueryOptionsBinary.length);
+		VarintUtils.writeUnsignedInt(
+				dataTypeQueryOptionsBinary.length,
+				buf);
 		buf.put(dataTypeQueryOptionsBinary);
-		buf.putInt(indexQueryOptionsBinary.length);
+		VarintUtils.writeUnsignedInt(
+				indexQueryOptionsBinary.length,
+				buf);
 		buf.put(indexQueryOptionsBinary);
 		buf.put(queryConstraintsBinary);
 		return buf.array();
@@ -89,7 +99,7 @@ public abstract class BaseQuery<T, O extends DataTypeQueryOptions<T>> implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final byte[] commonQueryOptionsBinary = new byte[buf.getInt()];
+		final byte[] commonQueryOptionsBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (commonQueryOptionsBinary.length == 0) {
 			commonQueryOptions = null;
 		}
@@ -97,7 +107,7 @@ public abstract class BaseQuery<T, O extends DataTypeQueryOptions<T>> implements
 			buf.get(commonQueryOptionsBinary);
 			commonQueryOptions = (CommonQueryOptions) PersistenceUtils.fromBinary(commonQueryOptionsBinary);
 		}
-		final byte[] dataTypeQueryOptionsBinary = new byte[buf.getInt()];
+		final byte[] dataTypeQueryOptionsBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (dataTypeQueryOptionsBinary.length == 0) {
 			dataTypeQueryOptions = null;
 		}
@@ -105,7 +115,7 @@ public abstract class BaseQuery<T, O extends DataTypeQueryOptions<T>> implements
 			buf.get(dataTypeQueryOptionsBinary);
 			dataTypeQueryOptions = (O) PersistenceUtils.fromBinary(dataTypeQueryOptionsBinary);
 		}
-		final byte[] indexQueryOptionsBinary = new byte[buf.getInt()];
+		final byte[] indexQueryOptionsBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (indexQueryOptionsBinary.length == 0) {
 			indexQueryOptions = null;
 		}
@@ -113,8 +123,7 @@ public abstract class BaseQuery<T, O extends DataTypeQueryOptions<T>> implements
 			buf.get(indexQueryOptionsBinary);
 			indexQueryOptions = (IndexQueryOptions) PersistenceUtils.fromBinary(indexQueryOptionsBinary);
 		}
-		final byte[] queryConstraintsBinary = new byte[bytes.length - 12 - commonQueryOptionsBinary.length
-				- dataTypeQueryOptionsBinary.length - indexQueryOptionsBinary.length];
+		final byte[] queryConstraintsBinary = new byte[buf.remaining()];
 		if (queryConstraintsBinary.length == 0) {
 			queryConstraints = null;
 		}

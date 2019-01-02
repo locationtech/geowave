@@ -16,8 +16,10 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
+import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
 public class CalendarSerializationProvider implements
@@ -38,15 +40,33 @@ public class CalendarSerializationProvider implements
 	{
 		@Override
 		public Calendar readField(
-				final byte[] fieldData ) {
-			if ((fieldData == null) || (fieldData.length < 8)) {
+				byte[] fieldData ) {
+			if ((fieldData == null) || (fieldData.length == 0)) {
 				return null;
 			}
 			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 			cal.setTime(new Date(
-					ByteBuffer.wrap(
-							fieldData).getLong()));
+					VarintUtils.readTime(ByteBuffer.wrap(fieldData))));
 			return cal;
+		}
+
+		@Override
+		public Calendar readField(
+				byte[] fieldData,
+				byte serializationVersion ) {
+			if ((fieldData == null) || (fieldData.length == 0)) {
+				return null;
+			}
+			if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
+				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+				cal.setTime(new Date(
+						ByteBuffer.wrap(
+								fieldData).getLong()));
+				return cal;
+			}
+			else {
+				return readField(fieldData);
+			}
 		}
 	}
 
@@ -59,8 +79,11 @@ public class CalendarSerializationProvider implements
 			if (cal == null) {
 				return new byte[] {};
 			}
-			final ByteBuffer buf = ByteBuffer.allocate(8);
-			buf.putLong(TimeUtils.calendarToGMTMillis(cal));
+			long time = TimeUtils.calendarToGMTMillis(cal);
+			final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.timeByteLength(time));
+			VarintUtils.writeTime(
+					time,
+					buf);
 			return buf.array();
 		}
 	}

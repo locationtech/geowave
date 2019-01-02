@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Index;
 
@@ -75,8 +76,11 @@ public class PrimaryIndex implements
 	public byte[] toBinary() {
 		final byte[] indexStrategyBinary = PersistenceUtils.toBinary(indexStrategy);
 		final byte[] indexModelBinary = PersistenceUtils.toBinary(indexModel);
-		final ByteBuffer buf = ByteBuffer.allocate(indexStrategyBinary.length + indexModelBinary.length + 4);
-		buf.putInt(indexStrategyBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(indexStrategyBinary.length + indexModelBinary.length
+				+ VarintUtils.unsignedIntByteLength(indexStrategyBinary.length));
+		VarintUtils.writeUnsignedInt(
+				indexStrategyBinary.length,
+				buf);
 		buf.put(indexStrategyBinary);
 		buf.put(indexModelBinary);
 		return buf.array();
@@ -86,13 +90,13 @@ public class PrimaryIndex implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int indexStrategyLength = buf.getInt();
+		final int indexStrategyLength = VarintUtils.readUnsignedInt(buf);
 		final byte[] indexStrategyBinary = new byte[indexStrategyLength];
 		buf.get(indexStrategyBinary);
 
 		indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(indexStrategyBinary);
 
-		final byte[] indexModelBinary = new byte[bytes.length - indexStrategyLength - 4];
+		final byte[] indexModelBinary = new byte[buf.remaining()];
 		buf.get(indexModelBinary);
 		indexModel = (CommonIndexModel) PersistenceUtils.fromBinary(indexModelBinary);
 	}

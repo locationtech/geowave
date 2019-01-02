@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
@@ -71,8 +72,14 @@ public class DuplicateEntryCount<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = super.binaryBuffer(8);
-		buf.putLong(entriesWithDuplicates);
+		if (entriesWithDuplicates == 0) {
+			return super.binaryBuffer(
+					0).array();
+		}
+		final ByteBuffer buf = super.binaryBuffer(VarintUtils.unsignedLongByteLength(entriesWithDuplicates));
+		VarintUtils.writeUnsignedLong(
+				entriesWithDuplicates,
+				buf);
 		return buf.array();
 	}
 
@@ -80,7 +87,12 @@ public class DuplicateEntryCount<T> extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = super.binaryBuffer(bytes);
-		entriesWithDuplicates = buf.getLong();
+		if (buf.hasRemaining()) {
+			entriesWithDuplicates = VarintUtils.readUnsignedLong(buf);
+		}
+		else {
+			entriesWithDuplicates = 0;
+		}
 	}
 
 	@Override

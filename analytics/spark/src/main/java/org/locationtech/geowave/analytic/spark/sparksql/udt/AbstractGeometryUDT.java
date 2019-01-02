@@ -10,13 +10,18 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.spark.sparksql.udt;
 
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKBReader;
-import org.locationtech.jts.io.WKBWriter;
 import org.apache.spark.sql.catalyst.InternalRow;
 import org.apache.spark.sql.catalyst.expressions.GenericInternalRow;
-import org.apache.spark.sql.types.*;
+import org.apache.spark.sql.types.DataType;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.Metadata;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
+import org.apache.spark.sql.types.UserDefinedType;
+import org.locationtech.geowave.core.geotime.util.TWKBReader;
+import org.locationtech.geowave.core.geotime.util.TWKBWriter;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
 
 /**
  * Created by jwileczek on 7/20/18.
@@ -44,7 +49,7 @@ public abstract class AbstractGeometryUDT<T extends Geometry> extends
 	@Override
 	public InternalRow serialize(
 			T obj ) {
-		byte[] bytes = new WKBWriter().write(obj);
+		byte[] bytes = new TWKBWriter().write(obj);
 		InternalRow returnRow = new GenericInternalRow(
 				bytes.length);
 		returnRow.update(
@@ -60,7 +65,7 @@ public abstract class AbstractGeometryUDT<T extends Geometry> extends
 		InternalRow row = (InternalRow) datum;
 		byte[] bytes = row.getBinary(0);
 		try {
-			geom = (T) new WKBReader().read(bytes);
+			geom = (T) new TWKBReader().read(bytes);
 		}
 		catch (ParseException e) {
 			e.printStackTrace();

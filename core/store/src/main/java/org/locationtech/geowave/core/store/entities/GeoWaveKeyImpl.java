@@ -18,6 +18,7 @@ import java.util.List;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
+import org.locationtech.geowave.core.index.VarintUtils;
 
 public class GeoWaveKeyImpl implements
 		GeoWaveKey
@@ -57,24 +58,25 @@ public class GeoWaveKeyImpl implements
 			final int offset,
 			final int length ) {
 		this.compositeInsertionId = compositeInsertionId;
-		final ByteBuffer metadataBuf = ByteBuffer.wrap(
-				compositeInsertionId,
-				(length + offset) - 4,
-				4);
-		final int dataIdLength = Short.toUnsignedInt(metadataBuf.getShort());
-		final int numberOfDuplicates = Short.toUnsignedInt(metadataBuf.getShort());
-
 		final ByteBuffer buf = ByteBuffer.wrap(
 				compositeInsertionId,
 				offset,
-				length - 4);
-		final byte[] sortKey = new byte[length - 6 - dataIdLength - partitionKeyLength];
-		final byte[] partitionKey = new byte[length - 6 - dataIdLength - sortKey.length];
+				length);
+		buf.position(buf.limit() - 1);
+		final int numberOfDuplicates = VarintUtils.readUnsignedIntReversed(buf);
+		final int dataIdLength = VarintUtils.readUnsignedIntReversed(buf);
 		final byte[] dataId = new byte[dataIdLength];
+		buf.position(buf.position() - dataIdLength + 1);
+		buf.get(dataId);
+		buf.position(buf.position() - dataIdLength - 1);
+		this.internalAdapterId = (short) VarintUtils.readUnsignedIntReversed(buf);
+		int readLength = buf.limit() - 1 - buf.position();
+
+		buf.position(offset);
+		final byte[] sortKey = new byte[length - readLength - partitionKeyLength];
+		final byte[] partitionKey = new byte[partitionKeyLength];
 		buf.get(partitionKey);
 		buf.get(sortKey);
-		this.internalAdapterId = buf.getShort();
-		buf.get(dataId);
 
 		this.dataId = dataId;
 		this.partitionKey = partitionKey;

@@ -12,6 +12,7 @@ package org.locationtech.geowave.core.index.sfc;
 
 import java.nio.ByteBuffer;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -111,8 +112,11 @@ public class SFCDimensionDefinition implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] dimensionBinary = PersistenceUtils.toBinary(dimensionDefinition);
-		final ByteBuffer buf = ByteBuffer.allocate(dimensionBinary.length + 4);
-		buf.putInt(bitsOfPrecision);
+		final ByteBuffer buf = ByteBuffer.allocate(dimensionBinary.length
+				+ VarintUtils.unsignedIntByteLength(bitsOfPrecision));
+		VarintUtils.writeUnsignedInt(
+				bitsOfPrecision,
+				buf);
 		buf.put(dimensionBinary);
 		return buf.array();
 	}
@@ -121,8 +125,8 @@ public class SFCDimensionDefinition implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final byte[] dimensionBinary = new byte[bytes.length - 4];
-		bitsOfPrecision = buf.getInt();
+		bitsOfPrecision = VarintUtils.readUnsignedInt(buf);
+		final byte[] dimensionBinary = new byte[buf.remaining()];
 		buf.get(dimensionBinary);
 		dimensionDefinition = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dimensionBinary);
 	}

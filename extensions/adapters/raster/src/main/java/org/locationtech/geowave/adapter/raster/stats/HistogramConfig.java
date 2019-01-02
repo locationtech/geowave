@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 
 import org.geotools.coverage.TypeMap;
 import org.geotools.util.NumberRange;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
 public class HistogramConfig implements
@@ -69,14 +70,23 @@ public class HistogramConfig implements
 
 	@Override
 	public byte[] toBinary() {
+		int byteLength = 0;
+		for (int b = 0; b < highValues.length; b++) {
+			byteLength += 16 + VarintUtils.unsignedIntByteLength(numBins[b]);
+		}
+		byteLength += VarintUtils.unsignedIntByteLength(highValues.length);
 		// constant number of bands, 8 + 8 + 4 bytes per band (high,low, and
 		// numBins), and 4 more for the total bands
-		final ByteBuffer buf = ByteBuffer.allocate((20 * highValues.length) + 4);
-		buf.putInt(highValues.length);
+		final ByteBuffer buf = ByteBuffer.allocate(byteLength);
+		VarintUtils.writeUnsignedInt(
+				highValues.length,
+				buf);
 		for (int b = 0; b < highValues.length; b++) {
 			buf.putDouble(lowValues[b]);
 			buf.putDouble(highValues[b]);
-			buf.putInt(numBins[b]);
+			VarintUtils.writeUnsignedInt(
+					numBins[b],
+					buf);
 		}
 		return buf.array();
 	}
@@ -97,14 +107,14 @@ public class HistogramConfig implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int numBands = buf.getInt();
+		final int numBands = VarintUtils.readUnsignedInt(buf);
 		highValues = new double[numBands];
 		lowValues = new double[numBands];
 		numBins = new int[numBands];
 		for (int b = 0; b < numBands; b++) {
 			lowValues[b] = buf.getDouble();
 			highValues[b] = buf.getDouble();
-			numBins[b] = buf.getInt();
+			numBins[b] = VarintUtils.readUnsignedInt(buf);
 		}
 	}
 }

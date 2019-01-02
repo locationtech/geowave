@@ -51,7 +51,7 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends
 			// but is simple and will work in a majority of cases
 			new InternalDataAdapterWrapper<>(
 					adapter,
-					InternalAdapterStoreImpl.getInitialAdapterId(adapter.getTypeName())),
+					InternalAdapterStoreImpl.getLazyInitialAdapterId(adapter.getTypeName())),
 			index,
 			visibilityWriter);
 	private SimpleFeature simpleFeature;

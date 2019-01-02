@@ -16,6 +16,7 @@ import java.util.HashSet;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -77,8 +78,15 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = super.binaryBuffer(8);
-		buf.putLong(entriesWithDifferingFieldVisibilities);
+		if (entriesWithDifferingFieldVisibilities == 0) {
+			return super.binaryBuffer(
+					0).array();
+		}
+		final ByteBuffer buf = super.binaryBuffer(VarintUtils
+				.unsignedLongByteLength(entriesWithDifferingFieldVisibilities));
+		VarintUtils.writeUnsignedLong(
+				entriesWithDifferingFieldVisibilities,
+				buf);
 		return buf.array();
 	}
 
@@ -86,7 +94,12 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = super.binaryBuffer(bytes);
-		entriesWithDifferingFieldVisibilities = buf.getLong();
+		if (buf.hasRemaining()) {
+			entriesWithDifferingFieldVisibilities = VarintUtils.readUnsignedLong(buf);
+		}
+		else {
+			entriesWithDifferingFieldVisibilities = 0;
+		}
 	}
 
 	@Override

@@ -13,8 +13,10 @@ package org.locationtech.geowave.core.store.data.field.base;
 import java.nio.ByteBuffer;
 import java.nio.LongBuffer;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
+import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
 public class PrimitiveLongArraySerializationProvider implements
@@ -36,14 +38,35 @@ public class PrimitiveLongArraySerializationProvider implements
 		@Override
 		public long[] readField(
 				final byte[] fieldData ) {
-			if ((fieldData == null) || (fieldData.length < 8)) {
+			if ((fieldData == null) || (fieldData.length == 0)) {
 				return null;
 			}
-			final LongBuffer buff = ByteBuffer.wrap(
-					fieldData).asLongBuffer();
-			final long[] result = new long[buff.remaining()];
-			buff.get(result);
+			final ByteBuffer buff = ByteBuffer.wrap(fieldData);
+			int count = VarintUtils.readUnsignedInt(buff);
+			final long[] result = new long[count];
+			for (int i = 0; i < count; i++) {
+				result[i] = VarintUtils.readSignedLong(buff);
+			}
 			return result;
+		}
+
+		@Override
+		public long[] readField(
+				final byte[] fieldData,
+				final byte serializationVersion ) {
+			if ((fieldData == null) || (fieldData.length == 0)) {
+				return null;
+			}
+			if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
+				final LongBuffer buff = ByteBuffer.wrap(
+						fieldData).asLongBuffer();
+				final long[] result = new long[buff.remaining()];
+				buff.get(result);
+				return result;
+			}
+			else {
+				return readField(fieldData);
+			}
 		}
 	}
 
@@ -60,9 +83,18 @@ public class PrimitiveLongArraySerializationProvider implements
 			if (fieldValue == null) {
 				return new byte[] {};
 			}
-			final ByteBuffer buf = ByteBuffer.allocate(8 * fieldValue.length);
+			int bytes = VarintUtils.unsignedIntByteLength(fieldValue.length);
 			for (final long value : fieldValue) {
-				buf.putLong(value);
+				bytes += VarintUtils.signedLongByteLength(value);
+			}
+			final ByteBuffer buf = ByteBuffer.allocate(bytes);
+			VarintUtils.writeUnsignedInt(
+					fieldValue.length,
+					buf);
+			for (final long value : fieldValue) {
+				VarintUtils.writeSignedLong(
+						value,
+						buf);
 			}
 			return buf.array();
 		}

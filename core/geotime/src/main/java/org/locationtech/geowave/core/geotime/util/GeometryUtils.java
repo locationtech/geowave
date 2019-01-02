@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nullable;
 import javax.measure.Unit;
 import javax.measure.quantity.Length;
 
@@ -46,6 +47,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
@@ -96,6 +98,8 @@ public class GeometryUtils
 	public static final String DEFAULT_CRS_STR = "EPSG:4326";
 	private static CoordinateReferenceSystem defaultCrsSingleton;
 	private static Set<ClassLoader> initializedClassLoaders = new HashSet<>();
+
+	public static final Integer MAX_GEOMETRY_PRECISION = Integer.valueOf(TWKBUtils.MAX_COORD_PRECISION);
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
 	public static CoordinateReferenceSystem getDefaultCRS() {
@@ -371,16 +375,13 @@ public class GeometryUtils
 	 * @return The binary representation of the geometry
 	 */
 	public static byte[] geometryToBinary(
-			final Geometry geometry ) {
-
-		int dimensions = DEFAULT_DIMENSIONALITY;
-
-		if (!geometry.isEmpty()) {
-			dimensions = Double.isNaN(geometry.getCoordinate().getZ()) ? 2 : 3;
+			final Geometry geometry,
+			final @Nullable Integer precision ) {
+		if (precision == null) {
+			return new WKBWriter().write(geometry);
 		}
-
-		return new WKBWriter(
-				dimensions).write(geometry);
+		return new TWKBWriter(
+				precision).write(geometry);
 	}
 
 	/**
@@ -391,9 +392,13 @@ public class GeometryUtils
 	 * @return The JTS geometry
 	 */
 	public static Geometry geometryFromBinary(
-			final byte[] binary ) {
+			final byte[] binary,
+			final @Nullable Integer precision ) {
 		try {
-			return new WKBReader().read(binary);
+			if (precision == null) {
+				return new WKBReader().read(binary);
+			}
+			return new TWKBReader().read(binary);
 		}
 		catch (final ParseException e) {
 			LOGGER.warn(
@@ -401,6 +406,33 @@ public class GeometryUtils
 					e);
 		}
 		return null;
+	}
+
+	/**
+	 * Converts a byte array as well-known binary to a JTS geometry
+	 *
+	 * @param binary
+	 *            The well known binary
+	 * @return The JTS geometry
+	 */
+	public static Geometry geometryFromBinary(
+			final byte[] binary,
+			final @Nullable Integer precision,
+			final byte serializationVersion ) {
+		if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
+			try {
+				return new WKBReader().read(binary);
+			}
+			catch (final ParseException e) {
+				LOGGER.warn(
+						"Unable to deserialize geometry data",
+						e);
+			}
+		}
+
+		return geometryFromBinary(
+				binary,
+				precision);
 	}
 
 	/**

@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
@@ -47,8 +48,11 @@ public class AggregateTypeQueryOptions<P extends Persistable, R, T> implements
 		else {
 			aggregationBinary = new byte[0];
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(4 + aggregationBinary.length + typeNamesBinary.length);
-		buf.putInt(typeNamesBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(typeNamesBinary.length)
+				+ aggregationBinary.length + typeNamesBinary.length);
+		VarintUtils.writeUnsignedInt(
+				typeNamesBinary.length,
+				buf);
 		buf.put(typeNamesBinary);
 		buf.put(aggregationBinary);
 		return buf.array();
@@ -58,7 +62,7 @@ public class AggregateTypeQueryOptions<P extends Persistable, R, T> implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final byte[] typeNamesBytes = new byte[buf.getInt()];
+		final byte[] typeNamesBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (typeNamesBytes.length == 0) {
 			typeNames = new String[0];
 		}
@@ -66,7 +70,7 @@ public class AggregateTypeQueryOptions<P extends Persistable, R, T> implements
 			buf.get(typeNamesBytes);
 			typeNames = StringUtils.stringsFromBinary(typeNamesBytes);
 		}
-		final byte[] aggregationBytes = new byte[bytes.length - 4 - typeNamesBytes.length];
+		final byte[] aggregationBytes = new byte[buf.remaining()];
 		if (aggregationBytes.length == 0) {
 			aggregation = null;
 		}

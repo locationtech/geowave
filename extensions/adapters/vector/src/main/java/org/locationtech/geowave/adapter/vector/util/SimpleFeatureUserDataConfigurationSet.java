@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -230,33 +231,43 @@ public class SimpleFeatureUserDataConfigurationSet implements
 
 	@Override
 	public byte[] toBinary() {
-		int size = 4;
+		int size = 0;
 		List<byte[]> entries = new ArrayList<>(
 				configurations.size());
 		for (Entry<String, List<SimpleFeatureUserDataConfiguration>> e : configurations.entrySet()) {
 			byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
-			int entrySize = 8 + keyBytes.length;
 			List<byte[]> configs = new ArrayList<>(
 					e.getValue().size());
+			int entrySize = VarintUtils.unsignedIntByteLength(keyBytes.length) + keyBytes.length
+					+ VarintUtils.unsignedIntByteLength(configs.size());
 			for (SimpleFeatureUserDataConfiguration config : e.getValue()) {
 				byte[] confBytes = PersistenceUtils.toBinary(config);
-				entrySize += 4;
+				entrySize += VarintUtils.unsignedIntByteLength(confBytes.length);
 				entrySize += confBytes.length;
 				configs.add(confBytes);
 			}
 			size += entrySize;
 			ByteBuffer buf = ByteBuffer.allocate(entrySize);
-			buf.putInt(keyBytes.length);
+			VarintUtils.writeUnsignedInt(
+					keyBytes.length,
+					buf);
 			buf.put(keyBytes);
-			buf.putInt(configs.size());
+			VarintUtils.writeUnsignedInt(
+					configs.size(),
+					buf);
 			for (byte[] confBytes : configs) {
-				buf.putInt(confBytes.length);
+				VarintUtils.writeUnsignedInt(
+						confBytes.length,
+						buf);
 				buf.put(confBytes);
 			}
 			entries.add(buf.array());
 		}
+		size += VarintUtils.unsignedIntByteLength(configurations.size());
 		ByteBuffer buf = ByteBuffer.allocate(size);
-		buf.putInt(configurations.size());
+		VarintUtils.writeUnsignedInt(
+				configurations.size(),
+				buf);
 		for (byte[] e : entries) {
 			buf.put(e);
 		}
@@ -267,19 +278,19 @@ public class SimpleFeatureUserDataConfigurationSet implements
 	public void fromBinary(
 			byte[] bytes ) {
 		ByteBuffer buf = ByteBuffer.wrap(bytes);
-		int entrySize = buf.getInt();
+		int entrySize = VarintUtils.readUnsignedInt(buf);
 		Map<String, List<SimpleFeatureUserDataConfiguration>> internalConfigurations = new HashMap<>(
 				entrySize);
 		for (int i = 0; i < entrySize; i++) {
-			int keySize = buf.getInt();
+			int keySize = VarintUtils.readUnsignedInt(buf);
 			byte[] keyBytes = new byte[keySize];
 			buf.get(keyBytes);
 			String key = StringUtils.stringFromBinary(keyBytes);
-			int numConfigs = buf.getInt();
+			int numConfigs = VarintUtils.readUnsignedInt(buf);
 			List<SimpleFeatureUserDataConfiguration> confList = new ArrayList<>(
 					numConfigs);
 			for (int c = 0; c < numConfigs; c++) {
-				byte[] entryBytes = new byte[buf.getInt()];
+				byte[] entryBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 				buf.get(entryBytes);
 				confList.add((SimpleFeatureUserDataConfiguration) PersistenceUtils.fromBinary(entryBytes));
 			}

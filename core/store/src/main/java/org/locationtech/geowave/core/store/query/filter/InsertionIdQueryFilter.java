@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 import java.util.Objects;
 
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
@@ -57,12 +58,17 @@ public class InsertionIdQueryFilter implements
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(12 + partitionKey.length + sortKey.length + dataId.length);
-		buf.putInt(partitionKey.length);
+		final ByteBuffer buf = ByteBuffer.allocate(partitionKey.length + sortKey.length + dataId.length
+				+ VarintUtils.unsignedIntByteLength(partitionKey.length)
+				+ VarintUtils.unsignedIntByteLength(sortKey.length));
+		VarintUtils.writeUnsignedInt(
+				partitionKey.length,
+				buf);
 		buf.put(partitionKey);
-		buf.putInt(sortKey.length);
+		VarintUtils.writeUnsignedInt(
+				sortKey.length,
+				buf);
 		buf.put(sortKey);
-		buf.putInt(dataId.length);
 		buf.put(dataId);
 		return buf.array();
 	}
@@ -71,11 +77,11 @@ public class InsertionIdQueryFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		partitionKey = new byte[buf.getInt()];
+		partitionKey = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(partitionKey);
-		sortKey = new byte[buf.getInt()];
+		sortKey = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(sortKey);
-		dataId = new byte[buf.getInt()];
+		dataId = new byte[buf.remaining()];
 		buf.get(dataId);
 	}
 

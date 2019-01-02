@@ -294,6 +294,11 @@ public class GeoWaveVectorSerializationIT extends
 										p.getType().getBinding(),
 										after));
 					}
+					else if (before instanceof Geometry) {
+						Assert.assertTrue(((Geometry) before).equalsExact(
+								(Geometry) after,
+								1e-7));
+					}
 					else {
 						Assert.assertTrue(before.equals(after));
 					}

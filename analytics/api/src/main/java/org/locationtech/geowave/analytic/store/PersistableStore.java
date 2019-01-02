@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 
@@ -46,22 +47,30 @@ public class PersistableStore implements
 				null);
 		final List<byte[]> strOptionsBinary = new ArrayList<byte[]>(
 				strOptions.size());
-		int optionsLength = 4;// for the size of the config options
+		int optionsLength = 0;
 		for (final String key : strOptions.stringPropertyNames()) {
 			final byte[] keyBinary = StringUtils.stringToBinary(key);
 			final byte[] valueBinary = StringUtils.stringToBinary(strOptions.getProperty(key));
-			final int entryLength = keyBinary.length + valueBinary.length + 8;
+			final int entryLength = keyBinary.length + valueBinary.length
+					+ VarintUtils.unsignedIntByteLength(keyBinary.length)
+					+ VarintUtils.unsignedIntByteLength(valueBinary.length);
 			final ByteBuffer buf = ByteBuffer.allocate(entryLength);
-			buf.putInt(keyBinary.length);
+			VarintUtils.writeUnsignedInt(
+					keyBinary.length,
+					buf);
 			buf.put(keyBinary);
-			buf.putInt(valueBinary.length);
+			VarintUtils.writeUnsignedInt(
+					valueBinary.length,
+					buf);
 			buf.put(valueBinary);
 			strOptionsBinary.add(buf.array());
 			optionsLength += entryLength;
 		}
-		optionsLength += (8);
+		optionsLength += VarintUtils.unsignedIntByteLength(strOptionsBinary.size());
 		final ByteBuffer buf = ByteBuffer.allocate(optionsLength);
-		buf.putInt(strOptionsBinary.size());
+		VarintUtils.writeUnsignedInt(
+				strOptionsBinary.size(),
+				buf);
 		for (final byte[] strOption : strOptionsBinary) {
 			buf.put(strOption);
 		}
@@ -72,13 +81,13 @@ public class PersistableStore implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int configOptionLength = buf.getInt();
+		final int configOptionLength = VarintUtils.readUnsignedInt(buf);
 		final Properties configOptions = new Properties();
 		for (int i = 0; i < configOptionLength; i++) {
-			final int keyLength = buf.getInt();
+			final int keyLength = VarintUtils.readUnsignedInt(buf);
 			final byte[] keyBinary = new byte[keyLength];
 			buf.get(keyBinary);
-			final int valueLength = buf.getInt();
+			final int valueLength = VarintUtils.readUnsignedInt(buf);
 			final byte[] valueBinary = new byte[valueLength];
 			buf.get(valueBinary);
 			configOptions.put(

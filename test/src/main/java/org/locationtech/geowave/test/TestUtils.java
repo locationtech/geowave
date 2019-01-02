@@ -59,6 +59,8 @@ import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.TWKBReader;
+import org.locationtech.geowave.core.geotime.util.TWKBWriter;
 import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.ingest.operations.LocalToGeowaveCommand;
@@ -77,6 +79,7 @@ import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.And;
 import org.opengis.filter.Filter;
@@ -566,6 +569,8 @@ public class TestUtils
 		final Set<Long> hashedCentroids = new HashSet<>();
 		int expectedResultCount = 0;
 		final MathTransform mathTransform = transformFromCrs(crs);
+		TWKBWriter writer = new TWKBWriter();
+		TWKBReader reader = new TWKBReader();
 		for (final URL expectedResultsResource : expectedResultsResources) {
 			map.put(
 					"url",
@@ -589,13 +594,17 @@ public class TestUtils
 				while (featureIterator.hasNext()) {
 					final SimpleFeature feature = featureIterator.next();
 					final Geometry geometry = (Geometry) feature.getDefaultGeometry();
-					final long centroid = hashCentroid(mathTransform != null ? JTS.transform(
+
+					// TODO: Geometry has to be serialized and deserialized here
+					// to make the centroid match the one coming out of the
+					// database.
+					final long centroid = hashCentroid(reader.read(writer.write(mathTransform != null ? JTS.transform(
 							geometry,
-							mathTransform) : geometry);
+							mathTransform) : geometry)));
 					hashedCentroids.add(centroid);
 				}
 			}
-			catch (MismatchedDimensionException | TransformException e) {
+			catch (MismatchedDimensionException | TransformException | ParseException e) {
 				LOGGER.warn(
 						"Unable to transform geometry",
 						e);

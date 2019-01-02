@@ -12,6 +12,8 @@ package org.locationtech.geowave.core.store.data.field;
 
 import java.nio.ByteBuffer;
 
+import org.locationtech.geowave.core.index.VarintUtils;
+
 /**
  * This class contains the basic object array writer field types
  *
@@ -63,11 +65,6 @@ abstract public class ArrayWriter<RowType, FieldType> implements
 
 		final byte[][] byteData = getBytes(fieldValue);
 
-		final ByteBuffer buf = ByteBuffer.allocate(5 + (int) Math.ceil(fieldValue.length / 8.0) + getLength(byteData));
-
-		// this is a header value to indicate how data should be read/written
-		buf.put(Encoding.FIXED_SIZE_ENCODING.getByteEncoding());
-
 		int bytesPerEntry = 0;
 		for (final byte[] bytes : byteData) {
 			if (bytes.length > 0) {
@@ -75,8 +72,16 @@ abstract public class ArrayWriter<RowType, FieldType> implements
 			}
 		}
 
+		final ByteBuffer buf = ByteBuffer.allocate(1 + VarintUtils.unsignedIntByteLength(bytesPerEntry)
+				+ (int) Math.ceil(fieldValue.length / 8.0) + getLength(byteData));
+
+		// this is a header value to indicate how data should be read/written
+		buf.put(Encoding.FIXED_SIZE_ENCODING.getByteEncoding());
+
 		// this is a header value to indicate the size of each entry
-		buf.putInt(bytesPerEntry);
+		VarintUtils.writeUnsignedInt(
+				bytesPerEntry,
+				buf);
 
 		for (int i = 0; i < fieldValue.length; i += 8) {
 
@@ -112,13 +117,21 @@ abstract public class ArrayWriter<RowType, FieldType> implements
 		}
 
 		final byte[][] bytes = getBytes(fieldValue);
-		final ByteBuffer buf = ByteBuffer.allocate(1 + (4 * fieldValue.length) + getLength(bytes));
+
+		int sizeBytes = 0;
+		for (final byte[] entry : bytes) {
+			sizeBytes += VarintUtils.unsignedIntByteLength(entry.length);
+		}
+
+		final ByteBuffer buf = ByteBuffer.allocate(1 + sizeBytes + getLength(bytes));
 
 		// this is a header value to indicate how data should be read/written
 		buf.put(Encoding.VARIABLE_SIZE_ENCODING.getByteEncoding());
 
 		for (final byte[] entry : bytes) {
-			buf.putInt(entry.length);
+			VarintUtils.writeUnsignedInt(
+					entry.length,
+					buf);
 			if (entry.length > 0) {
 				buf.put(entry);
 			}

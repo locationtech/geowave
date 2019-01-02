@@ -20,10 +20,10 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.cs.CoordinateSystem;
-import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.clearspring.analytics.util.Varint;
 
 /**
  * This class is used by GridCoverageDataAdapter to persist GridCoverages. The
@@ -86,7 +86,7 @@ public class GridCoverageWritable implements
 	public void readFields(
 			final DataInput input )
 			throws IOException {
-		final int rasterTileSize = input.readInt();
+		final int rasterTileSize = Varint.readUnsignedVarInt(input);
 		final byte[] rasterTileBinary = new byte[rasterTileSize];
 		input.readFully(rasterTileBinary);
 		rasterTile = new RasterTile();
@@ -95,7 +95,7 @@ public class GridCoverageWritable implements
 		maxX = input.readDouble();
 		minY = input.readDouble();
 		maxY = input.readDouble();
-		int crsStrSize = input.readInt();
+		int crsStrSize = Varint.readUnsignedVarInt(input);
 
 		if (crsStrSize > 0) {
 			byte[] crsStrBytes = new byte[crsStrSize];
@@ -123,7 +123,9 @@ public class GridCoverageWritable implements
 			final DataOutput output )
 			throws IOException {
 		final byte[] rasterTileBinary = rasterTile.toBinary();
-		output.writeInt(rasterTileBinary.length);
+		Varint.writeUnsignedVarInt(
+				rasterTileBinary.length,
+				output);
 		output.write(rasterTileBinary);
 		output.writeDouble(minX);
 		output.writeDouble(maxX);
@@ -131,7 +133,9 @@ public class GridCoverageWritable implements
 		output.writeDouble(maxY);
 		String crsStr = crs == null || GeometryUtils.getDefaultCRS().equals(
 				crs) ? "" : CRS.toSRS(crs);
-		output.writeInt(crsStr.length());
+		Varint.writeUnsignedVarInt(
+				crsStr.length(),
+				output);
 		output.write(StringUtils.stringToBinary(crsStr));
 	}
 

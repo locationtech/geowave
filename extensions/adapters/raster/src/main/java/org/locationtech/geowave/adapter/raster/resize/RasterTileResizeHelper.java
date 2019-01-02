@@ -51,7 +51,7 @@ public class RasterTileResizeHelper
 				-1);
 		newAdapterId = (short) conf.getInt(
 				RasterTileResizeJobRunner.NEW_ADAPTER_ID_KEY,
-				InternalAdapterStoreImpl.getInitialAdapterId(newTypeName));
+				InternalAdapterStoreImpl.getLazyInitialAdapterId(newTypeName));
 		for (final DataTypeAdapter adapter : adapters) {
 			if (adapter.getTypeName().equals(
 					newTypeName)) {

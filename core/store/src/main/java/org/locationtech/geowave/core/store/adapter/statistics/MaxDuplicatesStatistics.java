@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 public class MaxDuplicatesStatistics<T> extends
@@ -60,8 +61,10 @@ public class MaxDuplicatesStatistics<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = super.binaryBuffer(8);
-		buf.putInt(maxDuplicates);
+		final ByteBuffer buf = super.binaryBuffer(VarintUtils.unsignedIntByteLength(maxDuplicates));
+		VarintUtils.writeUnsignedInt(
+				maxDuplicates,
+				buf);
 		return buf.array();
 	}
 
@@ -69,7 +72,7 @@ public class MaxDuplicatesStatistics<T> extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = super.binaryBuffer(bytes);
-		maxDuplicates = buf.getInt();
+		maxDuplicates = VarintUtils.readUnsignedInt(buf);
 	}
 
 	@Override

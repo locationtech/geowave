@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
@@ -75,9 +76,13 @@ abstract public class TimeRangeDataStatistics<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buffer = super.binaryBuffer(16);
-		buffer.putLong(min);
-		buffer.putLong(max);
+		final ByteBuffer buffer = super.binaryBuffer(VarintUtils.timeByteLength(min) + VarintUtils.timeByteLength(max));
+		VarintUtils.writeTime(
+				min,
+				buffer);
+		VarintUtils.writeTime(
+				max,
+				buffer);
 		return buffer.array();
 	}
 
@@ -85,8 +90,8 @@ abstract public class TimeRangeDataStatistics<T> extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
-		min = buffer.getLong();
-		max = buffer.getLong();
+		min = VarintUtils.readTime(buffer);
+		max = VarintUtils.readTime(buffer);
 	}
 
 	@Override

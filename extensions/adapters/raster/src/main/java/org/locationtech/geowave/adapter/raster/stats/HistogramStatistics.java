@@ -34,6 +34,7 @@ import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.Resolution;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsQueryBuilder;
@@ -81,7 +82,7 @@ public class HistogramStatistics extends
 	@Override
 	public byte[] toBinary() {
 		final List<byte[]> perEntryBinary = new ArrayList<>();
-		int totalBytes = 4;
+		int totalBytes = 0;
 		for (final Entry<Resolution, javax.media.jai.Histogram> entry : histograms.entrySet()) {
 			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			byte[] keyBytes;
@@ -110,21 +111,31 @@ public class HistogramStatistics extends
 			}
 			// 8 for key and value lengths as ints
 
-			final int entryBytes = 8 + keyBytes.length + valueBytes.length;
+			final int entryBytes = VarintUtils.unsignedIntByteLength(keyBytes.length)
+					+ VarintUtils.unsignedIntByteLength(valueBytes.length) + keyBytes.length + valueBytes.length;
 			final ByteBuffer buf = ByteBuffer.allocate(entryBytes);
-			buf.putInt(keyBytes.length);
+			VarintUtils.writeUnsignedInt(
+					keyBytes.length,
+					buf);
 			buf.put(keyBytes);
-			buf.putInt(valueBytes.length);
+			VarintUtils.writeUnsignedInt(
+					valueBytes.length,
+					buf);
 			buf.put(valueBytes);
 			perEntryBinary.add(buf.array());
 			totalBytes += entryBytes;
 		}
+		totalBytes += VarintUtils.unsignedIntByteLength(perEntryBinary.size());
 		final byte[] configBinary = PersistenceUtils.toBinary(histogramConfig);
-		totalBytes += (configBinary.length + 4);
+		totalBytes += (configBinary.length + VarintUtils.unsignedIntByteLength(configBinary.length));
 		final ByteBuffer buf = super.binaryBuffer(totalBytes);
-		buf.putInt(configBinary.length);
+		VarintUtils.writeUnsignedInt(
+				configBinary.length,
+				buf);
 		buf.put(configBinary);
-		buf.putInt(perEntryBinary.size());
+		VarintUtils.writeUnsignedInt(
+				perEntryBinary.size(),
+				buf);
 		for (final byte[] entryBinary : perEntryBinary) {
 			buf.put(entryBinary);
 		}
@@ -135,19 +146,19 @@ public class HistogramStatistics extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = super.binaryBuffer(bytes);
-		final byte[] configBinary = new byte[buf.getInt()];
+		final byte[] configBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(configBinary);
 		histogramConfig = (HistogramConfig) PersistenceUtils.fromBinary(configBinary);
-		final int numEntries = buf.getInt();
+		final int numEntries = VarintUtils.readUnsignedInt(buf);
 		for (int i = 0; i < numEntries; i++) {
-			final int keyLength = buf.getInt();
+			final int keyLength = VarintUtils.readUnsignedInt(buf);
 			Resolution key = null;
 			if (keyLength > 0) {
 				final byte[] keyBytes = new byte[keyLength];
 				buf.get(keyBytes);
 				key = (Resolution) PersistenceUtils.fromBinary(keyBytes);
 			}
-			final int valueLength = buf.getInt();
+			final int valueLength = VarintUtils.readUnsignedInt(buf);
 			javax.media.jai.Histogram histogram = null;
 			if (valueLength > 0) {
 

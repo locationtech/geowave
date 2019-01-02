@@ -17,12 +17,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.locationtech.geowave.adapter.raster.adapter.RasterTile;
 import org.locationtech.geowave.adapter.raster.util.SampleModelPersistenceUtils;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.slf4j.Logger;
@@ -200,7 +201,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 	}, justification = "Incorrect warning, sampleModelBinary used")
 	@Override
 	public byte[] toBinary() {
-		int byteCount = 16;
+		int byteCount = 0;
 		final List<byte[]> sampleModelBinaries = new ArrayList<byte[]>();
 		final List<Integer> sampleModelKeys = new ArrayList<Integer>();
 		int successfullySerializedModels = 0;
@@ -208,11 +209,11 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 		final Set<Integer> successfullySerializedModelIds = new HashSet<Integer>();
 		for (final Entry<Integer, SampleModel> entry : sampleModels.entrySet()) {
 			final SampleModel sampleModel = entry.getValue();
-			byte[] sampleModelBinary = new byte[0];
 			try {
-				sampleModelBinary = SampleModelPersistenceUtils.getSampleModelBinary(sampleModel);
+				byte[] sampleModelBinary = SampleModelPersistenceUtils.getSampleModelBinary(sampleModel);
 				byteCount += sampleModelBinary.length;
-				byteCount += 8;
+				byteCount += VarintUtils.unsignedIntByteLength(sampleModelBinary.length);
+				byteCount += VarintUtils.unsignedIntByteLength(entry.getKey());
 				sampleModelBinaries.add(sampleModelBinary);
 				sampleModelKeys.add(entry.getKey());
 				successfullySerializedModels++;
@@ -224,13 +225,16 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 						e);
 			}
 		}
+		byteCount += VarintUtils.unsignedIntByteLength(successfullySerializedModelIds.size());
 
 		for (final Entry<Short, Integer> entry : adapterIdToSampleModelKey.entrySet()) {
 			if (successfullySerializedModelIds.contains(entry.getValue())) {
-				byteCount += 6;
+				byteCount += VarintUtils.unsignedShortByteLength(entry.getKey());
+				byteCount += VarintUtils.unsignedIntByteLength(entry.getValue());
 				successfullySerializedModelAdapters++;
 			}
 		}
+		byteCount += VarintUtils.unsignedIntByteLength(successfullySerializedModelAdapters);
 
 		final List<byte[]> mergeStrategyBinaries = new ArrayList<byte[]>();
 		final List<Integer> mergeStrategyKeys = new ArrayList<Integer>();
@@ -241,48 +245,77 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 			final RasterTileMergeStrategy<T> mergeStrategy = entry.getValue();
 			final byte[] mergeStrategyBinary = PersistenceUtils.toBinary(mergeStrategy);
 			byteCount += mergeStrategyBinary.length;
-			byteCount += 8;
+			byteCount += VarintUtils.unsignedIntByteLength(mergeStrategyBinary.length);
+			byteCount += VarintUtils.unsignedIntByteLength(entry.getKey());
 			mergeStrategyBinaries.add(mergeStrategyBinary);
 			mergeStrategyKeys.add(entry.getKey());
 			successfullySerializedMergeStrategies++;
 			successfullySerializedMergeIds.add(entry.getKey());
 		}
+		byteCount += VarintUtils.unsignedIntByteLength(successfullySerializedMergeStrategies);
 
 		for (final Entry<Short, Integer> entry : adapterIdToChildMergeStrategyKey.entrySet()) {
 			if (successfullySerializedMergeIds.contains(entry.getValue())) {
-				byteCount += 6;
+				byteCount += VarintUtils.unsignedShortByteLength(entry.getKey());
+				byteCount += VarintUtils.unsignedIntByteLength(entry.getValue());
 				successfullySerializedMergeAdapters++;
 			}
 		}
+		byteCount += VarintUtils.unsignedIntByteLength(successfullySerializedMergeAdapters);
+
 		final ByteBuffer buf = ByteBuffer.allocate(byteCount);
-		buf.putInt(successfullySerializedModels);
+		VarintUtils.writeUnsignedInt(
+				successfullySerializedModels,
+				buf);
 		for (int i = 0; i < successfullySerializedModels; i++) {
 			final byte[] sampleModelBinary = sampleModelBinaries.get(i);
-			buf.putInt(sampleModelBinary.length);
+			VarintUtils.writeUnsignedInt(
+					sampleModelBinary.length,
+					buf);
 			buf.put(sampleModelBinary);
-			buf.putInt(sampleModelKeys.get(i));
+			VarintUtils.writeUnsignedInt(
+					sampleModelKeys.get(i),
+					buf);
 		}
 
-		buf.putInt(successfullySerializedModelAdapters);
+		VarintUtils.writeUnsignedInt(
+				successfullySerializedModelAdapters,
+				buf);
 		for (final Entry<Short, Integer> entry : adapterIdToSampleModelKey.entrySet()) {
 			if (successfullySerializedModelIds.contains(entry.getValue())) {
-				buf.putShort(entry.getKey());
-				buf.putInt(entry.getValue());
+				VarintUtils.writeUnsignedShort(
+						entry.getKey(),
+						buf);
+				VarintUtils.writeUnsignedInt(
+						entry.getValue(),
+						buf);
 			}
 		}
-		buf.putInt(successfullySerializedMergeStrategies);
+		VarintUtils.writeUnsignedInt(
+				successfullySerializedMergeStrategies,
+				buf);
 		for (int i = 0; i < successfullySerializedMergeStrategies; i++) {
 			final byte[] mergeStrategyBinary = mergeStrategyBinaries.get(i);
-			buf.putInt(mergeStrategyBinary.length);
+			VarintUtils.writeUnsignedInt(
+					mergeStrategyBinary.length,
+					buf);
 			buf.put(mergeStrategyBinary);
-			buf.putInt(mergeStrategyKeys.get(i));
+			VarintUtils.writeUnsignedInt(
+					mergeStrategyKeys.get(i),
+					buf);
 		}
 
-		buf.putInt(successfullySerializedMergeAdapters);
+		VarintUtils.writeUnsignedInt(
+				successfullySerializedMergeAdapters,
+				buf);
 		for (final Entry<Short, Integer> entry : adapterIdToChildMergeStrategyKey.entrySet()) {
 			if (successfullySerializedModelIds.contains(entry.getValue())) {
-				buf.putShort(entry.getKey());
-				buf.putInt(entry.getValue());
+				VarintUtils.writeUnsignedShort(
+						entry.getKey(),
+						buf);
+				VarintUtils.writeUnsignedInt(
+						entry.getValue(),
+						buf);
 			}
 		}
 		return buf.array();
@@ -292,15 +325,15 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int sampleModelSize = buf.getInt();
+		final int sampleModelSize = VarintUtils.readUnsignedInt(buf);
 		sampleModels = new HashMap<Integer, SampleModel>(
 				sampleModelSize);
 		for (int i = 0; i < sampleModelSize; i++) {
-			final byte[] sampleModelBinary = new byte[buf.getInt()];
+			final byte[] sampleModelBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 			if (sampleModelBinary.length > 0) {
 				try {
 					buf.get(sampleModelBinary);
-					final int sampleModelKey = buf.getInt();
+					final int sampleModelKey = VarintUtils.readUnsignedInt(buf);
 					final SampleModel sampleModel = SampleModelPersistenceUtils.getSampleModel(sampleModelBinary);
 					sampleModels.put(
 							sampleModelKey,
@@ -316,26 +349,26 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 				LOGGER.warn("Sample model binary is empty, unable to deserialize");
 			}
 		}
-		final int sampleModelAdapterIdSize = buf.getInt();
+		final int sampleModelAdapterIdSize = VarintUtils.readUnsignedInt(buf);
 		adapterIdToSampleModelKey = new HashMap<Short, Integer>(
 				sampleModelAdapterIdSize);
 		for (int i = 0; i < sampleModelAdapterIdSize; i++) {
 			adapterIdToSampleModelKey.put(
-					buf.getShort(),
-					buf.getInt());
+					VarintUtils.readUnsignedShort(buf),
+					VarintUtils.readUnsignedInt(buf));
 		}
 
-		final int mergeStrategySize = buf.getInt();
+		final int mergeStrategySize = VarintUtils.readUnsignedInt(buf);
 		childMergeStrategies = new HashMap<Integer, RasterTileMergeStrategy<T>>(
 				mergeStrategySize);
 		for (int i = 0; i < mergeStrategySize; i++) {
-			final byte[] mergeStrategyBinary = new byte[buf.getInt()];
+			final byte[] mergeStrategyBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 			if (mergeStrategyBinary.length > 0) {
 				try {
 					buf.get(mergeStrategyBinary);
 					final RasterTileMergeStrategy mergeStrategy = (RasterTileMergeStrategy) PersistenceUtils
 							.fromBinary(mergeStrategyBinary);
-					final int mergeStrategyKey = buf.getInt();
+					final int mergeStrategyKey = VarintUtils.readUnsignedInt(buf);
 					if (mergeStrategy != null) {
 						childMergeStrategies.put(
 								mergeStrategyKey,
@@ -352,13 +385,13 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 				LOGGER.warn("Merge strategy binary is empty, unable to deserialize");
 			}
 		}
-		final int mergeStrategyAdapterIdSize = buf.getInt();
+		final int mergeStrategyAdapterIdSize = VarintUtils.readUnsignedInt(buf);
 		adapterIdToChildMergeStrategyKey = new HashMap<Short, Integer>(
 				mergeStrategyAdapterIdSize);
 		for (int i = 0; i < mergeStrategyAdapterIdSize; i++) {
 			adapterIdToChildMergeStrategyKey.put(
-					buf.getShort(),
-					buf.getInt());
+					VarintUtils.readUnsignedShort(buf),
+					VarintUtils.readUnsignedInt(buf));
 		}
 	}
 

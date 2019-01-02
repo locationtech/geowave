@@ -13,8 +13,10 @@ package org.locationtech.geowave.core.geotime.store.field;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
+import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
 public class DateSerializationProvider implements
@@ -36,13 +38,29 @@ public class DateSerializationProvider implements
 	{
 		@Override
 		public Date readField(
-				final byte[] fieldData ) {
-			if ((fieldData == null) || (fieldData.length < 8)) {
+				byte[] fieldData ) {
+			if ((fieldData == null) || (fieldData.length == 0)) {
 				return null;
 			}
 			return new Date(
-					ByteBuffer.wrap(
-							fieldData).getLong());
+					VarintUtils.readTime(ByteBuffer.wrap(fieldData)));
+		}
+
+		@Override
+		public Date readField(
+				byte[] fieldData,
+				byte serializationVersion ) {
+			if ((fieldData == null) || (fieldData.length == 0)) {
+				return null;
+			}
+			if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
+				return new Date(
+						ByteBuffer.wrap(
+								fieldData).getLong());
+			}
+			else {
+				return readField(fieldData);
+			}
 		}
 	}
 
@@ -56,8 +74,10 @@ public class DateSerializationProvider implements
 				return new byte[] {};
 			}
 
-			final ByteBuffer buf = ByteBuffer.allocate(8);
-			buf.putLong(fieldData.getTime());
+			final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.timeByteLength(fieldData.getTime()));
+			VarintUtils.writeTime(
+					fieldData.getTime(),
+					buf);
 			return buf.array();
 		}
 	}

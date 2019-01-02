@@ -14,11 +14,11 @@ import java.util.Calendar;
 
 import org.locationtech.geowave.core.geotime.store.field.CalendarSerializationProvider.CalendarReader;
 import org.locationtech.geowave.core.geotime.store.field.CalendarSerializationProvider.CalendarWriter;
+import org.locationtech.geowave.core.store.data.field.ArrayReader;
+import org.locationtech.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.data.field.ArrayReader.FixedSizeObjectArrayReader;
-import org.locationtech.geowave.core.store.data.field.ArrayWriter.FixedSizeObjectArrayWriter;
 
 public class CalendarArraySerializationProvider implements
 		FieldSerializationProviderSpi<Calendar[]>
@@ -33,17 +33,19 @@ public class CalendarArraySerializationProvider implements
 		return new CalendarArrayWriter();
 	}
 
-	private static class CalendarArrayReader extends
-			FixedSizeObjectArrayReader<Calendar>
+	private static class CalendarArrayReader implements
+			FieldReader<Calendar[]>
 	{
-		public CalendarArrayReader() {
-			super(
-					new CalendarReader());
+		@Override
+		public Calendar[] readField(
+				byte[] fieldData ) {
+			return new ArrayReader<Calendar>(
+					new CalendarReader()).readField(fieldData);
 		}
 	}
 
 	private static class CalendarArrayWriter extends
-			FixedSizeObjectArrayWriter<Object, Calendar>
+			VariableSizeObjectArrayWriter<Object, Calendar>
 	{
 		public CalendarArrayWriter() {
 			super(

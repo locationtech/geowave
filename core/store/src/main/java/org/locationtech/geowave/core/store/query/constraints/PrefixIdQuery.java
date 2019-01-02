@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.filter.PrefixIdQueryFilter;
@@ -75,8 +76,11 @@ public class PrefixIdQuery implements
 		else {
 			sortKeyPrefixBinary = new byte[0];
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(4 + sortKeyPrefixBinary.length + partitionKeyBinary.length);
-		buf.putInt(partitionKeyBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(partitionKeyBinary.length)
+				+ sortKeyPrefixBinary.length + partitionKeyBinary.length);
+		VarintUtils.writeUnsignedInt(
+				partitionKeyBinary.length,
+				buf);
 		buf.put(partitionKeyBinary);
 		buf.put(sortKeyPrefixBinary);
 		return buf.array();
@@ -86,7 +90,7 @@ public class PrefixIdQuery implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final byte[] partitionKeyBinary = new byte[buf.getInt()];
+		final byte[] partitionKeyBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (partitionKeyBinary.length == 0) {
 			partitionKey = null;
 		}
@@ -95,7 +99,7 @@ public class PrefixIdQuery implements
 			partitionKey = new ByteArray(
 					partitionKeyBinary);
 		}
-		final byte[] sortKeyPrefixBinary = new byte[bytes.length - 4 - partitionKeyBinary.length];
+		final byte[] sortKeyPrefixBinary = new byte[buf.remaining()];
 		if (sortKeyPrefixBinary.length == 0) {
 			sortKeyPrefix = null;
 		}

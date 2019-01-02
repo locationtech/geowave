@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.geotime.store.dimension;
 
-import org.locationtech.geowave.core.store.data.field.ArrayReader.FixedSizeObjectArrayReader;
-import org.locationtech.geowave.core.store.data.field.ArrayWriter.FixedSizeObjectArrayWriter;
+import org.locationtech.geowave.core.store.data.field.ArrayReader;
+import org.locationtech.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.ArrayField;
@@ -32,10 +32,10 @@ public class TimeArrayField extends
 		super(
 				elementField);
 		reader = new ArrayWrapperReader<>(
-				new FixedSizeObjectArrayReader<>(
+				new ArrayReader<>(
 						elementField.getReader()));
 		writer = new ArrayWrapperWriter<Time>(
-				new FixedSizeObjectArrayWriter(
+				new VariableSizeObjectArrayWriter(
 						elementField.getWriter()));
 	}
 
@@ -56,10 +56,10 @@ public class TimeArrayField extends
 			final byte[] bytes ) {
 		super.fromBinary(bytes);
 		reader = new ArrayWrapperReader<>(
-				new FixedSizeObjectArrayReader<>(
+				new ArrayReader<>(
 						elementField.getReader()));
 		writer = new ArrayWrapperWriter<Time>(
-				new FixedSizeObjectArrayWriter(
+				new VariableSizeObjectArrayWriter(
 						elementField.getWriter()));
 	}
 }

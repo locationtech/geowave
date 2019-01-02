@@ -171,10 +171,57 @@ public class InternalAdapterStoreImpl implements
 		}
 	}
 
-	public static short getInitialAdapterId(
+	/**
+	 * This method has a chance of producing a conflicting adapter ID. Whenever
+	 * possible, {@link #getInitialAdapterId(String)} should be used.
+	 * 
+	 * @param typeName
+	 * @return
+	 */
+	public static short getLazyInitialAdapterId(
 			final String typeName ) {
-		final int shortRange = Short.MAX_VALUE - Short.MIN_VALUE;
-		final short adapterId = (short) (Math.abs((typeName.hashCode() % shortRange)) - Short.MIN_VALUE);
+		return (short) (Math.abs((typeName.hashCode() % 127)));
+	}
+
+	@Override
+	public short getInitialAdapterId(
+			final String typeName ) {
+		// try to fit it into 1 byte first
+		short adapterId = (short) (Math.abs((typeName.hashCode() % 127)));
+		for (int i = 0; i < 127; i++) {
+			if (!internalAdapterIdExists(adapterId)) {
+				return adapterId;
+			}
+			adapterId++;
+			if (adapterId > 127) {
+				adapterId = 0;
+			}
+		}
+		// try to fit into 2 bytes (only happens if there are more than 127
+		// adapters)
+		adapterId = (short) (Math.abs((typeName.hashCode() % 16383)));
+		for (int i = 0; i < 16256; i++) {
+			if (!internalAdapterIdExists(adapterId)) {
+				return adapterId;
+			}
+			adapterId++;
+			if (adapterId > 16383) {
+				adapterId = 128; // it already didn't fit in 1 byte
+			}
+		}
+		// fall back to negative numbers (only happens if there are more than
+		// 16,383 adapters)
+		final int negativeRange = 0 - Short.MIN_VALUE;
+		adapterId = (short) (Math.abs((typeName.hashCode() % negativeRange)) - Short.MIN_VALUE);
+		for (int i = 0; i < negativeRange; i++) {
+			if (!internalAdapterIdExists(adapterId)) {
+				return adapterId;
+			}
+			adapterId++;
+			if (adapterId > -1) {
+				adapterId = Short.MIN_VALUE;
+			}
+		}
 		return adapterId;
 	}
 
@@ -201,9 +248,6 @@ public class InternalAdapterStoreImpl implements
 				return adapterId;
 			}
 			adapterId = getInitialAdapterId(typeName);
-			while (internalAdapterIdExists(adapterId)) {
-				adapterId++;
-			}
 			try (final MetadataWriter writer = operations.createMetadataWriter(MetadataType.INTERNAL_ADAPTER)) {
 				if (writer != null) {
 					final byte[] adapterIdBytes = ByteArrayUtils.shortToByteArray(adapterId);

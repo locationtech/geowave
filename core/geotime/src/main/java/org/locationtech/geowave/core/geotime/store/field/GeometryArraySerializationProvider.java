@@ -12,12 +12,11 @@ package org.locationtech.geowave.core.geotime.store.field;
 
 import org.locationtech.geowave.core.geotime.store.field.GeometrySerializationProvider.GeometryReader;
 import org.locationtech.geowave.core.geotime.store.field.GeometrySerializationProvider.GeometryWriter;
+import org.locationtech.geowave.core.store.data.field.ArrayReader;
+import org.locationtech.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.data.field.ArrayReader.VariableSizeObjectArrayReader;
-import org.locationtech.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
-
 import org.locationtech.jts.geom.Geometry;
 
 public class GeometryArraySerializationProvider implements
@@ -34,7 +33,7 @@ public class GeometryArraySerializationProvider implements
 	}
 
 	private static class GeometryArrayReader extends
-			VariableSizeObjectArrayReader<Geometry>
+			ArrayReader<Geometry>
 	{
 		public GeometryArrayReader() {
 			super(

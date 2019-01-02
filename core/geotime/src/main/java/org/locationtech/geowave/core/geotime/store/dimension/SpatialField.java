@@ -12,7 +12,10 @@ package org.locationtech.geowave.core.geotime.store.dimension;
 
 import java.nio.ByteBuffer;
 
+import javax.annotation.Nullable;
+
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -33,17 +36,29 @@ abstract public class SpatialField implements
 	private final GeometryWrapperReader geometryReader;
 	private final GeometryWrapperWriter geometryWriter;
 	private String fieldName;
+	private Integer geometryPrecision;
 
 	protected SpatialField() {
-		geometryReader = new GeometryWrapperReader();
-		geometryWriter = new GeometryWrapperWriter();
+		this(
+				null);
+	}
+
+	protected SpatialField(
+			@Nullable Integer geometryPrecision ) {
+		geometryReader = new GeometryWrapperReader(
+				geometryPrecision);
+		geometryWriter = new GeometryWrapperWriter(
+				geometryPrecision);
 		this.fieldName = GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME;
+		this.geometryPrecision = geometryPrecision;
 	}
 
 	public SpatialField(
-			final NumericDimensionDefinition baseDefinition ) {
+			final NumericDimensionDefinition baseDefinition,
+			final @Nullable Integer geometryPrecision ) {
 		this(
 				baseDefinition,
+				geometryPrecision,
 				GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
 	}
 
@@ -54,11 +69,15 @@ abstract public class SpatialField implements
 
 	public SpatialField(
 			final NumericDimensionDefinition baseDefinition,
+			final @Nullable Integer geometryPrecision,
 			final String fieldName ) {
 		this.baseDefinition = baseDefinition;
 		this.fieldName = fieldName;
-		geometryReader = new GeometryWrapperReader();
-		geometryWriter = new GeometryWrapperWriter();
+		this.geometryPrecision = geometryPrecision;
+		geometryReader = new GeometryWrapperReader(
+				geometryPrecision);
+		geometryWriter = new GeometryWrapperWriter(
+				geometryPrecision);
 	}
 
 	@Override
@@ -126,10 +145,19 @@ abstract public class SpatialField implements
 	public byte[] toBinary() {
 		final byte[] dimensionBinary = PersistenceUtils.toBinary(baseDefinition);
 		final byte[] fieldNameBytes = StringUtils.stringToBinary(fieldName);
-		final ByteBuffer buf = ByteBuffer.allocate(dimensionBinary.length + fieldNameBytes.length + 4);
-		buf.putInt(fieldNameBytes.length);
+		final ByteBuffer buf = ByteBuffer.allocate(dimensionBinary.length + fieldNameBytes.length
+				+ VarintUtils.unsignedIntByteLength(fieldNameBytes.length) + 1);
+		VarintUtils.writeUnsignedInt(
+				fieldNameBytes.length,
+				buf);
 		buf.put(fieldNameBytes);
 		buf.put(dimensionBinary);
+		if (geometryPrecision == null) {
+			buf.put(Byte.MAX_VALUE);
+		}
+		else {
+			buf.put((byte) this.geometryPrecision.intValue());
+		}
 		return buf.array();
 	}
 
@@ -137,13 +165,22 @@ abstract public class SpatialField implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int fieldNameLength = buf.getInt();
+		final int fieldNameLength = VarintUtils.readUnsignedInt(buf);
 		final byte[] fieldNameBytes = new byte[fieldNameLength];
 		buf.get(fieldNameBytes);
 		fieldName = StringUtils.stringFromBinary(fieldNameBytes);
-		final byte[] dimensionBinary = new byte[bytes.length - fieldNameLength - 4];
+		final byte[] dimensionBinary = new byte[buf.remaining() - 1];
 		buf.get(dimensionBinary);
 		baseDefinition = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dimensionBinary);
+		byte precision = buf.get();
+		if (precision == Byte.MAX_VALUE) {
+			geometryPrecision = null;
+		}
+		else {
+			geometryPrecision = Integer.valueOf(precision);
+		}
+		geometryReader.setPrecision(geometryPrecision);
+		geometryWriter.setPrecision(geometryPrecision);
 	}
 
 	@Override
@@ -154,6 +191,7 @@ abstract public class SpatialField implements
 		result = (prime * result) + ((className == null) ? 0 : className.hashCode());
 		result = (prime * result) + ((baseDefinition == null) ? 0 : baseDefinition.hashCode());
 		result = (prime * result) + ((fieldName == null) ? 0 : fieldName.hashCode());
+		result = (prime * result) + ((geometryPrecision == null) ? 0 : geometryPrecision.hashCode());
 		return result;
 	}
 
@@ -184,6 +222,14 @@ abstract public class SpatialField implements
 			}
 		}
 		else if (!fieldName.equals(other.fieldName)) {
+			return false;
+		}
+		if (geometryPrecision == null) {
+			if (other.geometryPrecision != null) {
+				return false;
+			}
+		}
+		else if (!geometryPrecision.equals(other.geometryPrecision)) {
 			return false;
 		}
 		return true;

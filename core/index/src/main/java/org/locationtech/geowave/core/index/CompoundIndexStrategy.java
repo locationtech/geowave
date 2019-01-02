@@ -69,8 +69,11 @@ public class CompoundIndexStrategy implements
 	public byte[] toBinary() {
 		final byte[] delegateBinary1 = PersistenceUtils.toBinary(subStrategy1);
 		final byte[] delegateBinary2 = PersistenceUtils.toBinary(subStrategy2);
-		final ByteBuffer buf = ByteBuffer.allocate(4 + delegateBinary1.length + delegateBinary2.length);
-		buf.putInt(delegateBinary1.length);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(delegateBinary1.length)
+				+ delegateBinary1.length + delegateBinary2.length);
+		VarintUtils.writeUnsignedInt(
+				delegateBinary1.length,
+				buf);
 		buf.put(delegateBinary1);
 		buf.put(delegateBinary2);
 		return buf.array();
@@ -80,10 +83,10 @@ public class CompoundIndexStrategy implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int delegateBinary1Length = buf.getInt();
+		final int delegateBinary1Length = VarintUtils.readUnsignedInt(buf);
 		final byte[] delegateBinary1 = new byte[delegateBinary1Length];
 		buf.get(delegateBinary1);
-		final byte[] delegateBinary2 = new byte[bytes.length - delegateBinary1Length - 4];
+		final byte[] delegateBinary2 = new byte[buf.remaining()];
 		buf.get(delegateBinary2);
 		subStrategy1 = (PartitionIndexStrategy) PersistenceUtils.fromBinary(delegateBinary1);
 		subStrategy2 = (NumericIndexStrategy) PersistenceUtils.fromBinary(delegateBinary2);

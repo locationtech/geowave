@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
@@ -40,15 +41,19 @@ public class DataIdQueryFilter implements
 
 	@Override
 	public byte[] toBinary() {
-		int size = 4;
+		int size = VarintUtils.unsignedIntByteLength(dataIds.size());
 		for (final ByteArray id : dataIds) {
-			size += (id.getBytes().length + 4);
+			size += (id.getBytes().length + VarintUtils.unsignedIntByteLength(id.getBytes().length));
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(size);
-		buf.putInt(dataIds.size());
+		VarintUtils.writeUnsignedInt(
+				dataIds.size(),
+				buf);
 		for (final ByteArray id : dataIds) {
 			final byte[] idBytes = id.getBytes();
-			buf.putInt(idBytes.length);
+			VarintUtils.writeUnsignedInt(
+					idBytes.length,
+					buf);
 			buf.put(idBytes);
 		}
 		return buf.array();
@@ -58,11 +63,11 @@ public class DataIdQueryFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int size = buf.getInt();
+		final int size = VarintUtils.readUnsignedInt(buf);
 		dataIds = new ArrayList<>(
 				size);
 		for (int i = 0; i < size; i++) {
-			final int bsize = buf.getInt();
+			final int bsize = VarintUtils.readUnsignedInt(buf);
 			final byte[] dataIdBytes = new byte[bsize];
 			buf.get(dataIdBytes);
 			dataIds.add(new ByteArray(

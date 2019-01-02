@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
@@ -150,31 +150,52 @@ public class SecondaryIndexImpl<T> implements
 		if (handlePartials) {
 			int totalLength = 0;
 			for (final String partialFieldName : partialFieldNames) {
-				totalLength += StringUtils.stringToBinary(partialFieldName).length;
+				int stringLength = StringUtils.stringToBinary(partialFieldName).length;
+				totalLength += stringLength;
+				totalLength += VarintUtils.unsignedIntByteLength(stringLength);
 			}
-			final ByteBuffer allPartials = ByteBuffer.allocate(totalLength + (partialFieldNames.size() * 4));
+			final ByteBuffer allPartials = ByteBuffer.allocate(totalLength);
 			for (final String partialFieldName : partialFieldNames) {
 				final byte[] partialFieldBytes = StringUtils.stringToBinary(partialFieldName);
-				allPartials.putInt(partialFieldBytes.length);
+				VarintUtils.writeUnsignedInt(
+						partialFieldBytes.length,
+						allPartials);
 				allPartials.put(partialFieldBytes);
 			}
 			partialsLength = allPartials.array().length;
 			partialsBinary = allPartials.array();
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(indexStrategyBinary.length + fieldIdBinary.length
-				+ secondaryIndexTypeBinary.length + 20 + persistablesBinary.length + partialsLength
-				+ (partialsLength > 0 ? 4 : 0));
-		buf.putInt(indexStrategyBinary.length);
-		buf.putInt(fieldIdBinary.length);
-		buf.putInt(secondaryIndexTypeBinary.length);
-		buf.putInt(persistablesBinary.length);
-		buf.putInt(handlePartials ? partialFieldNames.size() : 0);
+				+ secondaryIndexTypeBinary.length + persistablesBinary.length + partialsLength
+				+ (partialsLength > 0 ? VarintUtils.unsignedIntByteLength(partialsLength) : 0)
+				+ VarintUtils.unsignedIntByteLength(indexStrategyBinary.length)
+				+ VarintUtils.unsignedIntByteLength(fieldIdBinary.length)
+				+ VarintUtils.unsignedIntByteLength(secondaryIndexTypeBinary.length)
+				+ VarintUtils.unsignedIntByteLength(persistablesBinary.length)
+				+ VarintUtils.unsignedIntByteLength(handlePartials ? partialFieldNames.size() : 0));
+		VarintUtils.writeUnsignedInt(
+				indexStrategyBinary.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				fieldIdBinary.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				secondaryIndexTypeBinary.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				persistablesBinary.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				handlePartials ? partialFieldNames.size() : 0,
+				buf);
 		buf.put(indexStrategyBinary);
 		buf.put(fieldIdBinary);
 		buf.put(secondaryIndexTypeBinary);
 		buf.put(persistablesBinary);
 		if (handlePartials) {
-			buf.putInt(partialsLength);
+			VarintUtils.writeUnsignedInt(
+					partialsLength,
+					buf);
 			buf.put(partialsBinary);
 		}
 		return buf.array();
@@ -185,11 +206,11 @@ public class SecondaryIndexImpl<T> implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int indexStrategyLength = buf.getInt();
-		final int fieldNameLength = buf.getInt();
-		final int secondaryIndexTypeLength = buf.getInt();
-		final int persistablesBinaryLength = buf.getInt();
-		final int numPartials = buf.getInt();
+		final int indexStrategyLength = VarintUtils.readUnsignedInt(buf);
+		final int fieldNameLength = VarintUtils.readUnsignedInt(buf);
+		final int secondaryIndexTypeLength = VarintUtils.readUnsignedInt(buf);
+		final int persistablesBinaryLength = VarintUtils.readUnsignedInt(buf);
+		final int numPartials = VarintUtils.readUnsignedInt(buf);
 		final byte[] indexStrategyBinary = new byte[indexStrategyLength];
 		final byte[] fieldNameBinary = new byte[fieldNameLength];
 		final byte[] secondaryIndexTypeBinary = new byte[secondaryIndexTypeLength];
@@ -213,11 +234,11 @@ public class SecondaryIndexImpl<T> implements
 
 		if (numPartials > 0) {
 			partialFieldNames = new ArrayList<>();
-			final int partialsLength = buf.getInt();
+			final int partialsLength = VarintUtils.readUnsignedInt(buf);
 			final byte[] partialsBinary = new byte[partialsLength];
 			final ByteBuffer partialsBB = ByteBuffer.wrap(partialsBinary);
 			for (int i = 0; i < numPartials; i++) {
-				final int currPartialLength = partialsBB.getInt();
+				final int currPartialLength = VarintUtils.readUnsignedInt(partialsBB);
 				final byte[] currPartialBinary = new byte[currPartialLength];
 				partialFieldNames.add(StringUtils.stringFromBinary(currPartialBinary));
 			}

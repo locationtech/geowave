@@ -30,6 +30,7 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -212,23 +213,29 @@ public class SingleTierSubStrategy implements
 
 	@Override
 	public byte[] toBinary() {
-		int byteBufferLength = 5;
+		int byteBufferLength = 1 + VarintUtils.unsignedIntByteLength(baseDefinitions.length);
 		final List<byte[]> dimensionBinaries = new ArrayList<byte[]>(
 				baseDefinitions.length);
 		final byte[] sfcBinary = PersistenceUtils.toBinary(sfc);
-		byteBufferLength += (4 + sfcBinary.length);
+		byteBufferLength += (VarintUtils.unsignedIntByteLength(sfcBinary.length) + sfcBinary.length);
 		for (final NumericDimensionDefinition dimension : baseDefinitions) {
 			final byte[] dimensionBinary = PersistenceUtils.toBinary(dimension);
-			byteBufferLength += (4 + dimensionBinary.length);
+			byteBufferLength += (VarintUtils.unsignedIntByteLength(dimensionBinary.length) + dimensionBinary.length);
 			dimensionBinaries.add(dimensionBinary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferLength);
 		buf.put(tier);
-		buf.putInt(baseDefinitions.length);
-		buf.putInt(sfcBinary.length);
+		VarintUtils.writeUnsignedInt(
+				baseDefinitions.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				sfcBinary.length,
+				buf);
 		buf.put(sfcBinary);
 		for (final byte[] dimensionBinary : dimensionBinaries) {
-			buf.putInt(dimensionBinary.length);
+			VarintUtils.writeUnsignedInt(
+					dimensionBinary.length,
+					buf);
 			buf.put(dimensionBinary);
 		}
 		return buf.array();
@@ -239,13 +246,13 @@ public class SingleTierSubStrategy implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		tier = buf.get();
-		final int numDimensions = buf.getInt();
+		final int numDimensions = VarintUtils.readUnsignedInt(buf);
 		baseDefinitions = new NumericDimensionDefinition[numDimensions];
-		final byte[] sfcBinary = new byte[buf.getInt()];
+		final byte[] sfcBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(sfcBinary);
 		sfc = (SpaceFillingCurve) PersistenceUtils.fromBinary(sfcBinary);
 		for (int i = 0; i < numDimensions; i++) {
-			final byte[] dim = new byte[buf.getInt()];
+			final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(dim);
 			baseDefinitions[i] = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dim);
 		}

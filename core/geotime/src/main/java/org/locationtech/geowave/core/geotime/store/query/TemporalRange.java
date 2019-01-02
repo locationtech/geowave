@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.geotime.store.query;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 
 public class TemporalRange
@@ -94,20 +95,34 @@ public class TemporalRange
 				end);
 	}
 
+	public void toBinary(
+			ByteBuffer buffer ) {
+		VarintUtils.writeTime(
+				startTime.getTime(),
+				buffer);
+		VarintUtils.writeTime(
+				endTime.getTime(),
+				buffer);
+	}
+
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(16);
-		buf.putLong(startTime.getTime());
-		buf.putLong(endTime.getTime());
+		final ByteBuffer buf = ByteBuffer.allocate(getBufferSize());
+		toBinary(buf);
 		return buf.array();
+	}
+
+	public void fromBinary(
+			ByteBuffer buffer ) {
+		startTime = new Date(
+				VarintUtils.readTime(buffer));
+		endTime = new Date(
+				VarintUtils.readTime(buffer));
 	}
 
 	public void fromBinary(
 			final byte[] data ) {
 		final ByteBuffer buf = ByteBuffer.wrap(data);
-		startTime = new Date(
-				buf.getLong());
-		endTime = new Date(
-				buf.getLong());
+		fromBinary(buf);
 	}
 
 	@Override
@@ -115,8 +130,8 @@ public class TemporalRange
 		return "TemporalRange [startTime=" + startTime + ", endTime=" + endTime + "]";
 	}
 
-	protected static final int getBufferSize() {
-		return 16;
+	protected final int getBufferSize() {
+		return VarintUtils.timeByteLength(startTime.getTime()) + VarintUtils.timeByteLength(endTime.getTime());
 	}
 
 	public boolean isInfinity() {

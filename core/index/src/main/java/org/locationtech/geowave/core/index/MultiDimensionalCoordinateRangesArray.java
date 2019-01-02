@@ -33,15 +33,19 @@ public class MultiDimensionalCoordinateRangesArray implements
 	@Override
 	public byte[] toBinary() {
 		final byte[][] rangesBinaries = new byte[rangesArray.length][];
-		int binaryLength = 4;
+		int binaryLength = VarintUtils.unsignedIntByteLength(rangesBinaries.length);
 		for (int i = 0; i < rangesArray.length; i++) {
 			rangesBinaries[i] = rangesArray[i].toBinary();
-			binaryLength += (4 + rangesBinaries[i].length);
+			binaryLength += (VarintUtils.unsignedIntByteLength(rangesBinaries[i].length) + rangesBinaries[i].length);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(binaryLength);
-		buf.putInt(rangesBinaries.length);
+		VarintUtils.writeUnsignedInt(
+				rangesBinaries.length,
+				buf);
 		for (final byte[] rangesBinary : rangesBinaries) {
-			buf.putInt(rangesBinary.length);
+			VarintUtils.writeUnsignedInt(
+					rangesBinary.length,
+					buf);
 			buf.put(rangesBinary);
 		}
 		return buf.array();
@@ -51,9 +55,9 @@ public class MultiDimensionalCoordinateRangesArray implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		rangesArray = new MultiDimensionalCoordinateRanges[buf.getInt()];
+		rangesArray = new MultiDimensionalCoordinateRanges[VarintUtils.readUnsignedInt(buf)];
 		for (int i = 0; i < rangesArray.length; i++) {
-			final byte[] rangesBinary = new byte[buf.getInt()];
+			final byte[] rangesBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(rangesBinary);
 			rangesArray[i] = new MultiDimensionalCoordinateRanges();
 			rangesArray[i].fromBinary(rangesBinary);
@@ -81,15 +85,19 @@ public class MultiDimensionalCoordinateRangesArray implements
 		@Override
 		public byte[] toBinary() {
 			final byte[][] rangesBinaries = new byte[coordinateArrays.length][];
-			int binaryLength = 4;
+			int binaryLength = VarintUtils.unsignedIntByteLength(rangesBinaries.length);
 			for (int i = 0; i < coordinateArrays.length; i++) {
 				rangesBinaries[i] = coordinateArrays[i].toBinary();
-				binaryLength += (4 + rangesBinaries[i].length);
+				binaryLength += (VarintUtils.unsignedIntByteLength(rangesBinaries[i].length) + rangesBinaries[i].length);
 			}
 			final ByteBuffer buf = ByteBuffer.allocate(binaryLength);
-			buf.putInt(rangesBinaries.length);
+			VarintUtils.writeUnsignedInt(
+					rangesBinaries.length,
+					buf);
 			for (final byte[] rangesBinary : rangesBinaries) {
-				buf.putInt(rangesBinary.length);
+				VarintUtils.writeUnsignedInt(
+						rangesBinary.length,
+						buf);
 				buf.put(rangesBinary);
 			}
 			return buf.array();
@@ -99,9 +107,9 @@ public class MultiDimensionalCoordinateRangesArray implements
 		public void fromBinary(
 				byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
-			coordinateArrays = new MultiDimensionalCoordinateRangesArray[buf.getInt()];
+			coordinateArrays = new MultiDimensionalCoordinateRangesArray[VarintUtils.readUnsignedInt(buf)];
 			for (int i = 0; i < coordinateArrays.length; i++) {
-				final byte[] rangesBinary = new byte[buf.getInt()];
+				final byte[] rangesBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 				buf.get(rangesBinary);
 				coordinateArrays[i] = new MultiDimensionalCoordinateRangesArray();
 				coordinateArrays[i].fromBinary(rangesBinary);

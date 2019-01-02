@@ -69,18 +69,22 @@ public class StringUtils
 	 */
 	public static byte[] stringsToBinary(
 			final String strings[] ) {
-		int len = 4;
+		int len = VarintUtils.unsignedIntByteLength(strings.length);
 		final List<byte[]> strsBytes = new ArrayList<byte[]>();
 		for (final String str : strings) {
 			final byte[] strByte = str.getBytes(getGeoWaveCharset());
 			strsBytes.add(strByte);
-			len += (strByte.length + 4);
+			len += (strByte.length + VarintUtils.unsignedIntByteLength(strByte.length));
 
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(len);
-		buf.putInt(strings.length);
+		VarintUtils.writeUnsignedInt(
+				strings.length,
+				buf);
 		for (final byte[] str : strsBytes) {
-			buf.putInt(str.length);
+			VarintUtils.writeUnsignedInt(
+					str.length,
+					buf);
 			buf.put(str);
 		}
 		return buf.array();
@@ -110,10 +114,10 @@ public class StringUtils
 	public static String[] stringsFromBinary(
 			final byte[] binary ) {
 		final ByteBuffer buf = ByteBuffer.wrap(binary);
-		final int count = buf.getInt();
+		final int count = VarintUtils.readUnsignedInt(buf);
 		final String[] result = new String[count];
 		for (int i = 0; i < count; i++) {
-			final int size = buf.getInt();
+			final int size = VarintUtils.readUnsignedInt(buf);
 			final byte[] strBytes = new byte[size];
 			buf.get(strBytes);
 			result[i] = new String(

@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.opengis.feature.simple.SimpleFeature;
@@ -132,24 +133,31 @@ public class StatsConfigurationCollection implements
 
 		@Override
 		public byte[] toBinary() {
-			int size = 4;
+			int size = 0;
 			final List<byte[]> entries = new ArrayList<>(
 					attConfig.size());
 			for (final Entry<String, StatsConfigurationCollection> e : attConfig.entrySet()) {
 				final byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
-				int entrySize = 8 + keyBytes.length;
 				final byte[] confBytes = PersistenceUtils.toBinary(e.getValue());
-				entrySize += confBytes.length;
+				int entrySize = VarintUtils.unsignedIntByteLength(keyBytes.length) + keyBytes.length
+						+ VarintUtils.unsignedIntByteLength(confBytes.length) + confBytes.length;
 				size += entrySize;
 				final ByteBuffer buf = ByteBuffer.allocate(entrySize);
-				buf.putInt(keyBytes.length);
+				VarintUtils.writeUnsignedInt(
+						keyBytes.length,
+						buf);
 				buf.put(keyBytes);
-				buf.putInt(confBytes.length);
+				VarintUtils.writeUnsignedInt(
+						confBytes.length,
+						buf);
 				buf.put(confBytes);
 				entries.add(buf.array());
 			}
+			size += VarintUtils.unsignedIntByteLength(attConfig.size());
 			final ByteBuffer buf = ByteBuffer.allocate(size);
-			buf.putInt(attConfig.size());
+			VarintUtils.writeUnsignedInt(
+					attConfig.size(),
+					buf);
 			for (final byte[] e : entries) {
 				buf.put(e);
 			}
@@ -160,15 +168,15 @@ public class StatsConfigurationCollection implements
 		public void fromBinary(
 				final byte[] bytes ) {
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
-			final int entrySize = buf.getInt();
+			final int entrySize = VarintUtils.readUnsignedInt(buf);
 			final Map<String, StatsConfigurationCollection> internalAttConfig = new HashMap<>(
 					entrySize);
 			for (int i = 0; i < entrySize; i++) {
-				final int keySize = buf.getInt();
+				final int keySize = VarintUtils.readUnsignedInt(buf);
 				final byte[] keyBytes = new byte[keySize];
 				buf.get(keyBytes);
 				final String key = StringUtils.stringFromBinary(keyBytes);
-				final byte[] entryBytes = new byte[buf.getInt()];
+				final byte[] entryBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 				buf.get(entryBytes);
 
 				internalAttConfig.put(

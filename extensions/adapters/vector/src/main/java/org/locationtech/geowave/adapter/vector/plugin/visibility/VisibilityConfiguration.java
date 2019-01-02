@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -213,10 +214,16 @@ public class VisibilityConfiguration implements
 		else {
 			attributeBytes = new byte[0];
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(attributeBytes.length + managerClassBytes.length + 8);
-		buf.putInt(attributeBytes.length);
+		final ByteBuffer buf = ByteBuffer.allocate(attributeBytes.length + managerClassBytes.length
+				+ VarintUtils.unsignedIntByteLength(attributeBytes.length)
+				+ VarintUtils.unsignedIntByteLength(managerClassBytes.length));
+		VarintUtils.writeUnsignedInt(
+				attributeBytes.length,
+				buf);
 		buf.put(attributeBytes);
-		buf.putInt(managerClassBytes.length);
+		VarintUtils.writeUnsignedInt(
+				managerClassBytes.length,
+				buf);
 		buf.put(managerClassBytes);
 		return buf.array();
 	}
@@ -227,7 +234,7 @@ public class VisibilityConfiguration implements
 		byte[] attributeBytes;
 		final byte[] managerClassBytes;
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		attributeBytes = new byte[buf.getInt()];
+		attributeBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (attributeBytes.length > 0) {
 			buf.get(attributeBytes);
 			attributeName = StringUtils.stringFromBinary(attributeBytes);
@@ -235,7 +242,7 @@ public class VisibilityConfiguration implements
 		else {
 			attributeName = null;
 		}
-		managerClassBytes = new byte[buf.getInt()];
+		managerClassBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (managerClassBytes.length > 0) {
 			buf.get(managerClassBytes);
 			managerClassName = StringUtils.stringFromBinary(managerClassBytes);

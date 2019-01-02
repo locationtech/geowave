@@ -11,7 +11,6 @@
 package org.locationtech.geowave.core.index;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Base64.Encoder;
 import java.util.UUID;

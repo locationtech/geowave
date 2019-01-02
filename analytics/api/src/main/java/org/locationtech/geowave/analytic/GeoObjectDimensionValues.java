@@ -12,6 +12,7 @@ package org.locationtech.geowave.analytic;
 
 import java.nio.ByteBuffer;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
 /**
@@ -125,13 +126,18 @@ public class GeoObjectDimensionValues implements
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer b = ByteBuffer.allocate(((4 + values.length) * 8) + 4 + 8);
-		b.putLong(count);
+		final ByteBuffer b = ByteBuffer.allocate(((4 + values.length) * 8)
+				+ VarintUtils.unsignedIntByteLength(values.length) + VarintUtils.unsignedLongByteLength(count));
+		VarintUtils.writeUnsignedLong(
+				count,
+				b);
 		b.putDouble(x);
 		b.putDouble(y);
 		b.putDouble(z);
 		b.putDouble(distance);
-		b.putInt(values.length);
+		VarintUtils.writeUnsignedInt(
+				values.length,
+				b);
 		for (final double value : values) {
 			b.putDouble(value);
 		}
@@ -142,12 +148,12 @@ public class GeoObjectDimensionValues implements
 	public void fromBinary(
 			byte[] bytes ) {
 		final ByteBuffer b = ByteBuffer.wrap(bytes);
-		count = b.getLong();
+		count = VarintUtils.readUnsignedLong(b);
 		x = b.getDouble();
 		y = b.getDouble();
 		z = b.getDouble();
 		distance = b.getDouble();
-		int i = b.getInt();
+		int i = VarintUtils.readUnsignedInt(b);
 		values = new double[i];
 		for (; i > 0; i--) {
 			values[i - 1] = b.getDouble();

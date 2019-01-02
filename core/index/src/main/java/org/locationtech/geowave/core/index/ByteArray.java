@@ -112,14 +112,18 @@ public class ByteArray implements
 
 	public static byte[] toBytes(
 			final ByteArray[] ids ) {
-		int len = 4;
+		int len = VarintUtils.unsignedIntByteLength(ids.length);
 		for (final ByteArray id : ids) {
-			len += (id.bytes.length + 4);
+			len += (id.bytes.length + VarintUtils.unsignedIntByteLength(id.bytes.length));
 		}
 		final ByteBuffer buffer = ByteBuffer.allocate(len);
-		buffer.putInt(ids.length);
+		VarintUtils.writeUnsignedInt(
+				ids.length,
+				buffer);
 		for (final ByteArray id : ids) {
-			buffer.putInt(id.bytes.length);
+			VarintUtils.writeUnsignedInt(
+					id.bytes.length,
+					buffer);
 			buffer.put(id.bytes);
 		}
 		return buffer.array();
@@ -128,10 +132,10 @@ public class ByteArray implements
 	public static ByteArray[] fromBytes(
 			final byte[] idData ) {
 		final ByteBuffer buffer = ByteBuffer.wrap(idData);
-		final int len = buffer.getInt();
+		final int len = VarintUtils.readUnsignedInt(buffer);
 		final ByteArray[] result = new ByteArray[len];
 		for (int i = 0; i < len; i++) {
-			final int idSize = buffer.getInt();
+			final int idSize = VarintUtils.readUnsignedInt(buffer);
 			final byte[] id = new byte[idSize];
 			buffer.get(id);
 			result[i] = new ByteArray(

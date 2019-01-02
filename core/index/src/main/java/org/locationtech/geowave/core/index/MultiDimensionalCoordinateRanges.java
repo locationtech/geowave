@@ -52,28 +52,40 @@ public class MultiDimensionalCoordinateRanges implements
 		final List<byte[]> serializedRanges = new ArrayList<>();
 		final int idLength = (multiDimensionalId == null ? 0 : multiDimensionalId.length);
 
-		int byteLength = (4 * getNumDimensions()) + 8 + idLength;
+		int byteLength = VarintUtils.unsignedIntByteLength(idLength) + idLength;
+		byteLength += VarintUtils.unsignedIntByteLength(coordinateRangesPerDimension.length);
 		final int[] numPerDimension = new int[getNumDimensions()];
+		for (final int num : numPerDimension) {
+			byteLength += VarintUtils.unsignedIntByteLength(num);
+		}
 		int d = 0;
 		for (final CoordinateRange[] dim : coordinateRangesPerDimension) {
 			numPerDimension[d++] = dim.length;
 			for (final CoordinateRange range : dim) {
 				final byte[] serializedRange = range.toBinary();
-				byteLength += (serializedRange.length + 4);
+				byteLength += (serializedRange.length + VarintUtils.unsignedIntByteLength(serializedRange.length));
 				serializedRanges.add(serializedRange);
 			}
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteLength);
-		buf.putInt(idLength);
+		VarintUtils.writeUnsignedInt(
+				idLength,
+				buf);
 		if (idLength > 0) {
 			buf.put(multiDimensionalId);
 		}
-		buf.putInt(coordinateRangesPerDimension.length);
+		VarintUtils.writeUnsignedInt(
+				coordinateRangesPerDimension.length,
+				buf);
 		for (final int num : numPerDimension) {
-			buf.putInt(num);
+			VarintUtils.writeUnsignedInt(
+					num,
+					buf);
 		}
 		for (final byte[] serializedRange : serializedRanges) {
-			buf.putInt(serializedRange.length);
+			VarintUtils.writeUnsignedInt(
+					serializedRange.length,
+					buf);
 			buf.put(serializedRange);
 		}
 		return buf.array();
@@ -83,7 +95,7 @@ public class MultiDimensionalCoordinateRanges implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int idLength = buf.getInt();
+		final int idLength = VarintUtils.readUnsignedInt(buf);
 		if (idLength > 0) {
 			multiDimensionalId = new byte[idLength];
 			buf.get(multiDimensionalId);
@@ -91,13 +103,13 @@ public class MultiDimensionalCoordinateRanges implements
 		else {
 			multiDimensionalId = null;
 		}
-		coordinateRangesPerDimension = new CoordinateRange[buf.getInt()][];
+		coordinateRangesPerDimension = new CoordinateRange[VarintUtils.readUnsignedInt(buf)][];
 		for (int d = 0; d < coordinateRangesPerDimension.length; d++) {
-			coordinateRangesPerDimension[d] = new CoordinateRange[buf.getInt()];
+			coordinateRangesPerDimension[d] = new CoordinateRange[VarintUtils.readUnsignedInt(buf)];
 		}
 		for (int d = 0; d < coordinateRangesPerDimension.length; d++) {
 			for (int i = 0; i < coordinateRangesPerDimension[d].length; i++) {
-				final byte[] serializedRange = new byte[buf.getInt()];
+				final byte[] serializedRange = new byte[VarintUtils.readUnsignedInt(buf)];
 				buf.get(serializedRange);
 
 				coordinateRangesPerDimension[d][i] = new CoordinateRange();

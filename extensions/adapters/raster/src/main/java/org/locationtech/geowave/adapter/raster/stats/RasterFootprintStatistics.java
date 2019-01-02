@@ -14,20 +14,19 @@ import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
+import org.locationtech.geowave.core.geotime.util.TWKBReader;
+import org.locationtech.geowave.core.geotime.util.TWKBWriter;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTWriter;
 import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKBReader;
-import org.locationtech.jts.io.WKBWriter;
-import org.locationtech.jts.io.WKTWriter;
 
 public class RasterFootprintStatistics extends
 		AbstractDataStatistics<GridCoverage, Geometry, BaseStatisticsQueryBuilder<Geometry>>
@@ -56,7 +55,7 @@ public class RasterFootprintStatistics extends
 			bytes = new byte[] {};
 		}
 		else {
-			bytes = new WKBWriter().write(footprint);
+			bytes = new TWKBWriter().write(footprint);
 		}
 		final ByteBuffer buf = super.binaryBuffer(bytes.length);
 		buf.put(bytes);
@@ -70,7 +69,7 @@ public class RasterFootprintStatistics extends
 		final byte[] payload = buf.array();
 		if (payload.length > 0) {
 			try {
-				footprint = new WKBReader().read(payload);
+				footprint = new TWKBReader().read(payload);
 			}
 			catch (final ParseException e) {
 				LOGGER.warn(

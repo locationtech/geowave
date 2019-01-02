@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
@@ -117,18 +118,22 @@ public class BasicIndexModel implements
 
 	@Override
 	public byte[] toBinary() {
-		int byteBufferLength = 4;
+		int byteBufferLength = VarintUtils.unsignedIntByteLength(dimensions.length);
 		final List<byte[]> dimensionBinaries = new ArrayList<>(
 				dimensions.length);
 		for (final NumericDimensionField<?> dimension : dimensions) {
 			final byte[] dimensionBinary = PersistenceUtils.toBinary(dimension);
-			byteBufferLength += (4 + dimensionBinary.length);
+			byteBufferLength += (VarintUtils.unsignedIntByteLength(dimensionBinary.length) + dimensionBinary.length);
 			dimensionBinaries.add(dimensionBinary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferLength);
-		buf.putInt(dimensions.length);
+		VarintUtils.writeUnsignedInt(
+				dimensions.length,
+				buf);
 		for (final byte[] dimensionBinary : dimensionBinaries) {
-			buf.putInt(dimensionBinary.length);
+			VarintUtils.writeUnsignedInt(
+					dimensionBinary.length,
+					buf);
 			buf.put(dimensionBinary);
 		}
 		return buf.array();
@@ -138,10 +143,10 @@ public class BasicIndexModel implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int numDimensions = buf.getInt();
+		final int numDimensions = VarintUtils.readUnsignedInt(buf);
 		dimensions = new NumericDimensionField[numDimensions];
 		for (int i = 0; i < numDimensions; i++) {
-			final byte[] dim = new byte[buf.getInt()];
+			final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(dim);
 			dimensions[i] = (NumericDimensionField<?>) PersistenceUtils.fromBinary(dim);
 		}

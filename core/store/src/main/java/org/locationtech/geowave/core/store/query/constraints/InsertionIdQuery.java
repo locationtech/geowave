@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.filter.InsertionIdQueryFilter;
@@ -89,10 +90,16 @@ public class InsertionIdQuery implements
 		else {
 			dataIdBinary = new byte[0];
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(8 + sortKeyBinary.length + partitionKeyBinary.length);
-		buf.putInt(partitionKeyBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(partitionKeyBinary.length)
+				+ VarintUtils.unsignedIntByteLength(sortKeyBinary.length) + sortKeyBinary.length
+				+ partitionKeyBinary.length);
+		VarintUtils.writeUnsignedInt(
+				partitionKeyBinary.length,
+				buf);
 		buf.put(partitionKeyBinary);
-		buf.putInt(sortKeyBinary.length);
+		VarintUtils.writeUnsignedInt(
+				sortKeyBinary.length,
+				buf);
 		buf.put(sortKeyBinary);
 		buf.put(dataIdBinary);
 		return buf.array();
@@ -102,7 +109,7 @@ public class InsertionIdQuery implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final byte[] partitionKeyBinary = new byte[buf.getInt()];
+		final byte[] partitionKeyBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (partitionKeyBinary.length == 0) {
 			partitionKey = null;
 		}
@@ -111,7 +118,7 @@ public class InsertionIdQuery implements
 			partitionKey = new ByteArray(
 					partitionKeyBinary);
 		}
-		final byte[] sortKeyBinary = new byte[buf.getInt()];
+		final byte[] sortKeyBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (sortKeyBinary.length == 0) {
 			sortKey = null;
 		}
@@ -120,7 +127,7 @@ public class InsertionIdQuery implements
 			sortKey = new ByteArray(
 					sortKeyBinary);
 		}
-		final byte[] dataIdBinary = new byte[bytes.length - 8 - sortKeyBinary.length - partitionKeyBinary.length];
+		final byte[] dataIdBinary = new byte[buf.remaining()];
 		if (dataIdBinary.length == 0) {
 			dataId = null;
 		}

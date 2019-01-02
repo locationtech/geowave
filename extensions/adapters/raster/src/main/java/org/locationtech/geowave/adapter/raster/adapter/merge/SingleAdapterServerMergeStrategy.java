@@ -17,6 +17,7 @@ import java.util.Map;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.RasterTile;
 import org.locationtech.geowave.adapter.raster.util.SampleModelPersistenceUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.opengis.coverage.grid.GridCoverage;
@@ -56,12 +57,20 @@ public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
 
 		final byte[] mergeStrategyBinary = PersistenceUtils.toBinary(mergeStrategy);
 
-		final int byteCount = sampleModelBinary.length + 4 + 2 + mergeStrategyBinary.length + 4;
+		final int byteCount = sampleModelBinary.length + VarintUtils.unsignedIntByteLength(sampleModelBinary.length)
+				+ VarintUtils.unsignedShortByteLength(internalAdapterId) + mergeStrategyBinary.length
+				+ VarintUtils.unsignedIntByteLength(mergeStrategyBinary.length);
 		final ByteBuffer buf = ByteBuffer.allocate(byteCount);
-		buf.putInt(sampleModelBinary.length);
+		VarintUtils.writeUnsignedInt(
+				sampleModelBinary.length,
+				buf);
 		buf.put(sampleModelBinary);
-		buf.putShort(internalAdapterId);
-		buf.putInt(mergeStrategyBinary.length);
+		VarintUtils.writeUnsignedShort(
+				internalAdapterId,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				mergeStrategyBinary.length,
+				buf);
 		buf.put(mergeStrategyBinary);
 		return buf.array();
 	}
@@ -71,7 +80,7 @@ public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 
-		final byte[] sampleModelBinary = new byte[buf.getInt()];
+		final byte[] sampleModelBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (sampleModelBinary.length > 0) {
 			try {
 				buf.get(sampleModelBinary);
@@ -87,9 +96,9 @@ public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
 			LOGGER.warn("Sample model binary is empty, unable to deserialize");
 		}
 
-		internalAdapterId = buf.getShort();
+		internalAdapterId = VarintUtils.readUnsignedShort(buf);
 
-		final byte[] mergeStrategyBinary = new byte[buf.getInt()];
+		final byte[] mergeStrategyBinary = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (mergeStrategyBinary.length > 0) {
 			try {
 				buf.get(mergeStrategyBinary);

@@ -15,6 +15,7 @@ import java.util.Date;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -87,15 +88,21 @@ public class DateRangeFilter implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] fieldNameBytes = StringUtils.stringToBinary(fieldName);
-		final ByteBuffer bb = ByteBuffer.allocate(4 + fieldNameBytes.length + 8 + 8 + 8);
-		bb.putInt(fieldNameBytes.length);
+		final ByteBuffer bb = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(fieldNameBytes.length)
+				+ fieldNameBytes.length + VarintUtils.timeByteLength(start.getTime())
+				+ VarintUtils.timeByteLength(end.getTime()) + 2);
+		VarintUtils.writeUnsignedInt(
+				fieldNameBytes.length,
+				bb);
 		bb.put(fieldNameBytes);
-		bb.putLong(start.getTime());
-		bb.putLong(end.getTime());
-		final int rangeInclusiveHighInt = (inclusiveHigh) ? 1 : 0;
-		final int rangeInclusiveLowInt = (inclusiveLow) ? 1 : 0;
-		bb.putInt(rangeInclusiveLowInt);
-		bb.putInt(rangeInclusiveHighInt);
+		VarintUtils.writeTime(
+				start.getTime(),
+				bb);
+		VarintUtils.writeTime(
+				end.getTime(),
+				bb);
+		bb.put((byte) (inclusiveLow ? 0x1 : 0x0));
+		bb.put((byte) (inclusiveHigh ? 0x1 : 0x0));
 		return bb.array();
 	}
 
@@ -103,14 +110,14 @@ public class DateRangeFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer bb = ByteBuffer.wrap(bytes);
-		final byte[] fieldNameBytes = new byte[bb.getInt()];
+		final byte[] fieldNameBytes = new byte[VarintUtils.readUnsignedInt(bb)];
 		bb.get(fieldNameBytes);
 		fieldName = StringUtils.stringFromBinary(fieldNameBytes);
 		start = new Date(
-				bb.getLong());
+				VarintUtils.readTime(bb));
 		end = new Date(
-				bb.getLong());
-		inclusiveLow = (bb.getInt() == 1) ? true : false;
-		inclusiveHigh = (bb.getInt() == 1) ? true : false;
+				VarintUtils.readTime(bb));
+		inclusiveLow = (bb.get() > 0) ? true : false;
+		inclusiveHigh = (bb.get() > 1) ? true : false;
 	}
 }

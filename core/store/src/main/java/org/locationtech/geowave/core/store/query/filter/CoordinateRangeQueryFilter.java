@@ -16,6 +16,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -72,9 +73,12 @@ public class CoordinateRangeQueryFilter implements
 		final byte[] coordinateRangesBinary = new ArrayOfArrays(
 				coordinateRanges).toBinary();
 
-		final ByteBuffer buf = ByteBuffer.allocate(coordinateRangesBinary.length + indexStrategyBytes.length + 4);
+		final ByteBuffer buf = ByteBuffer.allocate(coordinateRangesBinary.length + indexStrategyBytes.length
+				+ VarintUtils.unsignedIntByteLength(indexStrategyBytes.length));
 
-		buf.putInt(indexStrategyBytes.length);
+		VarintUtils.writeUnsignedInt(
+				indexStrategyBytes.length,
+				buf);
 		buf.put(indexStrategyBytes);
 		buf.put(coordinateRangesBinary);
 		return buf.array();
@@ -85,11 +89,11 @@ public class CoordinateRangeQueryFilter implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		try {
-			final int indexStrategyLength = buf.getInt();
+			final int indexStrategyLength = VarintUtils.readUnsignedInt(buf);
 			final byte[] indexStrategyBytes = new byte[indexStrategyLength];
 			buf.get(indexStrategyBytes);
 			indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(indexStrategyBytes);
-			final byte[] coordRangeBytes = new byte[bytes.length - indexStrategyLength - 4];
+			final byte[] coordRangeBytes = new byte[buf.remaining()];
 			buf.get(coordRangeBytes);
 			final ArrayOfArrays arrays = new ArrayOfArrays();
 			arrays.fromBinary(coordRangeBytes);

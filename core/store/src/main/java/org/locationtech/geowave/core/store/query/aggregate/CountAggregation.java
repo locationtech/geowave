@@ -12,6 +12,7 @@ package org.locationtech.geowave.core.store.query.aggregate;
 
 import java.nio.ByteBuffer;
 
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 
@@ -80,15 +81,16 @@ public class CountAggregation implements
 	@Override
 	public byte[] resultToBinary(
 			final Long result ) {
-		return ByteBuffer.allocate(
-				8).putLong(
-				result).array();
+		ByteBuffer buffer = ByteBuffer.allocate(VarintUtils.unsignedLongByteLength(result));
+		VarintUtils.writeUnsignedLong(
+				result,
+				buffer);
+		return buffer.array();
 	}
 
 	@Override
 	public Long resultFromBinary(
 			final byte[] binary ) {
-		return ByteBuffer.wrap(
-				binary).getLong();
+		return VarintUtils.readUnsignedLong(ByteBuffer.wrap(binary));
 	}
 }

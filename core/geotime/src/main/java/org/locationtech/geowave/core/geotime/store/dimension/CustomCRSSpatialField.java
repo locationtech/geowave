@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.geotime.store.dimension;
 
+import javax.annotation.Nullable;
+
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
@@ -20,17 +22,27 @@ public class CustomCRSSpatialField extends
 	public CustomCRSSpatialField() {}
 
 	public CustomCRSSpatialField(
-			final CustomCRSSpatialDimension baseDefinition ) {
+			final @Nullable Integer geometryPrecision ) {
+		super(
+				geometryPrecision);
+	}
+
+	public CustomCRSSpatialField(
+			final CustomCRSSpatialDimension baseDefinition,
+			final @Nullable Integer geometryPrecision ) {
 		this(
 				baseDefinition,
+				geometryPrecision,
 				GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
 	}
 
 	public CustomCRSSpatialField(
 			final NumericDimensionDefinition baseDefinition,
+			final @Nullable Integer geometryPrecision,
 			final String fieldName ) {
 		super(
 				baseDefinition,
+				geometryPrecision,
 				fieldName);
 	}
 

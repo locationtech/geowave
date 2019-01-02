@@ -13,8 +13,6 @@ package org.locationtech.geowave.core.index;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.ByteArrayUtils;
 
 public class ByteArrayUtilsTest
 {
@@ -35,5 +33,28 @@ public class ByteArrayUtilsTest
 		Assert.assertArrayEquals(
 				second.getBytes(),
 				split.getRight());
+	}
+
+	@Test
+	public void testVariableLengthEncodeDecode() {
+		testVariableLengthValue(0);
+		testVariableLengthValue(123456L);
+		testVariableLengthValue(-42L);
+		testVariableLengthValue(Byte.MAX_VALUE);
+		testVariableLengthValue(Byte.MIN_VALUE);
+		testVariableLengthValue(Integer.MIN_VALUE);
+		testVariableLengthValue(Integer.MAX_VALUE);
+		testVariableLengthValue(Long.MAX_VALUE);
+		testVariableLengthValue(Long.MIN_VALUE);
+
+	}
+
+	private void testVariableLengthValue(
+			long value ) {
+		byte[] encoded = ByteArrayUtils.variableLengthEncode(value);
+		long result = ByteArrayUtils.variableLengthDecode(encoded);
+		Assert.assertEquals(
+				value,
+				result);
 	}
 }

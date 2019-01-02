@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -70,24 +71,31 @@ public class FieldVisibilityCount<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		int bufferSize = 4;
-		final List<byte[]> serializedCounts = new ArrayList<>();
+		int bufferSize = 0;
+		int serializedCounts = 0;
 		for (final Entry<ByteArray, Long> entry : countsPerVisibility.entrySet()) {
 			if (entry.getValue() != 0) {
-				final byte[] key = entry.getKey().getBytes();
-				final ByteBuffer buf = ByteBuffer.allocate(key.length + 12);
-				buf.putInt(key.length);
-				buf.put(key);
-				buf.putLong(entry.getValue());
-				final byte[] serializedEntry = buf.array();
-				serializedCounts.add(serializedEntry);
-				bufferSize += serializedEntry.length;
+				bufferSize += VarintUtils.unsignedIntByteLength(entry.getKey().getBytes().length);
+				bufferSize += entry.getKey().getBytes().length;
+				bufferSize += VarintUtils.unsignedLongByteLength(entry.getValue());
+				serializedCounts++;
 			}
 		}
+		bufferSize += VarintUtils.unsignedIntByteLength(serializedCounts);
 		final ByteBuffer buf = super.binaryBuffer(bufferSize);
-		buf.putInt(serializedCounts.size());
-		for (final byte[] count : serializedCounts) {
-			buf.put(count);
+		VarintUtils.writeUnsignedInt(
+				serializedCounts,
+				buf);
+		for (final Entry<ByteArray, Long> entry : countsPerVisibility.entrySet()) {
+			if (entry.getValue() != 0) {
+				VarintUtils.writeUnsignedInt(
+						entry.getKey().getBytes().length,
+						buf);
+				buf.put(entry.getKey().getBytes());
+				VarintUtils.writeUnsignedLong(
+						entry.getValue(),
+						buf);
+			}
 		}
 		return buf.array();
 	}
@@ -104,13 +112,13 @@ public class FieldVisibilityCount<T> extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = super.binaryBuffer(bytes);
-		final int size = buf.getInt();
+		final int size = VarintUtils.readUnsignedInt(buf);
 		countsPerVisibility.clear();
 		for (int i = 0; i < size; i++) {
-			final int idCount = buf.getInt();
+			final int idCount = VarintUtils.readUnsignedInt(buf);
 			final byte[] id = new byte[idCount];
 			buf.get(id);
-			final long count = buf.getLong();
+			final long count = VarintUtils.readUnsignedLong(buf);
 			if (count != 0) {
 				countsPerVisibility.put(
 						new ByteArray(

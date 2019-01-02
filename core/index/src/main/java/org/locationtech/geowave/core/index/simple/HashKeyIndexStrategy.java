@@ -21,6 +21,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.PartitionIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 import com.google.common.collect.Sets;
@@ -102,8 +103,10 @@ public class HashKeyIndexStrategy implements
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(4);
-		buf.putInt(keys.size());
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(keys.size()));
+		VarintUtils.writeUnsignedInt(
+				keys.size(),
+				buf);
 		return buf.array();
 
 	}
@@ -112,7 +115,7 @@ public class HashKeyIndexStrategy implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		init(buf.getInt());
+		init(VarintUtils.readUnsignedInt(buf));
 	}
 
 	public Set<ByteArray> getPartitionKeys() {

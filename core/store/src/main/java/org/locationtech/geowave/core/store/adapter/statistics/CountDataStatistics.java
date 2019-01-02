@@ -15,6 +15,7 @@ import java.util.HashSet;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
@@ -49,8 +50,10 @@ public class CountDataStatistics<T> extends
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buffer = super.binaryBuffer(8);
-		buffer.putLong(count);
+		final ByteBuffer buffer = super.binaryBuffer(VarintUtils.unsignedLongByteLength(count));
+		VarintUtils.writeUnsignedLong(
+				count,
+				buffer);
 		return buffer.array();
 	}
 
@@ -58,7 +61,7 @@ public class CountDataStatistics<T> extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
-		count = buffer.getLong();
+		count = VarintUtils.readUnsignedLong(buffer);
 	}
 
 	@Override

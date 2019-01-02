@@ -54,8 +54,8 @@ public class GeoWaveRedisRowWithTimestampCodec extends
 								fieldMask,
 								visibility,
 								value),
-						Integer.toUnsignedLong(in.readInt()),
-						in.readInt());
+						Integer.toUnsignedLong(Varint.readSignedVarInt(in)),
+						Varint.readSignedVarInt(in));
 			}
 		}
 	};
@@ -73,8 +73,12 @@ public class GeoWaveRedisRowWithTimestampCodec extends
 					GeoWaveRedisRowCodec.encodeRow(
 							out,
 							row);
-					out.writeInt((int) row.getSecondsSinceEpic());
-					out.writeInt(row.getNanoOfSecond());
+					Varint.writeSignedVarInt(
+							(int) row.getSecondsSinceEpic(),
+							out);
+					Varint.writeSignedVarInt(
+							row.getNanoOfSecond(),
+							out);
 					out.flush();
 					return out.buffer();
 				}

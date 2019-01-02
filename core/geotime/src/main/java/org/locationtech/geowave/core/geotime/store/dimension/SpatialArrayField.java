@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.geotime.store.dimension;
 
-import org.locationtech.geowave.core.store.data.field.ArrayReader.VariableSizeObjectArrayReader;
+import org.locationtech.geowave.core.store.data.field.ArrayReader;
 import org.locationtech.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
@@ -32,7 +32,7 @@ public class SpatialArrayField extends
 		super(
 				elementField);
 		reader = new ArrayWrapperReader<GeometryWrapper>(
-				new VariableSizeObjectArrayReader(
+				new ArrayReader(
 						elementField.getReader()));
 		writer = new ArrayWrapperWriter<GeometryWrapper>(
 				new VariableSizeObjectArrayWriter(
@@ -56,7 +56,7 @@ public class SpatialArrayField extends
 			final byte[] bytes ) {
 		super.fromBinary(bytes);
 		reader = new ArrayWrapperReader<GeometryWrapper>(
-				new VariableSizeObjectArrayReader(
+				new ArrayReader(
 						elementField.getReader()));
 		writer = new ArrayWrapperWriter<GeometryWrapper>(
 				new VariableSizeObjectArrayWriter(

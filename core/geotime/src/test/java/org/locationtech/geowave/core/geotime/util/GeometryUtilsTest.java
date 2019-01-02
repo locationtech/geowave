@@ -66,10 +66,14 @@ public class GeometryUtilsTest
 	public void test2DGeometryBinaryConversion() {
 
 		// convert 2D point to binary representation
-		final byte[] bytes = GeometryUtils.geometryToBinary(point2D);
+		final byte[] bytes = GeometryUtils.geometryToBinary(
+				point2D,
+				GeometryUtils.MAX_GEOMETRY_PRECISION);
 
 		// load the converted 2D geometry
-		final Geometry convGeo = GeometryUtils.geometryFromBinary(bytes);
+		final Geometry convGeo = GeometryUtils.geometryFromBinary(
+				bytes,
+				GeometryUtils.MAX_GEOMETRY_PRECISION);
 
 		// get the coordinates for each version
 		final Coordinate origCoords = point2D.getCoordinates()[0];
@@ -92,10 +96,14 @@ public class GeometryUtilsTest
 	public void test3DGeometryBinaryConversion() {
 
 		// convert 3D point to binary representation
-		final byte[] bytes = GeometryUtils.geometryToBinary(point3D);
+		final byte[] bytes = GeometryUtils.geometryToBinary(
+				point3D,
+				GeometryUtils.MAX_GEOMETRY_PRECISION);
 
 		// load the converted 3D geometry
-		final Geometry convGeo = GeometryUtils.geometryFromBinary(bytes);
+		final Geometry convGeo = GeometryUtils.geometryFromBinary(
+				bytes,
+				GeometryUtils.MAX_GEOMETRY_PRECISION);
 
 		// get the coordinates for each version
 		final Coordinate origCoords = point3D.getCoordinates()[0];

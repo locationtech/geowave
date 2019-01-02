@@ -112,7 +112,7 @@ public class NNMapReduceTest
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
 				adapter);
-		internalAdapterId = InternalAdapterStoreImpl.getInitialAdapterId(adapter.getTypeName());
+		internalAdapterId = InternalAdapterStoreImpl.getLazyInitialAdapterId(adapter.getTypeName());
 		JobContextAdapterStore.addDataAdapter(
 				reduceDriver.getConfiguration(),
 				adapter);

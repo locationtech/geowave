@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
@@ -103,10 +104,18 @@ abstract public class AbstractDataStatistics<T, R, B extends StatisticsQueryBuil
 			final int size ) {
 		final byte stypeBytes[] = statisticsType.toBinary();
 		final byte sidBytes[] = StringUtils.stringToBinary(extendedId);
-		final ByteBuffer buffer = ByteBuffer.allocate(size + 6 + stypeBytes.length + sidBytes.length);
-		buffer.putShort(adapterId);
-		buffer.putShort((short) stypeBytes.length);
-		buffer.putShort((short) sidBytes.length);
+		final ByteBuffer buffer = ByteBuffer.allocate(size + VarintUtils.unsignedShortByteLength(adapterId)
+				+ VarintUtils.unsignedIntByteLength(stypeBytes.length)
+				+ VarintUtils.unsignedIntByteLength(sidBytes.length) + stypeBytes.length + sidBytes.length);
+		VarintUtils.writeUnsignedShort(
+				adapterId,
+				buffer);
+		VarintUtils.writeUnsignedInt(
+				stypeBytes.length,
+				buffer);
+		VarintUtils.writeUnsignedInt(
+				sidBytes.length,
+				buffer);
 		buffer.put(stypeBytes);
 		buffer.put(sidBytes);
 		return buffer;
@@ -115,9 +124,9 @@ abstract public class AbstractDataStatistics<T, R, B extends StatisticsQueryBuil
 	protected ByteBuffer binaryBuffer(
 			final byte[] bytes ) {
 		final ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		adapterId = buffer.getShort();
-		final int typeLength = Short.toUnsignedInt(buffer.getShort());
-		final int extenedIdLength = Short.toUnsignedInt(buffer.getShort());
+		adapterId = VarintUtils.readUnsignedShort(buffer);
+		final int typeLength = VarintUtils.readUnsignedInt(buffer);
+		final int extenedIdLength = VarintUtils.readUnsignedInt(buffer);
 		final byte typeBytes[] = new byte[typeLength];
 		buffer.get(typeBytes);
 		statisticsType = new BaseStatisticsType();

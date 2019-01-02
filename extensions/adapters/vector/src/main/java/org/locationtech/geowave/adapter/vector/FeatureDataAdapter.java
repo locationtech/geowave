@@ -37,6 +37,7 @@ import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptor
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
@@ -692,18 +693,35 @@ public class FeatureDataAdapter extends
 		// version
 		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + indexCrsBytes.length
 				+ typeNameBytes.length + namespaceBytes.length + attrBytes.length + axisBytes.length
-				+ secondaryIndexBytes.length + 25);
+				+ secondaryIndexBytes.length + VarintUtils.unsignedIntByteLength(typeNameBytes.length)
+				+ VarintUtils.unsignedIntByteLength(indexCrsBytes.length)
+				+ VarintUtils.unsignedIntByteLength(namespaceBytes.length)
+				+ VarintUtils.unsignedIntByteLength(attrBytes.length)
+				+ VarintUtils.unsignedIntByteLength(axisBytes.length)
+				+ VarintUtils.unsignedIntByteLength(encodedTypeBytes.length) + 1);
 
 		// TODO we will mess with serialization but "version" is definitely
 		// better done by simply registering a different persistable constructor
 		// and this should go away
 		buf.put(VERSION);
-		buf.putInt(typeNameBytes.length);
-		buf.putInt(indexCrsBytes.length);
-		buf.putInt(namespaceBytes.length);
-		buf.putInt(attrBytes.length);
-		buf.putInt(axisBytes.length);
-		buf.putInt(encodedTypeBytes.length);
+		VarintUtils.writeUnsignedInt(
+				typeNameBytes.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				indexCrsBytes.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				namespaceBytes.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				attrBytes.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				axisBytes.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				encodedTypeBytes.length,
+				buf);
 		buf.put(typeNameBytes);
 		buf.put(indexCrsBytes);
 		buf.put(namespaceBytes);
@@ -738,14 +756,14 @@ public class FeatureDataAdapter extends
 		// better done by simply registering a different persistable constructor
 		// and this should go away
 		buf.get();
-		final byte[] typeNameBytes = new byte[buf.getInt()];
+		final byte[] typeNameBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 
-		final byte[] indexCrsBytes = new byte[buf.getInt()];
-		final byte[] namespaceBytes = new byte[buf.getInt()];
+		final byte[] indexCrsBytes = new byte[VarintUtils.readUnsignedInt(buf)];
+		final byte[] namespaceBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 
-		final byte[] attrBytes = new byte[buf.getInt()];
-		final byte[] axisBytes = new byte[buf.getInt()];
-		final byte[] encodedTypeBytes = new byte[buf.getInt()];
+		final byte[] attrBytes = new byte[VarintUtils.readUnsignedInt(buf)];
+		final byte[] axisBytes = new byte[VarintUtils.readUnsignedInt(buf)];
+		final byte[] encodedTypeBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(typeNameBytes);
 		buf.get(indexCrsBytes);
 		buf.get(namespaceBytes);
@@ -761,8 +779,7 @@ public class FeatureDataAdapter extends
 
 		// 21 bytes is the 7 four byte length fields and one byte for the
 		// version
-		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
-				- indexCrsBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 25];
+		final byte[] secondaryIndexBytes = new byte[buf.remaining()];
 		buf.get(secondaryIndexBytes);
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);

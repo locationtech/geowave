@@ -18,6 +18,7 @@ import java.util.TimeZone;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 
 import org.locationtech.jts.geom.Coordinate;
@@ -74,6 +75,7 @@ public class GeoTimeReaderWriterTest
 		};
 	}
 
+	@Test
 	public void testGeoTimeReadWrite() {
 		byte[] value;
 		// test Geometry reader/writer

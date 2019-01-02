@@ -21,6 +21,7 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -77,14 +78,14 @@ public class HBaseDistributableFilter extends
 
 		final boolean wholeRow = buf.get() == (byte) 1 ? true : false;
 
-		final int partitionKeyLength = buf.getInt();
+		final int partitionKeyLength = VarintUtils.readUnsignedInt(buf);
 
-		final int modelLength = buf.getInt();
+		final int modelLength = VarintUtils.readUnsignedInt(buf);
 
 		final byte[] modelBytes = new byte[modelLength];
 		buf.get(modelBytes);
 
-		final byte[] filterBytes = new byte[pbBytes.length - modelLength - 9];
+		final byte[] filterBytes = new byte[buf.remaining()];
 		buf.get(filterBytes);
 
 		final HBaseDistributableFilter newInstance = new HBaseDistributableFilter();
@@ -103,11 +104,17 @@ public class HBaseDistributableFilter extends
 		final byte[] modelBinary = URLClassloaderUtils.toBinary(model);
 		final byte[] filterListBinary = URLClassloaderUtils.toBinary(filterList);
 
-		final ByteBuffer buf = ByteBuffer.allocate(modelBinary.length + filterListBinary.length + 9);
+		final ByteBuffer buf = ByteBuffer.allocate(modelBinary.length + filterListBinary.length + 1
+				+ VarintUtils.unsignedIntByteLength(partitionKeyLength)
+				+ VarintUtils.unsignedIntByteLength(modelBinary.length));
 
 		buf.put(wholeRowFilter ? (byte) 1 : (byte) 0);
-		buf.putInt(partitionKeyLength);
-		buf.putInt(modelBinary.length);
+		VarintUtils.writeUnsignedInt(
+				partitionKeyLength,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				modelBinary.length,
+				buf);
 		buf.put(modelBinary);
 		buf.put(filterListBinary);
 		return buf.array();

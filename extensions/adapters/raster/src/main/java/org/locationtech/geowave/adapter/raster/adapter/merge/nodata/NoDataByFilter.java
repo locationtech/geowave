@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,21 +75,27 @@ public class NoDataByFilter implements
 	public byte[] toBinary() {
 		final byte[] noDataBinary;
 		if ((noDataPerBand != null) && (noDataPerBand.length > 0)) {
-			int totalBytes = 4;
+			int totalBytes = 0;
 			final List<byte[]> noDataValuesBytes = new ArrayList<byte[]>(
 					noDataPerBand.length);
 			for (final double[] noDataValues : noDataPerBand) {
-				final int thisBytes = 4 + (noDataValues.length * 8);
+				final int thisBytes = VarintUtils.unsignedIntByteLength(noDataValues.length)
+						+ (noDataValues.length * 8);
 				totalBytes += thisBytes;
 				final ByteBuffer noDataBuf = ByteBuffer.allocate(thisBytes);
-				noDataBuf.putInt(noDataValues.length);
+				VarintUtils.writeUnsignedInt(
+						noDataValues.length,
+						noDataBuf);
 				for (final double noDataValue : noDataValues) {
 					noDataBuf.putDouble(noDataValue);
 				}
 				noDataValuesBytes.add(noDataBuf.array());
 			}
+			totalBytes += VarintUtils.unsignedIntByteLength(noDataPerBand.length);
 			final ByteBuffer noDataBuf = ByteBuffer.allocate(totalBytes);
-			noDataBuf.putInt(noDataPerBand.length);
+			VarintUtils.writeUnsignedInt(
+					noDataPerBand.length,
+					noDataBuf);
 			for (final byte[] noDataValueBytes : noDataValuesBytes) {
 				noDataBuf.put(noDataValueBytes);
 			}
@@ -102,10 +109,15 @@ public class NoDataByFilter implements
 			geometryBinary = new byte[0];
 		}
 		else {
-			geometryBinary = GeometryUtils.geometryToBinary(shape);
+			geometryBinary = GeometryUtils.geometryToBinary(
+					shape,
+					GeometryUtils.MAX_GEOMETRY_PRECISION);
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(geometryBinary.length + noDataBinary.length + 4);
-		buf.putInt(noDataBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(geometryBinary.length + noDataBinary.length
+				+ VarintUtils.unsignedIntByteLength(noDataBinary.length));
+		VarintUtils.writeUnsignedInt(
+				noDataBinary.length,
+				buf);
 		buf.put(noDataBinary);
 		buf.put(geometryBinary);
 		return buf.array();
@@ -115,15 +127,16 @@ public class NoDataByFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int noDataBinaryLength = buf.getInt();
-		final byte[] geometryBinary = new byte[bytes.length - noDataBinaryLength - 4];
+		final int noDataBinaryLength = VarintUtils.readUnsignedInt(buf);
+		final byte[] geometryBinary = new byte[bytes.length - noDataBinaryLength
+				- VarintUtils.unsignedIntByteLength(noDataBinaryLength)];
 		if (noDataBinaryLength == 0) {
 			noDataPerBand = new double[][] {};
 		}
 		else {
-			noDataPerBand = new double[buf.getInt()][];
+			noDataPerBand = new double[VarintUtils.readUnsignedInt(buf)][];
 			for (int b = 0; b < noDataPerBand.length; b++) {
-				noDataPerBand[b] = new double[buf.getInt()];
+				noDataPerBand[b] = new double[VarintUtils.readUnsignedInt(buf)];
 				for (int i = 0; i < noDataPerBand[b].length; i++) {
 					noDataPerBand[b][i] = buf.getDouble();
 				}
@@ -131,7 +144,9 @@ public class NoDataByFilter implements
 		}
 		if (geometryBinary.length > 0) {
 			buf.get(geometryBinary);
-			shape = GeometryUtils.geometryFromBinary(geometryBinary);
+			shape = GeometryUtils.geometryFromBinary(
+					geometryBinary,
+					GeometryUtils.MAX_GEOMETRY_PRECISION);
 		}
 		else {
 			shape = null;

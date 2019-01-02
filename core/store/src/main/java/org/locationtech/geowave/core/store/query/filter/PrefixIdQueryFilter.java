@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
@@ -52,10 +53,12 @@ public class PrefixIdQueryFilter implements
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(8 + partitionKey.length + sortKeyPrefix.length);
-		buf.putInt(partitionKey.length);
+		final ByteBuffer buf = ByteBuffer.allocate(partitionKey.length + sortKeyPrefix.length
+				+ VarintUtils.unsignedIntByteLength(partitionKey.length));
+		VarintUtils.writeUnsignedInt(
+				partitionKey.length,
+				buf);
 		buf.put(partitionKey);
-		buf.putInt(sortKeyPrefix.length);
 		buf.put(sortKeyPrefix);
 
 		return buf.array();
@@ -65,9 +68,9 @@ public class PrefixIdQueryFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		partitionKey = new byte[buf.getInt()];
+		partitionKey = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(partitionKey);
-		sortKeyPrefix = new byte[buf.getInt()];
+		sortKeyPrefix = new byte[buf.remaining()];
 		buf.get(sortKeyPrefix);
 	}
 }

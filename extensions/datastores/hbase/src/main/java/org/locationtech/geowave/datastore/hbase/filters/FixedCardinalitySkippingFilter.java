@@ -19,6 +19,7 @@ import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.locationtech.geowave.core.index.IndexUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 
 public class FixedCardinalitySkippingFilter extends
 		FilterBase
@@ -102,8 +103,10 @@ public class FixedCardinalitySkippingFilter extends
 	@Override
 	public byte[] toByteArray()
 			throws IOException {
-		final ByteBuffer buf = ByteBuffer.allocate(Integer.BYTES);
-		buf.putInt(bitPosition);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(bitPosition));
+		VarintUtils.writeUnsignedInt(
+				bitPosition,
+				buf);
 
 		return buf.array();
 	}
@@ -112,7 +115,7 @@ public class FixedCardinalitySkippingFilter extends
 			final byte[] bytes )
 			throws DeserializationException {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int bitpos = buf.getInt();
+		final int bitpos = VarintUtils.readUnsignedInt(buf);
 
 		return new FixedCardinalitySkippingFilter(
 				bitpos);

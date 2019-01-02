@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -202,8 +203,11 @@ public class BinnedNumericDataset implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] indexRangesBinary = PersistenceUtils.toBinary(indexRanges);
-		final ByteBuffer buf = ByteBuffer.allocate(4 + indexRangesBinary.length + binId.length);
-		buf.putInt(binId.length);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(binId.length)
+				+ indexRangesBinary.length + binId.length);
+		VarintUtils.writeUnsignedInt(
+				binId.length,
+				buf);
 		buf.put(binId);
 		buf.put(indexRangesBinary);
 		return null;
@@ -213,10 +217,10 @@ public class BinnedNumericDataset implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		binId = new byte[buf.getInt()];
+		binId = new byte[VarintUtils.readUnsignedInt(buf)];
 		buf.get(binId);
 
-		final byte[] indexRangesBinary = new byte[bytes.length - 5 - binId.length];
+		final byte[] indexRangesBinary = new byte[buf.remaining()];
 		buf.get(indexRangesBinary);
 		indexRanges = (MultiDimensionalNumericData) PersistenceUtils.fromBinary(indexRangesBinary);
 	}

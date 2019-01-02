@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
@@ -107,19 +108,26 @@ public class CustomCrsIndexModel extends
 	@Override
 	public byte[] toBinary() {
 		final byte[] crsCodeBinary = StringUtils.stringToBinary(crsCode);
-		int byteBufferLength = 8 + crsCodeBinary.length;
+		int byteBufferLength = VarintUtils.unsignedIntByteLength(dimensions.length)
+				+ VarintUtils.unsignedIntByteLength(crsCodeBinary.length) + crsCodeBinary.length;
 		final List<byte[]> dimensionBinaries = new ArrayList<>(
 				dimensions.length);
 		for (final NumericDimensionField<?> dimension : dimensions) {
 			final byte[] dimensionBinary = PersistenceUtils.toBinary(dimension);
-			byteBufferLength += (4 + dimensionBinary.length);
+			byteBufferLength += (VarintUtils.unsignedIntByteLength(dimensionBinary.length) + dimensionBinary.length);
 			dimensionBinaries.add(dimensionBinary);
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferLength);
-		buf.putInt(dimensions.length);
-		buf.putInt(crsCodeBinary.length);
+		VarintUtils.writeUnsignedInt(
+				dimensions.length,
+				buf);
+		VarintUtils.writeUnsignedInt(
+				crsCodeBinary.length,
+				buf);
 		for (final byte[] dimensionBinary : dimensionBinaries) {
-			buf.putInt(dimensionBinary.length);
+			VarintUtils.writeUnsignedInt(
+					dimensionBinary.length,
+					buf);
 			buf.put(dimensionBinary);
 		}
 		buf.put(crsCodeBinary);
@@ -130,11 +138,11 @@ public class CustomCrsIndexModel extends
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int numDimensions = buf.getInt();
-		final int crsCodeLength = buf.getInt();
+		final int numDimensions = VarintUtils.readUnsignedInt(buf);
+		final int crsCodeLength = VarintUtils.readUnsignedInt(buf);
 		dimensions = new NumericDimensionField[numDimensions];
 		for (int i = 0; i < numDimensions; i++) {
-			final byte[] dim = new byte[buf.getInt()];
+			final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
 			buf.get(dim);
 			dimensions[i] = (NumericDimensionField<?>) PersistenceUtils.fromBinary(dim);
 		}

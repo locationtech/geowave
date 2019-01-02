@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data.field.base;
 
+import org.locationtech.geowave.core.store.data.field.ArrayReader;
+import org.locationtech.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.data.field.ArrayReader.VariableSizeObjectArrayReader;
-import org.locationtech.geowave.core.store.data.field.ArrayWriter.VariableSizeObjectArrayWriter;
 import org.locationtech.geowave.core.store.data.field.base.StringSerializationProvider.StringReader;
 import org.locationtech.geowave.core.store.data.field.base.StringSerializationProvider.StringWriter;
 
@@ -33,7 +33,7 @@ public class StringArraySerializationProvider implements
 	}
 
 	private static class StringArrayReader extends
-			VariableSizeObjectArrayReader<String>
+			ArrayReader<String>
 	{
 		public StringArrayReader() {
 			super(

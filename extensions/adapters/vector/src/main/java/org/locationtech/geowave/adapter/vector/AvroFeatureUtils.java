@@ -25,28 +25,28 @@ import org.locationtech.geowave.adapter.vector.avro.AttributeValues;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeature;
 import org.locationtech.geowave.adapter.vector.avro.FeatureDefinition;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.TWKBReader;
+import org.locationtech.geowave.core.geotime.util.TWKBWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKBReader;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
 import com.google.common.base.Preconditions;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKBReader;
-import org.locationtech.jts.io.WKBWriter;
 
 public class AvroFeatureUtils
 {
-	private static final WKBWriter WKB_WRITER = new WKBWriter(
-			3);
+	private static final TWKBWriter WKB_WRITER = new TWKBWriter();
 
 	private static final DecoderFactory DECODER_FACTORY = DecoderFactory.get();
 	private static final SpecificDatumReader<AvroSimpleFeature> DATUM_READER = new SpecificDatumReader<>(
 			AvroSimpleFeature.getClassSchema());
-	private static final WKBReader WKB_READER = new WKBReader();
+	private static final TWKBReader WKB_READER = new TWKBReader();
 
 	private AvroFeatureUtils() {}
 
@@ -153,6 +153,10 @@ public class AvroFeatureUtils
 		final List<ByteBuffer> values = new ArrayList<>(
 				sft.getAttributeCount());
 
+		attributeValue.setSerializationVersion(ByteBuffer.wrap(new byte[] {
+			FieldUtils.SERIALIZATION_VERSION
+		}));
+
 		attributeValue.setFid(sf.getID());
 
 		for (final AttributeDescriptor attr : sft.getAttributeDescriptors()) {
@@ -233,6 +237,11 @@ public class AvroFeatureUtils
 
 		// null values should still take a place in the array - check
 		Preconditions.checkArgument(attributeTypes.size() == attributeValues.getValues().size());
+		byte serializationVersion = attributeValues.getSerializationVersion().get();
+		WKBReader legacyReader = null;
+		if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
+			legacyReader = new WKBReader();
+		}
 		for (int i = 0; i < attributeValues.getValues().size(); i++) {
 			final ByteBuffer val = attributeValues.getValues().get(
 					i);
@@ -240,12 +249,19 @@ public class AvroFeatureUtils
 			if (attributeTypes.get(
 					i).equals(
 					"org.locationtech.jts.geom.Geometry")) {
-				sfb.add(WKB_READER.read(val.array()));
+				if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
+					sfb.add(legacyReader.read(val.array()));
+				}
+				else {
+					sfb.add(WKB_READER.read(val.array()));
+				}
 			}
 			else {
 				final FieldReader<?> fr = FieldUtils.getDefaultReaderForClass(Class
 						.forName(jtsCompatibility(attributeTypes.get(i))));
-				sfb.add(fr.readField(val.array()));
+				sfb.add(fr.readField(
+						val.array(),
+						serializationVersion));
 			}
 		}
 

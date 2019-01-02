@@ -15,12 +15,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SimpleFeatureSerializationProvider
 {
@@ -49,8 +50,7 @@ public class SimpleFeatureSerializationProvider
 			int attrCnt = type.getAttributeCount();
 			byte[][] retVal = new byte[attrCnt][];
 			for (int i = 0; i < attrCnt; i++) {
-				int byteLength;
-				byteLength = input.getInt();
+				int byteLength = VarintUtils.readSignedInt(input);
 				if (byteLength < 0) {
 					retVal[i] = null;
 					continue;
@@ -84,14 +84,23 @@ public class SimpleFeatureSerializationProvider
 
 			try {
 				for (Object attr : fieldValue) {
+					ByteBuffer lengthBytes;
 					if (attr == null) {
-						output.writeInt(-1);
+						lengthBytes = ByteBuffer.allocate(VarintUtils.signedIntByteLength(-1));
+						VarintUtils.writeSignedInt(
+								-1,
+								lengthBytes);
+						output.write(lengthBytes.array());
 
 						continue;
 					}
 					FieldWriter writer = FieldUtils.getDefaultWriterForClass(attr.getClass());
 					byte[] binary = writer.writeField(attr);
-					output.writeInt(binary.length);
+					lengthBytes = ByteBuffer.allocate(VarintUtils.signedIntByteLength(binary.length));
+					VarintUtils.writeSignedInt(
+							binary.length,
+							lengthBytes);
+					output.write(lengthBytes.array());
 					output.write(binary);
 				}
 				output.close();

@@ -15,6 +15,7 @@ import java.util.Arrays;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
@@ -126,8 +127,11 @@ public class AdapterToIndexMapping implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] indexIdBytes = StringUtils.stringsToBinary(indexNames);
-		final ByteBuffer buf = ByteBuffer.allocate(2 + indexIdBytes.length);
-		buf.putShort(adapterId);
+		final ByteBuffer buf = ByteBuffer
+				.allocate(VarintUtils.unsignedShortByteLength(adapterId) + indexIdBytes.length);
+		VarintUtils.writeUnsignedShort(
+				adapterId,
+				buf);
 		buf.put(indexIdBytes);
 		return buf.array();
 	}
@@ -136,8 +140,8 @@ public class AdapterToIndexMapping implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		adapterId = buf.getShort();
-		final byte[] indexNamesBytes = new byte[bytes.length - 2];
+		adapterId = VarintUtils.readUnsignedShort(buf);
+		final byte[] indexNamesBytes = new byte[buf.remaining()];
 		buf.get(indexNamesBytes);
 		indexNames = StringUtils.stringsFromBinary(indexNamesBytes);
 	}

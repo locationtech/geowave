@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 
 public class FilterByTypeQueryOptions<T> implements
 		DataTypeQueryOptions<T>
@@ -52,8 +53,11 @@ public class FilterByTypeQueryOptions<T> implements
 		else {
 			fieldNamesBinary = new byte[0];
 		}
-		final ByteBuffer buf = ByteBuffer.allocate(4 + fieldNamesBinary.length + typeNamesBinary.length);
-		buf.putInt(typeNamesBinary.length);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(typeNamesBinary.length)
+				+ fieldNamesBinary.length + typeNamesBinary.length);
+		VarintUtils.writeUnsignedInt(
+				typeNamesBinary.length,
+				buf);
 		buf.put(typeNamesBinary);
 		buf.put(fieldNamesBinary);
 		return buf.array();
@@ -63,7 +67,7 @@ public class FilterByTypeQueryOptions<T> implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final byte[] typeNamesBytes = new byte[buf.getInt()];
+		final byte[] typeNamesBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 		if (typeNamesBytes.length <= 0) {
 			typeNames = new String[0];
 		}
@@ -71,7 +75,7 @@ public class FilterByTypeQueryOptions<T> implements
 			buf.get(typeNamesBytes);
 			typeNames = StringUtils.stringsFromBinary(typeNamesBytes);
 		}
-		final byte[] fieldNamesBytes = new byte[bytes.length - 4 - typeNamesBytes.length];
+		final byte[] fieldNamesBytes = new byte[buf.remaining()];
 		if (fieldNamesBytes.length == 0) {
 			fieldNames = null;
 		}

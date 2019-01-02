@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
@@ -69,12 +70,14 @@ public class TextExactMatchFilter implements
 	public byte[] toBinary() {
 		final byte[] fieldNameBytes = StringUtils.stringToBinary(fieldName);
 		final byte[] matchValueBytes = StringUtils.stringToBinary(matchValue);
-		final ByteBuffer bb = ByteBuffer.allocate(4 + fieldNameBytes.length + 4 + matchValueBytes.length + 4);
-		bb.putInt(fieldNameBytes.length);
+		final ByteBuffer bb = ByteBuffer.allocate(1 + VarintUtils.unsignedIntByteLength(fieldNameBytes.length)
+				+ fieldNameBytes.length + matchValueBytes.length);
+		bb.put((byte) (caseSensitive ? 1 : 0));
+		VarintUtils.writeUnsignedInt(
+				fieldNameBytes.length,
+				bb);
 		bb.put(fieldNameBytes);
-		bb.putInt(matchValueBytes.length);
 		bb.put(matchValueBytes);
-		bb.putInt(caseSensitive ? 1 : 0);
 		return bb.array();
 	}
 
@@ -82,12 +85,12 @@ public class TextExactMatchFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer bb = ByteBuffer.wrap(bytes);
-		final byte[] fieldNameBytes = new byte[bb.getInt()];
+		caseSensitive = bb.get() > 0 ? true : false;
+		final byte[] fieldNameBytes = new byte[VarintUtils.readUnsignedInt(bb)];
 		bb.get(fieldNameBytes);
 		fieldName = StringUtils.stringFromBinary(fieldNameBytes);
-		final byte[] matchValueBytes = new byte[bb.getInt()];
+		final byte[] matchValueBytes = new byte[bb.remaining()];
 		bb.get(matchValueBytes);
 		matchValue = StringUtils.stringFromBinary(matchValueBytes);
-		caseSensitive = (bb.getInt() == 1) ? true : false;
 	}
 }

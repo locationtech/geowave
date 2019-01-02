@@ -12,10 +12,10 @@ package org.locationtech.geowave.analytic.spark.sparksql.util;
 
 import java.io.Serializable;
 
-import org.locationtech.jts.io.WKBWriter;
+import org.locationtech.geowave.core.geotime.util.TWKBWriter;
 
 public class GeomWriter extends
-		WKBWriter implements
+		TWKBWriter implements
 		Serializable
 {
 

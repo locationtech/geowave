@@ -15,6 +15,7 @@ import java.util.BitSet;
 import java.util.Locale;
 
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
@@ -300,7 +301,7 @@ public class TimeDescriptors
 			if (timeName != null) {
 				bits.set(0);
 				timeBytes = StringUtils.stringToBinary(timeName);
-				length += 4;
+				length += VarintUtils.unsignedIntByteLength(timeBytes.length);
 				length += timeBytes.length;
 			}
 			else {
@@ -309,7 +310,7 @@ public class TimeDescriptors
 			if (startRangeName != null) {
 				bits.set(1);
 				startRangeBytes = StringUtils.stringToBinary(startRangeName);
-				length += 4;
+				length += VarintUtils.unsignedIntByteLength(startRangeBytes.length);
 				length += startRangeBytes.length;
 			}
 			else {
@@ -318,7 +319,7 @@ public class TimeDescriptors
 			if (endRangeName != null) {
 				bits.set(2);
 				endRangeBytes = StringUtils.stringToBinary(endRangeName);
-				length += 4;
+				length += VarintUtils.unsignedIntByteLength(endRangeBytes.length);
 				length += endRangeBytes.length;
 			}
 			else {
@@ -328,15 +329,21 @@ public class TimeDescriptors
 			byte[] bitMask = bits.toByteArray();
 			buf.put(bitMask.length > 0 ? bitMask[0] : (byte) 0);
 			if (timeBytes != null) {
-				buf.putInt(timeBytes.length);
+				VarintUtils.writeUnsignedInt(
+						timeBytes.length,
+						buf);
 				buf.put(timeBytes);
 			}
 			if (startRangeBytes != null) {
-				buf.putInt(startRangeBytes.length);
+				VarintUtils.writeUnsignedInt(
+						startRangeBytes.length,
+						buf);
 				buf.put(startRangeBytes);
 			}
 			if (endRangeBytes != null) {
-				buf.putInt(endRangeBytes.length);
+				VarintUtils.writeUnsignedInt(
+						endRangeBytes.length,
+						buf);
 				buf.put(endRangeBytes);
 			}
 			return buf.array();
@@ -350,7 +357,7 @@ public class TimeDescriptors
 				buf.get()
 			});
 			if (bitSet.get(0)) {
-				byte[] timeBytes = new byte[buf.getInt()];
+				byte[] timeBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 				buf.get(timeBytes);
 				timeName = StringUtils.stringFromBinary(timeBytes);
 			}
@@ -358,7 +365,7 @@ public class TimeDescriptors
 				timeName = null;
 			}
 			if (bitSet.get(1)) {
-				byte[] startRangeBytes = new byte[buf.getInt()];
+				byte[] startRangeBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 				buf.get(startRangeBytes);
 				startRangeName = StringUtils.stringFromBinary(startRangeBytes);
 			}
@@ -366,7 +373,7 @@ public class TimeDescriptors
 				startRangeName = null;
 			}
 			if (bitSet.get(2)) {
-				byte[] endRangeBytes = new byte[buf.getInt()];
+				byte[] endRangeBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 				buf.get(endRangeBytes);
 				endRangeName = StringUtils.stringFromBinary(endRangeBytes);
 

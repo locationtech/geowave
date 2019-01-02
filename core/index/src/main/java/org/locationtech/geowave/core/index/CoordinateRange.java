@@ -84,9 +84,14 @@ public class CoordinateRange implements
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(16 + (binId == null ? 0 : binId.length));
-		buf.putLong(minCoordinate);
-		buf.putLong(maxCoordinate);
+		final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedLongByteLength(minCoordinate)
+				+ VarintUtils.unsignedLongByteLength(maxCoordinate) + (binId == null ? 0 : binId.length));
+		VarintUtils.writeUnsignedLong(
+				minCoordinate,
+				buf);
+		VarintUtils.writeUnsignedLong(
+				maxCoordinate,
+				buf);
 		if (binId != null) {
 			buf.put(binId);
 		}
@@ -97,10 +102,10 @@ public class CoordinateRange implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		minCoordinate = buf.getLong();
-		maxCoordinate = buf.getLong();
-		if (bytes.length > 16) {
-			binId = new byte[bytes.length - 16];
+		minCoordinate = VarintUtils.readUnsignedLong(buf);
+		maxCoordinate = VarintUtils.readUnsignedLong(buf);
+		if (buf.remaining() > 0) {
+			binId = new byte[buf.remaining()];
 			buf.get(binId);
 		}
 		else {

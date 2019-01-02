@@ -171,27 +171,33 @@ public class SinglePartitionInsertionIds implements
 			pLength = partitionKey.getBytes().length;
 		}
 		int sSize;
-		int byteBufferSize = 8 + pLength;
+		int byteBufferSize = VarintUtils.unsignedIntByteLength(pLength) + pLength;
 		if (sortKeys == null) {
 			sSize = 0;
 		}
 		else {
 			sSize = sortKeys.size();
-			byteBufferSize += (4 * sSize);
 			for (final ByteArray sKey : sortKeys) {
-				byteBufferSize += sKey.getBytes().length;
+				byteBufferSize += VarintUtils.unsignedIntByteLength(sKey.getBytes().length) + sKey.getBytes().length;
 			}
 		}
+		byteBufferSize += VarintUtils.unsignedIntByteLength(sSize);
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferSize);
-		buf.putInt(pLength);
+		VarintUtils.writeUnsignedInt(
+				pLength,
+				buf);
 		if (pLength > 0) {
 			buf.put(partitionKey.getBytes());
 		}
-		buf.putInt(sSize);
+		VarintUtils.writeUnsignedInt(
+				sSize,
+				buf);
 
 		if (sSize > 0) {
 			for (final ByteArray sKey : sortKeys) {
-				buf.putInt(sKey.getBytes().length);
+				VarintUtils.writeUnsignedInt(
+						sKey.getBytes().length,
+						buf);
 				buf.put(sKey.getBytes());
 			}
 		}
@@ -202,7 +208,7 @@ public class SinglePartitionInsertionIds implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int pLength = buf.getInt();
+		final int pLength = VarintUtils.readUnsignedInt(buf);
 		if (pLength > 0) {
 			final byte[] pBytes = new byte[pLength];
 			buf.get(pBytes);
@@ -212,12 +218,12 @@ public class SinglePartitionInsertionIds implements
 		else {
 			partitionKey = null;
 		}
-		final int sSize = buf.getInt();
+		final int sSize = VarintUtils.readUnsignedInt(buf);
 		if (sSize > 0) {
 			sortKeys = new ArrayList<>(
 					sSize);
 			for (int i = 0; i < sSize; i++) {
-				final int keyLength = buf.getInt();
+				final int keyLength = VarintUtils.readUnsignedInt(buf);
 				final byte[] sortKey = new byte[keyLength];
 				buf.get(sortKey);
 				sortKeys.add(new ByteArray(

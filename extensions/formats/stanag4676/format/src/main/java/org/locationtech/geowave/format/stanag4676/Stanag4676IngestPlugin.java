@@ -490,7 +490,9 @@ public class Stanag4676IngestPlugin extends
 					objectClassTimes += dateStr;
 				}
 				else if (event.EventType.get() == 3) {
-					missionFrameBuilder.add(GeometryUtils.geometryFromBinary(event.Geometry.getBytes()));
+					missionFrameBuilder.add(GeometryUtils.geometryFromBinary(
+							event.Geometry.getBytes(),
+							null));
 					missionFrameBuilder.add(event.MissionUUID.toString());
 					missionFrameBuilder.add(new Date(
 							event.TimeStamp.get()));
@@ -503,7 +505,9 @@ public class Stanag4676IngestPlugin extends
 				}
 				else if (event.EventType.get() == 4) {
 
-					missionSummaryBuilder.add(GeometryUtils.geometryFromBinary(event.Geometry.getBytes()));
+					missionSummaryBuilder.add(GeometryUtils.geometryFromBinary(
+							event.Geometry.getBytes(),
+							null));
 					missionSummaryBuilder.add(event.MissionUUID.toString());
 					missionSummaryBuilder.add(new Date(
 							event.TimeStamp.get()));

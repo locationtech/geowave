@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.geotime.ingest;
 
+import javax.annotation.Nullable;
+
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
@@ -60,20 +62,34 @@ public class SpatialDimensionalityTypeProvider implements
 	// just use the same range for latitude to make square sfc values in
 	// decimal degrees (EPSG:4326)
 	};
-	public static final NumericDimensionField[] SPATIAL_FIELDS = new NumericDimensionField[] {
-		new LongitudeField(),
-		new LatitudeField(
-				true)
-	// just use the same range for latitude to make square sfc values in
-	// decimal degrees (EPSG:4326)
-	};
-	public static final NumericDimensionField[] SPATIAL_TEMPORAL_FIELDS = new NumericDimensionField[] {
-		new LongitudeField(),
-		new LatitudeField(
-				true),
-		new TimeField(
-				Unit.YEAR)
-	};
+
+	@SuppressWarnings("rawtypes")
+	public static NumericDimensionField[] getSpatialFields(
+			final @Nullable Integer geometryPrecision ) {
+		return new NumericDimensionField[] {
+			new LongitudeField(
+					geometryPrecision),
+			new LatitudeField(
+					geometryPrecision,
+					true)
+		// just use the same range for latitude to make square sfc values in
+		// decimal degrees (EPSG:4326)
+		};
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static NumericDimensionField[] getSpatialTemporalFields(
+			final @Nullable Integer geometryPrecision ) {
+		return new NumericDimensionField[] {
+			new LongitudeField(
+					geometryPrecision),
+			new LatitudeField(
+					geometryPrecision,
+					true),
+			new TimeField(
+					Unit.YEAR)
+		};
+	}
 
 	public SpatialDimensionalityTypeProvider() {}
 
@@ -112,11 +128,12 @@ public class SpatialDimensionalityTypeProvider implements
 		String crsCode = null;
 		NumericDimensionField<?>[] fields = null;
 		NumericDimensionField<?>[] fields_temporal = null;
+		Integer geometryPrecision = options.getGeometryPrecision();
 
 		if ((options.crs == null) || options.crs.isEmpty()
 				|| options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
 			dimensions = SPATIAL_DIMENSIONS;
-			fields = SPATIAL_FIELDS;
+			fields = getSpatialFields(geometryPrecision);
 			isDefaultCRS = true;
 			crsCode = "EPSG:4326";
 		}
@@ -137,14 +154,16 @@ public class SpatialDimensionalityTypeProvider implements
 								csa.getMinimumValue(),
 								csa.getMaximumValue());
 						fields_temporal[d] = new CustomCRSSpatialField(
-								(CustomCRSBoundedSpatialDimension) dimensions[d]);
+								(CustomCRSBoundedSpatialDimension) dimensions[d],
+								geometryPrecision);
 					}
 					else {
 						dimensions[d] = new CustomCRSUnboundedSpatialDimension(
 								DEFAULT_UNBOUNDED_CRS_INTERVAL,
 								(byte) d);
 						fields_temporal[d] = new CustomCRSSpatialField(
-								(CustomCRSUnboundedSpatialDimension) dimensions[d]);
+								(CustomCRSUnboundedSpatialDimension) dimensions[d],
+								geometryPrecision);
 					}
 				}
 				fields_temporal[dimensions.length] = new TimeField(
@@ -160,7 +179,8 @@ public class SpatialDimensionalityTypeProvider implements
 								csa.getMinimumValue(),
 								csa.getMaximumValue());
 						fields[d] = new CustomCRSSpatialField(
-								(CustomCRSBoundedSpatialDimension) dimensions[d]);
+								(CustomCRSBoundedSpatialDimension) dimensions[d],
+								geometryPrecision);
 					}
 					else {
 						if (d == 0) {
@@ -168,14 +188,16 @@ public class SpatialDimensionalityTypeProvider implements
 									DEFAULT_UNBOUNDED_CRS_INTERVAL,
 									(byte) d);
 							fields[d] = new CustomCRSSpatialField(
-									(CustomCRSUnboundedSpatialDimensionX) dimensions[d]);
+									(CustomCRSUnboundedSpatialDimensionX) dimensions[d],
+									geometryPrecision);
 						}
 						if (d == 1) {
 							dimensions[d] = new CustomCRSUnboundedSpatialDimensionY(
 									DEFAULT_UNBOUNDED_CRS_INTERVAL,
 									(byte) d);
 							fields[d] = new CustomCRSSpatialField(
-									(CustomCRSUnboundedSpatialDimensionY) dimensions[d]);
+									(CustomCRSUnboundedSpatialDimensionY) dimensions[d],
+									geometryPrecision);
 						}
 					}
 				}
@@ -186,7 +208,8 @@ public class SpatialDimensionalityTypeProvider implements
 		BasicIndexModel indexModel = null;
 		if (isDefaultCRS) {
 			indexModel = new BasicIndexModel(
-					options.storeTime ? SPATIAL_TEMPORAL_FIELDS : SPATIAL_FIELDS);
+					options.storeTime ? getSpatialTemporalFields(geometryPrecision)
+							: getSpatialFields(geometryPrecision));
 		}
 		else {
 
@@ -267,6 +290,18 @@ public class SpatialDimensionalityTypeProvider implements
 		public SpatialIndexBuilder setIncludeTimeInCommonIndexModel(
 				final boolean storeTime ) {
 			options.storeTime = storeTime;
+			return this;
+		}
+
+		public SpatialIndexBuilder setGeometryPrecision(
+				@Nullable Integer precision ) {
+			if (precision == null) {
+				options.fullGeometryPrecision = true;
+			}
+			else {
+				options.fullGeometryPrecision = false;
+				options.geometryPrecision = precision;
+			}
 			return this;
 		}
 
