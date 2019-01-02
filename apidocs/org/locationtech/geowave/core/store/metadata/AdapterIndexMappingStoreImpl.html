@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -208,6 +208,13 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
  constraints.</div>
 </td>
 </tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/AdapterIndexMappingStoreImpl.html#remove-short-java.lang.String-">remove</a></span>(short&nbsp;internalAdapterId,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>
+<div class="block">Remove an index for the specified adapter mapping.</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence">
@@ -316,7 +323,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <a name="remove-short-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
 <pre>public&nbsp;void&nbsp;remove(short&nbsp;internalAdapterId)</pre>
@@ -326,6 +333,23 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-short-">remove</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="remove-short-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>remove</h4>
+<pre>public&nbsp;boolean&nbsp;remove(short&nbsp;internalAdapterId,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-short-java.lang.String-">AdapterIndexMappingStore</a></code></span></div>
+<div class="block">Remove an index for the specified adapter mapping. The method should
+ return false if the adapter, or index for the adapter does not exist.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-short-java.lang.String-">remove</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>
 </dl>
 </li>
 </ul>

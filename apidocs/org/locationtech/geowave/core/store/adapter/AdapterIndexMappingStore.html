@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -145,6 +145,13 @@ var activeTableTab = "activeTableTab";
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-short-java.lang.String-">remove</a></span>(short&nbsp;adapterId,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>
+<div class="block">Remove an index for the specified adapter mapping.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#removeAll--">removeAll</a></span>()</code>&nbsp;</td>
 </tr>
@@ -200,6 +207,23 @@ var activeTableTab = "activeTableTab";
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapterId</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="remove-short-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>remove</h4>
+<pre>boolean&nbsp;remove(short&nbsp;adapterId,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
+<div class="block">Remove an index for the specified adapter mapping. The method should
+ return false if the adapter, or index for the adapter does not exist.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>adapterId</code> - </dd>
+<dd><code>indexName</code> - </dd>
 </dl>
 </li>
 </ul>
