@@ -91,6 +91,7 @@ import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
+import org.locationtech.geowave.core.store.query.filter.InsertionIdQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.server.BasicOptionProvider;
 import org.locationtech.geowave.core.store.server.RowMergingAdapterOptionProvider;
@@ -1429,13 +1430,9 @@ public class HBaseOperations implements
 					.getIndex()
 					.getIndexModel())));
 
-			final int maxRangeDecomposition = readerParams.getMaxRangeDecomposition() == null ? options
-					.getAggregationMaxRangeDecomposition() : readerParams.getMaxRangeDecomposition();
-			final MultiRowRangeFilter multiFilter = getMultiRowRangeFilter(DataStoreUtils.constraintsToQueryRanges(
-					readerParams.getConstraints(),
-					readerParams.getIndex().getIndexStrategy(),
-					null,
-					maxRangeDecomposition).getCompositeQueryRanges());
+			final MultiRowRangeFilter multiFilter = getMultiRowRangeFilter(readerParams
+					.getQueryRanges()
+					.getCompositeQueryRanges());
 			if (multiFilter != null) {
 				requestBuilder.setRangeFilter(ByteString.copyFrom(multiFilter.toByteArray()));
 			}
@@ -1916,7 +1913,16 @@ public class HBaseOperations implements
 	@Override
 	public <T> Deleter<T> createDeleter(
 			final ReaderParams<T> readerParams ) {
-		if (isServerSideLibraryEnabled()) {
+
+		// Currently, the InsertionIdQueryFilter is incompatible with the hbase
+		// bulk deleter when the MultiRowRangeFilter is present. This check
+		// prevents the situation by deferring to a single row delete.
+		boolean isSingleRowFilter = false;
+		if (readerParams.getFilter() instanceof InsertionIdQueryFilter) {
+			isSingleRowFilter = true;
+		}
+
+		if (isServerSideLibraryEnabled() && !isSingleRowFilter) {
 			return new HBaseDeleter(
 					readerParams,
 					this);
