@@ -47,8 +47,8 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import org.locationtech.geowave.service.grpc.protobuf.CliGeoserverGrpc.CliGeoserverImplBase;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.RepeatedStringResponse;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.RepeatedStringResponseProtos;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,11 +64,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerListWorkspacesCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListWorkspacesCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerListWorkspacesCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes
-                  .RepeatedStringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos
+                  .RepeatedStringResponseProtos>
           responseObserver) {
 
     GeoServerListWorkspacesCommand cmd = new GeoServerListWorkspacesCommand();
@@ -84,8 +84,8 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerListWorkspacesCommand...");
     try {
       final List<String> result = cmd.computeResults(params);
-      final RepeatedStringResponse resp =
-          RepeatedStringResponse.newBuilder().addAllResponseValue(result).build();
+      final RepeatedStringResponseProtos resp =
+          RepeatedStringResponseProtos.newBuilder().addAllResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -96,9 +96,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerAddCoverageCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerAddCoverageCommand cmd = new GeoServerAddCoverageCommand();
@@ -114,7 +114,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerAddCoverageCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -125,10 +125,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerRemoveCoverageStoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveCoverageStoreCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveCoverageStoreCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerRemoveCoverageStoreCommand cmd = new GeoServerRemoveCoverageStoreCommand();
@@ -144,7 +144,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerRemoveCoverageStoreCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -155,10 +155,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerAddCoverageStoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageStoreCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageStoreCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerAddCoverageStoreCommand cmd = new GeoServerAddCoverageStoreCommand();
@@ -174,7 +174,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerAddCoverageStoreCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -185,10 +185,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerGetCoverageStoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetCoverageStoreCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetCoverageStoreCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
     GeoServerGetCoverageStoreCommand cmd = new GeoServerGetCoverageStoreCommand();
     Map<FieldDescriptor, Object> m = request.getAllFields();
@@ -203,7 +203,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerGetCoverageStoreCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -214,9 +214,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerAddDatastoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddDatastoreCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddDatastoreCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
     GeoServerAddDatastoreCommand cmd = new GeoServerAddDatastoreCommand();
     Map<FieldDescriptor, Object> m = request.getAllFields();
@@ -231,7 +231,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerAddDatastoreCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -242,9 +242,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerGetStyleCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetStyleCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetStyleCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerGetStyleCommand cmd = new GeoServerGetStyleCommand();
@@ -260,7 +260,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerGetStyleCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -271,9 +271,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void configGeoServerCommand(
-      org.locationtech.geowave.service.grpc.protobuf.ConfigGeoServerCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.ConfigGeoServerCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     ConfigGeoServerCommand cmd = new ConfigGeoServerCommand();
@@ -289,7 +289,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing ConfigGeoServerCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -300,9 +300,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerGetCoverageCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetCoverageCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetCoverageCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
     GeoServerGetCoverageCommand cmd = new GeoServerGetCoverageCommand();
     Map<FieldDescriptor, Object> m = request.getAllFields();
@@ -317,7 +317,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerGetCoverageCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -328,10 +328,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerListFeatureLayersCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListFeatureLayersCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerListFeatureLayersCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerListFeatureLayersCommand cmd = new GeoServerListFeatureLayersCommand();
@@ -347,7 +347,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerListFeatureLayersCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -358,11 +358,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerGetStoreAdapterCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetStoreAdapterCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetStoreAdapterCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes
-                  .RepeatedStringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos
+                  .RepeatedStringResponseProtos>
           responseObserver) {
 
     GeoServerGetStoreAdapterCommand cmd = new GeoServerGetStoreAdapterCommand();
@@ -378,8 +378,8 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerGetStoreAdapterCommand...");
     try {
       final List<String> result = cmd.computeResults(params);
-      final RepeatedStringResponse resp =
-          RepeatedStringResponse.newBuilder().addAllResponseValue(result).build();
+      final RepeatedStringResponseProtos resp =
+          RepeatedStringResponseProtos.newBuilder().addAllResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -390,9 +390,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerAddWorkspaceCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddWorkspaceCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddWorkspaceCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
     GeoServerAddWorkspaceCommand cmd = new GeoServerAddWorkspaceCommand();
     Map<FieldDescriptor, Object> m = request.getAllFields();
@@ -407,7 +407,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerAddWorkspaceCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -418,10 +418,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerRemoveDatastoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveDatastoreCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveDatastoreCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerRemoveDatastoreCommand cmd = new GeoServerRemoveDatastoreCommand();
@@ -437,7 +437,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerRemoveDatastoreCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -448,10 +448,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerRemoveWorkspaceCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveWorkspaceCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveWorkspaceCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerRemoveWorkspaceCommand cmd = new GeoServerRemoveWorkspaceCommand();
@@ -467,7 +467,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerRemoveWorkspaceCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -478,9 +478,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerAddStyleCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddStyleCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddStyleCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerAddStyleCommand cmd = new GeoServerAddStyleCommand();
@@ -496,7 +496,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerAddStyleCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -507,10 +507,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerListDatastoresCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListDatastoresCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerListDatastoresCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerListDatastoresCommand cmd = new GeoServerListDatastoresCommand();
@@ -526,7 +526,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerListDatastoresCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -537,10 +537,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerListCoverageStoresCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListCoverageStoresCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerListCoverageStoresCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerListCoverageStoresCommand cmd = new GeoServerListCoverageStoresCommand();
@@ -556,7 +556,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerListCoverageStoresCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -567,9 +567,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerAddLayerCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddLayerCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddLayerCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerAddLayerCommand cmd = new GeoServerAddLayerCommand();
@@ -585,7 +585,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerAddLayerCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -596,9 +596,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerListStylesCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListStylesCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerListStylesCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerListStylesCommand cmd = new GeoServerListStylesCommand();
@@ -614,7 +614,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerListStylesCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -625,10 +625,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerGetFeatureLayerCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetFeatureLayerCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetFeatureLayerCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerGetFeatureLayerCommand cmd = new GeoServerGetFeatureLayerCommand();
@@ -644,7 +644,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerGetFeatureLayerCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -655,10 +655,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerRemoveCoverageCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveCoverageCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveCoverageCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerRemoveCoverageCommand cmd = new GeoServerRemoveCoverageCommand();
@@ -674,7 +674,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerRemoveCoverageCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -685,10 +685,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerListCoveragesCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListCoveragesCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerListCoveragesCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerListCoveragesCommand cmd = new GeoServerListCoveragesCommand();
@@ -704,7 +704,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerListCoveragesCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -715,10 +715,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerRemoveFeatureLayerCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveFeatureLayerCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveFeatureLayerCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerRemoveFeatureLayerCommand cmd = new GeoServerRemoveFeatureLayerCommand();
@@ -734,7 +734,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerRemoveFeatureLayerCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -745,9 +745,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerRemoveStyleCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveStyleCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveStyleCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerRemoveStyleCommand cmd = new GeoServerRemoveStyleCommand();
@@ -763,7 +763,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerRemoveStyleCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -774,9 +774,9 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerGetDatastoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetDatastoreCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetDatastoreCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerGetDatastoreCommand cmd = new GeoServerGetDatastoreCommand();
@@ -792,7 +792,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerGetDatastoreCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -803,10 +803,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerAddFeatureLayerCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddFeatureLayerCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddFeatureLayerCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerAddFeatureLayerCommand cmd = new GeoServerAddFeatureLayerCommand();
@@ -822,7 +822,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerAddFeatureLayerCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -833,10 +833,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
 
   @Override
   public void geoServerSetLayerStyleCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerSetLayerStyleCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.GeoServerSetLayerStyleCommandParametersProtos
           request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     GeoServerSetLayerStyleCommand cmd = new GeoServerSetLayerStyleCommand();
@@ -852,7 +852,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
     LOGGER.info("Executing GeoServerSetLayerStyleCommand...");
     try {
       final String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 

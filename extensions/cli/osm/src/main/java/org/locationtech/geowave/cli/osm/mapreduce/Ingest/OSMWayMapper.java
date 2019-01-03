@@ -15,19 +15,19 @@ import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.locationtech.geowave.cli.osm.accumulo.osmschema.ColumnFamily;
 import org.locationtech.geowave.cli.osm.accumulo.osmschema.ColumnQualifier;
-import org.locationtech.geowave.cli.osm.types.generated.LongArray;
-import org.locationtech.geowave.cli.osm.types.generated.Primitive;
-import org.locationtech.geowave.cli.osm.types.generated.Way;
+import org.locationtech.geowave.cli.osm.types.avro.AvroLongArray;
+import org.locationtech.geowave.cli.osm.types.avro.AvroPrimitive;
+import org.locationtech.geowave.cli.osm.types.avro.AvroWay;
 
 /** */
-public class OSMWayMapper extends OSMMapperBase<Way> {
+public class OSMWayMapper extends OSMMapperBase<AvroWay> {
 
   @Override
-  public void map(final AvroKey<Way> key, final NullWritable value, final Context context)
+  public void map(final AvroKey<AvroWay> key, final NullWritable value, final Context context)
       throws IOException, InterruptedException {
 
-    final Way way = key.datum();
-    final Primitive p = way.getCommon();
+    final AvroWay way = key.datum();
+    final AvroPrimitive p = way.getCommon();
 
     final Mutation m = new Mutation(getIdHash(p.getId()));
     // Mutation m = new Mutation(_longWriter.writeField(p.getId()));
@@ -35,7 +35,7 @@ public class OSMWayMapper extends OSMMapperBase<Way> {
 
     put(m, ColumnFamily.WAY, ColumnQualifier.ID, p.getId());
 
-    final LongArray lr = new LongArray();
+    final AvroLongArray lr = new AvroLongArray();
     lr.setIds(way.getNodes());
 
     put(m, ColumnFamily.WAY, ColumnQualifier.REFERENCES, lr);

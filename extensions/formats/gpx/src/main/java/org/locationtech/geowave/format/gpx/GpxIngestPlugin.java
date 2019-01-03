@@ -50,13 +50,13 @@ import org.xml.sax.SAXException;
  * using a map-reduce job. It supports OSM metadata.xml files if the file is directly in the root
  * base directory that is passed in command-line to the ingest framework.
  */
-public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<GpxTrack> {
+public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroGpxTrack> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GpxIngestPlugin.class);
 
   private static final String TAG_SEPARATOR = " ||| ";
 
-  private Map<Long, GpxTrack> metadata = null;
+  private Map<Long, AvroGpxTrack> metadata = null;
 
   private MaxExtentOptProvider extentOptProvider = new MaxExtentOptProvider();
 
@@ -126,12 +126,12 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<GpxTrack>
 
   @Override
   public Schema getAvroSchema() {
-    return GpxTrack.getClassSchema();
+    return AvroGpxTrack.getClassSchema();
   }
 
   @Override
-  public CloseableIterator<GpxTrack> toAvroObjects(final URL input) {
-    GpxTrack track = null;
+  public CloseableIterator<AvroGpxTrack> toAvroObjects(final URL input) {
+    AvroGpxTrack track = null;
     if (metadata != null) {
       try {
         final long id = Long.parseLong(FilenameUtils.getBaseName(input.getPath()));
@@ -141,7 +141,7 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<GpxTrack>
       }
     }
     if (track == null) {
-      track = new GpxTrack();
+      track = new AvroGpxTrack();
       track.setTrackid(currentFreeTrackId.getAndIncrement());
     }
 
@@ -160,19 +160,19 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<GpxTrack>
   }
 
   @Override
-  public IngestWithMapper<GpxTrack, SimpleFeature> ingestWithMapper() {
+  public IngestWithMapper<AvroGpxTrack, SimpleFeature> ingestWithMapper() {
     return new IngestGpxTrackFromHdfs(this);
   }
 
   @Override
-  public IngestWithReducer<GpxTrack, ?, ?, SimpleFeature> ingestWithReducer() {
+  public IngestWithReducer<AvroGpxTrack, ?, ?, SimpleFeature> ingestWithReducer() {
     // unsupported right now
     throw new UnsupportedOperationException("GPX tracks cannot be ingested with a reducer");
   }
 
   @Override
   protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
-      final GpxTrack gpxTrack, final String[] indexNames, final String globalVisibility) {
+      final AvroGpxTrack gpxTrack, final String[] indexNames, final String globalVisibility) {
     final InputStream in = new ByteArrayInputStream(gpxTrack.getGpxfile().array());
     // LOGGER.debug("Processing track [" + gpxTrack.getTimestamp() + "]");
     try {
@@ -196,7 +196,7 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<GpxTrack>
     return new Index[] {};
   }
 
-  private Map<String, Map<String, String>> getAdditionalData(final GpxTrack gpxTrack) {
+  private Map<String, Map<String, String>> getAdditionalData(final AvroGpxTrack gpxTrack) {
     final Map<String, Map<String, String>> pathDataSet = new HashMap<>();
     final Map<String, String> dataSet = new HashMap<>();
     pathDataSet.put("gpx.trk", dataSet);
@@ -225,7 +225,7 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<GpxTrack>
   }
 
   public static class IngestGpxTrackFromHdfs
-      extends AbstractIngestSimpleFeatureWithMapper<GpxTrack> {
+      extends AbstractIngestSimpleFeatureWithMapper<AvroGpxTrack> {
     public IngestGpxTrackFromHdfs() {
       this(new GpxIngestPlugin());
       // this constructor will be used when deserialized
@@ -237,7 +237,7 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<GpxTrack>
   }
 
   @Override
-  public IngestPluginBase<GpxTrack, SimpleFeature> getIngestWithAvroPlugin() {
+  public IngestPluginBase<AvroGpxTrack, SimpleFeature> getIngestWithAvroPlugin() {
     return new IngestGpxTrackFromHdfs(this);
   }
 

@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 /*
  */
-public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<TdrivePoint> {
+public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroTdrivePoint> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TdriveIngestPlugin.class);
 
@@ -77,18 +77,18 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<Tdrive
 
   @Override
   public Schema getAvroSchema() {
-    return TdrivePoint.getClassSchema();
+    return AvroTdrivePoint.getClassSchema();
   }
 
   @Override
-  public CloseableIterator<TdrivePoint> toAvroObjects(final URL input) {
+  public CloseableIterator<AvroTdrivePoint> toAvroObjects(final URL input) {
     try {
       final InputStream fis = input.openStream();
       final BufferedReader fr =
           new BufferedReader(new InputStreamReader(fis, StringUtils.getGeoWaveCharset()));
       final BufferedReader br = new BufferedReader(fr);
-      return new CloseableIterator<TdrivePoint>() {
-        TdrivePoint next = null;
+      return new CloseableIterator<AvroTdrivePoint>() {
+        AvroTdrivePoint next = null;
         long pointInstance = 0l;
 
         private void computeNext() {
@@ -97,7 +97,7 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<Tdrive
             try {
               if ((line = br.readLine()) != null) {
                 final String[] vals = line.split(",");
-                next = new TdrivePoint();
+                next = new AvroTdrivePoint();
                 next.setTaxiid(Integer.parseInt(vals[0]));
                 try {
                   next.setTimestamp(TdriveUtils.parseDate(vals[1]).getTime());
@@ -123,9 +123,9 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<Tdrive
         }
 
         @Override
-        public TdrivePoint next() {
+        public AvroTdrivePoint next() {
           computeNext();
-          final TdrivePoint retVal = next;
+          final AvroTdrivePoint retVal = next;
           next = null;
           return retVal;
         }
@@ -153,19 +153,19 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<Tdrive
   }
 
   @Override
-  public IngestWithMapper<TdrivePoint, SimpleFeature> ingestWithMapper() {
+  public IngestWithMapper<AvroTdrivePoint, SimpleFeature> ingestWithMapper() {
     return new IngestTdrivePointFromHdfs(this);
   }
 
   @Override
-  public IngestWithReducer<TdrivePoint, ?, ?, SimpleFeature> ingestWithReducer() {
+  public IngestWithReducer<AvroTdrivePoint, ?, ?, SimpleFeature> ingestWithReducer() {
     // unsupported right now
     throw new UnsupportedOperationException("GPX tracks cannot be ingested with a reducer");
   }
 
   @Override
   protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
-      final TdrivePoint tdrivePoint, final String[] indexNames, final String globalVisibility) {
+      final AvroTdrivePoint tdrivePoint, final String[] indexNames, final String globalVisibility) {
 
     final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<>();
 
@@ -195,7 +195,7 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<Tdrive
   }
 
   public static class IngestTdrivePointFromHdfs
-      extends AbstractIngestSimpleFeatureWithMapper<TdrivePoint> {
+      extends AbstractIngestSimpleFeatureWithMapper<AvroTdrivePoint> {
     public IngestTdrivePointFromHdfs() {
       this(new TdriveIngestPlugin());
       // this constructor will be used when deserialized
@@ -207,7 +207,7 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<Tdrive
   }
 
   @Override
-  public IngestPluginBase<TdrivePoint, SimpleFeature> getIngestWithAvroPlugin() {
+  public IngestPluginBase<AvroTdrivePoint, SimpleFeature> getIngestWithAvroPlugin() {
     return new IngestTdrivePointFromHdfs(this);
   }
 

@@ -17,13 +17,13 @@ import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
  * from a local file system or staging data from a local files system and ingesting into GeoWave
  * using a map-reduce job.
  */
-public class GpxIngestFormat extends AbstractSimpleFeatureIngestFormat<GpxTrack> {
+public class GpxIngestFormat extends AbstractSimpleFeatureIngestFormat<AvroGpxTrack> {
   private final MaxExtentOptProvider extentOptProvider = new MaxExtentOptProvider();
 
   @Override
-  protected AbstractSimpleFeatureIngestPlugin<GpxTrack> newPluginInstance(
-      IngestFormatOptions options) {
-    GpxIngestPlugin plugin = new GpxIngestPlugin();
+  protected AbstractSimpleFeatureIngestPlugin<AvroGpxTrack> newPluginInstance(
+      final IngestFormatOptions options) {
+    final GpxIngestPlugin plugin = new GpxIngestPlugin();
     plugin.setExtentOptionProvider(extentOptProvider);
     return plugin;
   }

@@ -27,8 +27,8 @@ import org.locationtech.geowave.core.ingest.operations.SparkToGeowaveCommand;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import org.locationtech.geowave.service.grpc.protobuf.CoreIngestGrpc.CoreIngestImplBase;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,8 +45,8 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
 
   @Override
   public void localToHdfsCommand(
-      org.locationtech.geowave.service.grpc.protobuf.LocalToHdfsCommandParameters request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse>
+      org.locationtech.geowave.service.grpc.protobuf.LocalToHdfsCommandParametersProtos request,
+      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos>
           responseObserver) {
 
     LocalToHdfsCommand cmd = new LocalToHdfsCommand();
@@ -62,7 +62,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
     LOGGER.info("Executing LocalToHdfsCommand...");
     try {
       cmd.computeResults(params);
-      final VoidResponse resp = VoidResponse.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -73,8 +73,8 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
 
   @Override
   public void sparkToGeowaveCommand(
-      org.locationtech.geowave.service.grpc.protobuf.SparkToGeowaveCommandParameters request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse>
+      org.locationtech.geowave.service.grpc.protobuf.SparkToGeowaveCommandParametersProtos request,
+      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos>
           responseObserver) {
     SparkToGeowaveCommand cmd = new SparkToGeowaveCommand();
     Map<FieldDescriptor, Object> m = request.getAllFields();
@@ -91,7 +91,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
     LOGGER.info("Executing SparkToGeowaveCommand...");
     try {
       cmd.computeResults(params);
-      final VoidResponse resp = VoidResponse.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -102,8 +102,8 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
 
   @Override
   public void kafkaToGeowaveCommand(
-      org.locationtech.geowave.service.grpc.protobuf.KafkaToGeowaveCommandParameters request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse>
+      org.locationtech.geowave.service.grpc.protobuf.KafkaToGeowaveCommandParametersProtos request,
+      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos>
           responseObserver) {
 
     KafkaToGeowaveCommand cmd = new KafkaToGeowaveCommand();
@@ -119,7 +119,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
     LOGGER.info("Executing KafkaToGeowaveCommand...");
     try {
       cmd.computeResults(params);
-      final VoidResponse resp = VoidResponse.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -130,9 +130,9 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
 
   @Override
   public void listPluginsCommand(
-      org.locationtech.geowave.service.grpc.protobuf.ListPluginsCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.ListPluginsCommandParametersProtos request,
       io.grpc.stub.StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     ListPluginsCommand cmd = new ListPluginsCommand();
@@ -148,7 +148,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
     LOGGER.info("Executing ListPluginsCommand...");
     try {
       String result = cmd.computeResults(params);
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(result).build();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -159,8 +159,8 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
 
   @Override
   public void localToKafkaCommand(
-      org.locationtech.geowave.service.grpc.protobuf.LocalToKafkaCommandParameters request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse>
+      org.locationtech.geowave.service.grpc.protobuf.LocalToKafkaCommandParametersProtos request,
+      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos>
           responseObserver) {
 
     LocalToKafkaCommand cmd = new LocalToKafkaCommand();
@@ -176,7 +176,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
     LOGGER.info("Executing LocalToKafkaCommand...");
     try {
       cmd.computeResults(params);
-      final VoidResponse resp = VoidResponse.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -187,9 +187,9 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
 
   @Override
   public void localToMapReduceToGeowaveCommand(
-      org.locationtech.geowave.service.grpc.protobuf.LocalToMapReduceToGeowaveCommandParameters
+      org.locationtech.geowave.service.grpc.protobuf.LocalToMapReduceToGeowaveCommandParametersProtos
           request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse>
+      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos>
           responseObserver) {
     LocalToMapReduceToGeowaveCommand cmd = new LocalToMapReduceToGeowaveCommand();
     Map<FieldDescriptor, Object> m = request.getAllFields();
@@ -204,7 +204,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
     LOGGER.info("Executing LocalToMapReduceToGeowaveCommand...");
     try {
       cmd.computeResults(params);
-      final VoidResponse resp = VoidResponse.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -215,8 +215,8 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
 
   @Override
   public void localToGeowaveCommand(
-      org.locationtech.geowave.service.grpc.protobuf.LocalToGeowaveCommandParameters request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse>
+      org.locationtech.geowave.service.grpc.protobuf.LocalToGeowaveCommandParametersProtos request,
+      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos>
           responseObserver) {
 
     LocalToGeowaveCommand cmd = new LocalToGeowaveCommand();
@@ -232,7 +232,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
     LOGGER.info("Executing LocalToGeowaveCommand...");
     try {
       cmd.computeResults(params);
-      final VoidResponse resp = VoidResponse.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -243,8 +243,8 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
 
   @Override
   public void mapReduceToGeowaveCommand(
-      org.locationtech.geowave.service.grpc.protobuf.MapReduceToGeowaveCommandParameters request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse>
+      org.locationtech.geowave.service.grpc.protobuf.MapReduceToGeowaveCommandParametersProtos request,
+      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos>
           responseObserver) {
 
     MapReduceToGeowaveCommand cmd = new MapReduceToGeowaveCommand();
@@ -260,7 +260,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase
     LOGGER.info("Executing MapReduceToGeowaveCommand...");
     try {
       cmd.computeResults(params);
-      final VoidResponse resp = VoidResponse.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 

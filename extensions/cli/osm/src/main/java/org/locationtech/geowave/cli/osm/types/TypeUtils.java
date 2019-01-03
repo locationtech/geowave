@@ -19,7 +19,7 @@ import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
-import org.locationtech.geowave.cli.osm.types.generated.LongArray;
+import org.locationtech.geowave.cli.osm.types.avro.AvroLongArray;
 
 /** */
 public class TypeUtils {
@@ -55,16 +55,17 @@ public class TypeUtils {
     return reader.read(avroObject, decoder);
   }
 
-  public static LongArray deserializeLongArray(final byte[] avroData, LongArray reusableInstance)
-      throws IOException {
+  public static AvroLongArray deserializeLongArray(
+      final byte[] avroData, AvroLongArray reusableInstance) throws IOException {
     if (reusableInstance == null) {
-      reusableInstance = new LongArray();
+      reusableInstance = new AvroLongArray();
     }
-    return deserialize(reusableInstance, avroData, LongArray.class, LongArray.getClassSchema());
+    return deserialize(
+        reusableInstance, avroData, AvroLongArray.class, AvroLongArray.getClassSchema());
   }
 
-  public static byte[] serializeLongArray(LongArray avroObject) throws IOException {
-    return deserialize(avroObject, LongArray.getClassSchema(), LongArray.class);
+  public static byte[] serializeLongArray(AvroLongArray avroObject) throws IOException {
+    return deserialize(avroObject, AvroLongArray.getClassSchema(), AvroLongArray.class);
   }
 
   /*

@@ -1,6 +1,6 @@
 {
 	"type" : "record",
-	"name" : "TdrivePoint",
+	"name" : "AvroTdrivePoint",
 	"namespace" : "org.locationtech.geowave.format.tdrive",
 		"fields" : [{
 				"name" : "taxiid",

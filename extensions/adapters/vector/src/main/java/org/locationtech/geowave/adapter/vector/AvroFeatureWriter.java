@@ -14,9 +14,9 @@ import java.util.Map;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumWriter;
-import org.locationtech.geowave.adapter.vector.avro.AttributeValues;
+import org.locationtech.geowave.adapter.vector.avro.AvroAttributeValues;
+import org.locationtech.geowave.adapter.vector.avro.AvroFeatureDefinition;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeature;
-import org.locationtech.geowave.adapter.vector.avro.FeatureDefinition;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -107,12 +107,12 @@ public class AvroFeatureWriter implements FieldWriter<SimpleFeature, Object> {
       avroObjectToReuse = new AvroSimpleFeature();
     }
 
-    final FeatureDefinition fd =
+    final AvroFeatureDefinition fd =
         AvroFeatureUtils.buildFeatureDefinition(
             avroObjectToReuse.getFeatureType(), sft, defaultClassifications, defaultClassification);
     avroObjectToReuse.setFeatureType(fd);
 
-    final AttributeValues av = AvroFeatureUtils.buildAttributeValue(sf, sft);
+    final AvroAttributeValues av = AvroFeatureUtils.buildAttributeValue(sf, sft);
     avroObjectToReuse.setValue(av);
 
     return serializeAvroSimpleFeature(avroObjectToReuse);

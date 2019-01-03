@@ -15,19 +15,19 @@ import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.locationtech.geowave.cli.osm.accumulo.osmschema.ColumnFamily;
 import org.locationtech.geowave.cli.osm.accumulo.osmschema.ColumnQualifier;
-import org.locationtech.geowave.cli.osm.types.generated.Primitive;
-import org.locationtech.geowave.cli.osm.types.generated.Relation;
-import org.locationtech.geowave.cli.osm.types.generated.RelationMember;
+import org.locationtech.geowave.cli.osm.types.avro.AvroPrimitive;
+import org.locationtech.geowave.cli.osm.types.avro.AvroRelation;
+import org.locationtech.geowave.cli.osm.types.avro.AvroRelationMember;
 
 /** */
-public class OSMRelationMapper extends OSMMapperBase<Relation> {
+public class OSMRelationMapper extends OSMMapperBase<AvroRelation> {
 
   @Override
-  public void map(final AvroKey<Relation> key, final NullWritable value, final Context context)
+  public void map(final AvroKey<AvroRelation> key, final NullWritable value, final Context context)
       throws IOException, InterruptedException {
 
-    final Relation relation = key.datum();
-    final Primitive p = relation.getCommon();
+    final AvroRelation relation = key.datum();
+    final AvroPrimitive p = relation.getCommon();
 
     final Mutation m = new Mutation(getIdHash(p.getId()));
     // Mutation m = new Mutation(_longWriter.writeField(p.getId()));
@@ -36,7 +36,7 @@ public class OSMRelationMapper extends OSMMapperBase<Relation> {
     put(m, ColumnFamily.RELATION, ColumnQualifier.ID, p.getId());
 
     int i = 0;
-    for (final RelationMember rm : relation.getMembers()) {
+    for (final AvroRelationMember rm : relation.getMembers()) {
       put(
           m,
           ColumnFamily.RELATION,

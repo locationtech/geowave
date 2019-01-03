@@ -44,16 +44,16 @@ import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
-import org.locationtech.geowave.service.grpc.protobuf.CQLQueryParameters;
-import org.locationtech.geowave.service.grpc.protobuf.Feature;
-import org.locationtech.geowave.service.grpc.protobuf.FeatureAttribute;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse;
-import org.locationtech.geowave.service.grpc.protobuf.SpatialQueryParameters;
-import org.locationtech.geowave.service.grpc.protobuf.SpatialTemporalQueryParameters;
-import org.locationtech.geowave.service.grpc.protobuf.TemporalConstraints;
+import org.locationtech.geowave.service.grpc.protobuf.CQLQueryParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.FeatureProtos;
+import org.locationtech.geowave.service.grpc.protobuf.FeatureAttributeProtos;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos;
+import org.locationtech.geowave.service.grpc.protobuf.SpatialQueryParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.SpatialTemporalQueryParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.TemporalConstraintsProtos;
 import org.locationtech.geowave.service.grpc.protobuf.VectorGrpc;
-import org.locationtech.geowave.service.grpc.protobuf.VectorIngestParameters;
-import org.locationtech.geowave.service.grpc.protobuf.VectorQueryParameters;
+import org.locationtech.geowave.service.grpc.protobuf.VectorIngestParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.VectorQueryParametersProtos;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.WKBReader;
 import org.opengis.feature.simple.SimpleFeature;
@@ -75,7 +75,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
 
   @Override
   public void vectorQuery(
-      final VectorQueryParameters request, final StreamObserver<Feature> responseObserver) {
+      final VectorQueryParametersProtos request, final StreamObserver<FeatureProtos> responseObserver) {
     final String storeName = request.getStoreName();
     final StoreLoader storeLoader = new StoreLoader(storeName);
     // first check to make sure the data store exists
@@ -110,8 +110,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
       while (iterator.hasNext()) {
         final SimpleFeature simpleFeature = iterator.next();
         final SimpleFeatureType type = simpleFeature.getType();
-        final Feature.Builder b = Feature.newBuilder();
-        final FeatureAttribute.Builder attBuilder = FeatureAttribute.newBuilder();
+        final FeatureProtos.Builder b = FeatureProtos.newBuilder();
+        final FeatureAttributeProtos.Builder attBuilder = FeatureAttributeProtos.newBuilder();
 
         for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
           SetAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
@@ -122,7 +122,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
            * i).toString());
            */
         }
-        final Feature f = b.build();
+        final FeatureProtos f = b.build();
         responseObserver.onNext(f);
       }
       responseObserver.onCompleted();
@@ -132,9 +132,9 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
   }
 
   @Override
-  public StreamObserver<VectorIngestParameters> vectorIngest(
-      final StreamObserver<StringResponse> responseObserver) {
-    return new StreamObserver<VectorIngestParameters>() {
+  public StreamObserver<VectorIngestParametersProtos> vectorIngest(
+      final StreamObserver<StringResponseProtos> responseObserver) {
+    return new StreamObserver<VectorIngestParametersProtos>() {
       private boolean firstFeature = true;
       private String storeName = null;
       private DataStore dataStore = null;
@@ -152,7 +152,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
       private int totalCount = 0;
 
       @Override
-      public void onNext(final VectorIngestParameters f) {
+      public void onNext(final VectorIngestParametersProtos f) {
         if (firstFeature) {
           firstFeature = false;
 
@@ -170,7 +170,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
           if (typeBuilder == null) {
             typeBuilder = new SimpleFeatureTypeBuilder();
 
-            for (final Map.Entry<String, FeatureAttribute> mapEntry :
+            for (final Map.Entry<String, FeatureAttributeProtos> mapEntry :
                 f.getFeatureMap().entrySet()) {
               switch (mapEntry.getValue().getValueCase()) {
                 case VALSTRING:
@@ -256,7 +256,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
         } // end first-time initialization
 
         // Set the values for all the attributes in the feature
-        for (final Map.Entry<String, FeatureAttribute> attribute : f.getFeatureMap().entrySet()) {
+        for (final Map.Entry<String, FeatureAttributeProtos> attribute : f.getFeatureMap().entrySet()) {
           switch (attribute.getValue().getValueCase()) {
             case VALSTRING:
               {
@@ -314,8 +314,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
           batchCount = 0;
         }
 
-        final StringResponse resp =
-            StringResponse.newBuilder().setResponseValue(String.valueOf(++totalCount)).build();
+        final StringResponseProtos resp =
+            StringResponseProtos.newBuilder().setResponseValue(String.valueOf(++totalCount)).build();
         responseObserver.onNext(resp);
       }
 
@@ -325,8 +325,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
         writer.flush();
         writer.close();
 
-        final StringResponse resp =
-            StringResponse.newBuilder().setResponseValue("Error during ingest: ").build();
+        final StringResponseProtos resp =
+            StringResponseProtos.newBuilder().setResponseValue("Error during ingest: ").build();
         responseObserver.onNext(resp);
         responseObserver.onCompleted();
       }
@@ -335,8 +335,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
       public void onCompleted() {
         writer.flush();
         writer.close();
-        final StringResponse resp =
-            StringResponse.newBuilder().setResponseValue("Ingest completed successfully").build();
+        final StringResponseProtos resp =
+            StringResponseProtos.newBuilder().setResponseValue("Ingest completed successfully").build();
         responseObserver.onNext(resp);
         responseObserver.onCompleted();
       }
@@ -345,7 +345,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
 
   @Override
   public void cqlQuery(
-      final CQLQueryParameters request, final StreamObserver<Feature> responseObserver) {
+      final CQLQueryParametersProtos request, final StreamObserver<FeatureProtos> responseObserver) {
 
     final String cql = request.getCql();
     final String storeName = request.getBaseParams().getStoreName();
@@ -383,14 +383,14 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
       while (iterator.hasNext()) {
         final SimpleFeature simpleFeature = iterator.next();
         final SimpleFeatureType type = simpleFeature.getType();
-        final Feature.Builder b = Feature.newBuilder();
-        final FeatureAttribute.Builder attBuilder = FeatureAttribute.newBuilder();
+        final FeatureProtos.Builder b = FeatureProtos.newBuilder();
+        final FeatureAttributeProtos.Builder attBuilder = FeatureAttributeProtos.newBuilder();
 
         for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
           SetAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
           b.putAttributes(type.getAttributeDescriptors().get(i).getLocalName(), attBuilder.build());
         }
-        final Feature f = b.build();
+        final FeatureProtos f = b.build();
         responseObserver.onNext(f);
       }
       responseObserver.onCompleted();
@@ -399,7 +399,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
 
   @Override
   public void spatialQuery(
-      final SpatialQueryParameters request, final StreamObserver<Feature> responseObserver) {
+      final SpatialQueryParametersProtos request, final StreamObserver<FeatureProtos> responseObserver) {
 
     final String storeName = request.getBaseParams().getStoreName();
     final StoreLoader storeLoader = new StoreLoader(storeName);
@@ -446,14 +446,14 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
       while (iterator.hasNext()) {
         final SimpleFeature simpleFeature = iterator.next();
         final SimpleFeatureType type = simpleFeature.getType();
-        final Feature.Builder b = Feature.newBuilder();
-        final FeatureAttribute.Builder attBuilder = FeatureAttribute.newBuilder();
+        final FeatureProtos.Builder b = FeatureProtos.newBuilder();
+        final FeatureAttributeProtos.Builder attBuilder = FeatureAttributeProtos.newBuilder();
 
         for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
           SetAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
           b.putAttributes(type.getAttributeDescriptors().get(i).getLocalName(), attBuilder.build());
         }
-        final Feature f = b.build();
+        final FeatureProtos f = b.build();
         responseObserver.onNext(f);
       }
       responseObserver.onCompleted();
@@ -462,8 +462,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
 
   @Override
   public void spatialTemporalQuery(
-      final SpatialTemporalQueryParameters request,
-      final StreamObserver<Feature> responseObserver) {
+      final SpatialTemporalQueryParametersProtos request,
+      final StreamObserver<FeatureProtos> responseObserver) {
 
     final String storeName = request.getSpatialParams().getBaseParams().getStoreName();
     final StoreLoader storeLoader = new StoreLoader(storeName);
@@ -494,7 +494,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
     SpatialTemporalConstraintsBuilder stBldr =
         bldr.constraintsFactory().spatialTemporalConstraints();
     for (int i = 0; i < constraintCount; i++) {
-      final TemporalConstraints t = request.getTemporalConstraints(i);
+      final TemporalConstraintsProtos t = request.getTemporalConstraints(i);
       stBldr.addTimeRange(
           Interval.of(
               Instant.ofEpochMilli(Timestamps.toMillis(t.getStartTime())),
@@ -521,14 +521,14 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
       while (iterator.hasNext()) {
         final SimpleFeature simpleFeature = iterator.next();
         final SimpleFeatureType type = simpleFeature.getType();
-        final Feature.Builder b = Feature.newBuilder();
-        final FeatureAttribute.Builder attBuilder = FeatureAttribute.newBuilder();
+        final FeatureProtos.Builder b = FeatureProtos.newBuilder();
+        final FeatureAttributeProtos.Builder attBuilder = FeatureAttributeProtos.newBuilder();
 
         for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
           SetAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
           b.putAttributes(type.getAttributeDescriptors().get(i).getLocalName(), attBuilder.build());
         }
-        final Feature f = b.build();
+        final FeatureProtos f = b.build();
         responseObserver.onNext(f);
       }
       responseObserver.onCompleted();
@@ -536,7 +536,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
   }
 
   private void SetAttributeBuilderValue(
-      final Object simpleFeatureAttribute, final FeatureAttribute.Builder attBuilder) {
+      final Object simpleFeatureAttribute, final FeatureAttributeProtos.Builder attBuilder) {
     if (simpleFeatureAttribute != null) {
       switch (simpleFeatureAttribute.getClass().getSimpleName()) {
         case "String":

@@ -15,7 +15,7 @@ import java.util.Collections;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.ingest.avro.AbstractStageWholeFileToAvro;
-import org.locationtech.geowave.core.ingest.avro.WholeFile;
+import org.locationtech.geowave.core.ingest.avro.AvroWholeFile;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * the map phase of a map-reduce job.
  */
 public abstract class AbstractLocalIngestWithMapper<T> extends AbstractStageWholeFileToAvro
-    implements LocalFileIngestPlugin<T>, IngestFromHdfsPlugin<WholeFile, T>, Persistable {
+    implements LocalFileIngestPlugin<T>, IngestFromHdfsPlugin<AvroWholeFile, T>, Persistable {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLocalIngestWithMapper.class);
 
   @Override
@@ -39,7 +39,7 @@ public abstract class AbstractLocalIngestWithMapper<T> extends AbstractStageWhol
   }
 
   @Override
-  public IngestWithMapper<WholeFile, T> ingestWithMapper() {
+  public IngestWithMapper<AvroWholeFile, T> ingestWithMapper() {
     return new InternalIngestWithMapper<>(this);
   }
 
@@ -58,11 +58,11 @@ public abstract class AbstractLocalIngestWithMapper<T> extends AbstractStageWhol
       final InputStream file, final String[] indexNames, final String globalVisibility);
 
   @Override
-  public IngestWithReducer<WholeFile, ?, ?, T> ingestWithReducer() {
+  public IngestWithReducer<AvroWholeFile, ?, ?, T> ingestWithReducer() {
     return null;
   }
 
-  protected static class InternalIngestWithMapper<T> implements IngestWithMapper<WholeFile, T> {
+  protected static class InternalIngestWithMapper<T> implements IngestWithMapper<AvroWholeFile, T> {
     private AbstractLocalIngestWithMapper parentPlugin;
 
     public InternalIngestWithMapper() {}
@@ -78,7 +78,7 @@ public abstract class AbstractLocalIngestWithMapper<T> extends AbstractStageWhol
 
     @Override
     public CloseableIterator<GeoWaveData<T>> toGeoWaveData(
-        final WholeFile input, final String[] indexNames, final String globalVisibility) {
+        final AvroWholeFile input, final String[] indexNames, final String globalVisibility) {
       final InputStream inputStream = new ByteBufferBackedInputStream(input.getOriginalFile());
       return parentPlugin.toGeoWaveDataInternal(inputStream, indexNames, globalVisibility);
     }

@@ -24,8 +24,8 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import org.locationtech.geowave.service.grpc.protobuf.CoreCliGrpc.CoreCliImplBase;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.MapStringStringResponse;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.MapStringStringResponseProtos;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,9 +40,9 @@ public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWav
 
   @Override
   public void setCommand(
-      org.locationtech.geowave.service.grpc.protobuf.SetCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.SetCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos>
           responseObserver) {
 
     SetCommand cmd = new SetCommand();
@@ -58,9 +58,9 @@ public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWav
     LOGGER.info("Executing SetCommand...");
     try {
       final Object result = cmd.computeResults(params);
-      String strResponse = "";
-      if (result != null) strResponse = result.toString();
-      final StringResponse resp = StringResponse.newBuilder().setResponseValue(strResponse).build();
+      String strResponseProtos = "";
+      if (result != null) strResponseProtos = result.toString();
+      final StringResponseProtos resp = StringResponseProtos.newBuilder().setResponseValue(strResponseProtos).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -71,10 +71,10 @@ public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWav
 
   @Override
   public void listCommand(
-      org.locationtech.geowave.service.grpc.protobuf.ListCommandParameters request,
+      org.locationtech.geowave.service.grpc.protobuf.ListCommandParametersProtos request,
       StreamObserver<
-              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes
-                  .MapStringStringResponse>
+              org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos
+                  .MapStringStringResponseProtos>
           responseObserver) {
 
     ListCommand cmd = new ListCommand();
@@ -96,8 +96,8 @@ public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWav
         Map.Entry<String, Object> pair = (Map.Entry<String, Object>) it.next();
         post_result.put(pair.getKey().toString(), pair.getValue().toString());
       }
-      final MapStringStringResponse resp =
-          MapStringStringResponse.newBuilder().putAllResponseValue(post_result).build();
+      final MapStringStringResponseProtos resp =
+          MapStringStringResponseProtos.newBuilder().putAllResponseValue(post_result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 

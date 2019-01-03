@@ -1,6 +1,6 @@
 {
-        "name": "LongArray",
-        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
+        "name": "AvroLongArray",
+        "namespace": "org.locationtech.geowave.cli.osm.types.avro",
         "type": "record",
         "fields": [{
             "name": "ids",

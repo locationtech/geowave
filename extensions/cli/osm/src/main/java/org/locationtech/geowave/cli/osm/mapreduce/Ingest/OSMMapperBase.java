@@ -19,7 +19,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.locationtech.geowave.cli.osm.accumulo.osmschema.Constants;
 import org.locationtech.geowave.cli.osm.accumulo.osmschema.Schema;
 import org.locationtech.geowave.cli.osm.types.TypeUtils;
-import org.locationtech.geowave.cli.osm.types.generated.LongArray;
+import org.locationtech.geowave.cli.osm.types.avro.AvroLongArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
@@ -121,7 +121,7 @@ public class OSMMapperBase<T> extends Mapper<AvroKey<T>, NullWritable, Text, Mut
     }
   }
 
-  protected void put(final Mutation m, final String cf, final String cq, final LongArray val) {
+  protected void put(final Mutation m, final String cf, final String cq, final AvroLongArray val) {
     if (val != null) {
       try {
         m.put(

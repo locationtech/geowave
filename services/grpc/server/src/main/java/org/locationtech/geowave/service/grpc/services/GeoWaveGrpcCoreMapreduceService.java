@@ -20,7 +20,7 @@ import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import org.locationtech.geowave.service.grpc.protobuf.CoreMapreduceGrpc.CoreMapreduceImplBase;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +37,8 @@ public class GeoWaveGrpcCoreMapreduceService extends CoreMapreduceImplBase
 
   @Override
   public void configHDFSCommand(
-      org.locationtech.geowave.service.grpc.protobuf.ConfigHDFSCommandParameters request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse>
+      org.locationtech.geowave.service.grpc.protobuf.ConfigHDFSCommandParametersProtos request,
+      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos>
           responseObserver) {
 
     ConfigHDFSCommand cmd = new ConfigHDFSCommand();
@@ -54,7 +54,7 @@ public class GeoWaveGrpcCoreMapreduceService extends CoreMapreduceImplBase
     LOGGER.info("Executing ConfigHDFSCommand...");
     try {
       cmd.computeResults(params);
-      final VoidResponse resp = VoidResponse.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 

@@ -30,12 +30,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.locationtech.geowave.cli.osm.types.generated.MemberType;
-import org.locationtech.geowave.cli.osm.types.generated.Node;
-import org.locationtech.geowave.cli.osm.types.generated.Primitive;
-import org.locationtech.geowave.cli.osm.types.generated.Relation;
-import org.locationtech.geowave.cli.osm.types.generated.RelationMember;
-import org.locationtech.geowave.cli.osm.types.generated.Way;
+import org.locationtech.geowave.cli.osm.types.avro.AvroMemberType;
+import org.locationtech.geowave.cli.osm.types.avro.AvroNode;
+import org.locationtech.geowave.cli.osm.types.avro.AvroPrimitive;
+import org.locationtech.geowave.cli.osm.types.avro.AvroRelation;
+import org.locationtech.geowave.cli.osm.types.avro.AvroRelationMember;
+import org.locationtech.geowave.cli.osm.types.avro.AvroWay;
 import org.openstreetmap.osmosis.osmbinary.BinaryParser;
 import org.openstreetmap.osmosis.osmbinary.Osmformat;
 import org.openstreetmap.osmosis.osmbinary.file.BlockInputStream;
@@ -82,9 +82,9 @@ public class OsmPbfParser {
       wayOut = fs.create(waysPath);
       relationOut = fs.create(relationsPath);
 
-      nodeWriter.create(Node.getClassSchema(), nodeOut);
-      wayWriter.create(Way.getClassSchema(), wayOut);
-      relationWriter.create(Relation.getClassSchema(), relationOut);
+      nodeWriter.create(AvroNode.getClassSchema(), nodeOut);
+      wayWriter.create(AvroWay.getClassSchema(), wayOut);
+      relationWriter.create(AvroRelation.getClassSchema(), relationOut);
 
       parser.setupWriter(nodeWriter, wayWriter, relationWriter);
 
@@ -150,32 +150,32 @@ public class OsmPbfParser {
     @Override
     protected void parseRelations(List<Osmformat.Relation> rels) {
       for (Osmformat.Relation r : rels) {
-        Relation r2 = new Relation();
-        Primitive p = getPrimitive(r.getInfo());
+        AvroRelation r2 = new AvroRelation();
+        AvroPrimitive p = getPrimitive(r.getInfo());
         p.setId(r.getId());
         p.setTags(getTags(r.getKeysList(), r.getValsList()));
         r2.setCommon(p);
 
-        List<RelationMember> members = new ArrayList<>(r.getRolesSidCount());
+        List<AvroRelationMember> members = new ArrayList<>(r.getRolesSidCount());
 
         for (int i = 0; i < r.getRolesSidCount(); i++) {
-          RelationMember rm = new RelationMember();
+          AvroRelationMember rm = new AvroRelationMember();
           rm.setMember(r.getMemids(i));
           rm.setRole(getStringById(r.getRolesSid(i)));
           switch (r.getTypes(i).toString()) {
             case "NODE":
               {
-                rm.setMemberType(MemberType.NODE);
+                rm.setMemberType(AvroMemberType.NODE);
                 break;
               }
             case "WAY":
               {
-                rm.setMemberType(MemberType.WAY);
+                rm.setMemberType(AvroMemberType.WAY);
                 break;
               }
             case "RELATION":
               {
-                rm.setMemberType(MemberType.RELATION);
+                rm.setMemberType(AvroMemberType.RELATION);
                 break;
               }
             default:
@@ -205,8 +205,8 @@ public class OsmPbfParser {
 
       for (int i = 0; i < nodes.getIdCount(); i++) {
 
-        Node n = new Node();
-        Primitive p = new Primitive();
+        AvroNode n = new AvroNode();
+        AvroPrimitive p = new AvroPrimitive();
 
         lastId += nodes.getId(i);
         lastLat += nodes.getLat(i);
@@ -259,8 +259,8 @@ public class OsmPbfParser {
     @Override
     protected void parseNodes(List<Osmformat.Node> nodes) {
       for (Osmformat.Node n : nodes) {
-        Node n2 = new Node();
-        Primitive p = getPrimitive(n.getInfo());
+        AvroNode n2 = new AvroNode();
+        AvroPrimitive p = getPrimitive(n.getInfo());
         p.setId(n.getId());
         p.setTags(getTags(n.getKeysList(), n.getValsList()));
         n2.setCommon(p);
@@ -277,8 +277,8 @@ public class OsmPbfParser {
     @Override
     protected void parseWays(List<Osmformat.Way> ways) {
       for (Osmformat.Way w : ways) {
-        Way w2 = new Way();
-        Primitive p = getPrimitive(w.getInfo());
+        AvroWay w2 = new AvroWay();
+        AvroPrimitive p = getPrimitive(w.getInfo());
         p.setId(w.getId());
         p.setTags(getTags(w.getKeysList(), w.getValsList()));
         w2.setCommon(p);
@@ -314,8 +314,8 @@ public class OsmPbfParser {
       return tags;
     }
 
-    private Primitive getPrimitive(Osmformat.Info info) {
-      Primitive p = new Primitive();
+    private AvroPrimitive getPrimitive(Osmformat.Info info) {
+      AvroPrimitive p = new AvroPrimitive();
       p.setVersion((long) info.getVersion());
       p.setTimestamp(info.getTimestamp());
       p.setUserId((long) info.getUid());

@@ -13,52 +13,53 @@ import java.util.Map;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
-import org.locationtech.geowave.cli.osm.accumulo.osmschema.Schema;
-import org.locationtech.geowave.cli.osm.types.generated.Node;
-import org.locationtech.geowave.cli.osm.types.generated.Primitive;
+import org.locationtech.geowave.cli.osm.accumulo.osmschema.ColumnFamily;
+import org.locationtech.geowave.cli.osm.accumulo.osmschema.ColumnQualifier;
+import org.locationtech.geowave.cli.osm.types.avro.AvroNode;
+import org.locationtech.geowave.cli.osm.types.avro.AvroPrimitive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OSMNodeMapper extends OSMMapperBase<Node> {
+public class OSMNodeMapper extends OSMMapperBase<AvroNode> {
 
   private static Logger LOGGER = LoggerFactory.getLogger(OSMNodeMapper.class);
 
   @Override
-  public void map(AvroKey<Node> key, NullWritable value, Context context)
+  public void map(final AvroKey<AvroNode> key, final NullWritable value, final Context context)
       throws IOException, InterruptedException {
 
-    Node node = key.datum();
-    Primitive p = node.getCommon();
+    final AvroNode node = key.datum();
+    final AvroPrimitive p = node.getCommon();
 
-    Mutation m = new Mutation(getIdHash(p.getId()));
+    final Mutation m = new Mutation(getIdHash(p.getId()));
     // Mutation m = new Mutation(_longWriter.writeField(p.getId()));
     // Mutation m = new Mutation(p.getId().toString());
 
-    put(m, Schema.CF.NODE, Schema.CQ.ID, p.getId());
-    put(m, Schema.CF.NODE, Schema.CQ.LONGITUDE, node.getLongitude());
-    put(m, Schema.CF.NODE, Schema.CQ.LATITUDE, node.getLatitude());
+    put(m, ColumnFamily.NODE, ColumnQualifier.ID, p.getId());
+    put(m, ColumnFamily.NODE, ColumnQualifier.LONGITUDE, node.getLongitude());
+    put(m, ColumnFamily.NODE, ColumnQualifier.LATITUDE, node.getLatitude());
 
     if (!Long.valueOf(0).equals(p.getVersion())) {
-      put(m, Schema.CF.NODE, Schema.CQ.VERSION, p.getVersion());
+      put(m, ColumnFamily.NODE, ColumnQualifier.VERSION, p.getVersion());
     }
 
     if (!Long.valueOf(0).equals(p.getTimestamp())) {
-      put(m, Schema.CF.NODE, Schema.CQ.TIMESTAMP, p.getTimestamp());
+      put(m, ColumnFamily.NODE, ColumnQualifier.TIMESTAMP, p.getTimestamp());
     }
 
     if (!Long.valueOf(0).equals(p.getChangesetId())) {
-      put(m, Schema.CF.NODE, Schema.CQ.CHANGESET, p.getChangesetId());
+      put(m, ColumnFamily.NODE, ColumnQualifier.CHANGESET, p.getChangesetId());
     }
 
     if (!Long.valueOf(0).equals(p.getUserId())) {
-      put(m, Schema.CF.NODE, Schema.CQ.USER_ID, p.getUserId());
+      put(m, ColumnFamily.NODE, ColumnQualifier.USER_ID, p.getUserId());
     }
 
-    put(m, Schema.CF.NODE, Schema.CQ.USER_TEXT, p.getUserName());
-    put(m, Schema.CF.NODE, Schema.CQ.OSM_VISIBILITY, p.getVisible());
+    put(m, ColumnFamily.NODE, ColumnQualifier.USER_TEXT, p.getUserName());
+    put(m, ColumnFamily.NODE, ColumnQualifier.OSM_VISIBILITY, p.getVisible());
 
-    for (Map.Entry<String, String> kvp : p.getTags().entrySet()) {
-      put(m, Schema.CF.NODE, kvp.getKey(), kvp.getValue().toString());
+    for (final Map.Entry<String, String> kvp : p.getTags().entrySet()) {
+      put(m, ColumnFamily.NODE, kvp.getKey(), kvp.getValue().toString());
     }
     context.write(_tableName, m);
   }

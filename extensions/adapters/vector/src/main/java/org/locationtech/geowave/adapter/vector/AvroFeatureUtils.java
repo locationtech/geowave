@@ -19,9 +19,9 @@ import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.locationtech.geowave.adapter.vector.avro.AttributeValues;
+import org.locationtech.geowave.adapter.vector.avro.AvroAttributeValues;
+import org.locationtech.geowave.adapter.vector.avro.AvroFeatureDefinition;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeature;
-import org.locationtech.geowave.adapter.vector.avro.FeatureDefinition;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TWKBReader;
 import org.locationtech.geowave.core.geotime.util.TWKBWriter;
@@ -56,14 +56,14 @@ public class AvroFeatureUtils {
    * @return
    * @throws IOException
    */
-  public static FeatureDefinition buildFeatureDefinition(
-      FeatureDefinition fd,
+  public static AvroFeatureDefinition buildFeatureDefinition(
+      AvroFeatureDefinition fd,
       final SimpleFeatureType sft,
       final Map<String, String> defaultClassifications,
       final String defaultClassification)
       throws IOException {
     if (fd == null) {
-      fd = new FeatureDefinition();
+      fd = new AvroFeatureDefinition();
     }
     fd.setFeatureTypeName(sft.getTypeName());
 
@@ -128,9 +128,9 @@ public class AvroFeatureUtils {
    * @param sft
    * @return
    */
-  public static synchronized AttributeValues buildAttributeValue(
+  public static synchronized AvroAttributeValues buildAttributeValue(
       final SimpleFeature sf, final SimpleFeatureType sft) {
-    final AttributeValues attributeValue = new AttributeValues();
+    final AvroAttributeValues attributeValue = new AvroAttributeValues();
 
     final List<ByteBuffer> values = new ArrayList<>(sft.getAttributeCount());
 
@@ -168,7 +168,7 @@ public class AvroFeatureUtils {
       throws IOException, ClassNotFoundException, ParseException {
     // Deserialize
     final AvroSimpleFeature sfc = deserializeASF(avroData, null);
-    final FeatureDefinition featureDefinition = sfc.getFeatureType();
+    final AvroFeatureDefinition featureDefinition = sfc.getFeatureType();
     return avroSimpleFeatureToGTSimpleFeature(
         avroFeatureDefinitionToGTSimpleFeatureType(featureDefinition),
         featureDefinition.getAttributeTypes(),
@@ -176,7 +176,7 @@ public class AvroFeatureUtils {
   }
 
   public static SimpleFeatureType avroFeatureDefinitionToGTSimpleFeatureType(
-      final FeatureDefinition featureDefinition) throws ClassNotFoundException {
+      final AvroFeatureDefinition featureDefinition) throws ClassNotFoundException {
     final SimpleFeatureTypeBuilder sftb = new SimpleFeatureTypeBuilder();
     sftb.setCRS(GeometryUtils.getDefaultCRS());
     sftb.setName(featureDefinition.getFeatureTypeName());
@@ -194,7 +194,7 @@ public class AvroFeatureUtils {
   public static SimpleFeature avroSimpleFeatureToGTSimpleFeature(
       final SimpleFeatureType type,
       final List<String> attributeTypes,
-      final AttributeValues attributeValues)
+      final AvroAttributeValues attributeValues)
       throws IOException, ClassNotFoundException, ParseException {
     // Convert
     SimpleFeature simpleFeature;

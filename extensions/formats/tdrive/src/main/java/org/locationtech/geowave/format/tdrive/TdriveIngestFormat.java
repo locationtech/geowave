@@ -17,10 +17,10 @@ import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
  * from a local file system or staging data from a local files system and ingesting into GeoWave
  * using a map-reduce job.
  */
-public class TdriveIngestFormat extends AbstractSimpleFeatureIngestFormat<TdrivePoint> {
+public class TdriveIngestFormat extends AbstractSimpleFeatureIngestFormat<AvroTdrivePoint> {
   @Override
-  protected AbstractSimpleFeatureIngestPlugin<TdrivePoint> newPluginInstance(
-      IngestFormatOptions options) {
+  protected AbstractSimpleFeatureIngestPlugin<AvroTdrivePoint> newPluginInstance(
+      final IngestFormatOptions options) {
     return new TdriveIngestPlugin();
   }
 

@@ -26,9 +26,9 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.locationtech.geowave.cli.osm.operations.options.OSMIngestCommandArgs;
-import org.locationtech.geowave.cli.osm.types.generated.Node;
-import org.locationtech.geowave.cli.osm.types.generated.Relation;
-import org.locationtech.geowave.cli.osm.types.generated.Way;
+import org.locationtech.geowave.cli.osm.types.avro.AvroNode;
+import org.locationtech.geowave.cli.osm.types.avro.AvroRelation;
+import org.locationtech.geowave.cli.osm.types.avro.AvroWay;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -107,21 +107,21 @@ public class OSMRunner extends Configured implements Tool {
     switch (ingestOptions.getMapperType()) {
       case "NODE":
         {
-          configureSchema(Node.getClassSchema());
+          configureSchema(AvroNode.getClassSchema());
           inputAvroFile = ingestOptions.getNodesBasePath();
           job.setMapperClass(OSMNodeMapper.class);
           break;
         }
       case "WAY":
         {
-          configureSchema(Way.getClassSchema());
+          configureSchema(AvroWay.getClassSchema());
           inputAvroFile = ingestOptions.getWaysBasePath();
           job.setMapperClass(OSMWayMapper.class);
           break;
         }
       case "RELATION":
         {
-          configureSchema(Relation.getClassSchema());
+          configureSchema(AvroRelation.getClassSchema());
           inputAvroFile = ingestOptions.getRelationsBasePath();
           job.setMapperClass(OSMRelationMapper.class);
           break;

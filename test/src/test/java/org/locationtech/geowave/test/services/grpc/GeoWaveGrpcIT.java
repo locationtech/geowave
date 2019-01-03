@@ -32,7 +32,7 @@ import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.cli.StartGrpcServerCommand;
 import org.locationtech.geowave.service.grpc.cli.StartGrpcServerCommandOptions;
 import org.locationtech.geowave.service.grpc.cli.StopGrpcServerCommand;
-import org.locationtech.geowave.service.grpc.protobuf.Feature;
+import org.locationtech.geowave.service.grpc.protobuf.FeatureProtos;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
@@ -96,7 +96,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
 
-    if (configFile != null && configFile.exists()) {
+    if ((configFile != null) && configFile.exists()) {
       configFile.delete();
     }
   }
@@ -182,7 +182,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
 
-    String plugins = client.ListPluginsCommand();
+    final String plugins = client.ListPluginsCommand();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
     LOGGER.warn("* FINISHED ListPluginsCommand  *");
@@ -231,7 +231,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
 
     Assert.assertNotEquals(0, client.numFeaturesProcessed);
 
-    ArrayList<Feature> features = client.vectorQuery();
+    ArrayList<FeatureProtos> features = client.vectorQuery();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
     LOGGER.warn("* FINISHED vectorQuery  *");
@@ -411,8 +411,8 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     TestUtils.deleteAll(dataStore);
   }
 
-  private static int countLines(String str) {
-    String[] lines = str.split("\r\n|\r|\n");
+  private static int countLines(final String str) {
+    final String[] lines = str.split("\r\n|\r|\n");
     return lines.length;
   }
 
@@ -447,7 +447,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     final AddIndexCommand indexCommand = new AddIndexCommand();
     indexCommand.setType("spatial");
     indexCommand.setParameters(GeoWaveGrpcTestUtils.indexName);
-    BasicIndexOptions basicIndexOpts = new BasicIndexOptions();
+    final BasicIndexOptions basicIndexOpts = new BasicIndexOptions();
     basicIndexOpts.setNumPartitions(32);
     basicIndexOpts.setPartitionStrategy(PartitionStrategy.ROUND_ROBIN);
     indexCommand.getPluginOptions().setBasicIndexOptions(basicIndexOpts);
@@ -466,8 +466,8 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     configS3.execute(operationParams);
 
     // mimic starting the server from command line
-    StartGrpcServerCommand startCmd = new StartGrpcServerCommand();
-    StartGrpcServerCommandOptions grpcCmdOpts = new StartGrpcServerCommandOptions();
+    final StartGrpcServerCommand startCmd = new StartGrpcServerCommand();
+    final StartGrpcServerCommandOptions grpcCmdOpts = new StartGrpcServerCommandOptions();
     grpcCmdOpts.setPort(GeoWaveGrpcServiceOptions.port);
     grpcCmdOpts.setNonBlocking(true);
     startCmd.setCommandOptions(grpcCmdOpts);
@@ -493,7 +493,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
       client.shutdown();
 
       // mimic terminating the server from cli
-      StopGrpcServerCommand stopCmd = new StopGrpcServerCommand();
+      final StopGrpcServerCommand stopCmd = new StopGrpcServerCommand();
       stopCmd.execute(operationParams);
     } catch (final Exception e) {
       LOGGER.error("Exception encountered.", e);

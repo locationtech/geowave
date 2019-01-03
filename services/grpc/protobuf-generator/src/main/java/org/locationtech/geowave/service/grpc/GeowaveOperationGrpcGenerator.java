@@ -35,7 +35,7 @@ public class GeowaveOperationGrpcGenerator {
       "option java_package = \"org.locationtech.geowave.service.grpc.protobuf\";\n";
   private static final String header =
       "/**\n"
-          + " * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation\n"
+          + " * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation\n"
           + " *\n"
           + " * See the NOTICE file distributed with this work for additional\n"
           + " * information regarding copyright ownership.\n"
@@ -150,7 +150,7 @@ public class GeowaveOperationGrpcGenerator {
           String retType = GeoWaveGrpcOperationParser.getGrpcReturnType(paramType.getTypeName());
           responseName = retType.replaceAll("(<)|(>)|(,)", " ");
           responseName = WordUtils.capitalize(responseName);
-          responseName = responseName.replaceAll(" ", "") + "Response";
+          responseName = responseName.replaceAll(" ", "") + "ResponseProtos";
           // if the return type is void we need to return an
           // empty message
           if (retType.equalsIgnoreCase("void")) retType = "\nmessage " + responseName + " { }";
@@ -163,12 +163,12 @@ public class GeowaveOperationGrpcGenerator {
                 + rpcName
                 + "("
                 + rpcName
-                + "Parameters) returns ("
+                + "ParametersProtos) returns ("
                 + responseName
                 + ") {} \n";
         rpcs.get(serviceName).add(rpc);
         final ProcessOperationResult pr = new ProcessOperationResult();
-        pr.message = "\nmessage " + rpcName + "Parameters {";
+        pr.message = "\nmessage " + rpcName + "ParametersProtos {";
         pr.currFieldPosition = 1;
 
         Class<?> opClass = operation;
@@ -206,8 +206,8 @@ public class GeowaveOperationGrpcGenerator {
       // first write header
       final String serviceHeader =
           header
-              + "import \"GeoWaveReturnTypes.proto\";\n"
-              + options.replace("&OUTER_CLASSNAME&", currServiceName + "Service");
+              + "import \"GeoWaveReturnTypesProtos.proto\";\n"
+              + options.replace("&OUTER_CLASSNAME&", currServiceName + "ServiceProtos");
       try {
         if (serviceWriter != null) {
           serviceWriter.write(serviceHeader + "\n");
@@ -234,7 +234,8 @@ public class GeowaveOperationGrpcGenerator {
       }
     }
 
-    String serviceReturnFilename = outputBasePath + "/src/main/protobuf/GeoWaveReturnTypes.proto";
+    String serviceReturnFilename =
+        outputBasePath + "/src/main/protobuf/GeoWaveReturnTypesProtos.proto";
     Writer serviceReturnWriter = null;
     try {
       serviceReturnWriter =

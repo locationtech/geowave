@@ -22,22 +22,23 @@ import org.slf4j.LoggerFactory;
  * This class can be sub-classed as a general-purpose recipe for parallelizing ingestion of files by
  * directly staging the binary of the file to Avro.
  */
-public abstract class AbstractStageWholeFileToAvro<O> implements AvroFormatPlugin<WholeFile, O> {
+public abstract class AbstractStageWholeFileToAvro<O>
+    implements AvroFormatPlugin<AvroWholeFile, O> {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractStageWholeFileToAvro.class);
 
   @Override
   public Schema getAvroSchema() {
-    return WholeFile.getClassSchema();
+    return AvroWholeFile.getClassSchema();
   }
 
   @Override
-  public CloseableIterator<WholeFile> toAvroObjects(final URL f) {
+  public CloseableIterator<AvroWholeFile> toAvroObjects(final URL f) {
     try {
       // TODO: consider a streaming mechanism in case a single file is too
       // large
-      return new CloseableIterator.Wrapper<WholeFile>(
+      return new CloseableIterator.Wrapper<AvroWholeFile>(
           Iterators.singletonIterator(
-              new WholeFile(ByteBuffer.wrap(IOUtils.toByteArray(f)), f.getPath())));
+              new AvroWholeFile(ByteBuffer.wrap(IOUtils.toByteArray(f)), f.getPath())));
     } catch (final IOException e) {
       LOGGER.warn("Unable to read file", e);
     }

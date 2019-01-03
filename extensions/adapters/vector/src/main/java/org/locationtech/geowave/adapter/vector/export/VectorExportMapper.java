@@ -17,7 +17,7 @@ import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.locationtech.geowave.adapter.vector.AvroFeatureUtils;
-import org.locationtech.geowave.adapter.vector.avro.AttributeValues;
+import org.locationtech.geowave.adapter.vector.avro.AvroAttributeValues;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.opengis.feature.simple.SimpleFeature;
@@ -114,7 +114,7 @@ public class VectorExportMapper
     private final SimpleFeatureType sft;
 
     private AvroSimpleFeatureCollection simpleFeatureCollection = null;
-    private List<AttributeValues> avList = null;
+    private List<AvroAttributeValues> avList = null;
 
     private AvroSFCWriter(final SimpleFeatureType sft, final int batchSize) {
       this.sft = sft;
@@ -130,7 +130,7 @@ public class VectorExportMapper
         retVal = simpleFeatureCollection;
         newFeatureCollection();
       }
-      final AttributeValues av = AvroFeatureUtils.buildAttributeValue(feature, sft);
+      final AvroAttributeValues av = AvroFeatureUtils.buildAttributeValue(feature, sft);
       avList.add(av);
       return retVal;
     }
@@ -146,7 +146,7 @@ public class VectorExportMapper
         // passed in
         LOGGER.warn("Unable to find classification", e);
       }
-      avList = new ArrayList<AttributeValues>(batchSize);
+      avList = new ArrayList<AvroAttributeValues>(batchSize);
     }
   }
 }

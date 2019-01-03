@@ -27,7 +27,7 @@ import org.locationtech.geowave.cli.osm.osmfeature.types.attributes.AttributeDef
 import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureDefinition;
 import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureDefinitionSet;
 import org.locationtech.geowave.cli.osm.types.TypeUtils;
-import org.locationtech.geowave.cli.osm.types.generated.MemberType;
+import org.locationtech.geowave.cli.osm.types.avro.AvroMemberType;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -259,17 +259,17 @@ public class SimpleFeatureGenerator {
           switch (stringReader.readField(item.getValue().get())) {
             case "NODE":
               {
-                relationSets.get(id).memType = MemberType.NODE;
+                relationSets.get(id).memType = AvroMemberType.NODE;
                 break;
               }
             case "WAY":
               {
-                relationSets.get(id).memType = MemberType.WAY;
+                relationSets.get(id).memType = AvroMemberType.WAY;
                 break;
               }
             case "RELATION":
               {
-                relationSets.get(id).memType = MemberType.RELATION;
+                relationSets.get(id).memType = AvroMemberType.RELATION;
                 break;
               }
             default:
@@ -289,6 +289,6 @@ public class SimpleFeatureGenerator {
   public static class RelationSet {
     public String roleId = null;
     public Long memId = null;
-    public MemberType memType = null;
+    public AvroMemberType memType = null;
   }
 }

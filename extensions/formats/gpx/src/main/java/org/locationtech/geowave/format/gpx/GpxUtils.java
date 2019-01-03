@@ -89,9 +89,9 @@ public class GpxUtils {
   }
 
   @SuppressFBWarnings({"SF_SWITCH_NO_DEFAULT"})
-  public static Map<Long, GpxTrack> parseOsmMetadata(final URL metadataFile)
+  public static Map<Long, AvroGpxTrack> parseOsmMetadata(final URL metadataFile)
       throws FileNotFoundException, XMLStreamException {
-    final Map<Long, GpxTrack> metadata = new HashMap<Long, GpxTrack>();
+    final Map<Long, AvroGpxTrack> metadata = new HashMap<>();
     try (final InputStream fis = metadataFile.openStream();
         final InputStream in = new BufferedInputStream(fis)) {
 
@@ -106,7 +106,7 @@ public class GpxUtils {
           switch (node.getName().getLocalPart()) {
             case "gpxFile":
               {
-                final GpxTrack gt = new GpxTrack();
+                final AvroGpxTrack gt = new AvroGpxTrack();
                 node = event.asStartElement();
                 @SuppressWarnings("unchecked")
                 final Iterator<Attribute> attributes = node.getAttributes();
@@ -169,7 +169,7 @@ public class GpxUtils {
                         }
                       case "tags":
                         {
-                          final List<String> tags = new ArrayList<String>();
+                          final List<String> tags = new ArrayList<>();
                           while (!(event.isEndElement()
                               && event.asEndElement().getName().getLocalPart().equals("tags"))) {
                             if (event.isStartElement()) {
@@ -196,7 +196,7 @@ public class GpxUtils {
           }
         }
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.info("Could not create the FileInputStream for OSM metadata.", e);
     }
 
@@ -402,7 +402,7 @@ public class GpxUtils {
         }
         return false;
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.info("Unable read " + gpxDocument.getPath(), e);
       return false;
     }

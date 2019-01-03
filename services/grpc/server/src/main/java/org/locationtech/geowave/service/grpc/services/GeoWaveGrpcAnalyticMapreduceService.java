@@ -22,10 +22,10 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import org.locationtech.geowave.service.grpc.protobuf.AnalyticMapreduceGrpc;
-import org.locationtech.geowave.service.grpc.protobuf.DBScanCommandParameters;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse;
-import org.locationtech.geowave.service.grpc.protobuf.KdeCommandParameters;
-import org.locationtech.geowave.service.grpc.protobuf.NearestNeighborCommandParameters;
+import org.locationtech.geowave.service.grpc.protobuf.DBScanCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos;
+import org.locationtech.geowave.service.grpc.protobuf.KdeCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.NearestNeighborCommandParametersProtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class GeoWaveGrpcAnalyticMapreduceService
 
   @Override
   public void kdeCommand(
-      KdeCommandParameters request, StreamObserver<VoidResponse> responseObserver) {
+      KdeCommandParametersProtos request, StreamObserver<VoidResponseProtos> responseObserver) {
     KdeCommand cmd = new KdeCommand();
     Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
@@ -59,7 +59,7 @@ public class GeoWaveGrpcAnalyticMapreduceService
     LOGGER.info("Executing KdeCommand...");
     try {
 
-      VoidResponse resp = VoidResponse.newBuilder().build();
+      VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -70,7 +70,7 @@ public class GeoWaveGrpcAnalyticMapreduceService
 
   @Override
   public void dBScanCommand(
-      DBScanCommandParameters request, StreamObserver<VoidResponse> responseObserver) {
+      DBScanCommandParametersProtos request, StreamObserver<VoidResponseProtos> responseObserver) {
     DBScanCommand cmd = new DBScanCommand();
     Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
@@ -83,7 +83,7 @@ public class GeoWaveGrpcAnalyticMapreduceService
     LOGGER.info("Executing DBScanCommand...");
     try {
       cmd.computeResults(params);
-      VoidResponse resp = VoidResponse.newBuilder().build();
+      VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -94,7 +94,7 @@ public class GeoWaveGrpcAnalyticMapreduceService
 
   @Override
   public void nearestNeighborCommand(
-      NearestNeighborCommandParameters request, StreamObserver<VoidResponse> responseObserver) {
+      NearestNeighborCommandParametersProtos request, StreamObserver<VoidResponseProtos> responseObserver) {
     NearestNeighborCommand cmd = new NearestNeighborCommand();
     Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
@@ -107,7 +107,7 @@ public class GeoWaveGrpcAnalyticMapreduceService
     LOGGER.info("Executing NearestNeighborCommand...");
     try {
       cmd.computeResults(params);
-      VoidResponse resp = VoidResponse.newBuilder().build();
+      VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 

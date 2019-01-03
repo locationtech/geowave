@@ -1,1 +1,1 @@
-src/main/java/org/locationtech/geowave/format/tdrive/TdrivePoint.java
+src/main/java/org/locationtech/geowave/format/tdrive/AvroTdrivePoint.java
