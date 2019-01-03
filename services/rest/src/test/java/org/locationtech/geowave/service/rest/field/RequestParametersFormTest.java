@@ -1,7 +1,10 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p>See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.service.rest.field;
 
@@ -12,128 +15,90 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.locationtech.geowave.service.rest.field.RequestParametersForm;
 import org.mockito.Mockito;
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
 
-public class RequestParametersFormTest
-{
+public class RequestParametersFormTest {
 
-	private RequestParametersForm classUnderTest;
+  private RequestParametersForm classUnderTest;
 
-	private String testKey = "foo";
-	private String testString = "bar";
-	private List<String> testList = new ArrayList<String>(
-			Arrays.asList(
-					"bar",
-					"baz"));
-	private String[] testArray = {
-		"foo",
-		"bar"
-	};
+  private String testKey = "foo";
+  private String testString = "bar";
+  private List<String> testList = new ArrayList<String>(Arrays.asList("bar", "baz"));
+  private String[] testArray = {"foo", "bar"};
 
-	private Form mockedForm(Map<String,String> inputKeyValuePairs) {
-		String keyName;
-		Form form = Mockito.mock(Form.class);
-		Mockito.when(form.getNames()).thenReturn(inputKeyValuePairs.keySet());
-		Mockito.when(form.getFirst(Mockito.anyString())).thenAnswer(i -> mockedFormParameter(inputKeyValuePairs.get(i.getArguments()[0])));
-		
-		return form;
-	}
+  private Form mockedForm(Map<String, String> inputKeyValuePairs) {
+    String keyName;
+    Form form = Mockito.mock(Form.class);
+    Mockito.when(form.getNames()).thenReturn(inputKeyValuePairs.keySet());
+    Mockito.when(form.getFirst(Mockito.anyString()))
+        .thenAnswer(i -> mockedFormParameter(inputKeyValuePairs.get(i.getArguments()[0])));
 
-	private Parameter mockedFormParameter(
-			String value ) {
-		Parameter param = Mockito.mock(Parameter.class);
+    return form;
+  }
 
-		Mockito.when(
-				param.getValue()).thenReturn(
-				value);
+  private Parameter mockedFormParameter(String value) {
+    Parameter param = Mockito.mock(Parameter.class);
 
-		return param;
-	}
+    Mockito.when(param.getValue()).thenReturn(value);
 
-	@Before
-	public void setUp()
-			throws Exception {}
+    return param;
+  }
 
-	@After
-	public void tearDown()
-			throws Exception {}
+  @Before
+  public void setUp() throws Exception {}
 
-	@Test
-	public void instantiationSuccessfulWithForm()
-			throws Exception {
-		Map<String, String> testKVP = new HashMap<String, String>();
+  @After
+  public void tearDown() throws Exception {}
 
-		Form form = mockedForm(testKVP);
+  @Test
+  public void instantiationSuccessfulWithForm() throws Exception {
+    Map<String, String> testKVP = new HashMap<String, String>();
 
-		classUnderTest = new RequestParametersForm(
-				form);
-	}
+    Form form = mockedForm(testKVP);
 
-	@Test
-	public void getStringReturnsFormString()
-			throws Exception {
-		Map<String, String> testKVP = new HashMap<String, String>();
+    classUnderTest = new RequestParametersForm(form);
+  }
 
-		Form form = mockedForm(testKVP);
-		testKVP.put(
-				testKey,
-				testString);
+  @Test
+  public void getStringReturnsFormString() throws Exception {
+    Map<String, String> testKVP = new HashMap<String, String>();
 
-		classUnderTest = new RequestParametersForm(
-				form);
+    Form form = mockedForm(testKVP);
+    testKVP.put(testKey, testString);
 
-		assertEquals(
-				testString,
-				classUnderTest.getString(testKey));
-	}
+    classUnderTest = new RequestParametersForm(form);
 
-	@Test
-	public void getListReturnsFormList()
-			throws Exception {
-		Map<String, String> testKVP = new HashMap<String, String>();
+    assertEquals(testString, classUnderTest.getString(testKey));
+  }
 
-		String testJoinedString = String.join(
-				",",
-				testList);
-		Form form = mockedForm(testKVP);
-		testKVP.put(
-				testKey,
-				testJoinedString);
+  @Test
+  public void getListReturnsFormList() throws Exception {
+    Map<String, String> testKVP = new HashMap<String, String>();
 
-		classUnderTest = new RequestParametersForm(
-				form);
+    String testJoinedString = String.join(",", testList);
+    Form form = mockedForm(testKVP);
+    testKVP.put(testKey, testJoinedString);
 
-		assertEquals(
-				testList,
-				classUnderTest.getList(testKey));
-	}
+    classUnderTest = new RequestParametersForm(form);
 
-	@Test
-	public void getArrayReturnsFormArray()
-			throws Exception {
-		Map<String, String> testKVP = new HashMap<String, String>();
+    assertEquals(testList, classUnderTest.getList(testKey));
+  }
 
-		String testJoinedString = String.join(
-				",",
-				testArray);
-		Form form = mockedForm(testKVP);
-		testKVP.put(
-				testKey,
-				testJoinedString);
+  @Test
+  public void getArrayReturnsFormArray() throws Exception {
+    Map<String, String> testKVP = new HashMap<String, String>();
 
-		classUnderTest = new RequestParametersForm(
-				form);
+    String testJoinedString = String.join(",", testArray);
+    Form form = mockedForm(testKVP);
+    testKVP.put(testKey, testJoinedString);
 
-		assertArrayEquals(
-				testArray,
-				classUnderTest.getArray(testKey));
-	}
+    classUnderTest = new RequestParametersForm(form);
 
+    assertArrayEquals(testArray, classUnderTest.getArray(testKey));
+  }
 }

@@ -1,7 +1,10 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p>See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.mapreduce.splits;
 
@@ -10,7 +13,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.JobID;
@@ -51,429 +53,307 @@ import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.GeometryFactory;
-
 @RunWith(GeoWaveITRunner.class)
-@Environments({
-	Environment.MAP_REDUCE
-})
-public class SplitsProviderIT extends
-		AbstractGeoWaveIT
-{
+@Environments({Environment.MAP_REDUCE})
+public class SplitsProviderIT extends AbstractGeoWaveIT {
 
-	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE,
-		GeoWaveStoreType.DYNAMODB,
-		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.REDIS,
-		GeoWaveStoreType.ROCKSDB
-	})
-	protected DataStorePluginOptions dataStorePluginOptions;
+  @GeoWaveTestStore(
+      value = {
+        GeoWaveStoreType.ACCUMULO,
+        GeoWaveStoreType.BIGTABLE,
+        GeoWaveStoreType.HBASE,
+        GeoWaveStoreType.DYNAMODB,
+        GeoWaveStoreType.CASSANDRA,
+        GeoWaveStoreType.REDIS,
+        GeoWaveStoreType.ROCKSDB
+      })
+  protected DataStorePluginOptions dataStorePluginOptions;
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
-	private static long startMillis;
-	private final static String testName = "SplitsProviderIT";
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
+  private static long startMillis;
+  private static final String testName = "SplitsProviderIT";
 
-	private static final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
-	private static final Index idx = SimpleIngest.createSpatialIndex();
-	private static final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
+  private static final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
+  private static final Index idx = SimpleIngest.createSpatialIndex();
+  private static final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 
-	enum Distribution {
-		UNIFORM,
-		BIMODAL,
-		SKEWED
-	}
+  enum Distribution {
+    UNIFORM,
+    BIMODAL,
+    SKEWED
+  }
 
-	@BeforeClass
-	public static void setup() {
-		startMillis = System.currentTimeMillis();
-		TestUtils.printStartOfTest(
-				LOGGER,
-				testName);
-	}
+  @BeforeClass
+  public static void setup() {
+    startMillis = System.currentTimeMillis();
+    TestUtils.printStartOfTest(LOGGER, testName);
+  }
 
-	@AfterClass
-	public static void reportTest() {
-		TestUtils.printEndOfTest(
-				LOGGER,
-				testName,
-				startMillis);
-	}
+  @AfterClass
+  public static void reportTest() {
+    TestUtils.printEndOfTest(LOGGER, testName, startMillis);
+  }
 
-	@Override
-	protected DataStorePluginOptions getDataStorePluginOptions() {
-		return dataStorePluginOptions;
-	}
+  @Override
+  protected DataStorePluginOptions getDataStorePluginOptions() {
+    return dataStorePluginOptions;
+  }
 
-	private void ingestWithDistribution(
-			final Distribution distr ) {
-		final DataStore dataStore = dataStorePluginOptions.createDataStore();
-		dataStore.addType(
-				fda,
-				idx);
-		try (final Writer<SimpleFeature> writer = dataStore.createWriter(fda.getTypeName())) {
+  private void ingestWithDistribution(final Distribution distr) {
+    final DataStore dataStore = dataStorePluginOptions.createDataStore();
+    dataStore.addType(fda, idx);
+    try (final Writer<SimpleFeature> writer = dataStore.createWriter(fda.getTypeName())) {
 
-			switch (distr) {
-				case UNIFORM:
-					createUniformFeatures(
-							new SimpleFeatureBuilder(
-									sft),
-							writer,
-							100000);
-					break;
-				case BIMODAL:
-					createBimodalFeatures(
-							new SimpleFeatureBuilder(
-									sft),
-							writer,
-							400000);
-					break;
-				case SKEWED:
-				default:
-					createSkewedFeatures(
-							new SimpleFeatureBuilder(
-									sft),
-							writer,
-							700000);
-					break;
-			}
-		}
-	}
+      switch (distr) {
+        case UNIFORM:
+          createUniformFeatures(new SimpleFeatureBuilder(sft), writer, 100000);
+          break;
+        case BIMODAL:
+          createBimodalFeatures(new SimpleFeatureBuilder(sft), writer, 400000);
+          break;
+        case SKEWED:
+        default:
+          createSkewedFeatures(new SimpleFeatureBuilder(sft), writer, 700000);
+          break;
+      }
+    }
+  }
 
-	@Test
-	public void testUniform() {
-		ingestWithDistribution(Distribution.UNIFORM);
-		final QueryConstraints query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-180,
-						180,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				query,
-				12,
-				12) < 0.1);
-	}
+  @Test
+  public void testUniform() {
+    ingestWithDistribution(Distribution.UNIFORM);
+    final QueryConstraints query =
+        new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-180, 180, -90, 90)));
+    assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
+  }
 
-	@Test
-	public void testBimodal() {
-		ingestWithDistribution(Distribution.BIMODAL);
-		QueryConstraints query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-180,
-						180,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				query,
-				12,
-				12) < 0.1);
+  @Test
+  public void testBimodal() {
+    ingestWithDistribution(Distribution.BIMODAL);
+    QueryConstraints query =
+        new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-180, 180, -90, 90)));
+    assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
 
-		query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-120,
-						-60,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				query,
-				12,
-				12) < 0.1);
+    query = new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-120, -60, -90, 90)));
+    assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
 
-		query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-20,
-						20,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				query,
-				12,
-				12) < 0.1);
-	}
+    query = new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-20, 20, -90, 90)));
+    assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
+  }
 
-	@Test
-	public void testSkewed() {
-		ingestWithDistribution(Distribution.SKEWED);
-		QueryConstraints query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-180,
-						180,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				query,
-				12,
-				12) < 0.1);
+  @Test
+  public void testSkewed() {
+    ingestWithDistribution(Distribution.SKEWED);
+    QueryConstraints query =
+        new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-180, 180, -90, 90)));
+    assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
 
-		query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-180,
-						-140,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				query,
-				12,
-				12) < 0.1);
+    query = new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-180, -140, -90, 90)));
+    assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
 
-		query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						0,
-						180,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				query,
-				12,
-				12) < 0.1);
-	}
+    query = new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(0, 180, -90, 90)));
+    assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
+  }
 
-	private double getSplitsMSE(
-			final QueryConstraints query,
-			final int minSplits,
-			final int maxSplits ) {
+  private double getSplitsMSE(
+      final QueryConstraints query, final int minSplits, final int maxSplits) {
 
-		// get splits and create reader for each RangeLocationPair, then summing
-		// up the rows for each split
+    // get splits and create reader for each RangeLocationPair, then summing
+    // up the rows for each split
 
-		List<InputSplit> splits = null;
-		final MapReduceDataStore dataStore = (MapReduceDataStore) dataStorePluginOptions.createDataStore();
-		final PersistentAdapterStore as = dataStorePluginOptions.createAdapterStore();
-		final InternalAdapterStore ias = dataStorePluginOptions.createInternalAdapterStore();
-		final MapReduceDataStoreOperations ops = (MapReduceDataStoreOperations) dataStorePluginOptions
-				.createDataStoreOperations();
-		final IndexStore is = dataStorePluginOptions.createIndexStore();
-		final AdapterIndexMappingStore aim = dataStorePluginOptions.createAdapterIndexMappingStore();
-		final DataStatisticsStore stats = dataStorePluginOptions.createDataStatisticsStore();
+    List<InputSplit> splits = null;
+    final MapReduceDataStore dataStore =
+        (MapReduceDataStore) dataStorePluginOptions.createDataStore();
+    final PersistentAdapterStore as = dataStorePluginOptions.createAdapterStore();
+    final InternalAdapterStore ias = dataStorePluginOptions.createInternalAdapterStore();
+    final MapReduceDataStoreOperations ops =
+        (MapReduceDataStoreOperations) dataStorePluginOptions.createDataStoreOperations();
+    final IndexStore is = dataStorePluginOptions.createIndexStore();
+    final AdapterIndexMappingStore aim = dataStorePluginOptions.createAdapterIndexMappingStore();
+    final DataStatisticsStore stats = dataStorePluginOptions.createDataStatisticsStore();
 
-		final MemoryAdapterStore mas = new MemoryAdapterStore();
-		mas.addAdapter(fda);
-		try {
-			splits = dataStore.getSplits(
-					new CommonQueryOptions(),
-					new FilterByTypeQueryOptions<>(
-							new String[] {
-								fda.getTypeName()
-							}),
-					new QuerySingleIndex(
-							idx.getName()),
-					new EverythingQuery(),
-					mas,
-					aim,
-					stats,
-					ias,
-					is,
-					new JobContextImpl(
-							new Configuration(),
-							new JobID()),
-					minSplits,
-					maxSplits);
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"IOException thrown when calling getSplits",
-					e);
-		}
-		catch (final InterruptedException e) {
-			LOGGER.error(
-					"InterruptedException thrown when calling getSplits",
-					e);
-		}
+    final MemoryAdapterStore mas = new MemoryAdapterStore();
+    mas.addAdapter(fda);
+    try {
+      splits =
+          dataStore.getSplits(
+              new CommonQueryOptions(),
+              new FilterByTypeQueryOptions<>(new String[] {fda.getTypeName()}),
+              new QuerySingleIndex(idx.getName()),
+              new EverythingQuery(),
+              mas,
+              aim,
+              stats,
+              ias,
+              is,
+              new JobContextImpl(new Configuration(), new JobID()),
+              minSplits,
+              maxSplits);
+    } catch (final IOException e) {
+      LOGGER.error("IOException thrown when calling getSplits", e);
+    } catch (final InterruptedException e) {
+      LOGGER.error("InterruptedException thrown when calling getSplits", e);
+    }
 
-		final double[] observed = new double[splits.size()];
+    final double[] observed = new double[splits.size()];
 
-		int totalCount = 0;
-		int currentSplit = 0;
+    int totalCount = 0;
+    int currentSplit = 0;
 
-		for (final InputSplit split : splits) {
-			int countPerSplit = 0;
-			if (GeoWaveInputSplit.class.isAssignableFrom(split.getClass())) {
-				final GeoWaveInputSplit gwSplit = (GeoWaveInputSplit) split;
-				for (final String indexName : gwSplit.getIndexNames()) {
-					final SplitInfo splitInfo = gwSplit.getInfo(indexName);
-					for (final RangeLocationPair p : splitInfo.getRangeLocationPairs()) {
-						final RecordReaderParams<?> readerParams = new RecordReaderParams<>(
-								splitInfo.getIndex(),
-								as,
-								ias,
-								new short[] {
-									ias.getAdapterId(fda.getTypeName())
-								},
-								null,
-								null,
-								null,
-								splitInfo.isMixedVisibility(),
-								splitInfo.isAuthorizationsLimiting(),
-								p.getRange(),
-								null,
-								null,
-								GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
-						try (RowReader<?> reader = ops.createReader(readerParams)) {
-							while (reader.hasNext()) {
-								reader.next();
-								countPerSplit++;
-							}
-						}
-						catch (final Exception e) {
-							LOGGER.error(
-									"Exception thrown when calling createReader",
-									e);
-						}
-					}
-				}
-			}
-			totalCount += countPerSplit;
-			observed[currentSplit] = countPerSplit;
-			currentSplit++;
-		}
+    for (final InputSplit split : splits) {
+      int countPerSplit = 0;
+      if (GeoWaveInputSplit.class.isAssignableFrom(split.getClass())) {
+        final GeoWaveInputSplit gwSplit = (GeoWaveInputSplit) split;
+        for (final String indexName : gwSplit.getIndexNames()) {
+          final SplitInfo splitInfo = gwSplit.getInfo(indexName);
+          for (final RangeLocationPair p : splitInfo.getRangeLocationPairs()) {
+            final RecordReaderParams<?> readerParams =
+                new RecordReaderParams<>(
+                    splitInfo.getIndex(),
+                    as,
+                    ias,
+                    new short[] {ias.getAdapterId(fda.getTypeName())},
+                    null,
+                    null,
+                    null,
+                    splitInfo.isMixedVisibility(),
+                    splitInfo.isAuthorizationsLimiting(),
+                    p.getRange(),
+                    null,
+                    null,
+                    GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
+            try (RowReader<?> reader = ops.createReader(readerParams)) {
+              while (reader.hasNext()) {
+                reader.next();
+                countPerSplit++;
+              }
+            } catch (final Exception e) {
+              LOGGER.error("Exception thrown when calling createReader", e);
+            }
+          }
+        }
+      }
+      totalCount += countPerSplit;
+      observed[currentSplit] = countPerSplit;
+      currentSplit++;
+    }
 
-		final double expected = 1.0 / splits.size();
+    final double expected = 1.0 / splits.size();
 
-		double sum = 0;
+    double sum = 0;
 
-		for (int i = 0; i < observed.length; i++) {
-			sum += Math.pow(
-					(observed[i] / totalCount) - expected,
-					2);
-		}
+    for (int i = 0; i < observed.length; i++) {
+      sum += Math.pow((observed[i] / totalCount) - expected, 2);
+    }
 
-		return sum / splits.size();
-	}
+    return sum / splits.size();
+  }
 
-	public static void createUniformFeatures(
-			final SimpleFeatureBuilder pointBuilder,
-			final Writer<SimpleFeature> writer,
-			final int firstFeatureId ) {
+  public static void createUniformFeatures(
+      final SimpleFeatureBuilder pointBuilder,
+      final Writer<SimpleFeature> writer,
+      final int firstFeatureId) {
 
-		int featureId = firstFeatureId;
-		for (int longitude = -180; longitude <= 180; longitude += 1) {
-			for (int latitude = -90; latitude <= 90; latitude += 1) {
-				pointBuilder.set(
-						"geometry",
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								longitude,
-								latitude)));
-				pointBuilder.set(
-						"TimeStamp",
-						new Date());
-				pointBuilder.set(
-						"Latitude",
-						latitude);
-				pointBuilder.set(
-						"Longitude",
-						longitude);
-				// Note since trajectoryID and comment are marked as nillable we
-				// don't need to set them (they default ot null).
+    int featureId = firstFeatureId;
+    for (int longitude = -180; longitude <= 180; longitude += 1) {
+      for (int latitude = -90; latitude <= 90; latitude += 1) {
+        pointBuilder.set(
+            "geometry",
+            GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
+        pointBuilder.set("TimeStamp", new Date());
+        pointBuilder.set("Latitude", latitude);
+        pointBuilder.set("Longitude", longitude);
+        // Note since trajectoryID and comment are marked as nillable we
+        // don't need to set them (they default ot null).
 
-				final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-				writer.write(sft);
-				featureId++;
-			}
-		}
-	}
+        final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
+        writer.write(sft);
+        featureId++;
+      }
+    }
+  }
 
-	public static void createBimodalFeatures(
-			final SimpleFeatureBuilder pointBuilder,
-			final Writer<SimpleFeature> writer,
-			final int firstFeatureId ) {
+  public static void createBimodalFeatures(
+      final SimpleFeatureBuilder pointBuilder,
+      final Writer<SimpleFeature> writer,
+      final int firstFeatureId) {
 
-		int featureId = firstFeatureId;
-		for (double longitude = -180.0; longitude <= 0.0; longitude += 1.0) {
-			if (longitude == -90) {
-				continue;
-			}
-			for (double latitude = -180.0; latitude <= 0.0; latitude += (Math.abs(-90.0 - longitude) / 10.0)) {
-				pointBuilder.set(
-						"geometry",
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								longitude,
-								latitude)));
-				pointBuilder.set(
-						"TimeStamp",
-						new Date());
-				pointBuilder.set(
-						"Latitude",
-						latitude);
-				pointBuilder.set(
-						"Longitude",
-						longitude);
-				// Note since trajectoryID and comment are marked as nillable we
-				// don't need to set them (they default ot null).
+    int featureId = firstFeatureId;
+    for (double longitude = -180.0; longitude <= 0.0; longitude += 1.0) {
+      if (longitude == -90) {
+        continue;
+      }
+      for (double latitude = -180.0;
+          latitude <= 0.0;
+          latitude += (Math.abs(-90.0 - longitude) / 10.0)) {
+        pointBuilder.set(
+            "geometry",
+            GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
+        pointBuilder.set("TimeStamp", new Date());
+        pointBuilder.set("Latitude", latitude);
+        pointBuilder.set("Longitude", longitude);
+        // Note since trajectoryID and comment are marked as nillable we
+        // don't need to set them (they default ot null).
 
-				final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-				writer.write(sft);
-				featureId++;
-			}
-		}
+        final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
+        writer.write(sft);
+        featureId++;
+      }
+    }
 
-		for (double longitude = 0.0; longitude <= 180.0; longitude += 1.0) {
-			if (longitude == 90) {
-				continue;
-			}
-			for (double latitude = 0.0; latitude <= 180.0; latitude += (Math.abs(90.0 - longitude) / 10.0)) {
-				pointBuilder.set(
-						"geometry",
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								longitude,
-								latitude)));
-				pointBuilder.set(
-						"TimeStamp",
-						new Date());
-				pointBuilder.set(
-						"Latitude",
-						latitude);
-				pointBuilder.set(
-						"Longitude",
-						longitude);
-				// Note since trajectoryID and comment are marked as nillable we
-				// don't need to set them (they default ot null).
+    for (double longitude = 0.0; longitude <= 180.0; longitude += 1.0) {
+      if (longitude == 90) {
+        continue;
+      }
+      for (double latitude = 0.0;
+          latitude <= 180.0;
+          latitude += (Math.abs(90.0 - longitude) / 10.0)) {
+        pointBuilder.set(
+            "geometry",
+            GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
+        pointBuilder.set("TimeStamp", new Date());
+        pointBuilder.set("Latitude", latitude);
+        pointBuilder.set("Longitude", longitude);
+        // Note since trajectoryID and comment are marked as nillable we
+        // don't need to set them (they default ot null).
 
-				final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-				writer.write(sft);
-				featureId++;
-			}
-		}
-	}
+        final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
+        writer.write(sft);
+        featureId++;
+      }
+    }
+  }
 
-	public static void createSkewedFeatures(
-			final SimpleFeatureBuilder pointBuilder,
-			final Writer<SimpleFeature> writer,
-			final int firstFeatureId ) {
+  public static void createSkewedFeatures(
+      final SimpleFeatureBuilder pointBuilder,
+      final Writer<SimpleFeature> writer,
+      final int firstFeatureId) {
 
-		int featureId = firstFeatureId;
-		for (double longitude = -180.0; longitude <= 180.0; longitude += 1.0) {
-			for (double latitude = -90.0; latitude <= 90.0; latitude += ((longitude + 181.0) / 10.0)) {
-				pointBuilder.set(
-						"geometry",
-						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
-								longitude,
-								latitude)));
-				pointBuilder.set(
-						"TimeStamp",
-						new Date());
-				pointBuilder.set(
-						"Latitude",
-						latitude);
-				pointBuilder.set(
-						"Longitude",
-						longitude);
-				// Note since trajectoryID and comment are marked as nillable we
-				// don't need to set them (they default ot null).
+    int featureId = firstFeatureId;
+    for (double longitude = -180.0; longitude <= 180.0; longitude += 1.0) {
+      for (double latitude = -90.0; latitude <= 90.0; latitude += ((longitude + 181.0) / 10.0)) {
+        pointBuilder.set(
+            "geometry",
+            GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
+        pointBuilder.set("TimeStamp", new Date());
+        pointBuilder.set("Latitude", latitude);
+        pointBuilder.set("Longitude", longitude);
+        // Note since trajectoryID and comment are marked as nillable we
+        // don't need to set them (they default ot null).
 
-				final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
-				writer.write(sft);
-				featureId++;
-			}
-		}
-	}
+        final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
+        writer.write(sft);
+        featureId++;
+      }
+    }
+  }
 }

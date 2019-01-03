@@ -1,7 +1,10 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p>See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.analytic.distance;
 
@@ -10,45 +13,36 @@ import org.locationtech.jts.geom.Geometry;
 
 /**
  * Calculate distance between two geometries.
- * 
+ *
  * @see org.locationtech.jts.geom.Geometry
- * 
  */
-public class GeometryCentroidDistanceFn implements
-		DistanceFn<Geometry>
-{
+public class GeometryCentroidDistanceFn implements DistanceFn<Geometry> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4340689267509659236L;
-	private DistanceFn<Coordinate> coordinateDistanceFunction = new CoordinateEuclideanDistanceFn();
+  /** */
+  private static final long serialVersionUID = -4340689267509659236L;
 
-	public GeometryCentroidDistanceFn() {}
+  private DistanceFn<Coordinate> coordinateDistanceFunction = new CoordinateEuclideanDistanceFn();
 
-	public GeometryCentroidDistanceFn(
-			final DistanceFn<Coordinate> coordinateDistanceFunction ) {
-		super();
-		this.coordinateDistanceFunction = coordinateDistanceFunction;
-	}
+  public GeometryCentroidDistanceFn() {}
 
-	public DistanceFn<Coordinate> getCoordinateDistanceFunction() {
-		return coordinateDistanceFunction;
-	}
+  public GeometryCentroidDistanceFn(final DistanceFn<Coordinate> coordinateDistanceFunction) {
+    super();
+    this.coordinateDistanceFunction = coordinateDistanceFunction;
+  }
 
-	public void setCoordinateDistanceFunction(
-			final DistanceFn<Coordinate> coordinateDistanceFunction ) {
-		this.coordinateDistanceFunction = coordinateDistanceFunction;
-	}
+  public DistanceFn<Coordinate> getCoordinateDistanceFunction() {
+    return coordinateDistanceFunction;
+  }
 
-	@Override
-	public double measure(
-			final Geometry x,
-			final Geometry y ) {
+  public void setCoordinateDistanceFunction(
+      final DistanceFn<Coordinate> coordinateDistanceFunction) {
+    this.coordinateDistanceFunction = coordinateDistanceFunction;
+  }
 
-		return coordinateDistanceFunction.measure(
-				x.getCentroid().getCoordinate(),
-				y.getCentroid().getCoordinate());
-	}
+  @Override
+  public double measure(final Geometry x, final Geometry y) {
 
+    return coordinateDistanceFunction.measure(
+        x.getCentroid().getCoordinate(), y.getCentroid().getCoordinate());
+  }
 }

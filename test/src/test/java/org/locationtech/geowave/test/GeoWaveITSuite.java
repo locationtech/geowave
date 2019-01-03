@@ -1,7 +1,10 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p>See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.test;
 
@@ -42,55 +45,54 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
-	GeoWaveVisibilityIT.class,
-	GeowaveCustomCRSSpatialVectorIT.class,
-	GeoWaveBasicSpatialTemporalVectorIT.class,
-	GeoWaveGeometryPrecisionIT.class,
-	// TODO need to mock up S3
-	// GeowaveBasicURLIngestIT.class,
-	GeoWaveVectorSerializationIT.class,
-	BasicKafkaIT.class,
-	BasicMapReduceIT.class,
-	// // for now tests are taking too long in travis and landsatIT is a long
-	// test
-	// // LandsatIT.class,
-	CustomCRSLandsatIT.class,
-	GeoWaveBasicRasterIT.class,
-	GeoWaveBasicCustomCRSRasterIT.class,
-	CustomCRSKDERasterResizeIT.class,
-	BulkIngestInputGenerationIT.class,
-	GeoWaveNNIT.class,
-	AttributesSubsetQueryIT.class,
-	SpatialTemporalQueryIT.class,
-	PolygonDataIdQueryIT.class,
-	ConfigCacheIT.class,
-	DBScanIT.class,
-	GeoWaveBasicSparkIT.class,
-	GeoWaveSparkKMeansIT.class,
-	GeoWaveSparkSQLIT.class,
-	GeoWaveSparkSpatialJoinIT.class,
-	ConfigServicesIT.class,
-	GeoServerIngestIT.class,
-	GeoServerIT.class,
-	GeoWaveGrpcIT.class,
-	RemoteIT.class,
-	IngestIT.class,
-	FileUploadIT.class,
-	SplitsProviderIT.class
+  GeoWaveVisibilityIT.class,
+  GeowaveCustomCRSSpatialVectorIT.class,
+  GeoWaveBasicSpatialTemporalVectorIT.class,
+  GeoWaveGeometryPrecisionIT.class,
+  // TODO need to mock up S3
+  // GeowaveBasicURLIngestIT.class,
+  GeoWaveVectorSerializationIT.class,
+  BasicKafkaIT.class,
+  BasicMapReduceIT.class,
+  // // for now tests are taking too long in travis and landsatIT is a long
+  // test
+  // // LandsatIT.class,
+  CustomCRSLandsatIT.class,
+  GeoWaveBasicRasterIT.class,
+  GeoWaveBasicCustomCRSRasterIT.class,
+  CustomCRSKDERasterResizeIT.class,
+  BulkIngestInputGenerationIT.class,
+  GeoWaveNNIT.class,
+  AttributesSubsetQueryIT.class,
+  SpatialTemporalQueryIT.class,
+  PolygonDataIdQueryIT.class,
+  ConfigCacheIT.class,
+  DBScanIT.class,
+  GeoWaveBasicSparkIT.class,
+  GeoWaveSparkKMeansIT.class,
+  GeoWaveSparkSQLIT.class,
+  GeoWaveSparkSpatialJoinIT.class,
+  ConfigServicesIT.class,
+  GeoServerIngestIT.class,
+  GeoServerIT.class,
+  GeoWaveGrpcIT.class,
+  RemoteIT.class,
+  IngestIT.class,
+  FileUploadIT.class,
+  SplitsProviderIT.class
 })
-public class GeoWaveITSuite
-{
-	@BeforeClass
-	public static void setupSuite() {
-		synchronized (GeoWaveITRunner.MUTEX) {
-			GeoWaveITRunner.DEFER_CLEANUP.set(true);
-		}
-	}
+public class GeoWaveITSuite {
+  @BeforeClass
+  public static void setupSuite() {
+    synchronized (GeoWaveITRunner.MUTEX) {
+      GeoWaveITRunner.DEFER_CLEANUP.set(true);
+    }
+  }
 
-	@AfterClass
-	public static void tearDownSuite() {
-		synchronized (GeoWaveITRunner.MUTEX) {
-			GeoWaveITRunner.DEFER_CLEANUP.set(false);
-		}
-	}
+  @AfterClass
+  public static void tearDownSuite() {
+    synchronized (GeoWaveITRunner.MUTEX) {
+      GeoWaveITRunner.DEFER_CLEANUP.set(false);
+    }
+  }
 }

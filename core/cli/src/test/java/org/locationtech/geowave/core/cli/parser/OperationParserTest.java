@@ -1,154 +1,97 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p>See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.core.cli.parser;
 
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
-import org.locationtech.geowave.core.cli.parser.OperationParser;
 import org.locationtech.geowave.core.cli.spi.OperationEntry;
 import org.locationtech.geowave.core.cli.spi.OperationRegistry;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
+public class OperationParserTest {
+  @Test
+  public void testParseTopLevel() {
 
-import org.junit.Assert;
+    OperationEntry op1Entry = new OperationEntry(Op1.class);
+    OperationEntry op2Entry = new OperationEntry(Op2.class);
+    op1Entry.addChild(op2Entry);
 
-public class OperationParserTest
-{
-	@Test
-	public void testParseTopLevel() {
+    List<OperationEntry> entries = new ArrayList<OperationEntry>();
+    entries.add(op1Entry);
+    entries.add(op2Entry);
 
-		OperationEntry op1Entry = new OperationEntry(
-				Op1.class);
-		OperationEntry op2Entry = new OperationEntry(
-				Op2.class);
-		op1Entry.addChild(op2Entry);
+    OperationParser parser = new OperationParser(new OperationRegistry(entries));
 
-		List<OperationEntry> entries = new ArrayList<OperationEntry>();
-		entries.add(op1Entry);
-		entries.add(op2Entry);
+    CommandLineOperationParams params =
+        parser.parse(Op1.class, new String[] {"op", "--username", "user", "--password", "blah"});
 
-		OperationParser parser = new OperationParser(
-				new OperationRegistry(
-						entries));
+    Op2 op2 = (Op2) params.getOperationMap().get("op");
 
-		CommandLineOperationParams params = parser.parse(
-				Op1.class,
-				new String[] {
-					"op",
-					"--username",
-					"user",
-					"--password",
-					"blah"
-				});
+    Assert.assertEquals("blah", op2.args.passWord);
+    Assert.assertEquals("user", op2.args.userName);
+  }
 
-		Op2 op2 = (Op2) params.getOperationMap().get(
-				"op");
+  @Test
+  public void testParseArgs() {
+    OperationParser parser = new OperationParser();
+    Args args = new Args();
+    parser.addAdditionalObject(args);
+    parser.parse(new String[] {"--username", "user", "--password", "blah"});
+    Assert.assertEquals("blah", args.passWord);
+    Assert.assertEquals("user", args.userName);
+  }
 
-		Assert.assertEquals(
-				"blah",
-				op2.args.passWord);
-		Assert.assertEquals(
-				"user",
-				op2.args.userName);
+  @Test
+  public void testParseOperation() {
 
-	}
+    OperationEntry op1Entry = new OperationEntry(Op1.class);
+    OperationEntry op2Entry = new OperationEntry(Op2.class);
+    op1Entry.addChild(op2Entry);
 
-	@Test
-	public void testParseArgs() {
-		OperationParser parser = new OperationParser();
-		Args args = new Args();
-		parser.addAdditionalObject(args);
-		parser.parse(new String[] {
-			"--username",
-			"user",
-			"--password",
-			"blah"
-		});
-		Assert.assertEquals(
-				"blah",
-				args.passWord);
-		Assert.assertEquals(
-				"user",
-				args.userName);
-	}
+    List<OperationEntry> entries = new ArrayList<OperationEntry>();
+    entries.add(op1Entry);
+    entries.add(op2Entry);
 
-	@Test
-	public void testParseOperation() {
+    OperationParser parser = new OperationParser(new OperationRegistry(entries));
 
-		OperationEntry op1Entry = new OperationEntry(
-				Op1.class);
-		OperationEntry op2Entry = new OperationEntry(
-				Op2.class);
-		op1Entry.addChild(op2Entry);
+    Op2 op2 = new Op2();
 
-		List<OperationEntry> entries = new ArrayList<OperationEntry>();
-		entries.add(op1Entry);
-		entries.add(op2Entry);
+    parser.parse(op2, new String[] {"--username", "user", "--password", "blah"});
 
-		OperationParser parser = new OperationParser(
-				new OperationRegistry(
-						entries));
+    Assert.assertEquals("blah", op2.args.passWord);
+    Assert.assertEquals("user", op2.args.userName);
+  }
 
-		Op2 op2 = new Op2();
+  public static class Args {
+    @Parameter(names = "--username")
+    private String userName;
 
-		parser.parse(
-				op2,
-				new String[] {
-					"--username",
-					"user",
-					"--password",
-					"blah"
-				});
+    @Parameter(names = "--password")
+    private String passWord;
+  }
 
-		Assert.assertEquals(
-				"blah",
-				op2.args.passWord);
-		Assert.assertEquals(
-				"user",
-				op2.args.userName);
-	}
+  @GeowaveOperation(name = "toplevel")
+  public static class Op1 extends DefaultOperation {}
 
-	public static class Args
-	{
-		@Parameter(names = "--username")
-		private String userName;
+  @GeowaveOperation(name = "op", parentOperation = Op1.class)
+  public static class Op2 extends DefaultOperation implements Command {
 
-		@Parameter(names = "--password")
-		private String passWord;
-	}
+    @ParametersDelegate private Args args = new Args();
 
-	@GeowaveOperation(name = "toplevel")
-	public static class Op1 extends
-			DefaultOperation
-	{
-	}
-
-	@GeowaveOperation(name = "op", parentOperation = Op1.class)
-	public static class Op2 extends
-			DefaultOperation implements
-			Command
-	{
-
-		@ParametersDelegate
-		private Args args = new Args();
-
-		@Override
-		public void execute(
-				OperationParams params )
-				throws Exception {
-
-		}
-	}
-
+    @Override
+    public void execute(OperationParams params) throws Exception {}
+  }
 }

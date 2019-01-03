@@ -1,144 +1,96 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p>See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.core.index.dimension;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
-public class BasicDimensionDefinitionTest
-{
+public class BasicDimensionDefinitionTest {
 
-	private double MINIMUM = 20;
-	private double MAXIMUM = 100;
-	private double DELTA = 1e-15;
+  private double MINIMUM = 20;
+  private double MAXIMUM = 100;
+  private double DELTA = 1e-15;
 
-	@Test
-	public void testNormalizeMidValue() {
+  @Test
+  public void testNormalizeMidValue() {
 
-		final double midValue = 60;
-		final double normalizedValue = 0.5;
+    final double midValue = 60;
+    final double normalizedValue = 0.5;
 
-		Assert.assertEquals(
-				normalizedValue,
-				getNormalizedValueUsingBounds(
-						MINIMUM,
-						MAXIMUM,
-						midValue),
-				DELTA);
+    Assert.assertEquals(
+        normalizedValue, getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, midValue), DELTA);
+  }
 
-	}
+  @Test
+  public void testNormalizeUpperValue() {
 
-	@Test
-	public void testNormalizeUpperValue() {
+    final double lowerValue = 20;
+    final double normalizedValue = 0.0;
 
-		final double lowerValue = 20;
-		final double normalizedValue = 0.0;
+    Assert.assertEquals(
+        normalizedValue, getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, lowerValue), DELTA);
+  }
 
-		Assert.assertEquals(
-				normalizedValue,
-				getNormalizedValueUsingBounds(
-						MINIMUM,
-						MAXIMUM,
-						lowerValue),
-				DELTA);
+  @Test
+  public void testNormalizeLowerValue() {
 
-	}
+    final double upperValue = 100;
+    final double normalizedValue = 1.0;
 
-	@Test
-	public void testNormalizeLowerValue() {
+    Assert.assertEquals(
+        normalizedValue, getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, upperValue), DELTA);
+  }
 
-		final double upperValue = 100;
-		final double normalizedValue = 1.0;
+  @Test
+  public void testNormalizeClampOutOfBoundsValue() {
 
-		Assert.assertEquals(
-				normalizedValue,
-				getNormalizedValueUsingBounds(
-						MINIMUM,
-						MAXIMUM,
-						upperValue),
-				DELTA);
+    final double value = 1;
+    final double normalizedValue = 0.0;
 
-	}
+    Assert.assertEquals(
+        normalizedValue, getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, value), DELTA);
+  }
 
-	@Test
-	public void testNormalizeClampOutOfBoundsValue() {
+  @Test
+  public void testNormalizeRangesBinRangeCount() {
 
-		final double value = 1;
-		final double normalizedValue = 0.0;
+    final double minRange = 40;
+    final double maxRange = 50;
+    final int binCount = 1;
 
-		Assert.assertEquals(
-				normalizedValue,
-				getNormalizedValueUsingBounds(
-						MINIMUM,
-						MAXIMUM,
-						value),
-				DELTA);
+    BinRange[] binRange = getNormalizedRangesUsingBounds(minRange, maxRange);
 
-	}
+    Assert.assertEquals(binCount, binRange.length);
+  }
 
-	@Test
-	public void testNormalizeRangesBinRangeCount() {
+  @Test
+  public void testNormalizeClampOutOfBoundsRanges() {
 
-		final double minRange = 40;
-		final double maxRange = 50;
-		final int binCount = 1;
+    final double minRange = 1;
+    final double maxRange = 150;
 
-		BinRange[] binRange = getNormalizedRangesUsingBounds(
-				minRange,
-				maxRange);
+    BinRange[] binRange = getNormalizedRangesUsingBounds(minRange, maxRange);
 
-		Assert.assertEquals(
-				binCount,
-				binRange.length);
+    Assert.assertEquals(MINIMUM, binRange[0].getNormalizedMin(), DELTA);
+    Assert.assertEquals(MAXIMUM, binRange[0].getNormalizedMax(), DELTA);
+  }
 
-	}
+  private double getNormalizedValueUsingBounds(
+      final double min, final double max, final double value) {
+    return new BasicDimensionDefinition(min, max).normalize(value);
+  }
 
-	@Test
-	public void testNormalizeClampOutOfBoundsRanges() {
+  private BinRange[] getNormalizedRangesUsingBounds(final double minRange, final double maxRange) {
 
-		final double minRange = 1;
-		final double maxRange = 150;
-
-		BinRange[] binRange = getNormalizedRangesUsingBounds(
-				minRange,
-				maxRange);
-
-		Assert.assertEquals(
-				MINIMUM,
-				binRange[0].getNormalizedMin(),
-				DELTA);
-		Assert.assertEquals(
-				MAXIMUM,
-				binRange[0].getNormalizedMax(),
-				DELTA);
-
-	}
-
-	private double getNormalizedValueUsingBounds(
-			final double min,
-			final double max,
-			final double value ) {
-		return new BasicDimensionDefinition(
-				min,
-				max).normalize(value);
-	}
-
-	private BinRange[] getNormalizedRangesUsingBounds(
-			final double minRange,
-			final double maxRange ) {
-
-		return new BasicDimensionDefinition(
-				MINIMUM,
-				MAXIMUM).getNormalizedRanges(new NumericRange(
-				minRange,
-				maxRange));
-
-	}
-
+    return new BasicDimensionDefinition(MINIMUM, MAXIMUM)
+        .getNormalizedRanges(new NumericRange(minRange, maxRange));
+  }
 }

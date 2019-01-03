@@ -1,89 +1,78 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p>See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.datastore.accumulo.cli;
 
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.datastore.accumulo.split.SplitCommandLineOptions;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.ParametersDelegate;
+public abstract class AbstractSplitsCommand extends DefaultOperation {
 
-public abstract class AbstractSplitsCommand extends
-		DefaultOperation
-{
+  @Parameter(description = "<storename>")
+  private List<String> parameters = new ArrayList<String>();
 
-	@Parameter(description = "<storename>")
-	private List<String> parameters = new ArrayList<String>();
+  @ParametersDelegate
+  protected SplitCommandLineOptions splitOptions = new SplitCommandLineOptions();
 
-	@ParametersDelegate
-	protected SplitCommandLineOptions splitOptions = new SplitCommandLineOptions();
+  protected DataStorePluginOptions inputStoreOptions = null;
 
-	protected DataStorePluginOptions inputStoreOptions = null;
+  public AbstractSplitsCommand() {}
 
-	public AbstractSplitsCommand() {
+  public void execute(OperationParams params) throws Exception {
 
-	}
+    // Ensure we have all the required arguments
+    if (parameters.size() != 1) {
+      throw new ParameterException("Requires arguments: <storename>");
+    }
 
-	public void execute(
-			OperationParams params )
-			throws Exception {
+    String inputStoreName = parameters.get(0);
 
-		// Ensure we have all the required arguments
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Requires arguments: <storename>");
-		}
+    // Config file
+    File configFile = getGeoWaveConfigFile(params);
 
-		String inputStoreName = parameters.get(0);
+    StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
+    if (!inputStoreLoader.loadFromConfig(configFile)) {
+      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
+    }
+    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
-		// Config file
-		File configFile = getGeoWaveConfigFile(params);
+    doSplit();
+  }
 
-		StoreLoader inputStoreLoader = new StoreLoader(
-				inputStoreName);
-		if (!inputStoreLoader.loadFromConfig(configFile)) {
-			throw new ParameterException(
-					"Cannot find store name: " + inputStoreLoader.getStoreName());
-		}
-		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+  public abstract void doSplit() throws Exception;
 
-		doSplit();
-	}
+  public List<String> getParameters() {
+    return parameters;
+  }
 
-	public abstract void doSplit()
-			throws Exception;
+  public void setParameters(String storeName) {
+    this.parameters = new ArrayList<String>();
+    this.parameters.add(storeName);
+  }
 
-	public List<String> getParameters() {
-		return parameters;
-	}
+  public SplitCommandLineOptions getSplitOptions() {
+    return splitOptions;
+  }
 
-	public void setParameters(
-			String storeName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
-	}
+  public void setSplitOptions(SplitCommandLineOptions splitOptions) {
+    this.splitOptions = splitOptions;
+  }
 
-	public SplitCommandLineOptions getSplitOptions() {
-		return splitOptions;
-	}
-
-	public void setSplitOptions(
-			SplitCommandLineOptions splitOptions ) {
-		this.splitOptions = splitOptions;
-	}
-
-	public DataStorePluginOptions getInputStoreOptions() {
-		return inputStoreOptions;
-	}
+  public DataStorePluginOptions getInputStoreOptions() {
+    return inputStoreOptions;
+  }
 }

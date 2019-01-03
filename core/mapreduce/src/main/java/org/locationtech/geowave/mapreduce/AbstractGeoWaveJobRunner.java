@@ -1,7 +1,10 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p>See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.mapreduce;
 
@@ -22,154 +25,112 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class can run a basic job to query GeoWave. It manages datastore
- * connection params, adapters, indices, query, min splits and max splits.
+ * This class can run a basic job to query GeoWave. It manages datastore connection params,
+ * adapters, indices, query, min splits and max splits.
  */
-public abstract class AbstractGeoWaveJobRunner extends
-		Configured implements
-		Tool
-{
+public abstract class AbstractGeoWaveJobRunner extends Configured implements Tool {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveJobRunner.class);
+  protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveJobRunner.class);
 
-	protected DataStorePluginOptions dataStoreOptions;
-	protected QueryConstraints constraints = null;
-	protected CommonQueryOptions commonOptions;
-	protected DataTypeQueryOptions<?> dataTypeOptions;
-	protected IndexQueryOptions indexOptions;
-	protected Integer minInputSplits = null;
-	protected Integer maxInputSplits = null;
+  protected DataStorePluginOptions dataStoreOptions;
+  protected QueryConstraints constraints = null;
+  protected CommonQueryOptions commonOptions;
+  protected DataTypeQueryOptions<?> dataTypeOptions;
+  protected IndexQueryOptions indexOptions;
+  protected Integer minInputSplits = null;
+  protected Integer maxInputSplits = null;
 
-	public AbstractGeoWaveJobRunner(
-			final DataStorePluginOptions dataStoreOptions ) {
-		this.dataStoreOptions = dataStoreOptions;
-	}
+  public AbstractGeoWaveJobRunner(final DataStorePluginOptions dataStoreOptions) {
+    this.dataStoreOptions = dataStoreOptions;
+  }
 
-	/**
-	 * Main method to execute the MapReduce analytic.
-	 */
-	public int runJob()
-			throws Exception {
-		final Job job = Job.getInstance(super.getConf());
-		// must use the assembled job configuration
-		final Configuration conf = job.getConfiguration();
+  /** Main method to execute the MapReduce analytic. */
+  public int runJob() throws Exception {
+    final Job job = Job.getInstance(super.getConf());
+    // must use the assembled job configuration
+    final Configuration conf = job.getConfiguration();
 
-		GeoWaveInputFormat.setStoreOptions(
-				conf,
-				dataStoreOptions);
+    GeoWaveInputFormat.setStoreOptions(conf, dataStoreOptions);
 
-		GeoWaveOutputFormat.setStoreOptions(
-				conf,
-				dataStoreOptions);
+    GeoWaveOutputFormat.setStoreOptions(conf, dataStoreOptions);
 
-		job.setJarByClass(this.getClass());
+    job.setJarByClass(this.getClass());
 
-		configure(job);
+    configure(job);
 
-		if (commonOptions != null) {
-			GeoWaveInputFormat.setCommonQueryOptions(
-					conf,
-					commonOptions);
+    if (commonOptions != null) {
+      GeoWaveInputFormat.setCommonQueryOptions(conf, commonOptions);
+    }
+    if (dataTypeOptions != null) {
+      GeoWaveInputFormat.setDataTypeQueryOptions(
+          conf,
+          dataTypeOptions,
+          dataStoreOptions.createAdapterStore(),
+          dataStoreOptions.createInternalAdapterStore());
+    }
+    if (indexOptions != null) {
+      GeoWaveInputFormat.setIndexQueryOptions(
+          conf, indexOptions, dataStoreOptions.createIndexStore());
+    }
+    if (constraints != null) {
+      GeoWaveInputFormat.setQueryConstraints(conf, constraints);
+    }
+    if (minInputSplits != null) {
+      GeoWaveInputFormat.setMinimumSplitCount(conf, minInputSplits);
+    }
+    if (maxInputSplits != null) {
+      GeoWaveInputFormat.setMaximumSplitCount(conf, maxInputSplits);
+    }
 
-		}
-		if (dataTypeOptions != null) {
-			GeoWaveInputFormat.setDataTypeQueryOptions(
-					conf,
-					dataTypeOptions,
-					dataStoreOptions.createAdapterStore(),
-					dataStoreOptions.createInternalAdapterStore());
+    final boolean jobSuccess = job.waitForCompletion(true);
 
-		}
-		if (indexOptions != null) {
-			GeoWaveInputFormat.setIndexQueryOptions(
-					conf,
-					indexOptions,
-					dataStoreOptions.createIndexStore());
+    return (jobSuccess) ? 0 : 1;
+  }
 
-		}
-		if (constraints != null) {
-			GeoWaveInputFormat.setQueryConstraints(
-					conf,
-					constraints);
-		}
-		if (minInputSplits != null) {
-			GeoWaveInputFormat.setMinimumSplitCount(
-					conf,
-					minInputSplits);
-		}
-		if (maxInputSplits != null) {
-			GeoWaveInputFormat.setMaximumSplitCount(
-					conf,
-					maxInputSplits);
-		}
+  protected abstract void configure(Job job) throws Exception;
 
-		final boolean jobSuccess = job.waitForCompletion(true);
+  public void setMaxInputSplits(final int maxInputSplits) {
+    this.maxInputSplits = maxInputSplits;
+  }
 
-		return (jobSuccess) ? 0 : 1;
-	}
+  public void setMinInputSplits(final int minInputSplits) {
+    this.minInputSplits = minInputSplits;
+  }
 
-	protected abstract void configure(
-			Job job )
-			throws Exception;
+  public void setQuery(Query<?> query) {
+    setCommonQueryOptions(query.getCommonQueryOptions());
+    setDataTypeQueryOptions(query.getDataTypeQueryOptions());
+    setIndexQueryOptions(query.getIndexQueryOptions());
+    setQueryConstraints(query.getQueryConstraints());
+  }
 
-	public void setMaxInputSplits(
-			final int maxInputSplits ) {
-		this.maxInputSplits = maxInputSplits;
-	}
+  public void setCommonQueryOptions(final CommonQueryOptions commonOptions) {
+    this.commonOptions = commonOptions;
+  }
 
-	public void setMinInputSplits(
-			final int minInputSplits ) {
-		this.minInputSplits = minInputSplits;
-	}
+  public void setDataTypeQueryOptions(final DataTypeQueryOptions<?> dataTypeOptions) {
+    this.dataTypeOptions = dataTypeOptions;
+  }
 
-	public void setQuery(
-			Query<?> query ) {
-		setCommonQueryOptions(query.getCommonQueryOptions());
-		setDataTypeQueryOptions(query.getDataTypeQueryOptions());
-		setIndexQueryOptions(query.getIndexQueryOptions());
-		setQueryConstraints(query.getQueryConstraints());
-	}
+  public void setIndexQueryOptions(final IndexQueryOptions indexOptions) {
+    this.indexOptions = indexOptions;
+  }
 
-	public void setCommonQueryOptions(
-			final CommonQueryOptions commonOptions ) {
-		this.commonOptions = commonOptions;
-	}
+  public void setQueryConstraints(final QueryConstraints constraints) {
+    this.constraints = constraints;
+  }
 
-	public void setDataTypeQueryOptions(
-			final DataTypeQueryOptions<?> dataTypeOptions ) {
-		this.dataTypeOptions = dataTypeOptions;
-	}
+  @Override
+  public int run(final String[] args) throws Exception {
+    return runOperation(args) ? 0 : -1;
+  }
 
-	public void setIndexQueryOptions(
-			final IndexQueryOptions indexOptions ) {
-		this.indexOptions = indexOptions;
-	}
-
-	public void setQueryConstraints(
-			final QueryConstraints constraints ) {
-		this.constraints = constraints;
-	}
-
-	@Override
-	public int run(
-			final String[] args )
-			throws Exception {
-		return runOperation(args) ? 0 : -1;
-	}
-
-	public boolean runOperation(
-			final String[] args )
-			throws ParseException {
-		try {
-			return runJob() == 0 ? true : false;
-		}
-		catch (final Exception e) {
-			LOGGER.error(
-					"Unable to run job",
-					e);
-			throw new ParseException(
-					e.getMessage());
-		}
-	}
-
+  public boolean runOperation(final String[] args) throws ParseException {
+    try {
+      return runJob() == 0 ? true : false;
+    } catch (final Exception e) {
+      LOGGER.error("Unable to run job", e);
+      throw new ParseException(e.getMessage());
+    }
+  }
 }
