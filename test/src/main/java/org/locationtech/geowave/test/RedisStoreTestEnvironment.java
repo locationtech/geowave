@@ -1,7 +1,10 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.test;
 
@@ -11,68 +14,59 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.datastore.redis.RedisStoreFactoryFamily;
 import org.locationtech.geowave.datastore.redis.config.RedisOptions;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-
 import redis.embedded.RedisServer;
 
-public class RedisStoreTestEnvironment extends
-		StoreTestEnvironment
-{
-	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new RedisStoreFactoryFamily()
-			.getDataStoreFactory();
+public class RedisStoreTestEnvironment extends StoreTestEnvironment {
+  private static final GenericStoreFactory<DataStore> STORE_FACTORY =
+      new RedisStoreFactoryFamily().getDataStoreFactory();
 
-	private static RedisStoreTestEnvironment singletonInstance = null;
+  private static RedisStoreTestEnvironment singletonInstance = null;
 
-	private RedisServer redisServer;
+  private RedisServer redisServer;
 
-	public static synchronized RedisStoreTestEnvironment getInstance() {
-		if (singletonInstance == null) {
-			singletonInstance = new RedisStoreTestEnvironment();
-		}
-		return singletonInstance;
-	}
+  public static synchronized RedisStoreTestEnvironment getInstance() {
+    if (singletonInstance == null) {
+      singletonInstance = new RedisStoreTestEnvironment();
+    }
+    return singletonInstance;
+  }
 
-	@Override
-	public void setup() {
-		if (redisServer == null) {
-			redisServer = RedisServer.builder().port(
-					6379).setting(
-					"bind 127.0.0.1") // secure + prevents popups on Windows
-					.setting(
-							"maxmemory 512M")
-					.setting(
-							"timeout 30000")
-					.build();
-			redisServer.start();
-		}
+  @Override
+  public void setup() {
+    if (redisServer == null) {
+      redisServer =
+          RedisServer.builder().port(6379).setting("bind 127.0.0.1") // secure + prevents
+              // popups on Windows
+              .setting("maxmemory 512M").setting("timeout 30000").build();
+      redisServer.start();
+    }
+  }
 
-	}
+  @Override
+  public void tearDown() {
+    if (redisServer != null) {
+      redisServer.stop();
+      redisServer = null;
+    }
+  }
 
-	@Override
-	public void tearDown() {
-		if (redisServer != null) {
-			redisServer.stop();
-			redisServer = null;
-		}
-	}
+  @Override
+  protected GenericStoreFactory<DataStore> getDataStoreFactory() {
+    return STORE_FACTORY;
+  }
 
-	@Override
-	protected GenericStoreFactory<DataStore> getDataStoreFactory() {
-		return STORE_FACTORY;
-	}
+  @Override
+  protected GeoWaveStoreType getStoreType() {
+    return GeoWaveStoreType.REDIS;
+  }
 
-	@Override
-	protected GeoWaveStoreType getStoreType() {
-		return GeoWaveStoreType.REDIS;
-	}
+  @Override
+  protected void initOptions(final StoreFactoryOptions options) {
+    ((RedisOptions) options).setAddress("redis://127.0.0.1:6379");
+  }
 
-	@Override
-	protected void initOptions(
-			final StoreFactoryOptions options ) {
-		((RedisOptions) options).setAddress("redis://127.0.0.1:6379");
-	}
-
-	@Override
-	public TestEnvironment[] getDependentEnvironments() {
-		return new TestEnvironment[] {};
-	}
+  @Override
+  public TestEnvironment[] getDependentEnvironments() {
+    return new TestEnvironment[] {};
+  }
 }

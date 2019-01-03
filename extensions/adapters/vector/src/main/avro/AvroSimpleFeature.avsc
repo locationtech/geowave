@@ -1,6 +1,6 @@
 [
     {
-        "name" : "AttributeValues",
+        "name" : "AvroAttributeValues",
         "namespace" : "org.locationtech.geowave.adapter.vector.avro",
         "type" : "record",
         "fields" : [
@@ -32,7 +32,7 @@
          ]
     },
     {
-        "name" : "FeatureDefinition",
+        "name" : "AvroFeatureDefinition",
         "namespace" : "org.locationtech.geowave.adapter.vector.avro",
         "type" : "record",
         "fields" : [
@@ -70,11 +70,11 @@
         "fields" : [
             {
             	"name" : "featureType",
-            	"type" : "FeatureDefinition"
+            	"type" : "AvroFeatureDefinition"
            	},
             {
             	"name" : "value",
-            	"type" : "AttributeValues"
+            	"type" : "AvroAttributeValues"
             }
         ]
     },
@@ -83,11 +83,11 @@
         "namespace" : "org.locationtech.geowave.adapter.vector.avro",
         "type" : "record",
         "fields" : [
-            {"name" : "featureType", "type" : "FeatureDefinition"},
+            {"name" : "featureType", "type" : "AvroFeatureDefinition"},
             {"name" : "simpleFeatureCollection",
                 "type" : {
                     "type" : "array",
-                    "items" : "AttributeValues"
+                    "items" : "AvroAttributeValues"
                 }
             }
         ]

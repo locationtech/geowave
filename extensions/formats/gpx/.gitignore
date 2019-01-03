@@ -1,1 +1,1 @@
-src/main/java/org/locationtech/geowave/format/gpx/GpxTrack.java
+src/main/java/org/locationtech/geowave/format/gpx/AvroGpxTrack.java

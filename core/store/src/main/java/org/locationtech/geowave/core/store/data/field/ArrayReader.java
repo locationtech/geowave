@@ -1,7 +1,10 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.core.store.data.field;
 
@@ -9,218 +12,168 @@ import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.ArrayWriter.Encoding;
 import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 
-/**
- * This class contains the basic array reader field types
- * 
- */
-public class ArrayReader<FieldType> implements
-		FieldReader<FieldType[]>
-{
+/** This class contains the basic array reader field types */
+public class ArrayReader<FieldType> implements FieldReader<FieldType[]> {
 
-	private final FieldReader<FieldType> reader;
+  private final FieldReader<FieldType> reader;
 
-	public ArrayReader(
-			final FieldReader<FieldType> reader ) {
-		this.reader = reader;
-	}
+  public ArrayReader(final FieldReader<FieldType> reader) {
+    this.reader = reader;
+  }
 
-	@Override
-	public FieldType[] readField(
-			final byte[] fieldData ) {
-		if (fieldData == null || fieldData.length == 0) {
-			return null;
-		}
+  @Override
+  public FieldType[] readField(final byte[] fieldData) {
+    if (fieldData == null || fieldData.length == 0) {
+      return null;
+    }
 
-		final byte encoding = fieldData[0];
+    final byte encoding = fieldData[0];
 
-		SerializationHelper<FieldType> serializationHelper = new SerializationHelper<FieldType>() {
+    SerializationHelper<FieldType> serializationHelper = new SerializationHelper<FieldType>() {
 
-			@Override
-			public int readUnsignedInt(
-					ByteBuffer buffer ) {
-				return VarintUtils.readUnsignedInt(buffer);
-			}
+      @Override
+      public int readUnsignedInt(ByteBuffer buffer) {
+        return VarintUtils.readUnsignedInt(buffer);
+      }
 
-			@Override
-			public FieldType readField(
-					FieldReader<FieldType> reader,
-					byte[] bytes ) {
-				return reader.readField(bytes);
-			}
+      @Override
+      public FieldType readField(FieldReader<FieldType> reader, byte[] bytes) {
+        return reader.readField(bytes);
+      }
+    };
 
-		};
+    // try to read the encoding first
+    if (encoding == Encoding.FIXED_SIZE_ENCODING.getByteEncoding()) {
+      return readFixedSizeField(fieldData, serializationHelper);
+    } else if (encoding == Encoding.VARIABLE_SIZE_ENCODING.getByteEncoding()) {
+      return readVariableSizeField(fieldData, serializationHelper);
+    }
 
-		// try to read the encoding first
-		if (encoding == Encoding.FIXED_SIZE_ENCODING.getByteEncoding()) {
-			return readFixedSizeField(
-					fieldData,
-					serializationHelper);
-		}
-		else if (encoding == Encoding.VARIABLE_SIZE_ENCODING.getByteEncoding()) {
-			return readVariableSizeField(
-					fieldData,
-					serializationHelper);
-		}
+    // class type not supported!
+    // to be safe, treat as variable size
+    return readVariableSizeField(fieldData, serializationHelper);
+  }
 
-		// class type not supported!
-		// to be safe, treat as variable size
-		return readVariableSizeField(
-				fieldData,
-				serializationHelper);
-	}
+  @Override
+  public FieldType[] readField(final byte[] fieldData, final byte serializationVersion) {
+    if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
+      SerializationHelper<FieldType> serializationHelper = new SerializationHelper<FieldType>() {
+        @Override
+        public int readUnsignedInt(ByteBuffer buffer) {
+          return buffer.getInt();
+        }
 
-	@Override
-	public FieldType[] readField(
-			final byte[] fieldData,
-			final byte serializationVersion ) {
-		if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
-			SerializationHelper<FieldType> serializationHelper = new SerializationHelper<FieldType>() {
-				@Override
-				public int readUnsignedInt(
-						ByteBuffer buffer ) {
-					return buffer.getInt();
-				}
+        @Override
+        public FieldType readField(FieldReader<FieldType> reader, byte[] bytes) {
+          return reader.readField(bytes, serializationVersion);
+        }
+      };
 
-				@Override
-				public FieldType readField(
-						FieldReader<FieldType> reader,
-						byte[] bytes ) {
-					return reader.readField(
-							bytes,
-							serializationVersion);
-				}
+      final byte encoding = fieldData[0];
 
-			};
+      // try to read the encoding first
+      if (encoding == Encoding.FIXED_SIZE_ENCODING.getByteEncoding()) {
+        return readFixedSizeField(fieldData, serializationHelper);
+      } else if (encoding == Encoding.VARIABLE_SIZE_ENCODING.getByteEncoding()) {
+        return readVariableSizeField(fieldData, serializationHelper);
+      }
 
-			final byte encoding = fieldData[0];
+      // class type not supported!
+      // to be safe, treat as variable size
+      return readVariableSizeField(fieldData, serializationHelper);
+    } else {
+      return readField(fieldData);
+    }
+  }
 
-			// try to read the encoding first
-			if (encoding == Encoding.FIXED_SIZE_ENCODING.getByteEncoding()) {
-				return readFixedSizeField(
-						fieldData,
-						serializationHelper);
-			}
-			else if (encoding == Encoding.VARIABLE_SIZE_ENCODING.getByteEncoding()) {
-				return readVariableSizeField(
-						fieldData,
-						serializationHelper);
-			}
+  @SuppressWarnings("unchecked")
+  protected FieldType[] readFixedSizeField(
+      final byte[] fieldData,
+      final SerializationHelper<FieldType> serializationHelper) {
+    if (fieldData.length < 1) {
+      return null;
+    }
 
-			// class type not supported!
-			// to be safe, treat as variable size
-			return readVariableSizeField(
-					fieldData,
-					serializationHelper);
-		}
-		else {
-			return readField(fieldData);
-		}
-	}
+    final List<FieldType> result = new ArrayList<FieldType>();
 
-	@SuppressWarnings("unchecked")
-	protected FieldType[] readFixedSizeField(
-			final byte[] fieldData,
-			final SerializationHelper<FieldType> serializationHelper ) {
-		if (fieldData.length < 1) {
-			return null;
-		}
+    final ByteBuffer buff = ByteBuffer.wrap(fieldData);
 
-		final List<FieldType> result = new ArrayList<FieldType>();
+    // this would be bad
+    if (buff.get() != Encoding.FIXED_SIZE_ENCODING.getByteEncoding()) {
+      return null;
+    }
 
-		final ByteBuffer buff = ByteBuffer.wrap(fieldData);
+    final int bytesPerEntry = serializationHelper.readUnsignedInt(buff);
 
-		// this would be bad
-		if (buff.get() != Encoding.FIXED_SIZE_ENCODING.getByteEncoding()) {
-			return null;
-		}
+    final byte[] data = new byte[bytesPerEntry];
 
-		final int bytesPerEntry = serializationHelper.readUnsignedInt(buff);
+    while (buff.hasRemaining()) {
 
-		final byte[] data = new byte[bytesPerEntry];
+      final int header = buff.get();
 
-		while (buff.hasRemaining()) {
+      for (int i = 0; i < 8; i++) {
 
-			final int header = buff.get();
+        final int mask = (int) Math.pow(2.0, i);
 
-			for (int i = 0; i < 8; i++) {
+        if ((header & mask) != 0) {
+          if (buff.hasRemaining()) {
+            buff.get(data);
+            result.add(serializationHelper.readField(reader, data));
+          } else {
+            break;
+          }
+        } else {
+          result.add(null);
+        }
+      }
+    }
+    final FieldType[] resultArray =
+        (FieldType[]) Array.newInstance(
+            GenericTypeResolver.resolveTypeArgument(reader.getClass(), FieldReader.class),
+            result.size());
+    return result.toArray(resultArray);
+  }
 
-				final int mask = (int) Math.pow(
-						2.0,
-						i);
+  @SuppressWarnings("unchecked")
+  protected FieldType[] readVariableSizeField(
+      final byte[] fieldData,
+      final SerializationHelper<FieldType> serializationHelper) {
+    if ((fieldData == null) || (fieldData.length == 0)) {
+      return null;
+    }
+    final List<FieldType> result = new ArrayList<FieldType>();
 
-				if ((header & mask) != 0) {
-					if (buff.hasRemaining()) {
-						buff.get(data);
-						result.add(serializationHelper.readField(
-								reader,
-								data));
-					}
-					else {
-						break;
-					}
-				}
-				else {
-					result.add(null);
-				}
-			}
-		}
-		final FieldType[] resultArray = (FieldType[]) Array.newInstance(
-				GenericTypeResolver.resolveTypeArgument(
-						reader.getClass(),
-						FieldReader.class),
-				result.size());
-		return result.toArray(resultArray);
-	}
+    final ByteBuffer buff = ByteBuffer.wrap(fieldData);
 
-	@SuppressWarnings("unchecked")
-	protected FieldType[] readVariableSizeField(
-			final byte[] fieldData,
-			final SerializationHelper<FieldType> serializationHelper ) {
-		if ((fieldData == null) || (fieldData.length == 0)) {
-			return null;
-		}
-		final List<FieldType> result = new ArrayList<FieldType>();
+    // this would be bad
+    if (buff.get() != Encoding.VARIABLE_SIZE_ENCODING.getByteEncoding()) {
+      return null;
+    }
 
-		final ByteBuffer buff = ByteBuffer.wrap(fieldData);
+    while (buff.remaining() >= 1) {
+      final int size = serializationHelper.readUnsignedInt(buff);
+      if (size > 0) {
+        final byte[] bytes = new byte[size];
+        buff.get(bytes);
+        result.add(serializationHelper.readField(reader, bytes));
+      } else {
+        result.add(null);
+      }
+    }
+    final FieldType[] resultArray =
+        (FieldType[]) Array.newInstance(
+            GenericTypeResolver.resolveTypeArgument(reader.getClass(), FieldReader.class),
+            result.size());
+    return result.toArray(resultArray);
+  }
 
-		// this would be bad
-		if (buff.get() != Encoding.VARIABLE_SIZE_ENCODING.getByteEncoding()) {
-			return null;
-		}
+  private static interface SerializationHelper<FieldType> {
+    public int readUnsignedInt(ByteBuffer buffer);
 
-		while (buff.remaining() >= 1) {
-			final int size = serializationHelper.readUnsignedInt(buff);
-			if (size > 0) {
-				final byte[] bytes = new byte[size];
-				buff.get(bytes);
-				result.add(serializationHelper.readField(
-						reader,
-						bytes));
-			}
-			else {
-				result.add(null);
-			}
-		}
-		final FieldType[] resultArray = (FieldType[]) Array.newInstance(
-				GenericTypeResolver.resolveTypeArgument(
-						reader.getClass(),
-						FieldReader.class),
-				result.size());
-		return result.toArray(resultArray);
-	}
-
-	private static interface SerializationHelper<FieldType>
-	{
-		public int readUnsignedInt(
-				ByteBuffer buffer );
-
-		public FieldType readField(
-				FieldReader<FieldType> reader,
-				byte[] bytes );
-	}
+    public FieldType readField(FieldReader<FieldType> reader, byte[] bytes);
+  }
 }

@@ -1,7 +1,10 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.test;
 
@@ -13,69 +16,64 @@ import org.locationtech.geowave.datastore.dynamodb.DynamoDBOptions;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class DynamoDBStoreTestEnvironment extends
-		StoreTestEnvironment
-{
-	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new DynamoDBStoreFactoryFamily()
-			.getDataStoreFactory();
+public class DynamoDBStoreTestEnvironment extends StoreTestEnvironment {
+  private static final GenericStoreFactory<DataStore> STORE_FACTORY =
+      new DynamoDBStoreFactoryFamily().getDataStoreFactory();
 
-	private static DynamoDBStoreTestEnvironment singletonInstance = null;
+  private static DynamoDBStoreTestEnvironment singletonInstance = null;
 
-	public static synchronized DynamoDBStoreTestEnvironment getInstance() {
-		if (singletonInstance == null) {
-			singletonInstance = new DynamoDBStoreTestEnvironment();
-		}
-		return singletonInstance;
-	}
+  public static synchronized DynamoDBStoreTestEnvironment getInstance() {
+    if (singletonInstance == null) {
+      singletonInstance = new DynamoDBStoreTestEnvironment();
+    }
+    return singletonInstance;
+  }
 
-	private final static Logger LOGGER = Logger.getLogger(DynamoDBStoreTestEnvironment.class);
+  private static final Logger LOGGER = Logger.getLogger(DynamoDBStoreTestEnvironment.class);
 
-	protected DynamoDBLocal dynamoLocal;
+  protected DynamoDBLocal dynamoLocal;
 
-	private DynamoDBStoreTestEnvironment() {}
+  private DynamoDBStoreTestEnvironment() {}
 
-	@Override
-	public void setup() {
-		// DynamoDB IT's rely on an external dynamo local process
-		if (dynamoLocal == null) {
-			dynamoLocal = new DynamoDBLocal(
-					null); // null uses tmp dir
-		}
+  @Override
+  public void setup() {
+    // DynamoDB IT's rely on an external dynamo local process
+    if (dynamoLocal == null) {
+      dynamoLocal = new DynamoDBLocal(null); // null uses tmp dir
+    }
 
-		// Make sure we clean up any old processes first
-		if (dynamoLocal.isRunning()) {
-			dynamoLocal.stop();
-		}
+    // Make sure we clean up any old processes first
+    if (dynamoLocal.isRunning()) {
+      dynamoLocal.stop();
+    }
 
-		if (!dynamoLocal.start()) {
-			LOGGER.error("DynamoDB emulator startup failed");
-		}
-	}
+    if (!dynamoLocal.start()) {
+      LOGGER.error("DynamoDB emulator startup failed");
+    }
+  }
 
-	@Override
-	public void tearDown() {
-		dynamoLocal.stop();
-	}
+  @Override
+  public void tearDown() {
+    dynamoLocal.stop();
+  }
 
-	@Override
-	protected GenericStoreFactory<DataStore> getDataStoreFactory() {
-		return STORE_FACTORY;
-	}
+  @Override
+  protected GenericStoreFactory<DataStore> getDataStoreFactory() {
+    return STORE_FACTORY;
+  }
 
-	@Override
-	protected GeoWaveStoreType getStoreType() {
-		return GeoWaveStoreType.DYNAMODB;
-	}
+  @Override
+  protected GeoWaveStoreType getStoreType() {
+    return GeoWaveStoreType.DYNAMODB;
+  }
 
-	@Override
-	protected void initOptions(
-			final StoreFactoryOptions options ) {
-		((DynamoDBOptions) options).setEndpoint("http://localhost:8000");
-	}
+  @Override
+  protected void initOptions(final StoreFactoryOptions options) {
+    ((DynamoDBOptions) options).setEndpoint("http://localhost:8000");
+  }
 
-	@Override
-	public TestEnvironment[] getDependentEnvironments() {
-		return new TestEnvironment[] {};
-	}
-
+  @Override
+  public TestEnvironment[] getDependentEnvironments() {
+    return new TestEnvironment[] {};
+  }
 }

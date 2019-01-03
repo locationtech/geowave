@@ -9,68 +9,68 @@
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
 syntax = "proto3";
-import "GeoWaveReturnTypes.proto";
+import "GeoWaveReturnTypesProtos.proto";
 import "google/protobuf/timestamp.proto";
 option java_multiple_files = true;
 option java_package = "org.locationtech.geowave.service.grpc.protobuf";
-option java_outer_classname = "VectorService";
+option java_outer_classname = "VectorServiceProtos";
 
 // Interface exported by the server.
 service Vector {
   // Ingest for vector data
-  rpc VectorIngest(stream VectorIngestParameters) returns (stream StringResponse) {}
+  rpc VectorIngest(stream VectorIngestParametersProtos) returns (stream StringResponseProtos) {}
 
   // Standard query for accessing vector data
-  rpc VectorQuery(VectorQueryParameters) returns (stream Feature) {}
+  rpc VectorQuery(VectorQueryParametersProtos) returns (stream FeatureProtos) {}
   
   // The following are API-based queries that provide lower-level access for advanced users
-  rpc CqlQuery(CQLQueryParameters) returns (stream Feature) {}
-  rpc SpatialQuery(SpatialQueryParameters) returns (stream Feature) {}
-  rpc SpatialTemporalQuery(SpatialTemporalQueryParameters) returns (stream Feature) {}
+  rpc CqlQuery(CQLQueryParametersProtos) returns (stream FeatureProtos) {}
+  rpc SpatialQuery(SpatialQueryParametersProtos) returns (stream FeatureProtos) {}
+  rpc SpatialTemporalQuery(SpatialTemporalQueryParametersProtos) returns (stream FeatureProtos) {}
 }
 
 // Parameters for standard vector query
-message VectorQueryParameters {
+message VectorQueryParametersProtos {
 	string storeName = 1;	// required
 	string typeName = 2;		// required
 	string query = 3;		// required
 }
 
 // Base parameters needed to access data, adapter, and index stores
-message VectorStoreParameters {
+message VectorStoreParametersProtos {
 	string storeName = 1;	// required
 	string indexName = 2;		// optional	
 	string typeName = 3;		// optional
 }
 
 // A CQL query string to be executed by the server
-message CQLQueryParameters {
-  VectorStoreParameters baseParams = 1;
+message CQLQueryParametersProtos {
+  VectorStoreParametersProtos baseParams = 1;
   string cql = 2;
 }
 
-message SpatialQueryParameters {
-	VectorStoreParameters baseParams = 1;
+message SpatialQueryParametersProtos {
+	VectorStoreParametersProtos baseParams = 1;
 	bytes geometry = 2;	//ISO 19107 Geometry binary definition (WKB)
 }
 
-message SpatialTemporalQueryParameters {
-	SpatialQueryParameters spatialParams = 1;
-	repeated TemporalConstraints temporalConstraints = 2;
+message SpatialTemporalQueryParametersProtos {
+	SpatialQueryParametersProtos spatialParams = 1;
+	repeated TemporalConstraintsProtos temporalConstraints = 2;
 	string compareOperation = 3;	//see org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation for enum values to use here
 }
 
-message VectorIngestParameters {
-	VectorStoreParameters baseParams = 1;	//this should only be set on the first feature sent to the server
-	map<string, FeatureAttribute> feature = 2;
+message VectorIngestParametersProtos {
+	VectorStoreParametersProtos baseParams = 1;	//this should only be set on the first feature sent to the server
+	map<string, FeatureAttributeProtos> feature = 2;
 }
 
 //a feature in this case is just a map of string key value pairs (aka SimpleFeature)
-message Feature {
-	map<string, FeatureAttribute> attributes = 1;
+message FeatureProtos {
+	map<string, FeatureAttributeProtos> attributes = 1;
 }
 
-message FeatureAttribute {
+message FeatureAttributeProtos {
 	string classType = 1;
 	oneof value {
     string valString = 4;
@@ -83,7 +83,7 @@ message FeatureAttribute {
   }
 }
 
-message TemporalConstraints {
+message TemporalConstraintsProtos {
 	google.protobuf.Timestamp startTime = 1;
 	google.protobuf.Timestamp endTime = 2;
 }

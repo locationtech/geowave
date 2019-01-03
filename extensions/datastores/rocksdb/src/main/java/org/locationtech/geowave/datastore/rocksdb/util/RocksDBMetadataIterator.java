@@ -1,66 +1,52 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.datastore.rocksdb.util;
 
 import java.nio.ByteBuffer;
-
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksIterator;
 
-public class RocksDBMetadataIterator extends
-		AbstractRocksDBIterator<GeoWaveMetadata>
-{
-	private final boolean containsTimestamp;
+public class RocksDBMetadataIterator extends AbstractRocksDBIterator<GeoWaveMetadata> {
+  private final boolean containsTimestamp;
 
-	public RocksDBMetadataIterator(
-			final RocksIterator it,
-			final boolean containsTimestamp ) {
-		this(
-				null,
-				it,
-				containsTimestamp);
-	}
+  public RocksDBMetadataIterator(final RocksIterator it, final boolean containsTimestamp) {
+    this(null, it, containsTimestamp);
+  }
 
-	public RocksDBMetadataIterator(
-			final ReadOptions options,
-			final RocksIterator it,
-			final boolean containsTimestamp ) {
-		super(
-				options,
-				it);
-		this.options = options;
-		this.it = it;
-		this.containsTimestamp = containsTimestamp;
-	}
+  public RocksDBMetadataIterator(
+      final ReadOptions options,
+      final RocksIterator it,
+      final boolean containsTimestamp) {
+    super(options, it);
+    this.options = options;
+    this.it = it;
+    this.containsTimestamp = containsTimestamp;
+  }
 
-	@Override
-	protected GeoWaveMetadata readRow(
-			final byte[] key,
-			final byte[] value ) {
-		final ByteBuffer buf = ByteBuffer.wrap(key);
-		final byte[] primaryId = new byte[Byte.toUnsignedInt(key[key.length - 2])];
-		final byte[] visibility = new byte[Byte.toUnsignedInt(key[key.length - 1])];
-		final byte[] secondaryId = new byte[containsTimestamp ? key.length - primaryId.length - visibility.length - 10
-				: key.length - primaryId.length - visibility.length - 2];
-		buf.get(primaryId);
-		buf.get(secondaryId);
-		if (containsTimestamp) {
-			// just skip 8 bytes - we don't care to parse out the timestamp but
-			// its there for key uniqueness and to maintain expected sort order
-			buf.position(buf.position() + 8);
-		}
-		buf.get(visibility);
+  @Override
+  protected GeoWaveMetadata readRow(final byte[] key, final byte[] value) {
+    final ByteBuffer buf = ByteBuffer.wrap(key);
+    final byte[] primaryId = new byte[Byte.toUnsignedInt(key[key.length - 2])];
+    final byte[] visibility = new byte[Byte.toUnsignedInt(key[key.length - 1])];
+    final byte[] secondaryId =
+        new byte[containsTimestamp ? key.length - primaryId.length - visibility.length - 10
+            : key.length - primaryId.length - visibility.length - 2];
+    buf.get(primaryId);
+    buf.get(secondaryId);
+    if (containsTimestamp) {
+      // just skip 8 bytes - we don't care to parse out the timestamp but
+      // its there for key uniqueness and to maintain expected sort order
+      buf.position(buf.position() + 8);
+    }
+    buf.get(visibility);
 
-		return new RocksDBGeoWaveMetadata(
-				primaryId,
-				secondaryId,
-				visibility,
-				value,
-				key);
-	}
-
+    return new RocksDBGeoWaveMetadata(primaryId, secondaryId, visibility, value, key);
+  }
 }

@@ -1,10 +1,15 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.cli.debug;
 
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 import org.apache.commons.lang3.time.StopWatch;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
@@ -14,123 +19,99 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
-
 @GeowaveOperation(name = "bbox", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "bbox query")
-public class BBOXQuery extends
-		AbstractGeoWaveQuery
-{
-	private static Logger LOGGER = LoggerFactory.getLogger(BBOXQuery.class);
+public class BBOXQuery extends AbstractGeoWaveQuery {
+  private static Logger LOGGER = LoggerFactory.getLogger(BBOXQuery.class);
 
-	@Parameter(names = {
-		"-e",
-		"--east"
-	}, required = true, description = "Max Longitude of BBOX")
-	private Double east;
+  @Parameter(names = {"-e", "--east"}, required = true, description = "Max Longitude of BBOX")
+  private Double east;
 
-	@Parameter(names = {
-		"-w",
-		"--west"
-	}, required = true, description = "Min Longitude of BBOX")
-	private Double west;
+  @Parameter(names = {"-w", "--west"}, required = true, description = "Min Longitude of BBOX")
+  private Double west;
 
-	@Parameter(names = {
-		"-n",
-		"--north"
-	}, required = true, description = "Max Latitude of BBOX")
-	private Double north;
+  @Parameter(names = {"-n", "--north"}, required = true, description = "Max Latitude of BBOX")
+  private Double north;
 
-	@Parameter(names = {
-		"-s",
-		"--south"
-	}, required = true, description = "Min Latitude of BBOX")
-	private Double south;
+  @Parameter(names = {"-s", "--south"}, required = true, description = "Min Latitude of BBOX")
+  private Double south;
 
-	@Parameter(names = {
-		"--useAggregation",
-		"-agg"
-	}, description = "Compute count on the server side")
-	private final Boolean useAggregation = Boolean.FALSE;
+  @Parameter(names = {"--useAggregation", "-agg"}, description = "Compute count on the server side")
+  private final Boolean useAggregation = Boolean.FALSE;
 
-	private Geometry geom;
+  private Geometry geom;
 
-	private void getBoxGeom() {
-		geom = new GeometryFactory().toGeometry(new Envelope(
-				west,
-				east,
-				south,
-				north));
-	}
+  private void getBoxGeom() {
+    geom = new GeometryFactory().toGeometry(new Envelope(west, east, south, north));
+  }
 
-	@Override
-	protected long runQuery(
-			final GeotoolsFeatureDataAdapter adapter,
-			final String typeName,
-			final String indexName,
-			final DataStore dataStore,
-			final boolean debug,
-			DataStorePluginOptions pluginOptions ) {
-		final StopWatch stopWatch = new StopWatch();
+  @Override
+  protected long runQuery(
+      final GeotoolsFeatureDataAdapter adapter,
+      final String typeName,
+      final String indexName,
+      final DataStore dataStore,
+      final boolean debug,
+      DataStorePluginOptions pluginOptions) {
+    final StopWatch stopWatch = new StopWatch();
 
-		getBoxGeom();
+    getBoxGeom();
 
-		long count = 0;
-		if (useAggregation) {
+    long count = 0;
+    if (useAggregation) {
 
-			final VectorAggregationQueryBuilder<Persistable, Long> bldr = (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder
-					.newBuilder()
-					.count(
-							typeName)
-					.indexName(
-							indexName);
-			final Long countResult = dataStore.aggregate(bldr.constraints(
-					bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
-							geom).build()).build());
+      final VectorAggregationQueryBuilder<Persistable, Long> bldr =
+          (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder().count(typeName)
+              .indexName(indexName);
+      final Long countResult =
+          dataStore.aggregate(
+              bldr.constraints(
+                  bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(geom)
+                      .build())
+                  .build());
 
-			if (countResult != null) {
-				count += countResult;
-			}
+      if (countResult != null) {
+        count += countResult;
+      }
 
-		}
-		else {
-			final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder().addTypeName(
-					typeName).indexName(
-					indexName);
-			stopWatch.start();
+    } else {
+      final VectorQueryBuilder bldr =
+          VectorQueryBuilder.newBuilder().addTypeName(typeName).indexName(indexName);
+      stopWatch.start();
 
-			try (final CloseableIterator<SimpleFeature> it = dataStore.query(bldr.constraints(
-					bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
-							geom).build()).build())) {
+      try (final CloseableIterator<SimpleFeature> it =
+          dataStore.query(
+              bldr.constraints(
+                  bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(geom)
+                      .build())
+                  .build())) {
 
-				stopWatch.stop();
-				System.out.println("Ran BBOX query in " + stopWatch.toString());
+        stopWatch.stop();
+        System.out.println("Ran BBOX query in " + stopWatch.toString());
 
-				stopWatch.reset();
-				stopWatch.start();
+        stopWatch.reset();
+        stopWatch.start();
 
-				while (it.hasNext()) {
-					if (debug) {
-						System.out.println(it.next());
-					}
-					else {
-						it.next();
-					}
-					count++;
-				}
+        while (it.hasNext()) {
+          if (debug) {
+            System.out.println(it.next());
+          } else {
+            it.next();
+          }
+          count++;
+        }
 
-				stopWatch.stop();
-				System.out.println("BBOX query results iteration took " + stopWatch.toString());
-			}
-		}
-		return count;
-	}
+        stopWatch.stop();
+        System.out.println("BBOX query results iteration took " + stopWatch.toString());
+      }
+    }
+    return count;
+  }
 }
