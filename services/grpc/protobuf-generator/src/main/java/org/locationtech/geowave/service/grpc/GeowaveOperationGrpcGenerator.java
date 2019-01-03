@@ -1,13 +1,8 @@
-/*******************************************************************************
- * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
- *  See the NOTICE file distributed with this work for additional
- *  information regarding copyright ownership.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Apache License,
- *  Version 2.0 which accompanies this distribution and is available at
- *  http://www.apache.org/licenses/LICENSE-2.0.txt
- ******************************************************************************/
+/**
+ * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional information regarding copyright ownership. All rights reserved. This program and the accompanying materials are made available under the terms of the Apache License, Version 2.0 which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package org.locationtech.geowave.service.grpc;
 
 import java.lang.reflect.ParameterizedType;
@@ -39,7 +34,7 @@ public class GeowaveOperationGrpcGenerator
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeowaveOperationGrpcGenerator.class.getName());
 	private static final String protobufPackage = "option java_package = \"org.locationtech.geowave.service.grpc.protobuf\";\n";
-	private static final String header = "/*******************************************************************************\n"
+	private static final String header = "/**\n"
 			+ " * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation\n"
 			+ " *\n"
 			+ " * See the NOTICE file distributed with this work for additional\n"
@@ -48,7 +43,7 @@ public class GeowaveOperationGrpcGenerator
 			+ " * are made available under the terms of the Apache License\n"
 			+ " * Version 2.0 which accompanies this distribution and is available at\n"
 			+ " * http://www.apache.org/licenses/LICENSE-2.0.txt\n"
-			+ " ******************************************************************************/\n"
+			+ "*/\n"
 			+ "syntax = \"proto3\";\n";
 
 	private static final String options = "option java_multiple_files = true;\n" + protobufPackage
