@@ -1,6 +1,6 @@
 {
 	"type" : "record",
-	"name" : "GpxTrack",
+	"name" : "AvroGpxTrack",
 	"namespace" : "org.locationtech.geowave.format.gpx",
 		"fields" : [{
 				"name" : "trackid",

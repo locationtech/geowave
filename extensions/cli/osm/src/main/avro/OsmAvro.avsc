@@ -19,8 +19,8 @@
 
 [
     {
-        "name": "Changeset",
-        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
+        "name": "AvroChangeset",
+        "namespace": "org.locationtech.geowave.cli.osm.types.avro",
         "type": "record",
         "fields": [
             {"name": "id", "type": "long"},
@@ -38,8 +38,8 @@
         ]
     },
     {
-        "name": "Primitive",
-        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
+        "name": "AvroPrimitive",
+        "namespace": "org.locationtech.geowave.cli.osm.types.avro",
         "type": "record",
         "fields": [
             {"name": "id", "type": "long"},
@@ -53,35 +53,35 @@
         ]
     },
     {
-        "name": "Node",
-        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
+        "name": "AvroNode",
+        "namespace": "org.locationtech.geowave.cli.osm.types.avro",
         "type": "record",
         "fields": [
-            {"name": "common", "type": "Primitive"},
+            {"name": "common", "type": "AvroPrimitive"},
             {"name": "latitude", "type": "double"},
             {"name": "longitude", "type": "double"}
         ]
     },
     {
-        "name": "Way",
-        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
+        "name": "AvroWay",
+        "namespace": "org.locationtech.geowave.cli.osm.types.avro",
         "type": "record",
         "fields": [
-            {"name": "common", "type": "Primitive"},
+            {"name": "common", "type": "AvroPrimitive"},
             {"name": "nodes", "type": ["null", {"type": "array", "items": "long"}]}
         ]
     },
     {
-        "name": "Relation",
-        "namespace": "org.locationtech.geowave.cli.osm.types.generated",
+        "name": "AvroRelation",
+        "namespace": "org.locationtech.geowave.cli.osm.types.avro",
         "type": "record",
         "fields": [
-            {"name": "common", "type": "Primitive"},
+            {"name": "common", "type": "AvroPrimitive"},
             {"name": "members", "type": ["null", {"type": "array", "items":
-                { "name": "RelationMember", "type": "record", "fields": [
+                { "name": "AvroRelationMember", "type": "record", "fields": [
                         {"name": "role", "type": ["null", "string"]},
                         {"name": "member", "type": "long"},
-                        {"name": "member_type", "type": {"name": "MemberType", "type": "enum", "symbols": ["NODE", "WAY", "RELATION"]}}
+                        {"name": "member_type", "type": {"name": "AvroMemberType", "type": "enum", "symbols": ["NODE", "WAY", "RELATION"]}}
                     ]
                 }
               }

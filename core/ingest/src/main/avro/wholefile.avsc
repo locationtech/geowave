@@ -1,6 +1,6 @@
 {
 	"type" : "record",
-	"name" : "WholeFile",
+	"name" : "AvroWholeFile",
 	"namespace" : "org.locationtech.geowave.core.ingest.avro",
 		"fields" : [{
 				"name" : "originalFile",

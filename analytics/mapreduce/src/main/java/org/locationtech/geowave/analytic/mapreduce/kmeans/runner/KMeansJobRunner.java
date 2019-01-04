@@ -1,13 +1,11 @@
-/*******************************************************************************
- * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
- *  See the NOTICE file distributed with this work for additional
- *  information regarding copyright ownership.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Apache License,
- *  Version 2.0 which accompanies this distribution and is available at
- *  http://www.apache.org/licenses/LICENSE-2.0.txt
- ******************************************************************************/
+/**
+ * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package org.locationtech.geowave.analytic.mapreduce.kmeans.runner;
 
 import org.apache.hadoop.conf.Configuration;
@@ -26,80 +24,58 @@ import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.feature.simple.SimpleFeature;
 
-/**
- * 
- * Run 'K' means one time to move the centroids towards the mean.
- * 
- * 
- */
-public class KMeansJobRunner extends
-		GeoWaveAnalyticJobRunner implements
-		MapReduceJobRunner
-{
+/** Run 'K' means one time to move the centroids towards the mean. */
+public class KMeansJobRunner extends GeoWaveAnalyticJobRunner implements MapReduceJobRunner {
 
-	public KMeansJobRunner() {
-		super.setOutputFormatConfiguration(new GeoWaveOutputFormatConfiguration());
-	}
+  public KMeansJobRunner() {
+    super.setOutputFormatConfiguration(new GeoWaveOutputFormatConfiguration());
+  }
 
-	@Override
-	public void setReducerCount(
-			final int reducerCount ) {
-		super.setReducerCount(Math.min(
-				2,
-				reducerCount));
-	}
+  @Override
+  public void setReducerCount(final int reducerCount) {
+    super.setReducerCount(Math.min(2, reducerCount));
+  }
 
-	@Override
-	public void configure(
-			final Job job )
-			throws Exception {
-		job.setMapperClass(KMeansMapReduce.KMeansMapper.class);
-		job.setMapOutputKeyClass(GroupIDText.class);
-		job.setMapOutputValueClass(BytesWritable.class);
-		job.setReducerClass(KMeansMapReduce.KMeansReduce.class);
-		job.setCombinerClass(KMeansMapReduce.KMeansCombiner.class);
-		job.setReduceSpeculativeExecution(false);
-		job.setOutputKeyClass(GeoWaveOutputKey.class);
-		job.setOutputValueClass(SimpleFeature.class);
-	}
+  @Override
+  public void configure(final Job job) throws Exception {
+    job.setMapperClass(KMeansMapReduce.KMeansMapper.class);
+    job.setMapOutputKeyClass(GroupIDText.class);
+    job.setMapOutputValueClass(BytesWritable.class);
+    job.setReducerClass(KMeansMapReduce.KMeansReduce.class);
+    job.setCombinerClass(KMeansMapReduce.KMeansCombiner.class);
+    job.setReduceSpeculativeExecution(false);
+    job.setOutputKeyClass(GeoWaveOutputKey.class);
+    job.setOutputValueClass(SimpleFeature.class);
+  }
 
-	@Override
-	public Class<?> getScope() {
-		return KMeansMapReduce.class;
-	}
+  @Override
+  public Class<?> getScope() {
+    return KMeansMapReduce.class;
+  }
 
-	@Override
-	public int run(
-			final Configuration configuration,
-			final PropertyManagement runTimeProperties )
-			throws Exception {
-		NestedGroupCentroidAssignment.setParameters(
-				configuration,
-				getScope(),
-				runTimeProperties);
-		super.setReducerCount(runTimeProperties.getPropertyAsInt(
-				ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
-				Math.max(
-						2,
-						super.getReducerCount())));
-		runTimeProperties.setConfig(
-				new ParameterEnum[] {
-					CentroidParameters.Centroid.EXTRACTOR_CLASS,
-					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS
-				},
-				configuration,
-				getScope());
+  @Override
+  public int run(final Configuration configuration, final PropertyManagement runTimeProperties)
+      throws Exception {
+    NestedGroupCentroidAssignment.setParameters(configuration, getScope(), runTimeProperties);
+    super.setReducerCount(
+        runTimeProperties.getPropertyAsInt(
+            ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
+            Math.max(2, super.getReducerCount())));
+    runTimeProperties.setConfig(
+        new ParameterEnum[] {
+            CentroidParameters.Centroid.EXTRACTOR_CLASS,
+            CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS},
+        configuration,
+        getScope());
 
-		// HP Fortify "Command Injection" false positive
-		// What Fortify considers "externally-influenced input"
-		// comes only from users with OS-level access anyway
-		return super.run(
-				configuration,
-				runTimeProperties);
-	}
+    // HP Fortify "Command Injection" false positive
+    // What Fortify considers "externally-influenced input"
+    // comes only from users with OS-level access anyway
+    return super.run(configuration, runTimeProperties);
+  }
 
-	@Override
-	protected String getJobName() {
-		return "K-Means";
-	}
+  @Override
+  protected String getJobName() {
+    return "K-Means";
+  }
 }

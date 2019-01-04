@@ -1,19 +1,17 @@
-/*******************************************************************************
- * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
+/**
+ * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
  *
- *  See the NOTICE file distributed with this work for additional
- *  information regarding copyright ownership.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Apache License,
- *  Version 2.0 which accompanies this distribution and is available at
- *  http://www.apache.org/licenses/LICENSE-2.0.txt
- ******************************************************************************/
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package org.locationtech.geowave.core.geotime.ingest;
 
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.ParameterException;
 import java.util.Locale;
-
 import javax.annotation.Nullable;
-
 import org.apache.commons.lang3.StringUtils;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
@@ -47,330 +45,287 @@ import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.ParameterException;
+public class SpatialTemporalDimensionalityTypeProvider
+    implements DimensionalityTypeProviderSpi<SpatialTemporalOptions> {
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(SpatialTemporalDimensionalityTypeProvider.class);
+  private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "ST_IDX";
 
-public class SpatialTemporalDimensionalityTypeProvider implements
-		DimensionalityTypeProviderSpi<SpatialTemporalOptions>
-{
-	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialTemporalDimensionalityTypeProvider.class);
-	private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "ST_IDX";
+  // TODO should we use different default IDs for all the different
+  // options, for now lets just use one
+  public static final NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS =
+      new NumericDimensionDefinition[] {
+          new LongitudeDefinition(),
+          new LatitudeDefinition(true),
+          new TimeDefinition(SpatialTemporalOptions.DEFAULT_PERIODICITY)};
 
-	// TODO should we use different default IDs for all the different
-	// options, for now lets just use one
-	public final static NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS = new NumericDimensionDefinition[] {
-		new LongitudeDefinition(),
-		new LatitudeDefinition(
-				true),
-		new TimeDefinition(
-				SpatialTemporalOptions.DEFAULT_PERIODICITY)
-	};
+  @SuppressWarnings("rawtypes")
+  public static NumericDimensionField[] getSpatialTemporalFields(
+      final @Nullable Integer geometryPrecision) {
+    return new NumericDimensionField[] {
+        new LongitudeField(geometryPrecision),
+        new LatitudeField(geometryPrecision, true),
+        new TimeField(SpatialTemporalOptions.DEFAULT_PERIODICITY)};
+  }
 
-	@SuppressWarnings("rawtypes")
-	public static NumericDimensionField[] getSpatialTemporalFields(
-			final @Nullable Integer geometryPrecision ) {
-		return new NumericDimensionField[] {
-			new LongitudeField(
-					geometryPrecision),
-			new LatitudeField(
-					geometryPrecision,
-					true),
-			new TimeField(
-					SpatialTemporalOptions.DEFAULT_PERIODICITY)
-		};
-	}
+  public SpatialTemporalDimensionalityTypeProvider() {}
 
-	public SpatialTemporalDimensionalityTypeProvider() {}
+  @Override
+  public String getDimensionalityTypeName() {
+    return "spatial_temporal";
+  }
 
-	@Override
-	public String getDimensionalityTypeName() {
-		return "spatial_temporal";
-	}
+  @Override
+  public String getDimensionalityTypeDescription() {
+    return "This dimensionality type matches all indices that only require Geometry and Time.";
+  }
 
-	@Override
-	public String getDimensionalityTypeDescription() {
-		return "This dimensionality type matches all indices that only require Geometry and Time.";
-	}
+  @Override
+  public int getPriority() {
+    // arbitrary - just lower than spatial so that the default
+    // will be spatial over spatial-temporal
+    return 5;
+  }
 
-	@Override
-	public int getPriority() {
-		// arbitrary - just lower than spatial so that the default
-		// will be spatial over spatial-temporal
-		return 5;
-	}
+  @Override
+  public SpatialTemporalOptions createOptions() {
+    return new SpatialTemporalOptions();
+  }
 
-	@Override
-	public SpatialTemporalOptions createOptions() {
-		return new SpatialTemporalOptions();
-	}
+  @Override
+  public Index createIndex(final SpatialTemporalOptions options) {
+    return internalCreateIndex(options);
+  }
 
-	@Override
-	public Index createIndex(
-			final SpatialTemporalOptions options ) {
-		return internalCreateIndex(options);
-	}
+  private static Index internalCreateIndex(final SpatialTemporalOptions options) {
 
-	private static Index internalCreateIndex(
-			final SpatialTemporalOptions options ) {
+    NumericDimensionDefinition[] dimensions;
+    NumericDimensionField<?>[] fields = null;
+    CoordinateReferenceSystem crs = null;
+    boolean isDefaultCRS;
+    String crsCode = null;
+    Integer geometryPrecision = options.getGeometryPrecision();
 
-		NumericDimensionDefinition[] dimensions;
-		NumericDimensionField<?>[] fields = null;
-		CoordinateReferenceSystem crs = null;
-		boolean isDefaultCRS;
-		String crsCode = null;
-		Integer geometryPrecision = options.getGeometryPrecision();
+    if ((options.crs == null)
+        || options.crs.isEmpty()
+        || options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
+      dimensions = SPATIAL_TEMPORAL_DIMENSIONS;
+      fields = getSpatialTemporalFields(geometryPrecision);
+      isDefaultCRS = true;
+      crsCode = "EPSG:4326";
+    } else {
+      crs = decodeCRS(options.crs);
+      final CoordinateSystem cs = crs.getCoordinateSystem();
+      isDefaultCRS = false;
+      crsCode = options.crs;
+      dimensions = new NumericDimensionDefinition[cs.getDimension() + 1];
+      fields = new NumericDimensionField[dimensions.length];
 
-		if ((options.crs == null) || options.crs.isEmpty()
-				|| options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
-			dimensions = SPATIAL_TEMPORAL_DIMENSIONS;
-			fields = getSpatialTemporalFields(geometryPrecision);
-			isDefaultCRS = true;
-			crsCode = "EPSG:4326";
-		}
-		else {
-			crs = decodeCRS(options.crs);
-			final CoordinateSystem cs = crs.getCoordinateSystem();
-			isDefaultCRS = false;
-			crsCode = options.crs;
-			dimensions = new NumericDimensionDefinition[cs.getDimension() + 1];
-			fields = new NumericDimensionField[dimensions.length];
+      for (int d = 0; d < (dimensions.length - 1); d++) {
+        final CoordinateSystemAxis csa = cs.getAxis(d);
+        dimensions[d] =
+            new CustomCRSBoundedSpatialDimension(
+                (byte) d,
+                csa.getMinimumValue(),
+                csa.getMaximumValue());
+        fields[d] =
+            new CustomCRSSpatialField(
+                (CustomCRSBoundedSpatialDimension) dimensions[d],
+                geometryPrecision);
+      }
 
-			for (int d = 0; d < (dimensions.length - 1); d++) {
-				final CoordinateSystemAxis csa = cs.getAxis(d);
-				dimensions[d] = new CustomCRSBoundedSpatialDimension(
-						(byte) d,
-						csa.getMinimumValue(),
-						csa.getMaximumValue());
-				fields[d] = new CustomCRSSpatialField(
-						(CustomCRSBoundedSpatialDimension) dimensions[d],
-						geometryPrecision);
-			}
+      dimensions[dimensions.length - 1] = new TimeDefinition(options.periodicity);
+      fields[dimensions.length - 1] = new TimeField(options.periodicity);
+    }
 
-			dimensions[dimensions.length - 1] = new TimeDefinition(
-					options.periodicity);
-			fields[dimensions.length - 1] = new TimeField(
-					options.periodicity);
-		}
+    BasicIndexModel indexModel = null;
+    if (isDefaultCRS) {
+      indexModel = new BasicIndexModel(fields);
+    } else {
+      indexModel = new CustomCrsIndexModel(fields, crsCode);
+    }
 
-		BasicIndexModel indexModel = null;
-		if (isDefaultCRS) {
-			indexModel = new BasicIndexModel(
-					fields);
-		}
-		else {
-			indexModel = new CustomCrsIndexModel(
-					fields,
-					crsCode);
-		}
+    String combinedArrayID;
+    if (isDefaultCRS) {
+      combinedArrayID =
+          DEFAULT_SPATIAL_TEMPORAL_ID_STR + "_" + options.bias + "_" + options.periodicity;
+    } else {
+      combinedArrayID =
+          DEFAULT_SPATIAL_TEMPORAL_ID_STR
+              + "_"
+              + (crsCode.substring(crsCode.indexOf(":") + 1))
+              + "_"
+              + options.bias
+              + "_"
+              + options.periodicity;
+    }
+    final String combinedId = combinedArrayID;
 
-		String combinedArrayID;
-		if (isDefaultCRS) {
-			combinedArrayID = DEFAULT_SPATIAL_TEMPORAL_ID_STR + "_" + options.bias + "_" + options.periodicity;
-		}
-		else {
-			combinedArrayID = DEFAULT_SPATIAL_TEMPORAL_ID_STR + "_" + (crsCode.substring(crsCode.indexOf(":") + 1))
-					+ "_" + options.bias + "_" + options.periodicity;
-		}
-		final String combinedId = combinedArrayID;
+    return new CustomNameIndex(
+        XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
+            dimensions,
+            new int[] {
+                options.bias.getSpatialPrecision(),
+                options.bias.getSpatialPrecision(),
+                options.bias.getTemporalPrecision()},
+            SFCType.HILBERT,
+            options.maxDuplicates),
+        indexModel,
+        combinedId);
+  }
 
-		return new CustomNameIndex(
-				XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
-						dimensions,
-						new int[] {
-							options.bias.getSpatialPrecision(),
-							options.bias.getSpatialPrecision(),
-							options.bias.getTemporalPrecision()
-						},
-						SFCType.HILBERT,
-						options.maxDuplicates),
-				indexModel,
-				combinedId);
-	}
+  public static CoordinateReferenceSystem decodeCRS(final String crsCode) {
 
-	public static CoordinateReferenceSystem decodeCRS(
-			final String crsCode ) {
+    CoordinateReferenceSystem crs = null;
+    try {
+      crs = CRS.decode(crsCode, true);
+    } catch (final FactoryException e) {
+      LOGGER.error("Unable to decode '" + crsCode + "' CRS", e);
+      throw new RuntimeException("Unable to decode '" + crsCode + "' CRS", e);
+    }
 
-		CoordinateReferenceSystem crs = null;
-		try {
-			crs = CRS.decode(
-					crsCode,
-					true);
-		}
-		catch (final FactoryException e) {
-			LOGGER.error(
-					"Unable to decode '" + crsCode + "' CRS",
-					e);
-			throw new RuntimeException(
-					"Unable to decode '" + crsCode + "' CRS",
-					e);
-		}
+    return crs;
+  }
 
-		return crs;
+  @Override
+  public Class<? extends CommonIndexValue>[] getRequiredIndexTypes() {
+    return new Class[] {GeometryWrapper.class, Time.class};
+  }
 
-	}
+  public static enum Bias {
+    TEMPORAL, BALANCED, SPATIAL;
+    // converter that will be used later
+    public static Bias fromString(final String code) {
 
-	@Override
-	public Class<? extends CommonIndexValue>[] getRequiredIndexTypes() {
-		return new Class[] {
-			GeometryWrapper.class,
-			Time.class
-		};
-	}
+      for (final Bias output : Bias.values()) {
+        if (output.toString().equalsIgnoreCase(code)) {
+          return output;
+        }
+      }
 
-	public static enum Bias {
-		TEMPORAL,
-		BALANCED,
-		SPATIAL;
-		// converter that will be used later
-		public static Bias fromString(
-				final String code ) {
+      return null;
+    }
 
-			for (final Bias output : Bias.values()) {
-				if (output.toString().equalsIgnoreCase(
-						code)) {
-					return output;
-				}
-			}
+    public int getSpatialPrecision() {
+      switch (this) {
+        case SPATIAL:
+          return 25;
+        case TEMPORAL:
+          return 10;
+        case BALANCED:
+        default:
+          return 20;
+      }
+    }
 
-			return null;
-		}
+    public int getTemporalPrecision() {
+      switch (this) {
+        case SPATIAL:
+          return 10;
+        case TEMPORAL:
+          return 40;
+        case BALANCED:
+        default:
+          return 20;
+      }
+    }
+  }
 
-		public int getSpatialPrecision() {
-			switch (this) {
-				case SPATIAL:
-					return 25;
-				case TEMPORAL:
-					return 10;
-				case BALANCED:
-				default:
-					return 20;
-			}
-		}
+  public static class BiasConverter implements IStringConverter<Bias> {
+    @Override
+    public Bias convert(final String value) {
+      final Bias convertedValue = Bias.fromString(value);
 
-		public int getTemporalPrecision() {
-			switch (this) {
-				case SPATIAL:
-					return 10;
-				case TEMPORAL:
-					return 40;
-				case BALANCED:
-				default:
-					return 20;
-			}
-		}
-	}
+      if (convertedValue == null) {
+        throw new ParameterException(
+            "Value "
+                + value
+                + "can not be converted to an index bias. "
+                + "Available values are: "
+                + StringUtils.join(Bias.values(), ", ").toLowerCase(Locale.ENGLISH));
+      }
+      return convertedValue;
+    }
+  }
 
-	public static class BiasConverter implements
-			IStringConverter<Bias>
-	{
-		@Override
-		public Bias convert(
-				final String value ) {
-			final Bias convertedValue = Bias.fromString(value);
+  public static class UnitConverter implements IStringConverter<Unit> {
 
-			if (convertedValue == null) {
-				throw new ParameterException(
-						"Value " + value + "can not be converted to an index bias. " + "Available values are: "
-								+ StringUtils.join(
-										Bias.values(),
-										", ").toLowerCase(
-										Locale.ENGLISH));
-			}
-			return convertedValue;
-		}
+    @Override
+    public Unit convert(final String value) {
+      final Unit convertedValue = Unit.fromString(value);
 
-	}
+      if (convertedValue == null) {
+        throw new ParameterException(
+            "Value "
+                + value
+                + "can not be converted to Unit. "
+                + "Available values are: "
+                + StringUtils.join(Unit.values(), ", ").toLowerCase(Locale.ENGLISH));
+      }
+      return convertedValue;
+    }
+  }
 
-	public static class UnitConverter implements
-			IStringConverter<Unit>
-	{
+  public static class SpatialTemporalIndexBuilder
+      extends BaseIndexBuilder<SpatialTemporalIndexBuilder> {
+    private final SpatialTemporalOptions options;
 
-		@Override
-		public Unit convert(
-				final String value ) {
-			final Unit convertedValue = Unit.fromString(value);
+    public SpatialTemporalIndexBuilder() {
+      options = new SpatialTemporalOptions();
+    }
 
-			if (convertedValue == null) {
-				throw new ParameterException(
-						"Value " + value + "can not be converted to Unit. " + "Available values are: "
-								+ StringUtils.join(
-										Unit.values(),
-										", ").toLowerCase(
-										Locale.ENGLISH));
-			}
-			return convertedValue;
-		}
-	}
+    public SpatialTemporalIndexBuilder setBias(final Bias bias) {
+      options.bias = bias;
+      return this;
+    }
 
-	public static class SpatialTemporalIndexBuilder extends
-			BaseIndexBuilder<SpatialTemporalIndexBuilder>
-	{
-		private final SpatialTemporalOptions options;
+    public SpatialTemporalIndexBuilder setPeriodicity(final Unit periodicity) {
+      options.periodicity = periodicity;
+      return this;
+    }
 
-		public SpatialTemporalIndexBuilder() {
-			options = new SpatialTemporalOptions();
-		}
+    public SpatialTemporalIndexBuilder setMaxDuplicates(final long maxDuplicates) {
+      options.maxDuplicates = maxDuplicates;
+      return this;
+    }
 
-		public SpatialTemporalIndexBuilder setBias(
-				final Bias bias ) {
-			options.bias = bias;
-			return this;
-		}
+    public SpatialTemporalIndexBuilder setCrs(final String crs) {
+      options.crs = crs;
+      return this;
+    }
 
-		public SpatialTemporalIndexBuilder setPeriodicity(
-				final Unit periodicity ) {
-			options.periodicity = periodicity;
-			return this;
-		}
+    @Override
+    public Index createIndex() {
+      return createIndex(internalCreateIndex(options));
+    }
+  }
 
-		public SpatialTemporalIndexBuilder setMaxDuplicates(
-				final long maxDuplicates ) {
-			options.maxDuplicates = maxDuplicates;
-			return this;
-		}
+  public static boolean isSpatialTemporal(final Index index) {
+    if (index == null) {
+      return false;
+    }
 
-		public SpatialTemporalIndexBuilder setCrs(
-				final String crs ) {
-			options.crs = crs;
-			return this;
-		}
+    return isSpatialTemporal(index.getIndexStrategy());
+  }
 
-		@Override
-		public Index createIndex() {
-			return createIndex(internalCreateIndex(options));
-		}
-	}
-
-	public static boolean isSpatialTemporal(
-			final Index index ) {
-		if (index == null) {
-			return false;
-		}
-
-		return isSpatialTemporal(index.getIndexStrategy());
-	}
-
-	public static boolean isSpatialTemporal(
-			final NumericIndexStrategy indexStrategy ) {
-		if ((indexStrategy == null) || (indexStrategy.getOrderedDimensionDefinitions() == null)) {
-			return false;
-		}
-		final NumericDimensionDefinition[] dimensions = indexStrategy.getOrderedDimensionDefinitions();
-		if (dimensions.length < 3) {
-			return false;
-		}
-		boolean hasLat = false, hasLon = false, hasTime = false;
-		for (final NumericDimensionDefinition definition : dimensions) {
-			if (definition instanceof TimeDefinition) {
-				hasTime = true;
-			}
-			else if (definition instanceof LatitudeDefinition) {
-				hasLat = true;
-			}
-			else if (definition instanceof LongitudeDefinition) {
-				hasLon = true;
-			}
-		}
-		return hasTime && hasLat && hasLon;
-	}
+  public static boolean isSpatialTemporal(final NumericIndexStrategy indexStrategy) {
+    if ((indexStrategy == null) || (indexStrategy.getOrderedDimensionDefinitions() == null)) {
+      return false;
+    }
+    final NumericDimensionDefinition[] dimensions = indexStrategy.getOrderedDimensionDefinitions();
+    if (dimensions.length < 3) {
+      return false;
+    }
+    boolean hasLat = false, hasLon = false, hasTime = false;
+    for (final NumericDimensionDefinition definition : dimensions) {
+      if (definition instanceof TimeDefinition) {
+        hasTime = true;
+      } else if (definition instanceof LatitudeDefinition) {
+        hasLat = true;
+      } else if (definition instanceof LongitudeDefinition) {
+        hasLon = true;
+      }
+    }
+    return hasTime && hasLat && hasLon;
+  }
 }

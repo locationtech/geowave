@@ -1,20 +1,17 @@
-/*******************************************************************************
- * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
- *  See the NOTICE file distributed with this work for additional
- *  information regarding copyright ownership.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Apache License,
- *  Version 2.0 which accompanies this distribution and is available at
- *  http://www.apache.org/licenses/LICENSE-2.0.txt
- ******************************************************************************/
+/**
+ * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package org.locationtech.geowave.service.rest.security.oauth2;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpEntity;
@@ -34,116 +31,92 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
-public class FacebookTokenServices extends
-		RemoteTokenServices
-{
-	protected final Log logger = LogFactory.getLog(getClass());
+public class FacebookTokenServices extends RemoteTokenServices {
+  protected final Log logger = LogFactory.getLog(getClass());
 
-	private RestOperations restTemplate;
+  private RestOperations restTemplate;
 
-	private String checkTokenEndpointUrl;
+  private String checkTokenEndpointUrl;
 
-	private String tokenName = "token";
+  private String tokenName = "token";
 
-	private AccessTokenConverter tokenConverter = new FacebookAccessTokenConverter();
+  private AccessTokenConverter tokenConverter = new FacebookAccessTokenConverter();
 
-	public FacebookTokenServices() {
-		restTemplate = new RestTemplate();
-		((RestTemplate) restTemplate).setErrorHandler(new DefaultResponseErrorHandler() {
-			@Override
-			// Ignore 400
-			public void handleError(
-					ClientHttpResponse response )
-					throws IOException {
-				if (response.getRawStatusCode() != 400) {
-					super.handleError(response);
-				}
-			}
-		});
-	}
+  public FacebookTokenServices() {
+    restTemplate = new RestTemplate();
+    ((RestTemplate) restTemplate).setErrorHandler(new DefaultResponseErrorHandler() {
+      @Override
+      // Ignore 400
+      public void handleError(ClientHttpResponse response) throws IOException {
+        if (response.getRawStatusCode() != 400) {
+          super.handleError(response);
+        }
+      }
+    });
+  }
 
-	public void setRestTemplate(
-			RestOperations restTemplate ) {
-		this.restTemplate = restTemplate;
-	}
+  public void setRestTemplate(RestOperations restTemplate) {
+    this.restTemplate = restTemplate;
+  }
 
-	public void setCheckTokenEndpointUrl(
-			String checkTokenEndpointUrl ) {
-		this.checkTokenEndpointUrl = checkTokenEndpointUrl;
-	}
+  public void setCheckTokenEndpointUrl(String checkTokenEndpointUrl) {
+    this.checkTokenEndpointUrl = checkTokenEndpointUrl;
+  }
 
-	public void setAccessTokenConverter(
-			AccessTokenConverter accessTokenConverter ) {
-		this.tokenConverter = accessTokenConverter;
-	}
+  public void setAccessTokenConverter(AccessTokenConverter accessTokenConverter) {
+    this.tokenConverter = accessTokenConverter;
+  }
 
-	public void setTokenName(
-			String tokenName ) {
-		this.tokenName = tokenName;
-	}
+  public void setTokenName(String tokenName) {
+    this.tokenName = tokenName;
+  }
 
-	@Override
-	public OAuth2Authentication loadAuthentication(
-			String accessToken )
-			throws AuthenticationException,
-			InvalidTokenException {
+  @Override
+  public OAuth2Authentication loadAuthentication(String accessToken)
+      throws AuthenticationException, InvalidTokenException {
 
-		MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
-		formData.add(
-				tokenName,
-				accessToken);
+    MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
+    formData.add(tokenName, accessToken);
 
-		HttpHeaders headers = new HttpHeaders();
-		String req = "";
-		try {
-			req = checkTokenEndpointUrl + "?access_token=" + URLEncoder.encode(
-					accessToken,
-					"UTF-8");
-		}
-		catch (UnsupportedEncodingException e) {
-			logger.error(
-					"Unsupported encoding",
-					e);
-		}
+    HttpHeaders headers = new HttpHeaders();
+    String req = "";
+    try {
+      req = checkTokenEndpointUrl + "?access_token=" + URLEncoder.encode(accessToken, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      logger.error("Unsupported encoding", e);
+    }
 
-		Map<String, Object> map = getForMap(
-				req,
-				formData,
-				headers);
+    Map<String, Object> map = getForMap(req, formData, headers);
 
-		if (map.containsKey("error")) {
-			logger.debug("check_token returned error: " + map.get("error"));
-			throw new InvalidTokenException(
-					accessToken);
-		}
+    if (map.containsKey("error")) {
+      logger.debug("check_token returned error: " + map.get("error"));
+      throw new InvalidTokenException(accessToken);
+    }
 
-		return tokenConverter.extractAuthentication(map);
-	}
+    return tokenConverter.extractAuthentication(map);
+  }
 
-	@Override
-	public OAuth2AccessToken readAccessToken(
-			String accessToken ) {
-		throw new UnsupportedOperationException(
-				"Not supported: read access token");
-	}
+  @Override
+  public OAuth2AccessToken readAccessToken(String accessToken) {
+    throw new UnsupportedOperationException("Not supported: read access token");
+  }
 
-	private Map<String, Object> getForMap(
-			String path,
-			MultiValueMap<String, String> formData,
-			HttpHeaders headers ) {
-		if (headers.getContentType() == null) {
-			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		}
-		@SuppressWarnings("rawtypes")
-		Map map = restTemplate.exchange(
-				path,
-				HttpMethod.GET,
-				new HttpEntity<MultiValueMap<String, String>>(
-						formData,
-						headers),
-				Map.class).getBody();
-		@SuppressWarnings("unchecked")
-		Map<String, Object> result = map;
-		return result;
-	}
+  private Map<String, Object> getForMap(
+      String path,
+      MultiValueMap<String, String> formData,
+      HttpHeaders headers) {
+    if (headers.getContentType() == null) {
+      headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    }
+    @SuppressWarnings("rawtypes")
+    Map map =
+        restTemplate.exchange(
+            path,
+            HttpMethod.GET,
+            new HttpEntity<MultiValueMap<String, String>>(formData, headers),
+            Map.class).getBody();
+    @SuppressWarnings("unchecked")
+    Map<String, Object> result = map;
+    return result;
+  }
 }

@@ -1,21 +1,21 @@
-/*******************************************************************************
- * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
- *  See the NOTICE file distributed with this work for additional
- *  information regarding copyright ownership.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Apache License,
- *  Version 2.0 which accompanies this distribution and is available at
- *  http://www.apache.org/licenses/LICENSE-2.0.txt
- ******************************************************************************/
+/**
+ * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package org.locationtech.geowave.cli.debug;
 
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.BatchScanner;
@@ -38,88 +38,73 @@ import org.locationtech.geowave.datastore.hbase.HBaseStoreFactoryFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-
 @GeowaveOperation(name = "fullscanMinimal", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "full table scan without any iterators or deserialization")
-public class MinimalFullTable extends
-		DefaultOperation implements
-		Command
-{
-	private static Logger LOGGER = LoggerFactory.getLogger(MinimalFullTable.class);
+public class MinimalFullTable extends DefaultOperation implements Command {
+  private static Logger LOGGER = LoggerFactory.getLogger(MinimalFullTable.class);
 
-	@Parameter(description = "<storename>")
-	private final List<String> parameters = new ArrayList<String>();
+  @Parameter(description = "<storename>")
+  private final List<String> parameters = new ArrayList<String>();
 
-	@Parameter(names = "--indexId", required = true, description = "The name of the index (optional)")
-	private String indexId;
+  @Parameter(names = "--indexId", required = true, description = "The name of the index (optional)")
+  private String indexId;
 
-	@Override
-	public void execute(
-			final OperationParams params )
-			throws ParseException {
-		final StopWatch stopWatch = new StopWatch();
+  @Override
+  public void execute(final OperationParams params) throws ParseException {
+    final StopWatch stopWatch = new StopWatch();
 
-		// Ensure we have all the required arguments
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Requires arguments: <storename>");
-		}
+    // Ensure we have all the required arguments
+    if (parameters.size() != 1) {
+      throw new ParameterException("Requires arguments: <storename>");
+    }
 
-		final String storeName = parameters.get(0);
+    final String storeName = parameters.get(0);
 
-		// Attempt to load store.
-		final StoreLoader storeOptions = new StoreLoader(
-				storeName);
-		if (!storeOptions.loadFromConfig(getGeoWaveConfigFile(params))) {
-			throw new ParameterException(
-					"Cannot find store name: " + storeOptions.getStoreName());
-		}
+    // Attempt to load store.
+    final StoreLoader storeOptions = new StoreLoader(storeName);
+    if (!storeOptions.loadFromConfig(getGeoWaveConfigFile(params))) {
+      throw new ParameterException("Cannot find store name: " + storeOptions.getStoreName());
+    }
 
-		final String storeType = storeOptions.getDataStorePlugin().getType();
+    final String storeType = storeOptions.getDataStorePlugin().getType();
 
-		if (storeType.equals(AccumuloStoreFactoryFamily.TYPE)) {
-			try {
-				final AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
+    if (storeType.equals(AccumuloStoreFactoryFamily.TYPE)) {
+      try {
+        final AccumuloRequiredOptions opts =
+            (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
 
-				final AccumuloOperations ops = new AccumuloOperations(
-						opts.getZookeeper(),
-						opts.getInstance(),
-						opts.getUser(),
-						opts.getPassword(),
-						opts.getGeoWaveNamespace(),
-						(AccumuloOptions) opts.getStoreOptions());
+        final AccumuloOperations ops =
+            new AccumuloOperations(
+                opts.getZookeeper(),
+                opts.getInstance(),
+                opts.getUser(),
+                opts.getPassword(),
+                opts.getGeoWaveNamespace(),
+                (AccumuloOptions) opts.getStoreOptions());
 
-				long results = 0;
-				final BatchScanner scanner = ops.createBatchScanner(indexId);
-				scanner.setRanges(Collections.singleton(new Range()));
-				final Iterator<Entry<Key, Value>> it = scanner.iterator();
+        long results = 0;
+        final BatchScanner scanner = ops.createBatchScanner(indexId);
+        scanner.setRanges(Collections.singleton(new Range()));
+        final Iterator<Entry<Key, Value>> it = scanner.iterator();
 
-				stopWatch.start();
-				while (it.hasNext()) {
-					it.next();
-					results++;
-				}
-				stopWatch.stop();
+        stopWatch.start();
+        while (it.hasNext()) {
+          it.next();
+          results++;
+        }
+        stopWatch.stop();
 
-				scanner.close();
-				System.out.println("Got " + results + " results in " + stopWatch.toString());
-			}
-			catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
-				LOGGER.error(
-						"Unable to scan accumulo datastore",
-						e);
-			}
-		}
-		else if (storeType.equals(HBaseStoreFactoryFamily.TYPE)) {
-			throw new UnsupportedOperationException(
-					"full scan for store type " + storeType + " not yet implemented.");
-		}
-		else {
-			throw new UnsupportedOperationException(
-					"full scan for store type " + storeType + " not implemented.");
-		}
-	}
+        scanner.close();
+        System.out.println("Got " + results + " results in " + stopWatch.toString());
+      } catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
+        LOGGER.error("Unable to scan accumulo datastore", e);
+      }
+    } else if (storeType.equals(HBaseStoreFactoryFamily.TYPE)) {
+      throw new UnsupportedOperationException(
+          "full scan for store type " + storeType + " not yet implemented.");
+    } else {
+      throw new UnsupportedOperationException(
+          "full scan for store type " + storeType + " not implemented.");
+    }
+  }
 }

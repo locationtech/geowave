@@ -1,22 +1,21 @@
-/*******************************************************************************
- * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
- *  See the NOTICE file distributed with this work for additional
- *  information regarding copyright ownership.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Apache License,
- *  Version 2.0 which accompanies this distribution and is available at
- *  http://www.apache.org/licenses/LICENSE-2.0.txt
- ******************************************************************************/
+/**
+ * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package org.locationtech.geowave.core.store.cli.config;
 
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
-import org.locationtech.geowave.core.cli.api.Command;
-import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
@@ -26,187 +25,159 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
-
 @GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
-public class AddStoreCommand extends
-		ServiceEnabledCommand<String>
-{
+public class AddStoreCommand extends ServiceEnabledCommand<String> {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(AddStoreCommand.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AddStoreCommand.class);
 
-	public static final String PROPERTIES_CONTEXT = "properties";
+  public static final String PROPERTIES_CONTEXT = "properties";
 
-	@Parameter(description = "<name>")
-	private List<String> parameters = new ArrayList<String>();
+  @Parameter(description = "<name>")
+  private List<String> parameters = new ArrayList<String>();
 
-	@Parameter(names = {
-		"-d",
-		"--default"
-	}, description = "Make this the default store in all operations")
-	private Boolean makeDefault;
+  @Parameter(
+      names = {"-d", "--default"},
+      description = "Make this the default store in all operations")
+  private Boolean makeDefault;
 
-	@Parameter(names = {
-		"-t",
-		"--type"
-	}, required = true, description = "The type of store, such as accumulo, hbase, etc")
-	private String storeType;
+  @Parameter(
+      names = {"-t", "--type"},
+      required = true,
+      description = "The type of store, such as accumulo, hbase, etc")
+  private String storeType;
 
-	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+  private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
 
-	@ParametersDelegate
-	private StoreFactoryOptions requiredOptions;
+  @ParametersDelegate
+  private StoreFactoryOptions requiredOptions;
 
-	@Override
-	public boolean prepare(
-			OperationParams params ) {
-		super.prepare(params);
+  @Override
+  public boolean prepare(OperationParams params) {
+    super.prepare(params);
 
-		// Load SPI options for the given type into pluginOptions.
-		if (storeType != null) {
-			pluginOptions.selectPlugin(storeType);
-			requiredOptions = pluginOptions.getFactoryOptions();
-		}
-		else {
-			Properties existingProps = getGeoWaveConfigProperties(params);
+    // Load SPI options for the given type into pluginOptions.
+    if (storeType != null) {
+      pluginOptions.selectPlugin(storeType);
+      requiredOptions = pluginOptions.getFactoryOptions();
+    } else {
+      Properties existingProps = getGeoWaveConfigProperties(params);
 
-			// Try to load the 'default' options.
-			String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
+      // Try to load the 'default' options.
+      String defaultStore =
+          existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
-			// Load the default index.
-			if (defaultStore != null) {
-				try {
-					if (pluginOptions.load(
-							existingProps,
-							DataStorePluginOptions.getStoreNamespace(defaultStore))) {
-						// Set the required type option.
-						this.storeType = pluginOptions.getType();
-						requiredOptions = pluginOptions.getFactoryOptions();
-					}
-				}
-				catch (ParameterException pe) {
-					// HP Fortify "Improper Output Neutralization" false
-					// positive
-					// What Fortify considers "user input" comes only
-					// from users with OS-level access anyway
-					LOGGER.warn(
-							"Couldn't load default store: " + defaultStore,
-							pe);
-				}
-			}
-		}
-		return true;
-	}
+      // Load the default index.
+      if (defaultStore != null) {
+        try {
+          if (pluginOptions.load(
+              existingProps,
+              DataStorePluginOptions.getStoreNamespace(defaultStore))) {
+            // Set the required type option.
+            this.storeType = pluginOptions.getType();
+            requiredOptions = pluginOptions.getFactoryOptions();
+          }
+        } catch (ParameterException pe) {
+          // HP Fortify "Improper Output Neutralization" false
+          // positive
+          // What Fortify considers "user input" comes only
+          // from users with OS-level access anyway
+          LOGGER.warn("Couldn't load default store: " + defaultStore, pe);
+        }
+      }
+    }
+    return true;
+  }
 
-	@Override
-	public void execute(
-			OperationParams params ) {
-		computeResults(params);
-	}
+  @Override
+  public void execute(OperationParams params) {
+    computeResults(params);
+  }
 
-	@Override
-	public String computeResults(
-			OperationParams params ) {
-		Properties existingProps = getGeoWaveConfigProperties(params);
+  @Override
+  public String computeResults(OperationParams params) {
+    Properties existingProps = getGeoWaveConfigProperties(params);
 
-		// Ensure that a name is chosen.
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Must specify store name");
-		}
+    // Ensure that a name is chosen.
+    if (parameters.size() != 1) {
+      throw new ParameterException("Must specify store name");
+    }
 
-		// Make sure we're not already in the index.
-		DataStorePluginOptions existingOptions = new DataStorePluginOptions();
-		if (existingOptions.load(
-				existingProps,
-				getNamespace())) {
-			throw new ParameterException(
-					"That store already exists: " + getPluginName());
-		}
+    // Make sure we're not already in the index.
+    DataStorePluginOptions existingOptions = new DataStorePluginOptions();
+    if (existingOptions.load(existingProps, getNamespace())) {
+      throw new ParameterException("That store already exists: " + getPluginName());
+    }
 
-		if (pluginOptions.getFactoryOptions() != null) {
-			pluginOptions.getFactoryOptions().validatePluginOptions(
-					existingProps);
-		}
+    if (pluginOptions.getFactoryOptions() != null) {
+      pluginOptions.getFactoryOptions().validatePluginOptions(existingProps);
+    }
 
-		// Save the store options.
-		pluginOptions.save(
-				existingProps,
-				getNamespace());
+    // Save the store options.
+    pluginOptions.save(existingProps, getNamespace());
 
-		// Make default?
-		if (Boolean.TRUE.equals(makeDefault)) {
-			existingProps.setProperty(
-					DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE,
-					getPluginName());
-		}
+    // Make default?
+    if (Boolean.TRUE.equals(makeDefault)) {
+      existingProps.setProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE, getPluginName());
+    }
 
-		// Write properties file
-		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(),
-				existingProps,
-				pluginOptions.getFactoryOptions().getClass(),
-				getNamespace() + "." + DataStorePluginOptions.OPTS);
+    // Write properties file
+    ConfigOptions.writeProperties(
+        getGeoWaveConfigFile(),
+        existingProps,
+        pluginOptions.getFactoryOptions().getClass(),
+        getNamespace() + "." + DataStorePluginOptions.OPTS);
 
-		StringBuilder builder = new StringBuilder();
-		for (Object key : existingProps.keySet()) {
-			String[] split = key.toString().split(
-					"\\.");
-			if (split.length > 1) {
-				if (split[1].equals(parameters.get(0))) {
-					builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
-				}
-			}
-		}
-		return builder.toString();
-	}
+    StringBuilder builder = new StringBuilder();
+    for (Object key : existingProps.keySet()) {
+      String[] split = key.toString().split("\\.");
+      if (split.length > 1) {
+        if (split[1].equals(parameters.get(0))) {
+          builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
+        }
+      }
+    }
+    return builder.toString();
+  }
 
-	public DataStorePluginOptions getPluginOptions() {
-		return pluginOptions;
-	}
+  public DataStorePluginOptions getPluginOptions() {
+    return pluginOptions;
+  }
 
-	public String getPluginName() {
-		return parameters.get(0);
-	}
+  public String getPluginName() {
+    return parameters.get(0);
+  }
 
-	public String getNamespace() {
-		return DataStorePluginOptions.getStoreNamespace(getPluginName());
-	}
+  public String getNamespace() {
+    return DataStorePluginOptions.getStoreNamespace(getPluginName());
+  }
 
-	public List<String> getParameters() {
-		return parameters;
-	}
+  public List<String> getParameters() {
+    return parameters;
+  }
 
-	public void setParameters(
-			String storeName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
-	}
+  public void setParameters(String storeName) {
+    this.parameters = new ArrayList<String>();
+    this.parameters.add(storeName);
+  }
 
-	public Boolean getMakeDefault() {
-		return makeDefault;
-	}
+  public Boolean getMakeDefault() {
+    return makeDefault;
+  }
 
-	public void setMakeDefault(
-			Boolean makeDefault ) {
-		this.makeDefault = makeDefault;
-	}
+  public void setMakeDefault(Boolean makeDefault) {
+    this.makeDefault = makeDefault;
+  }
 
-	public String getStoreType() {
-		return storeType;
-	}
+  public String getStoreType() {
+    return storeType;
+  }
 
-	public void setStoreType(
-			String storeType ) {
-		this.storeType = storeType;
-	}
+  public void setStoreType(String storeType) {
+    this.storeType = storeType;
+  }
 
-	public void setPluginOptions(
-			DataStorePluginOptions pluginOptions ) {
-		this.pluginOptions = pluginOptions;
-	}
+  public void setPluginOptions(DataStorePluginOptions pluginOptions) {
+    this.pluginOptions = pluginOptions;
+  }
 }

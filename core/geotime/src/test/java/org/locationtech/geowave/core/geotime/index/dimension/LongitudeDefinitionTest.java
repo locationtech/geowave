@@ -1,166 +1,114 @@
-/*******************************************************************************
- * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
- *  See the NOTICE file distributed with this work for additional
- *  information regarding copyright ownership.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Apache License,
- *  Version 2.0 which accompanies this distribution and is available at
- *  http://www.apache.org/licenses/LICENSE-2.0.txt
- ******************************************************************************/
+/**
+ * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package org.locationtech.geowave.core.geotime.index.dimension;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
-public class LongitudeDefinitionTest
-{
+public class LongitudeDefinitionTest {
 
-	private double DELTA = 1e-15;
+  private double DELTA = 1e-15;
 
-	@Test
-	public void testNormalizeWithinBoundsRanges() {
+  @Test
+  public void testNormalizeWithinBoundsRanges() {
 
-		final double minRange = 10;
-		final double maxRange = 100;
+    final double minRange = 10;
+    final double maxRange = 100;
 
-		BinRange[] binRange = getNormalizedRanges(
-				minRange,
-				maxRange);
+    BinRange[] binRange = getNormalizedRanges(minRange, maxRange);
 
-		Assert.assertEquals(
-				minRange,
-				binRange[0].getNormalizedMin(),
-				DELTA);
+    Assert.assertEquals(minRange, binRange[0].getNormalizedMin(), DELTA);
 
-		Assert.assertEquals(
-				maxRange,
-				binRange[0].getNormalizedMax(),
-				DELTA);
+    Assert.assertEquals(maxRange, binRange[0].getNormalizedMax(), DELTA);
+  }
 
-	}
+  @Test
+  public void testNormalizeWithinBoundsValue() {
 
-	@Test
-	public void testNormalizeWithinBoundsValue() {
+    final double easternNormalizedValue = -160;
+    final double westernNormalizedValue = 160;
 
-		final double easternNormalizedValue = -160;
-		final double westernNormalizedValue = 160;
+    final double easternValue = 200;
+    final double westernValue = -200;
 
-		final double easternValue = 200;
-		final double westernValue = -200;
+    Assert.assertEquals(easternNormalizedValue, getNormalizedLongitudeValue(easternValue), DELTA);
 
-		Assert.assertEquals(
-				easternNormalizedValue,
-				getNormalizedLongitudeValue(easternValue),
-				DELTA);
+    Assert.assertEquals(westernNormalizedValue, getNormalizedLongitudeValue(westernValue), DELTA);
+  }
 
-		Assert.assertEquals(
-				westernNormalizedValue,
-				getNormalizedLongitudeValue(westernValue),
-				DELTA);
+  @Test
+  public void testNormalizeDateLineCrossingEast() {
 
-	}
+    final double minRange = 150;
+    final double maxRange = 200;
 
-	@Test
-	public void testNormalizeDateLineCrossingEast() {
+    final int expectedBinCount = 2;
 
-		final double minRange = 150;
-		final double maxRange = 200;
+    final BinRange[] expectedBinRanges =
+        new BinRange[] {new BinRange(-180, -160), new BinRange(150, 180)};
 
-		final int expectedBinCount = 2;
+    BinRange[] binRange = getNormalizedRanges(minRange, maxRange);
 
-		final BinRange[] expectedBinRanges = new BinRange[] {
-			new BinRange(
-					-180,
-					-160),
-			new BinRange(
-					150,
-					180)
-		};
+    Assert.assertEquals(expectedBinCount, binRange.length);
 
-		BinRange[] binRange = getNormalizedRanges(
-				minRange,
-				maxRange);
+    for (int i = 0; i < binRange.length; i++) {
 
-		Assert.assertEquals(
-				expectedBinCount,
-				binRange.length);
+      Assert.assertEquals(
+          expectedBinRanges[i].getNormalizedMin(),
+          binRange[i].getNormalizedMin(),
+          DELTA);
 
-		for (int i = 0; i < binRange.length; i++) {
+      Assert.assertEquals(
+          expectedBinRanges[i].getNormalizedMax(),
+          binRange[i].getNormalizedMax(),
+          DELTA);
+    }
+  }
 
-			Assert.assertEquals(
-					expectedBinRanges[i].getNormalizedMin(),
-					binRange[i].getNormalizedMin(),
-					DELTA);
+  @Test
+  public void testNormalizeDateLineCrossingWest() {
 
-			Assert.assertEquals(
-					expectedBinRanges[i].getNormalizedMax(),
-					binRange[i].getNormalizedMax(),
-					DELTA);
+    final double minRange = -200;
+    final double maxRange = -170;
 
-		}
+    final int expectedBinCount = 2;
 
-	}
+    final BinRange[] expectedBinRanges =
+        new BinRange[] {new BinRange(-180, -170), new BinRange(160, 180)};
 
-	@Test
-	public void testNormalizeDateLineCrossingWest() {
+    BinRange[] binRange = getNormalizedRanges(minRange, maxRange);
 
-		final double minRange = -200;
-		final double maxRange = -170;
+    Assert.assertEquals(expectedBinCount, binRange.length);
 
-		final int expectedBinCount = 2;
+    for (int i = 0; i < binRange.length; i++) {
 
-		final BinRange[] expectedBinRanges = new BinRange[] {
-			new BinRange(
-					-180,
-					-170),
-			new BinRange(
-					160,
-					180)
-		};
+      Assert.assertEquals(
+          expectedBinRanges[i].getNormalizedMin(),
+          binRange[i].getNormalizedMin(),
+          DELTA);
 
-		BinRange[] binRange = getNormalizedRanges(
-				minRange,
-				maxRange);
+      Assert.assertEquals(
+          expectedBinRanges[i].getNormalizedMax(),
+          binRange[i].getNormalizedMax(),
+          DELTA);
+    }
+  }
 
-		Assert.assertEquals(
-				expectedBinCount,
-				binRange.length);
+  private BinRange[] getNormalizedRanges(final double minRange, final double maxRange) {
 
-		for (int i = 0; i < binRange.length; i++) {
+    return new LongitudeDefinition().getNormalizedRanges(new NumericRange(minRange, maxRange));
+  }
 
-			Assert.assertEquals(
-					expectedBinRanges[i].getNormalizedMin(),
-					binRange[i].getNormalizedMin(),
-					DELTA);
+  private double getNormalizedLongitudeValue(final double value) {
 
-			Assert.assertEquals(
-					expectedBinRanges[i].getNormalizedMax(),
-					binRange[i].getNormalizedMax(),
-					DELTA);
-
-		}
-
-	}
-
-	private BinRange[] getNormalizedRanges(
-			final double minRange,
-			final double maxRange ) {
-
-		return new LongitudeDefinition().getNormalizedRanges(new NumericRange(
-				minRange,
-				maxRange));
-
-	}
-
-	private double getNormalizedLongitudeValue(
-			final double value ) {
-
-		return LongitudeDefinition.getNormalizedLongitude(value);
-
-	}
-
+    return LongitudeDefinition.getNormalizedLongitude(value);
+  }
 }
