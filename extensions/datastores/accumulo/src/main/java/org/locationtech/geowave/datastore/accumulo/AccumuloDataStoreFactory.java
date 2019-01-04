@@ -36,7 +36,8 @@ public class AccumuloDataStoreFactory extends BaseDataStoreFactory {
     }
 
     final DataStoreOperations accumuloOperations = helper.createOperations(opts);
-    return new AccumuloDataStore((AccumuloOperations) accumuloOperations,
+    return new AccumuloDataStore(
+        (AccumuloOperations) accumuloOperations,
         (AccumuloOptions) opts.getStoreOptions());
   }
 }

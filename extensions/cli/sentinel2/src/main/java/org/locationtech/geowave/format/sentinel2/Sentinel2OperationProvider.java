@@ -12,9 +12,13 @@ import org.locationtech.geowave.core.cli.spi.CLIOperationProviderSpi;
 
 public class Sentinel2OperationProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
-      new Class<?>[] {Sentinel2Section.class, Sentinel2AnalyzeCommand.class,
-          Sentinel2DownloadCommand.class, Sentinel2IngestCommand.class,
-          Sentinel2IngestRasterCommand.class, Sentinel2IngestVectorCommand.class,
+      new Class<?>[] {
+          Sentinel2Section.class,
+          Sentinel2AnalyzeCommand.class,
+          Sentinel2DownloadCommand.class,
+          Sentinel2IngestCommand.class,
+          Sentinel2IngestRasterCommand.class,
+          Sentinel2IngestVectorCommand.class,
           Sentinel2ImageryProvidersCommand.class,};
 
   @Override

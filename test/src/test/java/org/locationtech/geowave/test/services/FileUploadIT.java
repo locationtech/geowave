@@ -35,9 +35,15 @@ public class FileUploadIT {
 
   private static long startMillis;
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.HBASE, GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.DYNAMODB,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;
 
   @BeforeClass
@@ -56,7 +62,8 @@ public class FileUploadIT {
   @Test
   public void fileUpload() {
     TestUtils.assertStatusCode(
-        "Should succeed for valid file path", 201,
+        "Should succeed for valid file path",
+        201,
         fileUploadServiceClient.uploadFile("data/osm_gpx_test_case/public/000/992/000992764.gpx"));
   }
 

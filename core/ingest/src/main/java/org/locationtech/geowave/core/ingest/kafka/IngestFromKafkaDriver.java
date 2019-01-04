@@ -114,8 +114,7 @@ public class IngestFromKafkaDriver {
       final Map<String, GeoWaveAvroFormatPlugin<?, ?>> pluginProviders,
       final List<String> queue) {
     try {
-      for (final Entry<String, GeoWaveAvroFormatPlugin<?, ?>> pluginProvider : pluginProviders
-          .entrySet()) {
+      for (final Entry<String, GeoWaveAvroFormatPlugin<?, ?>> pluginProvider : pluginProviders.entrySet()) {
         final List<DataTypeAdapter<?>> adapters = new ArrayList<>();
 
         GeoWaveAvroFormatPlugin<?, ?> avroFormatPlugin = null;
@@ -129,8 +128,8 @@ public class IngestFromKafkaDriver {
           adapters.addAll(Arrays.asList(dataAdapters));
           final KafkaIngestRunData runData = new KafkaIngestRunData(adapters, dataStore);
 
-          futures
-              .add(launchTopicConsumer(pluginProvider.getKey(), avroFormatPlugin, runData, queue));
+          futures.add(
+              launchTopicConsumer(pluginProvider.getKey(), avroFormatPlugin, runData, queue));
         } catch (final UnsupportedOperationException e) {
           LOGGER.warn(
               "Plugin provider '"
@@ -287,7 +286,9 @@ public class IngestFromKafkaDriver {
 
     try (CloseableIterator<?> geowaveDataIt =
         ingestPlugin.toGeoWaveData(
-            dataRecord, indexMap.keySet().toArray(new String[0]), ingestOptions.getVisibility())) {
+            dataRecord,
+            indexMap.keySet().toArray(new String[0]),
+            ingestOptions.getVisibility())) {
       while (geowaveDataIt.hasNext()) {
         final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
         final DataTypeAdapter adapter = ingestRunData.getDataAdapter(geowaveData);

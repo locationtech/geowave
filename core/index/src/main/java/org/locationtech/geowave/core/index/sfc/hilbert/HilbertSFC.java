@@ -188,14 +188,22 @@ public class HilbertSFC implements SpaceFillingCurve {
       maxFilteredIndexedRanges = Integer.MAX_VALUE;
     }
     final QueryCacheKey key =
-        new QueryCacheKey(query.getMinValuesPerDimension(), query.getMaxValuesPerDimension(),
-            overInclusiveOnEdge, maxFilteredIndexedRanges);
+        new QueryCacheKey(
+            query.getMinValuesPerDimension(),
+            query.getMaxValuesPerDimension(),
+            overInclusiveOnEdge,
+            maxFilteredIndexedRanges);
     RangeDecomposition rangeDecomp = queryDecompositionCache.get(key);
     if (rangeDecomp == null) {
       rangeDecomp =
           decomposeQueryOperations.decomposeRange(
-              query.getDataPerDimension(), compactHilbertCurve, dimensionDefinitions,
-              totalPrecision, maxFilteredIndexedRanges, REMOVE_VACUUM, overInclusiveOnEdge);
+              query.getDataPerDimension(),
+              compactHilbertCurve,
+              dimensionDefinitions,
+              totalPrecision,
+              maxFilteredIndexedRanges,
+              REMOVE_VACUUM,
+              overInclusiveOnEdge);
       queryDecompositionCache.put(key, rangeDecomp);
     }
     return rangeDecomp;
@@ -295,8 +303,11 @@ public class HilbertSFC implements SpaceFillingCurve {
 
   @Override
   public long[] normalizeRange(final double minValue, final double maxValue, final int dimension) {
-    return getIdOperations
-        .normalizeRange(minValue, maxValue, dimension, dimensionDefinitions[dimension]);
+    return getIdOperations.normalizeRange(
+        minValue,
+        maxValue,
+        dimension,
+        dimensionDefinitions[dimension]);
   }
 
   @Override

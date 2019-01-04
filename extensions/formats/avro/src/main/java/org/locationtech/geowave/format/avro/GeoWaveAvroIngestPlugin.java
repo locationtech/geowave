@@ -67,7 +67,8 @@ public class GeoWaveAvroIngestPlugin
   public boolean supportsFile(final URL file) {
 
     try (DataFileStream<AvroSimpleFeatureCollection> ds =
-        new DataFileStream<AvroSimpleFeatureCollection>(file.openStream(),
+        new DataFileStream<AvroSimpleFeatureCollection>(
+            file.openStream(),
             new SpecificDatumReader<AvroSimpleFeatureCollection>(
                 AvroSimpleFeatureCollection.getClassSchema()))) {
       if (ds.getHeader() != null) {
@@ -96,7 +97,8 @@ public class GeoWaveAvroIngestPlugin
   public CloseableIterator<AvroSimpleFeatureCollection> toAvroObjects(final URL input) {
     try {
       final DataFileStream<AvroSimpleFeatureCollection> reader =
-          new DataFileStream<AvroSimpleFeatureCollection>(input.openStream(),
+          new DataFileStream<AvroSimpleFeatureCollection>(
+              input.openStream(),
               new SpecificDatumReader<AvroSimpleFeatureCollection>(
                   AvroSimpleFeatureCollection.getClassSchema()));
 
@@ -122,8 +124,9 @@ public class GeoWaveAvroIngestPlugin
         }
       };
     } catch (final IOException e) {
-      LOGGER
-          .warn("Unable to read file '" + input.getPath() + "' as AVRO SimpleFeatureCollection", e);
+      LOGGER.warn(
+          "Unable to read file '" + input.getPath() + "' as AVRO SimpleFeatureCollection",
+          e);
     }
     return new CloseableIterator.Empty<AvroSimpleFeatureCollection>();
   }
@@ -159,12 +162,13 @@ public class GeoWaveAvroIngestPlugin
 
       final FeatureDataAdapter adapter = new FeatureDataAdapter(featureType);
       final List<String> attributeTypes = featureDefinition.getAttributeTypes();
-      for (final AvroAttributeValues attributeValues : featureCollection
-          .getSimpleFeatureCollection()) {
+      for (final AvroAttributeValues attributeValues : featureCollection.getSimpleFeatureCollection()) {
         try {
           final SimpleFeature simpleFeature =
-              GeoWaveAvroFeatureUtils
-                  .avroSimpleFeatureToGTSimpleFeature(featureType, attributeTypes, attributeValues);
+              GeoWaveAvroFeatureUtils.avroSimpleFeatureToGTSimpleFeature(
+                  featureType,
+                  attributeTypes,
+                  attributeValues);
           retVal.add(new GeoWaveData<SimpleFeature>(adapter, indexNames, simpleFeature));
         } catch (final Exception e) {
           LOGGER.warn("Unable to read simple feature from Avro", e);

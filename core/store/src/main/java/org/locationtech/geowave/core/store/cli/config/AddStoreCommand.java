@@ -36,11 +36,14 @@ public class AddStoreCommand extends ServiceEnabledCommand<String> {
   @Parameter(description = "<name>")
   private List<String> parameters = new ArrayList<String>();
 
-  @Parameter(names = {"-d", "--default"},
+  @Parameter(
+      names = {"-d", "--default"},
       description = "Make this the default store in all operations")
   private Boolean makeDefault;
 
-  @Parameter(names = {"-t", "--type"}, required = true,
+  @Parameter(
+      names = {"-t", "--type"},
+      required = true,
       description = "The type of store, such as accumulo, hbase, etc")
   private String storeType;
 
@@ -67,8 +70,9 @@ public class AddStoreCommand extends ServiceEnabledCommand<String> {
       // Load the default index.
       if (defaultStore != null) {
         try {
-          if (pluginOptions
-              .load(existingProps, DataStorePluginOptions.getStoreNamespace(defaultStore))) {
+          if (pluginOptions.load(
+              existingProps,
+              DataStorePluginOptions.getStoreNamespace(defaultStore))) {
             // Set the required type option.
             this.storeType = pluginOptions.getType();
             requiredOptions = pluginOptions.getFactoryOptions();
@@ -119,7 +123,9 @@ public class AddStoreCommand extends ServiceEnabledCommand<String> {
 
     // Write properties file
     ConfigOptions.writeProperties(
-        getGeoWaveConfigFile(), existingProps, pluginOptions.getFactoryOptions().getClass(),
+        getGeoWaveConfigFile(),
+        existingProps,
+        pluginOptions.getFactoryOptions().getClass(),
         getNamespace() + "." + DataStorePluginOptions.OPTS);
 
     StringBuilder builder = new StringBuilder();

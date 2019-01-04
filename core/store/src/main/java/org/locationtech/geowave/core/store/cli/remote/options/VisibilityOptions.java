@@ -12,7 +12,8 @@ import com.beust.jcommander.Parameter;
 import java.io.Serializable;
 
 public class VisibilityOptions implements Serializable {
-  @Parameter(names = {"-v", "--visibility"},
+  @Parameter(
+      names = {"-v", "--visibility"},
       description = "The visibility of the data ingested (optional; default is 'public')")
   private String visibility;
 

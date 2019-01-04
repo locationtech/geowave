@@ -63,7 +63,8 @@ public class KMeansParallelInitializeTest {
   @Test
   public void test() {
     final GeometryDataSetGenerator dataGenerator =
-        new GeometryDataSetGenerator(initializer.getCentroidAssociationFn().getDistanceFunction(),
+        new GeometryDataSetGenerator(
+            initializer.getCentroidAssociationFn().getDistanceFunction(),
             getBuilder());
     final List<SimpleFeature> pointSet = dataGenerator.generatePointSet(0.15, 0.2, 10, 10000);
     // Sort the data as if coming out of geowave
@@ -74,11 +75,13 @@ public class KMeansParallelInitializeTest {
       @Override
       public int compare(final SimpleFeature arg0, final SimpleFeature arg1) {
         final double arg0ToCorner =
-            initializer.getCentroidAssociationFn().getDistanceFunction()
-                .measure(arg0, dataGenerator.getCorner());
+            initializer.getCentroidAssociationFn().getDistanceFunction().measure(
+                arg0,
+                dataGenerator.getCorner());
         final double arg1ToCorner =
-            initializer.getCentroidAssociationFn().getDistanceFunction()
-                .measure(arg1, dataGenerator.getCorner());
+            initializer.getCentroidAssociationFn().getDistanceFunction().measure(
+                arg1,
+                dataGenerator.getCorner());
         return (arg0ToCorner - arg1ToCorner) < 0 ? -1 : 1;
       }
     });
@@ -91,8 +94,8 @@ public class KMeansParallelInitializeTest {
     assertTrue(result.getRight().size() >= 5);
     assertTrue(isMonotonic((StatsMap) initializer.getStats()));
     for (AnalyticItemWrapper<SimpleFeature> centroid : result.getRight()) {
-      System.out
-          .println(centroid.getWrappedItem().toString() + " = " + centroid.getAssociationCount());
+      System.out.println(
+          centroid.getWrappedItem().toString() + " = " + centroid.getAssociationCount());
     }
   }
 

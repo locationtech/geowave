@@ -59,8 +59,9 @@ public class OperationRegistry {
             OperationEntry entry = new OperationEntry(clz);
             operationMapByClass.put(clz, entry);
           } else {
-            throw new RuntimeException("CLI operations must be assignable from Operation.class: "
-                + clz.getCanonicalName());
+            throw new RuntimeException(
+                "CLI operations must be assignable from Operation.class: "
+                    + clz.getCanonicalName());
           }
         }
       }

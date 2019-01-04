@@ -36,10 +36,14 @@ public class AnalyzeRunner {
   protected void runInternal(final OperationParams params) throws Exception {
     try {
       try (BandFeatureIterator bands =
-          new BandFeatureIterator(landsatOptions.isOnlyScenesSinceLastRun(),
-              landsatOptions.isUseCachedScenes(), landsatOptions.isNBestPerSpatial(),
-              landsatOptions.getNBestScenes(), landsatOptions.getNBestBands(),
-              landsatOptions.getCqlFilter(), landsatOptions.getWorkspaceDir())) {
+          new BandFeatureIterator(
+              landsatOptions.isOnlyScenesSinceLastRun(),
+              landsatOptions.isUseCachedScenes(),
+              landsatOptions.isNBestPerSpatial(),
+              landsatOptions.getNBestScenes(),
+              landsatOptions.getNBestBands(),
+              landsatOptions.getCqlFilter(),
+              landsatOptions.getWorkspaceDir())) {
         final AnalysisInfo info = new AnalysisInfo();
         String prevEntityId = null;
         while (bands.hasNext()) {
@@ -151,8 +155,8 @@ public class AnalyzeRunner {
             System.out.println(
                 "Acquisition Date: "
                     + sdf.format(
-                        feature
-                            .getAttribute(SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME)));
+                        feature.getAttribute(
+                            SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME)));
             System.out.println(
                 "Cloud Cover: "
                     + feature.getAttribute(SceneFeatureIterator.CLOUD_COVER_ATTRIBUTE_NAME));
@@ -177,8 +181,9 @@ public class AnalyzeRunner {
     }
 
     private void addBandInfo(final SimpleFeature band) {
-      entityBandIdToSimpleFeatureMap
-          .put((String) band.getAttribute(BandFeatureIterator.BAND_ATTRIBUTE_NAME), band);
+      entityBandIdToSimpleFeatureMap.put(
+          (String) band.getAttribute(BandFeatureIterator.BAND_ATTRIBUTE_NAME),
+          band);
     }
 
     private void printTotals() {

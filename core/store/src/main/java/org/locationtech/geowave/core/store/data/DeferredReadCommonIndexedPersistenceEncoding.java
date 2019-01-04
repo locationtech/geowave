@@ -37,8 +37,15 @@ public class DeferredReadCommonIndexedPersistenceEncoding
       final int duplicateCount,
       final PersistentDataset<CommonIndexValue> commonData,
       final FlattenedUnreadData unreadData) {
-    super(adapterId, dataId, partitionKey, sortKey, duplicateCount, commonData,
-        new PersistentDataset<byte[]>(), new PersistentDataset<>());
+    super(
+        adapterId,
+        dataId,
+        partitionKey,
+        sortKey,
+        duplicateCount,
+        commonData,
+        new PersistentDataset<byte[]>(),
+        new PersistentDataset<>());
     this.unreadData = unreadData;
   }
 

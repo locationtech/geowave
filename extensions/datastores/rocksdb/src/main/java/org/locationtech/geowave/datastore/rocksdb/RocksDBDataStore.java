@@ -21,10 +21,15 @@ import org.locationtech.geowave.mapreduce.BaseMapReduceDataStore;
 
 public class RocksDBDataStore extends BaseMapReduceDataStore implements Closeable {
   public RocksDBDataStore(final RocksDBOperations operations, final DataStoreOptions options) {
-    super(new IndexStoreImpl(operations, options), new AdapterStoreImpl(operations, options),
+    super(
+        new IndexStoreImpl(operations, options),
+        new AdapterStoreImpl(operations, options),
         new DataStatisticsStoreImpl(operations, options),
-        new AdapterIndexMappingStoreImpl(operations, options), new SecondaryIndexStoreImpl(),
-        operations, options, new InternalAdapterStoreImpl(operations));
+        new AdapterIndexMappingStoreImpl(operations, options),
+        new SecondaryIndexStoreImpl(),
+        operations,
+        options,
+        new InternalAdapterStoreImpl(operations));
   }
 
   @Override

@@ -79,9 +79,15 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
   public static final String ENTITY_ID_ATTRIBUTE_NAME = "entityId";
 
   protected static final String[] SCENE_ATTRIBUTES =
-      new String[] {SHAPE_ATTRIBUTE_NAME, ACQUISITION_DATE_ATTRIBUTE_NAME,
-          CLOUD_COVER_ATTRIBUTE_NAME, PROCESSING_LEVEL_ATTRIBUTE_NAME, PATH_ATTRIBUTE_NAME,
-          ROW_ATTRIBUTE_NAME, ENTITY_ID_ATTRIBUTE_NAME, SCENE_DOWNLOAD_ATTRIBUTE_NAME};
+      new String[] {
+          SHAPE_ATTRIBUTE_NAME,
+          ACQUISITION_DATE_ATTRIBUTE_NAME,
+          CLOUD_COVER_ATTRIBUTE_NAME,
+          PROCESSING_LEVEL_ATTRIBUTE_NAME,
+          PATH_ATTRIBUTE_NAME,
+          ROW_ATTRIBUTE_NAME,
+          ENTITY_ID_ATTRIBUTE_NAME,
+          SCENE_DOWNLOAD_ATTRIBUTE_NAME};
   protected static String AQUISITION_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
   private final String SCENES_DIR = "scenes";
   private final String COMPRESSED_FILE_NAME = "scene_list.gz";
@@ -101,8 +107,13 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
       final Filter cqlFilter,
       final String workspaceDir) throws MalformedURLException, IOException {
     init(
-        new File(workspaceDir, SCENES_DIR), onlyScenesSinceLastRun, useCachedScenes,
-        nBestScenesByPathRow, nBestScenes, new WRS2GeometryStore(workspaceDir), cqlFilter);
+        new File(workspaceDir, SCENES_DIR),
+        onlyScenesSinceLastRun,
+        useCachedScenes,
+        nBestScenesByPathRow,
+        nBestScenes,
+        new WRS2GeometryStore(workspaceDir),
+        cqlFilter);
   }
 
   private void init(

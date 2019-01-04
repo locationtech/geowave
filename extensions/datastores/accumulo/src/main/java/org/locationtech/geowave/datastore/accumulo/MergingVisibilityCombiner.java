@@ -98,9 +98,10 @@ public class MergingVisibilityCombiner extends TransformingIterator {
         continue;
       } else {
         final Text combinedVisibility =
-            new Text(combineVisibilities(
-                currentKey.getColumnVisibility().getBytes(),
-                outputKey.getColumnVisibility().getBytes()));
+            new Text(
+                combineVisibilities(
+                    currentKey.getColumnVisibility().getBytes(),
+                    outputKey.getColumnVisibility().getBytes()));
         outputKey = replaceColumnVisibility(outputKey, combinedVisibility);
       }
       final Mergeable mergeable = getMergeable(currentKey, val.get());
@@ -135,8 +136,9 @@ public class MergingVisibilityCombiner extends TransformingIterator {
     if ((vis2 == null) || (vis2.length == 0)) {
       return vis1;
     }
-    return new ColumnVisibility(ArrayUtils.addAll(
-        ArrayUtils.addAll(ColumnVisibility.quote(vis1), AMPRISAND), ColumnVisibility.quote(vis2)))
-            .flatten();
+    return new ColumnVisibility(
+        ArrayUtils.addAll(
+            ArrayUtils.addAll(ColumnVisibility.quote(vis1), AMPRISAND),
+            ColumnVisibility.quote(vis2))).flatten();
   }
 }

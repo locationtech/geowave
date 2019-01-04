@@ -60,10 +60,12 @@ public class GeoWaveInputKey implements WritableComparable<GeoWaveInputKey>, jav
       // ID to gaurantee uniqueness and effectively disable
       // aggregating by only the data ID
       dataId =
-          new ByteArray(Bytes.concat(
-              indexName == null ? new byte[0] : StringUtils.stringToBinary(indexName),
-              key.getPartitionKey() == null ? new byte[0] : key.getPartitionKey(),
-              key.getSortKey() == null ? new byte[0] : key.getSortKey(), key.getDataId()));
+          new ByteArray(
+              Bytes.concat(
+                  indexName == null ? new byte[0] : StringUtils.stringToBinary(indexName),
+                  key.getPartitionKey() == null ? new byte[0] : key.getPartitionKey(),
+                  key.getSortKey() == null ? new byte[0] : key.getSortKey(),
+                  key.getDataId()));
     }
     this.key = key;
   }
@@ -78,7 +80,9 @@ public class GeoWaveInputKey implements WritableComparable<GeoWaveInputKey>, jav
           Arrays.copyOfRange(dataId.getBytes(), indexIdLength, indexIdLength + partitionKeyLength);
       final byte[] sortKey =
           Arrays.copyOfRange(
-              dataId.getBytes(), indexIdLength + partitionKeyLength, dataId.getBytes().length);
+              dataId.getBytes(),
+              indexIdLength + partitionKeyLength,
+              dataId.getBytes().length);
       return ImmutablePair.of(partitionKey, sortKey);
     }
   }
@@ -112,8 +116,11 @@ public class GeoWaveInputKey implements WritableComparable<GeoWaveInputKey>, jav
     final byte[] internalAdapterIdBytes = ByteArrayUtils.shortToByteArray(internalAdapterId);
     final int adapterCompare =
         WritableComparator.compareBytes(
-            internalAdapterIdBytes, 0, internalAdapterIdBytes.length,
-            ByteArrayUtils.shortToByteArray(o.internalAdapterId), 0,
+            internalAdapterIdBytes,
+            0,
+            internalAdapterIdBytes.length,
+            ByteArrayUtils.shortToByteArray(o.internalAdapterId),
+            0,
             ByteArrayUtils.shortToByteArray(o.internalAdapterId).length);
 
     if (adapterCompare != 0) {
@@ -121,7 +128,11 @@ public class GeoWaveInputKey implements WritableComparable<GeoWaveInputKey>, jav
     }
     final GeoWaveInputKey other = o;
     return WritableComparator.compareBytes(
-        dataId.getBytes(), 0, dataId.getBytes().length, other.dataId.getBytes(), 0,
+        dataId.getBytes(),
+        0,
+        dataId.getBytes().length,
+        other.dataId.getBytes(),
+        0,
         other.dataId.getBytes().length);
   }
 

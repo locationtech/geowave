@@ -50,11 +50,15 @@ public class NNJobRunner extends GeoWaveAnalyticJobRunner {
 
     final Partitioner<?> partitioner =
         runTimeProperties.getClassInstance(
-            Partition.PARTITIONER_CLASS, Partitioner.class, OrthodromicDistancePartitioner.class);
+            Partition.PARTITIONER_CLASS,
+            Partitioner.class,
+            OrthodromicDistancePartitioner.class);
 
     final Partitioner<?> secondaryPartitioner =
         runTimeProperties.getClassInstance(
-            Partition.SECONDARY_PARTITIONER_CLASS, Partitioner.class, PassthruPartitioner.class);
+            Partition.SECONDARY_PARTITIONER_CLASS,
+            Partitioner.class,
+            PassthruPartitioner.class);
 
     partitioner.setup(runTimeProperties, getScope(), config);
     if (secondaryPartitioner.getClass() != partitioner.getClass()) {
@@ -62,11 +66,16 @@ public class NNJobRunner extends GeoWaveAnalyticJobRunner {
     }
 
     runTimeProperties.setConfig(
-        new ParameterEnum[] {Partition.PARTITIONER_CLASS, Partition.SECONDARY_PARTITIONER_CLASS,
-            Partition.MAX_DISTANCE, Partition.MAX_MEMBER_SELECTION,
-            Partition.GEOMETRIC_DISTANCE_UNIT, Partition.DISTANCE_THRESHOLDS,
+        new ParameterEnum[] {
+            Partition.PARTITIONER_CLASS,
+            Partition.SECONDARY_PARTITIONER_CLASS,
+            Partition.MAX_DISTANCE,
+            Partition.MAX_MEMBER_SELECTION,
+            Partition.GEOMETRIC_DISTANCE_UNIT,
+            Partition.DISTANCE_THRESHOLDS,
             CommonParameters.Common.DISTANCE_FUNCTION_CLASS},
-        config, getScope());
+        config,
+        getScope());
 
     // HP Fortify "Command Injection" false positive
     // What Fortify considers "externally-influenced input"
@@ -80,9 +89,13 @@ public class NNJobRunner extends GeoWaveAnalyticJobRunner {
     params.addAll(super.getParameters());
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {Partition.PARTITIONER_CLASS, Partition.MAX_DISTANCE,
-                Partition.SECONDARY_PARTITIONER_CLASS, Partition.MAX_MEMBER_SELECTION,
-                Partition.GEOMETRIC_DISTANCE_UNIT, Partition.DISTANCE_THRESHOLDS,
+            new ParameterEnum<?>[] {
+                Partition.PARTITIONER_CLASS,
+                Partition.MAX_DISTANCE,
+                Partition.SECONDARY_PARTITIONER_CLASS,
+                Partition.MAX_MEMBER_SELECTION,
+                Partition.GEOMETRIC_DISTANCE_UNIT,
+                Partition.DISTANCE_THRESHOLDS,
                 CommonParameters.Common.DISTANCE_FUNCTION_CLASS}));
     return params;
   }

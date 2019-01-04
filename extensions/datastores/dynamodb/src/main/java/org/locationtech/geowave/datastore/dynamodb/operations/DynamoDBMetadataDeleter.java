@@ -44,14 +44,17 @@ public class DynamoDBMetadataDeleter implements MetadataDeleter {
     final QueryRequest queryRequest = new QueryRequest(tableName);
 
     if (metadata.hasSecondaryId()) {
-      queryRequest.withFilterExpression(DynamoDBOperations.METADATA_SECONDARY_ID_KEY + " = :secVal")
-          .addExpressionAttributeValuesEntry(
-              ":secVal", new AttributeValue().withB(ByteBuffer.wrap(metadata.getSecondaryId())));
+      queryRequest.withFilterExpression(
+          DynamoDBOperations.METADATA_SECONDARY_ID_KEY
+              + " = :secVal").addExpressionAttributeValuesEntry(
+                  ":secVal",
+                  new AttributeValue().withB(ByteBuffer.wrap(metadata.getSecondaryId())));
     }
-    queryRequest
-        .withKeyConditionExpression(DynamoDBOperations.METADATA_PRIMARY_ID_KEY + " = :priVal")
-        .addExpressionAttributeValuesEntry(
-            ":priVal", new AttributeValue().withB(ByteBuffer.wrap(metadata.getPrimaryId())));
+    queryRequest.withKeyConditionExpression(
+        DynamoDBOperations.METADATA_PRIMARY_ID_KEY
+            + " = :priVal").addExpressionAttributeValuesEntry(
+                ":priVal",
+                new AttributeValue().withB(ByteBuffer.wrap(metadata.getPrimaryId())));
 
     final QueryResult queryResult = operations.getClient().query(queryRequest);
     for (Map<String, AttributeValue> entry : queryResult.getItems()) {

@@ -84,12 +84,14 @@ public class QueryIndexHelperTest {
     endTime = DateUtilities.parseISO("2005-05-20T20:32:56Z");
 
     geoType =
-        DataUtilities
-            .createType("geostuff", "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String");
+        DataUtilities.createType(
+            "geostuff",
+            "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String");
 
     geoMercType =
-        DataUtilities
-            .createType("geostuff", "geometry:Geometry:srid=3785,pop:java.lang.Long,pid:String");
+        DataUtilities.createType(
+            "geostuff",
+            "geometry:Geometry:srid=3785,pop:java.lang.Long,pid:String");
 
     rangeType =
         DataUtilities.createType(
@@ -98,11 +100,13 @@ public class QueryIndexHelperTest {
 
     singleType =
         DataUtilities.createType(
-            "geostuff", "geometry:Geometry:srid=4326,when:Date,pop:java.lang.Long,pid:String");
+            "geostuff",
+            "geometry:Geometry:srid=4326,when:Date,pop:java.lang.Long,pid:String");
 
     transform =
         CRS.findMathTransform(
-            geoMercType.getCoordinateReferenceSystem(), geoType.getCoordinateReferenceSystem(),
+            geoMercType.getCoordinateReferenceSystem(),
+            geoType.getCoordinateReferenceSystem(),
             true);
 
     final TimeDescriptorConfiguration rangeConfig = new TimeDescriptorConfiguration();
@@ -145,8 +149,8 @@ public class QueryIndexHelperTest {
     final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
     final FeatureTimeRangeStatistics whenStats = new FeatureTimeRangeStatistics("when");
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName("when").build()
-            .getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+            "when").build().getId(),
         whenStats);
 
     final TemporalConstraintsSet constraintsSet = new TemporalConstraintsSet();
@@ -161,8 +165,10 @@ public class QueryIndexHelperTest {
     whenStats.entryIngested(notIntersectSingle);
 
     final TemporalConstraintsSet resultConstraintsSet =
-        QueryIndexHelper
-            .clipIndexedTemporalConstraints(statsMap, singleTimeDescriptors, constraintsSet);
+        QueryIndexHelper.clipIndexedTemporalConstraints(
+            statsMap,
+            singleTimeDescriptors,
+            constraintsSet);
 
     final TemporalConstraints constraints = resultConstraintsSet.getConstraintsFor("when");
 
@@ -174,8 +180,10 @@ public class QueryIndexHelperTest {
     constraintsSet1.getConstraintsFor("when").add(new TemporalRange(stime1, etime1));
 
     final TemporalConstraintsSet resultConstraintsSet1 =
-        QueryIndexHelper
-            .clipIndexedTemporalConstraints(statsMap, singleTimeDescriptors, constraintsSet1);
+        QueryIndexHelper.clipIndexedTemporalConstraints(
+            statsMap,
+            singleTimeDescriptors,
+            constraintsSet1);
 
     final TemporalConstraints constraints1 = resultConstraintsSet1.getConstraintsFor("when");
 
@@ -190,14 +198,14 @@ public class QueryIndexHelperTest {
     final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
     final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics("start");
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName("start").build()
-            .getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+            "start").build().getId(),
         startStats);
 
     final FeatureTimeRangeStatistics endStats = new FeatureTimeRangeStatistics("end");
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName("end").build()
-            .getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+            "end").build().getId(),
         endStats);
 
     final Date statsStart1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
@@ -221,12 +229,14 @@ public class QueryIndexHelperTest {
     final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
 
     final TemporalConstraintsSet constraintsSet = new TemporalConstraintsSet();
-    constraintsSet.getConstraintsForRange("start", "end")
-        .add(new TemporalRange(new Date(0), etime));
+    constraintsSet.getConstraintsForRange("start", "end").add(
+        new TemporalRange(new Date(0), etime));
 
     final TemporalConstraintsSet resultConstraintsSet =
-        QueryIndexHelper
-            .clipIndexedTemporalConstraints(statsMap, rangeTimeDescriptors, constraintsSet);
+        QueryIndexHelper.clipIndexedTemporalConstraints(
+            statsMap,
+            rangeTimeDescriptors,
+            constraintsSet);
 
     final TemporalConstraints constraints =
         resultConstraintsSet.getConstraintsForRange("start", "end");
@@ -242,14 +252,14 @@ public class QueryIndexHelperTest {
     final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
     final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics("start");
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName("start").build()
-            .getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+            "start").build().getId(),
         startStats);
 
     final FeatureTimeRangeStatistics endStats = new FeatureTimeRangeStatistics("end");
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName("end").build()
-            .getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+            "end").build().getId(),
         endStats);
 
     final Date statsStart1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
@@ -276,11 +286,14 @@ public class QueryIndexHelperTest {
     constraintsSet.getConstraintsForRange("start", "end").add(new TemporalRange(stime, etime));
 
     final BasicQuery query =
-        new BasicQuery(QueryIndexHelper.composeConstraints(
-            rangeType, rangeTimeDescriptors, statsMap,
-            factory.toGeometry(
-                factory.createPoint(new Coordinate(27.25, 41.25)).getEnvelopeInternal()),
-            constraintsSet));
+        new BasicQuery(
+            QueryIndexHelper.composeConstraints(
+                rangeType,
+                rangeTimeDescriptors,
+                statsMap,
+                factory.toGeometry(
+                    factory.createPoint(new Coordinate(27.25, 41.25)).getEnvelopeInternal()),
+                constraintsSet));
 
     final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
     assertEquals(stime.getTime(), (long) nd.get(0).getDataPerDimension()[2].getMin());
@@ -289,7 +302,9 @@ public class QueryIndexHelperTest {
     final BasicQuery query1 =
         new BasicQuery(
             QueryIndexHelper.composeConstraints(
-                rangeType, rangeTimeDescriptors, statsMap,
+                rangeType,
+                rangeTimeDescriptors,
+                statsMap,
                 factory.toGeometry(
                     factory.createPoint(new Coordinate(27.25, 41.25)).getEnvelopeInternal()),
                 null));
@@ -305,8 +320,8 @@ public class QueryIndexHelperTest {
     final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
     final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics("geometry");
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName("geometry").build()
-            .getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+            "geometry").build().getId(),
         geoStats);
 
     final SimpleFeature firstFeature =
@@ -322,8 +337,13 @@ public class QueryIndexHelperTest {
     final Envelope bounds = new Envelope(21.23, 26.23, 41.75, 43.1);
 
     final BasicQuery query =
-        new BasicQuery(QueryIndexHelper.composeConstraints(
-            geoType, geoTimeDescriptors, statsMap, new GeometryFactory().toGeometry(bounds), null));
+        new BasicQuery(
+            QueryIndexHelper.composeConstraints(
+                geoType,
+                geoTimeDescriptors,
+                statsMap,
+                new GeometryFactory().toGeometry(bounds),
+                null));
 
     final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(SPATIAL_INDEX);
     assertEquals(21.23, nd.get(0).getDataPerDimension()[0].getMin(), 0.0001);
@@ -337,8 +357,8 @@ public class QueryIndexHelperTest {
     final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
     final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics("geometry");
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName("geometry").build()
-            .getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+            "geometry").build().getId(),
         geoStats);
 
     final SimpleFeature firstFeature =
@@ -355,7 +375,9 @@ public class QueryIndexHelperTest {
 
     final Geometry bbox =
         QueryIndexHelper.clipIndexedBBOXConstraints(
-            geoType, new GeometryFactory().toGeometry(bounds), statsMap);
+            geoType,
+            new GeometryFactory().toGeometry(bounds),
+            statsMap);
 
     final Envelope env = bbox.getEnvelopeInternal();
 
@@ -424,14 +446,14 @@ public class QueryIndexHelperTest {
     final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
     final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics("start");
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName("start").build()
-            .getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+            "start").build().getId(),
         startStats);
 
     final FeatureTimeRangeStatistics endStats = new FeatureTimeRangeStatistics("end");
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName("end").build()
-            .getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+            "end").build().getId(),
         endStats);
 
     final Date statsStart1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
@@ -459,15 +481,18 @@ public class QueryIndexHelperTest {
 
     final Constraints constraints =
         QueryIndexHelper.composeTimeBoundedConstraints(
-            rangeType, rangeTimeDescriptors, statsMap, constraintsSet);
+            rangeType,
+            rangeTimeDescriptors,
+            statsMap,
+            constraintsSet);
     final List<MultiDimensionalNumericData> nd =
         constraints.getIndexConstraints(SPATIAL_TEMPORAL_INDEX.getIndexStrategy());
     assertTrue(nd.isEmpty());
 
     final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics("geometry");
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName("geometry").build()
-            .getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+            "geometry").build().getId(),
         geoStats);
 
     final SimpleFeature firstFeature =
@@ -480,8 +505,12 @@ public class QueryIndexHelperTest {
     geoStats.entryIngested(secondFeature);
 
     final Constraints constraints1 =
-        QueryIndexHelper
-            .composeConstraints(rangeType, rangeTimeDescriptors, statsMap, null, constraintsSet);
+        QueryIndexHelper.composeConstraints(
+            rangeType,
+            rangeTimeDescriptors,
+            statsMap,
+            null,
+            constraintsSet);
     final List<MultiDimensionalNumericData> nd1 =
         constraints1.getIndexConstraints(SPATIAL_TEMPORAL_INDEX.getIndexStrategy());
     assertTrue(nd1.isEmpty());
@@ -491,11 +520,14 @@ public class QueryIndexHelperTest {
      */
 
     final TemporalConstraintsSet constraintsSet2 = new TemporalConstraintsSet();
-    constraintsSet2.getConstraintsForRange("start", "end")
-        .add(new TemporalRange(statsStart1, statsEnd2));
+    constraintsSet2.getConstraintsForRange("start", "end").add(
+        new TemporalRange(statsStart1, statsEnd2));
     final Constraints constraints2 =
         QueryIndexHelper.composeTimeBoundedConstraints(
-            rangeType, rangeTimeDescriptors, statsMap, constraintsSet2);
+            rangeType,
+            rangeTimeDescriptors,
+            statsMap,
+            constraintsSet2);
     final List<MultiDimensionalNumericData> nd2 =
         constraints2.getIndexConstraints(SPATIAL_TEMPORAL_INDEX.getIndexStrategy());
     assertTrue(nd2.isEmpty());

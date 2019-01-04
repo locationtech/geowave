@@ -97,9 +97,13 @@ import org.slf4j.LoggerFactory;
 public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
   static final Logger LOGGER = LoggerFactory.getLogger(CentroidManagerGeoWave.class);
   private static final ParameterEnum<?>[] MY_PARAMS =
-      new ParameterEnum[] {StoreParameters.StoreParam.INPUT_STORE, GlobalParameters.Global.BATCH_ID,
-          CentroidParameters.Centroid.DATA_TYPE_ID, CentroidParameters.Centroid.DATA_NAMESPACE_URI,
-          CentroidParameters.Centroid.INDEX_NAME, CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+      new ParameterEnum[] {
+          StoreParameters.StoreParam.INPUT_STORE,
+          GlobalParameters.Global.BATCH_ID,
+          CentroidParameters.Centroid.DATA_TYPE_ID,
+          CentroidParameters.Centroid.DATA_NAMESPACE_URI,
+          CentroidParameters.Centroid.INDEX_NAME,
+          CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
           CentroidParameters.Centroid.ZOOM_LEVEL};
   private String batchId;
   private int level = 0;
@@ -130,8 +134,8 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
     this.centroidDataTypeId = centroidDataTypeId;
     index = indexStore.getIndex(indexName);
     adapter =
-        (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(centroidInternalAdapterId)
-            .getAdapter();
+        (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
+            centroidInternalAdapterId).getAdapter();
   }
 
   public CentroidManagerGeoWave(final PropertyManagement properties) throws IOException {
@@ -156,15 +160,18 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
         new ScopedJobConfiguration(context.getConfiguration(), scope, logger);
     try {
       centroidFactory =
-          (AnalyticItemWrapperFactory<T>) CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS
-              .getHelper().getValue(context, scope, CentroidItemWrapperFactory.class);
+          (AnalyticItemWrapperFactory<T>) CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS.getHelper().getValue(
+              context,
+              scope,
+              CentroidItemWrapperFactory.class);
       centroidFactory.initialize(context, scope, logger);
 
     } catch (final Exception e1) {
       LOGGER.error(
           "Cannot instantiate "
               + GeoWaveConfiguratorBase.enumToConfKey(
-                  this.getClass(), CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS));
+                  this.getClass(),
+                  CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS));
       throw new IOException(e1);
     }
 
@@ -182,8 +189,10 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
             CentroidParameters.Centroid.INDEX_NAME,
             new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName());
     final PersistableStore store =
-        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper()
-            .getValue(context, scope, null);
+        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+            context,
+            scope,
+            null);
 
     dataStore = store.getDataStoreOptions().createDataStore();
     indexStore = store.getDataStoreOptions().createIndexStore();
@@ -191,9 +200,8 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
     final PersistentAdapterStore adapterStore = store.getDataStoreOptions().createAdapterStore();
     adapter =
         (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
-            store.getDataStoreOptions().createInternalAdapterStore()
-                .getAdapterId(centroidDataTypeId))
-            .getAdapter();
+            store.getDataStoreOptions().createInternalAdapterStore().getAdapterId(
+                centroidDataTypeId)).getAdapter();
   }
 
   /**
@@ -319,8 +327,8 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
   @SuppressWarnings("unchecked")
   public AnalyticItemWrapper<T> getCentroid(final String dataId) {
     final QueryBuilder<T, ?> bldr =
-        (QueryBuilder<T, ?>) QueryBuilder.newBuilder().addTypeName(centroidDataTypeId)
-            .indexName(index.getName());
+        (QueryBuilder<T, ?>) QueryBuilder.newBuilder().addTypeName(centroidDataTypeId).indexName(
+            index.getName());
     try (CloseableIterator<T> it =
         dataStore.query(
             bldr.constraints(bldr.constraintsFactory().dataIds(new ByteArray(dataId))).build())) {
@@ -353,10 +361,10 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
       finalFilter = factory.and(factory.equal(exp1, exp2, false), batchIdFilter);
     }
     final VectorQueryBuilder bldr =
-        VectorQueryBuilder.newBuilder().addTypeName(adapter.getTypeName())
-            .indexName(index.getName());
-    return (CloseableIterator<T>) dataStore
-        .query(bldr.constraints(bldr.constraintsFactory().filterConstraints(finalFilter)).build());
+        VectorQueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+            index.getName());
+    return (CloseableIterator<T>) dataStore.query(
+        bldr.constraints(bldr.constraintsFactory().filterConstraints(finalFilter)).build());
   }
 
   @SuppressWarnings("unchecked")
@@ -423,7 +431,8 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
     return (adapter instanceof FeatureDataAdapter)
         ? new SimpleFeatureConverter((FeatureDataAdapter) adapter, shapeClass)
         : new NonSimpleFeatureConverter(
-            items.isEmpty() ? new String[0] : items.get(0).getExtraDimensions(), shapeClass);
+            items.isEmpty() ? new String[0] : items.get(0).getExtraDimensions(),
+            shapeClass);
   }
 
   private interface ToSimpleFeatureConverter<T> {
@@ -524,11 +533,13 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
         final String[] extraDimensionNames,
         final Class<? extends Geometry> shapeClass) {
       featureType =
-          AnalyticFeature
-              .createFeatureAdapter(
-                  centroidDataTypeId, extraDimensionNames, BasicFeatureTypes.DEFAULT_NAMESPACE,
-                  ClusteringUtils.CLUSTERING_CRS, ClusterFeatureAttribute.values(), shapeClass)
-              .getFeatureType();
+          AnalyticFeature.createFeatureAdapter(
+              centroidDataTypeId,
+              extraDimensionNames,
+              BasicFeatureTypes.DEFAULT_NAMESPACE,
+              ClusteringUtils.CLUSTERING_CRS,
+              ClusterFeatureAttribute.values(),
+              shapeClass).getFeatureType();
       this.shapeClass = shapeClass;
       final List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
       defaults = new Object[descriptors.size()];
@@ -553,9 +564,18 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
       }
 
       return AnalyticFeature.createGeometryFeature(
-          featureType, item.getBatchID(), item.getID(), item.getName(), item.getGroupID(),
-          item.getCost(), newValue, item.getExtraDimensions(), item.getDimensionValues(),
-          item.getZoomLevel(), item.getIterationID(), item.getAssociationCount());
+          featureType,
+          item.getBatchID(),
+          item.getID(),
+          item.getName(),
+          item.getGroupID(),
+          item.getCost(),
+          newValue,
+          item.getExtraDimensions(),
+          item.getDimensionValues(),
+          item.getZoomLevel(),
+          item.getIterationID(),
+          item.getAssociationCount());
     }
   }
 
@@ -589,8 +609,7 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
       for (final AnalyticItemWrapper<T> item : centroids) {
         final SimpleFeature copy = writer.next();
         final SimpleFeature newFeature = converter.toSimpleFeature(item);
-        for (final AttributeDescriptor attrD : newFeature.getFeatureType()
-            .getAttributeDescriptors()) {
+        for (final AttributeDescriptor attrD : newFeature.getFeatureType().getAttributeDescriptors()) {
           // the null case should only happen for geometry
           if (copy.getFeatureType().getDescriptor(attrD.getName()) != null) {
             copy.setAttribute(attrD.getName(), newFeature.getAttribute(attrD.getName()));

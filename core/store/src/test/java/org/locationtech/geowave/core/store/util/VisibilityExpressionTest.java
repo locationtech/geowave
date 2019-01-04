@@ -103,7 +103,8 @@ public class VisibilityExpressionTest {
       // Expected
       assertTrue(e.getCause() instanceof ParseException);
       assertEquals(
-          "Left parenthesis found with no matching right parenthesis.", e.getCause().getMessage());
+          "Left parenthesis found with no matching right parenthesis.",
+          e.getCause().getMessage());
     }
 
     try {
@@ -113,7 +114,8 @@ public class VisibilityExpressionTest {
       // Expected
       assertTrue(e.getCause() instanceof ParseException);
       assertEquals(
-          "Right parenthesis found with no matching left parenthesis.", e.getCause().getMessage());
+          "Right parenthesis found with no matching left parenthesis.",
+          e.getCause().getMessage());
     }
 
     try {

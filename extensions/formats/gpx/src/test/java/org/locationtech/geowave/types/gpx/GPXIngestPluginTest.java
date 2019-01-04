@@ -52,12 +52,15 @@ public class GPXIngestPluginTest {
 
     final GpxIngestPlugin pluggin = new GpxIngestPlugin();
     pluggin.init(
-        new File(this.getClass().getClassLoader().getResource("metadata.xml").getPath())
-            .getParentFile().toURI().toURL());
+        new File(
+            this.getClass().getClassLoader().getResource(
+                "metadata.xml").getPath()).getParentFile().toURI().toURL());
 
     final CloseableIterator<GeoWaveData<SimpleFeature>> consumer =
         pluggin.toGeoWaveData(
-            this.getClass().getClassLoader().getResource("12345.xml"), new String[] {"123"}, "");
+            this.getClass().getClassLoader().getResource("12345.xml"),
+            new String[] {"123"},
+            "");
 
     int totalCount = 0;
     while (consumer.hasNext()) {
@@ -77,7 +80,8 @@ public class GPXIngestPluginTest {
       System.out.println(expectedSet);
     }
     assertEquals(
-        "All expected data set should be matched; zero unmatched data expected", 0,
+        "All expected data set should be matched; zero unmatched data expected",
+        0,
         expectedSet.size());
   }
 }

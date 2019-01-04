@@ -46,8 +46,10 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
   protected SimpleNumericIndexStrategy(final NumberLexicoder<T> lexicoder) {
     this.lexicoder = lexicoder;
     this.definitions =
-        new NumericDimensionDefinition[] {new BasicDimensionDefinition(
-            lexicoder.getMinimumValue().doubleValue(), lexicoder.getMaximumValue().doubleValue())};
+        new NumericDimensionDefinition[] {
+            new BasicDimensionDefinition(
+                lexicoder.getMinimumValue().doubleValue(),
+                lexicoder.getMaximumValue().doubleValue())};
   }
 
   protected NumberLexicoder<T> getLexicoder() {
@@ -144,8 +146,10 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
   public MultiDimensionalCoordinates getCoordinatesPerDimension(
       final ByteArray partitionKey,
       final ByteArray sortKey) {
-    return new MultiDimensionalCoordinates(null, new Coordinate[] {
-        new Coordinate(Long.class.cast(lexicoder.fromByteArray(sortKey.getBytes())), null)});
+    return new MultiDimensionalCoordinates(
+        null,
+        new Coordinate[] {
+            new Coordinate(Long.class.cast(lexicoder.fromByteArray(sortKey.getBytes())), null)});
   }
 
   @Override

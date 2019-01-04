@@ -45,7 +45,11 @@ public class ConfigServiceClient implements ConfigService {
       addStoreTarget =
           addPathFromAnnotation(
               ConfigService.class.getMethod(
-                  "addStoreReRoute", String.class, String.class, String.class, Map.class),
+                  "addStoreReRoute",
+                  String.class,
+                  String.class,
+                  String.class,
+                  Map.class),
               addStoreTarget);
     } catch (NoSuchMethodException | SecurityException e) {
       LOGGER.warn("Unable to derive path from method annotations", e);
@@ -77,7 +81,18 @@ public class ConfigServiceClient implements ConfigService {
   public Response addHBaseStore(final String name, final String zookeeper) {
 
     return addHBaseStore(
-        name, zookeeper, null, null, null, null, null, null, null, null, null, null);
+        name,
+        zookeeper,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null);
   }
 
   @Override
@@ -97,8 +112,17 @@ public class ConfigServiceClient implements ConfigService {
 
     final Response resp =
         configService.addHBaseStore(
-            name, zookeeper, makeDefault, geowaveNamespace, disableServiceSide, coprocessorjar,
-            persistAdapter, persistIndex, persistDataStatistics, createTable, useAltIndex,
+            name,
+            zookeeper,
+            makeDefault,
+            geowaveNamespace,
+            disableServiceSide,
+            coprocessorjar,
+            persistAdapter,
+            persistIndex,
+            persistDataStatistics,
+            createTable,
+            useAltIndex,
             enableBlockCache);
     return resp;
   }
@@ -111,7 +135,19 @@ public class ConfigServiceClient implements ConfigService {
       final String password) {
 
     return addAccumuloStore(
-        name, zookeeper, instance, user, password, null, null, null, null, null, null, null, null,
+        name,
+        zookeeper,
+        instance,
+        user,
+        password,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null);
   }
 
@@ -134,16 +170,39 @@ public class ConfigServiceClient implements ConfigService {
 
     final Response resp =
         configService.addAccumuloStore(
-            name, zookeeper, instance, user, password, makeDefault, geowaveNamespace,
-            useLocalityGroups, persistAdapter, persistIndex, persistDataStatistics, createTable,
-            useAltIndex, enableBlockCache);
+            name,
+            zookeeper,
+            instance,
+            user,
+            password,
+            makeDefault,
+            geowaveNamespace,
+            useLocalityGroups,
+            persistAdapter,
+            persistIndex,
+            persistDataStatistics,
+            createTable,
+            useAltIndex,
+            enableBlockCache);
     return resp;
   }
 
   public Response addBigTableStore(final String name) {
 
     return addBigTableStore(
-        name, null, null, null, null, null, null, null, null, null, null, null, null);
+        name,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null);
   }
 
   @Override
@@ -164,16 +223,41 @@ public class ConfigServiceClient implements ConfigService {
 
     final Response resp =
         configService.addBigTableStore(
-            name, makeDefault, scanCacheSize, projectId, instanceId, geowaveNamespace,
-            useLocalityGroups, persistAdapter, persistIndex, persistDataStatistics, createTable,
-            useAltIndex, enableBlockCache);
+            name,
+            makeDefault,
+            scanCacheSize,
+            projectId,
+            instanceId,
+            geowaveNamespace,
+            useLocalityGroups,
+            persistAdapter,
+            persistIndex,
+            persistDataStatistics,
+            createTable,
+            useAltIndex,
+            enableBlockCache);
     return resp;
   }
 
   public Response addDynamoDBStore(String name) {
     return addDynamoDBStore(
-        name, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-        null, null);
+        name,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null);
   }
 
   @Override
@@ -198,16 +282,42 @@ public class ConfigServiceClient implements ConfigService {
 
     final Response resp =
         configService.addDynamoDBStore(
-            name, makeDefault, endpoint, region, writeCapacity, readCapacity, maxConnections,
-            protocol, enableCacheResponseMetadata, geowaveNamespace, persistAdapter, persistIndex,
-            persistDataStatistics, createTable, useAltIndex, enableBlockCache,
+            name,
+            makeDefault,
+            endpoint,
+            region,
+            writeCapacity,
+            readCapacity,
+            maxConnections,
+            protocol,
+            enableCacheResponseMetadata,
+            geowaveNamespace,
+            persistAdapter,
+            persistIndex,
+            persistDataStatistics,
+            createTable,
+            useAltIndex,
+            enableBlockCache,
             enableServerSideLibrary);
     return resp;
   }
 
   public Response addCassandraStore(String name) {
     return addCassandraStore(
-        name, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        name,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null);
   }
 
   @Override
@@ -228,9 +338,20 @@ public class ConfigServiceClient implements ConfigService {
       Boolean enableServerSideLibrary) {
     final Response resp =
         configService.addCassandraStore(
-            name, makeDefault, contactPoint, batchWriteSize, durableWrites, replicationFactor,
-            geowaveNamespace, persistAdapter, persistIndex, persistDataStatistics, createTable,
-            useAltIndex, enableBlockCache, enableServerSideLibrary);
+            name,
+            makeDefault,
+            contactPoint,
+            batchWriteSize,
+            durableWrites,
+            replicationFactor,
+            geowaveNamespace,
+            persistAdapter,
+            persistIndex,
+            persistDataStatistics,
+            createTable,
+            useAltIndex,
+            enableBlockCache,
+            enableServerSideLibrary);
     return resp;
   }
 
@@ -250,7 +371,13 @@ public class ConfigServiceClient implements ConfigService {
 
     final Response resp =
         configService.addSpatialIndex(
-            name, makeDefault, nameOverride, numPartitions, partitionStrategy, storeTime, crs);
+            name,
+            makeDefault,
+            nameOverride,
+            numPartitions,
+            partitionStrategy,
+            storeTime,
+            crs);
     return resp;
   }
 
@@ -277,8 +404,15 @@ public class ConfigServiceClient implements ConfigService {
 
     final Response resp =
         configService.addSpatialTemporalIndex(
-            name, makeDefault, nameOverride, numPartitions, partitionStrategy, periodicity, bias,
-            maxDuplicates, crs);
+            name,
+            makeDefault,
+            nameOverride,
+            numPartitions,
+            partitionStrategy,
+            periodicity,
+            bias,
+            maxDuplicates,
+            crs);
     return resp;
   }
 
@@ -301,16 +435,41 @@ public class ConfigServiceClient implements ConfigService {
       final String crs) {
     final Response resp =
         configService.addIndex(
-            name, type, makeDefault, nameOverride, numPartitions, partitionStrategy, storeTime,
-            periodicity, bias, maxDuplicates, crs);
+            name,
+            type,
+            makeDefault,
+            nameOverride,
+            numPartitions,
+            partitionStrategy,
+            storeTime,
+            periodicity,
+            bias,
+            maxDuplicates,
+            crs);
     return resp;
   }
 
   public Response configGeoServer(final String GeoServer_URL) {
 
     return configGeoServer(
-        GeoServer_URL, null, null, null, null, null, null, null, null, null, null, null, null, null,
-        null, null, null, null);
+        GeoServer_URL,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null);
   }
 
   @Override
@@ -336,10 +495,23 @@ public class ConfigServiceClient implements ConfigService {
 
     final Response resp =
         configService.configGeoServer(
-            GeoServer_URL, username, pass, workspace, sslSecurityProtocol, sslTrustStorePath,
-            sslTrustStorePassword, sslTrustStoreType, sslTruststoreProvider,
-            sslTrustManagerAlgorithm, sslTrustManagerProvider, sslKeyStorePath, sslKeyStorePassword,
-            sslKeyStoreProvider, sslKeyPassword, sslKeyStoreType, sslKeyManagerAlgorithm,
+            GeoServer_URL,
+            username,
+            pass,
+            workspace,
+            sslSecurityProtocol,
+            sslTrustStorePath,
+            sslTrustStorePassword,
+            sslTrustStoreType,
+            sslTruststoreProvider,
+            sslTrustManagerAlgorithm,
+            sslTrustManagerProvider,
+            sslKeyStorePath,
+            sslKeyStorePassword,
+            sslKeyStoreProvider,
+            sslKeyPassword,
+            sslKeyStoreType,
+            sslKeyManagerAlgorithm,
             sslKeyManagerProvider);
     return resp;
   }

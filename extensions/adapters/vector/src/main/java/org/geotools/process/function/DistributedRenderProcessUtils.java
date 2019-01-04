@@ -29,7 +29,9 @@ public class DistributedRenderProcessUtils {
   public static Expression getRenderingProcess() {
     if (SINGLETON_RENDER_PROCESS == null) {
       final ProcessFactory processFactory =
-          new AnnotatedBeanProcessFactory(Text.text("Internal GeoWave Process Factory"), "internal",
+          new AnnotatedBeanProcessFactory(
+              Text.text("Internal GeoWave Process Factory"),
+              "internal",
               InternalDistributedRenderProcess.class);
       final Name processName = new NameImpl("internal", "InternalDistributedRender");
       final RenderingProcess process = (RenderingProcess) processFactory.create(processName);
@@ -43,11 +45,15 @@ public class DistributedRenderProcessUtils {
       Processors.addProcessFactory(factory);
 
       SINGLETON_RENDER_PROCESS =
-          new RenderingProcessFunction(processName,
+          new RenderingProcessFunction(
+              processName,
               Collections.singletonList(
-                  new ParameterFunction(null,
+                  new ParameterFunction(
+                      null,
                       Collections.singletonList(new LiteralExpressionImpl("data")))),
-              parameters, process, null);
+              parameters,
+              process,
+              null);
       Processors.removeProcessFactory(factory);
     }
     return SINGLETON_RENDER_PROCESS;

@@ -68,8 +68,8 @@ public class ComparisonCellData implements WritableComparable<ComparisonCellData
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(2003, 6373).append(summerPercentile).append(winterPercentile)
-        .toHashCode();
+    return new HashCodeBuilder(2003, 6373).append(summerPercentile).append(
+        winterPercentile).toHashCode();
   }
 
   private static double applyCombinationFunction(

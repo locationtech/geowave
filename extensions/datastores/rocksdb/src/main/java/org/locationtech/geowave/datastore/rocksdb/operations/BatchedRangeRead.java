@@ -55,13 +55,15 @@ public class BatchedRangeRead<T> {
     public int compare(final RangeReadInfo o1, final RangeReadInfo o2) {
       int comp =
           UnsignedBytes.lexicographicalComparator().compare(
-              o1.sortKeyRange.getStart().getBytes(), o2.sortKeyRange.getStart().getBytes());
+              o1.sortKeyRange.getStart().getBytes(),
+              o2.sortKeyRange.getStart().getBytes());
       if (comp != 0) {
         return comp;
       }
       comp =
-          UnsignedBytes.lexicographicalComparator()
-              .compare(o1.sortKeyRange.getEnd().getBytes(), o2.sortKeyRange.getEnd().getBytes());
+          UnsignedBytes.lexicographicalComparator().compare(
+              o1.sortKeyRange.getEnd().getBytes(),
+              o2.sortKeyRange.getEnd().getBytes());
       if (comp != 0) {
         return comp;
       }
@@ -107,7 +109,11 @@ public class BatchedRangeRead<T> {
 
   private RocksDBIndexTable getTable(final byte[] partitionKey) {
     return RocksDBUtils.getIndexTableFromPrefix(
-        client, indexNamePrefix, adapterId, partitionKey, groupByRowAndSortByTimePair.getRight());
+        client,
+        indexNamePrefix,
+        adapterId,
+        partitionKey,
+        groupByRowAndSortByTimePair.getRight());
   }
 
   public CloseableIterator<T> results() {
@@ -136,18 +142,21 @@ public class BatchedRangeRead<T> {
       // precision we need to make
       // sure the end is inclusive
       return transformAndFilter(
-          setCache.get(partitionKey).iterator(r.sortKeyRange), r.partitionKey);
+          setCache.get(partitionKey).iterator(r.sortKeyRange),
+          r.partitionKey);
     }).iterator()));
   }
 
   private CloseableIterator<T> transformAndFilter(
       final CloseableIterator<GeoWaveRow> result,
       final byte[] partitionKey) {
-    return new CloseableIteratorWrapper<>(result, rowTransformer.apply(
-        sortByKeyIfRequired(
-            isSortFinalResultsBySortKey,
-            (Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator(
-                Iterators.filter(result, filter)))));
+    return new CloseableIteratorWrapper<>(
+        result,
+        rowTransformer.apply(
+            sortByKeyIfRequired(
+                isSortFinalResultsBySortKey,
+                (Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator(
+                    Iterators.filter(result, filter)))));
   }
 
   private static Iterator<GeoWaveRow> sortByKeyIfRequired(

@@ -117,7 +117,8 @@ public class TwitterIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
   }
 
   @Override
-  @SuppressFBWarnings(value = {"REC_CATCH_EXCEPTION"},
+  @SuppressFBWarnings(
+      value = {"REC_CATCH_EXCEPTION"},
       justification = "Intentionally catching any possible exception as there may be unknown format issues in a file and we don't want to error partially through parsing")
   protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
       final AvroWholeFile hfile,
@@ -177,11 +178,11 @@ public class TwitterIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
 
             try {
               lon =
-                  tweet.getJsonObject("coordinates").getJsonArray("coordinates").getJsonNumber(0)
-                      .doubleValue();
+                  tweet.getJsonObject("coordinates").getJsonArray("coordinates").getJsonNumber(
+                      0).doubleValue();
               lat =
-                  tweet.getJsonObject("coordinates").getJsonArray("coordinates").getJsonNumber(1)
-                      .doubleValue();
+                  tweet.getJsonObject("coordinates").getJsonArray("coordinates").getJsonNumber(
+                      1).doubleValue();
               LOGGER.debug("line " + lineNumber + " at POINT(" + lon + " " + lat + ")");
             } catch (final Exception e) {
               LOGGER.debug(
@@ -242,8 +243,9 @@ public class TwitterIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
             twitterSftBuilder.set(TwitterUtils.TWITTER_RETWEETCOUNT_ATTRIBUTE, retweetCount);
             twitterSftBuilder.set(TwitterUtils.TWITTER_LANG_ATTRIBUTE, lang);
             twitterSftBuilder.set(TwitterUtils.TWITTER_DTG_ATTRIBUTE, dtg);
-            twitterSftBuilder
-                .set(TwitterUtils.TWITTER_GEOMETRY_ATTRIBUTE, geometryFactory.createPoint(coord));
+            twitterSftBuilder.set(
+                TwitterUtils.TWITTER_GEOMETRY_ATTRIBUTE,
+                geometryFactory.createPoint(coord));
 
             final SimpleFeature tweetSft = twitterSftBuilder.buildFeature(tweetId);
             // LOGGER.warn(tweetSft.toString());

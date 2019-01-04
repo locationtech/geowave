@@ -70,8 +70,9 @@ public class ChooseLocalityPreservingQueryStrategy implements IndexQueryStrategy
                     qr.getMaxValuesPerDimension()[d] - qr.getMinValuesPerDimension()[d];
               }
               totalMax +=
-                  IndexUtils
-                      .getDimensionalBitsUsed(nextIdx.getIndexStrategy(), dataRangePerDimension);
+                  IndexUtils.getDimensionalBitsUsed(
+                      nextIdx.getIndexStrategy(),
+                      dataRangePerDimension);
             }
             if (totalMax > indexMax) {
               indexMax = totalMax;

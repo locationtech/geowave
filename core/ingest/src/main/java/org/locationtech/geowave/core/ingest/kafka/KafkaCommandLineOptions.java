@@ -24,7 +24,9 @@ import org.slf4j.LoggerFactory;
 public class KafkaCommandLineOptions {
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaCommandLineOptions.class);
 
-  @Parameter(names = "--kafkaprops", required = false,
+  @Parameter(
+      names = "--kafkaprops",
+      required = false,
       description = "Properties file containing Kafka properties")
   private String kafkaPropertyFile;
 

@@ -28,7 +28,8 @@ public class RowMergingVisibilityCombiner extends MergingVisibilityCombiner {
   protected Mergeable getMergeable(final Key key, final byte[] binary) {
     return rowTransform.getRowAsMergeableObject(
         ByteArrayUtils.shortFromString(key.getColumnFamily().toString()),
-        new ByteArray(key.getColumnQualifier().getBytes()), binary);
+        new ByteArray(key.getColumnQualifier().getBytes()),
+        binary);
   }
 
   @Override

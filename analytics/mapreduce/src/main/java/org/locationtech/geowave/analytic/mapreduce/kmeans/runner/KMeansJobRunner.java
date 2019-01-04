@@ -62,9 +62,11 @@ public class KMeansJobRunner extends GeoWaveAnalyticJobRunner implements MapRedu
             ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
             Math.max(2, super.getReducerCount())));
     runTimeProperties.setConfig(
-        new ParameterEnum[] {CentroidParameters.Centroid.EXTRACTOR_CLASS,
+        new ParameterEnum[] {
+            CentroidParameters.Centroid.EXTRACTOR_CLASS,
             CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS},
-        configuration, getScope());
+        configuration,
+        getScope());
 
     // HP Fortify "Command Injection" false positive
     // What Fortify considers "externally-influenced input"

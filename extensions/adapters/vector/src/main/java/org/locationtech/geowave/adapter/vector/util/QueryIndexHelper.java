@@ -39,8 +39,8 @@ public class QueryIndexHelper {
     if (attr != null) {
       final FeatureTimeRangeStatistics stat =
           ((FeatureTimeRangeStatistics) statsMap.get(
-              VectorStatisticsQueryBuilder.newBuilder().factory().timeRange()
-                  .fieldName(attr.getLocalName()).build().getId()));
+              VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+                  attr.getLocalName()).build().getId()));
       if (stat != null) {
         timeRange.setStartTime(stat.getMinTime());
         timeRange.setEndTime(stat.getMaxTime());
@@ -75,8 +75,8 @@ public class QueryIndexHelper {
             new TemporalRange(statsStartRange.getStartTime(), statsEndRange.getEndTime());
 
         final TemporalConstraints constraints = constraintsSet.getConstraintsForRange(sname, ename);
-        constraints
-            .replaceWithIntersections(new TemporalConstraints(fullRange, constraints.getName()));
+        constraints.replaceWithIntersections(
+            new TemporalConstraints(fullRange, constraints.getName()));
 
         constraintsSet.removeAllConstraintsExcept(constraints.getName());
         // this should be fixed to handle interwoven range.
@@ -88,13 +88,13 @@ public class QueryIndexHelper {
       final String name = timeDescriptors.getTime().getLocalName();
       final FeatureTimeRangeStatistics stats =
           ((FeatureTimeRangeStatistics) statsMap.get(
-              VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(name)
-                  .build().getId()));
+              VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+                  name).build().getId()));
 
       final TemporalConstraints constraints = constraintsSet.getConstraintsFor(name);
       if (stats != null) {
-        constraints
-            .replaceWithIntersections(new TemporalConstraints(stats.asTemporalRange(), name));
+        constraints.replaceWithIntersections(
+            new TemporalConstraints(stats.asTemporalRange(), name));
       }
       constraintsSet.removeAllConstraintsExcept(name);
       return constraintsSet;
@@ -118,8 +118,8 @@ public class QueryIndexHelper {
     final String geoAttrName = featureType.getGeometryDescriptor().getLocalName();
 
     final StatisticsId statId =
-        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(geoAttrName).build()
-            .getId();
+        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+            geoAttrName).build().getId();
     final FeatureBoundingBoxStatistics bboxStats =
         (FeatureBoundingBoxStatistics) statsMap.get(statId);
     if ((bboxStats != null) && bboxStats.isSet() && (bbox != null)) {
@@ -143,19 +143,20 @@ public class QueryIndexHelper {
       final FeatureTimeRangeStatistics endRange =
           (timeDescriptors.getEndRange() != null)
               ? ((FeatureTimeRangeStatistics) stats.get(
-                  VectorStatisticsQueryBuilder.newBuilder().factory().timeRange()
-                      .fieldName(timeDescriptors.getEndRange().getLocalName()).build().getId()))
+                  VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+                      timeDescriptors.getEndRange().getLocalName()).build().getId()))
               : null;
       final FeatureTimeRangeStatistics startRange =
           (timeDescriptors.getStartRange() != null)
               ? ((FeatureTimeRangeStatistics) stats.get(
-                  VectorStatisticsQueryBuilder.newBuilder().factory().timeRange()
-                      .fieldName(timeDescriptors.getStartRange().getLocalName()).build().getId()))
+                  VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+                      timeDescriptors.getStartRange().getLocalName()).build().getId()))
               : null;
 
       if ((endRange != null) && (startRange != null)) {
         return SpatialTemporalQuery.createConstraints(
-            startRange.asTemporalRange().union(endRange.asTemporalRange()), true);
+            startRange.asTemporalRange().union(endRange.asTemporalRange()),
+            true);
       } else if (endRange != null) {
         return SpatialTemporalQuery.createConstraints(endRange.asTemporalRange(), true);
       } else if (startRange != null) {
@@ -164,8 +165,8 @@ public class QueryIndexHelper {
     } else if (timeDescriptors.getTime() != null) {
       final FeatureTimeRangeStatistics timeStat =
           ((FeatureTimeRangeStatistics) stats.get(
-              VectorStatisticsQueryBuilder.newBuilder().factory().timeRange()
-                  .fieldName(timeDescriptors.getTime().getLocalName()).build().getId()));
+              VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+                  timeDescriptors.getTime().getLocalName()).build().getId()));
       if (timeStat != null) {
         return SpatialTemporalQuery.createConstraints(timeStat.asTemporalRange(), true);
       }
@@ -178,8 +179,8 @@ public class QueryIndexHelper {
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap) {
     final String geoAttrName = featureType.getGeometryDescriptor().getLocalName();
     final StatisticsId statId =
-        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(geoAttrName).build()
-            .getId();
+        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+            geoAttrName).build().getId();
     final BoundingBoxDataStatistics<SimpleFeature> bboxStats =
         (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(statId);
     return (bboxStats != null) ? bboxStats.getConstraints() : new ConstraintSet();
@@ -266,8 +267,10 @@ public class QueryIndexHelper {
     final Constraints statsConstraints =
         new Constraints(getBBOXIndexConstraintsFromIndex(featureType, statsMap));
     if (geoConstraints.getConstraints().matches(statsConstraints)) {
-      return new GeoConstraintsWrapper(new Constraints(),
-          geoConstraints.isConstraintsMatchGeometry(), jtsBounds);
+      return new GeoConstraintsWrapper(
+          new Constraints(),
+          geoConstraints.isConstraintsMatchGeometry(),
+          jtsBounds);
     }
     return geoConstraints;
   }

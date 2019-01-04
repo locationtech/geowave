@@ -15,10 +15,19 @@ import org.locationtech.geowave.core.store.operations.remote.VersionCommand;
 public class RemoteOperationProvider implements CLIOperationProviderSpi {
 
   private static final Class<?>[] OPERATIONS =
-      new Class<?>[] {RemoteSection.class, CalculateStatCommand.class, ClearCommand.class,
-          ListTypesCommand.class, ListIndicesCommand.class, ListStatsCommand.class,
-          VersionCommand.class, MergeDataCommand.class, RecalculateStatsCommand.class,
-          CombineStatsCommand.class, RemoveTypeCommand.class, RemoveStatCommand.class};
+      new Class<?>[] {
+          RemoteSection.class,
+          CalculateStatCommand.class,
+          ClearCommand.class,
+          ListTypesCommand.class,
+          ListIndicesCommand.class,
+          ListStatsCommand.class,
+          VersionCommand.class,
+          MergeDataCommand.class,
+          RecalculateStatsCommand.class,
+          CombineStatsCommand.class,
+          RemoveTypeCommand.class,
+          RemoveStatCommand.class};
 
   @Override
   public Class<?>[] getOperations() {

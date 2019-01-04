@@ -67,19 +67,22 @@ public class GeometryWrapper implements CommonIndexValue {
           && ((rangeData[0].getMax() > r.getMin())
               || DoubleMath.fuzzyEquals(rangeData[0].getMax(), r.getMin(), DOUBLE_TOLERANCE));
     }
-    return geometry.getFactory()
-        .createPolygon(
-            new Coordinate[] {
-                new Coordinate(rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
-                    rangeData[latPosition].getMin() - DOUBLE_TOLERANCE),
-                new Coordinate(rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
-                    rangeData[latPosition].getMax() + DOUBLE_TOLERANCE),
-                new Coordinate(rangeData[longPosition].getMax() + DOUBLE_TOLERANCE,
-                    rangeData[latPosition].getMax() + DOUBLE_TOLERANCE),
-                new Coordinate(rangeData[longPosition].getMax() + DOUBLE_TOLERANCE,
-                    rangeData[latPosition].getMin() - DOUBLE_TOLERANCE),
-                new Coordinate(rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
-                    rangeData[latPosition].getMin() - DOUBLE_TOLERANCE)})
-        .intersects(geometry);
+    return geometry.getFactory().createPolygon(
+        new Coordinate[] {
+            new Coordinate(
+                rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
+                rangeData[latPosition].getMin() - DOUBLE_TOLERANCE),
+            new Coordinate(
+                rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
+                rangeData[latPosition].getMax() + DOUBLE_TOLERANCE),
+            new Coordinate(
+                rangeData[longPosition].getMax() + DOUBLE_TOLERANCE,
+                rangeData[latPosition].getMax() + DOUBLE_TOLERANCE),
+            new Coordinate(
+                rangeData[longPosition].getMax() + DOUBLE_TOLERANCE,
+                rangeData[latPosition].getMin() - DOUBLE_TOLERANCE),
+            new Coordinate(
+                rangeData[longPosition].getMin() - DOUBLE_TOLERANCE,
+                rangeData[latPosition].getMin() - DOUBLE_TOLERANCE)}).intersects(geometry);
   }
 }

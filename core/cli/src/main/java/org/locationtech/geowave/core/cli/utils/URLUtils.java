@@ -37,7 +37,10 @@ public class URLUtils {
       URL targetURL = uri.toURL();
       if (targetURL.getPort() == -1) {
         targetURL =
-            new URL(targetURL.getProtocol(), targetURL.getHost(), targetURL.getDefaultPort(),
+            new URL(
+                targetURL.getProtocol(),
+                targetURL.getHost(),
+                targetURL.getDefaultPort(),
                 // HP Fortify "Path Traversal" False Positive
                 // User input is not used at any point to determine the
                 // file path.
@@ -48,7 +51,10 @@ public class URLUtils {
       }
       if (String.valueOf(targetURL.getPort()).endsWith("443")) {
         targetURL =
-            new URL(HTTPS, targetURL.getHost(), targetURL.getPort(),
+            new URL(
+                HTTPS,
+                targetURL.getHost(),
+                targetURL.getPort(),
                 // HP Fortify "Path Traversal" False Positive
                 // User input is not used at any point to determine the
                 // file path.

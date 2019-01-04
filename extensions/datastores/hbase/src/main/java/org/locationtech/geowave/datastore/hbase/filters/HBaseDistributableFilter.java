@@ -182,7 +182,10 @@ public class HBaseDistributableFilter extends FilterBase {
         // Grab rowkey from first cell
         if (rowKey == null) {
           rowKey =
-              new GeoWaveKeyImpl(cell.getRowArray(), partitionKeyLength, cell.getRowOffset(),
+              new GeoWaveKeyImpl(
+                  cell.getRowArray(),
+                  partitionKeyLength,
+                  cell.getRowOffset(),
                   cell.getRowLength());
         }
 
@@ -214,7 +217,10 @@ public class HBaseDistributableFilter extends FilterBase {
 
   protected ReturnCode applyFilter(final Cell cell) {
     final GeoWaveKeyImpl rowKey =
-        new GeoWaveKeyImpl(cell.getRowArray(), partitionKeyLength, cell.getRowOffset(),
+        new GeoWaveKeyImpl(
+            cell.getRowArray(),
+            partitionKeyLength,
+            cell.getRowOffset(),
             cell.getRowLength());
 
     return applyFilter(rowKey);
@@ -242,9 +248,14 @@ public class HBaseDistributableFilter extends FilterBase {
       final PersistentDataset<CommonIndexValue> commonData,
       final FlattenedUnreadData unreadData) {
 
-    return new DeferredReadCommonIndexedPersistenceEncoding(rowKey.getAdapterId(),
-        new ByteArray(rowKey.getDataId()), new ByteArray(rowKey.getPartitionKey()),
-        new ByteArray(rowKey.getSortKey()), rowKey.getNumberOfDuplicates(), commonData, unreadData);
+    return new DeferredReadCommonIndexedPersistenceEncoding(
+        rowKey.getAdapterId(),
+        new ByteArray(rowKey.getDataId()),
+        new ByteArray(rowKey.getPartitionKey()),
+        new ByteArray(rowKey.getSortKey()),
+        rowKey.getNumberOfDuplicates(),
+        commonData,
+        unreadData);
   }
 
   public CommonIndexedPersistenceEncoding getPersistenceEncoding() {
@@ -254,8 +265,9 @@ public class HBaseDistributableFilter extends FilterBase {
   public IndexedAdapterPersistenceEncoding getAdapterEncoding(final DataTypeAdapter dataAdapter) {
     final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<>();
     if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
-      ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
-          .convertUnknownValues(dataAdapter, model);
+      ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
+          dataAdapter,
+          model);
       final PersistentDataset<Object> existingExtValues =
           ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
       if (existingExtValues != null) {
@@ -264,10 +276,14 @@ public class HBaseDistributableFilter extends FilterBase {
     }
 
     adapterEncoding =
-        new IndexedAdapterPersistenceEncoding(persistenceEncoding.getInternalAdapterId(),
-            persistenceEncoding.getDataId(), persistenceEncoding.getInsertionPartitionKey(),
-            persistenceEncoding.getInsertionSortKey(), persistenceEncoding.getDuplicateCount(),
-            persistenceEncoding.getCommonData(), new PersistentDataset<byte[]>(),
+        new IndexedAdapterPersistenceEncoding(
+            persistenceEncoding.getInternalAdapterId(),
+            persistenceEncoding.getDataId(),
+            persistenceEncoding.getInsertionPartitionKey(),
+            persistenceEncoding.getInsertionSortKey(),
+            persistenceEncoding.getDuplicateCount(),
+            persistenceEncoding.getCommonData(),
+            new PersistentDataset<byte[]>(),
             adapterExtendedValues);
 
     return adapterEncoding;
@@ -310,8 +326,11 @@ public class HBaseDistributableFilter extends FilterBase {
     final byte[] valBuf = CellUtil.cloneValue(cell);
 
     final FlattenedDataSet dataSet =
-        DataStoreUtils
-            .decomposeFlattenedFields(qualBuf, valBuf, null, commonIndexFieldIds.size() - 1);
+        DataStoreUtils.decomposeFlattenedFields(
+            qualBuf,
+            valBuf,
+            null,
+            commonIndexFieldIds.size() - 1);
 
     final List<FlattenedFieldInfo> fieldInfos = dataSet.getFieldsRead();
     for (final FlattenedFieldInfo fieldInfo : fieldInfos) {

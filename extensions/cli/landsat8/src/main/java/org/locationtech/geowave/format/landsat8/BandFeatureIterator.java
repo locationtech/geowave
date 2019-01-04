@@ -58,8 +58,17 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
       final int nBestBands,
       final Filter cqlFilter,
       final String workspaceDir) throws MalformedURLException, IOException {
-    this(new SceneFeatureIterator(onlyScenesSinceLastRun, useCachedScenes, nBestScenesByPathRow,
-        nBestScenes, cqlFilter, workspaceDir), nBestScenesByPathRow, nBestBands, cqlFilter);
+    this(
+        new SceneFeatureIterator(
+            onlyScenesSinceLastRun,
+            useCachedScenes,
+            nBestScenesByPathRow,
+            nBestScenes,
+            cqlFilter,
+            workspaceDir),
+        nBestScenesByPathRow,
+        nBestBands,
+        cqlFilter);
   }
 
   public BandFeatureIterator(
@@ -188,8 +197,9 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
               }
               featureBuilder.set(SIZE_ATTRIBUTE_NAME, mb);
               featureBuilder.set(BAND_ATTRIBUTE_NAME, bandId);
-              featureBuilder
-                  .set(BAND_DOWNLOAD_ATTRIBUTE_NAME, getDownloadImage(entityId, path, row, bandId));
+              featureBuilder.set(
+                  BAND_DOWNLOAD_ATTRIBUTE_NAME,
+                  getDownloadImage(entityId, path, row, bandId));
               bands.add(featureBuilder.buildFeature(entityId + "_" + bandId));
             }
           }

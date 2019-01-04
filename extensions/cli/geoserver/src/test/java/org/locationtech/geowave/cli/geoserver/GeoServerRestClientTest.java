@@ -29,8 +29,9 @@ public class GeoServerRestClientTest {
     final Response response = Mockito.mock(Response.class);
 
     Mockito.when(webTarget.path(Mockito.anyString())).thenReturn(webTarget);
-    Mockito.when(webTarget.queryParam(Mockito.eq("quietOnNotFound"), Mockito.anyBoolean()))
-        .thenReturn(webTarget);
+    Mockito.when(
+        webTarget.queryParam(Mockito.eq("quietOnNotFound"), Mockito.anyBoolean())).thenReturn(
+            webTarget);
     Mockito.when(webTarget.request()).thenReturn(invBuilder);
 
     Mockito.when(invBuilder.get()).thenReturn(response);
@@ -82,8 +83,8 @@ public class GeoServerRestClientTest {
   @Test
   public void testGetCoverages() {
     client.getCoverages("some_workspace", "some_cvgStore");
-    Mockito.verify(webTarget)
-        .path("rest/workspaces/some_workspace/coveragestores/some_cvgStore/coverages.json");
+    Mockito.verify(webTarget).path(
+        "rest/workspaces/some_workspace/coveragestores/some_cvgStore/coverages.json");
   }
 
   @Test
@@ -119,8 +120,8 @@ public class GeoServerRestClientTest {
   @Test
   public void addCoverage() {
     client.addCoverage("some_workspace", "some_cvgStore", "some_coverage");
-    Mockito.verify(webTarget)
-        .path("rest/workspaces/some_workspace/coveragestores/some_cvgStore/coverages");
+    Mockito.verify(webTarget).path(
+        "rest/workspaces/some_workspace/coveragestores/some_cvgStore/coverages");
   }
 
   @Test

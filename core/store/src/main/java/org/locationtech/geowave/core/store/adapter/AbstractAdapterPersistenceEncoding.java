@@ -28,7 +28,13 @@ public abstract class AbstractAdapterPersistenceEncoding extends CommonIndexedPe
       final PersistentDataset<CommonIndexValue> commonData,
       final PersistentDataset<byte[]> unknownData,
       final PersistentDataset<Object> adapterExtendedData) {
-    super(internalAdapterId, dataId, partitionKey, sortKey, duplicateCount, commonData,
+    super(
+        internalAdapterId,
+        dataId,
+        partitionKey,
+        sortKey,
+        duplicateCount,
+        commonData,
         unknownData);
     this.adapterExtendedData = adapterExtendedData;
   }

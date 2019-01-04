@@ -35,11 +35,14 @@ public class MapReduceMemoryDataStore extends BaseMapReduceDataStore {
   }
 
   public MapReduceMemoryDataStore(final MapReduceDataStoreOperations operations) {
-    super(new IndexStoreImpl(operations, new MemoryRequiredOptions().getStoreOptions()),
+    super(
+        new IndexStoreImpl(operations, new MemoryRequiredOptions().getStoreOptions()),
         new AdapterStoreImpl(operations, new MemoryRequiredOptions().getStoreOptions()),
         new DataStatisticsStoreImpl(operations, new MemoryRequiredOptions().getStoreOptions()),
         new AdapterIndexMappingStoreImpl(operations, new MemoryRequiredOptions().getStoreOptions()),
-        null, operations, new MemoryRequiredOptions().getStoreOptions(),
+        null,
+        operations,
+        new MemoryRequiredOptions().getStoreOptions(),
         new InternalAdapterStoreImpl(operations));
   }
 
@@ -58,8 +61,18 @@ public class MapReduceMemoryDataStore extends BaseMapReduceDataStore {
       final Integer minSplits,
       final Integer maxSplits) throws IOException, InterruptedException {
     return super.getSplits(
-        commonOptions, typeOptions, indexOptions, constraints, adapterStore, indexMappingStore,
-        statisticsStore, this.internalAdapterStore, this.indexStore, context, minSplits, maxSplits);
+        commonOptions,
+        typeOptions,
+        indexOptions,
+        constraints,
+        adapterStore,
+        indexMappingStore,
+        statisticsStore,
+        this.internalAdapterStore,
+        this.indexStore,
+        context,
+        minSplits,
+        maxSplits);
   }
 
   public PersistentAdapterStore getAdapterStore() {

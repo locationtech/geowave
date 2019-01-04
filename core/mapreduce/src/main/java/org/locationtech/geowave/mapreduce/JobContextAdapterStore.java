@@ -97,7 +97,8 @@ public class JobContextAdapterStore implements TransientAdapterStore {
   public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
     final CloseableIterator<InternalDataAdapter<?>> it = persistentAdapterStore.getAdapters();
     // cache any results
-    return new CloseableIteratorWrapper<DataTypeAdapter<?>>(it,
+    return new CloseableIteratorWrapper<DataTypeAdapter<?>>(
+        it,
         IteratorUtils.transformedIterator(it, new Transformer() {
 
           @Override
@@ -114,8 +115,8 @@ public class JobContextAdapterStore implements TransientAdapterStore {
     final DataTypeAdapter<?>[] userAdapters =
         GeoWaveConfiguratorBase.getDataAdapters(CLASS, context);
     if ((userAdapters == null) || (userAdapters.length <= 0)) {
-      return IteratorUtils
-          .toList(IteratorUtils.transformedIterator(getAdapters(), new Transformer() {
+      return IteratorUtils.toList(
+          IteratorUtils.transformedIterator(getAdapters(), new Transformer() {
 
             @Override
             public Object transform(final Object input) {

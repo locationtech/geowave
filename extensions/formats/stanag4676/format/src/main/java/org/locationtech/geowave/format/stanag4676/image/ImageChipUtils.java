@@ -21,7 +21,10 @@ public class ImageChipUtils {
     final int currentPixelSize = Math.max(currentWidth, currentHeight);
     final double scaleFactor = (double) targetPixelSize / (double) currentPixelSize;
     return getScaledImageOfType(
-        img, (int) (currentWidth * scaleFactor), (int) (currentHeight * scaleFactor), type);
+        img,
+        (int) (currentWidth * scaleFactor),
+        (int) (currentHeight * scaleFactor),
+        type);
   }
 
   public static BufferedImage getScaledImageOfType(

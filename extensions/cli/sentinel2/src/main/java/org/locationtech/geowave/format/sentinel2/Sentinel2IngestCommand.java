@@ -49,7 +49,11 @@ public class Sentinel2IngestCommand extends DefaultOperation implements Command 
     JAIExt.initJAIEXT();
 
     final IngestRunner runner =
-        new IngestRunner(analyzeOptions, downloadOptions, ingestOptions, vectorOverrideOptions,
+        new IngestRunner(
+            analyzeOptions,
+            downloadOptions,
+            ingestOptions,
+            vectorOverrideOptions,
             parameters);
     runner.runInternal(params);
   }

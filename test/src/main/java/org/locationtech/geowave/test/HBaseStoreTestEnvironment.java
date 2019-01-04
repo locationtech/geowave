@@ -93,9 +93,10 @@ public class HBaseStoreTestEnvironment extends StoreTestEnvironment {
       if (!TestUtils.isSet(System.getProperty(ZookeeperTestEnvironment.ZK_PROPERTY_NAME))) {
         try {
           final Configuration conf =
-              (Configuration) Class
-                  .forName("org.apache.hadoop.hbase.HBaseConfiguration", true, hbaseMiniClusterCl)
-                  .getMethod("create").invoke(null);
+              (Configuration) Class.forName(
+                  "org.apache.hadoop.hbase.HBaseConfiguration",
+                  true,
+                  hbaseMiniClusterCl).getMethod("create").invoke(null);
           System.setProperty("test.build.data.basedirectory", DEFAULT_HBASE_TEMP_DIR);
           conf.setBoolean("hbase.online.schema.update.enable", true);
           conf.setBoolean("hbase.defaults.for.version.skip", true);
@@ -109,13 +110,15 @@ public class HBaseStoreTestEnvironment extends StoreTestEnvironment {
 
             // setup vis IT configuration
             conf.setClass(
-                VisibilityUtils.VISIBILITY_LABEL_GENERATOR_CLASS, SimpleScanLabelGenerator.class,
+                VisibilityUtils.VISIBILITY_LABEL_GENERATOR_CLASS,
+                SimpleScanLabelGenerator.class,
                 ScanLabelGenerator.class);
 
             conf.setClass(
                 VisibilityLabelServiceManager.VISIBILITY_LABEL_SERVICE_CLASS,
                 // DefaultVisibilityLabelServiceImpl.class,
-                HBaseTestVisibilityLabelServiceImpl.class, VisibilityLabelService.class);
+                HBaseTestVisibilityLabelServiceImpl.class,
+                VisibilityLabelService.class);
 
             // Install the VisibilityController as a system
             // processor
@@ -125,13 +128,16 @@ public class HBaseStoreTestEnvironment extends StoreTestEnvironment {
           // HBaseTestingUtility must be loaded dynamically by the
           // minicluster class loader
           hbaseLocalCluster =
-              Class.forName("org.apache.hadoop.hbase.HBaseTestingUtility", true, hbaseMiniClusterCl)
-                  .getConstructor(Configuration.class).newInstance(conf);
+              Class.forName(
+                  "org.apache.hadoop.hbase.HBaseTestingUtility",
+                  true,
+                  hbaseMiniClusterCl).getConstructor(Configuration.class).newInstance(conf);
 
           // Start the cluster
-          hbaseLocalCluster.getClass()
-              .getMethod("startMiniHBaseCluster", Integer.TYPE, Integer.TYPE)
-              .invoke(hbaseLocalCluster, 1, NUM_REGION_SERVERS);
+          hbaseLocalCluster.getClass().getMethod(
+              "startMiniHBaseCluster",
+              Integer.TYPE,
+              Integer.TYPE).invoke(hbaseLocalCluster, 1, NUM_REGION_SERVERS);
 
           if (enableVisibility) {
             // Set valid visibilities for the vis IT
@@ -183,8 +189,8 @@ public class HBaseStoreTestEnvironment extends StoreTestEnvironment {
   public void tearDown() {
     try {
       hbaseLocalCluster.getClass().getMethod("shutdownMiniCluster").invoke(hbaseLocalCluster);
-      if (!(Boolean) hbaseLocalCluster.getClass().getMethod("cleanupTestDir")
-          .invoke(hbaseLocalCluster)) {
+      if (!(Boolean) hbaseLocalCluster.getClass().getMethod("cleanupTestDir").invoke(
+          hbaseLocalCluster)) {
         LOGGER.warn("Unable to delete mini hbase temporary directory");
       }
       hbaseLocalCluster = null;

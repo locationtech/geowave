@@ -49,7 +49,8 @@ public class CalculateStatCommand extends AbstractStatsCommand<Void> {
   // calculateStatistics()
   private String statType;
 
-  @Parameter(names = {"--fieldName"},
+  @Parameter(
+      names = {"--fieldName"},
       description = "If the statistic is maintained per field, optionally provide a field name")
   private String fieldName = "";
 
@@ -77,8 +78,8 @@ public class CalculateStatCommand extends AbstractStatsCommand<Void> {
       final IndexStore indexStore = storeOptions.createIndexStore();
 
       boolean isFirstTime = true;
-      for (final Index index : mappingStore.getIndicesForAdapter(adapter.getAdapterId())
-          .getIndices(indexStore)) {
+      for (final Index index : mappingStore.getIndicesForAdapter(adapter.getAdapterId()).getIndices(
+          indexStore)) {
 
         @SuppressWarnings({"rawtypes", "unchecked"})
         final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
@@ -92,13 +93,16 @@ public class CalculateStatCommand extends AbstractStatsCommand<Void> {
             };
 
         try (StatsCompositionTool<?> statsTool =
-            new StatsCompositionTool(provider, storeOptions.createDataStatisticsStore(), index,
+            new StatsCompositionTool(
+                provider,
+                storeOptions.createDataStatisticsStore(),
+                index,
                 adapter)) {
 
           try (CloseableIterator<?> entryIt =
               ((BaseDataStore) dataStore).query(
-                  QueryBuilder.newBuilder().addTypeName(adapter.getTypeName())
-                      .indexName(index.getName()).setAuthorizations(authorizations).build(),
+                  QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+                      index.getName()).setAuthorizations(authorizations).build(),
                   (ScanCallback) statsTool)) {
             while (entryIt.hasNext()) {
               entryIt.next();

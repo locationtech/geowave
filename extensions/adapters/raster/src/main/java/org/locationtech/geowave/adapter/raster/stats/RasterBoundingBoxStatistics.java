@@ -38,8 +38,11 @@ public class RasterBoundingBoxStatistics extends BoundingBoxDataStatistics<GridC
     final org.opengis.geometry.Envelope resultingEnvelope =
         getIntersection(originalEnvelope, indexedEnvelope);
     if (resultingEnvelope != null) {
-      return new Envelope(resultingEnvelope.getMinimum(0), resultingEnvelope.getMaximum(0),
-          resultingEnvelope.getMinimum(1), resultingEnvelope.getMaximum(1));
+      return new Envelope(
+          resultingEnvelope.getMinimum(0),
+          resultingEnvelope.getMaximum(0),
+          resultingEnvelope.getMinimum(1),
+          resultingEnvelope.getMaximum(1));
     }
     return null;
   }

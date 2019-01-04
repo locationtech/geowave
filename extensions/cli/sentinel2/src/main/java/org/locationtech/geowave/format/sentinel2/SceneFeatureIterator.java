@@ -91,20 +91,27 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
     // and the feature ID is entityId for the scene
     //
     typeBuilder.add(SHAPE_ATTRIBUTE_NAME, Polygon.class);
-    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false)
-        .add(ENTITY_ID_ATTRIBUTE_NAME, String.class);
-    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false)
-        .add(PROVIDER_NAME_ATTRIBUTE_NAME, String.class);
-    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false)
-        .add(LOCATION_ATTRIBUTE_NAME, String.class);
-    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false)
-        .add(PRODUCT_ID_ATTRIBUTE_NAME, String.class);
-    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false)
-        .add(PRODUCT_TYPE_ATTRIBUTE_NAME, String.class);
-    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false)
-        .add(COLLECTION_ATTRIBUTE_NAME, String.class);
-    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false)
-        .add(PLATFORM_ATTRIBUTE_NAME, String.class);
+    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false).add(
+        ENTITY_ID_ATTRIBUTE_NAME,
+        String.class);
+    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false).add(
+        PROVIDER_NAME_ATTRIBUTE_NAME,
+        String.class);
+    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false).add(
+        LOCATION_ATTRIBUTE_NAME,
+        String.class);
+    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false).add(
+        PRODUCT_ID_ATTRIBUTE_NAME,
+        String.class);
+    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false).add(
+        PRODUCT_TYPE_ATTRIBUTE_NAME,
+        String.class);
+    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false).add(
+        COLLECTION_ATTRIBUTE_NAME,
+        String.class);
+    typeBuilder.minOccurs(1).maxOccurs(1).nillable(false).add(
+        PLATFORM_ATTRIBUTE_NAME,
+        String.class);
     typeBuilder.add(PROCESSING_LEVEL_ATTRIBUTE_NAME, String.class);
     typeBuilder.add(ACQUISITION_DATE_ATTRIBUTE_NAME, Date.class);
     typeBuilder.add(QUICKLOOK_ATTRIBUTE_NAME, String.class);
@@ -134,8 +141,16 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
       final String workspaceDir) throws NoSuchAuthorityCodeException, FactoryException,
       MalformedURLException, IOException, GeneralSecurityException {
     init(
-        new File(workspaceDir, SCENES_DIR), providerName, collection, platform, location, startDate,
-        endDate, orbitNumber, relativeOrbitNumber, cqlFilter);
+        new File(workspaceDir, SCENES_DIR),
+        providerName,
+        collection,
+        platform,
+        location,
+        startDate,
+        endDate,
+        orbitNumber,
+        relativeOrbitNumber,
+        cqlFilter);
   }
 
   private void init(
@@ -178,7 +193,14 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
     // Fetch the meta data of found Sentinel2 products.
     Iterator<SimpleFeature> featureIterator =
         provider.searchScenes(
-            scenesDir, collection, platform, location, envelope, startDate, endDate, orbitNumber,
+            scenesDir,
+            collection,
+            platform,
+            location,
+            envelope,
+            startDate,
+            endDate,
+            orbitNumber,
             relativeOrbitNumber);
 
     if ((featureIterator != null) && (cqlFilter != null) && !cqlFilter.equals(Filter.INCLUDE)) {
@@ -244,8 +266,11 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
   }
 
   private Envelope infinity() {
-    return new Envelope(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
-        Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+    return new Envelope(
+        Double.NEGATIVE_INFINITY,
+        Double.POSITIVE_INFINITY,
+        Double.NEGATIVE_INFINITY,
+        Double.POSITIVE_INFINITY);
   }
 
   public static class CqlFilterPredicate implements Predicate<SimpleFeature> {

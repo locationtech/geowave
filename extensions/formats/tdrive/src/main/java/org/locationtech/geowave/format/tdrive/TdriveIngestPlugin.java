@@ -172,17 +172,20 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroTd
 
     // tdrivepointBuilder = new SimpleFeatureBuilder(tdrivepointType);
     tdrivepointBuilder.set(
-        "geometry", GeometryUtils.GEOMETRY_FACTORY
-            .createPoint(new Coordinate(tdrivePoint.getLongitude(), tdrivePoint.getLatitude())));
+        "geometry",
+        GeometryUtils.GEOMETRY_FACTORY.createPoint(
+            new Coordinate(tdrivePoint.getLongitude(), tdrivePoint.getLatitude())));
     tdrivepointBuilder.set("taxiid", tdrivePoint.getTaxiid());
     tdrivepointBuilder.set("pointinstance", tdrivePoint.getPointinstance());
     tdrivepointBuilder.set("Timestamp", new Date(tdrivePoint.getTimestamp()));
     tdrivepointBuilder.set("Latitude", tdrivePoint.getLatitude());
     tdrivepointBuilder.set("Longitude", tdrivePoint.getLongitude());
     featureData.add(
-        new GeoWaveData<SimpleFeature>(TdriveUtils.TDRIVE_POINT_FEATURE, indexNames,
-            tdrivepointBuilder
-                .buildFeature(tdrivePoint.getTaxiid() + "_" + tdrivePoint.getPointinstance())));
+        new GeoWaveData<SimpleFeature>(
+            TdriveUtils.TDRIVE_POINT_FEATURE,
+            indexNames,
+            tdrivepointBuilder.buildFeature(
+                tdrivePoint.getTaxiid() + "_" + tdrivePoint.getPointinstance())));
 
     return new CloseableIterator.Wrapper<>(featureData.iterator());
   }

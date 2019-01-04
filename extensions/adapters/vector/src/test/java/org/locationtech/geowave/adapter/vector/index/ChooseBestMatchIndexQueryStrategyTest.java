@@ -67,26 +67,29 @@ public class ChooseBestMatchIndexQueryStrategyTest {
 
     final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().rowHistogram()
-            .indexName(spatialIndex.getName()).build().getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().rowHistogram().indexName(
+            spatialIndex.getName()).build().getId(),
         rangeStats);
     statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().rowHistogram()
-            .indexName(temporalindex.getName()).build().getId(),
+        VectorStatisticsQueryBuilder.newBuilder().factory().rowHistogram().indexName(
+            temporalindex.getName()).build().getId(),
         rangeTempStats);
 
     final ChooseBestMatchIndexQueryStrategy strategy = new ChooseBestMatchIndexQueryStrategy();
 
     final ConstraintSet cs1 = new ConstraintSet();
     cs1.addConstraint(
-        LatitudeDefinition.class, new ConstraintData(new ConstrainedIndexValue(0.3, 0.5), true));
+        LatitudeDefinition.class,
+        new ConstraintData(new ConstrainedIndexValue(0.3, 0.5), true));
 
     cs1.addConstraint(
-        LongitudeDefinition.class, new ConstraintData(new ConstrainedIndexValue(0.4, 0.7), true));
+        LongitudeDefinition.class,
+        new ConstraintData(new ConstrainedIndexValue(0.4, 0.7), true));
 
     final ConstraintSet cs2a = new ConstraintSet();
     cs2a.addConstraint(
-        TimeDefinition.class, new ConstraintData(new ConstrainedIndexValue(0.1, 0.2), true));
+        TimeDefinition.class,
+        new ConstraintData(new ConstrainedIndexValue(0.1, 0.2), true));
 
     final Constraints constraints =
         new Constraints(Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
@@ -102,13 +105,21 @@ public class ChooseBestMatchIndexQueryStrategyTest {
       final double t = r.nextDouble();
       final InsertionIds id =
           temporalIndexStrategy.getInsertionIds(
-              new BasicNumericDataset(new NumericData[] {new NumericValue(x), new NumericValue(y),
-                  new NumericValue(t)}));
+              new BasicNumericDataset(
+                  new NumericData[] {
+                      new NumericValue(x),
+                      new NumericValue(y),
+                      new NumericValue(t)}));
       for (final SinglePartitionInsertionIds range : id.getPartitionKeys()) {
         rangeTempStats.entryIngested(
             null,
-            new GeoWaveRowImpl(new GeoWaveKeyImpl(new byte[] {1}, (short) 1,
-                range.getPartitionKey().getBytes(), range.getSortKeys().get(0).getBytes(), 0),
+            new GeoWaveRowImpl(
+                new GeoWaveKeyImpl(
+                    new byte[] {1},
+                    (short) 1,
+                    range.getPartitionKey().getBytes(),
+                    range.getSortKeys().get(0).getBytes(),
+                    0),
                 new GeoWaveValue[] {}));
       }
     }
@@ -121,13 +132,21 @@ public class ChooseBestMatchIndexQueryStrategyTest {
       final double t = r.nextDouble();
       final InsertionIds id =
           indexStrategy.getInsertionIds(
-              new BasicNumericDataset(new NumericData[] {new NumericValue(x), new NumericValue(y),
-                  new NumericValue(t)}));
+              new BasicNumericDataset(
+                  new NumericData[] {
+                      new NumericValue(x),
+                      new NumericValue(y),
+                      new NumericValue(t)}));
       for (final SinglePartitionInsertionIds range : id.getPartitionKeys()) {
         rangeStats.entryIngested(
             null,
-            new GeoWaveRowImpl(new GeoWaveKeyImpl(new byte[] {1}, (short) 1,
-                range.getPartitionKey().getBytes(), range.getSortKeys().get(0).getBytes(), 0),
+            new GeoWaveRowImpl(
+                new GeoWaveKeyImpl(
+                    new byte[] {1},
+                    (short) 1,
+                    range.getPartitionKey().getBytes(),
+                    range.getSortKeys().get(0).getBytes(),
+                    0),
                 new GeoWaveValue[] {}));
       }
     }
@@ -143,9 +162,13 @@ public class ChooseBestMatchIndexQueryStrategyTest {
       final BasicQuery query,
       final ChooseBestMatchIndexQueryStrategy strategy) {
     return strategy.getIndices(
-        stats, query,
-        new Index[] {IMAGE_CHIP_INDEX1, new SpatialTemporalIndexBuilder().createIndex(),
-            new SpatialIndexBuilder().createIndex(), IMAGE_CHIP_INDEX2},
+        stats,
+        query,
+        new Index[] {
+            IMAGE_CHIP_INDEX1,
+            new SpatialTemporalIndexBuilder().createIndex(),
+            new SpatialIndexBuilder().createIndex(),
+            IMAGE_CHIP_INDEX2},
         Maps.newHashMap());
   }
 

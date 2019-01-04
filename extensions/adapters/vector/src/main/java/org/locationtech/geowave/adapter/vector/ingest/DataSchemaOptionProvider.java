@@ -13,7 +13,8 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 
 public class DataSchemaOptionProvider implements Persistable, IngestFormatOptions {
-  @Parameter(names = "--extended",
+  @Parameter(
+      names = "--extended",
       description = "A flag to indicate whether extended data format should be used")
   private boolean includeSupplementalFields = false;
 

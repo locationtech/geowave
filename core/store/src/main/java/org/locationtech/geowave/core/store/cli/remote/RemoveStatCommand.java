@@ -30,7 +30,8 @@ public class RemoveStatCommand extends AbstractStatsCommand<Void> {
   @Parameter(description = "<store name> <datatype name> <stat type>")
   private List<String> parameters = new ArrayList<>();
 
-  @Parameter(names = {"--fieldName"},
+  @Parameter(
+      names = {"--fieldName"},
       description = "If the statistic is maintained per field, optionally provide a field name")
   private String fieldName = "";
 
@@ -52,7 +53,10 @@ public class RemoveStatCommand extends AbstractStatsCommand<Void> {
     final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 
     if (!statStore.removeStatistics(
-        adapter.getAdapterId(), fieldName, new BaseStatisticsType<>(statType), authorizations)) {
+        adapter.getAdapterId(),
+        fieldName,
+        new BaseStatisticsType<>(statType),
+        authorizations)) {
       throw new RuntimeException("Unable to remove statistic: " + statType);
     }
 

@@ -14,17 +14,23 @@ import org.locationtech.geowave.analytic.param.annotations.SampleParameter;
 
 public class KMeansParallelOptions {
   @SampleParameter(SampleParameters.Sample.MAX_SAMPLE_SIZE)
-  @Parameter(names = {"-sxs", "--sampleMaxSampleSize"}, required = true,
+  @Parameter(
+      names = {"-sxs", "--sampleMaxSampleSize"},
+      required = true,
       description = "Max Sample Size")
   private String sampleMaxSampleSize;
 
   @SampleParameter(SampleParameters.Sample.MIN_SAMPLE_SIZE)
-  @Parameter(names = {"-sms", "--sampleMinSampleSize"}, required = true,
+  @Parameter(
+      names = {"-sms", "--sampleMinSampleSize"},
+      required = true,
       description = "Minimum Sample Size")
   private String sampleMinSampleSize;
 
   @SampleParameter(SampleParameters.Sample.SAMPLE_ITERATIONS)
-  @Parameter(names = {"-ssi", "--sampleSampleIterations"}, required = true,
+  @Parameter(
+      names = {"-ssi", "--sampleSampleIterations"},
+      required = true,
       description = "Minimum number of sample iterations")
   private String sampleSampleIterations;
 

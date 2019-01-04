@@ -59,8 +59,9 @@ public class VectorExportMapper extends
       throws IOException, InterruptedException {
     super.setup(context);
     batchSize =
-        context.getConfiguration()
-            .getInt(VectorMRExportJobRunner.BATCH_SIZE_KEY, VectorExportOptions.DEFAULT_BATCH_SIZE);
+        context.getConfiguration().getInt(
+            VectorMRExportJobRunner.BATCH_SIZE_KEY,
+            VectorExportOptions.DEFAULT_BATCH_SIZE);
   }
 
   @Override
@@ -113,8 +114,8 @@ public class VectorExportMapper extends
     private void newFeatureCollection() {
       simpleFeatureCollection = new AvroSimpleFeatureCollection();
       try {
-        simpleFeatureCollection
-            .setFeatureType(GeoWaveAvroFeatureUtils.buildFeatureDefinition(null, sft, null, ""));
+        simpleFeatureCollection.setFeatureType(
+            GeoWaveAvroFeatureUtils.buildFeatureDefinition(null, sft, null, ""));
       } catch (final IOException e) {
         // this should never actually happen, deault classification is
         // passed in

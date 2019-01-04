@@ -58,7 +58,10 @@ public class GeoWaveEmptyTransaction extends AbstractTransactionManagement
     bounds.include(updated.getBounds());
     bounds.include(original.getBounds());
     this.components.getGTstore().getListenerManager().fireFeaturesChanged(
-        updated.getFeatureType().getTypeName(), Transaction.AUTO_COMMIT, bounds, true);
+        updated.getFeatureType().getTypeName(),
+        Transaction.AUTO_COMMIT,
+        bounds,
+        true);
   }
 
   public void add(String fid, SimpleFeature feature) throws IOException {
@@ -72,15 +75,19 @@ public class GeoWaveEmptyTransaction extends AbstractTransactionManagement
     this.components.writeCommit(feature, this);
 
     components.getGTstore().getListenerManager().fireFeaturesAdded(
-        components.getAdapter().getFeatureType().getTypeName(), Transaction.AUTO_COMMIT,
-        ReferencedEnvelope.reference(feature.getBounds()), true);
+        components.getAdapter().getFeatureType().getTypeName(),
+        Transaction.AUTO_COMMIT,
+        ReferencedEnvelope.reference(feature.getBounds()),
+        true);
   }
 
   public void remove(String fid, SimpleFeature feature) throws IOException {
     this.components.remove(feature, this);
     this.components.getGTstore().getListenerManager().fireFeaturesRemoved(
-        feature.getFeatureType().getTypeName(), Transaction.AUTO_COMMIT,
-        ReferencedEnvelope.reference(feature.getBounds()), true);
+        feature.getFeatureType().getTypeName(),
+        Transaction.AUTO_COMMIT,
+        ReferencedEnvelope.reference(feature.getBounds()),
+        true);
   }
 
   public String getID() {

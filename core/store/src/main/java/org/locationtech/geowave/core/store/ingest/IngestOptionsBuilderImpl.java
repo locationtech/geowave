@@ -82,7 +82,14 @@ public class IngestOptionsBuilderImpl<T> implements Builder<T> {
 
   @Override
   public IngestOptions<T> build() {
-    return new IngestOptions<>(format, formatOptions, threads, globalVisibility, fileExtensions,
-        filter, transform, callback);
+    return new IngestOptions<>(
+        format,
+        formatOptions,
+        threads,
+        globalVisibility,
+        fileExtensions,
+        filter,
+        transform,
+        callback);
   }
 }

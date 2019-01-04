@@ -177,8 +177,8 @@ public class StripWeakCentroidsRunnerTest {
 
         @Override
         public String getIndexName() {
-          return new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions())
-              .getName();
+          return new SpatialDimensionalityTypeProvider().createIndex(
+              new SpatialOptions()).getName();
         }
 
         @Override
@@ -278,8 +278,8 @@ public class StripWeakCentroidsRunnerTest {
 
         @Override
         public String getIndexName() {
-          return new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions())
-              .getName();
+          return new SpatialDimensionalityTypeProvider().createIndex(
+              new SpatialOptions()).getName();
         }
 
         @Override

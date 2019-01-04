@@ -90,39 +90,51 @@ public class SpatialTemporalQueryExample {
     try {
       points.add(
           buildSimpleFeature(
-              "Washington Monument 1", washingtonMonument,
+              "Washington Monument 1",
+              washingtonMonument,
               DateUtilities.parseISO("2005-05-15T20:32:56Z"),
               DateUtilities.parseISO("2005-05-15T21:32:56Z")));
 
       points.add(
           buildSimpleFeature(
-              "Washington Monument 2", washingtonMonument,
+              "Washington Monument 2",
+              washingtonMonument,
               DateUtilities.parseISO("2005-05-17T20:32:56Z"),
               DateUtilities.parseISO("2005-05-17T21:32:56Z")));
 
       points.add(
           buildSimpleFeature(
-              "White House 1", whiteHouse, DateUtilities.parseISO("2005-05-17T20:32:56Z"),
+              "White House 1",
+              whiteHouse,
+              DateUtilities.parseISO("2005-05-17T20:32:56Z"),
               DateUtilities.parseISO("2005-05-17T21:32:56Z")));
 
       points.add(
           buildSimpleFeature(
-              "White House 2", whiteHouse, DateUtilities.parseISO("2005-05-17T19:32:56Z"),
+              "White House 2",
+              whiteHouse,
+              DateUtilities.parseISO("2005-05-17T19:32:56Z"),
               DateUtilities.parseISO("2005-05-17T20:45:56Z")));
 
       points.add(
           buildSimpleFeature(
-              "Fedex 1", fedexField, DateUtilities.parseISO("2005-05-17T20:32:56Z"),
+              "Fedex 1",
+              fedexField,
+              DateUtilities.parseISO("2005-05-17T20:32:56Z"),
               DateUtilities.parseISO("2005-05-17T21:32:56Z")));
 
       points.add(
           buildSimpleFeature(
-              "Fedex 2", fedexField, DateUtilities.parseISO("2005-05-18T19:32:56Z"),
+              "Fedex 2",
+              fedexField,
+              DateUtilities.parseISO("2005-05-18T19:32:56Z"),
               DateUtilities.parseISO("2005-05-18T20:45:56Z")));
 
       points.add(
           buildSimpleFeature(
-              "White House 3", whiteHouse, DateUtilities.parseISO("2005-05-19T19:32:56Z"),
+              "White House 3",
+              whiteHouse,
+              DateUtilities.parseISO("2005-05-19T19:32:56Z"),
               DateUtilities.parseISO("2005-05-19T20:45:56Z")));
 
     } catch (final Exception ex) {
@@ -164,23 +176,18 @@ public class SpatialTemporalQueryExample {
     // looses accuracy as the distance from the centroid grows and
     // the centroid moves closer the poles.
     final CloseableIterator<SimpleFeature> iterator =
-        dataStore
-            .query(
-                bldr.constraints(
-                    bldr.constraintsFactory().spatialTemporalConstraints()
-                        .addTimeRange(
-                            DateUtilities.parseISO("2005-05-17T19:32:56Z"),
-                            DateUtilities.parseISO("2005-05-17T22:32:56Z"))
-                        .spatialConstraints(
-                            GeometryUtils
-                                .buffer(
-                                    GeometryUtils.getDefaultCRS(),
-                                    GeometryUtils.GEOMETRY_FACTORY.createPoint(
-                                        new Coordinate(-77.03521, 38.8895)),
-                                    "meter", 13700)
-                                .getKey())
-                        .spatialConstraintsCompareOperation(CompareOperation.CONTAINS).build())
-                    .build());
+        dataStore.query(
+            bldr.constraints(
+                bldr.constraintsFactory().spatialTemporalConstraints().addTimeRange(
+                    DateUtilities.parseISO("2005-05-17T19:32:56Z"),
+                    DateUtilities.parseISO("2005-05-17T22:32:56Z")).spatialConstraints(
+                        GeometryUtils.buffer(
+                            GeometryUtils.getDefaultCRS(),
+                            GeometryUtils.GEOMETRY_FACTORY.createPoint(
+                                new Coordinate(-77.03521, 38.8895)),
+                            "meter",
+                            13700).getKey()).spatialConstraintsCompareOperation(
+                                CompareOperation.CONTAINS).build()).build());
 
     while (iterator.hasNext()) {
       System.out.println("Query match: " + iterator.next().getID());
@@ -193,25 +200,19 @@ public class SpatialTemporalQueryExample {
     bldr = VectorQueryBuilder.newBuilder();
     final CloseableIterator<SimpleFeature> iterator2 =
         dataStore.query(
-            bldr.addTypeName(adapter.getTypeName()).indexName(index.getName())
-                .constraints(
-                    bldr.constraintsFactory().spatialTemporalConstraints()
-                        .addTimeRange(
-                            DateUtilities.parseISO("2005-05-17T19:32:56Z"),
-                            DateUtilities.parseISO("2005-05-17T22:32:56Z"))
-                        .addTimeRange(
-                            DateUtilities.parseISO("2005-05-19T19:32:56Z"),
-                            DateUtilities.parseISO("2005-05-19T22:32:56Z"))
-                        .spatialConstraints(
-                            GeometryUtils
-                                .buffer(
-                                    GeometryUtils.getDefaultCRS(),
-                                    GeometryUtils.GEOMETRY_FACTORY.createPoint(
-                                        new Coordinate(-77.03521, 38.8895)),
-                                    "meter", 13700)
-                                .getKey())
-                        .spatialConstraintsCompareOperation(CompareOperation.CONTAINS).build())
-                .build());
+            bldr.addTypeName(adapter.getTypeName()).indexName(index.getName()).constraints(
+                bldr.constraintsFactory().spatialTemporalConstraints().addTimeRange(
+                    DateUtilities.parseISO("2005-05-17T19:32:56Z"),
+                    DateUtilities.parseISO("2005-05-17T22:32:56Z")).addTimeRange(
+                        DateUtilities.parseISO("2005-05-19T19:32:56Z"),
+                        DateUtilities.parseISO("2005-05-19T22:32:56Z")).spatialConstraints(
+                            GeometryUtils.buffer(
+                                GeometryUtils.getDefaultCRS(),
+                                GeometryUtils.GEOMETRY_FACTORY.createPoint(
+                                    new Coordinate(-77.03521, 38.8895)),
+                                "meter",
+                                13700).getKey()).spatialConstraintsCompareOperation(
+                                    CompareOperation.CONTAINS).build()).build());
 
     while (iterator2.hasNext()) {
       System.out.println("Query match: " + iterator2.next().getID());

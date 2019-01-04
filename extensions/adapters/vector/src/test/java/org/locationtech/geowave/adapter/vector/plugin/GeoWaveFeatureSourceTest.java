@@ -74,7 +74,8 @@ public class GeoWaveFeatureSourceTest extends BaseDataStoreTest {
     final String typeName = "GeoWaveFeatureSourceTest_full" + ext;
     final SimpleFeatureType type =
         DataUtilities.createType(
-            typeName, "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
+            typeName,
+            "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
     final DataStore dataStore = createDataStore();
     populater.populate(type, dataStore);
     final SimpleFeatureSource source = dataStore.getFeatureSource(typeName);
@@ -88,8 +89,8 @@ public class GeoWaveFeatureSourceTest extends BaseDataStoreTest {
     final short internalAdapterId =
         ((GeoWaveGTDataStore) dataStore).getInternalAdapterStore().addTypeName(typeName);
     try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> stats =
-        ((GeoWaveGTDataStore) dataStore).getDataStatisticsStore()
-            .getDataStatistics(internalAdapterId)) {
+        ((GeoWaveGTDataStore) dataStore).getDataStatisticsStore().getDataStatistics(
+            internalAdapterId)) {
       assertTrue(stats.hasNext());
       int count = 0;
       BoundingBoxDataStatistics<SimpleFeature> bboxStats = null;
@@ -133,14 +134,17 @@ public class GeoWaveFeatureSourceTest extends BaseDataStoreTest {
     final String typeName = "GeoWaveFeatureSourceTest_p" + ext;
     final SimpleFeatureType type =
         DataUtilities.createType(
-            typeName, "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
+            typeName,
+            "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
     final DataStore dataStore = createDataStore();
     populater.populate(type, dataStore);
     final SimpleFeatureSource source = dataStore.getFeatureSource(typeName);
 
     final Query query =
-        new Query(typeName, CQL.toFilter(
-            "BBOX(geometry,42,28,44,30) and when during 2005-05-01T20:32:56Z/2005-05-29T21:32:56Z"),
+        new Query(
+            typeName,
+            CQL.toFilter(
+                "BBOX(geometry,42,28,44,30) and when during 2005-05-01T20:32:56Z/2005-05-29T21:32:56Z"),
             new String[] {"geometry", "when", "pid"});
     final ReferencedEnvelope env = source.getBounds(query);
     assertEquals(43.454, env.getMaxX(), 0.0001);

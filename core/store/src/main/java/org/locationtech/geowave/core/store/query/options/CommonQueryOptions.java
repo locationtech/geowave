@@ -112,7 +112,8 @@ public class CommonQueryOptions implements Persistable {
         VarintUtils.writeUnsignedInt(keyBinary.length, lengthBytes);
         hintsBinary[i] =
             Bytes.concat(
-                lengthBytes.array(), keyBinary,
+                lengthBytes.array(),
+                keyBinary,
                 ((Function<Object, byte[]>) e.getKey().writer).apply(e.getValue()));
         hintsLength +=
             hintsBinary[i].length + VarintUtils.unsignedIntByteLength(hintsBinary[i].length);

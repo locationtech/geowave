@@ -78,10 +78,25 @@ public class ReaderParamsBuilder<T> extends BaseReaderParamsBuilder<T, ReaderPar
     if (additionalAuthorizations == null) {
       additionalAuthorizations = new String[0];
     }
-    return new ReaderParams<T>(index, adapterStore, internalAdapterStore, adapterIds,
-        maxResolutionSubsamplingPerDimension, aggregation, fieldSubsets, isMixedVisibility,
-        isAuthorizationsLimiting, isServersideAggregation, isClientsideRowMerging, queryRanges,
-        filter, limit, maxRangeDecomposition, coordinateRanges, constraints, rowTransformer,
+    return new ReaderParams<T>(
+        index,
+        adapterStore,
+        internalAdapterStore,
+        adapterIds,
+        maxResolutionSubsamplingPerDimension,
+        aggregation,
+        fieldSubsets,
+        isMixedVisibility,
+        isAuthorizationsLimiting,
+        isServersideAggregation,
+        isClientsideRowMerging,
+        queryRanges,
+        filter,
+        limit,
+        maxRangeDecomposition,
+        coordinateRanges,
+        constraints,
+        rowTransformer,
         additionalAuthorizations);
   }
 }

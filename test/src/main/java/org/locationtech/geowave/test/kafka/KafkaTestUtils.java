@@ -55,8 +55,8 @@ public class KafkaTestUtils {
     localToKafka.getKafkaOptions().setRequestRequiredAcks("1");
     localToKafka.getKafkaOptions().setProducerType("sync");
     localToKafka.getKafkaOptions().setRetryBackoffMs("1000");
-    localToKafka.getKafkaOptions()
-        .setSerializerClass("org.locationtech.geowave.core.ingest.kafka.AvroKafkaEncoder");
+    localToKafka.getKafkaOptions().setSerializerClass(
+        "org.locationtech.geowave.core.ingest.kafka.KafkaAvroEncoder");
     localToKafka.execute(new ManualOperationParams());
   }
 
@@ -105,8 +105,8 @@ public class KafkaTestUtils {
     kafkaToGeowave.getKafkaOptions().setGroupId("testGroup");
     kafkaToGeowave.getKafkaOptions().setAutoOffsetReset("smallest");
     kafkaToGeowave.getKafkaOptions().setFetchMessageMaxBytes(MAX_MESSAGE_BYTES);
-    kafkaToGeowave.getKafkaOptions()
-        .setZookeeperConnect(ZookeeperTestEnvironment.getInstance().getZookeeper());
+    kafkaToGeowave.getKafkaOptions().setZookeeperConnect(
+        ZookeeperTestEnvironment.getInstance().getZookeeper());
     kafkaToGeowave.setParameters("test-store", "test-index");
 
     kafkaToGeowave.execute(params);

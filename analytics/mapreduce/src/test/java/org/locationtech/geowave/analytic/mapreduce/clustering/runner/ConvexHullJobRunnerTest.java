@@ -62,7 +62,9 @@ public class ConvexHullJobRunnerTest {
   public void init() {
     final SimpleFeatureType ftype =
         AnalyticFeature.createGeometryFeatureAdapter(
-            "centroidtest", new String[] {"extra1"}, BasicFeatureTypes.DEFAULT_NAMESPACE,
+            "centroidtest",
+            new String[] {"extra1"},
+            BasicFeatureTypes.DEFAULT_NAMESPACE,
             ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
     hullRunner.setMapReduceIntegrater(new MapReduceIntegration() {
@@ -73,7 +75,8 @@ public class ConvexHullJobRunnerTest {
           final GeoWaveAnalyticJobRunner tool) throws Exception {
         tool.setConf(configuration);
         ((ParameterHelper<Object>) StoreParam.INPUT_STORE.getHelper()).setValue(
-            configuration, ConvexHullMapReduce.class,
+            configuration,
+            ConvexHullMapReduce.class,
             StoreParam.INPUT_STORE.getHelper().getValue(runTimeProperties));
         return tool.run(new String[] {});
       }
@@ -88,26 +91,31 @@ public class ConvexHullJobRunnerTest {
             new ScopedJobConfiguration(job.getConfiguration(), ConvexHullMapReduce.class);
         Assert.assertEquals("file://foo/bin", job.getConfiguration().get("mapred.input.dir"));
         final PersistableStore persistableStore =
-            (PersistableStore) StoreParam.INPUT_STORE.getHelper()
-                .getValue(job, ConvexHullMapReduce.class, null);
+            (PersistableStore) StoreParam.INPUT_STORE.getHelper().getValue(
+                job,
+                ConvexHullMapReduce.class,
+                null);
         final IndexStore indexStore = persistableStore.getDataStoreOptions().createIndexStore();
         try {
           Assert.assertTrue(indexStore.indexExists("spatial"));
 
           final PersistableStore persistableAdapterStore =
-              (PersistableStore) StoreParam.INPUT_STORE.getHelper()
-                  .getValue(job, ConvexHullMapReduce.class, null);
+              (PersistableStore) StoreParam.INPUT_STORE.getHelper().getValue(
+                  job,
+                  ConvexHullMapReduce.class,
+                  null);
           final PersistentAdapterStore adapterStore =
               persistableAdapterStore.getDataStoreOptions().createAdapterStore();
 
           Assert.assertTrue(
               adapterStore.adapterExists(
-                  persistableAdapterStore.getDataStoreOptions().createInternalAdapterStore()
-                      .getAdapterId("centroidtest")));
+                  persistableAdapterStore.getDataStoreOptions().createInternalAdapterStore().getAdapterId(
+                      "centroidtest")));
 
           final Projection<?> projection =
               configWrapper.getInstance(
-                  HullParameters.Hull.PROJECTION_CLASS, Projection.class,
+                  HullParameters.Hull.PROJECTION_CLASS,
+                  Projection.class,
                   SimpleFeatureProjection.class);
 
           Assert.assertEquals(SimpleFeatureProjection.class, projection.getClass());
@@ -144,8 +152,9 @@ public class ConvexHullJobRunnerTest {
     runTimeProperties.store(HullParameters.Hull.INDEX_NAME, "spatial");
 
     final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies()
-        .put("memory", new MemoryStoreFactoryFamily());
+    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+        "memory",
+        new MemoryStoreFactoryFamily());
     pluginOptions.selectPlugin("memory");
     final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
@@ -157,7 +166,8 @@ public class ConvexHullJobRunnerTest {
     final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
     adapter.init(index);
     pluginOptions.createAdapterStore().addAdapter(
-        new InternalDataAdapterWrapper<>(adapter,
+        new InternalDataAdapterWrapper<>(
+            adapter,
             pluginOptions.createInternalAdapterStore().addTypeName(adapter.getTypeName())));
   }
 

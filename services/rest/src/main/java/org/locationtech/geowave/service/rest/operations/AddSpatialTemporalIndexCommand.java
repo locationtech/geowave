@@ -31,7 +31,8 @@ public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String
   @Parameter(description = "<name>", required = true)
   private List<String> parameters = new ArrayList<String>();
 
-  @Parameter(names = {"-d", "--default"},
+  @Parameter(
+      names = {"-d", "--default"},
       description = "Make this the default index creating stores")
   private Boolean makeDefault;
 

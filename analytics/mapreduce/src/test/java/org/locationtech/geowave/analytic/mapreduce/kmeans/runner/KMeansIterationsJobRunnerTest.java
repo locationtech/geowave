@@ -48,7 +48,9 @@ public class KMeansIterationsJobRunnerTest {
   private static final String[] grps = new String[] {"g1", "g2"};
   private static final FeatureDataAdapter adapter =
       AnalyticFeature.createGeometryFeatureAdapter(
-          "centroid", new String[] {}, BasicFeatureTypes.DEFAULT_NAMESPACE,
+          "centroid",
+          new String[] {},
+          BasicFeatureTypes.DEFAULT_NAMESPACE,
           ClusteringUtils.CLUSTERING_CRS);
 
   PropertyManagement propertyMgt = new PropertyManagement();
@@ -61,10 +63,12 @@ public class KMeansIterationsJobRunnerTest {
         CentroidParameters.Centroid.INDEX_NAME,
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName());
     propertyMgt.store(ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE, new Double(0.0001));
-    propertyMgt
-        .store(CommonParameters.Common.DISTANCE_FUNCTION_CLASS, FeatureCentroidDistanceFn.class);
     propertyMgt.store(
-        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, SimpleFeatureItemWrapperFactory.class);
+        CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+        FeatureCentroidDistanceFn.class);
+    propertyMgt.store(
+        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+        SimpleFeatureItemWrapperFactory.class);
   }
 
   @Test
@@ -74,24 +78,22 @@ public class KMeansIterationsJobRunnerTest {
     // then test
     jobRunner.run(new Configuration(), propertyMgt);
 
-    for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> e : KMeansIterationsJobRunnerForTest.groups
-        .entrySet()) {
+    for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> e : KMeansIterationsJobRunnerForTest.groups.entrySet()) {
       assertEquals(3, e.getValue().size());
 
       for (final AnalyticItemWrapper<SimpleFeature> newCentroid : e.getValue()) {
         assertEquals(2, newCentroid.getIterationID());
         // check to make sure there is no overlap of old and new IDs
         boolean b = false;
-        for (final AnalyticItemWrapper<SimpleFeature> oldCentroid : KMeansIterationsJobRunnerForTest.deletedSet
-            .get(e.getKey())) {
+        for (final AnalyticItemWrapper<SimpleFeature> oldCentroid : KMeansIterationsJobRunnerForTest.deletedSet.get(
+            e.getKey())) {
           b |= oldCentroid.getID().equals(newCentroid.getID());
         }
         assertFalse(b);
       }
     }
 
-    for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> e : KMeansIterationsJobRunnerForTest.deletedSet
-        .entrySet()) {
+    for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> e : KMeansIterationsJobRunnerForTest.deletedSet.entrySet()) {
       assertEquals(3, e.getValue().size());
       for (final AnalyticItemWrapper<SimpleFeature> oldCentroid : e.getValue()) {
         assertEquals(1, oldCentroid.getIterationID());
@@ -108,7 +110,8 @@ public class KMeansIterationsJobRunnerTest {
     private static SimpleFeatureItemWrapperFactory factory = new SimpleFeatureItemWrapperFactory();
     private static final GeometryFactory geoFactory = new GeometryFactory();
     private static Point[] points =
-        new Point[] {geoFactory.createPoint(new Coordinate(2.3, 2.3)),
+        new Point[] {
+            geoFactory.createPoint(new Coordinate(2.3, 2.3)),
             geoFactory.createPoint(new Coordinate(2.31, 2.31)),
             geoFactory.createPoint(new Coordinate(2.32, 2.31)),
             geoFactory.createPoint(new Coordinate(2.31, 2.33)),
@@ -142,8 +145,7 @@ public class KMeansIterationsJobRunnerTest {
         @Override
         public void delete(final String[] dataIds) throws IOException {
           final List<String> grps = Arrays.asList(dataIds);
-          for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> entry : groups
-              .entrySet()) {
+          for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> entry : groups.entrySet()) {
             final Iterator<AnalyticItemWrapper<SimpleFeature>> it = entry.getValue().iterator();
             while (it.hasNext()) {
               final AnalyticItemWrapper<SimpleFeature> next = it.next();
@@ -181,8 +183,7 @@ public class KMeansIterationsJobRunnerTest {
         public int processForAllGroups(
             final org.locationtech.geowave.analytic.clustering.CentroidManager.CentroidProcessingFn<SimpleFeature> fn)
             throws IOException {
-          for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> entry : groups
-              .entrySet()) {
+          for (final Map.Entry<String, List<AnalyticItemWrapper<SimpleFeature>>> entry : groups.entrySet()) {
             final int status = fn.processGroup(entry.getKey(), entry.getValue());
             if (status < 0) {
               return status;
@@ -204,8 +205,8 @@ public class KMeansIterationsJobRunnerTest {
 
         @Override
         public String getIndexName() {
-          return new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions())
-              .getName();
+          return new SpatialDimensionalityTypeProvider().createIndex(
+              new SpatialOptions()).getName();
         }
 
         @Override
@@ -237,8 +238,18 @@ public class KMeansIterationsJobRunnerTest {
         for (int i = 0; i < 3; i++) {
           final SimpleFeature nextFeature =
               AnalyticFeature.createGeometryFeature(
-                  adapter.getFeatureType(), "b1", UUID.randomUUID().toString(), "nn" + i, grpID,
-                  0.1, points[j++], new String[0], new double[0], 1, iteration, 0);
+                  adapter.getFeatureType(),
+                  "b1",
+                  UUID.randomUUID().toString(),
+                  "nn" + i,
+                  grpID,
+                  0.1,
+                  points[j++],
+                  new String[0],
+                  new double[0],
+                  1,
+                  iteration,
+                  0);
           groups.get(grpID).add(factory.create(nextFeature));
         }
       }

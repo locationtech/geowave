@@ -75,7 +75,10 @@ public class KMeansMapReduce {
         final double extra[] = pairing.getPairedItem().getDimensionValues();
         final Point p = centroidExtractor.getCentroid(pairing.getPairedItem().getWrappedItem());
         association.set(
-            p.getCoordinate().x, p.getCoordinate().y, p.getCoordinate().z, extra,
+            p.getCoordinate().x,
+            p.getCoordinate().y,
+            p.getCoordinate().z,
+            extra,
             pairing.getDistance());
       }
     };
@@ -99,12 +102,16 @@ public class KMeansMapReduce {
         throws IOException, InterruptedException {
       super.setup(context);
       final ScopedJobConfiguration config =
-          new ScopedJobConfiguration(context.getConfiguration(), KMeansMapReduce.class,
+          new ScopedJobConfiguration(
+              context.getConfiguration(),
+              KMeansMapReduce.class,
               KMeansMapReduce.LOGGER);
 
       try {
         nestedGroupCentroidAssigner =
-            new NestedGroupCentroidAssignment<>(context, KMeansMapReduce.class,
+            new NestedGroupCentroidAssignment<>(
+                context,
+                KMeansMapReduce.class,
                 KMeansMapReduce.LOGGER);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -113,7 +120,8 @@ public class KMeansMapReduce {
       try {
         centroidExtractor =
             config.getInstance(
-                CentroidParameters.Centroid.EXTRACTOR_CLASS, CentroidExtractor.class,
+                CentroidParameters.Centroid.EXTRACTOR_CLASS,
+                CentroidExtractor.class,
                 SimpleFeatureCentroidExtractor.class);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -122,7 +130,8 @@ public class KMeansMapReduce {
       try {
         itemWrapperFactory =
             config.getInstance(
-                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, AnalyticItemWrapperFactory.class,
+                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+                AnalyticItemWrapperFactory.class,
                 SimpleFeatureItemWrapperFactory.class);
 
         itemWrapperFactory.initialize(context, KMeansMapReduce.class, KMeansMapReduce.LOGGER);
@@ -209,8 +218,11 @@ public class KMeansMapReduce {
 
       final AnalyticItemWrapper<Object> nextCentroid =
           centroidManager.createNextCentroid(
-              centroid.getWrappedItem(), groupID, new Coordinate(totals.x, totals.y, totals.z),
-              centroid.getExtraDimensions(), totals.values);
+              centroid.getWrappedItem(),
+              groupID,
+              new Coordinate(totals.x, totals.y, totals.z),
+              centroid.getExtraDimensions(),
+              totals.values);
 
       // new center
       context.write(

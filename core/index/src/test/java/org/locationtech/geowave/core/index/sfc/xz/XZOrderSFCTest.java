@@ -38,7 +38,8 @@ public class XZOrderSFCTest {
 
   private XZOrderSFC createSFC() {
     SFCDimensionDefinition[] dimensions =
-        {new SFCDimensionDefinition(new BasicDimensionDefinition(-180.0, 180.0), 32),
+        {
+            new SFCDimensionDefinition(new BasicDimensionDefinition(-180.0, 180.0), 32),
             new SFCDimensionDefinition(new BasicDimensionDefinition(-90.0, 90.0), 32)};
     return new XZOrderSFC(dimensions);
   }

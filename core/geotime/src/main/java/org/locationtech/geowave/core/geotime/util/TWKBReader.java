@@ -176,7 +176,8 @@ public class TWKBReader {
     }
 
     public Coordinate readPoint(DataInput input) throws IOException {
-      return new Coordinate(((double) Varint.readSignedVarLong(input)) / precisionMultiplier,
+      return new Coordinate(
+          ((double) Varint.readSignedVarLong(input)) / precisionMultiplier,
           ((double) Varint.readSignedVarLong(input)) / precisionMultiplier);
     }
 
@@ -189,7 +190,8 @@ public class TWKBReader {
         lastX = Varint.readSignedVarLong(input) + lastX;
         lastY = Varint.readSignedVarLong(input) + lastY;
         coordinates[i] =
-            new Coordinate(((double) lastX) / precisionMultiplier,
+            new Coordinate(
+                ((double) lastX) / precisionMultiplier,
                 ((double) lastY) / precisionMultiplier);
       }
       return coordinates;
@@ -240,7 +242,8 @@ public class TWKBReader {
         lastX = Varint.readSignedVarLong(input) + lastX;
         lastY = Varint.readSignedVarLong(input) + lastY;
         coordinates[i] =
-            new Coordinate(((double) lastX) / precisionMultiplier,
+            new Coordinate(
+                ((double) lastX) / precisionMultiplier,
                 ((double) lastY) / precisionMultiplier);
         if (hasZ) {
           lastZ = Varint.readSignedVarLong(input) + lastZ;

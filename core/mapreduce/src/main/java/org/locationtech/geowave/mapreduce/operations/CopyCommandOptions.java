@@ -11,11 +11,15 @@ package org.locationtech.geowave.mapreduce.operations;
 import com.beust.jcommander.Parameter;
 
 public class CopyCommandOptions {
-  @Parameter(names = "--hdfsHostPort", description = "The hdfs host port",
+  @Parameter(
+      names = "--hdfsHostPort",
+      description = "The hdfs host port",
       converter = HdfsHostPortConverter.class)
   private String hdfsHostPort;
 
-  @Parameter(names = "--jobSubmissionHostPort", required = true,
+  @Parameter(
+      names = "--jobSubmissionHostPort",
+      required = true,
       description = "The job submission tracker")
   private String jobTrackerOrResourceManHostPort;
 
@@ -25,7 +29,8 @@ public class CopyCommandOptions {
   @Parameter(names = "--maxSplits", description = "The max partitions for the input data")
   private Integer maxSplits;
 
-  @Parameter(names = "--numReducers",
+  @Parameter(
+      names = "--numReducers",
       description = "Number of threads writing at a time (default: 8)")
   private Integer numReducers = 8;
 

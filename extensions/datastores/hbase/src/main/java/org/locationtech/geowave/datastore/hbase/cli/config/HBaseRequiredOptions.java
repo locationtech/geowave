@@ -19,7 +19,8 @@ public class HBaseRequiredOptions extends StoreFactoryOptions {
 
   public static final String ZOOKEEPER_CONFIG_KEY = "zookeeper";
 
-  @Parameter(names = {"-z", "--" + ZOOKEEPER_CONFIG_KEY},
+  @Parameter(
+      names = {"-z", "--" + ZOOKEEPER_CONFIG_KEY},
       description = "A comma-separated list of zookeeper servers that an HBase instance is using",
       required = true)
   private String zookeeper;

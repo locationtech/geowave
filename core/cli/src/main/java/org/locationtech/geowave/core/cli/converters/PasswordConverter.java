@@ -93,9 +93,11 @@ public class PasswordConverter extends GeoWaveBaseConverter<String> {
                 }
               } else {
                 try {
-                  throw new ParameterException(new FileNotFoundException(propsFile != null
-                      ? "Properties file not found at path: " + propsFile.getCanonicalPath()
-                      : "No properties file specified"));
+                  throw new ParameterException(
+                      new FileNotFoundException(
+                          propsFile != null
+                              ? "Properties file not found at path: " + propsFile.getCanonicalPath()
+                              : "No properties file specified"));
                 } catch (IOException e) {
                   throw new ParameterException(e);
                 }

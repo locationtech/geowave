@@ -117,8 +117,9 @@ public abstract class Sentinel2ImageryProvider {
 
       // Main ID attribute
       feature.setAttribute(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME, id);
-      feature
-          .setAttribute(SceneFeatureIterator.PROVIDER_NAME_ATTRIBUTE_NAME, provider.providerName());
+      feature.setAttribute(
+          SceneFeatureIterator.PROVIDER_NAME_ATTRIBUTE_NAME,
+          provider.providerName());
 
       // Fill Geometry
       try {

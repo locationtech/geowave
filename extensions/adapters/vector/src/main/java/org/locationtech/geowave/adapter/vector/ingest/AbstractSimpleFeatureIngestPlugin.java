@@ -233,8 +233,8 @@ public abstract class AbstractSimpleFeatureIngestPlugin<I>
               }
               if ((internalSimpOptionProvider != null)) {
                 final Geometry simpGeom =
-                    internalSimpOptionProvider
-                        .simplifyGeometry((Geometry) input.getValue().getDefaultGeometry());
+                    internalSimpOptionProvider.simplifyGeometry(
+                        (Geometry) input.getValue().getDefaultGeometry());
                 if (!internalSimpOptionProvider.filterGeometry(simpGeom)) {
                   return false;
                 }

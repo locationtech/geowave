@@ -49,8 +49,8 @@ public class AccumuloSecondaryIndexUtils {
     try {
       rowMapping = WholeRowIterator.decodeRow(key, value);
     } catch (final IOException e) {
-      LOGGER
-          .error("Could not decode row from iterator. Ensure whole row iterators are being used.");
+      LOGGER.error(
+          "Could not decode row from iterator. Ensure whole row iterators are being used.");
       return null;
     }
     final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<>();
@@ -87,8 +87,15 @@ public class AccumuloSecondaryIndexUtils {
       }
     }
     final IndexedAdapterPersistenceEncoding encodedData =
-        new IndexedAdapterPersistenceEncoding(adapter.getAdapterId(), dataId, null, null, 0,
-            commonData, unknownData, extendedData);
+        new IndexedAdapterPersistenceEncoding(
+            adapter.getAdapterId(),
+            dataId,
+            null,
+            null,
+            0,
+            commonData,
+            unknownData,
+            extendedData);
     return adapter.decode(encodedData, index);
   }
 }

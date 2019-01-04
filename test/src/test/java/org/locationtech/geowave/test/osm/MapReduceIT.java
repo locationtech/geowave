@@ -75,8 +75,9 @@ public class MapReduceIT {
     stage.execute(mrEnv.getOperationParams());
 
     Connector conn =
-        new ZooKeeperInstance(accumuloEnv.getAccumuloInstance(), accumuloEnv.getZookeeper())
-            .getConnector(
+        new ZooKeeperInstance(
+            accumuloEnv.getAccumuloInstance(),
+            accumuloEnv.getZookeeper()).getConnector(
                 accumuloEnv.getAccumuloUser(),
                 new PasswordToken(accumuloEnv.getAccumuloPassword()));
     Authorizations auth = new Authorizations(new String[] {"public"});

@@ -43,8 +43,8 @@ public class AnalyticFeature {
       final int iteration,
       final long count) {
     if (extraDimensionNames.length != extraDimensions.length) {
-      LOGGER
-          .error("The number of extraDimension names does not equal the number of extraDimensions");
+      LOGGER.error(
+          "The number of extraDimension names does not equal the number of extraDimensions");
       throw new IllegalArgumentException(
           "The number of extraDimension names does not equal the number of extraDimensions");
     }
@@ -112,8 +112,12 @@ public class AnalyticFeature {
       final String namespaceURI,
       final String SRID) {
     return createFeatureAdapter(
-        centroidDataTypeId, extraNumericDimensions, namespaceURI, SRID,
-        ClusterFeatureAttribute.values(), Geometry.class);
+        centroidDataTypeId,
+        extraNumericDimensions,
+        namespaceURI,
+        SRID,
+        ClusterFeatureAttribute.values(),
+        Geometry.class);
   }
 
   public static enum ClusterFeatureAttribute {

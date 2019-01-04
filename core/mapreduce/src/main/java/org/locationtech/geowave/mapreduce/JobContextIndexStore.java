@@ -86,7 +86,8 @@ public class JobContextIndexStore implements IndexStore {
   public CloseableIterator<Index> getIndices() {
     final CloseableIterator<Index> it = persistentIndexStore.getIndices();
     // cache any results
-    return new CloseableIteratorWrapper<Index>(it,
+    return new CloseableIteratorWrapper<Index>(
+        it,
         IteratorUtils.transformedIterator(it, new Transformer() {
 
           @Override

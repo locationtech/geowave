@@ -68,37 +68,65 @@ public class GeoWavePluginConfig {
       ChooseHeuristicMatchIndexQueryStrategy.NAME;
 
   private static final Param GEOWAVE_NAMESPACE =
-      new Param(GEOWAVE_NAMESPACE_KEY, String.class,
-          "The table namespace associated with this data store", false);
+      new Param(
+          GEOWAVE_NAMESPACE_KEY,
+          String.class,
+          "The table namespace associated with this data store",
+          false);
   private static final Param TRANSACTION_BUFFER_SIZE_PARAM =
-      new Param(TRANSACTION_BUFFER_SIZE, Integer.class,
-          "Number of buffered feature insertions before flushing to the datastore.", false);
+      new Param(
+          TRANSACTION_BUFFER_SIZE,
+          Integer.class,
+          "Number of buffered feature insertions before flushing to the datastore.",
+          false);
 
   private static final Param FEATURE_NAMESPACE =
-      new Param(FEATURE_NAMESPACE_KEY, String.class,
+      new Param(
+          FEATURE_NAMESPACE_KEY,
+          String.class,
           "The overriding namespace for all feature types maintained within this data store",
           false);
 
   private static final Param LOCK_MGT =
-      new Param(LOCK_MGT_KEY, String.class, "WFS-T Locking Support.", true, null,
+      new Param(
+          LOCK_MGT_KEY,
+          String.class,
+          "WFS-T Locking Support.",
+          true,
+          null,
           getLockMgtOptions());
 
   private static final Param AUTH_MGT =
-      new Param(AUTH_MGT_KEY, String.class, "The provider to obtain authorization given a user.",
-          true, null, getAuthSPIOptions());
+      new Param(
+          AUTH_MGT_KEY,
+          String.class,
+          "The provider to obtain authorization given a user.",
+          true,
+          null,
+          getAuthSPIOptions());
 
   private static final Param AUTH_URL =
       new Param(AUTH_URL_KEY, String.class, "The providers data URL.", false);
 
   private static final Param QUERY_INDEX_STRATEGY =
-      new Param(QUERY_INDEX_STRATEGY_KEY, String.class,
-          "Strategy to choose an index during query processing.", true, null,
+      new Param(
+          QUERY_INDEX_STRATEGY_KEY,
+          String.class,
+          "Strategy to choose an index during query processing.",
+          true,
+          null,
           getIndexQueryStrategyOptions());
 
   private static final List<Param> BASE_GEOWAVE_PLUGIN_PARAMS =
       Arrays.asList(
-          new Param[] {FEATURE_NAMESPACE, GEOWAVE_NAMESPACE, LOCK_MGT, AUTH_MGT, AUTH_URL,
-              TRANSACTION_BUFFER_SIZE_PARAM, QUERY_INDEX_STRATEGY});
+          new Param[] {
+              FEATURE_NAMESPACE,
+              GEOWAVE_NAMESPACE,
+              LOCK_MGT,
+              AUTH_MGT,
+              AUTH_URL,
+              TRANSACTION_BUFFER_SIZE_PARAM,
+              QUERY_INDEX_STRATEGY});
   public static final List<String> BASE_GEOWAVE_PLUGIN_PARAM_KEYS =
       Arrays.asList(
           BASE_GEOWAVE_PLUGIN_PARAMS.stream().map(p -> p.key).toArray(size -> new String[size]));
@@ -127,8 +155,10 @@ public class GeoWavePluginConfig {
       final ConfigOption[] configOptions =
           GeoWaveStoreFinder.getAllOptions(storeFactoryFamily, false);
       params =
-          new ArrayList<Param>(Lists.transform(
-              Lists.newArrayList(configOptions), new GeoWaveConfigOptionToGeoToolsConfigOption()));
+          new ArrayList<Param>(
+              Lists.transform(
+                  Lists.newArrayList(configOptions),
+                  new GeoWaveConfigOptionToGeoToolsConfigOption()));
       params.addAll(BASE_GEOWAVE_PLUGIN_PARAMS);
       paramMap.put(storeFactoryFamily.getType(), params);
     }
@@ -136,10 +166,11 @@ public class GeoWavePluginConfig {
   }
 
   public GeoWavePluginConfig(final DataStorePluginOptions params) throws GeoWavePluginException {
-    this(params.getFactoryFamily(),
+    this(
+        params.getFactoryFamily(),
         // converting to Map<String,String> to Map<String,Serializable>
-        params.getOptionsAsMap().entrySet().stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        params.getOptionsAsMap().entrySet().stream().collect(
+            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
   }
 
   public GeoWavePluginConfig(
@@ -190,7 +221,8 @@ public class GeoWavePluginConfig {
     }
     final StoreFactoryOptions options =
         ConfigUtils.populateOptionsFromList(
-            storeFactoryFamily.getAdapterStoreFactory().createOptionsInstance(), paramStrs);
+            storeFactoryFamily.getAdapterStoreFactory().createOptionsInstance(),
+            paramStrs);
     adapterStore = storeFactoryFamily.getAdapterStoreFactory().createStore(options);
     internalAdapterStore = storeFactoryFamily.getInternalAdapterStoreFactory().createStore(options);
 
@@ -367,14 +399,27 @@ public class GeoWavePluginConfig {
     @Override
     public Param apply(final ConfigOption input) {
       if (input.isPassword()) {
-        return new Param(input.getName(), String.class, input.getDescription(), !input.isOptional(),
-            "mypassword", Collections.singletonMap(Parameter.IS_PASSWORD, Boolean.TRUE));
+        return new Param(
+            input.getName(),
+            String.class,
+            input.getDescription(),
+            !input.isOptional(),
+            "mypassword",
+            Collections.singletonMap(Parameter.IS_PASSWORD, Boolean.TRUE));
       }
       if (input.getType().isPrimitive() && (input.getType() == boolean.class)) {
-        return new Param(input.getName(), input.getType(), input.getDescription(), true, "true",
+        return new Param(
+            input.getName(),
+            input.getType(),
+            input.getDescription(),
+            true,
+            "true",
             Collections.singletonMap(Parameter.OPTIONS, BooleanOptions));
       }
-      return new Param(input.getName(), input.getType(), input.getDescription(),
+      return new Param(
+          input.getName(),
+          input.getType(),
+          input.getDescription(),
           !input.isOptional());
     }
   }

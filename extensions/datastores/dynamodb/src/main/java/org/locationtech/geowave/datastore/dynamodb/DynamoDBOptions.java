@@ -37,10 +37,11 @@ class ProtocolConvertor implements IStringConverter<Protocol> {
   public Protocol convert(final String protocolName) {
     final String protocolLowerCase = protocolName.toLowerCase();
     if (!protocolLowerCase.equals("http") && !protocolLowerCase.equals("https")) {
-      throw new ParameterException("Value "
-          + protocolName
-          + "can not be converted to Protocol. "
-          + "Available values are: http and https.");
+      throw new ParameterException(
+          "Value "
+              + protocolName
+              + "can not be converted to Protocol. "
+              + "Available values are: http and https.");
     }
 
     return Protocol.valueOf(protocolLowerCase);
@@ -49,12 +50,14 @@ class ProtocolConvertor implements IStringConverter<Protocol> {
 
 
 public class DynamoDBOptions extends StoreFactoryOptions {
-  @Parameter(names = "--endpoint",
+  @Parameter(
+      names = "--endpoint",
       description = "The endpoint to connect to(specify either endpoint/region not both) ",
       required = false)
   protected String endpoint;
 
-  @Parameter(names = "--region",
+  @Parameter(
+      names = "--region",
       description = "The AWS region to use(specify either endpoint/region not both)")
   protected Regions region = null;
 
@@ -65,14 +68,16 @@ public class DynamoDBOptions extends StoreFactoryOptions {
   protected long readCapacity = 5;
 
   /** List of client configuration that the user can tweak */
-  @Parameter(names = "--maxConnections",
+  @Parameter(
+      names = "--maxConnections",
       description = "The maximum number of open http(s) connections" + " active at any given time")
   protected int maxConnections = ClientConfiguration.DEFAULT_MAX_CONNECTIONS;
 
   @Parameter(names = "--protocol", description = "The protocol to use. HTTP or HTTPS")
   protected Protocol protocol = Protocol.HTTPS;
 
-  @Parameter(names = "--cacheResponseMetadata",
+  @Parameter(
+      names = "--cacheResponseMetadata",
       description = "Whether to cache responses from aws(true or false). "
           + "High performance systems can disable this but debugging will be more difficult")
   protected boolean enableCacheResponseMetadata =

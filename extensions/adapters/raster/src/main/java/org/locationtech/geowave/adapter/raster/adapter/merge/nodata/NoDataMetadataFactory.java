@@ -94,7 +94,11 @@ public class NoDataMetadataFactory {
         }
       }
       return mergeMetadataBySummary(
-          allNoDataValues, noDataByFilter1, raster1, noDataByFilter2, raster2);
+          allNoDataValues,
+          noDataByFilter1,
+          raster1,
+          noDataByFilter2,
+          raster2);
     } else {
       // this should never happen because the only implementations of
       // metadata are by index or by filter but just in case iteratively
@@ -127,8 +131,8 @@ public class NoDataMetadataFactory {
         }
       }
       if ((finalShape != null)
-          && finalShape
-              .covers(new GeometryFactory().toGeometry(new Envelope(0, width, 0, height)))) {
+          && finalShape.covers(
+              new GeometryFactory().toGeometry(new Envelope(0, width, 0, height)))) {
         // if the coverage of this geometric union ever gets to the
         // point that it fully covers the raster, stop storing it and
         // just set the geometry to null
@@ -153,8 +157,9 @@ public class NoDataMetadataFactory {
     final Iterator<SampleIndex> indices = noDataIndices.iterator();
     while (indices.hasNext()) {
       final SampleIndex index = indices.next();
-      if (!noDataMetadata
-          .isNoData(index, raster.getSampleDouble(index.getX(), index.getY(), index.getBand()))) {
+      if (!noDataMetadata.isNoData(
+          index,
+          raster.getSampleDouble(index.getX(), index.getY(), index.getBand()))) {
         indices.remove();
       }
     }
@@ -193,7 +198,8 @@ public class NoDataMetadataFactory {
     final NoDataSummary noDataSummary =
         getNoDataSummary(allNoDataValues, noDataMetadata1, raster1, noDataMetadata2, raster2);
     return createMetadata(
-        noDataSummary, new Geometry[] {noDataMetadata1.getShape(), noDataMetadata2.getShape()},
+        noDataSummary,
+        new Geometry[] {noDataMetadata1.getShape(), noDataMetadata2.getShape()},
         raster2.getWidth(), // both
         // rasters
         // better
@@ -216,7 +222,10 @@ public class NoDataMetadataFactory {
     return getNoDataSummary(
         allNoDataValues,
         new MultiShape(new Geometry[] {noDataMetadata1.getShape(), noDataMetadata2.getShape()}),
-        new MultiRaster(new Raster[] {raster1, raster2}), width, height, numBands);
+        new MultiRaster(new Raster[] {raster1, raster2}),
+        width,
+        height,
+        numBands);
   }
 
   private static NoDataSummary getNoDataSummary(
@@ -224,8 +233,12 @@ public class NoDataMetadataFactory {
       final Geometry shape,
       final Raster data) {
     return getNoDataSummary(
-        allNoDataValues, new SingleShape(shape), new SingleRaster(data), data.getWidth(),
-        data.getHeight(), data.getNumBands());
+        allNoDataValues,
+        new SingleShape(shape),
+        new SingleRaster(data),
+        data.getWidth(),
+        data.getHeight(),
+        data.getNumBands());
   }
 
   private static NoDataSummary getNoDataSummary(

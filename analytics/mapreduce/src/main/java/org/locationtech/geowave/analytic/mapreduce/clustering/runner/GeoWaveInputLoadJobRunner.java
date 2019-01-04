@@ -68,21 +68,27 @@ public class GeoWaveInputLoadJobRunner extends GeoWaveAnalyticJobRunner
       throws Exception {
     final String indexId =
         checkIndex(
-            runTimeProperties, OutputParameters.Output.INDEX_ID,
+            runTimeProperties,
+            OutputParameters.Output.INDEX_ID,
             runTimeProperties.getPropertyAsString(
-                CentroidParameters.Centroid.INDEX_NAME, new SpatialDimensionalityTypeProvider()
-                    .createIndex(new SpatialOptions()).getName()));
+                CentroidParameters.Centroid.INDEX_NAME,
+                new SpatialDimensionalityTypeProvider().createIndex(
+                    new SpatialOptions()).getName()));
     OutputParameters.Output.INDEX_ID.getHelper().setValue(config, getScope(), indexId);
 
     addDataAdapter(
         config,
         getAdapter(
-            runTimeProperties, OutputParameters.Output.DATA_TYPE_ID,
+            runTimeProperties,
+            OutputParameters.Output.DATA_TYPE_ID,
             OutputParameters.Output.DATA_NAMESPACE_URI));
     runTimeProperties.setConfig(
-        new ParameterEnum[] {OutputParameters.Output.DATA_TYPE_ID,
-            OutputParameters.Output.DATA_NAMESPACE_URI, OutputParameters.Output.INDEX_ID},
-        config, getScope());
+        new ParameterEnum[] {
+            OutputParameters.Output.DATA_TYPE_ID,
+            OutputParameters.Output.DATA_NAMESPACE_URI,
+            OutputParameters.Output.INDEX_ID},
+        config,
+        getScope());
     // HP Fortify "Command Injection" false positive
     // What Fortify considers "externally-influenced input"
     // comes only from users with OS-level access anyway
@@ -94,8 +100,10 @@ public class GeoWaveInputLoadJobRunner extends GeoWaveAnalyticJobRunner
     final Collection<ParameterEnum<?>> params = super.getParameters();
     params.addAll(
         Arrays.asList(
-            new OutputParameters.Output[] {OutputParameters.Output.INDEX_ID,
-                OutputParameters.Output.DATA_TYPE_ID, OutputParameters.Output.DATA_NAMESPACE_URI}));
+            new OutputParameters.Output[] {
+                OutputParameters.Output.INDEX_ID,
+                OutputParameters.Output.DATA_TYPE_ID,
+                OutputParameters.Output.DATA_NAMESPACE_URI}));
     params.addAll(MapReduceParameters.getParameters());
     return params;
   }

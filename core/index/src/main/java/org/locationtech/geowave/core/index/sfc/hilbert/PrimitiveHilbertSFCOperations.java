@@ -74,11 +74,12 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
 
     // Compare the number of dimensions to the number of values sent in
     if (dimensionDefinitions.length != values.length) {
-      throw new ArrayIndexOutOfBoundsException("Number of dimensions supplied ("
-          + values.length
-          + ") is different than initialized ("
-          + dimensionDefinitions.length
-          + ").");
+      throw new ArrayIndexOutOfBoundsException(
+          "Number of dimensions supplied ("
+              + values.length
+              + ") is different than initialized ("
+              + dimensionDefinitions.length
+              + ").");
     }
 
     // Loop through each value, then normalize the value based on the
@@ -86,7 +87,11 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
     for (int i = 0; i < dimensionDefinitions.length; i++) {
       dimensionValues.add(
           normalizeDimension(
-              dimensionDefinitions[i], values[i], binsPerDimension[i], false, false));
+              dimensionDefinitions[i],
+              values[i],
+              binsPerDimension[i],
+              false,
+              false));
     }
 
     // Convert the normalized values to a BitVector
@@ -157,7 +162,8 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
     for (int i = 0; i < retVal.length; i++) {
       retVal[i] =
           denormalizeDimension(
-              dimensionDefinitions[i], perDimensionBitVectors[i].toExactLong(),
+              dimensionDefinitions[i],
+              perDimensionBitVectors[i].toExactLong(),
               binsPerDimension[i]);
     }
     return new BasicNumericDataset(retVal);
@@ -210,11 +216,12 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
       final boolean overInclusiveOnEdge) throws IllegalArgumentException {
     final double normalizedValue = boundedDimensionDefinition.normalize(value);
     if ((normalizedValue < 0) || (normalizedValue > 1)) {
-      throw new IllegalArgumentException("Value ("
-          + value
-          + ") is not within dimension bounds. The normalized value ("
-          + normalizedValue
-          + ") must be within (0,1)");
+      throw new IllegalArgumentException(
+          "Value ("
+              + value
+              + ") is not within dimension bounds. The normalized value ("
+              + normalizedValue
+              + ") must be within (0,1)");
     }
     // scale it to a value within the bits of precision,
     // because max is handled as exclusive and min is inclusive, we need to
@@ -248,21 +255,24 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
     final double min = (double) (value) / (double) bins;
     final double max = (double) (value + 1) / (double) bins;
     if ((min < 0) || (min > 1)) {
-      throw new IllegalArgumentException("Value ("
-          + value
-          + ") is not within bounds. The normalized value ("
-          + min
-          + ") must be within (0,1)");
+      throw new IllegalArgumentException(
+          "Value ("
+              + value
+              + ") is not within bounds. The normalized value ("
+              + min
+              + ") must be within (0,1)");
     }
     if ((max < 0) || (max > 1)) {
-      throw new IllegalArgumentException("Value ("
-          + value
-          + ") is not within bounds. The normalized value ("
-          + max
-          + ") must be within (0,1)");
+      throw new IllegalArgumentException(
+          "Value ("
+              + value
+              + ") is not within bounds. The normalized value ("
+              + max
+              + ") must be within (0,1)");
     }
     // scale it to a value within the dimension definition range
-    return new NumericRange(boundedDimensionDefinition.denormalize(min),
+    return new NumericRange(
+        boundedDimensionDefinition.denormalize(min),
         boundedDimensionDefinition.denormalize(max));
   }
 
@@ -287,11 +297,17 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
 
       final long normalizedMin =
           normalizeDimension(
-              dimensionDefinitions[d], rangePerDimension[d].getMin(), binsPerDimension[d], true,
+              dimensionDefinitions[d],
+              rangePerDimension[d].getMin(),
+              binsPerDimension[d],
+              true,
               overInclusiveOnEdge);
       long normalizedMax =
           normalizeDimension(
-              dimensionDefinitions[d], rangePerDimension[d].getMax(), binsPerDimension[d], false,
+              dimensionDefinitions[d],
+              rangePerDimension[d].getMax(),
+              binsPerDimension[d],
+              false,
               overInclusiveOnEdge);
       if (normalizedMin > normalizedMax) {
         // if they're both equal, which is possible because we treat max
@@ -308,16 +324,23 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
 
     final RegionInspector<LongRange, LongContent> regionInspector =
         SimpleRegionInspector.create(
-            ImmutableList.of(region), new LongContent(minQuadSize), Functions.<LongRange>identity(),
-            LongRangeHome.INSTANCE, zero);
+            ImmutableList.of(region),
+            new LongContent(minQuadSize),
+            Functions.<LongRange>identity(),
+            LongRangeHome.INSTANCE,
+            zero);
 
     final PlainFilterCombiner<LongRange, Long, LongContent, LongRange> intervalCombiner =
         new PlainFilterCombiner<>(LongRange.of(0, 1));
 
     final QueryBuilder<LongRange, LongRange> queryBuilder =
         BacktrackingQueryBuilder.create(
-            regionInspector, intervalCombiner, maxFilteredIndexedRanges, removeVacuum,
-            LongRangeHome.INSTANCE, zero);
+            regionInspector,
+            intervalCombiner,
+            maxFilteredIndexedRanges,
+            removeVacuum,
+            LongRangeHome.INSTANCE,
+            zero);
     synchronized (compactHilbertCurve) {
       compactHilbertCurve.accept(new ZoomingSpaceVisitorAdapter(compactHilbertCurve, queryBuilder));
     }
@@ -328,8 +351,9 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
     final int expectedByteCount = (int) Math.ceil(totalPrecision / 8.0);
     if (expectedByteCount <= 0) {
       // special case for no precision
-      return new RangeDecomposition(new ByteArrayRange[] {
-          new ByteArrayRange(new ByteArray(new byte[] {}), new ByteArray(new byte[] {}))});
+      return new RangeDecomposition(
+          new ByteArrayRange[] {
+              new ByteArrayRange(new ByteArray(new byte[] {}), new ByteArray(new byte[] {}))});
     }
     for (int i = 0; i < hilbertRanges.size(); i++) {
       final FilteredIndexRange<LongRange, LongRange> range = hilbertRanges.get(i);
@@ -343,12 +367,14 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
       // make sure its padded if necessary
       final byte[] start =
           HilbertSFC.fitExpectedByteCount(
-              expectedByteCount, ByteBuffer.allocate(8).putLong(startValue).array());
+              expectedByteCount,
+              ByteBuffer.allocate(8).putLong(startValue).array());
 
       // make sure its padded if necessary
       final byte[] end =
           HilbertSFC.fitExpectedByteCount(
-              expectedByteCount, ByteBuffer.allocate(8).putLong(endValue).array());
+              expectedByteCount,
+              ByteBuffer.allocate(8).putLong(endValue).array());
       sfcRanges[i] = new ByteArrayRange(new ByteArray(start), new ByteArray(end));
     }
 
@@ -429,8 +455,16 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
       final SFCDimensionDefinition boundedDimensionDefinition) throws IllegalArgumentException {
     return new long[] {
         normalizeDimension(
-            boundedDimensionDefinition, minValue, binsPerDimension[dimension], true, true),
+            boundedDimensionDefinition,
+            minValue,
+            binsPerDimension[dimension],
+            true,
+            true),
         normalizeDimension(
-            boundedDimensionDefinition, maxValue, binsPerDimension[dimension], false, true)};
+            boundedDimensionDefinition,
+            maxValue,
+            binsPerDimension[dimension],
+            false,
+            true)};
   }
 }

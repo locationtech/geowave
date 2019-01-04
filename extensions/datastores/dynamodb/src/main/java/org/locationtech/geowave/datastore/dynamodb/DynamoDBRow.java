@@ -75,8 +75,12 @@ public class DynamoDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
     buf.get(sortKey);
     buf.get(dataId);
 
-    return new GeoWaveKeyImpl(dataId, internalAdapterId, partitionKey,
-        DynamoDBUtils.decodeSortableBase64(sortKey), numberOfDuplicates);
+    return new GeoWaveKeyImpl(
+        dataId,
+        internalAdapterId,
+        partitionKey,
+        DynamoDBUtils.decodeSortableBase64(sortKey),
+        numberOfDuplicates);
   }
 
   public List<Map<String, AttributeValue>> getAttributeMapping() {

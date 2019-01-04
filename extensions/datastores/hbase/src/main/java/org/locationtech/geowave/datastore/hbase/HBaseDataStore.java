@@ -36,10 +36,15 @@ import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 
 public class HBaseDataStore extends BaseMapReduceDataStore {
   public HBaseDataStore(final HBaseOperations operations, final HBaseOptions options) {
-    super(new IndexStoreImpl(operations, options), new AdapterStoreImpl(operations, options),
+    super(
+        new IndexStoreImpl(operations, options),
+        new AdapterStoreImpl(operations, options),
         new DataStatisticsStoreImpl(operations, options),
-        new AdapterIndexMappingStoreImpl(operations, options), new SecondaryIndexStoreImpl(),
-        operations, options, new InternalAdapterStoreImpl(operations));
+        new AdapterIndexMappingStoreImpl(operations, options),
+        new SecondaryIndexStoreImpl(),
+        operations,
+        options,
+        new InternalAdapterStoreImpl(operations));
   }
 
   public HBaseDataStore(
@@ -51,8 +56,15 @@ public class HBaseDataStore extends BaseMapReduceDataStore {
       final MapReduceDataStoreOperations operations,
       final DataStoreOptions options,
       final InternalAdapterStore adapterMappingStore) {
-    super(indexStore, adapterStore, statisticsStore, indexMappingStore, secondaryIndexDataStore,
-        operations, options, adapterMappingStore);
+    super(
+        indexStore,
+        adapterStore,
+        statisticsStore,
+        indexMappingStore,
+        secondaryIndexDataStore,
+        operations,
+        options,
+        adapterMappingStore);
   }
 
   @Override
@@ -62,22 +74,31 @@ public class HBaseDataStore extends BaseMapReduceDataStore {
     final String indexName = index.getName();
     final boolean rowMerging = adapter.getAdapter() instanceof RowMergingDataAdapter;
     if (rowMerging) {
-      if (!((HBaseOperations) baseOperations)
-          .isRowMergingEnabled(adapter.getAdapterId(), indexName)) {
+      if (!((HBaseOperations) baseOperations).isRowMergingEnabled(
+          adapter.getAdapterId(),
+          indexName)) {
         ((HBaseOperations) baseOperations).createTable(
-            index.getIndexStrategy().getPredefinedSplits(), index.getName(), false,
+            index.getIndexStrategy().getPredefinedSplits(),
+            index.getName(),
+            false,
             adapter.getAdapterId());
         if (baseOptions.isServerSideLibraryEnabled()) {
-          ((HBaseOperations) baseOperations)
-              .ensureServerSideOperationsObserverAttached(index.getName());
+          ((HBaseOperations) baseOperations).ensureServerSideOperationsObserverAttached(
+              index.getName());
           ServerOpHelper.addServerSideRowMerging(
-              ((RowMergingDataAdapter<?, ?>) adapter.getAdapter()), adapter.getAdapterId(),
-              (ServerSideOperations) baseOperations, RowMergingServerOp.class.getName(),
-              RowMergingVisibilityServerOp.class.getName(), indexName);
+              ((RowMergingDataAdapter<?, ?>) adapter.getAdapter()),
+              adapter.getAdapterId(),
+              (ServerSideOperations) baseOperations,
+              RowMergingServerOp.class.getName(),
+              RowMergingVisibilityServerOp.class.getName(),
+              indexName);
         }
 
-        ((HBaseOperations) baseOperations)
-            .verifyColumnFamily(adapter.getAdapterId(), false, indexName, true);
+        ((HBaseOperations) baseOperations).verifyColumnFamily(
+            adapter.getAdapterId(),
+            false,
+            indexName,
+            true);
       }
     }
   }

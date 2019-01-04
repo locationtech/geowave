@@ -28,16 +28,19 @@ public class GeoWaveAvroFeatureDataAdapter extends FeatureDataAdapter {
   protected GeoWaveAvroFeatureDataAdapter() {}
 
   public GeoWaveAvroFeatureDataAdapter(final SimpleFeatureType type) {
-    super(type,
+    super(
+        type,
         new ArrayList<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>());
   }
 
   public GeoWaveAvroFeatureDataAdapter(
       final SimpleFeatureType type,
       final VisibilityManagement<SimpleFeature> visibilityManagement) {
-    super(type,
+    super(
+        type,
         new ArrayList<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>(),
-        null, visibilityManagement);
+        null,
+        visibilityManagement);
   }
 
   public GeoWaveAvroFeatureDataAdapter(

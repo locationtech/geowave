@@ -29,9 +29,14 @@ public class SpatialQueryTest {
   public void test() {
     final GeometryFactory factory = new GeometryFactory();
     final SpatialQuery query =
-        new SpatialQuery(factory.createPolygon(
-            new Coordinate[] {new Coordinate(24, 33), new Coordinate(28, 33),
-                new Coordinate(28, 31), new Coordinate(24, 31), new Coordinate(24, 33)}));
+        new SpatialQuery(
+            factory.createPolygon(
+                new Coordinate[] {
+                    new Coordinate(24, 33),
+                    new Coordinate(28, 33),
+                    new Coordinate(28, 31),
+                    new Coordinate(24, 31),
+                    new Coordinate(24, 33)}));
     final SpatialQuery queryCopy = new SpatialQuery();
     queryCopy.fromBinary(query.toBinary());
     assertEquals(queryCopy.getQueryGeometry(), query.getQueryGeometry());
@@ -42,16 +47,26 @@ public class SpatialQueryTest {
 
     commonData.addValue(GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME, new GeometryWrapper(geomData));
 
-    return new IndexedPersistenceEncoding((short) 1, new ByteArray("1"), new ByteArray("1"),
-        new ByteArray("1"), 1, commonData, new PersistentDataset<byte[]>());
+    return new IndexedPersistenceEncoding(
+        (short) 1,
+        new ByteArray("1"),
+        new ByteArray("1"),
+        new ByteArray("1"),
+        1,
+        commonData,
+        new PersistentDataset<byte[]>());
   }
 
   public void performOp(final CompareOperation op, final boolean[] expectedResults) {
     final GeometryFactory factory = new GeometryFactory();
     // query geometry for testing
     final Coordinate[] queryCoord =
-        new Coordinate[] {new Coordinate(24, 33), new Coordinate(28, 33), new Coordinate(28, 37),
-            new Coordinate(24, 37), new Coordinate(24, 33)};
+        new Coordinate[] {
+            new Coordinate(24, 33),
+            new Coordinate(28, 33),
+            new Coordinate(28, 37),
+            new Coordinate(24, 37),
+            new Coordinate(24, 33)};
     // create spatial query object with geometric relationship operator
     final SpatialQuery query = new SpatialQuery(factory.createPolygon(queryCoord), op);
 
@@ -68,14 +83,19 @@ public class SpatialQueryTest {
     final Coordinate[] line4 = new Coordinate[] {new Coordinate(28, 33), new Coordinate(30, 34)};
     // this polygon is completely contained within the query polygon
     final Coordinate[] smallPolygon =
-        new Coordinate[] {new Coordinate(25, 34), new Coordinate(27, 34), new Coordinate(27, 36),
-            new Coordinate(25, 36), new Coordinate(25, 34)};
+        new Coordinate[] {
+            new Coordinate(25, 34),
+            new Coordinate(27, 34),
+            new Coordinate(27, 36),
+            new Coordinate(25, 36),
+            new Coordinate(25, 34)};
 
     // this polygon is same as query polygon
     final Coordinate[] dataPolygon = queryCoord.clone();
 
     final IndexedPersistenceEncoding[] data =
-        new IndexedPersistenceEncoding[] {createData(factory.createLineString(line1)),
+        new IndexedPersistenceEncoding[] {
+            createData(factory.createLineString(line1)),
             createData(factory.createLineString(line2)),
             createData(factory.createLineString(line3)),
             createData(factory.createLineString(line4)),
@@ -87,7 +107,8 @@ public class SpatialQueryTest {
     for (final IndexedPersistenceEncoding dataItem : data) {
       for (final QueryFilter filter : queryCopy.createFilters(index)) {
         assertEquals(
-            "result: " + pos, expectedResults[pos++],
+            "result: " + pos,
+            expectedResults[pos++],
             filter.accept(index.getIndexModel(), dataItem));
       }
     }

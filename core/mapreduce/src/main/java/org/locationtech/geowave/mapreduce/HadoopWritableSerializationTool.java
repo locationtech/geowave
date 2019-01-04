@@ -40,7 +40,8 @@ public class HadoopWritableSerializationTool {
   private final ObjectWritable objectWritable = new ObjectWritable();
 
   public HadoopWritableSerializationTool(final JobContext jobContext) {
-    this(GeoWaveInputFormat.getJobContextAdapterStore(jobContext),
+    this(
+        GeoWaveInputFormat.getJobContextAdapterStore(jobContext),
         GeoWaveInputFormat.getJobContextInternalAdapterStore(jobContext));
   }
 

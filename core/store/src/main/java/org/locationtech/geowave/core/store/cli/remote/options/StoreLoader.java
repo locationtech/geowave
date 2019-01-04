@@ -56,7 +56,9 @@ public class StoreLoader {
     String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
 
     return loadFromConfig(
-        ConfigOptions.loadProperties(configFile, "^" + namespace), namespace, configFile);
+        ConfigOptions.loadProperties(configFile, "^" + namespace),
+        namespace,
+        configFile);
   }
 
   /**

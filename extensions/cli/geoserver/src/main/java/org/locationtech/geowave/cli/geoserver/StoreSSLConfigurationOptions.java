@@ -28,78 +28,92 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.security.protocol")
-  @Parameter(names = "--sslSecurityProtocol",
+  @Parameter(
+      names = "--sslSecurityProtocol",
       description = "Specify the Transport Layer Security (TLS) protocol to use when connecting to the server. By default, the system will use TLS.")
   protected String sslSecurityProtocol;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.trustStore")
-  @Parameter(names = "--sslTrustStorePath",
+  @Parameter(
+      names = "--sslTrustStorePath",
       description = "Specify the absolute path to where truststore file is located on system. The truststore file is used to validate client certificates.")
   protected String sslTrustStorePath;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.trustStorePassword")
-  @Parameter(names = "--sslTrustStorePassword",
+  @Parameter(
+      names = "--sslTrustStorePassword",
       description = "Specify the password to use to access the truststore file. - "
           + OptionalPasswordConverter.DEFAULT_PASSWORD_DESCRIPTION,
       converter = OptionalPasswordConverter.class)
   protected String sslTrustStorePassword;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.trustStoreType")
-  @Parameter(names = "--sslTrustStoreType",
+  @Parameter(
+      names = "--sslTrustStoreType",
       description = "Specify the type of key store used for the truststore, i.e. JKS (Java KeyStore).")
   protected String sslTrustStoreType;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.trustStoreProvider")
-  @Parameter(names = "--sslTrustStoreProvider",
+  @Parameter(
+      names = "--sslTrustStoreProvider",
       description = "Specify the name of the truststore provider to be used for the server certificate.")
   protected String sslTrustStoreProvider;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.trustStoreMgrFactoryAlgorithm")
-  @Parameter(names = "--sslTrustManagerAlgorithm",
+  @Parameter(
+      names = "--sslTrustManagerAlgorithm",
       description = "Specify the algorithm to use for the truststore.")
   protected String sslTrustManagerAlgorithm;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.trustStoreMgrFactoryProvider")
-  @Parameter(names = "--sslTrustManagerProvider",
+  @Parameter(
+      names = "--sslTrustManagerProvider",
       description = "Specify the trust manager factory provider.")
   protected String sslTrustManagerProvider;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.keyStore")
-  @Parameter(names = "--sslKeyStorePath",
+  @Parameter(
+      names = "--sslKeyStorePath",
       description = "Specify the absolute path to where the keystore file is located on system. The keystore contains the server certificate to be loaded.")
   protected String sslKeyStorePath;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.keyStorePassword")
-  @Parameter(names = "--sslKeyStorePassword",
+  @Parameter(
+      names = "--sslKeyStorePassword",
       description = "Specify the password to use to access the keystore file. - "
           + OptionalPasswordConverter.DEFAULT_PASSWORD_DESCRIPTION,
       converter = OptionalPasswordConverter.class)
   protected String sslKeyStorePassword;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.keyStoreProvider")
-  @Parameter(names = "--sslKeyStoreProvider",
+  @Parameter(
+      names = "--sslKeyStoreProvider",
       description = "Specify the name of the keystore provider to be used for the server certificate.")
   protected String sslKeyStoreProvider;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.keyPassword")
-  @Parameter(names = "--sslKeyPassword",
+  @Parameter(
+      names = "--sslKeyPassword",
       description = "Specify the password to be used to access the server certificate from the specified keystore file. - "
           + OptionalPasswordConverter.DEFAULT_PASSWORD_DESCRIPTION,
       converter = OptionalPasswordConverter.class)
   protected String sslKeyPassword;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.keyStoreType")
-  @Parameter(names = "--sslKeyStoreType",
+  @Parameter(
+      names = "--sslKeyStoreType",
       description = "The type of keystore file to be used for the server certificate.")
   protected String sslKeyStoreType;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.keyMgrFactoryAlgorithm")
-  @Parameter(names = "--sslKeyManagerAlgorithm",
+  @Parameter(
+      names = "--sslKeyManagerAlgorithm",
       description = "Specify the algorithm to use for the keystore.")
   protected String sslKeyManagerAlgorithm;
 
   @SSLOptionAnnotation(propertyBaseName = "ssl.keyMgrFactoryProvider")
-  @Parameter(names = "--sslKeyManagerProvider",
+  @Parameter(
+      names = "--sslKeyManagerProvider",
       description = "Specify the key manager factory provider.")
   protected String sslKeyManagerProvider;
 

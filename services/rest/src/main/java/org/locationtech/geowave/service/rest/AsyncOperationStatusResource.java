@@ -31,8 +31,8 @@ public class AsyncOperationStatusResource extends ServerResource {
     try {
       // look up the operation status
       opStatuses =
-          (ConcurrentHashMap<String, Future<?>>) this.getApplication().getContext().getAttributes()
-              .get("asyncOperationStatuses");
+          (ConcurrentHashMap<String, Future<?>>) this.getApplication().getContext().getAttributes().get(
+              "asyncOperationStatuses");
       if (opStatuses.get(id) != null) {
         Future<?> future = opStatuses.get(id);
 

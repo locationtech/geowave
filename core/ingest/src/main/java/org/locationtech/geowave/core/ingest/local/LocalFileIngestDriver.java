@@ -74,7 +74,9 @@ public class LocalFileIngestDriver
     for (final Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
 
       if (!IngestUtils.checkIndexesAgainstProvider(
-          pluginEntry.getKey(), pluginEntry.getValue(), indexOptions)) {
+          pluginEntry.getKey(),
+          pluginEntry.getValue(),
+          indexOptions)) {
         continue;
       }
 
@@ -177,12 +179,22 @@ public class LocalFileIngestDriver
     if (threads == 1) {
 
       processFileSingleThreaded(
-          file, typeName, plugin, ingestRunData, specifiedPrimaryIndexes, requiredIndexMap);
+          file,
+          typeName,
+          plugin,
+          ingestRunData,
+          specifiedPrimaryIndexes,
+          requiredIndexMap);
 
     } else {
 
       processFileMultiThreaded(
-          file, typeName, plugin, ingestRunData, specifiedPrimaryIndexes, requiredIndexMap);
+          file,
+          typeName,
+          plugin,
+          ingestRunData,
+          specifiedPrimaryIndexes,
+          requiredIndexMap);
     }
 
     LOGGER.info(String.format("Finished ingest for file: [%s]", file.getFile()));
@@ -202,7 +214,8 @@ public class LocalFileIngestDriver
     // Read files until EOF from the command line.
     try (CloseableIterator<?> geowaveDataIt =
         plugin.toGeoWaveData(
-            file, specifiedPrimaryIndexes.keySet().toArray(new String[0]),
+            file,
+            specifiedPrimaryIndexes.keySet().toArray(new String[0]),
             ingestOptions.getVisibility())) {
 
       while (geowaveDataIt.hasNext()) {
@@ -212,7 +225,8 @@ public class LocalFileIngestDriver
           if (adapter == null) {
             LOGGER.warn(
                 String.format(
-                    "Adapter not found for [%s] file [%s]", geowaveData.getValue(),
+                    "Adapter not found for [%s] file [%s]",
+                    geowaveData.getValue(),
                     FilenameUtils.getName(file.getPath())));
             continue;
           }
@@ -220,7 +234,11 @@ public class LocalFileIngestDriver
           // Ingest the data!
           dbWriteMs +=
               ingestData(
-                  geowaveData, adapter, ingestRunData, specifiedPrimaryIndexes, requiredIndexMap,
+                  geowaveData,
+                  adapter,
+                  ingestRunData,
+                  specifiedPrimaryIndexes,
+                  requiredIndexMap,
                   indexWriters);
 
           count++;
@@ -233,7 +251,9 @@ public class LocalFileIngestDriver
       LOGGER.debug(
           String.format(
               "Finished ingest for file: [%s]; Ingested %d items in %d seconds",
-              FilenameUtils.getName(file.getPath()), count, (int) dbWriteMs / 1000));
+              FilenameUtils.getName(file.getPath()),
+              count,
+              (int) dbWriteMs / 1000));
 
     } finally {
       // Clean up index writers
@@ -241,8 +261,9 @@ public class LocalFileIngestDriver
         try {
           ingestRunData.releaseIndexWriter(writerEntry.getKey(), writerEntry.getValue());
         } catch (final Exception e) {
-          LOGGER
-              .warn(String.format("Could not return index writer: [%s]", writerEntry.getKey()), e);
+          LOGGER.warn(
+              String.format("Could not return index writer: [%s]", writerEntry.getKey()),
+              e);
         }
       }
     }
@@ -314,7 +335,8 @@ public class LocalFileIngestDriver
     // These folks will read our blocking queue
     LOGGER.debug(
         String.format(
-            "Creating [%d] threads to ingest file: [%s]", threads,
+            "Creating [%d] threads to ingest file: [%s]",
+            threads,
             FilenameUtils.getName(file.getPath())));
     final List<IngestTask> ingestTasks = new ArrayList<>();
     try {
@@ -329,7 +351,8 @@ public class LocalFileIngestDriver
       // Read files until EOF from the command line.
       try (CloseableIterator<?> geowaveDataIt =
           plugin.toGeoWaveData(
-              file, specifiedPrimaryIndexes.keySet().toArray(new String[0]),
+              file,
+              specifiedPrimaryIndexes.keySet().toArray(new String[0]),
               ingestOptions.getVisibility())) {
 
         while (geowaveDataIt.hasNext()) {

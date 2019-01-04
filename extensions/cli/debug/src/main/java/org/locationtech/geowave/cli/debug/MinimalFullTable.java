@@ -74,8 +74,12 @@ public class MinimalFullTable extends DefaultOperation implements Command {
             (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
 
         final AccumuloOperations ops =
-            new AccumuloOperations(opts.getZookeeper(), opts.getInstance(), opts.getUser(),
-                opts.getPassword(), opts.getGeoWaveNamespace(),
+            new AccumuloOperations(
+                opts.getZookeeper(),
+                opts.getInstance(),
+                opts.getUser(),
+                opts.getPassword(),
+                opts.getGeoWaveNamespace(),
                 (AccumuloOptions) opts.getStoreOptions());
 
         long results = 0;

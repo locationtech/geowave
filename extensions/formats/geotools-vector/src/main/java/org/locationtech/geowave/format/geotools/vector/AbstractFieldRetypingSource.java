@@ -44,8 +44,10 @@ public abstract class AbstractFieldRetypingSource implements RetypingVectorDataS
     if (featureId == null) {
       // a null ID will default to use the original
       final FeatureId id =
-          RetypingFeatureCollection
-              .reTypeId(original.getIdentifier(), original.getFeatureType(), target);
+          RetypingFeatureCollection.reTypeId(
+              original.getIdentifier(),
+              original.getFeatureType(),
+              target);
       featureId = id.getID();
     }
     final SimpleFeature retyped = builder.buildFeature(featureId);

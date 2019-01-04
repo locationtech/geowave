@@ -34,11 +34,14 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
   @Parameter(description = "<name>", required = true)
   private List<String> parameters = new ArrayList<String>();
 
-  @Parameter(names = {"-d", "--default"},
+  @Parameter(
+      names = {"-d", "--default"},
       description = "Make this the default index creating stores")
   private Boolean makeDefault;
 
-  @Parameter(names = {"-t", "--type"}, required = true,
+  @Parameter(
+      names = {"-t", "--type"},
+      required = true,
       description = "The type of index, such as spatial, or spatial_temporal")
   private String type;
 
@@ -68,8 +71,9 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
       // Load the default index.
       if (defaultIndex != null) {
         try {
-          if (pluginOptions
-              .load(existingProps, IndexPluginOptions.getIndexNamespace(defaultIndex))) {
+          if (pluginOptions.load(
+              existingProps,
+              IndexPluginOptions.getIndexNamespace(defaultIndex))) {
             // Set the required type option.
             this.type = pluginOptions.getType();
             opts = pluginOptions.getDimensionalityOptions();

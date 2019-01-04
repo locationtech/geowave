@@ -62,8 +62,8 @@ public class ChooseBestMatchIndexQueryStrategy implements IndexQueryStrategySPI 
           boolean containsRowRangeHistograms = false;
 
           final StatisticsQuery<NumericHistogram> query =
-              VectorStatisticsQueryBuilder.newBuilder().factory().rowHistogram()
-                  .indexName(nextIdx.getName()).build();
+              VectorStatisticsQueryBuilder.newBuilder().factory().rowHistogram().indexName(
+                  nextIdx.getName()).build();
           for (final StatisticsId statsId : stats.keySet()) {
             // find out if any partition histograms exist for this
             // index ID by checking the prefix
@@ -95,7 +95,10 @@ public class ChooseBestMatchIndexQueryStrategy implements IndexQueryStrategySPI 
             }
             final QueryRanges ranges =
                 DataStoreUtils.constraintsToQueryRanges(
-                    constraints, nextIdx.getIndexStrategy(), null, maxRangeDecomposition);
+                    constraints,
+                    nextIdx.getIndexStrategy(),
+                    null,
+                    maxRangeDecomposition);
             final long temp = DataStoreUtils.cardinality(nextIdx, stats, ranges);
             if (temp < min) {
               bestIdx = nextIdx;

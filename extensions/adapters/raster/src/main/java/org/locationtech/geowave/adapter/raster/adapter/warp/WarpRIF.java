@@ -51,8 +51,11 @@ public class WarpRIF extends it.geosolutions.jaiext.warp.WarpRIF {
       final OperationRegistry registry = JAI.getDefaultInstance().getOperationRegistry();
 
       final RenderedImageFactory rif = new WarpRIF();
-      registry
-          .registerFactory(RenderedRegistryMode.MODE_NAME, "Warp", "it.geosolutions.jaiext", rif);
+      registry.registerFactory(
+          RenderedRegistryMode.MODE_NAME,
+          "Warp",
+          "it.geosolutions.jaiext",
+          rif);
       registered = true;
     }
   }
@@ -86,7 +89,14 @@ public class WarpRIF extends it.geosolutions.jaiext.warp.WarpRIF {
       }
       Range noData = (Range) paramBlock.getObjectParameter(4);
       noData = RangeFactory.convert(noData, source.getSampleModel().getDataType());
-      return new WarpNearestOpImage(source, renderHints, layout, warp, interp, roi, noData,
+      return new WarpNearestOpImage(
+          source,
+          renderHints,
+          layout,
+          warp,
+          interp,
+          roi,
+          noData,
           backgroundValues);
     }
     return super.create(paramBlock, renderHints);

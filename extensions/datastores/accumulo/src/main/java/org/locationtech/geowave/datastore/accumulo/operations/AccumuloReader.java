@@ -177,8 +177,11 @@ public class AccumuloReader<T> implements RowReader<T> {
       }
     }
 
-    return new AccumuloRow(nextEntry.getKey().getRow().copyBytes(), partitionKeyLength,
-        fieldValueMapList, wholeRowEncoding);
+    return new AccumuloRow(
+        nextEntry.getKey().getRow().copyBytes(),
+        partitionKeyLength,
+        fieldValueMapList,
+        wholeRowEncoding);
   }
 
   private GeoWaveRow internalNext() {
@@ -187,8 +190,11 @@ public class AccumuloReader<T> implements RowReader<T> {
     List<Map<Key, Value>> fieldValueMapList = Lists.newLinkedList();
     fieldValueMapList.add(entryToRowMapping(nextEntry));
 
-    return new AccumuloRow(nextEntry.getKey().getRow().copyBytes(), partitionKeyLength,
-        fieldValueMapList, false);
+    return new AccumuloRow(
+        nextEntry.getKey().getRow().copyBytes(),
+        partitionKeyLength,
+        fieldValueMapList,
+        false);
   }
 
   private boolean entryRowIdsMatch(Entry<Key, Value> nextEntry, Entry<Key, Value> peekedEntry) {
@@ -209,7 +215,8 @@ public class AccumuloReader<T> implements RowReader<T> {
         rowMapping = WholeRowIterator.decodeRow(entry.getKey(), entry.getValue());
       } catch (final IOException e) {
         LOGGER.error(
-            "Could not decode row from iterator. Ensure whole row iterators are being used.", e);
+            "Could not decode row from iterator. Ensure whole row iterators are being used.",
+            e);
         return null;
       }
     } else {

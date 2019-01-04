@@ -139,7 +139,9 @@ public class IndexPluginOptions extends DefaultPluginOptions implements PluginOp
     }
     if ((options.getNameOverride() != null) && (options.getNameOverride().length() > 0)) {
       retVal =
-          new CustomNameIndex(retVal.getIndexStrategy(), retVal.getIndexModel(),
+          new CustomNameIndex(
+              retVal.getIndexStrategy(),
+              retVal.getIndexModel(),
               options.getNameOverride());
     }
     return retVal;

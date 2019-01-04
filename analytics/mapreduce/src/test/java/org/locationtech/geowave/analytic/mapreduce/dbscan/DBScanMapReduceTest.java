@@ -70,23 +70,29 @@ public class DBScanMapReduceTest {
 
     mapDriver.getConfiguration().set(
         GeoWaveConfiguratorBase.enumToConfKey(
-            NNMapReduce.class, PartitionParameters.Partition.DISTANCE_THRESHOLDS),
+            NNMapReduce.class,
+            PartitionParameters.Partition.DISTANCE_THRESHOLDS),
         "10,10");
 
     reduceDriver.getConfiguration().setDouble(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(NNMapReduce.class, PartitionParameters.Partition.MAX_DISTANCE),
+        GeoWaveConfiguratorBase.enumToConfKey(
+            NNMapReduce.class,
+            PartitionParameters.Partition.MAX_DISTANCE),
         10);
 
     ftype =
         AnalyticFeature.createGeometryFeatureAdapter(
-            "centroid", new String[] {"extra1"}, BasicFeatureTypes.DEFAULT_NAMESPACE,
+            "centroid",
+            new String[] {"extra1"},
+            BasicFeatureTypes.DEFAULT_NAMESPACE,
             ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
     reduceDriver.getConfiguration().setClass(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(DBScanMapReduce.class, HullParameters.Hull.PROJECTION_CLASS),
-        SimpleFeatureProjection.class, Projection.class);
+        GeoWaveConfiguratorBase.enumToConfKey(
+            DBScanMapReduce.class,
+            HullParameters.Hull.PROJECTION_CLASS),
+        SimpleFeatureProjection.class,
+        Projection.class);
 
     final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(ftype);
@@ -94,17 +100,31 @@ public class DBScanMapReduceTest {
     JobContextAdapterStore.addDataAdapter(mapDriver.getConfiguration(), adapter);
 
     JobContextAdapterStore.addDataAdapter(reduceDriver.getConfiguration(), adapter);
-    JobContextInternalAdapterStore
-        .addTypeName(mapDriver.getConfiguration(), adapter.getTypeName(), adapterId);
-    JobContextInternalAdapterStore
-        .addTypeName(reduceDriver.getConfiguration(), adapter.getTypeName(), adapterId);
+    JobContextInternalAdapterStore.addTypeName(
+        mapDriver.getConfiguration(),
+        adapter.getTypeName(),
+        adapterId);
+    JobContextInternalAdapterStore.addTypeName(
+        reduceDriver.getConfiguration(),
+        adapter.getTypeName(),
+        adapterId);
     serializations();
   }
 
   private SimpleFeature createTestFeature(final String name, final Coordinate coord) {
     return AnalyticFeature.createGeometryFeature(
-        ftype, "b1", name, name, "NA", 20.30203, factory.createPoint(coord),
-        new String[] {"extra1"}, new double[] {0.022}, 1, 1, 0);
+        ftype,
+        "b1",
+        name,
+        name,
+        "NA",
+        20.30203,
+        factory.createPoint(coord),
+        new String[] {"extra1"},
+        new double[] {0.022},
+        1,
+        1,
+        0);
   }
 
   private void serializations() {
@@ -170,8 +190,9 @@ public class DBScanMapReduceTest {
     reduceDriver.addAll(partitions);
 
     reduceDriver.getConfiguration().setInt(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(NNMapReduce.class, ClusteringParameters.Clustering.MINIMUM_SIZE),
+        GeoWaveConfiguratorBase.enumToConfKey(
+            NNMapReduce.class,
+            ClusteringParameters.Clustering.MINIMUM_SIZE),
         2);
 
     final List<Pair<GeoWaveInputKey, ObjectWritable>> reduceResults = reduceDriver.run();
@@ -217,8 +238,8 @@ public class DBScanMapReduceTest {
       final String id,
       final boolean primary) {
     for (final Pair<PartitionDataWritable, AdapterWithObjectWritable> pair : mapperResults) {
-      if (((FeatureWritable) pair.getSecond().getObjectWritable().get()).getFeature().getID()
-          .equals(id) && (pair.getFirst().getPartitionData().isPrimary() == primary)) {
+      if (((FeatureWritable) pair.getSecond().getObjectWritable().get()).getFeature().getID().equals(
+          id) && (pair.getFirst().getPartitionData().isPrimary() == primary)) {
         return pair.getFirst().getPartitionData();
       }
     }
@@ -236,7 +257,9 @@ public class DBScanMapReduceTest {
     for (int i = 0; i < 8; i++) {
       final SimpleFeature feature =
           createTestFeature(
-              "f" + i, new Coordinate(round(30.0 + (r.nextGaussian() * 0.00001)),
+              "f" + i,
+              new Coordinate(
+                  round(30.0 + (r.nextGaussian() * 0.00001)),
                   round(30.0 + (r.nextGaussian() * 0.00001))));
       mapDriver.addInput(new GeoWaveInputKey(adapterId, new ByteArray(feature.getID())), feature);
     }
@@ -250,8 +273,9 @@ public class DBScanMapReduceTest {
     reduceDriver.addAll(partitions);
 
     reduceDriver.getConfiguration().setInt(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(NNMapReduce.class, ClusteringParameters.Clustering.MINIMUM_SIZE),
+        GeoWaveConfiguratorBase.enumToConfKey(
+            NNMapReduce.class,
+            ClusteringParameters.Clustering.MINIMUM_SIZE),
         4);
 
     final List<Pair<GeoWaveInputKey, ObjectWritable>> reduceResults = reduceDriver.run();
@@ -265,7 +289,9 @@ public class DBScanMapReduceTest {
     for (int i = 0; i < 10000; i++) {
       final SimpleFeature feature =
           createTestFeature(
-              "f" + i, new Coordinate(round(30.0 + (r.nextGaussian() * 0.0001)),
+              "f" + i,
+              new Coordinate(
+                  round(30.0 + (r.nextGaussian() * 0.0001)),
                   round(30.0 + (r.nextGaussian() * 0.0001))));
       mapDriver.addInput(new GeoWaveInputKey(adapterId, new ByteArray(feature.getID())), feature);
     }
@@ -279,8 +305,9 @@ public class DBScanMapReduceTest {
     reduceDriver.addAll(partitions);
 
     reduceDriver.getConfiguration().setInt(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(NNMapReduce.class, ClusteringParameters.Clustering.MINIMUM_SIZE),
+        GeoWaveConfiguratorBase.enumToConfKey(
+            NNMapReduce.class,
+            ClusteringParameters.Clustering.MINIMUM_SIZE),
         10);
 
     final List<Pair<GeoWaveInputKey, ObjectWritable>> reduceResults = reduceDriver.run();

@@ -292,8 +292,10 @@ public abstract class DBScanClusterList implements Cluster {
 
       LOGGER.error("Union failed due to non-simple geometries", ex);
       clusterGeo =
-          connectGeometryTool
-              .createHullFromGeometry(clusterGeo, Arrays.asList(otherGeo.getCoordinates()), false);
+          connectGeometryTool.createHullFromGeometry(
+              clusterGeo,
+              Arrays.asList(otherGeo.getCoordinates()),
+              false);
     }
   }
 

@@ -84,8 +84,8 @@ public class ClusterItemDistanceFn implements DistanceFn<ClusterItem>,
       context.setPoint1(points[0]);
       context.setPoint2(points[1]);
     }
-    localProfile
-        .setDistance(coordinateDistanceFunction.measure(context.getPoint1(), context.getPoint2()));
+    localProfile.setDistance(
+        coordinateDistanceFunction.measure(context.getPoint1(), context.getPoint2()));
     return localProfile;
   }
 

@@ -121,8 +121,8 @@ public abstract class AbstractDataStatistics<T, R, B extends StatisticsQueryBuil
 
   @SuppressWarnings("unchecked")
   public InternalDataStatistics<T, R, B> duplicate() {
-    return (InternalDataStatistics<T, R, B>) PersistenceUtils
-        .fromBinary(PersistenceUtils.toBinary(this));
+    return (InternalDataStatistics<T, R, B>) PersistenceUtils.fromBinary(
+        PersistenceUtils.toBinary(this));
   }
 
   @Override

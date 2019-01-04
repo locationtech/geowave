@@ -63,7 +63,8 @@ public class GeometryGenerator {
           // double b = distanceactors.get(i % distanceactors.size())
           // * dy * distortationFn.distort();
           clist.add(
-              new Coordinate(cx + a * Math.sin(Math.toRadians(angle)),
+              new Coordinate(
+                  cx + a * Math.sin(Math.toRadians(angle)),
                   cy + a * Math.cos(Math.toRadians(angle))));
         }
 

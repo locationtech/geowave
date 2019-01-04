@@ -73,7 +73,8 @@ public class RasterFootprintStatistics
     if (entry instanceof FitToIndexGridCoverage) {
       footprint =
           RasterUtils.combineIntoOneGeometry(
-              footprint, ((FitToIndexGridCoverage) entry).getFootprintWorldGeometry());
+              footprint,
+              ((FitToIndexGridCoverage) entry).getFootprintWorldGeometry());
     }
   }
 
@@ -82,7 +83,8 @@ public class RasterFootprintStatistics
     if (statistics instanceof RasterFootprintStatistics) {
       footprint =
           RasterUtils.combineIntoOneGeometry(
-              footprint, ((RasterFootprintStatistics) statistics).footprint);
+              footprint,
+              ((RasterFootprintStatistics) statistics).footprint);
     }
   }
 

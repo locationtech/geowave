@@ -47,8 +47,15 @@ public class BaseMapReduceDataStore extends BaseDataStore implements MapReduceDa
       final MapReduceDataStoreOperations operations,
       final DataStoreOptions options,
       final InternalAdapterStore adapterMappingStore) {
-    super(indexStore, adapterStore, statisticsStore, indexMappingStore, secondaryIndexDataStore,
-        operations, options, adapterMappingStore);
+    super(
+        indexStore,
+        adapterStore,
+        statisticsStore,
+        indexMappingStore,
+        secondaryIndexDataStore,
+        operations,
+        options,
+        adapterMappingStore);
     splitsProvider = createSplitsProvider();
   }
 
@@ -79,8 +86,16 @@ public class BaseMapReduceDataStore extends BaseDataStore implements MapReduceDa
       final IndexStore indexStore,
       final boolean isOutputWritable,
       final InputSplit inputSplit) throws IOException, InterruptedException {
-    return new GeoWaveRecordReader(commonOptions, typeOptions, indexOptions, constraints,
-        isOutputWritable, adapterStore, internalAdapterStore, aimStore, indexStore,
+    return new GeoWaveRecordReader(
+        commonOptions,
+        typeOptions,
+        indexOptions,
+        constraints,
+        isOutputWritable,
+        adapterStore,
+        internalAdapterStore,
+        aimStore,
+        indexStore,
         (MapReduceDataStoreOperations) baseOperations);
   }
 
@@ -103,8 +118,18 @@ public class BaseMapReduceDataStore extends BaseDataStore implements MapReduceDa
       final Integer minSplits,
       final Integer maxSplits) throws IOException, InterruptedException {
     return splitsProvider.getSplits(
-        baseOperations, commonOptions, typeOptions, indexOptions, constraints, adapterStore,
-        statsStore, internalAdapterStore, indexStore, indexMappingStore, context, minSplits,
+        baseOperations,
+        commonOptions,
+        typeOptions,
+        indexOptions,
+        constraints,
+        adapterStore,
+        statsStore,
+        internalAdapterStore,
+        indexStore,
+        indexMappingStore,
+        context,
+        minSplits,
         maxSplits);
   }
 }

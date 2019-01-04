@@ -30,9 +30,14 @@ public class BaseDataStoreFactory extends BaseStoreFactory<DataStore> {
   public DataStore createStore(final StoreFactoryOptions factoryOptions) {
     final DataStoreOperations operations = helper.createOperations(factoryOptions);
     final DataStoreOptions options = factoryOptions.getStoreOptions();
-    return new BaseDataStore(new IndexStoreImpl(operations, options),
-        new AdapterStoreImpl(operations, options), new DataStatisticsStoreImpl(operations, options),
-        new AdapterIndexMappingStoreImpl(operations, options), new SecondaryIndexStoreImpl(),
-        operations, options, new InternalAdapterStoreImpl(operations));
+    return new BaseDataStore(
+        new IndexStoreImpl(operations, options),
+        new AdapterStoreImpl(operations, options),
+        new DataStatisticsStoreImpl(operations, options),
+        new AdapterIndexMappingStoreImpl(operations, options),
+        new SecondaryIndexStoreImpl(),
+        operations,
+        options,
+        new InternalAdapterStoreImpl(operations));
   }
 }

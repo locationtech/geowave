@@ -34,11 +34,14 @@ public class JavassistUtilsTest {
 
     AnnotationsAttribute clonedAttr =
         JavassistUtils.cloneAnnotationsAttribute(
-            ctmethod.getMethodInfo().getConstPool(), attr, java.lang.annotation.ElementType.METHOD);
+            ctmethod.getMethodInfo().getConstPool(),
+            attr,
+            java.lang.annotation.ElementType.METHOD);
 
     Assert.assertEquals(
-        135, ((IntegerMemberValue) clonedAttr.getAnnotation("java.lang.Integer")
-            .getMemberValue("origAnno")).getValue());
+        135,
+        ((IntegerMemberValue) clonedAttr.getAnnotation("java.lang.Integer").getMemberValue(
+            "origAnno")).getValue());
   }
 
   private static class FindMethodTest {
@@ -90,11 +93,12 @@ public class JavassistUtilsTest {
     JavassistUtils.copyClassAnnotations(fromClass, toClass);
 
     Annotation toAnno =
-        ((AnnotationsAttribute) toClass.getClassFile()
-            .getAttribute(AnnotationsAttribute.visibleTag)).getAnnotation("java.lang.Integer");
+        ((AnnotationsAttribute) toClass.getClassFile().getAttribute(
+            AnnotationsAttribute.visibleTag)).getAnnotation("java.lang.Integer");
 
     Assert.assertEquals(
-        246, ((IntegerMemberValue) toAnno.getMemberValue("copyClassName")).getValue());
+        246,
+        ((IntegerMemberValue) toAnno.getMemberValue("copyClassName")).getValue());
   }
 
   @Test
@@ -110,8 +114,8 @@ public class JavassistUtilsTest {
     JavassistUtils.copyMethodAnnotationsToField(createdMethod, createdField);
 
     IntegerMemberValue i = null;
-    for (Annotation annot : ((AnnotationsAttribute) createdField.getFieldInfo()
-        .getAttribute(AnnotationsAttribute.visibleTag)).getAnnotations()) {
+    for (Annotation annot : ((AnnotationsAttribute) createdField.getFieldInfo().getAttribute(
+        AnnotationsAttribute.visibleTag)).getAnnotations()) {
       i = (IntegerMemberValue) annot.getMemberValue("value");
       if (i != null) {
         break;
@@ -153,15 +157,15 @@ public class JavassistUtilsTest {
 
     Assert.assertEquals(
         7,
-        ((IntegerMemberValue) ((AnnotationsAttribute) method.getMethodInfo()
-            .getAttribute(AnnotationsAttribute.visibleTag)).getAnnotation("java.lang.Integer")
-                .getMemberValue("abc")).getValue());
+        ((IntegerMemberValue) ((AnnotationsAttribute) method.getMethodInfo().getAttribute(
+            AnnotationsAttribute.visibleTag)).getAnnotation("java.lang.Integer").getMemberValue(
+                "abc")).getValue());
 
     Assert.assertEquals(
         9,
-        ((IntegerMemberValue) ((AnnotationsAttribute) field.getFieldInfo()
-            .getAttribute(AnnotationsAttribute.visibleTag)).getAnnotation("java.lang.Integer")
-                .getMemberValue("def")).getValue());
+        ((IntegerMemberValue) ((AnnotationsAttribute) field.getFieldInfo().getAttribute(
+            AnnotationsAttribute.visibleTag)).getAnnotation("java.lang.Integer").getMemberValue(
+                "def")).getValue());
   }
 
   class TestClass {
@@ -193,7 +197,8 @@ public class JavassistUtilsTest {
       String annotationName,
       int annotationValue) {
     AnnotationsAttribute attr =
-        new AnnotationsAttribute(ctmethod.getMethodInfo().getConstPool(),
+        new AnnotationsAttribute(
+            ctmethod.getMethodInfo().getConstPool(),
             AnnotationsAttribute.visibleTag);
     Annotation anno = new Annotation("java.lang.Integer", ctmethod.getMethodInfo().getConstPool());
     anno.addMemberValue(
@@ -223,7 +228,8 @@ public class JavassistUtilsTest {
 
   private void annotateField(CtField ctfield, String annotationName, int annotationValue) {
     AnnotationsAttribute attr =
-        new AnnotationsAttribute(ctfield.getFieldInfo().getConstPool(),
+        new AnnotationsAttribute(
+            ctfield.getFieldInfo().getConstPool(),
             AnnotationsAttribute.visibleTag);
     Annotation anno = new Annotation("java.lang.Integer", ctfield.getFieldInfo().getConstPool());
     anno.addMemberValue(

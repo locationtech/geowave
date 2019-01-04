@@ -54,8 +54,8 @@ public abstract class GenericTypeResolver {
 
   /** Cache from Class to TypeVariable Map */
   private static final Map<Class<?>, Reference<Map<TypeVariable<?>, Type>>> typeVariableCache =
-      Collections
-          .synchronizedMap(new WeakHashMap<Class<?>, Reference<Map<TypeVariable<?>, Type>>>());
+      Collections.synchronizedMap(
+          new WeakHashMap<Class<?>, Reference<Map<TypeVariable<?>, Type>>>());
 
   /**
    * Resolve the single type argument of the given generic interface against the given target class
@@ -72,10 +72,11 @@ public abstract class GenericTypeResolver {
       return null;
     }
     if (typeArgs.length != 1) {
-      throw new IllegalArgumentException("Expected 1 type argument on generic interface ["
-          + genericIfc.getName()
-          + "] but found "
-          + typeArgs.length);
+      throw new IllegalArgumentException(
+          "Expected 1 type argument on generic interface ["
+              + genericIfc.getName()
+              + "] but found "
+              + typeArgs.length);
     }
     return typeArgs[0];
   }
@@ -110,7 +111,9 @@ public abstract class GenericTypeResolver {
       } else {
         Class<?>[] result =
             doResolveTypeArguments(
-                ownerClass, classToIntrospect.getGenericSuperclass(), genericIfc);
+                ownerClass,
+                classToIntrospect.getGenericSuperclass(),
+                genericIfc);
         if (result != null) {
           return result;
         }
@@ -274,11 +277,13 @@ public abstract class GenericTypeResolver {
         populateTypeMapFromParameterizedType(pt, typeVariableMap);
         if (pt.getRawType() instanceof Class) {
           extractTypeVariablesFromGenericInterfaces(
-              ((Class<?>) pt.getRawType()).getGenericInterfaces(), typeVariableMap);
+              ((Class<?>) pt.getRawType()).getGenericInterfaces(),
+              typeVariableMap);
         }
       } else if (genericInterface instanceof Class) {
         extractTypeVariablesFromGenericInterfaces(
-            ((Class<?>) genericInterface).getGenericInterfaces(), typeVariableMap);
+            ((Class<?>) genericInterface).getGenericInterfaces(),
+            typeVariableMap);
       }
     }
   }

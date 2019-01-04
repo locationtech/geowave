@@ -30,8 +30,8 @@ public class OptimalVectorTimeRangeAggregation<P extends Persistable, T>
     // or if field name is non-nul it must use a timestamp
     return ((fieldNameParam == null)
         || ((adapter.getTimeDescriptors().getTime() != null)
-            && fieldNameParam.getFieldName()
-                .equals(adapter.getTimeDescriptors().getTime().getLocalName())))
+            && fieldNameParam.getFieldName().equals(
+                adapter.getTimeDescriptors().getTime().getLocalName())))
         && IndexOptimizationUtils.hasTime(index, adapter);
   }
 

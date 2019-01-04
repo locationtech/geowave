@@ -156,16 +156,16 @@ public class IndexUtils {
   public static int getBitPositionOnSortKeyFromSubsamplingArray(
       final NumericIndexStrategy indexStrategy,
       final double[] maxResolutionSubsamplingPerDimension) {
-    return (int) Math
-        .round(getDimensionalBitsUsed(indexStrategy, maxResolutionSubsamplingPerDimension));
+    return (int) Math.round(
+        getDimensionalBitsUsed(indexStrategy, maxResolutionSubsamplingPerDimension));
   }
 
   public static int getBitPositionFromSubsamplingArray(
       final NumericIndexStrategy indexStrategy,
       final double[] maxResolutionSubsamplingPerDimension) {
     return getBitPositionOnSortKeyFromSubsamplingArray(
-        indexStrategy, maxResolutionSubsamplingPerDimension)
-        + (8 * indexStrategy.getPartitionKeyLength());
+        indexStrategy,
+        maxResolutionSubsamplingPerDimension) + (8 * indexStrategy.getPartitionKeyLength());
   }
 
   public static byte[] getNextRowForSkip(final byte[] row, final int bitPosition) {

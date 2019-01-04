@@ -100,8 +100,9 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
           config.setNumTservers(NUM_TABLET_SERVERS);
 
           miniAccumulo =
-              MiniAccumuloClusterFactory
-                  .newAccumuloCluster(config, AccumuloStoreTestEnvironment.class);
+              MiniAccumuloClusterFactory.newAccumuloCluster(
+                  config,
+                  AccumuloStoreTestEnvironment.class);
 
           startMiniAccumulo(config);
           accumuloUser = "root";
@@ -152,11 +153,12 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
 
     final int ret = initProcess.waitFor();
     if (ret != 0) {
-      throw new RuntimeException("Initialize process returned "
-          + ret
-          + ". Check the logs in "
-          + config.getLogDir()
-          + " for errors.");
+      throw new RuntimeException(
+          "Initialize process returned "
+              + ret
+              + ". Check the logs in "
+              + config.getLogDir()
+              + " for errors.");
     }
 
     LOGGER.info(

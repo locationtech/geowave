@@ -11,11 +11,14 @@ package org.locationtech.geowave.datastore.accumulo.split;
 import com.beust.jcommander.Parameter;
 
 public class SplitCommandLineOptions {
-  @Parameter(names = "--indexName",
+  @Parameter(
+      names = "--indexName",
       description = "The geowave index name (optional; default is all indices)")
   private String indexName;
 
-  @Parameter(names = "--num", required = true,
+  @Parameter(
+      names = "--num",
+      required = true,
       description = "The number of partitions (or entries)")
   private long number;
 

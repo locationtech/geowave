@@ -14,7 +14,8 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.jts.geom.Geometry;
 
 public class MaxExtentOptProvider implements Persistable {
-  @Parameter(names = "--maxLength",
+  @Parameter(
+      names = "--maxLength",
       description = "Maximum extent (in both dimensions) for gpx track in degrees. Used to remove excessively long gpx tracks")
   private double maxExtent = Double.MAX_VALUE;
 

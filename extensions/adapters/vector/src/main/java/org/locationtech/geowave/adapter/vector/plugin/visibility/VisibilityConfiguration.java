@@ -141,8 +141,9 @@ public class VisibilityConfiguration implements SimpleFeatureUserDataConfigurati
         manager =
             (VisibilityManagement<SimpleFeature>) Class.forName(visMgr.toString()).newInstance();
       } catch (final Exception ex) {
-        VisibilityManagementHelper.LOGGER
-            .warn("Cannot load visibility management class " + visMgr.toString(), ex);
+        VisibilityManagementHelper.LOGGER.warn(
+            "Cannot load visibility management class " + visMgr.toString(),
+            ex);
         return false;
       }
     }
@@ -157,8 +158,9 @@ public class VisibilityConfiguration implements SimpleFeatureUserDataConfigurati
         manager =
             (VisibilityManagement<SimpleFeature>) Class.forName(managerClassName).newInstance();
       } catch (final Exception ex) {
-        VisibilityManagementHelper.LOGGER
-            .warn("Cannot load visibility management class " + managerClassName, ex);
+        VisibilityManagementHelper.LOGGER.warn(
+            "Cannot load visibility management class " + managerClassName,
+            ex);
       }
     }
     return this;
@@ -216,8 +218,9 @@ public class VisibilityConfiguration implements SimpleFeatureUserDataConfigurati
         manager =
             (VisibilityManagement<SimpleFeature>) Class.forName(managerClassName).newInstance();
       } catch (final Exception ex) {
-        VisibilityManagementHelper.LOGGER
-            .warn("Cannot load visibility management class " + managerClassName, ex);
+        VisibilityManagementHelper.LOGGER.warn(
+            "Cannot load visibility management class " + managerClassName,
+            ex);
       }
     }
   }

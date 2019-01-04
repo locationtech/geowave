@@ -28,9 +28,11 @@ public class BigTableOperations extends HBaseOperations {
 
   public BigTableOperations(final BigTableOptions options) throws IOException {
     super(
-        BigTableConnectionPool.getInstance()
-            .getConnection(options.getProjectId(), options.getInstanceId()),
-        options.getGeoWaveNamespace(), options.getHBaseOptions());
+        BigTableConnectionPool.getInstance().getConnection(
+            options.getProjectId(),
+            options.getInstanceId()),
+        options.getGeoWaveNamespace(),
+        options.getHBaseOptions());
   }
 
   @Override

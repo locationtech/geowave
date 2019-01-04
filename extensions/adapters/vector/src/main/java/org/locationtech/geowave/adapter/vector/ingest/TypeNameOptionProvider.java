@@ -13,7 +13,8 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
 public class TypeNameOptionProvider implements Persistable {
-  @Parameter(names = "--typename",
+  @Parameter(
+      names = "--typename",
       description = "A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)")
   private String typename = null;
 

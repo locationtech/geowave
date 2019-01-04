@@ -40,7 +40,8 @@ public class SetCommand extends ServiceEnabledCommand<Object> {
   @Parameter(description = "<name> <value>")
   private List<String> parameters = new ArrayList<String>();
 
-  @Parameter(names = {"--password"},
+  @Parameter(
+      names = {"--password"},
       description = "Specify if the value being set is a password and should be encrypted in the configurations")
   private Boolean password = false;
 
@@ -102,7 +103,8 @@ public class SetCommand extends ServiceEnabledCommand<Object> {
           LOGGER.debug("Value was successfully encrypted");
         } catch (final Exception e) {
           LOGGER.error(
-              "An error occurred encrypting the specified value: " + e.getLocalizedMessage(), e);
+              "An error occurred encrypting the specified value: " + e.getLocalizedMessage(),
+              e);
         }
       } else {
         LOGGER.debug(

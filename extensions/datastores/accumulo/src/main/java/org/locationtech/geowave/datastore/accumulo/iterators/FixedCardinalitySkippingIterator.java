@@ -139,8 +139,11 @@ public class FixedCardinalitySkippingIterator extends SkippingIterator
 
   @Override
   public SortedKeyValueIterator<Key, Value> deepCopy(final IteratorEnvironment env) {
-    return new FixedCardinalitySkippingIterator(getSource().deepCopy(env), bitPosition,
-        columnFamilies, inclusive);
+    return new FixedCardinalitySkippingIterator(
+        getSource().deepCopy(env),
+        bitPosition,
+        columnFamilies,
+        inclusive);
   }
 
   @Override

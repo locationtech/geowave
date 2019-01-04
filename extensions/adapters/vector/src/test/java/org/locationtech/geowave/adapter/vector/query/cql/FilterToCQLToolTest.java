@@ -38,8 +38,9 @@ public class FilterToCQLToolTest {
   @Before
   public void setup() throws SchemaException, CQLException {
     type =
-        DataUtilities
-            .createType("geostuff", "geom:Geometry:srid=4326,pop:java.lang.Long,pid:String");
+        DataUtilities.createType(
+            "geostuff",
+            "geom:Geometry:srid=4326,pop:java.lang.Long,pid:String");
   }
 
   @Test
@@ -84,25 +85,24 @@ public class FilterToCQLToolTest {
   public void testFilter(Filter gtFilter) {
 
     final SimpleFeature newFeature =
-        FeatureDataUtils
-            .buildFeature(
-                type,
-                new Pair[] {
-                    Pair.of(
-                        "geom",
-                        new GeometryFactory()
-                            .createPoint(new Coordinate(-122.76570055844142, 0.4979))),
-                    Pair.of("pop", Long.valueOf(100))});
+        FeatureDataUtils.buildFeature(
+            type,
+            new Pair[] {
+                Pair.of(
+                    "geom",
+                    new GeometryFactory().createPoint(new Coordinate(-122.76570055844142, 0.4979))),
+                Pair.of("pop", Long.valueOf(100))});
 
     assertTrue(gtFilter.evaluate(newFeature));
 
     final SimpleFeature newFeatureToFail =
-        FeatureDataUtils
-            .buildFeature(
-                type,
-                new Pair[] {Pair.of(
-                    "geom", new GeometryFactory().createPoint(new Coordinate(-122.7690, 0.4980))),
-                    Pair.of("pop", Long.valueOf(100))});
+        FeatureDataUtils.buildFeature(
+            type,
+            new Pair[] {
+                Pair.of(
+                    "geom",
+                    new GeometryFactory().createPoint(new Coordinate(-122.7690, 0.4980))),
+                Pair.of("pop", Long.valueOf(100))});
 
     assertFalse(gtFilter.evaluate(newFeatureToFail));
   }

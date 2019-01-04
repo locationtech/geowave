@@ -45,14 +45,15 @@ public class FieldUtils {
     fieldReaderRegistry = new HashMap<Class<?>, FieldReader<?>>();
     fieldWriterRegistry = new HashMap<Class<?>, FieldWriter<?, ?>>();
     final Iterator<FieldSerializationProviderSpi> serializationProviders =
-        new SPIServiceRegistry(FieldSerializationProviderSpi.class)
-            .load(FieldSerializationProviderSpi.class);
+        new SPIServiceRegistry(FieldSerializationProviderSpi.class).load(
+            FieldSerializationProviderSpi.class);
     while (serializationProviders.hasNext()) {
       final FieldSerializationProviderSpi<?> serializationProvider = serializationProviders.next();
       if (serializationProvider != null) {
         final Class<?> type =
             GenericTypeResolver.resolveTypeArgument(
-                serializationProvider.getClass(), FieldSerializationProviderSpi.class);
+                serializationProvider.getClass(),
+                FieldSerializationProviderSpi.class);
         final FieldReader<?> reader = serializationProvider.getFieldReader();
         if (reader != null) {
           if (fieldReaderRegistry.containsKey(type)) {
@@ -114,7 +115,8 @@ public class FieldUtils {
   public static <RowType, FieldType> FieldWriter<RowType, FieldType> getDefaultWriterForClass(
       final Class<FieldType> myClass,
       final FieldVisibilityHandler<RowType, Object> visibilityHandler) {
-    return new BasicWriter<RowType, FieldType>(getDefaultWriterForClass(myClass),
+    return new BasicWriter<RowType, FieldType>(
+        getDefaultWriterForClass(myClass),
         visibilityHandler);
   }
 }

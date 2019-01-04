@@ -12,7 +12,9 @@ import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.mapreduce.operations.HdfsHostPortConverter;
 
 public class KDECommandLineOptions {
-  @Parameter(names = "--featureType", required = true,
+  @Parameter(
+      names = "--featureType",
+      required = true,
       description = "The name of the feature type to run a KDE on")
   private String featureType;
 
@@ -34,22 +36,28 @@ public class KDECommandLineOptions {
   @Parameter(names = "--coverageName", required = true, description = "The coverage name")
   private String coverageName;
 
-  @Parameter(names = "--hdfsHostPort", description = "The hdfs host port",
+  @Parameter(
+      names = "--hdfsHostPort",
+      description = "The hdfs host port",
       converter = HdfsHostPortConverter.class)
   private String hdfsHostPort;
 
-  @Parameter(names = "--jobSubmissionHostPort", required = true,
+  @Parameter(
+      names = "--jobSubmissionHostPort",
+      required = true,
       description = "The job submission tracker")
   private String jobTrackerOrResourceManHostPort;
 
   @Parameter(names = "--tileSize", description = "The tile size")
   private Integer tileSize = 1;
 
-  @Parameter(names = "--cqlFilter",
+  @Parameter(
+      names = "--cqlFilter",
       description = "An optional CQL filter applied to the input data")
   private String cqlFilter;
 
-  @Parameter(names = "--outputIndex",
+  @Parameter(
+      names = "--outputIndex",
       description = "An optional index for output datastore. Only spatial index type is supported")
   private String outputIndex;
 

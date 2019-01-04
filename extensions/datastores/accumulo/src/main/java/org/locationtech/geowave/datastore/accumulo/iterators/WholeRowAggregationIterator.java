@@ -50,7 +50,9 @@ public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
       }
       final CommonIndexedPersistenceEncoding encoding =
           QueryFilterIterator.getEncoding(
-              currentRow, queryFilterIterator.partitionKeyLength, commonData,
+              currentRow,
+              queryFilterIterator.partitionKeyLength,
+              commonData,
               unreadData.isEmpty() ? null : new UnreadFieldDataList(unreadData));
       boolean queryFilterResult = true;
       if (aggregationIterator.queryFilterIterator.isSet()) {
@@ -82,8 +84,8 @@ public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
     final SortedKeyValueIterator<Key, Value> iterator = super.deepCopy(env);
     if (iterator instanceof WholeRowAggregationIterator) {
       aggregationIterator = new AggregationIterator();
-      aggregationIterator
-          .deepCopyIterator(((WholeRowAggregationIterator) iterator).aggregationIterator);
+      aggregationIterator.deepCopyIterator(
+          ((WholeRowAggregationIterator) iterator).aggregationIterator);
       aggregationIterator.setParent(new WholeRowAggregationParent());
     }
     return iterator;

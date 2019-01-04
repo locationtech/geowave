@@ -76,8 +76,9 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements IndexQueryStrateg
                       qr.getMaxValuesPerDimension()[d] - qr.getMinValuesPerDimension()[d];
                 }
                 currentBitsUsed +=
-                    IndexUtils
-                        .getDimensionalBitsUsed(nextIdx.getIndexStrategy(), dataRangePerDimension);
+                    IndexUtils.getDimensionalBitsUsed(
+                        nextIdx.getIndexStrategy(),
+                        dataRangePerDimension);
               }
 
               if ((currentDimensionCount > bestIndexDimensionCount)

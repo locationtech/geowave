@@ -60,8 +60,8 @@ public class S3URLConnection extends URLConnection {
     final String signerOverride = System.getProperty(PROP_S3_HANDLER_SIGNER_OVERRIDE, null);
 
     final ClientConfiguration clientConfig =
-        new ClientConfiguration()
-            .withProtocol("https".equalsIgnoreCase(protocol) ? Protocol.HTTPS : Protocol.HTTP);
+        new ClientConfiguration().withProtocol(
+            "https".equalsIgnoreCase(protocol) ? Protocol.HTTPS : Protocol.HTTP);
 
     if (userAgent != null) {
       clientConfig.setUserAgent(userAgent);

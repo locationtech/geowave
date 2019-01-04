@@ -66,8 +66,8 @@ public class BigDecimalSerializationProvider implements FieldSerializationProvid
       }
       final byte[] unscaled = fieldValue.unscaledValue().toByteArray();
       final ByteBuffer buf =
-          ByteBuffer
-              .allocate(VarintUtils.signedIntByteLength(fieldValue.scale()) + unscaled.length);
+          ByteBuffer.allocate(
+              VarintUtils.signedIntByteLength(fieldValue.scale()) + unscaled.length);
       VarintUtils.writeSignedInt(fieldValue.scale(), buf);
       buf.put(unscaled);
       return buf.array();

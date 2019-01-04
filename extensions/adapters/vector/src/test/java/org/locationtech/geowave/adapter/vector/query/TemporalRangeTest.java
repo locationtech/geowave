@@ -44,7 +44,8 @@ public class TemporalRangeTest extends BaseDataStoreTest {
     dataStore = createDataStore();
     type =
         DataUtilities.createType(
-            "geostuff", "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
+            "geostuff",
+            "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
 
     dataStore.createSchema(type);
   }
@@ -75,6 +76,7 @@ public class TemporalRangeTest extends BaseDataStoreTest {
     stats.entryIngested(newFeature);
 
     assertEquals(
-        DateUtilities.parseISO("2005-05-19T23:32:56Z"), stats.asTemporalRange().getStartTime());
+        DateUtilities.parseISO("2005-05-19T23:32:56Z"),
+        stats.asTemporalRange().getStartTime());
   }
 }

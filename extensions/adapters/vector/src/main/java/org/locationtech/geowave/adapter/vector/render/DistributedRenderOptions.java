@@ -601,7 +601,8 @@ public class DistributedRenderOptions implements Persistable {
       final byte[] styleBinary = new byte[VarintUtils.readUnsignedInt(buf)];
       buf.get(styleBinary);
       final SLDParser parser =
-          new SLDParser(CommonFactoryFinder.getStyleFactory(null),
+          new SLDParser(
+              CommonFactoryFinder.getStyleFactory(null),
               new ByteArrayInputStream(styleBinary));
       final Style[] styles = parser.readXML();
       if ((styles != null) && (styles.length > 0)) {

@@ -104,8 +104,11 @@ public class GeoWaveRDDLoader {
 
     if (rddOpts.getQuery() != null) {
       GeoWaveInputFormat.setQuery(
-          conf, rddOpts.getQuery(), storeOptions.createAdapterStore(),
-          storeOptions.createInternalAdapterStore(), storeOptions.createIndexStore());
+          conf,
+          rddOpts.getQuery(),
+          storeOptions.createAdapterStore(),
+          storeOptions.createInternalAdapterStore(),
+          storeOptions.createIndexStore());
     }
 
     if ((rddOpts.getMinSplits() > -1) || (rddOpts.getMaxSplits() > -1)) {
@@ -124,7 +127,10 @@ public class GeoWaveRDDLoader {
 
     final RDD<Tuple2<GeoWaveInputKey, SimpleFeature>> rdd =
         sc.newAPIHadoopRDD(
-            conf, GeoWaveInputFormat.class, GeoWaveInputKey.class, SimpleFeature.class);
+            conf,
+            GeoWaveInputFormat.class,
+            GeoWaveInputKey.class,
+            SimpleFeature.class);
 
     final JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd =
         JavaPairRDD.fromJavaRDD(rdd.toJavaRDD());

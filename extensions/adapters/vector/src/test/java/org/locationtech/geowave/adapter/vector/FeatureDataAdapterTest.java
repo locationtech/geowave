@@ -77,8 +77,10 @@ public class FeatureDataAdapterTest {
     newFeature =
         FeatureDataUtils.buildFeature(
             schema,
-            new Pair[] {Pair.of("geometry", factory.createPoint(new Coordinate(27.25, 41.25))),
-                Pair.of("pop", Long.valueOf(100)), Pair.of("when", time1),
+            new Pair[] {
+                Pair.of("geometry", factory.createPoint(new Coordinate(27.25, 41.25))),
+                Pair.of("pop", Long.valueOf(100)),
+                Pair.of("when", time1),
                 Pair.of("whennot", time2)});
   }
 
@@ -87,7 +89,8 @@ public class FeatureDataAdapterTest {
     final SimpleFeatureType schema =
         DataUtilities.createType("sp.geostuff", "geometry:Geometry:srid=3005,pop:java.lang.Long");
     final FeatureDataAdapter dataAdapter =
-        new FeatureDataAdapter(schema,
+        new FeatureDataAdapter(
+            schema,
             new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
     final Index spatialIndex =
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
@@ -100,12 +103,14 @@ public class FeatureDataAdapterTest {
     final SimpleFeature newFeature =
         FeatureDataUtils.buildFeature(
             schema,
-            new Pair[] {Pair.of("geometry", factory.createPoint(new Coordinate(27.25, 41.25))),
+            new Pair[] {
+                Pair.of("geometry", factory.createPoint(new Coordinate(27.25, 41.25))),
                 Pair.of("pop", Long.valueOf(100))});
     final AdapterPersistenceEncoding persistenceEncoding =
         dataAdapter.encode(
-            newFeature, new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions())
-                .getIndexModel());
+            newFeature,
+            new SpatialDimensionalityTypeProvider().createIndex(
+                new SpatialOptions()).getIndexModel());
 
     GeometryWrapper wrapper = null;
     for (final Entry<String, ?> pv : persistenceEncoding.getCommonData().getValues().entrySet()) {
@@ -124,7 +129,8 @@ public class FeatureDataAdapterTest {
     schema.getDescriptor("whennot").getUserData().put("time", Boolean.TRUE);
 
     final FeatureDataAdapter dataAdapter =
-        new FeatureDataAdapter(schema,
+        new FeatureDataAdapter(
+            schema,
             new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
     final Index spatialIndex =
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
@@ -146,8 +152,8 @@ public class FeatureDataAdapterTest {
     for (final IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object> handler : handlers) {
       found |=
           ((handler instanceof FeatureTimestampHandler)
-              && ((((FeatureTimestampHandler) handler).toIndexValue(newFeature).toNumericData()
-                  .getMin() - time2.getTime()) < 0.001));
+              && ((((FeatureTimestampHandler) handler).toIndexValue(
+                  newFeature).toNumericData().getMin() - time2.getTime()) < 0.001));
     }
 
     assertTrue(found);
@@ -159,7 +165,8 @@ public class FeatureDataAdapterTest {
     schema.getDescriptor("pid").getUserData().put("visibility", Boolean.TRUE);
 
     final FeatureDataAdapter dataAdapter =
-        new FeatureDataAdapter(schema,
+        new FeatureDataAdapter(
+            schema,
             new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
     final Index spatialIndex =
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
@@ -184,7 +191,8 @@ public class FeatureDataAdapterTest {
     schema.getDescriptor("whennot").getUserData().put("time", Boolean.FALSE);
 
     final FeatureDataAdapter dataAdapter =
-        new FeatureDataAdapter(schema,
+        new FeatureDataAdapter(
+            schema,
             new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
 
     final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> handlers =
@@ -204,7 +212,8 @@ public class FeatureDataAdapterTest {
     schema.getDescriptor("whennot").getUserData().clear();
 
     final FeatureDataAdapter dataAdapter =
-        new FeatureDataAdapter(schema,
+        new FeatureDataAdapter(
+            schema,
             new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
     final Index spatialIndex =
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
@@ -226,8 +235,8 @@ public class FeatureDataAdapterTest {
     for (final IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object> handler : handlers) {
       found |=
           ((handler instanceof FeatureTimestampHandler)
-              && ((((FeatureTimestampHandler) handler).toIndexValue(newFeature).toNumericData()
-                  .getMin() - time1.getTime()) < 0.001));
+              && ((((FeatureTimestampHandler) handler).toIndexValue(
+                  newFeature).toNumericData().getMin() - time1.getTime()) < 0.001));
     }
 
     assertTrue(found);
@@ -243,7 +252,8 @@ public class FeatureDataAdapterTest {
     schema.getDescriptor("whennot").getUserData().put("end", Boolean.TRUE);
 
     final FeatureDataAdapter dataAdapter =
-        new FeatureDataAdapter(schema,
+        new FeatureDataAdapter(
+            schema,
             new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
     final Index spatialIndex =
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
@@ -268,10 +278,10 @@ public class FeatureDataAdapterTest {
     for (final IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object> handler : handlers) {
       found |=
           ((handler instanceof FeatureTimeRangeHandler)
-              && ((((FeatureTimeRangeHandler) handler).toIndexValue(newFeature).toNumericData()
-                  .getMin() - time1.getTime()) < 0.001)
-              && ((((FeatureTimeRangeHandler) handler).toIndexValue(newFeature).toNumericData()
-                  .getMax() - time2.getTime()) < 0.001));
+              && ((((FeatureTimeRangeHandler) handler).toIndexValue(
+                  newFeature).toNumericData().getMin() - time1.getTime()) < 0.001)
+              && ((((FeatureTimeRangeHandler) handler).toIndexValue(
+                  newFeature).toNumericData().getMax() - time2.getTime()) < 0.001));
     }
 
     assertTrue(found);
@@ -282,7 +292,8 @@ public class FeatureDataAdapterTest {
 
     final SimpleFeatureType schema =
         DataUtilities.createType(
-            "http://foo", "sp.geostuff",
+            "http://foo",
+            "sp.geostuff",
             "geometry:Geometry:srid=4326,pop:java.lang.Long,start:Date,end:Date,pid:String");
 
     final List<AttributeDescriptor> descriptors = schema.getAttributeDescriptors();
@@ -302,7 +313,8 @@ public class FeatureDataAdapterTest {
     newFeature.setAttribute("geometry", factory.createPoint(new Coordinate(27.25, 41.25)));
 
     final FeatureDataAdapter dataAdapter =
-        new FeatureDataAdapter(schema,
+        new FeatureDataAdapter(
+            schema,
             new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
     final Index spatialIndex =
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
@@ -329,10 +341,10 @@ public class FeatureDataAdapterTest {
     for (final IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object> handler : handlers) {
       found |=
           ((handler instanceof FeatureTimeRangeHandler)
-              && ((((FeatureTimeRangeHandler) handler).toIndexValue(newFeature).toNumericData()
-                  .getMin() - time1.getTime()) < 0.001)
-              && ((((FeatureTimeRangeHandler) handler).toIndexValue(newFeature).toNumericData()
-                  .getMax() - time2.getTime()) < 0.001));
+              && ((((FeatureTimeRangeHandler) handler).toIndexValue(
+                  newFeature).toNumericData().getMin() - time1.getTime()) < 0.001)
+              && ((((FeatureTimeRangeHandler) handler).toIndexValue(
+                  newFeature).toNumericData().getMax() - time2.getTime()) < 0.001));
     }
 
     assertTrue(found);
@@ -354,7 +366,8 @@ public class FeatureDataAdapterTest {
     final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(typeBuilder.buildFeatureType());
 
     final FeatureDataAdapter dataAdapter =
-        new FeatureDataAdapter(builder.getFeatureType(),
+        new FeatureDataAdapter(
+            builder.getFeatureType(),
             new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
     final Index spatialIndex =
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
@@ -382,12 +395,12 @@ public class FeatureDataAdapterTest {
                 + "munincipalPop:Integer,"
                 + "notes:String");
     final List<SimpleFeatureUserDataConfiguration> secondaryIndexConfigs = new ArrayList<>();
-    secondaryIndexConfigs
-        .add(new NumericSecondaryIndexConfiguration("landArea", SecondaryIndexType.JOIN));
-    secondaryIndexConfigs
-        .add(new TextSecondaryIndexConfiguration("notes", SecondaryIndexType.JOIN));
-    secondaryIndexConfigs
-        .add(new TemporalSecondaryIndexConfiguration("since", SecondaryIndexType.JOIN));
+    secondaryIndexConfigs.add(
+        new NumericSecondaryIndexConfiguration("landArea", SecondaryIndexType.JOIN));
+    secondaryIndexConfigs.add(
+        new TextSecondaryIndexConfiguration("notes", SecondaryIndexType.JOIN));
+    secondaryIndexConfigs.add(
+        new TemporalSecondaryIndexConfiguration("since", SecondaryIndexType.JOIN));
     final SimpleFeatureUserDataConfigurationSet config =
         new SimpleFeatureUserDataConfigurationSet(sfType, secondaryIndexConfigs);
     config.updateType(sfType);

@@ -57,7 +57,8 @@ public class AccumuloMetadataReader implements MetadataReader {
     try {
       final BatchScanner scanner =
           operations.createBatchScanner(
-              AbstractGeoWavePersistence.METADATA_TABLE, query.getAuthorizations());
+              AbstractGeoWavePersistence.METADATA_TABLE,
+              query.getAuthorizations());
       final String columnFamily = metadataType.name();
       final byte[] columnQualifier = query.getSecondaryId();
       if (columnFamily != null) {
@@ -105,24 +106,31 @@ public class AccumuloMetadataReader implements MetadataReader {
           final InternalDataStatistics<?, ?, ?> mergedStats = mergedDataMap.get(rowId);
 
           metadataList.add(
-              new GeoWaveMetadata(key.getRow().getBytes(), key.getColumnQualifier().getBytes(),
-                  key.getColumnVisibility().getBytes(), PersistenceUtils.toBinary(mergedStats)));
+              new GeoWaveMetadata(
+                  key.getRow().getBytes(),
+                  key.getColumnQualifier().getBytes(),
+                  key.getColumnVisibility().getBytes(),
+                  PersistenceUtils.toBinary(mergedStats)));
         }
 
-        return new CloseableIteratorWrapper<>(new ScannerClosableWrapper(scanner),
+        return new CloseableIteratorWrapper<>(
+            new ScannerClosableWrapper(scanner),
             metadataList.iterator());
       }
 
-      return new CloseableIteratorWrapper<>(new ScannerClosableWrapper(scanner),
+      return new CloseableIteratorWrapper<>(
+          new ScannerClosableWrapper(scanner),
           Iterators.transform(
               scanner.iterator(),
               new com.google.common.base.Function<Entry<Key, Value>, GeoWaveMetadata>() {
 
                 @Override
                 public GeoWaveMetadata apply(final Entry<Key, Value> row) {
-                  return new GeoWaveMetadata(row.getKey().getRow().getBytes(),
+                  return new GeoWaveMetadata(
+                      row.getKey().getRow().getBytes(),
                       row.getKey().getColumnQualifier().getBytes(),
-                      row.getKey().getColumnVisibility().getBytes(), row.getValue().get());
+                      row.getKey().getColumnVisibility().getBytes(),
+                      row.getValue().get());
                 }
               }));
     } catch (final TableNotFoundException e) {

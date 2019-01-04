@@ -50,8 +50,12 @@ public class GeowaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
       "s3://geowave-test/data/gdelt/20160202.export.CSV.zip";
   private static final int GDELT_URL_COUNT = 224482;
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.HBASE,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
 
   private static Stopwatch stopwatch = new Stopwatch();
@@ -82,7 +86,12 @@ public class GeowaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
   public void testBasicURLIngest() throws Exception {
 
     TestUtils.testS3LocalIngest(
-        dataStore, DimensionalityType.SPATIAL, S3URL, GDELT_INPUT_FILE_URL, "gdelt", 4);
+        dataStore,
+        DimensionalityType.SPATIAL,
+        S3URL,
+        GDELT_INPUT_FILE_URL,
+        "gdelt",
+        4);
 
     final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
     final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
@@ -94,21 +103,26 @@ public class GeowaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
         // query by the full bounding box, make sure there is more than
         // 0 count and make sure the count matches the number of results
         final StatisticsId statsId =
-            VectorStatisticsQueryBuilder.newBuilder().factory().bbox()
-                .fieldName(adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build()
-                .getId();
+            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+                adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build().getId();
         try (final CloseableIterator<BoundingBoxDataStatistics<?>> bboxStatIt =
             (CloseableIterator) statsStore.getDataStatistics(
-                internalDataAdapter.getAdapterId(), statsId.getExtendedId(), statsId.getType())) {
+                internalDataAdapter.getAdapterId(),
+                statsId.getExtendedId(),
+                statsId.getType())) {
           final BoundingBoxDataStatistics<?> bboxStat = bboxStatIt.next();
           try (final CloseableIterator<CountDataStatistics<SimpleFeature>> countStatIt =
               (CloseableIterator) statsStore.getDataStatistics(
-                  internalDataAdapter.getAdapterId(), CountDataStatistics.STATS_TYPE)) {
+                  internalDataAdapter.getAdapterId(),
+                  CountDataStatistics.STATS_TYPE)) {
             final CountDataStatistics<?> countStat = countStatIt.next();
             // then query it
             final GeometryFactory factory = new GeometryFactory();
             final Envelope env =
-                new Envelope(bboxStat.getMinX(), bboxStat.getMaxX(), bboxStat.getMinY(),
+                new Envelope(
+                    bboxStat.getMinX(),
+                    bboxStat.getMaxX(),
+                    bboxStat.getMinY(),
                     bboxStat.getMaxY());
             final Geometry spatialFilter = factory.toGeometry(env);
             final QueryConstraints query = new SpatialQuery(spatialFilter);
@@ -124,13 +138,15 @@ public class GeowaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
                     + "' adapter should have the same results from a spatial query of '"
                     + env
                     + "' as its total count statistic",
-                countStat.getCount(), resultCount);
+                countStat.getCount(),
+                resultCount);
 
             assertEquals(
                 "'"
                     + adapter.getTypeName()
                     + "' adapter entries ingested does not match expected count",
-                new Integer(GDELT_URL_COUNT), new Integer(resultCount));
+                new Integer(GDELT_URL_COUNT),
+                new Integer(resultCount));
           }
         }
       }
@@ -147,8 +163,8 @@ public class GeowaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
 
     final CloseableIterator<?> accumuloResults =
         geowaveStore.query(
-            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName())
-                .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(query).build());
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+                TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(query).build());
 
     int resultCount = 0;
     while (accumuloResults.hasNext()) {

@@ -57,8 +57,17 @@ public abstract class WarpOpImage extends it.geosolutions.jaiext.warp.WarpOpImag
       double[] backgroundValues,
       ROI roi,
       Range noData) {
-    super(source, layout, configuration, cobbleSources, extender, interp, warp, backgroundValues,
-        roi, noData);
+    super(
+        source,
+        layout,
+        configuration,
+        cobbleSources,
+        extender,
+        interp,
+        warp,
+        backgroundValues,
+        roi,
+        noData);
   }
 
   /**
@@ -85,7 +94,8 @@ public abstract class WarpOpImage extends it.geosolutions.jaiext.warp.WarpOpImag
       Rectangle srcRectExpanded = mapDestRect(destRect, 0);
       // The tile dimension is extended for avoiding border errors
       srcRectExpanded.setRect(
-          srcRectExpanded.getMinX() - leftPad, srcRectExpanded.getMinY() - topPad,
+          srcRectExpanded.getMinX() - leftPad,
+          srcRectExpanded.getMinY() - topPad,
           srcRectExpanded.getWidth() + rightPad + leftPad,
           srcRectExpanded.getHeight() + bottomPad + topPad);
 

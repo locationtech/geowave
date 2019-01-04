@@ -53,8 +53,8 @@ public class DistributedRenderCallback extends GetMapCallbackAdapter {
       if (style instanceof ProcessFunction
           && style.getTransformation() != null
           && (((ProcessFunction) style.getTransformation()).getName() != null)
-          && ((ProcessFunction) style.getTransformation()).getName()
-              .equals(DistributedRenderProcess.PROCESS_NAME)) {
+          && ((ProcessFunction) style.getTransformation()).getName().equals(
+              DistributedRenderProcess.PROCESS_NAME)) {
         // if their is a DistributedRender transformation, we need
         // to provide more information that can only be found
         final DuplicatingStyleVisitor cloner = new DuplicatingStyleVisitor();

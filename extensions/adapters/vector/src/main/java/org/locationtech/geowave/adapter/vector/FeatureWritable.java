@@ -75,7 +75,10 @@ public class FeatureWritable implements Writable, java.io.Serializable {
       String ns = input.readUTF();
       featureType =
           FeatureDataUtils.decodeType(
-              "-".equals(ns) ? "" : ns, input.readUTF(), input.readUTF(), input.readUTF());
+              "-".equals(ns) ? "" : ns,
+              input.readUTF(),
+              input.readUTF(),
+              input.readUTF());
     } catch (final SchemaException e) {
       throw new IOException("Failed to parse the encoded feature type", e);
     }

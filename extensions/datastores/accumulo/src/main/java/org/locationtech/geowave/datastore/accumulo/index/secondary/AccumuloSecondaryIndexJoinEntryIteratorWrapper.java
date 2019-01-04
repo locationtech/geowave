@@ -46,7 +46,8 @@ public class AccumuloSecondaryIndexJoinEntryIteratorWrapper<T>
     }
     final byte[] cqBytes = entry.getKey().getColumnQualifierData().getBackingArray();
     return Pair.of(
-        SecondaryIndexUtils.getIndexName(cqBytes), SecondaryIndexUtils.getPrimaryRowId(cqBytes));
+        SecondaryIndexUtils.getIndexName(cqBytes),
+        SecondaryIndexUtils.getPrimaryRowId(cqBytes));
   }
 
   @Override

@@ -103,9 +103,11 @@ public class SimpleNumericIndexStrategyTest {
     final ByteArray start = range.getStart();
     final ByteArray end = range.getEnd();
     Assert.assertEquals(
-        castToLong(strategy.getLexicoder().fromByteArray(start.getBytes())), startValue);
-    Assert
-        .assertEquals(castToLong(strategy.getLexicoder().fromByteArray(end.getBytes())), endValue);
+        castToLong(strategy.getLexicoder().fromByteArray(start.getBytes())),
+        startValue);
+    Assert.assertEquals(
+        castToLong(strategy.getLexicoder().fromByteArray(end.getBytes())),
+        endValue);
   }
 
   /**
@@ -139,7 +141,8 @@ public class SimpleNumericIndexStrategyTest {
     Assert.assertEquals(insertionIds.size(), 1);
     final ByteArray insertionId = insertionIds.get(0);
     Assert.assertEquals(
-        castToLong(strategy.getLexicoder().fromByteArray(insertionId.getBytes())), pointValue);
+        castToLong(strategy.getLexicoder().fromByteArray(insertionId.getBytes())),
+        pointValue);
   }
 
   @Test

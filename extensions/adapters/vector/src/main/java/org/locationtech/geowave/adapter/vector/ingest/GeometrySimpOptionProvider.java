@@ -16,15 +16,18 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.simplify.DouglasPeuckerSimplifier;
 
 public class GeometrySimpOptionProvider implements Persistable {
-  @Parameter(names = "--maxVertices",
+  @Parameter(
+      names = "--maxVertices",
       description = "Maximum number of vertices to allow for the feature. Features with over this vertice count will be discarded.")
   private int maxVertices = Integer.MAX_VALUE;
 
-  @Parameter(names = "--minSimpVertices",
+  @Parameter(
+      names = "--minSimpVertices",
       description = "Minimum vertex count to qualify for geometry simplification.")
   private int simpVertMin = Integer.MAX_VALUE;
 
-  @Parameter(names = "--tolerance",
+  @Parameter(
+      names = "--tolerance",
       description = "Maximum error tolerance in geometry simplification. Should range from 0.0 to 1.0 (i.e. .1 = 10%)")
   private double tolerance = 0.02;
 

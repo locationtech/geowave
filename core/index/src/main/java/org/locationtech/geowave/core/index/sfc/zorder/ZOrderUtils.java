@@ -89,7 +89,8 @@ public class ZOrderUtils {
         ceiling = mid;
       }
     }
-    return new NumericRange(dimensionDefinition.denormalize(floor),
+    return new NumericRange(
+        dimensionDefinition.denormalize(floor),
         dimensionDefinition.denormalize(ceiling));
   }
 

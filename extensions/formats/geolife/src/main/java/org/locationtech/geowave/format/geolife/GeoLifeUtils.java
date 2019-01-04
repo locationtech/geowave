@@ -51,12 +51,12 @@ public class GeoLifeUtils {
         attributeTypeBuilder.binding(Date.class).nillable(true).buildDescriptor("StartTimeStamp"));
     simpleFeatureTypeBuilder.add(
         attributeTypeBuilder.binding(Date.class).nillable(true).buildDescriptor("EndTimeStamp"));
-    simpleFeatureTypeBuilder
-        .add(attributeTypeBuilder.binding(Long.class).nillable(true).buildDescriptor("Duration"));
+    simpleFeatureTypeBuilder.add(
+        attributeTypeBuilder.binding(Long.class).nillable(true).buildDescriptor("Duration"));
     simpleFeatureTypeBuilder.add(
         attributeTypeBuilder.binding(Long.class).nillable(true).buildDescriptor("NumberPoints"));
-    simpleFeatureTypeBuilder
-        .add(attributeTypeBuilder.binding(String.class).nillable(true).buildDescriptor("TrackId"));
+    simpleFeatureTypeBuilder.add(
+        attributeTypeBuilder.binding(String.class).nillable(true).buildDescriptor("TrackId"));
     return simpleFeatureTypeBuilder.buildFeatureType();
   }
 
@@ -69,15 +69,15 @@ public class GeoLifeUtils {
 
     simpleFeatureTypeBuilder.add(
         attributeTypeBuilder.binding(Geometry.class).nillable(false).buildDescriptor("geometry"));
-    simpleFeatureTypeBuilder
-        .add(attributeTypeBuilder.binding(String.class).nillable(false).buildDescriptor("trackid"));
     simpleFeatureTypeBuilder.add(
-        attributeTypeBuilder.binding(Integer.class).nillable(true)
-            .buildDescriptor("pointinstance"));
-    simpleFeatureTypeBuilder
-        .add(attributeTypeBuilder.binding(Date.class).nillable(true).buildDescriptor("Timestamp"));
-    simpleFeatureTypeBuilder
-        .add(attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Latitude"));
+        attributeTypeBuilder.binding(String.class).nillable(false).buildDescriptor("trackid"));
+    simpleFeatureTypeBuilder.add(
+        attributeTypeBuilder.binding(Integer.class).nillable(true).buildDescriptor(
+            "pointinstance"));
+    simpleFeatureTypeBuilder.add(
+        attributeTypeBuilder.binding(Date.class).nillable(true).buildDescriptor("Timestamp"));
+    simpleFeatureTypeBuilder.add(
+        attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Latitude"));
     simpleFeatureTypeBuilder.add(
         attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Longitude"));
     simpleFeatureTypeBuilder.add(

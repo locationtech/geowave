@@ -69,9 +69,8 @@ public abstract class AbstractGeoWaveQuery extends DefaultOperation implements C
     final GeotoolsFeatureDataAdapter adapter;
     if (typeName != null) {
       adapter =
-          (GeotoolsFeatureDataAdapter) adapterStore
-              .getAdapter(storeOptions.createInternalAdapterStore().getAdapterId(typeName))
-              .getAdapter();
+          (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
+              storeOptions.createInternalAdapterStore().getAdapterId(typeName)).getAdapter();
     } else {
       final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
       adapter = (GeotoolsFeatureDataAdapter) it.next().getAdapter();

@@ -35,9 +35,19 @@ public class RecordReaderParams<T> extends BaseReaderParams<T> {
       final Integer maxRangeDecomposition,
       final GeoWaveRowIteratorTransformer<T> rowTransformer,
       final String... additionalAuthorizations) {
-    super(index, adapterStore, internalAdapterStore, adapterIds,
-        maxResolutionSubsamplingPerDimension, aggregation, fieldSubsets, isMixedVisibility,
-        isAuthorizationsLimiting, limit, maxRangeDecomposition, rowTransformer,
+    super(
+        index,
+        adapterStore,
+        internalAdapterStore,
+        adapterIds,
+        maxResolutionSubsamplingPerDimension,
+        aggregation,
+        fieldSubsets,
+        isMixedVisibility,
+        isAuthorizationsLimiting,
+        limit,
+        maxRangeDecomposition,
+        rowTransformer,
         additionalAuthorizations);
     this.rowRange = rowRange;
   }

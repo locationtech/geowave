@@ -124,7 +124,8 @@ public class FileUploadResource extends ServerResource {
       try {
         uuid = UUID.fromString(provided);
       } catch (IllegalArgumentException e) {
-        throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+        throw new ResourceException(
+            Status.CLIENT_ERROR_BAD_REQUEST,
             String.format("'%s' must be a valid UUID", KEY_BATCH_UUID));
       }
     }

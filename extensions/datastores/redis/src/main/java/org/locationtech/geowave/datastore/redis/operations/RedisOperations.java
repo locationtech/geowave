@@ -92,8 +92,13 @@ public class RedisOperations implements MapReduceDataStoreOperations {
 
   @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
-    return new RedisWriter(client, options.getCompression(), gwNamespace, adapter.getTypeName(),
-        index.getName(), RedisUtils.isSortByTime(adapter));
+    return new RedisWriter(
+        client,
+        options.getCompression(),
+        gwNamespace,
+        adapter.getTypeName(),
+        index.getName(),
+        RedisUtils.isSortByTime(adapter));
   }
 
   @Override
@@ -119,7 +124,11 @@ public class RedisOperations implements MapReduceDataStoreOperations {
 
   @Override
   public <T> RowReader<T> createReader(final ReaderParams<T> readerParams) {
-    return new RedisReader<>(client, options.getCompression(), readerParams, gwNamespace,
+    return new RedisReader<>(
+        client,
+        options.getCompression(),
+        readerParams,
+        gwNamespace,
         READER_ASYNC);
   }
 
@@ -127,8 +136,10 @@ public class RedisOperations implements MapReduceDataStoreOperations {
   public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
     return new QueryAndDeleteByRow<>(
         createRowDeleter(
-            readerParams.getIndex().getName(), readerParams.getAdapterStore(),
-            readerParams.getInternalAdapterStore(), readerParams.getAdditionalAuthorizations()),
+            readerParams.getIndex().getName(),
+            readerParams.getAdapterStore(),
+            readerParams.getInternalAdapterStore(),
+            readerParams.getAdditionalAuthorizations()),
         // intentionally don't run this reader as async because it does
         // not work well while simultaneously deleting rows
         new RedisReader<>(client, options.getCompression(), readerParams, gwNamespace, false));
@@ -141,7 +152,11 @@ public class RedisOperations implements MapReduceDataStoreOperations {
       final InternalAdapterStore internalAdapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore) {
     return DataStoreUtils.mergeData(
-        this, options.getStoreOptions(), index, adapterStore, internalAdapterStore,
+        this,
+        options.getStoreOptions(),
+        index,
+        adapterStore,
+        internalAdapterStore,
         adapterIndexMappingStore);
   }
 
@@ -163,7 +178,12 @@ public class RedisOperations implements MapReduceDataStoreOperations {
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
       final String... authorizations) {
-    return new RedisRowDeleter(client, options.getCompression(), adapterStore, internalAdapterStore,
-        indexName, gwNamespace);
+    return new RedisRowDeleter(
+        client,
+        options.getCompression(),
+        adapterStore,
+        internalAdapterStore,
+        indexName,
+        gwNamespace);
   }
 }

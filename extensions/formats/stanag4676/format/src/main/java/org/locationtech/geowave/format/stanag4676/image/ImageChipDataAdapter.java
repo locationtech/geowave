@@ -51,7 +51,8 @@ public class ImageChipDataAdapter implements DataTypeAdapter<ImageChip> {
   @Override
   public ImageChip decode(final IndexedAdapterPersistenceEncoding data, final Index index) {
     return ImageChipUtils.fromDataIdAndValue(
-        data.getDataId(), (byte[]) data.getAdapterExtendedData().getValue(IMAGE_FIELD_NAME));
+        data.getDataId(),
+        (byte[]) data.getAdapterExtendedData().getValue(IMAGE_FIELD_NAME));
   }
 
   @Override
@@ -60,8 +61,10 @@ public class ImageChipDataAdapter implements DataTypeAdapter<ImageChip> {
       final CommonIndexModel indexModel) {
     final Map<String, Object> fieldIdToValueMap = new HashMap<>();
     fieldIdToValueMap.put(IMAGE_FIELD_NAME, entry.getImageBinary());
-    return new AdapterPersistenceEncoding(entry.getDataId(),
-        new PersistentDataset<CommonIndexValue>(), new PersistentDataset<>(fieldIdToValueMap));
+    return new AdapterPersistenceEncoding(
+        entry.getDataId(),
+        new PersistentDataset<CommonIndexValue>(),
+        new PersistentDataset<>(fieldIdToValueMap));
   }
 
   @Override
@@ -84,8 +87,9 @@ public class ImageChipDataAdapter implements DataTypeAdapter<ImageChip> {
   public FieldWriter<ImageChip, Object> getWriter(final String fieldId) {
     if (IMAGE_FIELD_NAME.equals(fieldId)) {
       if (imageChipVisibilityHandler != null) {
-        return (FieldWriter) FieldUtils
-            .getDefaultWriterForClass(byte[].class, imageChipVisibilityHandler);
+        return (FieldWriter) FieldUtils.getDefaultWriterForClass(
+            byte[].class,
+            imageChipVisibilityHandler);
       } else {
         return (FieldWriter) FieldUtils.getDefaultWriterForClass(byte[].class);
       }
@@ -96,8 +100,7 @@ public class ImageChipDataAdapter implements DataTypeAdapter<ImageChip> {
   @Override
   public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldId) {
     int i = 0;
-    for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model
-        .getDimensions()) {
+    for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
       if (fieldId.equals(dimensionField.getFieldName())) {
         return i;
       }
@@ -113,8 +116,7 @@ public class ImageChipDataAdapter implements DataTypeAdapter<ImageChip> {
   public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
     if (position < model.getDimensions().length) {
       int i = 0;
-      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model
-          .getDimensions()) {
+      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
         if (i == position) {
           return dimensionField.getFieldName();
         }

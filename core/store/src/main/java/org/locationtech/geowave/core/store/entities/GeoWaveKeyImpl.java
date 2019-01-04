@@ -130,8 +130,12 @@ public class GeoWaveKeyImpl implements GeoWaveKey {
       final SinglePartitionInsertionIds partitionKey = it.next();
       if ((partitionKey.getSortKeys() == null) || partitionKey.getSortKeys().isEmpty()) {
         keys[i++] =
-            new GeoWaveKeyImpl(dataId, internalAdapterId, partitionKey.getPartitionKey().getBytes(),
-                new byte[] {}, numDuplicates);
+            new GeoWaveKeyImpl(
+                dataId,
+                internalAdapterId,
+                partitionKey.getPartitionKey().getBytes(),
+                new byte[] {},
+                numDuplicates);
       } else {
         byte[] partitionKeyBytes;
         if (partitionKey.getPartitionKey() == null) {
@@ -142,7 +146,11 @@ public class GeoWaveKeyImpl implements GeoWaveKey {
         final List<ByteArray> sortKeys = partitionKey.getSortKeys();
         for (final ByteArray sortKey : sortKeys) {
           keys[i++] =
-              new GeoWaveKeyImpl(dataId, internalAdapterId, partitionKeyBytes, sortKey.getBytes(),
+              new GeoWaveKeyImpl(
+                  dataId,
+                  internalAdapterId,
+                  partitionKeyBytes,
+                  sortKey.getBytes(),
                   numDuplicates);
         }
       }

@@ -89,7 +89,10 @@ public class RocksDBRowDeleter implements RowDeleter {
 
   private RocksDBIndexTable getIndexTable(final CacheKey cacheKey) {
     return RocksDBUtils.getIndexTable(
-        client, cacheKey.tableName, cacheKey.adapterId, cacheKey.partition,
+        client,
+        cacheKey.tableName,
+        cacheKey.adapterId,
+        cacheKey.partition,
         RocksDBUtils.isSortByTime(adapterStore.getAdapter(cacheKey.adapterId)));
   }
 
@@ -99,9 +102,12 @@ public class RocksDBRowDeleter implements RowDeleter {
         tableCache.get(
             new CacheKey(
                 RocksDBUtils.getTableName(
-                    internalAdapterStore.getTypeName(row.getAdapterId()), indexName,
-                    row.getAdapterId(), row.getPartitionKey()),
-                row.getAdapterId(), row.getPartitionKey()));
+                    internalAdapterStore.getTypeName(row.getAdapterId()),
+                    indexName,
+                    row.getAdapterId(),
+                    row.getPartitionKey()),
+                row.getAdapterId(),
+                row.getPartitionKey()));
 
     Arrays.stream(((RocksDBRow) row).getKeys()).forEach(k -> table.delete(k));
   }

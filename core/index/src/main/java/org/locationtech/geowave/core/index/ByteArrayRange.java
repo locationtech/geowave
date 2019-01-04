@@ -111,12 +111,14 @@ public class ByteArrayRange implements Comparable<ByteArrayRange> {
   }
 
   public ByteArrayRange intersection(final ByteArrayRange other) {
-    return new ByteArrayRange(start.compareTo(other.start) <= 0 ? other.start : start,
+    return new ByteArrayRange(
+        start.compareTo(other.start) <= 0 ? other.start : start,
         getEndAsNextPrefix().compareTo(other.getEndAsNextPrefix()) >= 0 ? other.end : end);
   }
 
   public ByteArrayRange union(final ByteArrayRange other) {
-    return new ByteArrayRange(start.compareTo(other.start) <= 0 ? start : other.start,
+    return new ByteArrayRange(
+        start.compareTo(other.start) <= 0 ? start : other.start,
         getEndAsNextPrefix().compareTo(other.getEndAsNextPrefix()) >= 0 ? end : other.end);
   }
 

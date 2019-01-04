@@ -33,7 +33,9 @@ public class GeometrySerializationProvider implements FieldSerializationProvider
         return null;
       }
       return GeometryUtils.geometryFromBinary(
-          fieldData, GeometryUtils.MAX_GEOMETRY_PRECISION, FieldUtils.SERIALIZATION_VERSION);
+          fieldData,
+          GeometryUtils.MAX_GEOMETRY_PRECISION,
+          FieldUtils.SERIALIZATION_VERSION);
     }
 
     @Override
@@ -42,7 +44,9 @@ public class GeometrySerializationProvider implements FieldSerializationProvider
         return null;
       }
       return GeometryUtils.geometryFromBinary(
-          fieldData, GeometryUtils.MAX_GEOMETRY_PRECISION, serializationVersion);
+          fieldData,
+          GeometryUtils.MAX_GEOMETRY_PRECISION,
+          serializationVersion);
     }
   }
 

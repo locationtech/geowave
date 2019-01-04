@@ -66,8 +66,12 @@ public class GeoWaveGTRasterFormat extends AbstractGridFormat implements Format 
     // reading parameters
     readParameters =
         new ParameterGroup(
-            new DefaultParameterDescriptorGroup(mInfo, new GeneralParameterDescriptor[] {
-                READ_GRIDGEOMETRY2D, OUTPUT_TRANSPARENT_COLOR, BACKGROUND_COLOR}));
+            new DefaultParameterDescriptorGroup(
+                mInfo,
+                new GeneralParameterDescriptor[] {
+                    READ_GRIDGEOMETRY2D,
+                    OUTPUT_TRANSPARENT_COLOR,
+                    BACKGROUND_COLOR}));
 
     // reading parameters
     writeParameters = null;

@@ -110,7 +110,8 @@ public class DynamoDBWriter implements RowWriter {
       final BatchWriteItemRequest batchRequest = new BatchWriteItemRequest(writes);
       final Future<BatchWriteItemResult> future =
           client.batchWriteItemAsync(
-              batchRequest, new AsyncHandler<BatchWriteItemRequest, BatchWriteItemResult>() {
+              batchRequest,
+              new AsyncHandler<BatchWriteItemRequest, BatchWriteItemResult>() {
 
                 @Override
                 public void onError(final Exception exception) {
@@ -238,7 +239,8 @@ public class DynamoDBWriter implements RowWriter {
       }
 
       map.put(
-          DynamoDBRow.GW_VALUE_KEY, new AttributeValue().withB(ByteBuffer.wrap(value.getValue())));
+          DynamoDBRow.GW_VALUE_KEY,
+          new AttributeValue().withB(ByteBuffer.wrap(value.getValue())));
 
       mutations.add(new WriteRequest(new PutRequest(map)));
     }

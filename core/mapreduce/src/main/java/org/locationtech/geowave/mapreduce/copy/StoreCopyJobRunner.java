@@ -63,7 +63,9 @@ public class StoreCopyJobRunner extends Configured implements Tool {
     }
 
     GeoWaveConfiguratorBase.setRemoteInvocationParams(
-        options.getHdfsHostPort(), options.getJobTrackerOrResourceManHostPort(), conf);
+        options.getHdfsHostPort(),
+        options.getJobTrackerOrResourceManHostPort(),
+        conf);
 
     final Job job = Job.getInstance(conf);
 
@@ -104,10 +106,13 @@ public class StoreCopyJobRunner extends Configured implements Tool {
         final AdapterToIndexMapping mapping =
             adapterIndexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
 
-        JobContextAdapterIndexMappingStore
-            .addAdapterToIndexMapping(job.getConfiguration(), mapping);
+        JobContextAdapterIndexMappingStore.addAdapterToIndexMapping(
+            job.getConfiguration(),
+            mapping);
         JobContextInternalAdapterStore.addTypeName(
-            job.getConfiguration(), dataAdapter.getTypeName(), dataAdapter.getAdapterId());
+            job.getConfiguration(),
+            dataAdapter.getTypeName(),
+            dataAdapter.getAdapterId());
       }
     }
 

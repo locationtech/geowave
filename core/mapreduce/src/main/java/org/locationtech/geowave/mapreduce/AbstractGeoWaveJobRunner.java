@@ -63,12 +63,16 @@ public abstract class AbstractGeoWaveJobRunner extends Configured implements Too
     }
     if (dataTypeOptions != null) {
       GeoWaveInputFormat.setDataTypeQueryOptions(
-          conf, dataTypeOptions, dataStoreOptions.createAdapterStore(),
+          conf,
+          dataTypeOptions,
+          dataStoreOptions.createAdapterStore(),
           dataStoreOptions.createInternalAdapterStore());
     }
     if (indexOptions != null) {
-      GeoWaveInputFormat
-          .setIndexQueryOptions(conf, indexOptions, dataStoreOptions.createIndexStore());
+      GeoWaveInputFormat.setIndexQueryOptions(
+          conf,
+          indexOptions,
+          dataStoreOptions.createIndexStore());
     }
     if (constraints != null) {
       GeoWaveInputFormat.setQueryConstraints(conf, constraints);

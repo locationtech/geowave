@@ -65,15 +65,15 @@ public class KMeansUtils {
     final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
 
     typeBuilder.add(
-        attrBuilder.binding(Geometry.class).nillable(false)
-            .buildDescriptor(Geometry.class.getName().toString()));
+        attrBuilder.binding(Geometry.class).nillable(false).buildDescriptor(
+            Geometry.class.getName().toString()));
 
     if (scaledRange != null) {
       typeBuilder.add(attrBuilder.binding(Date.class).nillable(false).buildDescriptor("Time"));
     }
 
-    typeBuilder
-        .add(attrBuilder.binding(Integer.class).nillable(false).buildDescriptor("ClusterIndex"));
+    typeBuilder.add(
+        attrBuilder.binding(Integer.class).nillable(false).buildDescriptor("ClusterIndex"));
 
     final SimpleFeatureType sfType = typeBuilder.buildFeatureType();
     final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(sfType);
@@ -139,11 +139,11 @@ public class KMeansUtils {
     final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
 
     typeBuilder.add(
-        attrBuilder.binding(Geometry.class).nillable(false)
-            .buildDescriptor(Geometry.class.getName().toString()));
+        attrBuilder.binding(Geometry.class).nillable(false).buildDescriptor(
+            Geometry.class.getName().toString()));
 
-    typeBuilder
-        .add(attrBuilder.binding(Integer.class).nillable(false).buildDescriptor("ClusterIndex"));
+    typeBuilder.add(
+        attrBuilder.binding(Integer.class).nillable(false).buildDescriptor("ClusterIndex"));
 
     typeBuilder.add(attrBuilder.binding(Integer.class).nillable(false).buildDescriptor("Count"));
 
@@ -222,8 +222,8 @@ public class KMeansUtils {
 
         return null;
       } else {
-        LOGGER
-            .error("Multiple feature adapters found for use with time param. Please specify one.");
+        LOGGER.error(
+            "Multiple feature adapters found for use with time param. Please specify one.");
 
         return null;
       }
@@ -244,8 +244,10 @@ public class KMeansUtils {
       final String geomField = FeatureDataUtils.getGeomField(inputDataStore, typeName);
 
       final Envelope bbox =
-          org.locationtech.geowave.adapter.vector.util.FeatureGeometryUtils
-              .getGeoBounds(inputDataStore, typeName, geomField);
+          org.locationtech.geowave.adapter.vector.util.FeatureGeometryUtils.getGeoBounds(
+              inputDataStore,
+              typeName,
+              geomField);
 
       if (bbox != null) {
         final double xRange = bbox.getMaxX() - bbox.getMinX();

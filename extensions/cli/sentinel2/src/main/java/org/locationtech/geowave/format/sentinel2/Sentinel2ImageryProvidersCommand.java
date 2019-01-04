@@ -26,8 +26,8 @@ public class Sentinel2ImageryProvidersCommand extends DefaultOperation implement
     StringBuilder sb = new StringBuilder();
 
     for (Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
-      sb.append("\n - ").append(provider.providerName()).append(":").append("\n   - Description: ")
-          .append(provider.description()).append("\n   - Collections: ");
+      sb.append("\n - ").append(provider.providerName()).append(":").append(
+          "\n   - Description: ").append(provider.description()).append("\n   - Collections: ");
 
       for (String collection : provider.collections()) {
         sb.append(collection).append(", ");

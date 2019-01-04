@@ -71,8 +71,19 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
       final Filter cqlFilter,
       final String workspaceDir) throws MalformedURLException, IOException,
       NoSuchAuthorityCodeException, FactoryException, GeneralSecurityException {
-    this(new SceneFeatureIterator(providerName, collection, platform, location, startDate, endDate,
-        orbitNumber, relativeOrbitNumber, cqlFilter, workspaceDir), cqlFilter);
+    this(
+        new SceneFeatureIterator(
+            providerName,
+            collection,
+            platform,
+            location,
+            startDate,
+            endDate,
+            orbitNumber,
+            relativeOrbitNumber,
+            cqlFilter,
+            workspaceDir),
+        cqlFilter);
   }
 
   public BandFeatureIterator(final SceneFeatureIterator sceneIterator, final Filter cqlFilter)
@@ -99,8 +110,9 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
       // specific band filters
       if (ArrayUtils.contains(attributes, BAND_ATTRIBUTE_NAME)) {
         featureIterator =
-            Iterators
-                .filter(featureIterator, new SceneFeatureIterator.CqlFilterPredicate(cqlFilter));
+            Iterators.filter(
+                featureIterator,
+                new SceneFeatureIterator.CqlFilterPredicate(cqlFilter));
       }
     }
     iterator = featureIterator;
@@ -140,8 +152,8 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
       final String entityId = scene.getID();
       final List<SimpleFeature> bands = new ArrayList<SimpleFeature>();
 
-      for (String bandId : scene.getAttribute(SceneFeatureIterator.BANDS_ATTRIBUTE_NAME).toString()
-          .split(";")) {
+      for (String bandId : scene.getAttribute(
+          SceneFeatureIterator.BANDS_ATTRIBUTE_NAME).toString().split(";")) {
         SimpleFeature band = featureBuilder.buildFeature(entityId + "_" + bandId);
 
         for (Property property : scene.getProperties()) {

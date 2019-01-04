@@ -106,7 +106,10 @@ public class AggregationIterator extends Filter {
           queryFilterIterator.aggregateFieldData(key, value, commonData);
       final CommonIndexedPersistenceEncoding encoding =
           QueryFilterIterator.getEncoding(
-              currentRow, queryFilterIterator.partitionKeyLength, commonData, unreadData);
+              currentRow,
+              queryFilterIterator.partitionKeyLength,
+              commonData,
+              unreadData);
 
       boolean queryFilterResult = true;
       if (queryFilterIterator.isSet()) {
@@ -133,12 +136,13 @@ public class AggregationIterator extends Filter {
       if (startRowOfAggregation == null) {
         startRowOfAggregation = currentRow;
       }
-    } else if (((Short) (persistenceEncoding.getInternalAdapterId()))
-        .equals((Short) (adapter.getAdapterId()))) {
+    } else if (((Short) (persistenceEncoding.getInternalAdapterId())).equals(
+        (Short) (adapter.getAdapterId()))) {
       final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
       if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
-        ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
-            .convertUnknownValues(adapter, model);
+        ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
+            adapter,
+            model);
         final PersistentDataset<Object> existingExtValues =
             ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
         if (existingExtValues != null) {
@@ -147,10 +151,14 @@ public class AggregationIterator extends Filter {
       }
 
       final IndexedAdapterPersistenceEncoding encoding =
-          new IndexedAdapterPersistenceEncoding(persistenceEncoding.getInternalAdapterId(),
-              persistenceEncoding.getDataId(), persistenceEncoding.getInsertionPartitionKey(),
-              persistenceEncoding.getInsertionSortKey(), persistenceEncoding.getDuplicateCount(),
-              persistenceEncoding.getCommonData(), new PersistentDataset<byte[]>(),
+          new IndexedAdapterPersistenceEncoding(
+              persistenceEncoding.getInternalAdapterId(),
+              persistenceEncoding.getDataId(),
+              persistenceEncoding.getInsertionPartitionKey(),
+              persistenceEncoding.getInsertionSortKey(),
+              persistenceEncoding.getDuplicateCount(),
+              persistenceEncoding.getCommonData(),
+              new PersistentDataset<byte[]>(),
               adapterExtendedValues);
       // the data adapter can't use the numeric index strategy and only
       // the common index model to decode which is the case for feature
@@ -173,8 +181,8 @@ public class AggregationIterator extends Filter {
     try {
       final String aggregrationBytes = options.get(AGGREGATION_OPTION_NAME);
       aggregationFunction =
-          (Aggregation) PersistenceUtils
-              .fromClassId(ByteArrayUtils.byteArrayFromString(aggregrationBytes));
+          (Aggregation) PersistenceUtils.fromClassId(
+              ByteArrayUtils.byteArrayFromString(aggregrationBytes));
       final String parameterStr = options.get(PARAMETER_OPTION_NAME);
       if ((parameterStr != null) && !parameterStr.isEmpty()) {
         final byte[] parameterBytes = ByteArrayUtils.byteArrayFromString(parameterStr);

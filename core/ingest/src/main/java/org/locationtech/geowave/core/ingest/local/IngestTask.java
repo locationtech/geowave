@@ -111,7 +111,9 @@ public class IngestTask implements Runnable {
         if (adapter == null) {
           LOGGER.warn(
               String.format(
-                  "Adapter not found for [%s] worker [%s]", geowaveData.getValue(), this.getId()));
+                  "Adapter not found for [%s] worker [%s]",
+                  geowaveData.getValue(),
+                  this.getId()));
           continue;
         }
 
@@ -131,14 +133,17 @@ public class IngestTask implements Runnable {
         try {
           runData.releaseIndexWriter(writerEntry.getKey(), writerEntry.getValue());
         } catch (Exception e) {
-          LOGGER
-              .warn(String.format("Could not return index writer: [%s]", writerEntry.getKey()), e);
+          LOGGER.warn(
+              String.format("Could not return index writer: [%s]", writerEntry.getKey()),
+              e);
         }
       }
 
       LOGGER.debug(
           String.format(
-              "Worker exited for plugin [%s]; Ingested %d items in %d seconds", this.getId(), count,
+              "Worker exited for plugin [%s]; Ingested %d items in %d seconds",
+              this.getId(),
+              count,
               (int) dbWriteMs / 1000));
 
       isFinished = true;
@@ -160,7 +165,9 @@ public class IngestTask implements Runnable {
           if (index == null) {
             LOGGER.warn(
                 String.format(
-                    "Index '%s' not found for %s; worker [%s]", indexName, geowaveData.getValue(),
+                    "Index '%s' not found for %s; worker [%s]",
+                    indexName,
+                    geowaveData.getValue(),
                     this.getId()));
             continue;
           }

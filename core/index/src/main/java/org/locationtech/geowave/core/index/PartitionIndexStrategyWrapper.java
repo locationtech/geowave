@@ -81,8 +81,8 @@ public class PartitionIndexStrategyWrapper implements NumericIndexStrategy {
   @Override
   public void fromBinary(final byte[] bytes) {
     partitionIndexStrategy =
-        (PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData>) PersistenceUtils
-            .fromBinary(bytes);
+        (PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData>) PersistenceUtils.fromBinary(
+            bytes);
   }
 
   @Override

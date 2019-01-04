@@ -18,7 +18,8 @@ import org.locationtech.geowave.datastore.rocksdb.RocksDBStoreFactoryFamily;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBUtils;
 
 public class RocksDBOptions extends StoreFactoryOptions {
-  @Parameter(names = "--directory",
+  @Parameter(
+      names = "--directory",
       description = "The directory to read/write to.  Defaults to \"rocksdb\" in the working directory.")
   private String directory = "rocksdb";
 

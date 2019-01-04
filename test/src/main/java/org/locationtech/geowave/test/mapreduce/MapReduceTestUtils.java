@@ -93,7 +93,10 @@ public class MapReduceTestUtils {
 
     mrGw.setPluginFormats(ingestFormatOptions);
     mrGw.setParameters(
-        ingestFilePath, env.getHdfsBaseDirectory(), "test-store", indexParam.toString());
+        ingestFilePath,
+        env.getHdfsBaseDirectory(),
+        "test-store",
+        indexParam.toString());
     mrGw.getMapReduceOptions().setJobTrackerHostPort(env.getJobtracker());
 
     mrGw.execute(operationParams);

@@ -32,7 +32,8 @@ public class StatisticsRowIterator implements CloseableIterator<GeoWaveMetadata>
     if ((authorizations != null) && (authorizations.length > 0)) {
       final Set<String> authorizationsSet = new HashSet<>(Arrays.asList(authorizations));
       it =
-          new CloseableIteratorWrapper<>(resultIterator,
+          new CloseableIteratorWrapper<>(
+              resultIterator,
               Iterators.filter(resultIterator, new Predicate<GeoWaveMetadata>() {
                 @Override
                 public boolean apply(final GeoWaveMetadata input) {
@@ -45,7 +46,8 @@ public class StatisticsRowIterator implements CloseableIterator<GeoWaveMetadata>
               }));
     } else {
       it =
-          new CloseableIteratorWrapper<>(resultIterator,
+          new CloseableIteratorWrapper<>(
+              resultIterator,
               Iterators.filter(resultIterator, new Predicate<GeoWaveMetadata>() {
                 @Override
                 public boolean apply(final GeoWaveMetadata input) {
@@ -94,8 +96,10 @@ public class StatisticsRowIterator implements CloseableIterator<GeoWaveMetadata>
     final InternalDataStatistics<?, ?, ?> basicStats =
         (InternalDataStatistics<?, ?, ?>) PersistenceUtils.fromBinary(entry.getValue());
     if (basicStats != null) {
-      DataStatisticsStoreImpl
-          .setFields(entry, basicStats, ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
+      DataStatisticsStoreImpl.setFields(
+          entry,
+          basicStats,
+          ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
     }
     return basicStats;
   }
@@ -103,7 +107,8 @@ public class StatisticsRowIterator implements CloseableIterator<GeoWaveMetadata>
   protected GeoWaveMetadata statsToMetadata(final InternalDataStatistics<?, ?, ?> stats) {
     return new GeoWaveMetadata(
         DataStatisticsStoreImpl.getPrimaryId(stats.getType(), stats.getExtendedId()).getBytes(),
-        ByteArrayUtils.shortToByteArray(stats.getAdapterId()), stats.getVisibility(),
+        ByteArrayUtils.shortToByteArray(stats.getAdapterId()),
+        stats.getVisibility(),
         PersistenceUtils.toBinary(stats));
   }
 

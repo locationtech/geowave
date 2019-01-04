@@ -48,7 +48,8 @@ public class WholeRowQueryFilterIterator extends WholeRowIterator {
         unreadData.add(queryFilterIterator.aggregateFieldData(key, value, commonData));
       }
       return queryFilterIterator.applyRowFilter(
-          currentRow, commonData,
+          currentRow,
+          commonData,
           unreadData.isEmpty() ? null : new UnreadFieldDataList(unreadData));
     }
     // if the query filter or index model did not get sent to this iterator,

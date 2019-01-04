@@ -19,41 +19,53 @@ import org.opengis.filter.Filter;
 public class Sentinel2BasicCommandLineOptions {
   private static final String DEFAULT_WORKSPACE_DIR = "sentinel2";
 
-  @Parameter(names = {"-ws", "--workspaceDir"},
+  @Parameter(
+      names = {"-ws", "--workspaceDir"},
       description = "A local directory to write temporary files needed for Sentinel2 ingest. Default is <TEMP_DIR>/sentinel2")
   private String workspaceDir = DEFAULT_WORKSPACE_DIR;
 
   @Parameter(names = "--provider", description = "Name of Sentinel2 provider ('THEIA','AWS').")
   private String providerName = "THEIA";
 
-  @Parameter(names = "--collection",
+  @Parameter(
+      names = "--collection",
       description = "Product collection to fetch within Sentinel2 collections ('SENTINEL2').")
   private String collection = "SENTINEL2";
 
   @Parameter(names = "--platform", description = "Satellite ('SENTINEL2A','SENTINEL2B',...).")
   private String platform = "";
 
-  @Parameter(names = "--location",
+  @Parameter(
+      names = "--location",
       description = "Product location, 100 km Grid Square ID of the Military Grid Reference System (EX: 'T30TWM').")
   private String location = "";
 
-  @Parameter(names = {"-s", "--startdate"}, description = "Optional start Date filter.",
+  @Parameter(
+      names = {"-s", "--startdate"},
+      description = "Optional start Date filter.",
       converter = ISO8601DateConverter.class)
   private Date startDate;
 
-  @Parameter(names = {"-f", "--enddate"}, description = "Optional end Date filter.",
+  @Parameter(
+      names = {"-f", "--enddate"},
+      description = "Optional end Date filter.",
       converter = ISO8601DateConverter.class)
   private Date endDate;
 
-  @Parameter(names = "--orbitnumber", description = "Optional Orbit Number filter.",
+  @Parameter(
+      names = "--orbitnumber",
+      description = "Optional Orbit Number filter.",
       converter = IntegerConverter.class)
   private int orbitNumber = 0;
 
-  @Parameter(names = "--relativeorbitnumber",
-      description = "Optional Relative Orbit Number filter.", converter = IntegerConverter.class)
+  @Parameter(
+      names = "--relativeorbitnumber",
+      description = "Optional Relative Orbit Number filter.",
+      converter = IntegerConverter.class)
   private int relativeOrbitNumber = 0;
 
-  @Parameter(names = "--cql",
+  @Parameter(
+      names = "--cql",
       description = "An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry), location (String), productIdentifier (String), productType (String), collection (String), platform (String), processingLevel (String), startDate (Date), quicklook (String), thumbnail (String), bands (String), resolution (int), cloudCover (int), snowCover (int), waterCover (int), orbitNumber (int), relativeOrbitNumber (int) and the feature ID is entityId for the scene.  Additionally attributes of the individuals band can be used such as band (String).",
       converter = ConvertCQLStrToFilterConverter.class)
   private FilterParameter cqlFilter = new FilterParameter(null, null);

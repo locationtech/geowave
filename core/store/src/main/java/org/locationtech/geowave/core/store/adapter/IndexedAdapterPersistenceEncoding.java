@@ -33,7 +33,14 @@ public class IndexedAdapterPersistenceEncoding extends AbstractAdapterPersistenc
       final PersistentDataset<CommonIndexValue> commonData,
       final PersistentDataset<byte[]> unknownData,
       final PersistentDataset<Object> adapterExtendedData) {
-    super(adapterId, dataId, partitionKey, sortKey, duplicateCount, commonData, unknownData,
+    super(
+        adapterId,
+        dataId,
+        partitionKey,
+        sortKey,
+        duplicateCount,
+        commonData,
+        unknownData,
         adapterExtendedData);
   }
 

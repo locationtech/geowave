@@ -12,15 +12,19 @@ import com.beust.jcommander.Parameter;
 
 public class QueryOptionsCommand {
 
-  @Parameter(names = "--auth",
+  @Parameter(
+      names = "--auth",
       description = "The comma-separated list of authorizations used during extract; by default all authorizations are used.")
   private String[] authorizations;
 
-  @Parameter(names = "--typeNames", required = true,
+  @Parameter(
+      names = "--typeNames",
+      required = true,
       description = "The comma-separated list of data typess to query; by default all data types are used.")
   private String[] typeNames = null;
 
-  @Parameter(names = "--indexName",
+  @Parameter(
+      names = "--indexName",
       description = "The specific index to query; by default one is chosen for each adapter.")
   private String indexName = null;
 

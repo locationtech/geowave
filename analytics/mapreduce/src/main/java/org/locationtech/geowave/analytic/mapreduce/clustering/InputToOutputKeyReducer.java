@@ -47,10 +47,13 @@ public class InputToOutputKeyReducer extends GeoWaveWritableInputReducer<GeoWave
     super.setup(context);
     internalAdapterStore = GeoWaveOutputFormat.getJobContextInternalAdapterStore(context);
     final ScopedJobConfiguration config =
-        new ScopedJobConfiguration(context.getConfiguration(), InputToOutputKeyReducer.class,
+        new ScopedJobConfiguration(
+            context.getConfiguration(),
+            InputToOutputKeyReducer.class,
             LOGGER);
     outputKey =
-        new GeoWaveOutputKey("na",
+        new GeoWaveOutputKey(
+            "na",
             new String[] {config.getString(OutputParameters.Output.INDEX_ID, "na")});
   }
 }

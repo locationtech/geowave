@@ -119,8 +119,10 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
     session.execute(
         SchemaBuilder.createKeyspace(gwNamespace).ifNotExists().with().replication(
             ImmutableMap.of(
-                "class", "SimpleStrategy", "replication_factor", options.getReplicationFactor()))
-            .durableWrites(options.isDurableWrites()));
+                "class",
+                "SimpleStrategy",
+                "replication_factor",
+                options.getReplicationFactor())).durableWrites(options.isDurableWrites()));
   }
 
   public Session getSession() {
@@ -145,8 +147,9 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   }
 
   public Select getSelect(final String table, final String... columns) {
-    return (columns.length == 0 ? QueryBuilder.select() : QueryBuilder.select(columns))
-        .from(gwNamespace, getCassandraSafeName(table));
+    return (columns.length == 0 ? QueryBuilder.select() : QueryBuilder.select(columns)).from(
+        gwNamespace,
+        getCassandraSafeName(table));
   }
 
   public BaseDataStoreOptions getOptions() {
@@ -182,26 +185,23 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
       preparedRead = state.preparedRangeReadsPerTable.get(safeTableName);
       if (preparedRead == null) {
         final Select select = getSelect(safeTableName);
-        select
-            .where(
-                QueryBuilder.eq(
-                    CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-                    QueryBuilder.bindMarker(
-                        CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName())))
-            .and(
-                QueryBuilder.in(
-                    CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-                    QueryBuilder.bindMarker(
-                        CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName())))
-            .and(
-                QueryBuilder.gte(
-                    CassandraRow.CassandraField.GW_SORT_KEY.getFieldName(),
-                    QueryBuilder.bindMarker(
-                        CassandraRow.CassandraField.GW_SORT_KEY.getLowerBoundBindMarkerName())))
-            .and(
-                QueryBuilder.lt(
-                    CassandraRow.CassandraField.GW_SORT_KEY.getFieldName(), QueryBuilder.bindMarker(
-                        CassandraRow.CassandraField.GW_SORT_KEY.getUpperBoundBindMarkerName())));
+        select.where(
+            QueryBuilder.eq(
+                CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+                QueryBuilder.bindMarker(
+                    CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName()))).and(
+                        QueryBuilder.in(
+                            CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+                            QueryBuilder.bindMarker(
+                                CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName()))).and(
+                                    QueryBuilder.gte(
+                                        CassandraRow.CassandraField.GW_SORT_KEY.getFieldName(),
+                                        QueryBuilder.bindMarker(
+                                            CassandraRow.CassandraField.GW_SORT_KEY.getLowerBoundBindMarkerName()))).and(
+                                                QueryBuilder.lt(
+                                                    CassandraRow.CassandraField.GW_SORT_KEY.getFieldName(),
+                                                    QueryBuilder.bindMarker(
+                                                        CassandraRow.CassandraField.GW_SORT_KEY.getUpperBoundBindMarkerName())));
         preparedRead = session.prepare(select);
         state.preparedRangeReadsPerTable.put(safeTableName, preparedRead);
       }
@@ -221,21 +221,19 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
       preparedRead = state.preparedRowReadPerTable.get(safeTableName);
       if (preparedRead == null) {
         final Select select = getSelect(safeTableName);
-        select
-            .where(
-                QueryBuilder.eq(
-                    CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-                    QueryBuilder.bindMarker(
-                        CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName())))
-            .and(
-                QueryBuilder.in(
-                    CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-                    QueryBuilder.bindMarker(
-                        CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName())))
-            .and(
-                QueryBuilder.eq(
-                    CassandraRow.CassandraField.GW_SORT_KEY.getFieldName(), QueryBuilder
-                        .bindMarker(CassandraRow.CassandraField.GW_SORT_KEY.getBindMarkerName())));
+        select.where(
+            QueryBuilder.eq(
+                CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+                QueryBuilder.bindMarker(
+                    CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName()))).and(
+                        QueryBuilder.in(
+                            CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+                            QueryBuilder.bindMarker(
+                                CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName()))).and(
+                                    QueryBuilder.eq(
+                                        CassandraRow.CassandraField.GW_SORT_KEY.getFieldName(),
+                                        QueryBuilder.bindMarker(
+                                            CassandraRow.CassandraField.GW_SORT_KEY.getBindMarkerName())));
         preparedRead = session.prepare(select);
         state.preparedRowReadPerTable.put(safeTableName, preparedRead);
       }
@@ -246,8 +244,9 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
 
   public CloseableIterator<CassandraRow> executeQuery(final Statement... statements) {
     final Iterator<Iterator<Row>> results =
-        Iterators
-            .transform(Arrays.asList(statements).iterator(), s -> session.execute(s).iterator());
+        Iterators.transform(
+            Arrays.asList(statements).iterator(),
+            s -> session.execute(s).iterator());
     final Iterator<Row> rows = Iterators.concat(results);
     return new CloseableIterator.Wrapper<>(Iterators.transform(rows, r -> new CassandraRow(r)));
   }
@@ -269,8 +268,9 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
     // always including at least Hash keys on where clause
     session.execute(
         QueryBuilder.delete().from(gwNamespace, getCassandraSafeName(tableName)).where(
-            QueryBuilder
-                .eq(CassandraField.GW_ADAPTER_ID_KEY.getFieldName(), ByteBuffer.wrap(adapterId))));
+            QueryBuilder.eq(
+                CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+                ByteBuffer.wrap(adapterId))));
     return true;
   }
 
@@ -280,13 +280,13 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
       final short internalAdapterId,
       final String... additionalAuthorizations) {
     session.execute(
-        QueryBuilder.delete().from(gwNamespace, getCassandraSafeName(tableName))
-            .where(
-                QueryBuilder.eq(CassandraField.GW_ADAPTER_ID_KEY.getFieldName(), internalAdapterId))
-            .and(
-                QueryBuilder.in(
-                    CassandraField.GW_DATA_ID_KEY.getFieldName(),
-                    Lists.transform(Arrays.asList(dataIds), new ByteArrayToByteBuffer()))));
+        QueryBuilder.delete().from(gwNamespace, getCassandraSafeName(tableName)).where(
+            QueryBuilder.eq(
+                CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+                internalAdapterId)).and(
+                    QueryBuilder.in(
+                        CassandraField.GW_DATA_ID_KEY.getFieldName(),
+                        Lists.transform(Arrays.asList(dataIds), new ByteArrayToByteBuffer()))));
     return true;
   }
 
@@ -301,9 +301,11 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
     }
     final CloseableIterator<CassandraRow> everything =
         executeQuery(
-            QueryBuilder.select().from(gwNamespace, getCassandraSafeName(tableName))
-                .allowFiltering());
-    return new CloseableIteratorWrapper<>(everything,
+            QueryBuilder.select().from(
+                gwNamespace,
+                getCassandraSafeName(tableName)).allowFiltering());
+    return new CloseableIteratorWrapper<>(
+        everything,
         Iterators.filter(everything, new Predicate<GeoWaveRow>() {
 
           @Override
@@ -322,26 +324,23 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
     for (int i = 0; i < row.getFieldValues().length; i++) {
       final ResultSet rs =
           session.execute(
-              QueryBuilder.delete().from(gwNamespace, getCassandraSafeName(tableName))
-                  .where(
-                      QueryBuilder.eq(
-                          CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-                          ByteBuffer.wrap(row.getPartitionKey())))
-                  .and(
-                      QueryBuilder.eq(
-                          CassandraField.GW_SORT_KEY.getFieldName(),
-                          ByteBuffer.wrap(row.getSortKey())))
-                  .and(
-                      QueryBuilder
-                          .eq(CassandraField.GW_ADAPTER_ID_KEY.getFieldName(), row.getAdapterId()))
-                  .and(
-                      QueryBuilder.eq(
-                          CassandraField.GW_DATA_ID_KEY.getFieldName(),
-                          ByteBuffer.wrap(row.getDataId())))
-                  .and(
-                      QueryBuilder.eq(
-                          CassandraField.GW_FIELD_VISIBILITY_KEY.getFieldName(),
-                          ByteBuffer.wrap(row.getFieldValues()[i].getVisibility()))));
+              QueryBuilder.delete().from(gwNamespace, getCassandraSafeName(tableName)).where(
+                  QueryBuilder.eq(
+                      CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+                      ByteBuffer.wrap(row.getPartitionKey()))).and(
+                          QueryBuilder.eq(
+                              CassandraField.GW_SORT_KEY.getFieldName(),
+                              ByteBuffer.wrap(row.getSortKey()))).and(
+                                  QueryBuilder.eq(
+                                      CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+                                      row.getAdapterId())).and(
+                                          QueryBuilder.eq(
+                                              CassandraField.GW_DATA_ID_KEY.getFieldName(),
+                                              ByteBuffer.wrap(row.getDataId()))).and(
+                                                  QueryBuilder.eq(
+                                                      CassandraField.GW_FIELD_VISIBILITY_KEY.getFieldName(),
+                                                      ByteBuffer.wrap(
+                                                          row.getFieldValues()[i].getVisibility()))));
       exhausted &= rs.isExhausted();
     }
 
@@ -437,8 +436,9 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
           if (MetadataType.STATS.equals(metadataType)
               || MetadataType.INTERNAL_ADAPTER.equals(metadataType)) {
             create.addClusteringColumn(CassandraMetadataWriter.SECONDARY_ID_KEY, DataType.blob());
-            create
-                .addClusteringColumn(CassandraMetadataWriter.TIMESTAMP_ID_KEY, DataType.timeuuid());
+            create.addClusteringColumn(
+                CassandraMetadataWriter.TIMESTAMP_ID_KEY,
+                DataType.timeuuid());
             if (MetadataType.STATS.equals(metadataType)) {
               create.addColumn(CassandraMetadataWriter.VISIBILITY_KEY, DataType.blob());
             }
@@ -484,7 +484,12 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
       final InternalAdapterStore internalAdapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore) {
     return DataStoreUtils.mergeData(
-        this, options, index, adapterStore, internalAdapterStore, adapterIndexMappingStore);
+        this,
+        options,
+        index,
+        adapterStore,
+        internalAdapterStore,
+        adapterIndexMappingStore);
   }
 
   @Override
@@ -517,8 +522,10 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
     return new QueryAndDeleteByRow<>(
         createRowDeleter(
-            readerParams.getIndex().getName(), readerParams.getAdapterStore(),
-            readerParams.getInternalAdapterStore(), readerParams.getAdditionalAuthorizations()),
+            readerParams.getIndex().getName(),
+            readerParams.getAdapterStore(),
+            readerParams.getInternalAdapterStore(),
+            readerParams.getAdditionalAuthorizations()),
         createReader(readerParams));
   }
 }

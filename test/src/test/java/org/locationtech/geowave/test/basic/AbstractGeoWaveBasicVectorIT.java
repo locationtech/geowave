@@ -119,8 +119,9 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
   @BeforeClass
   public static void extractTestFiles() throws URISyntaxException {
     ZipUtils.unZipFile(
-        new File(AbstractGeoWaveBasicVectorIT.class.getClassLoader()
-            .getResource(TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
+        new File(
+            AbstractGeoWaveBasicVectorIT.class.getClassLoader().getResource(
+                TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
         TestUtils.TEST_CASE_BASE);
   }
 
@@ -203,7 +204,8 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
           final InternalDataAdapter<?> internalDataAdapter = adapterIt.next();
           if (countDuplicates) {
             aggBldr.aggregate(
-                internalDataAdapter.getTypeName(), (Aggregation) new DuplicateCountAggregation());
+                internalDataAdapter.getTypeName(),
+                (Aggregation) new DuplicateCountAggregation());
             final DuplicateCount countResult =
                 (DuplicateCount) geowaveStore.aggregate((AggregationQuery) aggBldr.build());
             if (countResult != null) {
@@ -343,8 +345,8 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
 
     // Run the spatial query
     actualResults =
-        geowaveStore
-            .query(QueryBuilder.newBuilder().indexName(index.getName()).constraints(query).build());
+        geowaveStore.query(
+            QueryBuilder.newBuilder().indexName(index.getName()).constraints(query).build());
 
     // Grab the first one
     SimpleFeature testFeature = null;
@@ -361,15 +363,16 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       final ByteArray dataId = new ByteArray(testFeature.getID());
 
       if (geowaveStore.delete(
-          QueryBuilder.newBuilder().addTypeName(testFeature.getFeatureType().getTypeName())
-              .indexName(index.getName()).constraints(new DataIdQuery(dataId)).build())) {
+          QueryBuilder.newBuilder().addTypeName(
+              testFeature.getFeatureType().getTypeName()).indexName(index.getName()).constraints(
+                  new DataIdQuery(dataId)).build())) {
 
         success =
             !hasAtLeastOne(
                 geowaveStore.query(
-                    QueryBuilder.newBuilder()
-                        .addTypeName(testFeature.getFeatureType().getTypeName())
-                        .indexName(index.getName()).constraints(new DataIdQuery(dataId)).build()));
+                    QueryBuilder.newBuilder().addTypeName(
+                        testFeature.getFeatureType().getTypeName()).indexName(
+                            index.getName()).constraints(new DataIdQuery(dataId)).build()));
       }
     }
     Assert.assertTrue("Unable to delete entry by data ID and adapter ID", success);
@@ -432,8 +435,8 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
 
     // Run the query for this delete to get the expected count
     queryResults =
-        geowaveStore
-            .query(QueryBuilder.newBuilder().indexName(index.getName()).constraints(query).build());
+        geowaveStore.query(
+            QueryBuilder.newBuilder().indexName(index.getName()).constraints(query).build());
     int expectedFeaturesToDelete = 0;
     while (queryResults.hasNext()) {
       final Object obj = queryResults.next();
@@ -454,8 +457,8 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
 
     // Query again - should be zero remaining
     queryResults =
-        geowaveStore
-            .query(QueryBuilder.newBuilder().indexName(index.getName()).constraints(query).build());
+        geowaveStore.query(
+            QueryBuilder.newBuilder().indexName(index.getName()).constraints(query).build());
 
     final int initialQueryFeatures = expectedFeaturesToDelete;
     int remainingFeatures = 0;
@@ -545,15 +548,18 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
             StatisticsCache cachedValues = statsCache.get(adapter.getTypeName());
             if (cachedValues == null) {
               cachedValues =
-                  new StatisticsCache((StatisticsProvider<SimpleFeature>) adapter,
+                  new StatisticsCache(
+                      (StatisticsProvider<SimpleFeature>) adapter,
                       internalAdapterStore.getAdapterId(adapter.getTypeName()));
               statsCache.put(adapter.getTypeName(), cachedValues);
             }
             cachedValues.entryIngested(
-                mathTransform != null ? GeometryUtils.crsTransform(
-                    data.getValue(),
-                    SimpleFeatureTypeBuilder.retype(data.getValue().getFeatureType(), crs),
-                    mathTransform) : data.getValue());
+                mathTransform != null
+                    ? GeometryUtils.crsTransform(
+                        data.getValue(),
+                        SimpleFeatureTypeBuilder.retype(data.getValue().getFeatureType(), crs),
+                        mathTransform)
+                    : data.getValue());
           }
         }
       }
@@ -587,12 +593,14 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
               "The number of stats for data adapter '"
                   + adapter.getTypeName()
                   + "' do not match count expected",
-              expectedStats.size(), statsCount);
+              expectedStats.size(),
+              statsCount);
         }
         for (final InternalDataStatistics<SimpleFeature, ?, ?> expectedStat : expectedStats) {
           try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> actualStatsIt =
               statsStore.getDataStatistics(
-                  internalDataAdapter.getAdapterId(), expectedStat.getExtendedId(),
+                  internalDataAdapter.getAdapterId(),
+                  expectedStat.getExtendedId(),
                   expectedStat.getType())) {
             if (actualStatsIt.hasNext()) {
               final InternalDataStatistics<?, ?, ?> actualStats = actualStatsIt.next();
@@ -601,8 +609,8 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
               // case. None
               // of the other statistics will match!
               if (multithreaded) {
-                if (!(expectedStat.getType().getString()
-                    .startsWith(FeatureNumericRangeStatistics.STATS_TYPE.getString())
+                if (!(expectedStat.getType().getString().startsWith(
+                    FeatureNumericRangeStatistics.STATS_TYPE.getString())
                     || expectedStat.getType().equals(CountDataStatistics.STATS_TYPE)
                     || expectedStat.getType().getString().startsWith("BOUNDING_BOX"))) {
                   continue;
@@ -613,7 +621,8 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
               // if the stats are the same, their binary
               // serialization should be the same
               Assert.assertArrayEquals(
-                  actualStats.toString() + " = " + expectedStat.toString(), expectedStat.toBinary(),
+                  actualStats.toString() + " = " + expectedStat.toString(),
+                  expectedStat.toBinary(),
                   actualStats.toBinary());
             }
           }
@@ -621,32 +630,45 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
         // finally check the one stat that is more manually calculated -
         // the bounding box
         final StatisticsQuery<Envelope> query =
-            VectorStatisticsQueryBuilder.newBuilder().factory().bbox()
-                .fieldName(adapter.getFeatureType().getGeometryDescriptor().getLocalName())
-                .dataType(adapter.getTypeName()).build();
+            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+                adapter.getFeatureType().getGeometryDescriptor().getLocalName()).dataType(
+                    adapter.getTypeName()).build();
         final StatisticsId id = query.getId();
         final Envelope bboxStat =
             getDataStorePluginOptions().createDataStore().aggregateStatistics(query);
         Assert.assertNotNull(bboxStat);
         Assert.assertEquals(
             "The min X of the bounding box stat does not match the expected value",
-            cachedValue.minX, bboxStat.getMinX(), MathUtils.EPSILON);
+            cachedValue.minX,
+            bboxStat.getMinX(),
+            MathUtils.EPSILON);
         Assert.assertEquals(
             "The min Y of the bounding box stat does not match the expected value",
-            cachedValue.minY, bboxStat.getMinY(), MathUtils.EPSILON);
+            cachedValue.minY,
+            bboxStat.getMinY(),
+            MathUtils.EPSILON);
         Assert.assertEquals(
             "The max X of the bounding box stat does not match the expected value",
-            cachedValue.maxX, bboxStat.getMaxX(), MathUtils.EPSILON);
+            cachedValue.maxX,
+            bboxStat.getMaxX(),
+            MathUtils.EPSILON);
         Assert.assertEquals(
             "The max Y of the bounding box stat does not match the expected value",
-            cachedValue.maxY, bboxStat.getMaxY(), MathUtils.EPSILON);
+            cachedValue.maxY,
+            bboxStat.getMaxY(),
+            MathUtils.EPSILON);
         Assert.assertTrue(
-            "Unable to remove individual stat", statsStore.removeStatistics(
-                internalDataAdapter.getAdapterId(), id.getExtendedId(), id.getType()));
+            "Unable to remove individual stat",
+            statsStore.removeStatistics(
+                internalDataAdapter.getAdapterId(),
+                id.getExtendedId(),
+                id.getType()));
 
         try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> statsIt =
             statsStore.getDataStatistics(
-                internalDataAdapter.getAdapterId(), id.getExtendedId(), id.getType())) {
+                internalDataAdapter.getAdapterId(),
+                id.getExtendedId(),
+                id.getType())) {
           Assert.assertFalse("Individual stat was not successfully removed", statsIt.hasNext());
         }
       }

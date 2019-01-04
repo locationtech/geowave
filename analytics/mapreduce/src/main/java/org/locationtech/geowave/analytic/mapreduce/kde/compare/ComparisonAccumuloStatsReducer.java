@@ -63,8 +63,15 @@ public class ComparisonAccumuloStatsReducer
       context.write(
           new GeoWaveOutputKey(coverageName, indexNames),
           RasterUtils.createCoverageTypeDouble(
-              coverageName, bbox[0].x, bbox[1].x, bbox[0].y, bbox[1].y, MINS_PER_BAND,
-              MAXES_PER_BAND, NAME_PER_BAND, raster));
+              coverageName,
+              bbox[0].x,
+              bbox[1].x,
+              bbox[0].y,
+              bbox[1].y,
+              MINS_PER_BAND,
+              MAXES_PER_BAND,
+              NAME_PER_BAND,
+              raster));
       currentKey++;
     }
   }

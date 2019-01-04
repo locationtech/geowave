@@ -44,7 +44,8 @@ public class StoreCopyReducer extends GeoWaveWritableInputReducer<GeoWaveOutputK
     while (objects.hasNext()) {
       final AdapterToIndexMapping mapping = store.getIndicesForAdapter(key.getInternalAdapterId());
       context.write(
-          new GeoWaveOutputKey<>(internalAdapterStore.getTypeName(mapping.getAdapterId()),
+          new GeoWaveOutputKey<>(
+              internalAdapterStore.getTypeName(mapping.getAdapterId()),
               mapping.getIndexNames()),
           objects.next());
     }

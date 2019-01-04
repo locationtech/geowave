@@ -42,7 +42,9 @@ public class RowRangeHistogramStatistics<T> extends
       final Short internalDataAdapterId,
       final String indexName,
       final ByteArray partitionKey) {
-    super(internalDataAdapterId, STATS_TYPE,
+    super(
+        internalDataAdapterId,
+        STATS_TYPE,
         PartitionStatisticsQueryBuilder.composeId(indexName, partitionKey));
     histogram = createHistogram();
   }
@@ -55,7 +57,9 @@ public class RowRangeHistogramStatistics<T> extends
   public InternalDataStatistics<T, NumericHistogram, PartitionStatisticsQueryBuilder<NumericHistogram>> duplicate() {
     final Pair<String, ByteArray> pair =
         PartitionStatisticsQueryBuilder.decomposeIndexAndPartitionFromId(extendedId);
-    return new RowRangeHistogramStatistics<>(adapterId, pair.getLeft(), // indexName
+    return new RowRangeHistogramStatistics<>(
+        adapterId,
+        pair.getLeft(), // indexName
         pair.getRight());
   }
 

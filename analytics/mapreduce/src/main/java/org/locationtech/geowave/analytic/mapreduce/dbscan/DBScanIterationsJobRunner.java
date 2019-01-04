@@ -101,8 +101,9 @@ public class DBScanIterationsJobRunner implements MapReduceJobRunner, Independen
         fs.delete(startPath, true);
       }
 
-      runTimeProperties
-          .storeIfEmpty(Partition.PARTITIONER_CLASS, OrthodromicDistancePartitioner.class);
+      runTimeProperties.storeIfEmpty(
+          Partition.PARTITIONER_CLASS,
+          OrthodromicDistancePartitioner.class);
 
       final double maxDistance = runTimeProperties.getPropertyAsDouble(Partition.MAX_DISTANCE, 10);
 
@@ -140,8 +141,9 @@ public class DBScanIterationsJobRunner implements MapReduceJobRunner, Independen
         }
         secondary |= (total >= (Math.pow(maxDistance, distancePerDimension.length) * 2.0));
         if (secondary) {
-          runTimeProperties
-              .copy(Partition.PARTITIONER_CLASS, Partition.SECONDARY_PARTITIONER_CLASS);
+          runTimeProperties.copy(
+              Partition.PARTITIONER_CLASS,
+              Partition.SECONDARY_PARTITIONER_CLASS);
         }
       }
 
@@ -173,7 +175,8 @@ public class DBScanIterationsJobRunner implements MapReduceJobRunner, Independen
         try {
           final Partitioner<?> partitioner =
               runTimeProperties.getClassInstance(
-                  PartitionParameters.Partition.PARTITIONER_CLASS, Partitioner.class,
+                  PartitionParameters.Partition.PARTITIONER_CLASS,
+                  Partitioner.class,
                   OrthodromicDistancePartitioner.class);
 
           partitioner.initialize(Job.getInstance(config), partitioner.getClass());
@@ -199,8 +202,9 @@ public class DBScanIterationsJobRunner implements MapReduceJobRunner, Independen
          * dimension space or assuming only two dimensions were both undesirable.
          */
         if ((precisionFactor <= 0.9) && !overrideSecondary) {
-          localScopeProperties
-              .store(Partition.SECONDARY_PARTITIONER_CLASS, PassthruPartitioner.class);
+          localScopeProperties.store(
+              Partition.SECONDARY_PARTITIONER_CLASS,
+              PassthruPartitioner.class);
         }
 
         localScopeProperties.store(Partition.PARTITION_PRECISION, precisionFactor);
@@ -213,8 +217,10 @@ public class DBScanIterationsJobRunner implements MapReduceJobRunner, Independen
         localScopeProperties.store(HullParameters.Hull.ITERATION, iteration);
 
         localScopeProperties.storeIfEmpty(
-            OutputParameters.Output.DATA_TYPE_ID, localScopeProperties
-                .getPropertyAsString(HullParameters.Hull.DATA_TYPE_ID, "concave_hull"));
+            OutputParameters.Output.DATA_TYPE_ID,
+            localScopeProperties.getPropertyAsString(
+                HullParameters.Hull.DATA_TYPE_ID,
+                "concave_hull"));
 
         // Set to zero to force each cluster to be moved into the next
         // iteration
@@ -253,16 +259,20 @@ public class DBScanIterationsJobRunner implements MapReduceJobRunner, Independen
       final PropertyManagement localScopeProperties = new PropertyManagement(runTimeProperties);
 
       localScopeProperties.storeIfEmpty(
-          OutputParameters.Output.DATA_TYPE_ID, localScopeProperties
-              .getPropertyAsString(HullParameters.Hull.DATA_TYPE_ID, "concave_hull"));
+          OutputParameters.Output.DATA_TYPE_ID,
+          localScopeProperties.getPropertyAsString(
+              HullParameters.Hull.DATA_TYPE_ID,
+              "concave_hull"));
       localScopeProperties.storeIfEmpty(
-          OutputParameters.Output.DATA_NAMESPACE_URI, localScopeProperties.getPropertyAsString(
-              HullParameters.Hull.DATA_NAMESPACE_URI, BasicFeatureTypes.DEFAULT_NAMESPACE));
+          OutputParameters.Output.DATA_NAMESPACE_URI,
+          localScopeProperties.getPropertyAsString(
+              HullParameters.Hull.DATA_NAMESPACE_URI,
+              BasicFeatureTypes.DEFAULT_NAMESPACE));
       localScopeProperties.storeIfEmpty(
           OutputParameters.Output.INDEX_ID,
           localScopeProperties.get(HullParameters.Hull.INDEX_NAME));
-      inputLoadRunner
-          .setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(startPath));
+      inputLoadRunner.setInputFormatConfiguration(
+          new SequenceFileInputFormatConfiguration(startPath));
       // HP Fortify "Command Injection" false positive
       // What Fortify considers "externally-influenced input"
       // comes only from users with OS-level access anyway

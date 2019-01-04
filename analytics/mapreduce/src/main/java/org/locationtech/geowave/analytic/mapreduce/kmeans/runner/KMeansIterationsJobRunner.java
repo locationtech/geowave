@@ -70,11 +70,13 @@ public class KMeansIterationsJobRunner<T> implements MapReduceJobRunner, Indepen
 
     convergenceTol =
         runTimeProperties.getPropertyAsDouble(
-            ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE, convergenceTol);
+            ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE,
+            convergenceTol);
 
     final DistanceFn<T> distanceFunction =
         runTimeProperties.getClassInstance(
-            CommonParameters.Common.DISTANCE_FUNCTION_CLASS, DistanceFn.class,
+            CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+            DistanceFn.class,
             FeatureCentroidDistanceFn.class);
 
     int maxIterationCount =
@@ -103,11 +105,14 @@ public class KMeansIterationsJobRunner<T> implements MapReduceJobRunner, Indepen
       throws Exception {
 
     runTimeProperties.storeIfEmpty(
-        CentroidParameters.Centroid.EXTRACTOR_CLASS, SimpleFeatureCentroidExtractor.class);
+        CentroidParameters.Centroid.EXTRACTOR_CLASS,
+        SimpleFeatureCentroidExtractor.class);
     runTimeProperties.storeIfEmpty(
-        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, SimpleFeatureItemWrapperFactory.class);
+        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+        SimpleFeatureItemWrapperFactory.class);
     runTimeProperties.storeIfEmpty(
-        CommonParameters.Common.DISTANCE_FUNCTION_CLASS, FeatureCentroidDistanceFn.class);
+        CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+        FeatureCentroidDistanceFn.class);
     // HP Fortify "Command Injection" false positive
     // What Fortify considers "externally-influenced input"
     // comes only from users with OS-level access anyway
@@ -207,7 +212,8 @@ public class KMeansIterationsJobRunner<T> implements MapReduceJobRunner, Indepen
     final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {CentroidParameters.Centroid.INDEX_NAME,
+            new ParameterEnum<?>[] {
+                CentroidParameters.Centroid.INDEX_NAME,
                 CentroidParameters.Centroid.DATA_TYPE_ID,
                 CentroidParameters.Centroid.DATA_NAMESPACE_URI,
                 CentroidParameters.Centroid.EXTRACTOR_CLASS,

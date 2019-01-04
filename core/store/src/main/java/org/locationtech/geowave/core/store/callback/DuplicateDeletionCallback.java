@@ -70,8 +70,8 @@ public class DuplicateDeletionCallback<T> implements DeleteCallback<T, GeoWaveRo
       final InsertionIdQuery constraint =
           new InsertionIdQuery(insertionId.partitionKey, insertionId.sortKey, insertionId.dataId);
       final Query<T> query =
-          (Query) QueryBuilder.newBuilder().indexName(index.getName())
-              .addTypeName(adapter.getTypeName()).constraints(constraint).build();
+          (Query) QueryBuilder.newBuilder().indexName(index.getName()).addTypeName(
+              adapter.getTypeName()).constraints(constraint).build();
 
       // we don't want the duplicates to try to delete one another
       // recursively over and over so we pass false for this deletion
@@ -92,7 +92,9 @@ public class DuplicateDeletionCallback<T> implements DeleteCallback<T, GeoWaveRo
           if (!Arrays.equals(insertId.getPartitionKey().getBytes(), row.getPartitionKey())) {
             for (ByteArray sortKey : insertId.getSortKeys()) {
               final InsertionIdData insertionId =
-                  new InsertionIdData(insertId.getPartitionKey().getBytes(), sortKey.getBytes(),
+                  new InsertionIdData(
+                      insertId.getPartitionKey().getBytes(),
+                      sortKey.getBytes(),
                       row.getDataId());
               if (!duplicateInsertionIds.containsKey(insertionId.partitionKey)) {
                 duplicateInsertionIds.put(insertionId.partitionKey, insertionId);

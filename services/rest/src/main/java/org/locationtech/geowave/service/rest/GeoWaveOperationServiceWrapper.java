@@ -265,8 +265,8 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
         final ExecutorService opPool =
             (ExecutorService) appContext.getAttributes().get("asyncOperationPool");
         final ConcurrentHashMap<String, Future> opStatuses =
-            (ConcurrentHashMap<String, Future>) appContext.getAttributes()
-                .get("asyncOperationStatuses");
+            (ConcurrentHashMap<String, Future>) appContext.getAttributes().get(
+                "asyncOperationStatuses");
 
         Callable<T> task = () -> {
           T res = operation.computeResults(params);

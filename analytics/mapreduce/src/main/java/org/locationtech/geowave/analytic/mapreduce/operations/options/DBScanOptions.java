@@ -26,22 +26,28 @@ public class DBScanOptions {
   private String outputHdfsOutputPath;
 
   @PartitionParameter(PartitionParameters.Partition.DISTANCE_THRESHOLDS)
-  @Parameter(names = {"-pdt", "--partitionDistanceThresholds"},
+  @Parameter(
+      names = {"-pdt", "--partitionDistanceThresholds"},
       description = "Comma separated list of distance thresholds, per dimension")
   private String partitioningDistanceThresholds;
 
   @PartitionParameter(PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT)
-  @Parameter(names = {"-pdu", "--partitionGeometricDistanceUnit"},
+  @Parameter(
+      names = {"-pdu", "--partitionGeometricDistanceUnit"},
       description = "Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit)")
   private String partitioningGeometricDistanceUnit;
 
   @ClusteringParameter(ClusteringParameters.Clustering.MAX_ITERATIONS)
-  @Parameter(names = {"-cmi", "--clusteringMaxIterations"}, required = true,
+  @Parameter(
+      names = {"-cmi", "--clusteringMaxIterations"},
+      required = true,
       description = "Maximum number of iterations when finding optimal clusters")
   private String clusteringMaxIterations;
 
   @ClusteringParameter(ClusteringParameters.Clustering.MINIMUM_SIZE)
-  @Parameter(names = {"-cms", "--clusteringMinimumSize"}, required = true,
+  @Parameter(
+      names = {"-cms", "--clusteringMinimumSize"},
+      required = true,
       description = "Minimum Cluster Size")
   private String clusteringMinimumSize;
 
@@ -54,42 +60,51 @@ public class DBScanOptions {
   private String hullDataTypeId;
 
   @HullParameter(HullParameters.Hull.PROJECTION_CLASS)
-  @Parameter(names = {"-hpe", "--hullProjectionClass"},
+  @Parameter(
+      names = {"-hpe", "--hullProjectionClass"},
       description = "Class to project on to 2D space. Implements org.locationtech.geowave.analytics.tools.Projection")
   private String hullProjectionClass;
 
   @OutputParameter(OutputParameters.Output.DATA_NAMESPACE_URI)
-  @Parameter(names = {"-ons", "--outputDataNamespaceUri"},
+  @Parameter(
+      names = {"-ons", "--outputDataNamespaceUri"},
       description = "Output namespace for objects that will be written to GeoWave")
   private String outputDataNamespaceUri;
 
   @OutputParameter(OutputParameters.Output.DATA_TYPE_ID)
-  @Parameter(names = {"-odt", "--outputDataTypeId"},
+  @Parameter(
+      names = {"-odt", "--outputDataTypeId"},
       description = "Output Data ID assigned to objects that will be written to GeoWave")
   private String outputDataTypeId;
 
   @OutputParameter(OutputParameters.Output.INDEX_ID)
-  @Parameter(names = {"-oid", "--outputIndexId"},
+  @Parameter(
+      names = {"-oid", "--outputIndexId"},
       description = "Output Index ID for objects that will be written to GeoWave")
   private String outputIndexId;
 
   @PartitionParameter(PartitionParameters.Partition.MAX_MEMBER_SELECTION)
-  @Parameter(names = {"-pms", "--partitionMaxMemberSelection"},
+  @Parameter(
+      names = {"-pms", "--partitionMaxMemberSelection"},
       description = "Maximum number of members selected from a partition")
   private String partitionMaxMemberSelection;
 
   @PartitionParameter(PartitionParameters.Partition.PARTITIONER_CLASS)
-  @Parameter(names = {"-pc", "--partitionPartitionerClass"},
+  @Parameter(
+      names = {"-pc", "--partitionPartitionerClass"},
       description = "Index Identifier for Centroids")
   private String partitionPartitionerClass;
 
   @PartitionParameter(PartitionParameters.Partition.PARTITION_DECREASE_RATE)
-  @Parameter(names = {"-pdr", "--partitionPartitionDecreaseRate"},
+  @Parameter(
+      names = {"-pdr", "--partitionPartitionDecreaseRate"},
       description = "Rate of decrease for precision(within (0,1])")
   private String partitionPartitionDecreaseRate;
 
   @PartitionParameter(PartitionParameters.Partition.MAX_DISTANCE)
-  @Parameter(names = {"-pmd", "--partitionMaxDistance"}, required = true,
+  @Parameter(
+      names = {"-pmd", "--partitionMaxDistance"},
+      required = true,
       description = "Maximum Partition Distance")
   private String partitionMaxDistance;
 
@@ -98,7 +113,8 @@ public class DBScanOptions {
   private String partitionPartitionPrecision;
 
   @PartitionParameter(PartitionParameters.Partition.SECONDARY_PARTITIONER_CLASS)
-  @Parameter(names = {"-psp", "--partitionSecondaryPartitionerClass"},
+  @Parameter(
+      names = {"-psp", "--partitionSecondaryPartitionerClass"},
       description = "Perform secondary partitioning with the provided class")
   private String partitionSecondaryPartitionerClass;
 

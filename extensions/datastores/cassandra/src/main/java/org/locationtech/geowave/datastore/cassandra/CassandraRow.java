@@ -22,12 +22,15 @@ public class CassandraRow extends MergeableGeoWaveRow {
   private static final Logger LOGGER = Logger.getLogger(CassandraRow.class);
 
   private static enum ColumnType {
-    PARTITION_KEY((final Create c, final Pair<String, DataType> f) -> c
-        .addPartitionKey(f.getLeft(), f.getRight())), CLUSTER_COLUMN(
-            (final Create c, final Pair<String, DataType> f) -> c
-                .addClusteringColumn(f.getLeft(), f.getRight())), OTHER_COLUMN(
-                    (final Create c, final Pair<String, DataType> f) -> c
-                        .addColumn(f.getLeft(), f.getRight()));
+    PARTITION_KEY((final Create c, final Pair<String, DataType> f) -> c.addPartitionKey(
+        f.getLeft(),
+        f.getRight())), CLUSTER_COLUMN(
+            (final Create c, final Pair<String, DataType> f) -> c.addClusteringColumn(
+                f.getLeft(),
+                f.getRight())), OTHER_COLUMN(
+                    (final Create c, final Pair<String, DataType> f) -> c.addColumn(
+                        f.getLeft(),
+                        f.getRight()));
 
     private BiConsumer<Create, Pair<String, DataType>> createFunction;
 

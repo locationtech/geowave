@@ -50,7 +50,9 @@ public class RasterTileResizeHelper {
           // the new adapter doesn't have a merge strategy - resizing
           // will require merging, so default to NoDataMergeStrategy
           newAdapter =
-              new RasterDataAdapter((RasterDataAdapter) adapter, newTypeName,
+              new RasterDataAdapter(
+                  (RasterDataAdapter) adapter,
+                  newTypeName,
                   new NoDataMergeStrategy());
         } else {
           newAdapter = (RasterDataAdapter) adapter;
@@ -95,8 +97,10 @@ public class RasterTileResizeHelper {
       final Pair<byte[], byte[]> pair = key.getPartitionAndSortKey(index);
       mergedCoverage =
           newAdapter.getCoverageFromRasterTile(
-              mergedTile, pair == null ? null : new ByteArray(pair.getLeft()),
-              pair == null ? null : new ByteArray(pair.getRight()), index);
+              mergedTile,
+              pair == null ? null : new ByteArray(pair.getLeft()),
+              pair == null ? null : new ByteArray(pair.getRight()),
+              index);
     }
     return mergedCoverage;
   }

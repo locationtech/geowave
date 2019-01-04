@@ -35,19 +35,17 @@ public class PersistenceUtilsTest {
   public void test() {
     APersistable persistable = new APersistable();
     Assert.assertTrue(
-        PersistenceUtils.fromBinaryAsList(PersistenceUtils.toBinary(new ArrayList<Persistable>()))
-            .isEmpty());
+        PersistenceUtils.fromBinaryAsList(
+            PersistenceUtils.toBinary(new ArrayList<Persistable>())).isEmpty());
     Assert.assertTrue(
-        PersistenceUtils
-            .fromBinaryAsList(
-                PersistenceUtils.toBinary(Collections.<Persistable>singleton(persistable)))
-            .size() == 1);
+        PersistenceUtils.fromBinaryAsList(
+            PersistenceUtils.toBinary(
+                Collections.<Persistable>singleton(persistable))).size() == 1);
 
     Assert.assertTrue(
-        PersistenceUtils
-            .fromBinaryAsList(
-                PersistenceUtils.toBinary(
-                    Arrays.<Persistable>asList(new Persistable[] {persistable, persistable})))
-            .size() == 2);
+        PersistenceUtils.fromBinaryAsList(
+            PersistenceUtils.toBinary(
+                Arrays.<Persistable>asList(
+                    new Persistable[] {persistable, persistable}))).size() == 2);
   }
 }

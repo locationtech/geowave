@@ -33,7 +33,8 @@ public class RankSamplerJobRunner extends KSamplerJobRunner implements MapReduce
       throws Exception {
     CentroidManagerGeoWave.setParameters(config, getScope(), runTimeProperties);
     runTimeProperties.storeIfEmpty(
-        SampleParameters.Sample.PROBABILITY_FUNCTION, BahmanEtAlSampleProbabilityFn.class);
+        SampleParameters.Sample.PROBABILITY_FUNCTION,
+        BahmanEtAlSampleProbabilityFn.class);
     CentroidDistanceBasedSamplingRankFunction.setParameters(config, getScope(), runTimeProperties);
 
     // HP Fortify "Command Injection" false positive

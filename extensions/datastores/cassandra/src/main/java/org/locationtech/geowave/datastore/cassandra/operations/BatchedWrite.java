@@ -92,7 +92,9 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
     writeSemaphore.acquire();
     final ResultSetFuture future = session.executeAsync(statement);
     Futures.addCallback(
-        future, new IngestCallback(writeSemaphore), CassandraOperations.WRITE_RESPONSE_THREADS);
+        future,
+        new IngestCallback(writeSemaphore),
+        CassandraOperations.WRITE_RESPONSE_THREADS);
   }
 
   @Override

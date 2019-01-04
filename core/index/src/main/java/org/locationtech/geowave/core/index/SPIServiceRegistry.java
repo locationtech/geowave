@@ -148,8 +148,8 @@ public class SPIServiceRegistry extends ServiceRegistry {
         }
       } catch (SecurityException ex) {
         LOGGER.warn("Unable to get the class loader", ex);
-        exceptions
-            .add(loaderSet[i].toString() + "'s parent class loader : " + ex.getLocalizedMessage());
+        exceptions.add(
+            loaderSet[i].toString() + "'s parent class loader : " + ex.getLocalizedMessage());
       }
     }
     if (loaders.isEmpty()) {

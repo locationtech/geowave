@@ -175,8 +175,12 @@ public class SpatialQueryFilter extends BasicQueryFilter {
       final BasicQueryCompareOperation nonSpatialCompareOp) {
     this(
         stripGeometry(
-            query, orderedConstrainedDimensionDefinitions, unconstrainedDimensionDefinitions),
-        queryGeometry, compareOp, nonSpatialCompareOp);
+            query,
+            orderedConstrainedDimensionDefinitions,
+            unconstrainedDimensionDefinitions),
+        queryGeometry,
+        compareOp,
+        nonSpatialCompareOp);
   }
 
   private SpatialQueryFilter(
@@ -184,7 +188,9 @@ public class SpatialQueryFilter extends BasicQueryFilter {
       final Geometry queryGeometry,
       final CompareOperation compareOp,
       final BasicQueryCompareOperation nonSpatialCompareOp) {
-    super(strippedGeometry.strippedQuery, strippedGeometry.strippedDimensionDefinitions,
+    super(
+        strippedGeometry.strippedQuery,
+        strippedGeometry.strippedDimensionDefinitions,
         nonSpatialCompareOp);
     preparedGeometryImage = new GeometryImage(FACTORY.create(queryGeometry));
     geometryFieldNames = strippedGeometry.geometryFieldNames;
@@ -237,7 +243,8 @@ public class SpatialQueryFilter extends BasicQueryFilter {
     return new StrippedGeometry(
         new BasicNumericDataset(
             numericDataPerDimension.toArray(new NumericData[numericDataPerDimension.size()])),
-        fields.toArray(new NumericDimensionField<?>[fields.size()]), geometryFieldNames);
+        fields.toArray(new NumericDimensionField<?>[fields.size()]),
+        geometryFieldNames);
   }
 
   public static boolean isSpatial(final NumericDimensionField<?> d) {

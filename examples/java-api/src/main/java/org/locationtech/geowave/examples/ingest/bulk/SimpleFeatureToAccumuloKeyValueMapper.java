@@ -46,9 +46,11 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends Mapper<LongWritable, 
       new AccumuloKeyValuePairGenerator<SimpleFeature>(
           // this is not the most robust way to assign an internal adapter ID
           // but is simple and will work in a majority of cases
-          new InternalDataAdapterWrapper<>(adapter,
+          new InternalDataAdapterWrapper<>(
+              adapter,
               InternalAdapterStoreImpl.getLazyInitialAdapterId(adapter.getTypeName())),
-          index, visibilityWriter);
+          index,
+          visibilityWriter);
   private SimpleFeature simpleFeature;
   private List<KeyValue> keyValuePairs;
   private final SimpleFeatureBuilder builder =

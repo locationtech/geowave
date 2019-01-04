@@ -44,8 +44,13 @@ import org.slf4j.LoggerFactory;
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.SPARK})
 @GeoWaveTestStore(
-    value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE, GeoWaveStoreType.DYNAMODB,
-        GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+    value = {
+        GeoWaveStoreType.ACCUMULO,
+        GeoWaveStoreType.BIGTABLE,
+        GeoWaveStoreType.DYNAMODB,
+        GeoWaveStoreType.CASSANDRA,
+        GeoWaveStoreType.REDIS,
+        GeoWaveStoreType.ROCKSDB})
 public class GeoWaveSparkSpatialJoinIT extends AbstractGeoWaveBasicVectorIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkSpatialJoinIT.class);
 
@@ -180,7 +185,10 @@ public class GeoWaveSparkSpatialJoinIT extends AbstractGeoWaveBasicVectorIT {
     mark = System.currentTimeMillis();
 
     TestUtils.testLocalIngest(
-        tornadoStore, DimensionalityType.SPATIAL, TORNADO_TRACKS_SHAPEFILE_FILE, 1);
+        tornadoStore,
+        DimensionalityType.SPATIAL,
+        TORNADO_TRACKS_SHAPEFILE_FILE,
+        1);
 
     dur = (System.currentTimeMillis() - mark);
     LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + 1 + " thread(s).");
@@ -203,8 +211,8 @@ public class GeoWaveSparkSpatialJoinIT extends AbstractGeoWaveBasicVectorIT {
       hailRDD = GeoWaveRDDLoader.loadRDD(context, hailStore, hailOpts);
 
       final RDDOptions tornadoOpts = new RDDOptions();
-      tornadoOpts
-          .setQuery(QueryBuilder.newBuilder().addTypeName(tornadoAdapter.getTypeName()).build());
+      tornadoOpts.setQuery(
+          QueryBuilder.newBuilder().addTypeName(tornadoAdapter.getTypeName()).build());
       tornadoRDD = GeoWaveRDDLoader.loadRDD(context, tornadoStore, tornadoOpts);
     } catch (final Exception e) {
       LOGGER.error("Could not load rdds for test");

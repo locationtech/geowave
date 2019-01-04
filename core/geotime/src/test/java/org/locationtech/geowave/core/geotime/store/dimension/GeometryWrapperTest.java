@@ -32,7 +32,8 @@ public class GeometryWrapperTest {
 
     Geometry geo =
         factory.createLineString(
-            new Coordinate[] {new Coordinate(-99.22, 33.75000000000001), // notice
+            new Coordinate[] {
+                new Coordinate(-99.22, 33.75000000000001), // notice
                 // that
                 // this gets
                 // tiled as
@@ -61,7 +62,8 @@ public class GeometryWrapperTest {
 
     Geometry geo =
         factory.createLineString(
-            new Coordinate[] {new Coordinate(-99.22, 33.75000000000001), // notice
+            new Coordinate[] {
+                new Coordinate(-99.22, 33.75000000000001), // notice
                 // that
                 // this gets
                 // tiled as

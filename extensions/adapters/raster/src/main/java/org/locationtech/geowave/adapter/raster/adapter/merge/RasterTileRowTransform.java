@@ -33,8 +33,11 @@ public class RasterTileRowTransform<T extends Persistable> implements RowTransfo
   public Mergeable transform(final short internalAdapterId, final Mergeable mergeable) {
     if ((mergeable != null) && (mergeable instanceof RasterTile)) {
       final RasterTile<T> rasterTile = (RasterTile) mergeable;
-      return new ServerMergeableRasterTile<T>(rasterTile.getDataBuffer(), rasterTile.getMetadata(),
-          mergeStrategy, internalAdapterId);
+      return new ServerMergeableRasterTile<T>(
+          rasterTile.getDataBuffer(),
+          rasterTile.getMetadata(),
+          mergeStrategy,
+          internalAdapterId);
     }
     return mergeable;
   }

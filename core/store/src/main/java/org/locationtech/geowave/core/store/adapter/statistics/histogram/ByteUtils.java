@@ -28,8 +28,15 @@ import java.math.BigInteger;
 public class ByteUtils {
 
   private static final byte[] INFINITY_BYTE =
-      new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff,
-          (byte) 0xff, (byte) 0xff};
+      new byte[] {
+          (byte) 0xff,
+          (byte) 0xff,
+          (byte) 0xff,
+          (byte) 0xff,
+          (byte) 0xff,
+          (byte) 0xff,
+          (byte) 0xff,
+          (byte) 0xff};
 
   public static byte[] toBytes(double val) {
     BigInteger tmp = new BigDecimal(val).toBigInteger();

@@ -255,7 +255,8 @@ public class GeoWaveRasterConfig {
       dataStore =
           factoryFamily.getDataStoreFactory().createStore(
               ConfigUtils.populateOptionsFromList(
-                  factoryFamily.getDataStoreFactory().createOptionsInstance(), storeConfigObj));
+                  factoryFamily.getDataStoreFactory().createOptionsInstance(),
+                  storeConfigObj));
     }
     return dataStore;
   }
@@ -265,7 +266,8 @@ public class GeoWaveRasterConfig {
       adapterStore =
           factoryFamily.getAdapterStoreFactory().createStore(
               ConfigUtils.populateOptionsFromList(
-                  factoryFamily.getAdapterStoreFactory().createOptionsInstance(), storeConfigObj));
+                  factoryFamily.getAdapterStoreFactory().createOptionsInstance(),
+                  storeConfigObj));
     }
     return adapterStore;
   }
@@ -286,7 +288,8 @@ public class GeoWaveRasterConfig {
       indexStore =
           factoryFamily.getIndexStoreFactory().createStore(
               ConfigUtils.populateOptionsFromList(
-                  factoryFamily.getIndexStoreFactory().createOptionsInstance(), storeConfigObj));
+                  factoryFamily.getIndexStoreFactory().createOptionsInstance(),
+                  storeConfigObj));
     }
     return indexStore;
   }

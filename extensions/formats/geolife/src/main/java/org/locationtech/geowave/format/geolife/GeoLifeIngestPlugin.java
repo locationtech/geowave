@@ -192,12 +192,15 @@ public class GeoLifeIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
         }
         geolifePointBuilder.set("Elevation", elevation);
         featureData.add(
-            new GeoWaveData<>(pointKey, indexNames,
+            new GeoWaveData<>(
+                pointKey,
+                indexNames,
                 geolifePointBuilder.buildFeature(trackId + "_" + pointInstance)));
       }
 
       geolifeTrackBuilder.set(
-          "geometry", geometryFactory.createLineString(pts.toArray(new Coordinate[pts.size()])));
+          "geometry",
+          geometryFactory.createLineString(pts.toArray(new Coordinate[pts.size()])));
 
       geolifeTrackBuilder.set("StartTimeStamp", startTimeStamp);
       geolifeTrackBuilder.set("EndTimeStamp", endTimeStamp);
@@ -206,8 +209,8 @@ public class GeoLifeIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
       }
       geolifeTrackBuilder.set("NumberPoints", pointInstance);
       geolifeTrackBuilder.set("TrackId", trackId);
-      featureData
-          .add(new GeoWaveData<>(trackKey, indexNames, geolifeTrackBuilder.buildFeature(trackId)));
+      featureData.add(
+          new GeoWaveData<>(trackKey, indexNames, geolifeTrackBuilder.buildFeature(trackId)));
 
     } catch (final IOException e) {
       LOGGER.warn("Error reading line from file: " + hfile.getOriginalFilePath(), e);

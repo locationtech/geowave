@@ -85,20 +85,31 @@ public class SpatialQuery extends BasicQuery {
       final Constraints constraints,
       final Geometry queryGeometry,
       final String crsCode) {
-    this(constraints, queryGeometry, Collections.emptyMap(), crsCode, CompareOperation.INTERSECTS,
+    this(
+        constraints,
+        queryGeometry,
+        Collections.emptyMap(),
+        crsCode,
+        CompareOperation.INTERSECTS,
         BasicQueryCompareOperation.INTERSECTS);
   }
 
   public SpatialQuery(
       final Geometry queryGeometry,
       final Map<String, FilterableConstraints> additionalConstraints) {
-    this(GeometryUtils.basicConstraintsFromGeometry(queryGeometry), queryGeometry,
+    this(
+        GeometryUtils.basicConstraintsFromGeometry(queryGeometry),
+        queryGeometry,
         additionalConstraints);
   }
 
   public SpatialQuery(final Geometry queryGeometry, final String crsCode) {
-    this(GeometryUtils.basicConstraintsFromGeometry(queryGeometry), queryGeometry,
-        Collections.emptyMap(), crsCode, CompareOperation.INTERSECTS,
+    this(
+        GeometryUtils.basicConstraintsFromGeometry(queryGeometry),
+        queryGeometry,
+        Collections.emptyMap(),
+        crsCode,
+        CompareOperation.INTERSECTS,
         BasicQueryCompareOperation.INTERSECTS);
   }
 
@@ -106,7 +117,12 @@ public class SpatialQuery extends BasicQuery {
       final Constraints constraints,
       final Geometry queryGeometry,
       final Map<String, FilterableConstraints> additionalConstraints) {
-    this(constraints, queryGeometry, additionalConstraints, null, CompareOperation.INTERSECTS,
+    this(
+        constraints,
+        queryGeometry,
+        additionalConstraints,
+        null,
+        CompareOperation.INTERSECTS,
         BasicQueryCompareOperation.INTERSECTS);
   }
 
@@ -140,8 +156,11 @@ public class SpatialQuery extends BasicQuery {
       final Geometry queryGeometry,
       final String crsCode,
       final CompareOperation compareOp) {
-    this(GeometryUtils.basicConstraintsFromGeometry(queryGeometry), queryGeometry,
-        Collections.emptyMap(), crsCode,
+    this(
+        GeometryUtils.basicConstraintsFromGeometry(queryGeometry),
+        queryGeometry,
+        Collections.emptyMap(),
+        crsCode,
         compareOp == null ? CompareOperation.INTERSECTS : compareOp,
         BasicQueryCompareOperation.INTERSECTS);
   }
@@ -152,8 +171,13 @@ public class SpatialQuery extends BasicQuery {
       final String crsCode,
       final CompareOperation compareOp,
       final BasicQueryCompareOperation nonSpatialCompareOp) {
-    this(constraints, queryGeometry, Collections.emptyMap(), crsCode,
-        compareOp == null ? CompareOperation.INTERSECTS : compareOp, nonSpatialCompareOp);
+    this(
+        constraints,
+        queryGeometry,
+        Collections.emptyMap(),
+        crsCode,
+        compareOp == null ? CompareOperation.INTERSECTS : compareOp,
+        nonSpatialCompareOp);
   }
 
   /**
@@ -170,8 +194,13 @@ public class SpatialQuery extends BasicQuery {
       final Geometry queryGeometry,
       final CompareOperation compareOp,
       final BasicQueryCompareOperation nonSpatialCompareOp) {
-    this(constraints, queryGeometry, Collections.emptyMap(), null,
-        compareOp == null ? CompareOperation.INTERSECTS : compareOp, nonSpatialCompareOp);
+    this(
+        constraints,
+        queryGeometry,
+        Collections.emptyMap(),
+        null,
+        compareOp == null ? CompareOperation.INTERSECTS : compareOp,
+        nonSpatialCompareOp);
   }
 
   public SpatialQuery(
@@ -203,8 +232,12 @@ public class SpatialQuery extends BasicQuery {
       final NumericDimensionField<?>[] orderedConstrainedDimensionFields,
       final NumericDimensionField<?>[] unconstrainedDimensionDefinitions,
       final Index index) {
-    return new SpatialQueryFilter(constraints, orderedConstrainedDimensionFields,
-        unconstrainedDimensionDefinitions, internalGetGeometry(index), compareOp,
+    return new SpatialQueryFilter(
+        constraints,
+        orderedConstrainedDimensionFields,
+        unconstrainedDimensionDefinitions,
+        internalGetGeometry(index),
+        compareOp,
         nonSpatialCompareOp);
   }
 
@@ -291,8 +324,8 @@ public class SpatialQuery extends BasicQuery {
   private static List<MultiDimensionalNumericData> indexConstraintsFromGeometry(
       final Geometry geom,
       final Index index) {
-    return GeometryUtils.basicConstraintsFromGeometry(geom)
-        .getIndexConstraints(index.getIndexStrategy());
+    return GeometryUtils.basicConstraintsFromGeometry(geom).getIndexConstraints(
+        index.getIndexStrategy());
   }
 
   private static String getCrs(final CommonIndexModel indexModel) {

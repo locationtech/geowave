@@ -172,7 +172,9 @@ public class GeometryUtils {
       retVal = false;
       for (int gi = 0; gi < n; gi++) {
         constructListOfConstraintSetsFromGeometry(
-            geometry.getGeometryN(gi), destinationListOfSets, checkTopoEquality);
+            geometry.getGeometryN(gi),
+            destinationListOfSets,
+            checkTopoEquality);
       }
     } else {
       final Envelope env = geometry.getEnvelopeInternal();
@@ -356,7 +358,10 @@ public class GeometryUtils {
     // unless we make this synchronized, we will want to instantiate a new
     // geometry factory because geometry factories are not thread safe
     return new GeometryFactory().toGeometry(
-        new Envelope(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY,
+        new Envelope(
+            Double.NEGATIVE_INFINITY,
+            Double.POSITIVE_INFINITY,
+            Double.NEGATIVE_INFINITY,
             Double.POSITIVE_INFINITY));
   }
 
@@ -685,8 +690,10 @@ public class GeometryUtils {
   public static Coordinate adjustCoordinateToFitInRange(
       final CoordinateReferenceSystem crs,
       final Coordinate coord) {
-    return new Coordinate(adjustCoordinateDimensionToRange(coord.getX(), crs, 0),
-        clipRange(coord.getY(), crs, 1), clipRange(coord.getZ(), crs, 2));
+    return new Coordinate(
+        adjustCoordinateDimensionToRange(coord.getX(), crs, 0),
+        clipRange(coord.getY(), crs, 1),
+        clipRange(coord.getZ(), crs, 2));
   }
 
   /**
@@ -696,7 +703,9 @@ public class GeometryUtils {
    *         coord2
    */
   private static Coordinate diff(final Coordinate coord1, final Coordinate coord2) {
-    return new Coordinate(coord1.getX() - coord2.getX(), coord1.getY() - coord2.getY(),
+    return new Coordinate(
+        coord1.getX() - coord2.getX(),
+        coord1.getY() - coord2.getY(),
         coord1.getZ() - coord2.getZ());
   }
 
@@ -770,7 +779,8 @@ public class GeometryUtils {
     final BitSet mask = getGreyCodeMask(coordinateSystem.getDimension());
     for (int i = 0; i < coordinates.length; i++) {
       coordinates[i] =
-          new Coordinate(getValue(greyCode, coordinateSystem.getAxis(0), 0),
+          new Coordinate(
+              getValue(greyCode, coordinateSystem.getAxis(0), 0),
               getValue(greyCode, coordinateSystem.getAxis(1), 1),
               coordinateSystem.getDimension() > 2
                   ? getValue(greyCode, coordinateSystem.getAxis(2), 2)
@@ -816,7 +826,9 @@ public class GeometryUtils {
     return (geometry instanceof Point)
         ? geometry.distance(farthestPoint(crs, (Point) geometry, meters))
         : distanceToDegrees(
-            crs, geometry.getEnvelopeInternal(), factory == null ? new GeometryFactory() : factory,
+            crs,
+            geometry.getEnvelopeInternal(),
+            factory == null ? new GeometryFactory() : factory,
             meters);
   }
 
@@ -828,13 +840,21 @@ public class GeometryUtils {
     return Collections.max(
         Arrays.asList(
             distanceToDegrees(
-                crs, factory.createPoint(new Coordinate(env.getMaxX(), env.getMaxY())), meters),
+                crs,
+                factory.createPoint(new Coordinate(env.getMaxX(), env.getMaxY())),
+                meters),
             distanceToDegrees(
-                crs, factory.createPoint(new Coordinate(env.getMaxX(), env.getMinY())), meters),
+                crs,
+                factory.createPoint(new Coordinate(env.getMaxX(), env.getMinY())),
+                meters),
             distanceToDegrees(
-                crs, factory.createPoint(new Coordinate(env.getMinX(), env.getMinY())), meters),
+                crs,
+                factory.createPoint(new Coordinate(env.getMinX(), env.getMinY())),
+                meters),
             distanceToDegrees(
-                crs, factory.createPoint(new Coordinate(env.getMinX(), env.getMaxY())), meters)));
+                crs,
+                factory.createPoint(new Coordinate(env.getMinX(), env.getMaxY())),
+                meters)));
   }
 
   /** farther point in longitudinal axis given a latitude */
@@ -869,8 +889,8 @@ public class GeometryUtils {
         crsEntry = SimpleFeatureBuilder.retype(entry, reprojectedType);
 
         // this will transform the geometry
-        crsEntry
-            .setDefaultGeometry(JTS.transform((Geometry) entry.getDefaultGeometry(), transform));
+        crsEntry.setDefaultGeometry(
+            JTS.transform((Geometry) entry.getDefaultGeometry(), transform));
       } catch (MismatchedDimensionException | TransformException e) {
         LOGGER.warn(
             "Unable to perform transform to specified CRS of the index, the feature geometry will remain in its original CRS",

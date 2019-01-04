@@ -35,11 +35,13 @@ public class KMeansSparkOptions {
   @Parameter(names = {"-h", "--hulls"}, description = "Generate convex hulls?")
   private Boolean generateHulls = false;
 
-  @Parameter(names = {"-ch", "--computeHullData"},
+  @Parameter(
+      names = {"-ch", "--computeHullData"},
       description = "Compute hull count, area and density?")
   private Boolean computeHullData = false;
 
-  @Parameter(names = "--cqlFilter",
+  @Parameter(
+      names = "--cqlFilter",
       description = "An optional CQL filter applied to the input data")
   private String cqlFilter = null;
 
@@ -52,7 +54,8 @@ public class KMeansSparkOptions {
   @Parameter(names = "--maxSplits", description = "The max partitions for the input data")
   private Integer maxSplits = -1;
 
-  @Parameter(names = {"-ct", "--centroidType"},
+  @Parameter(
+      names = {"-ct", "--centroidType"},
       description = "Feature type name for centroid output")
   private String centroidTypeName = "kmeans_centroids";
 

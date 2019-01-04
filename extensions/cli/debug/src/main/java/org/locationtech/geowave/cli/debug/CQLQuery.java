@@ -44,8 +44,8 @@ public class CQLQuery extends AbstractGeoWaveQuery {
     long count = 0;
     if (useAggregation) {
       final VectorAggregationQueryBuilder<Persistable, Long> bldr =
-          (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder().count(typeName)
-              .indexName(indexName);
+          (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder().count(
+              typeName).indexName(indexName);
       final Long countResult =
           dataStore.aggregate(
               bldr.constraints(bldr.constraintsFactory().cqlConstraints(cqlStr)).build());
@@ -58,8 +58,8 @@ public class CQLQuery extends AbstractGeoWaveQuery {
           VectorQueryBuilder.newBuilder().addTypeName(typeName).indexName(indexName);
 
       try (final CloseableIterator<SimpleFeature> it =
-          dataStore
-              .query(bldr.constraints(bldr.constraintsFactory().cqlConstraints(cqlStr)).build())) {
+          dataStore.query(
+              bldr.constraints(bldr.constraintsFactory().cqlConstraints(cqlStr)).build())) {
         while (it.hasNext()) {
           if (debug) {
             System.out.println(it.next());

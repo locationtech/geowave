@@ -152,8 +152,9 @@ public class StatsConfigurationCollection implements java.io.Serializable, Persi
         final byte[] entryBytes = new byte[VarintUtils.readUnsignedInt(buf)];
         buf.get(entryBytes);
 
-        internalAttConfig
-            .put(key, (StatsConfigurationCollection) PersistenceUtils.fromBinary(entryBytes));
+        internalAttConfig.put(
+            key,
+            (StatsConfigurationCollection) PersistenceUtils.fromBinary(entryBytes));
       }
       attConfig = internalAttConfig;
     }

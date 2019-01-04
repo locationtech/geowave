@@ -48,8 +48,10 @@ public class QueryRanges {
             newPartitionKey = partitionKey;
           } else {
             newPartitionKey =
-                new ByteArray(ByteArrayUtils.combineArrays(
-                    partitionKey.getBytes(), sortKeyRange.getPartitionKey().getBytes()));
+                new ByteArray(
+                    ByteArrayUtils.combineArrays(
+                        partitionKey.getBytes(),
+                        sortKeyRange.getPartitionKey().getBytes()));
           }
           partitionRanges.add(
               new SinglePartitionQueryRanges(newPartitionKey, sortKeyRange.getSortKeyRanges()));
@@ -100,8 +102,9 @@ public class QueryRanges {
     if (partitionKeys == null) {
       return null;
     }
-    return Collections2
-        .transform(partitionKeys, new Function<ByteArray, SinglePartitionQueryRanges>() {
+    return Collections2.transform(
+        partitionKeys,
+        new Function<ByteArray, SinglePartitionQueryRanges>() {
           @Override
           public SinglePartitionQueryRanges apply(final ByteArray input) {
             return new SinglePartitionQueryRanges(input);
@@ -135,10 +138,14 @@ public class QueryRanges {
         for (final ByteArrayRange sortKeyRange : partition.getSortKeyRanges()) {
           internalQueryRanges.add(
               new ByteArrayRange(
-                  new ByteArray(ByteArrayUtils.combineArrays(
-                      partition.getPartitionKey().getBytes(), sortKeyRange.getStart().getBytes())),
-                  new ByteArray(ByteArrayUtils.combineArrays(
-                      partition.getPartitionKey().getBytes(), sortKeyRange.getEnd().getBytes())),
+                  new ByteArray(
+                      ByteArrayUtils.combineArrays(
+                          partition.getPartitionKey().getBytes(),
+                          sortKeyRange.getStart().getBytes())),
+                  new ByteArray(
+                      ByteArrayUtils.combineArrays(
+                          partition.getPartitionKey().getBytes(),
+                          sortKeyRange.getEnd().getBytes())),
                   sortKeyRange.singleValue));
         }
       }

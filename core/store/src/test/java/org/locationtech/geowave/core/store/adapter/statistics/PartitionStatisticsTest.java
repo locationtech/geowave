@@ -26,7 +26,8 @@ public class PartitionStatisticsTest {
 
   private GeoWaveKey genKey(final long id) {
     final InsertionIds insertionIds =
-        new InsertionIds(new ByteArray(new byte[] {(byte) (counter++ % 32)}),
+        new InsertionIds(
+            new ByteArray(new byte[] {(byte) (counter++ % 32)}),
             Arrays.asList(new ByteArray(String.format("\12%5h", base + id) + "20030f89")));
     return GeoWaveKeyImpl.createKeys(insertionIds, new byte[] {}, (short) 0)[0];
   }

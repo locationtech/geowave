@@ -49,14 +49,15 @@ public class AccumuloMiniCluster {
     final File tempDir = Files.createTempDir();
     final String instanceName = System.getProperty("instanceName", "accumulo");
     final MiniAccumuloConfigImpl miniAccumuloConfig =
-        new MiniAccumuloConfigImpl(tempDir, password).setNumTservers(2)
-            .setInstanceName(instanceName).setZooKeeperPort(2181);
+        new MiniAccumuloConfigImpl(tempDir, password).setNumTservers(2).setInstanceName(
+            instanceName).setZooKeeperPort(2181);
 
     miniAccumuloConfig.setProperty(Property.MONITOR_PORT, "50095");
 
     final MiniAccumuloClusterImpl accumulo =
-        MiniAccumuloClusterFactory
-            .newAccumuloCluster(miniAccumuloConfig, AccumuloMiniCluster.class);
+        MiniAccumuloClusterFactory.newAccumuloCluster(
+            miniAccumuloConfig,
+            AccumuloMiniCluster.class);
     accumulo.start();
 
     accumulo.exec(Monitor.class);

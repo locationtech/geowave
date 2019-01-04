@@ -49,7 +49,8 @@ public class ConfigGeoServerCommand extends ServiceEnabledCommand<String> {
   private String username;
 
   // GEOWAVE-811 - adding additional password options for added protection
-  @Parameter(names = {"-p", "--password"},
+  @Parameter(
+      names = {"-p", "--password"},
       description = "GeoServer Password - "
           + OptionalPasswordConverter.DEFAULT_PASSWORD_DESCRIPTION,
       converter = OptionalPasswordConverter.class)
@@ -231,7 +232,10 @@ public class ConfigGeoServerCommand extends ServiceEnabledCommand<String> {
 
     // Write properties file
     ConfigOptions.writeProperties(
-        getGeoWaveConfigFile(params), existingProps, this.getClass(), GEOSERVER_NAMESPACE_PREFIX);
+        getGeoWaveConfigFile(params),
+        existingProps,
+        this.getClass(),
+        GEOSERVER_NAMESPACE_PREFIX);
     GeoServerRestClient.invalidateInstance();
 
     // generate a return for rest calls

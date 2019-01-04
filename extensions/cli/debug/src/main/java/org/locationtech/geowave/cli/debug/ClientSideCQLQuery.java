@@ -53,8 +53,8 @@ public class ClientSideCQLQuery extends AbstractGeoWaveQuery {
 
     long count = 0;
     try (final CloseableIterator<Object> it =
-        dataStore
-            .query(QueryBuilder.newBuilder().addTypeName(typeName).indexName(indexName).build())) {
+        dataStore.query(
+            QueryBuilder.newBuilder().addTypeName(typeName).indexName(indexName).build())) {
       while (it.hasNext()) {
         final Object o = it.next();
         if (o instanceof SimpleFeature) {

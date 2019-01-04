@@ -47,9 +47,15 @@ public class AnalyticIT {
 
   private static final String testName = "AnalyticIT";
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.HBASE, GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.DYNAMODB,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;
 
   private static long startMillis;
@@ -90,7 +96,8 @@ public class AnalyticIT {
     // Use this method to check:
 
     TestUtils.assertStatusCode(
-        "Should Successfully <Insert Objective Here>", 200,
+        "Should Successfully <Insert Objective Here>",
+        200,
         analyticServiceClient.kmeansSpark(input_storename, output_storename));
   }
 

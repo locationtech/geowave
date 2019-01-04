@@ -76,15 +76,28 @@ public class RocksDBIndexTable {
       prevTime = time;
       key =
           Bytes.concat(
-              sortKey, dataId, Longs.toByteArray(time), value.getFieldMask(), value.getVisibility(),
-              ByteArrayUtils.shortToByteArray(numDuplicates), new byte[] {(byte) sortKey.length,
-                  (byte) value.getFieldMask().length, (byte) value.getVisibility().length});
+              sortKey,
+              dataId,
+              Longs.toByteArray(time),
+              value.getFieldMask(),
+              value.getVisibility(),
+              ByteArrayUtils.shortToByteArray(numDuplicates),
+              new byte[] {
+                  (byte) sortKey.length,
+                  (byte) value.getFieldMask().length,
+                  (byte) value.getVisibility().length});
     } else {
       key =
           Bytes.concat(
-              sortKey, dataId, value.getFieldMask(), value.getVisibility(),
-              ByteArrayUtils.shortToByteArray(numDuplicates), new byte[] {(byte) sortKey.length,
-                  (byte) value.getFieldMask().length, (byte) value.getVisibility().length,});
+              sortKey,
+              dataId,
+              value.getFieldMask(),
+              value.getVisibility(),
+              ByteArrayUtils.shortToByteArray(numDuplicates),
+              new byte[] {
+                  (byte) sortKey.length,
+                  (byte) value.getFieldMask().length,
+                  (byte) value.getVisibility().length,});
     }
     put(key, value.getValue());
   }

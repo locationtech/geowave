@@ -61,8 +61,9 @@ public class CentroidItemWrapperFactory<T> implements AnalyticItemWrapperFactory
     public CentroidItemWrapper(final T item) {
       wrappedItem = itemFactory.create(item);
       try {
-        nestedGroupCentroidAssignment
-            .findCentroidForLevel(wrappedItem, new AssociationNotification<T>() {
+        nestedGroupCentroidAssignment.findCentroidForLevel(
+            wrappedItem,
+            new AssociationNotification<T>() {
               @Override
               public void notify(final CentroidPairing<T> pairing) {
                 centroidItem = pairing.getCentroid();

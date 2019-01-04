@@ -11,7 +11,9 @@ package org.locationtech.geowave.core.geotime.ingest;
 import com.beust.jcommander.Parameter;
 
 public class SpatialOptions extends CommonSpatialOptions {
-  @Parameter(names = {"--storeTime"}, required = false,
+  @Parameter(
+      names = {"--storeTime"},
+      required = false,
       description = "The index will store temporal values.  This allows it to slightly more efficiently run spatial-temporal queries although if spatial-temporal queries are a common use case, a separate spatial-temporal index is recommended.")
   protected boolean storeTime = false;
 }

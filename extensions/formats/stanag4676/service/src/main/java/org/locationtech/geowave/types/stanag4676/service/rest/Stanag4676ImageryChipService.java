@@ -101,16 +101,17 @@ public class Stanag4676ImageryChipService {
     // ImageChipUtils.getDataId(mission,track,cal.getTimeInMillis()).getBytes()
     try (CloseableIterator<?> imageChipIt =
         dataStore.query(
-            bldr.addTypeName(ImageChipDataAdapter.ADAPTER_TYPE_NAME)
-                .indexName(Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getName())
-                .constraints(
+            bldr.addTypeName(ImageChipDataAdapter.ADAPTER_TYPE_NAME).indexName(
+                Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getName()).constraints(
                     bldr.constraintsFactory().prefix(
                         null,
-                        new ByteArray(ByteArrayUtils.combineArrays(
-                            StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
-                            ImageChipUtils.getDataId(mission, track, cal.getTimeInMillis())
-                                .getBytes()))))
-                .build())) {
+                        new ByteArray(
+                            ByteArrayUtils.combineArrays(
+                                StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
+                                ImageChipUtils.getDataId(
+                                    mission,
+                                    track,
+                                    cal.getTimeInMillis()).getBytes())))).build())) {
 
       imageChip = (imageChipIt.hasNext()) ? imageChipIt.next() : null;
     }
@@ -131,8 +132,8 @@ public class Stanag4676ImageryChipService {
           return Response.ok().entity(baos.toByteArray()).type("image/jpeg").build();
         } catch (final IOException e) {
           LOGGER.error("Unable to write image chip content to JPEG", e);
-          return Response.serverError()
-              .entity("Error generating JPEG from image chip for mission/track.").build();
+          return Response.serverError().entity(
+              "Error generating JPEG from image chip for mission/track.").build();
         }
       }
     }
@@ -161,15 +162,16 @@ public class Stanag4676ImageryChipService {
     final QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder();
     try (CloseableIterator<?> imageChipIt =
         dataStore.query(
-            bldr.addTypeName(ImageChipDataAdapter.ADAPTER_TYPE_NAME)
-                .indexName(Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getName())
-                .constraints(
+            bldr.addTypeName(ImageChipDataAdapter.ADAPTER_TYPE_NAME).indexName(
+                Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getName()).constraints(
                     bldr.constraintsFactory().prefix(
                         null,
-                        new ByteArray(ByteArrayUtils.combineArrays(
-                            StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
-                            ImageChipUtils.getTrackDataIdPrefix(mission, track).getBytes()))))
-                .build())) {
+                        new ByteArray(
+                            ByteArrayUtils.combineArrays(
+                                StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
+                                ImageChipUtils.getTrackDataIdPrefix(
+                                    mission,
+                                    track).getBytes())))).build())) {
 
       while (imageChipIt.hasNext()) {
         final Object imageChipObj = imageChipIt.next();
@@ -187,13 +189,11 @@ public class Stanag4676ImageryChipService {
       }
     } catch (final Exception e1) {
       LOGGER.error("Unable to read data to compose video file", e1);
-      return Response.serverError()
-          .entity(
-              "Video generation failed \nException: "
-                  + e1.getLocalizedMessage()
-                  + "\n stack trace: "
-                  + Arrays.toString(e1.getStackTrace()))
-          .build();
+      return Response.serverError().entity(
+          "Video generation failed \nException: "
+              + e1.getLocalizedMessage()
+              + "\n stack trace: "
+              + Arrays.toString(e1.getStackTrace())).build();
     }
 
     // ----------------------------------------------------

@@ -89,7 +89,8 @@ public class SingleEntryFilter extends FilterBase {
     } catch (final InvalidProtocolBufferException e) {
       throw new DeserializationException(e);
     }
-    return new SingleEntryFilter(proto.getDataId().toByteArray(),
+    return new SingleEntryFilter(
+        proto.getDataId().toByteArray(),
         proto.getAdapterId().toByteArray());
   }
 

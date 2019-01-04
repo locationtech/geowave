@@ -32,8 +32,9 @@ public class VectorIngestRunnerTest {
 
   @BeforeClass
   public static void setup() throws IOException {
-    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies()
-        .put("memory", new MemoryStoreFactoryFamily());
+    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+        "memory",
+        new MemoryStoreFactoryFamily());
 
     InstallGdal.main(new String[] {System.getenv("GDAL_DIR")});
   }
@@ -44,8 +45,8 @@ public class VectorIngestRunnerTest {
 
     final Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
     analyzeOptions.setNBestScenes(1);
-    analyzeOptions
-        .setCqlFilter("BBOX(shape,-76.6,42.34,-76.4,42.54) and band='BQA' and sizeMB < 1");
+    analyzeOptions.setCqlFilter(
+        "BBOX(shape,-76.6,42.34,-76.4,42.54) and band='BQA' and sizeMB < 1");
     analyzeOptions.setUseCachedScenes(true);
     analyzeOptions.setWorkspaceDir(Tests.WORKSPACE_DIR);
 
@@ -62,8 +63,10 @@ public class VectorIngestRunnerTest {
         new VectorIngestRunner(analyzeOptions, Arrays.asList("memorystore", "spatialindex"));
     final ManualOperationParams params = new ManualOperationParams();
     params.getContext().put(
-        ConfigOptions.PROPERTIES_FILE_CONTEXT, new File(VectorIngestRunnerTest.class
-            .getClassLoader().getResource("geowave-config.properties").toURI()));
+        ConfigOptions.PROPERTIES_FILE_CONTEXT,
+        new File(
+            VectorIngestRunnerTest.class.getClassLoader().getResource(
+                "geowave-config.properties").toURI()));
     runner.runInternal(params);
     try (CloseableIterator<Object> results =
         getStore(params).query(QueryBuilder.newBuilder().build())) {

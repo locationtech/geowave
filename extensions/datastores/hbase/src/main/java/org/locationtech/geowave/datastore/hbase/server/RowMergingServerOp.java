@@ -31,7 +31,8 @@ public class RowMergingServerOp extends MergingServerOp {
   protected Mergeable getMergeable(final Cell cell, final byte[] bytes) {
     return rowTransform.getRowAsMergeableObject(
         ByteArrayUtils.shortFromString(StringUtils.stringFromBinary(CellUtil.cloneFamily(cell))),
-        new ByteArray(CellUtil.cloneQualifier(cell)), bytes);
+        new ByteArray(CellUtil.cloneQualifier(cell)),
+        bytes);
   }
 
   @Override
@@ -56,7 +57,8 @@ public class RowMergingServerOp extends MergingServerOp {
     columnFamilyIds =
         Sets.newHashSet(
             Iterables.transform(
-                Splitter.on(",").split(columnStr), new Function<String, GeowaveColumnId>() {
+                Splitter.on(",").split(columnStr),
+                new Function<String, GeowaveColumnId>() {
 
                   @Override
                   public GeowaveColumnId apply(final String input) {

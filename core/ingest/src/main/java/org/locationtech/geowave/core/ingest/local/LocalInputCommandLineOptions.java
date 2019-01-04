@@ -19,12 +19,14 @@ import java.io.Serializable;
  * extensions if provided.
  */
 public class LocalInputCommandLineOptions implements Serializable {
-  @Parameter(names = {"-x", "--extension"},
+  @Parameter(
+      names = {"-x", "--extension"},
       description = "individual or comma-delimited set of file extensions to accept (optional)",
       converter = SplitConverter.class)
   private String[] extensions;
 
-  @Parameter(names = {"-f", "--formats"},
+  @Parameter(
+      names = {"-f", "--formats"},
       description = "Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used")
   private String formats;
 

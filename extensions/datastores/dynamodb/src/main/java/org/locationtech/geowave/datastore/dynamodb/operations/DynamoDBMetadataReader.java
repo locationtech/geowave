@@ -50,15 +50,17 @@ public class DynamoDBMetadataReader implements MetadataReader {
       final QueryRequest queryRequest = new QueryRequest(tableName);
 
       if (query.hasSecondaryId()) {
-        queryRequest
-            .withFilterExpression(DynamoDBOperations.METADATA_SECONDARY_ID_KEY + " = :secVal")
-            .addExpressionAttributeValuesEntry(
-                ":secVal", new AttributeValue().withB(ByteBuffer.wrap(query.getSecondaryId())));
+        queryRequest.withFilterExpression(
+            DynamoDBOperations.METADATA_SECONDARY_ID_KEY
+                + " = :secVal").addExpressionAttributeValuesEntry(
+                    ":secVal",
+                    new AttributeValue().withB(ByteBuffer.wrap(query.getSecondaryId())));
       }
-      queryRequest
-          .withKeyConditionExpression(DynamoDBOperations.METADATA_PRIMARY_ID_KEY + " = :priVal")
-          .addExpressionAttributeValuesEntry(
-              ":priVal", new AttributeValue().withB(ByteBuffer.wrap(query.getPrimaryId())));
+      queryRequest.withKeyConditionExpression(
+          DynamoDBOperations.METADATA_PRIMARY_ID_KEY
+              + " = :priVal").addExpressionAttributeValuesEntry(
+                  ":priVal",
+                  new AttributeValue().withB(ByteBuffer.wrap(query.getPrimaryId())));
 
       final QueryResult queryResult = operations.getClient().query(queryRequest);
 
@@ -68,21 +70,25 @@ public class DynamoDBMetadataReader implements MetadataReader {
             query.getAuthorizations());
       }
 
-      return new CloseableIteratorWrapper<>(new NoopClosableIteratorWrapper(),
+      return new CloseableIteratorWrapper<>(
+          new NoopClosableIteratorWrapper(),
           Iterators.transform(
               queryResult.getItems().iterator(),
-              result -> new GeoWaveMetadata(DynamoDBUtils.getPrimaryId(result),
-                  DynamoDBUtils.getSecondaryId(result), null, DynamoDBUtils.getValue(result))));
+              result -> new GeoWaveMetadata(
+                  DynamoDBUtils.getPrimaryId(result),
+                  DynamoDBUtils.getSecondaryId(result),
+                  null,
+                  DynamoDBUtils.getValue(result))));
     }
 
     final ScanRequest scan = new ScanRequest(tableName);
     if (query.hasSecondaryId()) {
       scan.addScanFilterEntry(
           DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
-          new Condition()
-              .withAttributeValueList(
-                  new AttributeValue().withB(ByteBuffer.wrap(query.getSecondaryId())))
-              .withComparisonOperator(ComparisonOperator.EQ));
+          new Condition().withAttributeValueList(
+              new AttributeValue().withB(
+                  ByteBuffer.wrap(query.getSecondaryId()))).withComparisonOperator(
+                      ComparisonOperator.EQ));
     }
     final ScanResult scanResult = operations.getClient().scan(scan);
 
@@ -92,15 +98,19 @@ public class DynamoDBMetadataReader implements MetadataReader {
           query.getAuthorizations());
     }
 
-    return new CloseableIteratorWrapper<>(new NoopClosableIteratorWrapper(),
+    return new CloseableIteratorWrapper<>(
+        new NoopClosableIteratorWrapper(),
         Iterators.transform(
             scanResult.getItems().iterator(),
             new com.google.common.base.Function<Map<String, AttributeValue>, GeoWaveMetadata>() {
               @Override
               public GeoWaveMetadata apply(final Map<String, AttributeValue> result) {
 
-                return new GeoWaveMetadata(DynamoDBUtils.getPrimaryId(result),
-                    DynamoDBUtils.getSecondaryId(result), null, DynamoDBUtils.getValue(result));
+                return new GeoWaveMetadata(
+                    DynamoDBUtils.getPrimaryId(result),
+                    DynamoDBUtils.getSecondaryId(result),
+                    null,
+                    DynamoDBUtils.getValue(result));
               }
             }));
   }
@@ -109,11 +119,14 @@ public class DynamoDBMetadataReader implements MetadataReader {
       final Iterator<Map<String, AttributeValue>> resultIterator,
       String... authorizations) {
     return new StatisticsRowIterator(
-        new CloseableIterator.Wrapper<GeoWaveMetadata>(Iterators.transform(
-            resultIterator,
-            result -> new GeoWaveMetadata(DynamoDBUtils.getPrimaryId(result),
-                DynamoDBUtils.getSecondaryId(result), DynamoDBUtils.getVisibility(result),
-                DynamoDBUtils.getValue(result)))),
+        new CloseableIterator.Wrapper<GeoWaveMetadata>(
+            Iterators.transform(
+                resultIterator,
+                result -> new GeoWaveMetadata(
+                    DynamoDBUtils.getPrimaryId(result),
+                    DynamoDBUtils.getSecondaryId(result),
+                    DynamoDBUtils.getVisibility(result),
+                    DynamoDBUtils.getValue(result)))),
         authorizations);
   }
 }

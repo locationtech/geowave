@@ -89,11 +89,20 @@ public class RedisScoredSetWrapper<V> implements AutoCloseable {
     final RScoredSortedSet<V> currentSet = getCurrentSet();
     final Collection<ScoredEntry<V>> currentResult =
         currentSet.entryRange(
-            startScore, startScoreInclusive, endScore, endScoreInclusive, 0,
+            startScore,
+            startScoreInclusive,
+            endScore,
+            endScoreInclusive,
+            0,
             RedisUtils.MAX_ROWS_FOR_PAGINATION);
     if (currentResult.size() >= RedisUtils.MAX_ROWS_FOR_PAGINATION) {
-      return new LazyPaginatedEntryRange<>(startScore, startScoreInclusive, endScore,
-          endScoreInclusive, currentSet, currentResult);
+      return new LazyPaginatedEntryRange<>(
+          startScore,
+          startScoreInclusive,
+          endScore,
+          endScoreInclusive,
+          currentSet,
+          currentResult);
     }
     return currentResult.iterator();
   }
@@ -144,7 +153,10 @@ public class RedisScoredSetWrapper<V> implements AutoCloseable {
       final boolean startScoreInclusive,
       final double endScore,
       final boolean endScoreInclusive) {
-    return getCurrentSet()
-        .entryRangeAsync(startScore, startScoreInclusive, endScore, endScoreInclusive);
+    return getCurrentSet().entryRangeAsync(
+        startScore,
+        startScoreInclusive,
+        endScore,
+        endScoreInclusive);
   }
 }

@@ -78,13 +78,17 @@ public class KMeansSingleSampleJobRunner<T> extends MapReduceJobController
     propertyManagement.storeIfEmpty(GlobalParameters.Global.BATCH_ID, UUID.randomUUID().toString());
 
     propertyManagement.storeIfEmpty(
-        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, SimpleFeatureItemWrapperFactory.class);
+        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+        SimpleFeatureItemWrapperFactory.class);
     propertyManagement.storeIfEmpty(
-        CommonParameters.Common.DISTANCE_FUNCTION_CLASS, FeatureCentroidDistanceFn.class);
+        CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+        FeatureCentroidDistanceFn.class);
     propertyManagement.storeIfEmpty(
-        CentroidParameters.Centroid.EXTRACTOR_CLASS, SimpleFeatureCentroidExtractor.class);
+        CentroidParameters.Centroid.EXTRACTOR_CLASS,
+        SimpleFeatureCentroidExtractor.class);
     propertyManagement.storeIfEmpty(
-        CommonParameters.Common.DIMENSION_EXTRACT_CLASS, SimpleFeatureGeometryExtractor.class);
+        CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
+        SimpleFeatureGeometryExtractor.class);
 
     ClusteringUtils.createAdapter(propertyManagement);
     ClusteringUtils.createIndex(propertyManagement);
@@ -98,15 +102,19 @@ public class KMeansSingleSampleJobRunner<T> extends MapReduceJobController
     params.addAll(kmeansJobRunner.getParameters());
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
-                SampleParameters.Sample.SAMPLE_SIZE, SampleParameters.Sample.SAMPLE_RANK_FUNCTION,
+            new ParameterEnum<?>[] {
+                ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
+                SampleParameters.Sample.SAMPLE_SIZE,
+                SampleParameters.Sample.SAMPLE_RANK_FUNCTION,
                 CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-                CentroidParameters.Centroid.INDEX_NAME, CentroidParameters.Centroid.DATA_TYPE_ID,
+                CentroidParameters.Centroid.INDEX_NAME,
+                CentroidParameters.Centroid.DATA_TYPE_ID,
                 CentroidParameters.Centroid.DATA_NAMESPACE_URI,
                 CentroidParameters.Centroid.EXTRACTOR_CLASS,
                 CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
                 CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
-                StoreParameters.StoreParam.INPUT_STORE, GlobalParameters.Global.BATCH_ID,
+                StoreParameters.StoreParam.INPUT_STORE,
+                GlobalParameters.Global.BATCH_ID,
                 ClusteringParameters.Clustering.MAX_REDUCER_COUNT}));
     params.addAll(MapReduceParameters.getParameters());
     params.addAll(NestedGroupCentroidAssignment.getParameters());

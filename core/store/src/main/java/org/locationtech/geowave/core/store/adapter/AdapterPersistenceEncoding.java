@@ -33,7 +33,14 @@ public class AdapterPersistenceEncoding extends AbstractAdapterPersistenceEncodi
       final ByteArray dataId,
       final PersistentDataset<CommonIndexValue> commonData,
       final PersistentDataset<Object> adapterExtendedData) {
-    super(internalAdapterId, dataId, null, null, 0, commonData, new PersistentDataset<byte[]>(),
+    super(
+        internalAdapterId,
+        dataId,
+        null,
+        null,
+        0,
+        commonData,
+        new PersistentDataset<byte[]>(),
         adapterExtendedData); // all data is identified by
     // the adapter, there is
     // inherently no unknown

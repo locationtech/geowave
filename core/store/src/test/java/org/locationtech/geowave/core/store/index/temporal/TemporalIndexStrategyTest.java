@@ -27,8 +27,8 @@ public class TemporalIndexStrategyTest {
     final InsertionIds insertionIds = strategy.getInsertionIds(date);
     Assert.assertTrue(insertionIds.getSize() == 1);
     Assert.assertTrue(
-        insertionIds.getCompositeInsertionIds()
-            .contains(new ByteArray(Lexicoders.LONG.toByteArray(date.getTime()))));
+        insertionIds.getCompositeInsertionIds().contains(
+            new ByteArray(Lexicoders.LONG.toByteArray(date.getTime()))));
   }
 
   @Test
@@ -38,7 +38,8 @@ public class TemporalIndexStrategyTest {
     Assert.assertTrue(ranges.getCompositeQueryRanges().size() == 1);
     Assert.assertTrue(
         ranges.getCompositeQueryRanges().get(0).equals(
-            new ByteArrayRange(new ByteArray(Lexicoders.LONG.toByteArray(date.getTime())),
+            new ByteArrayRange(
+                new ByteArray(Lexicoders.LONG.toByteArray(date.getTime())),
                 new ByteArray(Lexicoders.LONG.toByteArray(date.getTime())))));
   }
 }

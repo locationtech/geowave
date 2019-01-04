@@ -15,8 +15,11 @@ import org.locationtech.geowave.core.cli.spi.CLIOperationProviderSpi;
 
 public class VectorCLIProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
-      new Class<?>[] {VectorSection.class, VectorLocalExportCommand.class,
-          VectorMRExportCommand.class, CQLDelete.class};
+      new Class<?>[] {
+          VectorSection.class,
+          VectorLocalExportCommand.class,
+          VectorMRExportCommand.class,
+          CQLDelete.class};
 
   @Override
   public Class<?>[] getOperations() {

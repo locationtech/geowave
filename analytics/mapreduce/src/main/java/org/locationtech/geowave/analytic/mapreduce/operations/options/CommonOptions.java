@@ -30,27 +30,33 @@ public class CommonOptions {
   private String mapReduceConfigFile;
 
   @MapReduceParameter(MapReduceParameters.MRConfig.HDFS_BASE_DIR)
-  @Parameter(names = {"-hdfsbase", "--mapReduceHdfsBaseDir"}, required = true,
+  @Parameter(
+      names = {"-hdfsbase", "--mapReduceHdfsBaseDir"},
+      required = true,
       description = "Fully qualified path to the base directory in hdfs")
   private String mapReduceHdfsBaseDir;
 
   @MapReduceParameter(MapReduceParameters.MRConfig.HDFS_HOST_PORT)
-  @Parameter(names = {"-hdfs", "--mapReduceHdfsHostPort"},
+  @Parameter(
+      names = {"-hdfs", "--mapReduceHdfsHostPort"},
       description = "HDFS hostname and port in the format hostname:port")
   private String mapReduceHdfsHostPort;
 
   @MapReduceParameter(MapReduceParameters.MRConfig.JOBTRACKER_HOST_PORT)
-  @Parameter(names = {"-jobtracker", "--mapReduceJobtrackerHostPort"},
+  @Parameter(
+      names = {"-jobtracker", "--mapReduceJobtrackerHostPort"},
       description = "[REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port")
   private String mapReduceJobtrackerHostPort;
 
   @MapReduceParameter(MapReduceParameters.MRConfig.YARN_RESOURCE_MANAGER)
-  @Parameter(names = {"-resourceman", "--mapReduceYarnResourceManager"},
+  @Parameter(
+      names = {"-resourceman", "--mapReduceYarnResourceManager"},
       description = "[REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port")
   private String mapReduceYarnResourceManager;
 
   @CommonParameter(CommonParameters.Common.DISTANCE_FUNCTION_CLASS)
-  @Parameter(names = {"-cdf", "--commonDistanceFunctionClass"},
+  @Parameter(
+      names = {"-cdf", "--commonDistanceFunctionClass"},
       description = "Distance Function Class implements org.locationtech.geowave.analytics.distance.DistanceFn")
   private String commonDistanceFunctionClass;
 
@@ -59,12 +65,16 @@ public class CommonOptions {
   private QueryOptionsCommand queryOptions = new QueryOptionsCommand();
 
   @ExtractParameter(ExtractParameters.Extract.MAX_INPUT_SPLIT)
-  @Parameter(names = {"-emx", "--extractMaxInputSplit"}, required = true,
+  @Parameter(
+      names = {"-emx", "--extractMaxInputSplit"},
+      required = true,
       description = "Maximum hdfs input split size")
   private String extractMaxInputSplit;
 
   @ExtractParameter(ExtractParameters.Extract.MIN_INPUT_SPLIT)
-  @Parameter(names = {"-emn", "--extractMinInputSplit"}, required = true,
+  @Parameter(
+      names = {"-emn", "--extractMinInputSplit"},
+      required = true,
       description = "Minimum hdfs input split size")
   private String extractMinInputSplit;
 
@@ -85,7 +95,8 @@ public class CommonOptions {
   private String inputHdfsPath;
 
   @OutputParameter(OutputParameters.Output.REDUCER_COUNT)
-  @Parameter(names = {"-orc", "--outputReducerCount"},
+  @Parameter(
+      names = {"-orc", "--outputReducerCount"},
       description = "Number of Reducers For Output")
   private String outputReducerCount;
 

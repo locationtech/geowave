@@ -156,9 +156,11 @@ public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T>
       final Coordinate coordinate,
       final double[] distancePerDimension) {
     return getCalculator().buildSurroundingGeometries(
-        new double[] {distancePerDimension[longDimensionPosition],
+        new double[] {
+            distancePerDimension[longDimensionPosition],
             distancePerDimension[latDimensionPosition]},
-        geometricDistanceUnit == null ? SI.METRE : geometricDistanceUnit, coordinate);
+        geometricDistanceUnit == null ? SI.METRE : geometricDistanceUnit,
+        coordinate);
   }
 
   private GeometryCalculations getCalculator() {
@@ -223,7 +225,8 @@ public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T>
     try {
       dimensionExtractor =
           config.getInstance(
-              ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS, DimensionExtractor.class,
+              ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
+              DimensionExtractor.class,
               SimpleFeatureGeometryExtractor.class);
     } catch (final Exception ex) {
       throw new IOException(
@@ -245,7 +248,8 @@ public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T>
     params.addAll(super.getParameters());
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT,
+            new ParameterEnum<?>[] {
+                PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT,
                 ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS}));
     return params;
   }
@@ -257,7 +261,8 @@ public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T>
       final Configuration configuration) {
     super.setup(runTimeProperties, scope, configuration);
     final ParameterEnum[] params =
-        new ParameterEnum[] {GlobalParameters.Global.CRS_ID,
+        new ParameterEnum[] {
+            GlobalParameters.Global.CRS_ID,
             ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
             PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT};
     runTimeProperties.setConfig(params, configuration, scope);

@@ -35,7 +35,12 @@ public class AccumuloDeleter<T> extends AccumuloReader<T> implements Deleter<T> 
       final boolean parallel) {
     // AccumuloOperations operations,
     // ReaderParams<T> readerParams ) {
-    super(scanner, transformer, partitionKeyLength, wholeRowEncoding, clientSideRowMerging,
+    super(
+        scanner,
+        transformer,
+        partitionKeyLength,
+        wholeRowEncoding,
+        clientSideRowMerging,
         parallel);
     // idMap = new HashMap<>();
     // dupCountMap = new HashMap<>();

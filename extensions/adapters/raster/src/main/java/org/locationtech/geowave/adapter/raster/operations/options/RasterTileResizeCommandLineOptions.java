@@ -12,11 +12,15 @@ import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.mapreduce.operations.HdfsHostPortConverter;
 
 public class RasterTileResizeCommandLineOptions {
-  @Parameter(names = "--inputCoverageName", description = "The name of the input raster coverage",
+  @Parameter(
+      names = "--inputCoverageName",
+      description = "The name of the input raster coverage",
       required = true)
   private String inputCoverageName;
 
-  @Parameter(names = "--outputCoverageName", description = "The out output raster coverage name",
+  @Parameter(
+      names = "--outputCoverageName",
+      description = "The out output raster coverage name",
       required = true)
   private String outputCoverageName;
 
@@ -26,11 +30,15 @@ public class RasterTileResizeCommandLineOptions {
   @Parameter(names = "--maxSplits", description = "The max partitions for the input data")
   private Integer maxSplits;
 
-  @Parameter(names = "--hdfsHostPort", description = "he hdfs host port",
+  @Parameter(
+      names = "--hdfsHostPort",
+      description = "he hdfs host port",
       converter = HdfsHostPortConverter.class)
   private String hdfsHostPort;
 
-  @Parameter(names = "--jobSubmissionHostPort", description = "The job submission tracker",
+  @Parameter(
+      names = "--jobSubmissionHostPort",
+      description = "The job submission tracker",
       required = true)
   private String jobTrackerOrResourceManHostPort;
 

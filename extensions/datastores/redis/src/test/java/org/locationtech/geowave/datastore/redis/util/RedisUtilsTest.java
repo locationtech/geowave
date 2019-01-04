@@ -75,7 +75,8 @@ public class RedisUtilsTest {
               + "' differs from original '"
               + new ByteArray(originalSortKey).getHexString()
               + "'",
-          new ByteArray(originalSortKey), new ByteArray(currentSortKey));
+          new ByteArray(originalSortKey),
+          new ByteArray(currentSortKey));
     }
   }
 }

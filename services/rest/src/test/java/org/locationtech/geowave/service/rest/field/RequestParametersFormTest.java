@@ -34,8 +34,8 @@ public class RequestParametersFormTest {
     String keyName;
     Form form = Mockito.mock(Form.class);
     Mockito.when(form.getNames()).thenReturn(inputKeyValuePairs.keySet());
-    Mockito.when(form.getFirst(Mockito.anyString()))
-        .thenAnswer(i -> mockedFormParameter(inputKeyValuePairs.get(i.getArguments()[0])));
+    Mockito.when(form.getFirst(Mockito.anyString())).thenAnswer(
+        i -> mockedFormParameter(inputKeyValuePairs.get(i.getArguments()[0])));
 
     return form;
   }

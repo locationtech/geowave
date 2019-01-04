@@ -70,9 +70,16 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
   private static final String testName = "GeoServerIngestIT";
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.HBASE, GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.DYNAMODB,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB}, namespace = testName)
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB},
+      namespace = testName)
   protected DataStorePluginOptions dataStorePluginOptions;
 
   private static long startMillis;
@@ -139,8 +146,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
     final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
     final List<SimpleFeature> features =
         getGriddedTemporalFeatures(new SimpleFeatureBuilder(sft), 8675309);
-    LOGGER
-        .info(String.format("Beginning to ingest a uniform grid of %d features", features.size()));
+    LOGGER.info(
+        String.format("Beginning to ingest a uniform grid of %d features", features.size()));
     int ingestedFeatures = 0;
     final int featuresPer5Percent = features.size() / 20;
     ds.addType(fda, spatialIdx, spatialTemporalIdx);
@@ -151,34 +158,42 @@ public class GeoServerIngestIT extends BaseServiceIT {
         if ((ingestedFeatures % featuresPer5Percent) == 0) {
           LOGGER.info(
               String.format(
-                  "Ingested %d percent of features", (ingestedFeatures / featuresPer5Percent) * 5));
+                  "Ingested %d percent of features",
+                  (ingestedFeatures / featuresPer5Percent) * 5));
         }
       }
     }
     final Envelope env =
         ds.aggregateStatistics(
-            VectorStatisticsQueryBuilder.newBuilder().factory().bbox()
-                .fieldName(sft.getGeometryDescriptor().getLocalName()).build());
+            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+                sft.getGeometryDescriptor().getLocalName()).build());
     TestUtils.assertStatusCode(
-        "Should Create 'testomatic' Workspace", 201,
+        "Should Create 'testomatic' Workspace",
+        201,
         geoServerServiceClient.addWorkspace("testomatic"));
     configServiceClient.addStoreReRoute(
-        dataStorePluginOptions.getGeoWaveNamespace(), dataStorePluginOptions.getType(),
-        dataStorePluginOptions.getGeoWaveNamespace(), dataStorePluginOptions.getOptionsAsMap());
+        dataStorePluginOptions.getGeoWaveNamespace(),
+        dataStorePluginOptions.getType(),
+        dataStorePluginOptions.getGeoWaveNamespace(),
+        dataStorePluginOptions.getOptionsAsMap());
     TestUtils.assertStatusCode(
-        "Should Add " + dataStorePluginOptions.getGeoWaveNamespace() + " Datastore", 201,
+        "Should Add " + dataStorePluginOptions.getGeoWaveNamespace() + " Datastore",
+        201,
         geoServerServiceClient.addDataStore(
-            dataStorePluginOptions.getGeoWaveNamespace(), "testomatic",
+            dataStorePluginOptions.getGeoWaveNamespace(),
+            "testomatic",
             dataStorePluginOptions.getGeoWaveNamespace()));
 
     TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' Style", 201,
+        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' Style",
+        201,
         geoServerServiceClient.addStyle(
             ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
     muteLogging();
     TestUtils.assertStatusCode(
-        "Should return 400, that layer was already added", 400,
+        "Should return 400, that layer was already added",
+        400,
         geoServerServiceClient.addStyle(
             ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
@@ -203,9 +218,14 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
     TestUtils.assertStatusCode(
-        "Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer", 201,
+        "Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer",
+        201,
         geoServerServiceClient.addLayer(
-            dataStorePluginOptions.getGeoWaveNamespace(), WORKSPACE, null, null, "point"));
+            dataStorePluginOptions.getGeoWaveNamespace(),
+            WORKSPACE,
+            null,
+            null,
+            "point"));
     if (!(ds instanceof Closeable)) {
       // this is kinda hacky, but its only for the integration test - the
       // problem is that GeoServer and this thread have different class
@@ -215,14 +235,27 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // while it does not have the lock and therefore fails
       muteLogging();
       TestUtils.assertStatusCode(
-          "Should return 400, that layer was already added", 400, geoServerServiceClient.addLayer(
-              dataStorePluginOptions.getGeoWaveNamespace(), WORKSPACE, null, null, "point"));
+          "Should return 400, that layer was already added",
+          400,
+          geoServerServiceClient.addLayer(
+              dataStorePluginOptions.getGeoWaveNamespace(),
+              WORKSPACE,
+              null,
+              null,
+              "point"));
       unmuteLogging();
     }
     final BufferedImage biDirectRender =
         getWMSSingleTile(
-            env.getMinX(), env.getMaxX(), env.getMinY(), env.getMaxY(), SimpleIngest.FEATURE_NAME,
-            "point", 920, 360, null);
+            env.getMinX(),
+            env.getMaxX(),
+            env.getMinY(),
+            env.getMaxY(),
+            SimpleIngest.FEATURE_NAME,
+            "point",
+            920,
+            360,
+            null);
 
     BufferedImage ref = ImageIO.read(new File(REFERENCE_WMS_IMAGE_PATH));
 
@@ -231,8 +264,15 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     final BufferedImage biSubsamplingWithoutError =
         getWMSSingleTile(
-            env.getMinX(), env.getMaxX(), env.getMinY(), env.getMaxY(), SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE, 920, 360, null);
+            env.getMinX(),
+            env.getMaxX(),
+            env.getMinY(),
+            env.getMaxY(),
+            SimpleIngest.FEATURE_NAME,
+            ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
+            920,
+            360,
+            null);
     Assert.assertNotNull(ref);
 
     // being a little lenient because of differences in O/S rendering
@@ -240,21 +280,42 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     final BufferedImage biSubsamplingWithExpectedError =
         getWMSSingleTile(
-            env.getMinX(), env.getMaxX(), env.getMinY(), env.getMaxY(), SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE, 920, 360, null);
+            env.getMinX(),
+            env.getMaxX(),
+            env.getMinY(),
+            env.getMaxY(),
+            SimpleIngest.FEATURE_NAME,
+            ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
+            920,
+            360,
+            null);
 
     TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.05, 0.15);
 
     final BufferedImage biSubsamplingWithLotsOfError =
         getWMSSingleTile(
-            env.getMinX(), env.getMaxX(), env.getMinY(), env.getMaxY(), SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE, 920, 360, null);
+            env.getMinX(),
+            env.getMaxX(),
+            env.getMinY(),
+            env.getMaxY(),
+            SimpleIngest.FEATURE_NAME,
+            ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
+            920,
+            360,
+            null);
 
     TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.4);
     final BufferedImage biDistributedRendering =
         getWMSSingleTile(
-            env.getMinX(), env.getMaxX(), env.getMinY(), env.getMaxY(), SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER, 920, 360, null);
+            env.getMinX(),
+            env.getMaxX(),
+            env.getMinY(),
+            env.getMaxY(),
+            SimpleIngest.FEATURE_NAME,
+            ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER,
+            920,
+            360,
+            null);
     TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
   }
 
@@ -269,15 +330,29 @@ public class GeoServerIngestIT extends BaseServiceIT {
       final int height,
       final String outputFormat) throws IOException, URISyntaxException {
     final URIBuilder builder = new URIBuilder();
-    builder.setScheme("http").setHost("localhost").setPort(ServicesTestEnvironment.JETTY_PORT)
-        .setPath(WMS_URL_PREFIX).setParameter("service", "WMS").setParameter("version", WMS_VERSION)
-        .setParameter("request", "GetMap").setParameter("layers", layer)
-        .setParameter("styles", style == null ? "" : style).setParameter("crs", "EPSG:3857")
-        .setParameter("bbox", String.format("%.2f, %.2f, %.2f, %.2f", minX, minY, maxX, maxY))
-        .setParameter("format", outputFormat == null ? "image/gif" : outputFormat)
-        .setParameter("width", String.valueOf(width)).setParameter("height", String.valueOf(height))
-        .setParameter(
-            "cql_filter", "TimeStamp DURING 1997-01-01T00:00:00.000Z/1998-01-01T00:00:00.000Z");
+    builder.setScheme("http").setHost("localhost").setPort(
+        ServicesTestEnvironment.JETTY_PORT).setPath(WMS_URL_PREFIX).setParameter(
+            "service",
+            "WMS").setParameter("version", WMS_VERSION).setParameter(
+                "request",
+                "GetMap").setParameter("layers", layer).setParameter(
+                    "styles",
+                    style == null ? "" : style).setParameter("crs", "EPSG:3857").setParameter(
+                        "bbox",
+                        String.format(
+                            "%.2f, %.2f, %.2f, %.2f",
+                            minX,
+                            minY,
+                            maxX,
+                            maxY)).setParameter(
+                                "format",
+                                outputFormat == null ? "image/gif" : outputFormat).setParameter(
+                                    "width",
+                                    String.valueOf(width)).setParameter(
+                                        "height",
+                                        String.valueOf(height)).setParameter(
+                                            "cql_filter",
+                                            "TimeStamp DURING 1997-01-01T00:00:00.000Z/1998-01-01T00:00:00.000Z");
 
     final HttpGet command = new HttpGet(builder.build());
 

@@ -26,8 +26,9 @@ public class DownloadRunnerTest {
   @Test
   public void testExecuteForAWS() throws Exception {
     final File sceneDir =
-        new File(Tests.WORKSPACE_DIR
-            + "/scenes/S2A_MSIL1C_20180104T110431_N0206_R094_T30TXN_20180104T130839");
+        new File(
+            Tests.WORKSPACE_DIR
+                + "/scenes/S2A_MSIL1C_20180104T110431_N0206_R094_T30TXN_20180104T130839");
     testExecute("AWS", sceneDir);
   }
 

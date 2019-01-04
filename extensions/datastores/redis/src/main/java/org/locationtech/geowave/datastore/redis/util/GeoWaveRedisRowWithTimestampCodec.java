@@ -48,9 +48,12 @@ public class GeoWaveRedisRowWithTimestampCodec extends BaseCodec {
         if (in.read(value) != value.length) {
           LOGGER.warn("unable to read value");
         }
-        return new GeoWaveRedisPersistedTimestampRow((short) numDuplicates, dataId,
+        return new GeoWaveRedisPersistedTimestampRow(
+            (short) numDuplicates,
+            dataId,
             new GeoWaveValueImpl(fieldMask, visibility, value),
-            Integer.toUnsignedLong(Varint.readSignedVarInt(in)), Varint.readSignedVarInt(in));
+            Integer.toUnsignedLong(Varint.readSignedVarInt(in)),
+            Varint.readSignedVarInt(in));
       }
     }
   };

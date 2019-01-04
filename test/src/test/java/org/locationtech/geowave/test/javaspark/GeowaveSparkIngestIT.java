@@ -49,9 +49,15 @@ public class GeowaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
   protected static final String GDELT_INPUT_FILES = "s3://geowave-test/data/gdelt";
   private static final int GDELT_COUNT = 448675;
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.HBASE,
-      GeoWaveStoreType.BIGTABLE, GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.DYNAMODB,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
 
   private static Stopwatch stopwatch = new Stopwatch();
@@ -82,8 +88,12 @@ public class GeowaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
   public void testBasicSparkIngest() throws Exception {
 
     // ingest test points
-    TestUtils
-        .testSparkIngest(dataStore, DimensionalityType.SPATIAL, S3URL, GDELT_INPUT_FILES, "gdelt");
+    TestUtils.testSparkIngest(
+        dataStore,
+        DimensionalityType.SPATIAL,
+        S3URL,
+        GDELT_INPUT_FILES,
+        "gdelt");
 
     final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
     final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
@@ -96,21 +106,26 @@ public class GeowaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
         // query by the full bounding box, make sure there is more than
         // 0 count and make sure the count matches the number of results
         final StatisticsId statsId =
-            VectorStatisticsQueryBuilder.newBuilder().factory().bbox()
-                .fieldName(adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build()
-                .getId();
+            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+                adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build().getId();
         try (final CloseableIterator<BoundingBoxDataStatistics<?>> bboxStatIt =
             (CloseableIterator) statsStore.getDataStatistics(
-                internalDataAdapter.getAdapterId(), statsId.getExtendedId(), statsId.getType())) {
+                internalDataAdapter.getAdapterId(),
+                statsId.getExtendedId(),
+                statsId.getType())) {
           final BoundingBoxDataStatistics<?> bboxStat = bboxStatIt.next();
           try (final CloseableIterator<CountDataStatistics<SimpleFeature>> countStatIt =
               (CloseableIterator) statsStore.getDataStatistics(
-                  internalDataAdapter.getAdapterId(), CountDataStatistics.STATS_TYPE)) {
+                  internalDataAdapter.getAdapterId(),
+                  CountDataStatistics.STATS_TYPE)) {
             final CountDataStatistics<?> countStat = countStatIt.next();
             // then query it
             final GeometryFactory factory = new GeometryFactory();
             final Envelope env =
-                new Envelope(bboxStat.getMinX(), bboxStat.getMaxX(), bboxStat.getMinY(),
+                new Envelope(
+                    bboxStat.getMinX(),
+                    bboxStat.getMaxX(),
+                    bboxStat.getMinY(),
                     bboxStat.getMaxY());
             final Geometry spatialFilter = factory.toGeometry(env);
             final QueryConstraints query = new SpatialQuery(spatialFilter);
@@ -126,13 +141,15 @@ public class GeowaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
                     + "' adapter should have the same results from a spatial query of '"
                     + env
                     + "' as its total count statistic",
-                countStat.getCount(), resultCount);
+                countStat.getCount(),
+                resultCount);
 
             assertEquals(
                 "'"
                     + adapter.getTypeName()
                     + "' adapter entries ingested does not match expected count",
-                new Integer(GDELT_COUNT), new Integer(resultCount));
+                new Integer(GDELT_COUNT),
+                new Integer(resultCount));
 
             adapterCount++;
           }
@@ -151,8 +168,8 @@ public class GeowaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
 
     final CloseableIterator<?> accumuloResults =
         geowaveStore.query(
-            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName())
-                .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(query).build());
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+                TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(query).build());
 
     int resultCount = 0;
     while (accumuloResults.hasNext()) {

@@ -17,7 +17,11 @@ public class GeoWaveTimestampMetadata extends GeoWaveMetadata {
   private final long millisFromEpoch;
 
   public GeoWaveTimestampMetadata(final GeoWaveMetadata md, final long millisFromEpoch) {
-    this(md.getPrimaryId(), md.getSecondaryId(), md.getVisibility(), md.getValue(),
+    this(
+        md.getPrimaryId(),
+        md.getSecondaryId(),
+        md.getVisibility(),
+        md.getValue(),
         millisFromEpoch);
   }
 

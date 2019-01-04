@@ -116,8 +116,8 @@ public class SpatialJoinRunner implements Serializable {
       final String typeName,
       final InternalAdapterStore internalAdapterStore,
       final IndexStore indexStore) {
-    return storeOptions.createAdapterIndexMappingStore()
-        .getIndicesForAdapter(internalAdapterStore.getAdapterId(typeName)).getIndices(indexStore);
+    return storeOptions.createAdapterIndexMappingStore().getIndicesForAdapter(
+        internalAdapterStore.getAdapterId(typeName)).getIndices(indexStore);
   }
 
   private FeatureDataAdapter createOutputAdapter(
@@ -139,16 +139,25 @@ public class SpatialJoinRunner implements Serializable {
     if (outputStore != null) {
       final Index[] leftIndices =
           getIndicesForAdapter(
-              leftStore, leftAdapterTypeName, leftInternalAdapterStore, leftIndexStore);
+              leftStore,
+              leftAdapterTypeName,
+              leftInternalAdapterStore,
+              leftIndexStore);
       final FeatureDataAdapter newLeftAdapter =
           createOutputAdapter(leftStore, leftAdapterTypeName, leftIndices, outLeftAdapterTypeName);
 
       final Index[] rightIndices =
           getIndicesForAdapter(
-              rightStore, rightAdapterTypeName, rightInternalAdapterStore, rightIndexStore);
+              rightStore,
+              rightAdapterTypeName,
+              rightInternalAdapterStore,
+              rightIndexStore);
       final FeatureDataAdapter newRightAdapter =
           createOutputAdapter(
-              rightStore, rightAdapterTypeName, rightIndices, outRightAdapterTypeName);
+              rightStore,
+              rightAdapterTypeName,
+              rightIndices,
+              outRightAdapterTypeName);
       // Write each feature set to new adapter and store using original
       // indexing methods.
       RDDUtils.writeRDDToGeoWave(sc, leftIndices, outputStore, newLeftAdapter, getLeftResults());
@@ -181,8 +190,7 @@ public class SpatialJoinRunner implements Serializable {
       String jar = "";
       try {
         jar =
-            SpatialJoinRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI()
-                .getPath();
+            SpatialJoinRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
       } catch (final URISyntaxException e) {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }
@@ -247,7 +255,10 @@ public class SpatialJoinRunner implements Serializable {
       if (leftRDD == null) {
         leftRDD =
             createRDDFromOptions(
-                leftStore, leftAdapterTypeName, leftInternalAdapterStore, leftIndexStore);
+                leftStore,
+                leftAdapterTypeName,
+                leftInternalAdapterStore,
+                leftIndexStore);
       }
     }
 
@@ -255,7 +266,10 @@ public class SpatialJoinRunner implements Serializable {
       if (rightRDD == null) {
         rightRDD =
             createRDDFromOptions(
-                rightStore, rightAdapterTypeName, rightInternalAdapterStore, rightIndexStore);
+                rightStore,
+                rightAdapterTypeName,
+                rightInternalAdapterStore,
+                rightIndexStore);
       }
     }
   }

@@ -20,15 +20,19 @@ import org.apache.hadoop.conf.Configuration;
  * host name and port for the hadoop job tracker.
  */
 public class MapReduceCommandLineOptions {
-  @Parameter(names = "--jobtracker",
+  @Parameter(
+      names = "--jobtracker",
       description = "Hadoop job tracker hostname and port in the format hostname:port")
   private String jobTrackerHostPort;
 
-  @Parameter(names = "--resourceman",
+  @Parameter(
+      names = "--resourceman",
       description = "Yarn resource manager hostname and port in the format hostname:port")
   private String resourceManager;
 
-  @Parameter(names = "--conf", description = "Job configuration property in the format Name=Value",
+  @Parameter(
+      names = "--conf",
+      description = "Job configuration property in the format Name=Value",
       splitter = NoSplitter.class)
   private List<String> configurationProperties;
 

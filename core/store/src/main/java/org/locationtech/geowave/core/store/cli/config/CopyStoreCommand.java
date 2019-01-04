@@ -30,7 +30,8 @@ public class CopyStoreCommand extends DefaultOperation implements Command {
   @Parameter(description = "<name> <new name>")
   private List<String> parameters = new ArrayList<String>();
 
-  @Parameter(names = {"-d", "--default"},
+  @Parameter(
+      names = {"-d", "--default"},
       description = "Make this the default store in all operations")
   private Boolean makeDefault;
 
@@ -47,8 +48,9 @@ public class CopyStoreCommand extends DefaultOperation implements Command {
     String oldStore = null;
     if (parameters.size() >= 1) {
       oldStore = parameters.get(0);
-      if (!newPluginOptions
-          .load(existingProps, DataStorePluginOptions.getStoreNamespace(oldStore))) {
+      if (!newPluginOptions.load(
+          existingProps,
+          DataStorePluginOptions.getStoreNamespace(oldStore))) {
         throw new ParameterException("Could not find store: " + oldStore);
       }
     }

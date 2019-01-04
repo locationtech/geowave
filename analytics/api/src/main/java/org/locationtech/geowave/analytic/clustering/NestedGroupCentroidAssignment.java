@@ -85,7 +85,8 @@ public class NestedGroupCentroidAssignment<T> {
     @SuppressWarnings("unchecked")
     final DistanceFn<T> distanceFunction =
         config.getInstance(
-            CommonParameters.Common.DISTANCE_FUNCTION_CLASS, DistanceFn.class,
+            CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+            DistanceFn.class,
             FeatureCentroidDistanceFn.class);
     this.associationdFunction.setDistanceFunction(distanceFunction);
     centroidManager = new CentroidManagerGeoWave<T>(context, scope);
@@ -125,7 +126,8 @@ public class NestedGroupCentroidAssignment<T> {
 
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {CentroidParameters.Centroid.ZOOM_LEVEL,
+            new ParameterEnum<?>[] {
+                CentroidParameters.Centroid.ZOOM_LEVEL,
                 GlobalParameters.Global.PARENT_BATCH_ID,
                 CommonParameters.Common.DISTANCE_FUNCTION_CLASS}));
     return params;
@@ -204,10 +206,13 @@ public class NestedGroupCentroidAssignment<T> {
     CentroidManagerGeoWave.setParameters(config, scope, runTimeProperties);
 
     runTimeProperties.setConfig(
-        new ParameterEnum[] {CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
-            CentroidParameters.Centroid.ZOOM_LEVEL, GlobalParameters.Global.BATCH_ID,
+        new ParameterEnum[] {
+            CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+            CentroidParameters.Centroid.ZOOM_LEVEL,
+            GlobalParameters.Global.BATCH_ID,
             GlobalParameters.Global.PARENT_BATCH_ID},
-        config, scope);
+        config,
+        scope);
   }
 
   private class GroupHolder {

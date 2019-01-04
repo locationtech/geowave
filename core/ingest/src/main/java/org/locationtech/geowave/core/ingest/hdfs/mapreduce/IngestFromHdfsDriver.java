@@ -97,7 +97,9 @@ public class IngestFromHdfsDriver {
     try {
       final Configuration conf = new Configuration(false);
       GeoWaveConfiguratorBase.setRemoteInvocationParams(
-          hdfsHostPort, mapReduceOptions.getJobTrackerOrResourceManagerHostPort(), conf);
+          hdfsHostPort,
+          mapReduceOptions.getJobTrackerOrResourceManagerHostPort(),
+          conf);
       mapReduceOptions.applyConfigurationProperties(conf);
       try (FileSystem fs = FileSystem.get(conf)) {
         if (!fs.exists(hdfsBaseDirectory)) {
@@ -162,16 +164,28 @@ public class IngestFromHdfsDriver {
               continue;
             }
             jobRunner =
-                new IngestWithReducerJobRunner(storeOptions, indexOptions, ingestOptions, inputFile,
-                    pluginProvider.getKey(), ingestFromHdfsPlugin, ingestWithReducer);
+                new IngestWithReducerJobRunner(
+                    storeOptions,
+                    indexOptions,
+                    ingestOptions,
+                    inputFile,
+                    pluginProvider.getKey(),
+                    ingestFromHdfsPlugin,
+                    ingestWithReducer);
 
           } else if (ingestWithMapper != null) {
             if (!checkIndexesAgainstProvider(pluginProvider.getKey(), ingestWithMapper)) {
               continue;
             }
             jobRunner =
-                new IngestWithMapperJobRunner(storeOptions, indexOptions, ingestOptions, inputFile,
-                    pluginProvider.getKey(), ingestFromHdfsPlugin, ingestWithMapper);
+                new IngestWithMapperJobRunner(
+                    storeOptions,
+                    indexOptions,
+                    ingestOptions,
+                    inputFile,
+                    pluginProvider.getKey(),
+                    ingestFromHdfsPlugin,
+                    ingestWithMapper);
           }
           if (jobRunner != null) {
             try {

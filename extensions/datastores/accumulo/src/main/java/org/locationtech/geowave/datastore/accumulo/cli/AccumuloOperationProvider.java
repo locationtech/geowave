@@ -12,9 +12,13 @@ import org.locationtech.geowave.core.cli.spi.CLIOperationProviderSpi;
 
 public class AccumuloOperationProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
-      new Class<?>[] {AccumuloSection.class, AccumuloRunServerCommand.class,
-          PreSplitPartitionIdCommand.class, SplitEqualIntervalCommand.class,
-          SplitNumRecordsCommand.class, SplitQuantileCommand.class};
+      new Class<?>[] {
+          AccumuloSection.class,
+          AccumuloRunServerCommand.class,
+          PreSplitPartitionIdCommand.class,
+          SplitEqualIntervalCommand.class,
+          SplitNumRecordsCommand.class,
+          SplitQuantileCommand.class};
 
   @Override
   public Class<?>[] getOperations() {

@@ -71,19 +71,43 @@ public class AnalyticServiceClient {
 
     final Response resp =
         analyticService.dbScan(
-            storename, mapReduceHdfsBaseDir, extractMaxInputSplit, extractMinInputSplit, adapterIds, // Array
-                                                                                                     // of
-                                                                                                     // strings
-            clusteringMaxIterations, clusteringMinimumSize, partitionMaxDistance,
-            mapReduceConfigFile, mapReduceHdfsHostPort, mapReduceJobtrackerHostPort,
-            mapReduceYarnResourceManager, commonDistanceFunctionClass, extractQuery,
-            outputOutputFormat, inputFormatClass, inputHdfsPath, outputReducerCount, authorizations, // Array
-                                                                                                     // of
-                                                                                                     // strings
-            indexId, outputHdfsOutputPath, partitioningDistanceThresholds,
-            partitioningGeometricDistanceUnit, globalBatchId, hullDataTypeId, hullProjectionClass,
-            outputDataNamespaceUri, outputDataTypeId, outputIndexId, partitionMaxMemberSelection,
-            partitionPartitionerClass, partitionPartitionDecreaseRate, partitionPartitionPrecision,
+            storename,
+            mapReduceHdfsBaseDir,
+            extractMaxInputSplit,
+            extractMinInputSplit,
+            adapterIds, // Array
+                        // of
+                        // strings
+            clusteringMaxIterations,
+            clusteringMinimumSize,
+            partitionMaxDistance,
+            mapReduceConfigFile,
+            mapReduceHdfsHostPort,
+            mapReduceJobtrackerHostPort,
+            mapReduceYarnResourceManager,
+            commonDistanceFunctionClass,
+            extractQuery,
+            outputOutputFormat,
+            inputFormatClass,
+            inputHdfsPath,
+            outputReducerCount,
+            authorizations, // Array
+                            // of
+                            // strings
+            indexId,
+            outputHdfsOutputPath,
+            partitioningDistanceThresholds,
+            partitioningGeometricDistanceUnit,
+            globalBatchId,
+            hullDataTypeId,
+            hullProjectionClass,
+            outputDataNamespaceUri,
+            outputDataTypeId,
+            outputIndexId,
+            partitionMaxMemberSelection,
+            partitionPartitionerClass,
+            partitionPartitionDecreaseRate,
+            partitionPartitionPrecision,
             partitionSecondaryPartitionerClass);
     return resp;
   }
@@ -101,10 +125,40 @@ public class AnalyticServiceClient {
       final String partitionMaxDistance) {
 
     return dbScan(
-        storename, mapReduceHdfsBaseDir, extractMaxInputSplit, extractMinInputSplit, adapterIds,
-        clusteringMaxIterations, clusteringMinimumSize, partitionMaxDistance, null, null, null,
-        null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-        null, null, null, null, null, null, null, null);
+        storename,
+        mapReduceHdfsBaseDir,
+        extractMaxInputSplit,
+        extractMinInputSplit,
+        adapterIds,
+        clusteringMaxIterations,
+        clusteringMinimumSize,
+        partitionMaxDistance,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null);
   }
 
   public Response kde(
@@ -124,8 +178,18 @@ public class AnalyticServiceClient {
 
     final Response resp =
         analyticService.kde(
-            input_storename, output_storename, featuretype, minLevel, maxLevel, coverageName,
-            jobTrackerOrResourceManHostPort, indexId, minSplits, maxSplits, hdfsHostPort, tileSize,
+            input_storename,
+            output_storename,
+            featuretype,
+            minLevel,
+            maxLevel,
+            coverageName,
+            jobTrackerOrResourceManHostPort,
+            indexId,
+            minSplits,
+            maxSplits,
+            hdfsHostPort,
+            tileSize,
             cqlFilter);
     return resp;
   }
@@ -140,8 +204,19 @@ public class AnalyticServiceClient {
       final String jobTrackerOrResourceManHostPort) {
 
     return kde(
-        input_storename, output_storename, featuretype, minLevel, maxLevel, coverageName,
-        jobTrackerOrResourceManHostPort, null, null, null, null, null, null);
+        input_storename,
+        output_storename,
+        featuretype,
+        minLevel,
+        maxLevel,
+        coverageName,
+        jobTrackerOrResourceManHostPort,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null);
   }
 
   public Response kmeansSpark(
@@ -165,17 +240,46 @@ public class AnalyticServiceClient {
 
     final Response resp =
         analyticService.kmeansSpark(
-            input_storename, output_storename, appName, host, master, numClusters, numIterations,
-            epsilon, useTime, generateHulls, computeHullData, cqlFilter, adapterId, minSplits,
-            maxSplits, centroidTypeName, hullTypeName);
+            input_storename,
+            output_storename,
+            appName,
+            host,
+            master,
+            numClusters,
+            numIterations,
+            epsilon,
+            useTime,
+            generateHulls,
+            computeHullData,
+            cqlFilter,
+            adapterId,
+            minSplits,
+            maxSplits,
+            centroidTypeName,
+            hullTypeName);
     return resp;
   }
 
   public Response kmeansSpark(final String input_storename, final String output_storename) {
 
     return kmeansSpark(
-        input_storename, output_storename, null, null, null, null, null, null, null, null, null,
-        null, null, null, null, null, null);
+        input_storename,
+        output_storename,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null);
   }
 
   public Response nearestNeighbor(
@@ -209,16 +313,33 @@ public class AnalyticServiceClient {
 
     final Response resp =
         analyticService.nearestNeighbor(
-            storename, mapReduceHdfsBaseDir, extractMaxInputSplit, extractMinInputSplit, adapterIds, // Array
-                                                                                                     // of
-                                                                                                     // strings
-            outputHdfsOutputPath, partitionMaxDistance, mapReduceConfigFile, mapReduceHdfsHostPort,
-            mapReduceJobtrackerHostPort, mapReduceYarnResourceManager, commonDistanceFunctionClass,
-            extractQuery, outputOutputFormat, inputFormatClass, inputHdfsPath, outputReducerCount,
+            storename,
+            mapReduceHdfsBaseDir,
+            extractMaxInputSplit,
+            extractMinInputSplit,
+            adapterIds, // Array
+                        // of
+                        // strings
+            outputHdfsOutputPath,
+            partitionMaxDistance,
+            mapReduceConfigFile,
+            mapReduceHdfsHostPort,
+            mapReduceJobtrackerHostPort,
+            mapReduceYarnResourceManager,
+            commonDistanceFunctionClass,
+            extractQuery,
+            outputOutputFormat,
+            inputFormatClass,
+            inputHdfsPath,
+            outputReducerCount,
             authorizations, // Array of strings
-            indexId, partitionMaxMemberSelection, partitionPartitionerClass,
-            partitionPartitionPrecision, partitioningDistanceThresholds,
-            partitioningGeometricDistanceUnit, partitionSecondaryPartitionerClass);
+            indexId,
+            partitionMaxMemberSelection,
+            partitionPartitionerClass,
+            partitionPartitionPrecision,
+            partitioningDistanceThresholds,
+            partitioningGeometricDistanceUnit,
+            partitionSecondaryPartitionerClass);
     return resp;
   }
 
@@ -233,9 +354,31 @@ public class AnalyticServiceClient {
       final String outputHdfsOutputPath,
       final String partitionMaxDistance) {
     return nearestNeighbor(
-        storename, mapReduceHdfsBaseDir, extractMaxInputSplit, extractMinInputSplit, adapterIds,
-        outputHdfsOutputPath, partitionMaxDistance, null, null, null, null, null, null, null, null,
-        null, null, null, null, null, null, null, null, null, null);
+        storename,
+        mapReduceHdfsBaseDir,
+        extractMaxInputSplit,
+        extractMinInputSplit,
+        adapterIds,
+        outputHdfsOutputPath,
+        partitionMaxDistance,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null);
   }
 
   public Response sql(
@@ -248,7 +391,10 @@ public class AnalyticServiceClient {
     final Response resp =
         analyticService.sql(
             parameters, // Array of strings
-            csvOutputFile, outputStoreName, outputTypeName, showResults);
+            csvOutputFile,
+            outputStoreName,
+            outputTypeName,
+            showResults);
     return resp;
   }
 }

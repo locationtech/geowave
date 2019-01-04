@@ -37,16 +37,17 @@ public class GeoWaveInputFormatConfiguration implements FormatConfiguration {
   public void setup(final PropertyManagement runTimeProperties, final Configuration configuration)
       throws Exception {
     final DataStorePluginOptions dataStoreOptions =
-        ((PersistableStore) runTimeProperties.getProperty(StoreParam.INPUT_STORE))
-            .getDataStoreOptions();
+        ((PersistableStore) runTimeProperties.getProperty(
+            StoreParam.INPUT_STORE)).getDataStoreOptions();
     GeoWaveInputFormat.setStoreOptions(configuration, dataStoreOptions);
 
     final Query<?> query = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
 
     if (query != null) {
       if (query.getQueryConstraints() != null) {
-        GeoWaveInputFormat
-            .setQueryConstraints(configuration, (QueryConstraints) query.getQueryConstraints());
+        GeoWaveInputFormat.setQueryConstraints(
+            configuration,
+            (QueryConstraints) query.getQueryConstraints());
       }
 
       if (query.getCommonQueryOptions() != null) {
@@ -55,13 +56,17 @@ public class GeoWaveInputFormatConfiguration implements FormatConfiguration {
 
       if (query.getDataTypeQueryOptions() != null) {
         GeoWaveInputFormat.setDataTypeQueryOptions(
-            configuration, query.getDataTypeQueryOptions(), dataStoreOptions.createAdapterStore(),
+            configuration,
+            query.getDataTypeQueryOptions(),
+            dataStoreOptions.createAdapterStore(),
             dataStoreOptions.createInternalAdapterStore());
       }
 
       if (query.getIndexQueryOptions() != null) {
         GeoWaveInputFormat.setIndexQueryOptions(
-            configuration, query.getIndexQueryOptions(), dataStoreOptions.createIndexStore());
+            configuration,
+            query.getIndexQueryOptions(),
+            dataStoreOptions.createIndexStore());
       }
     }
 
@@ -105,8 +110,10 @@ public class GeoWaveInputFormatConfiguration implements FormatConfiguration {
   @Override
   public List<ParameterEnum<?>> getParameters() {
     return Arrays.asList(
-        new ParameterEnum<?>[] {ExtractParameters.Extract.QUERY,
-            ExtractParameters.Extract.MAX_INPUT_SPLIT, ExtractParameters.Extract.MIN_INPUT_SPLIT,
+        new ParameterEnum<?>[] {
+            ExtractParameters.Extract.QUERY,
+            ExtractParameters.Extract.MAX_INPUT_SPLIT,
+            ExtractParameters.Extract.MIN_INPUT_SPLIT,
             StoreParam.INPUT_STORE});
   }
 }

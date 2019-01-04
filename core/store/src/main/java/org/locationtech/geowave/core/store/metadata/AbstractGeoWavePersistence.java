@@ -159,8 +159,11 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
     try (final MetadataWriter writer = operations.createMetadataWriter(getType())) {
       if (writer != null) {
         final GeoWaveMetadata metadata =
-            new GeoWaveMetadata(id.getBytes(), secondaryId != null ? secondaryId.getBytes() : null,
-                getVisibility(object), getValue(object));
+            new GeoWaveMetadata(
+                id.getBytes(),
+                secondaryId != null ? secondaryId.getBytes() : null,
+                getVisibility(object),
+                getValue(object));
         writer.write(metadata);
       }
     } catch (final Exception e) {
@@ -218,12 +221,14 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
     final MetadataReader reader = operations.createMetadataReader(getType());
     try (final CloseableIterator<GeoWaveMetadata> it =
         reader.query(
-            new MetadataQuery(primaryId.getBytes(),
-                secondaryId == null ? null : secondaryId.getBytes(), authorizations))) {
+            new MetadataQuery(
+                primaryId.getBytes(),
+                secondaryId == null ? null : secondaryId.getBytes(),
+                authorizations))) {
       if (!it.hasNext()) {
         if (warnIfNotExists) {
-          LOGGER
-              .warn("Object '" + getCombinedId(primaryId, secondaryId).getString() + "' not found");
+          LOGGER.warn(
+              "Object '" + getCombinedId(primaryId, secondaryId).getString() + "' not found");
         }
         return null;
       }
@@ -267,7 +272,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
     if (result != null) {
       addObjectToCache(
           new ByteArray(entry.getPrimaryId()),
-          entry.getSecondaryId() == null ? null : new ByteArray(entry.getSecondaryId()), result,
+          entry.getSecondaryId() == null ? null : new ByteArray(entry.getSecondaryId()),
+          result,
           authorizations);
     }
     return result;
@@ -304,14 +310,18 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
         // TODO look at issue #1443, this should delete multiple - also
         // in general does this delete from the cache???
         return deleter.delete(
-            new MetadataQuery(primaryId.getBytes(),
-                secondaryId != null ? secondaryId.getBytes() : null, authorizations));
+            new MetadataQuery(
+                primaryId.getBytes(),
+                secondaryId != null ? secondaryId.getBytes() : null,
+                authorizations));
       }
       boolean retVal = false;
       final MetadataReader reader = operations.createMetadataReader(type);
       try (final CloseableIterator<GeoWaveMetadata> it =
           reader.query(
-              new MetadataQuery(null, secondaryId != null ? secondaryId.getBytes() : null,
+              new MetadataQuery(
+                  null,
+                  secondaryId != null ? secondaryId.getBytes() : null,
                   authorizations))) {
 
         while (it.hasNext()) {

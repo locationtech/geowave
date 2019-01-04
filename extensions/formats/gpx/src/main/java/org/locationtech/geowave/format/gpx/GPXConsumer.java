@@ -548,8 +548,8 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
         }
 
         final LineString geom =
-            GeometryUtils.GEOMETRY_FACTORY
-                .createLineString(childSequence.toArray(new Coordinate[childSequence.size()]));
+            GeometryUtils.GEOMETRY_FACTORY.createLineString(
+                childSequence.toArray(new Coordinate[childSequence.size()]));
 
         // Filter gpx track based on maxExtent
         if (geom.isEmpty() || (geom.getEnvelopeInternal().maxExtent() > maxLineLength)) {
@@ -585,29 +585,39 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
     switch (element.elementType) {
       case "trk": {
         if ((element.children != null) && element.build(trackBuilder)) {
-          trackBuilder
-              .set("TrackId", inputID.length() > 0 ? inputID : element.composeID("", false, true));
+          trackBuilder.set(
+              "TrackId",
+              inputID.length() > 0 ? inputID : element.composeID("", false, true));
           return buildGeoWaveDataInstance(
-              element.composeID(inputID, false, true), indexNames, GpxUtils.GPX_TRACK_FEATURE,
-              trackBuilder, additionalData.get(element.getPath()));
+              element.composeID(inputID, false, true),
+              indexNames,
+              GpxUtils.GPX_TRACK_FEATURE,
+              trackBuilder,
+              additionalData.get(element.getPath()));
         }
         break;
       }
       case "rte": {
         if ((element.children != null) && element.build(routeBuilder)) {
-          trackBuilder
-              .set("TrackId", inputID.length() > 0 ? inputID : element.composeID("", false, true));
+          trackBuilder.set(
+              "TrackId",
+              inputID.length() > 0 ? inputID : element.composeID("", false, true));
           return buildGeoWaveDataInstance(
-              element.composeID(inputID, false, true), indexNames, GpxUtils.GPX_ROUTE_FEATURE,
-              routeBuilder, additionalData.get(element.getPath()));
+              element.composeID(inputID, false, true),
+              indexNames,
+              GpxUtils.GPX_ROUTE_FEATURE,
+              routeBuilder,
+              additionalData.get(element.getPath()));
         }
         break;
       }
       case "wpt": {
         if (element.build(waypointBuilder)) {
           return buildGeoWaveDataInstance(
-              element.composeID(uniqueWayPoints ? "" : inputID, true, !uniqueWayPoints), indexNames,
-              GpxUtils.GPX_WAYPOINT_FEATURE, waypointBuilder,
+              element.composeID(uniqueWayPoints ? "" : inputID, true, !uniqueWayPoints),
+              indexNames,
+              GpxUtils.GPX_WAYPOINT_FEATURE,
+              waypointBuilder,
               additionalData.get(element.getPath()));
         }
         break;
@@ -615,8 +625,11 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
       case "rtept": {
         if (element.build(waypointBuilder)) {
           return buildGeoWaveDataInstance(
-              element.composeID(inputID, true, true), indexNames, GpxUtils.GPX_WAYPOINT_FEATURE,
-              waypointBuilder, additionalData.get(element.getPath()));
+              element.composeID(inputID, true, true),
+              indexNames,
+              GpxUtils.GPX_WAYPOINT_FEATURE,
+              waypointBuilder,
+              additionalData.get(element.getPath()));
         }
         break;
       }
@@ -629,8 +642,11 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
             pointBuilder.set("Timestamp", null);
           }
           return buildGeoWaveDataInstance(
-              element.composeID(inputID, false, true), indexNames, GpxUtils.GPX_POINT_FEATURE,
-              pointBuilder, additionalData.get(element.getPath()));
+              element.composeID(inputID, false, true),
+              indexNames,
+              GpxUtils.GPX_POINT_FEATURE,
+              pointBuilder,
+              additionalData.get(element.getPath()));
         }
         break;
       }

@@ -79,8 +79,9 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
         inputStoreOptions.createInternalAdapterStore();
 
     try (final DataFileWriter<AvroSimpleFeatureCollection> dfw =
-        new DataFileWriter<>(new GenericDatumWriter<AvroSimpleFeatureCollection>(
-            AvroSimpleFeatureCollection.SCHEMA$))) {
+        new DataFileWriter<>(
+            new GenericDatumWriter<AvroSimpleFeatureCollection>(
+                AvroSimpleFeatureCollection.SCHEMA$))) {
       dfw.setCodec(CodecFactory.snappyCodec());
       dfw.create(AvroSimpleFeatureCollection.SCHEMA$, options.getOutputFile());
       // get appropriate feature adapters
@@ -119,8 +120,8 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
       if (options.getIndexName() != null) {
         queryIndex = indexStore.getIndex(options.getIndexName());
         if (queryIndex == null) {
-          JCommander.getConsole()
-              .println("Unable to find index '" + options.getIndexName() + "' in store");
+          JCommander.getConsole().println(
+              "Unable to find index '" + options.getIndexName() + "' in store");
           return;
         }
       }
@@ -143,8 +144,8 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
           final AvroSimpleFeatureCollection simpleFeatureCollection =
               new AvroSimpleFeatureCollection();
 
-          simpleFeatureCollection
-              .setFeatureType(GeoWaveAvroFeatureUtils.buildFeatureDefinition(null, sft, null, ""));
+          simpleFeatureCollection.setFeatureType(
+              GeoWaveAvroFeatureUtils.buildFeatureDefinition(null, sft, null, ""));
           final List<AvroAttributeValues> avList = new ArrayList<>(options.getBatchSize());
           while (it.hasNext() && (avList.size() < options.getBatchSize())) {
             final Object obj = it.next();

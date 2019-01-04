@@ -34,10 +34,9 @@ public class RedisStoreTestEnvironment extends StoreTestEnvironment {
   @Override
   public void setup() {
     if (redisServer == null) {
-      redisServer =
-          RedisServer.builder().port(6379).setting("bind 127.0.0.1") // secure + prevents
-              // popups on Windows
-              .setting("maxmemory 512M").setting("timeout 30000").build();
+      redisServer = RedisServer.builder().port(6379).setting("bind 127.0.0.1") // secure + prevents
+          // popups on Windows
+          .setting("maxmemory 512M").setting("timeout 30000").build();
       redisServer.start();
     }
   }

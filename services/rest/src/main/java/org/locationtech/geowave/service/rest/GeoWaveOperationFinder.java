@@ -32,7 +32,8 @@ public class GeoWaveOperationFinder extends Finder {
       final Request request,
       final Response response) {
     try {
-      return new GeoWaveOperationServiceWrapper<>(operation.getClass().newInstance(),
+      return new GeoWaveOperationServiceWrapper<>(
+          operation.getClass().newInstance(),
           defaultConfigFile);
     } catch (InstantiationException | IllegalAccessException e) {
       getLogger().log(Level.SEVERE, "Unable to instantiate Service Resource", e);

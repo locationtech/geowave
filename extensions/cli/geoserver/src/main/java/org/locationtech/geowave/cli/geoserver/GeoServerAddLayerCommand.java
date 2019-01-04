@@ -33,11 +33,14 @@ public class GeoServerAddLayerCommand extends GeoServerCommand<String> {
   @Parameter(names = {"-ws", "--workspace"}, required = false, description = "workspace name")
   private String workspace = null;
 
-  @Parameter(names = {"-a", "--add"}, converter = AddOptionConverter.class,
+  @Parameter(
+      names = {"-a", "--add"},
+      converter = AddOptionConverter.class,
       description = "For multiple layers, add (all | raster | vector)")
   private AddOption addOption = null;
 
-  @Parameter(names = {"-id", "--adapterId"},
+  @Parameter(
+      names = {"-id", "--adapterId"},
       description = "select just <adapter id> from the store")
   private String adapterId = null;
 
@@ -62,11 +65,12 @@ public class GeoServerAddLayerCommand extends GeoServerCommand<String> {
       if ((convertedValue != AddOption.ALL)
           && (convertedValue != AddOption.RASTER)
           && (convertedValue != AddOption.VECTOR)) {
-        throw new ParameterException("Value "
-            + value
-            + "can not be converted to an add option. "
-            + "Available values are: "
-            + StringUtils.join(AddOption.values(), ", ").toLowerCase(Locale.ENGLISH));
+        throw new ParameterException(
+            "Value "
+                + value
+                + "can not be converted to an add option. "
+                + "Available values are: "
+                + StringUtils.join(AddOption.values(), ", ").toLowerCase(Locale.ENGLISH));
       }
       return convertedValue;
     }

@@ -113,7 +113,10 @@ public class GeoWaveInputFormat<T> extends InputFormat<GeoWaveInputKey, T> {
       final IndexStore indexStore) {
     setCommonQueryOptions(config, query.getCommonQueryOptions());
     setDataTypeQueryOptions(
-        config, query.getDataTypeQueryOptions(), adapterStore, internalAdapterStore);
+        config,
+        query.getDataTypeQueryOptions(),
+        adapterStore,
+        internalAdapterStore);
     setIndexQueryOptions(config, query.getIndexQueryOptions(), indexStore);
     setQueryConstraints(config, (QueryConstraints) query.getQueryConstraints());
   }
@@ -196,13 +199,15 @@ public class GeoWaveInputFormat<T> extends InputFormat<GeoWaveInputKey, T> {
   }
 
   protected static Index getIndex(final JobContext context) {
-    return GeoWaveInputConfigurator
-        .getIndex(CLASS, GeoWaveConfiguratorBase.getConfiguration(context));
+    return GeoWaveInputConfigurator.getIndex(
+        CLASS,
+        GeoWaveConfiguratorBase.getConfiguration(context));
   }
 
   protected static Boolean isOutputWritable(final JobContext context) {
     return GeoWaveConfiguratorBase.getConfiguration(context).getBoolean(
-        GeoWaveConfiguratorBase.enumToConfKey(CLASS, InputConfig.OUTPUT_WRITABLE), false);
+        GeoWaveConfiguratorBase.enumToConfKey(CLASS, InputConfig.OUTPUT_WRITABLE),
+        false);
   }
 
   protected static Integer getMinimumSplitCount(final JobContext context) {
@@ -221,11 +226,17 @@ public class GeoWaveInputFormat<T> extends InputFormat<GeoWaveInputKey, T> {
     final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
     if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
       return (RecordReader<GeoWaveInputKey, T>) ((MapReduceDataStore) dataStore).createRecordReader(
-          getCommonQueryOptions(context), getDataTypeQueryOptions(context),
-          getIndexQueryOptions(context), getQueryConstraints(context),
-          getJobContextAdapterStore(context), getJobContextInternalAdapterStore(context),
-          getJobContextAdapterIndexMappingStore(context), getJobContextDataStatisticsStore(context),
-          getJobContextIndexStore(context), isOutputWritable(context).booleanValue(), split);
+          getCommonQueryOptions(context),
+          getDataTypeQueryOptions(context),
+          getIndexQueryOptions(context),
+          getQueryConstraints(context),
+          getJobContextAdapterStore(context),
+          getJobContextInternalAdapterStore(context),
+          getJobContextAdapterIndexMappingStore(context),
+          getJobContextDataStatisticsStore(context),
+          getJobContextIndexStore(context),
+          isOutputWritable(context).booleanValue(),
+          split);
     }
     LOGGER.error("Data Store does not support map reduce");
     throw new IOException("Data Store does not support map reduce");
@@ -274,11 +285,17 @@ public class GeoWaveInputFormat<T> extends InputFormat<GeoWaveInputKey, T> {
     final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
     if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
       return ((MapReduceDataStore) dataStore).getSplits(
-          getCommonQueryOptions(context), getDataTypeQueryOptions(context),
-          getIndexQueryOptions(context), getQueryConstraints(context),
-          getJobContextAdapterStore(context), getJobContextAdapterIndexMappingStore(context),
-          getJobContextDataStatisticsStore(context), getJobContextInternalAdapterStore(context),
-          getJobContextIndexStore(context), context, getMinimumSplitCount(context),
+          getCommonQueryOptions(context),
+          getDataTypeQueryOptions(context),
+          getIndexQueryOptions(context),
+          getQueryConstraints(context),
+          getJobContextAdapterStore(context),
+          getJobContextAdapterIndexMappingStore(context),
+          getJobContextDataStatisticsStore(context),
+          getJobContextInternalAdapterStore(context),
+          getJobContextIndexStore(context),
+          context,
+          getMinimumSplitCount(context),
           getMaximumSplitCount(context));
     }
 

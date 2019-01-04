@@ -83,8 +83,9 @@ public class AccumuloSplitsProvider extends SplitsProvider {
     }
 
     final String tableName =
-        AccumuloUtils
-            .getQualifiedTableName(accumuloOperations.getTableNameSpace(), index.getName());
+        AccumuloUtils.getQualifiedTableName(
+            accumuloOperations.getTableNameSpace(),
+            index.getName());
 
     final TreeSet<Range> ranges;
     if (constraints != null) {
@@ -93,19 +94,21 @@ public class AccumuloSplitsProvider extends SplitsProvider {
       if ((maxSplits != null) && (maxSplits > 0)) {
         ranges =
             AccumuloUtils.byteArrayRangesToAccumuloRanges(
-                DataStoreUtils
-                    .constraintsToQueryRanges(
-                        indexConstraints, indexStrategy,
-                        targetResolutionPerDimensionForHierarchicalIndex, maxSplits, indexMetadata)
-                    .getCompositeQueryRanges());
+                DataStoreUtils.constraintsToQueryRanges(
+                    indexConstraints,
+                    indexStrategy,
+                    targetResolutionPerDimensionForHierarchicalIndex,
+                    maxSplits,
+                    indexMetadata).getCompositeQueryRanges());
       } else {
         ranges =
             AccumuloUtils.byteArrayRangesToAccumuloRanges(
-                DataStoreUtils
-                    .constraintsToQueryRanges(
-                        indexConstraints, indexStrategy,
-                        targetResolutionPerDimensionForHierarchicalIndex, -1, indexMetadata)
-                    .getCompositeQueryRanges());
+                DataStoreUtils.constraintsToQueryRanges(
+                    indexConstraints,
+                    indexStrategy,
+                    targetResolutionPerDimensionForHierarchicalIndex,
+                    -1,
+                    indexMetadata).getCompositeQueryRanges());
       }
       if (ranges.size() == 1) {
         final Range range = ranges.first();
@@ -124,11 +127,12 @@ public class AccumuloSplitsProvider extends SplitsProvider {
     // get the metadata information for these ranges
     final HashMap<String, String> hostNameCache = getHostNameCache();
     final BackwardCompatibleTabletLocator locator =
-        BackwardCompatibleTabletLocatorFactory
-            .createTabletLocator(accumuloOperations, tableName, ranges);
+        BackwardCompatibleTabletLocatorFactory.createTabletLocator(
+            accumuloOperations,
+            tableName,
+            ranges);
 
-    for (final Entry<TabletId, List<Range>> tabletIdRanges : locator.getLocationsGroupedByTablet()
-        .entrySet()) {
+    for (final Entry<TabletId, List<Range>> tabletIdRanges : locator.getLocationsGroupedByTablet().entrySet()) {
       final TabletId tabletId = tabletIdRanges.getKey();
       final String tabletServer = locator.getTabletLocation(tabletId);
       final String ipAddress = tabletServer.split(":", 2)[0];
@@ -155,11 +159,16 @@ public class AccumuloSplitsProvider extends SplitsProvider {
           final double cardinality =
               getCardinality(
                   getHistStats(
-                      index, adapterIds, adapterStore, statsStore, statsCache,
-                      new ByteArray(rowRange.getPartitionKey()), authorizations),
+                      index,
+                      adapterIds,
+                      adapterStore,
+                      statsStore,
+                      statsCache,
+                      new ByteArray(rowRange.getPartitionKey()),
+                      authorizations),
                   rowRange);
-          rangeList
-              .add(new RangeLocationPair(rowRange, location, cardinality < 1 ? 1.0 : cardinality));
+          rangeList.add(
+              new RangeLocationPair(rowRange, location, cardinality < 1 ? 1.0 : cardinality));
         } else {
           LOGGER.info("Query split outside of range");
         }
@@ -191,7 +200,8 @@ public class AccumuloSplitsProvider extends SplitsProvider {
 
   public static Range toAccumuloRange(final GeoWaveRowRange range, final int partitionKeyLength) {
     if ((range.getPartitionKey() == null) || (range.getPartitionKey().length == 0)) {
-      return new Range((range.getStartSortKey() == null) ? null : new Text(range.getStartSortKey()),
+      return new Range(
+          (range.getStartSortKey() == null) ? null : new Text(range.getStartSortKey()),
           range.isStartSortKeyInclusive(),
           (range.getEndSortKey() == null) ? null : new Text(range.getEndSortKey()),
           range.isEndSortKeyInclusive());
@@ -209,10 +219,12 @@ public class AccumuloSplitsProvider extends SplitsProvider {
 
   public static GeoWaveRowRange fromAccumuloRange(final Range range, final int partitionKeyLength) {
     if (partitionKeyLength <= 0) {
-      return new GeoWaveRowRange(null,
+      return new GeoWaveRowRange(
+          null,
           range.getStartKey() == null ? null : range.getStartKey().getRowData().getBackingArray(),
           range.getEndKey() == null ? null : range.getEndKey().getRowData().getBackingArray(),
-          range.isStartKeyInclusive(), range.isEndKeyInclusive());
+          range.isStartKeyInclusive(),
+          range.isEndKeyInclusive());
     } else {
       byte[] partitionKey;
       boolean partitionKeyDiffers = false;
@@ -221,29 +233,40 @@ public class AccumuloSplitsProvider extends SplitsProvider {
       } else if (range.getStartKey() != null) {
         partitionKey =
             ArrayUtils.subarray(
-                range.getStartKey().getRowData().getBackingArray(), 0, partitionKeyLength);
+                range.getStartKey().getRowData().getBackingArray(),
+                0,
+                partitionKeyLength);
         if (range.getEndKey() != null) {
           partitionKeyDiffers =
               !Arrays.equals(
-                  partitionKey, ArrayUtils.subarray(
-                      range.getEndKey().getRowData().getBackingArray(), 0, partitionKeyLength));
+                  partitionKey,
+                  ArrayUtils.subarray(
+                      range.getEndKey().getRowData().getBackingArray(),
+                      0,
+                      partitionKeyLength));
         }
       } else {
         partitionKey =
-            ArrayUtils
-                .subarray(range.getEndKey().getRowData().getBackingArray(), 0, partitionKeyLength);
+            ArrayUtils.subarray(
+                range.getEndKey().getRowData().getBackingArray(),
+                0,
+                partitionKeyLength);
       }
-      return new GeoWaveRowRange(partitionKey,
+      return new GeoWaveRowRange(
+          partitionKey,
           range.getStartKey() == null ? null
               : ArrayUtils.subarray(
-                  range.getStartKey().getRowData().getBackingArray(), partitionKeyLength,
+                  range.getStartKey().getRowData().getBackingArray(),
+                  partitionKeyLength,
                   range.getStartKey().getRowData().getBackingArray().length),
           partitionKeyDiffers ? null
               : range.getEndKey() == null ? null
                   : ArrayUtils.subarray(
-                      range.getEndKey().getRowData().getBackingArray(), partitionKeyLength,
+                      range.getEndKey().getRowData().getBackingArray(),
+                      partitionKeyLength,
                       range.getEndKey().getRowData().getBackingArray().length),
-          range.isStartKeyInclusive(), partitionKeyDiffers ? true : range.isEndKeyInclusive());
+          range.isStartKeyInclusive(),
+          partitionKeyDiffers ? true : range.isEndKeyInclusive());
     }
   }
 }

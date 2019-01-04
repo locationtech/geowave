@@ -44,7 +44,9 @@ public class TieredSFCIndexFactory {
       baseDefinitions[d] = dimensionDefs[d].getDimensionDefinition();
       maxBitsOfPrecision = Math.max(dimensionDefs[d].getBitsOfPrecision(), maxBitsOfPrecision);
     }
-    return new TieredSFCIndexStrategy(baseDefinitions, orderedSfcs,
+    return new TieredSFCIndexStrategy(
+        baseDefinitions,
+        orderedSfcs,
         ImmutableBiMap.of(0, (byte) maxBitsOfPrecision));
   }
 
@@ -71,7 +73,9 @@ public class TieredSFCIndexFactory {
     final SpaceFillingCurve[] orderedSfcs =
         new SpaceFillingCurve[] {SFCFactory.createSpaceFillingCurve(sfcDimensions, sfc)};
 
-    return new TieredSFCIndexStrategy(baseDefinitions, orderedSfcs,
+    return new TieredSFCIndexStrategy(
+        baseDefinitions,
+        orderedSfcs,
         ImmutableBiMap.of(0, (byte) maxBitsOfPrecision));
   }
 
@@ -119,7 +123,10 @@ public class TieredSFCIndexFactory {
       spaceFillingCurves[sfcIndex] = SFCFactory.createSpaceFillingCurve(sfcDimensions, sfcType);
     }
     if (maxEstimatedDuplicatedIds != null && maxEstimatedDuplicatedIds > 0) {
-      return new TieredSFCIndexStrategy(baseDefinitions, spaceFillingCurves, sfcIndexToTier.build(),
+      return new TieredSFCIndexStrategy(
+          baseDefinitions,
+          spaceFillingCurves,
+          sfcIndexToTier.build(),
           maxEstimatedDuplicatedIds);
     }
     return new TieredSFCIndexStrategy(baseDefinitions, spaceFillingCurves, sfcIndexToTier.build());
@@ -136,7 +143,10 @@ public class TieredSFCIndexFactory {
       final int[] maxBitsPerDimension,
       final SFCType sfcType) {
     return createEqualIntervalPrecisionTieredStrategy(
-        baseDefinitions, maxBitsPerDimension, sfcType, DEFAULT_NUM_TIERS);
+        baseDefinitions,
+        maxBitsPerDimension,
+        sfcType,
+        DEFAULT_NUM_TIERS);
   }
 
   /**
@@ -209,14 +219,17 @@ public class TieredSFCIndexFactory {
       int maxBitsOfPrecision = Integer.MIN_VALUE;
       for (int d = 0; d < numDimensions; d++) {
         sfcDimensions[d] =
-            new SFCDimensionDefinition(orderedDimensionDefinitions[d],
+            new SFCDimensionDefinition(
+                orderedDimensionDefinitions[d],
                 bitsPerDimensionPerLevel[d][l]);
         maxBitsOfPrecision = Math.max(bitsPerDimensionPerLevel[d][l], maxBitsOfPrecision);
       }
       sfcIndexToTier.put(l, (byte) maxBitsOfPrecision);
       orderedSFCTiers[l] = SFCFactory.createSpaceFillingCurve(sfcDimensions, sfcType);
     }
-    return new TieredSFCIndexStrategy(orderedDimensionDefinitions, orderedSFCTiers,
+    return new TieredSFCIndexStrategy(
+        orderedDimensionDefinitions,
+        orderedSFCTiers,
         sfcIndexToTier.build());
   }
 }

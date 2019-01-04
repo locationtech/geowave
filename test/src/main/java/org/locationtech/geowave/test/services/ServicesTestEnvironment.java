@@ -85,7 +85,8 @@ public class ServicesTestEnvironment implements TestEnvironment {
 
   private Server jettyServer;
 
-  @SuppressFBWarnings(value = {"SWL_SLEEP_WITH_LOCK_HELD"},
+  @SuppressFBWarnings(
+      value = {"SWL_SLEEP_WITH_LOCK_HELD"},
       justification = "Jetty must be started before releasing the lock")
   @Override
   public void setup() throws Exception {
@@ -101,7 +102,8 @@ public class ServicesTestEnvironment implements TestEnvironment {
       try {
         // Prevent "Unauthorized class found" error
         System.setProperty(
-            "GEOSERVER_XSTREAM_WHITELIST", "org.geoserver.wfs.**;org.geoserver.wms.**");
+            "GEOSERVER_XSTREAM_WHITELIST",
+            "org.geoserver.wfs.**;org.geoserver.wms.**");
 
         // delete old workspace configuration if it's still there
         jettyServer = new Server();
@@ -113,9 +115,11 @@ public class ServicesTestEnvironment implements TestEnvironment {
         conn.setSoLingerTime(SO_LINGER_TIME);
         jettyServer.setConnectors(new Connector[] {conn});
         FileUtils.copyFile(
-            new File(TEST_GEOSERVER_LOGGING_PATH), new File(EXISTING_GEOSERVER_LOGGING_PATH));
+            new File(TEST_GEOSERVER_LOGGING_PATH),
+            new File(EXISTING_GEOSERVER_LOGGING_PATH));
         FileUtils.copyFile(
-            new File(TEST_LOG_PROPERTIES_PATH), new File(TEST_GEOSERVER_LOG_PROPERTIES_PATH));
+            new File(TEST_LOG_PROPERTIES_PATH),
+            new File(TEST_GEOSERVER_LOG_PROPERTIES_PATH));
         final WebAppContext gsWebapp = new WebAppContext();
         gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
         gsWebapp.setResourceBase(GEOSERVER_WAR_DIR);
@@ -185,8 +189,8 @@ public class ServicesTestEnvironment implements TestEnvironment {
         restWebapp.setInitParameter("config_file", GEOWAVE_CONFIG_FILE);
         jettyServer.setHandler(new ContextHandlerCollection(gsWebapp, restWebapp));
         // // this allows to send large SLD's from the styles form
-        gsWebapp.getServletContext().getContextHandler()
-            .setMaxFormContentSize(MAX_FORM_CONTENT_SIZE);
+        gsWebapp.getServletContext().getContextHandler().setMaxFormContentSize(
+            MAX_FORM_CONTENT_SIZE);
 
         jettyServer.start();
         while (!jettyServer.isRunning() && !jettyServer.isStarted()) {

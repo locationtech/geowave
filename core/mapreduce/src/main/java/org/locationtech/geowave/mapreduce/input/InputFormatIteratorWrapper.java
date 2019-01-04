@@ -60,8 +60,10 @@ public class InputFormatIteratorWrapper<T> implements Iterator<Entry<GeoWaveInpu
       if (nextRow != null) {
         final Entry<GeoWaveInputKey, T> decodedValue =
             decodeRow(
-                nextRow, queryFilter, (InternalDataAdapter<T>) serializationTool
-                    .getInternalAdapter(nextRow.getAdapterId()),
+                nextRow,
+                queryFilter,
+                (InternalDataAdapter<T>) serializationTool.getInternalAdapter(
+                    nextRow.getAdapterId()),
                 index);
         if (decodedValue != null) {
           nextEntry = decodedValue;

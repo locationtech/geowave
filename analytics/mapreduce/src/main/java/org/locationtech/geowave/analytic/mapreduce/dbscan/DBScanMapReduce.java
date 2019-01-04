@@ -148,8 +148,11 @@ public class DBScanMapReduce {
       final Long count =
           (Long) feature.getAttribute(AnalyticFeature.ClusterFeatureAttribute.COUNT.attrName());
 
-      return new ClusterItem(feature.getID(), projection.getProjection(feature),
-          count == null ? 1 : count, false);
+      return new ClusterItem(
+          feature.getID(),
+          projection.getProjection(feature),
+          count == null ? 1 : count,
+          false);
     }
   }
 
@@ -252,11 +255,18 @@ public class DBScanMapReduce {
           processed.add(cluster);
           final SimpleFeature newPolygonFeature =
               AnalyticFeature.createGeometryFeature(
-                  outputAdapter.getFeatureType(), batchID, UUID.randomUUID().toString(),
+                  outputAdapter.getFeatureType(),
+                  batchID,
+                  UUID.randomUUID().toString(),
                   cluster.getId().getString(), // name
                   partitionData.getGroupId() != null ? partitionData.getGroupId().toString()
                       : cluster.getId().getString(), // group
-                  0.0, cluster.getGeometry(), new String[0], new double[0], zoomLevel, iteration,
+                  0.0,
+                  cluster.getGeometry(),
+                  new String[0],
+                  new double[0],
+                  zoomLevel,
+                  iteration,
                   cluster.size());
           output.set(serializer.toWritable(newPolygonFeature));
           if (LOGGER.isTraceEnabled()) {
@@ -321,16 +331,19 @@ public class DBScanMapReduce {
 
       outputAdapter =
           AnalyticFeature.createGeometryFeatureAdapter(
-              polygonDataTypeId, new String[0],
+              polygonDataTypeId,
+              new String[0],
               config.getString(
-                  HullParameters.Hull.DATA_NAMESPACE_URI, BasicFeatureTypes.DEFAULT_NAMESPACE),
+                  HullParameters.Hull.DATA_NAMESPACE_URI,
+                  BasicFeatureTypes.DEFAULT_NAMESPACE),
               ClusteringUtils.CLUSTERING_CRS);
 
       Projection<SimpleFeature> projectionFunction;
       try {
         projectionFunction =
             config.getInstance(
-                HullParameters.Hull.PROJECTION_CLASS, Projection.class,
+                HullParameters.Hull.PROJECTION_CLASS,
+                Projection.class,
                 SimpleFeatureProjection.class);
       } catch (InstantiationException | IllegalAccessException e) {
         throw new IOException(e);

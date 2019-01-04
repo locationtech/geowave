@@ -120,7 +120,12 @@ public class SparkToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
     // Execute
     if (!driver.runOperation(
-        configFile, localInputOptions, inputStoreName, indexList, ingestOptions, sparkOptions,
+        configFile,
+        localInputOptions,
+        inputStoreName,
+        indexList,
+        ingestOptions,
+        sparkOptions,
         inputPath)) {
       throw new RuntimeException("Ingest failed to execute");
     }

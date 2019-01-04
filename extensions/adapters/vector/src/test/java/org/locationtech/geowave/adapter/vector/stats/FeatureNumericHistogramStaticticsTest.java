@@ -44,7 +44,8 @@ public class FeatureNumericHistogramStaticticsTest {
             "sp.geostuff",
             "geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,whennot:Date,somewhere:Polygon,pid:String");
     dataAdapter =
-        new FeatureDataAdapter(schema,
+        new FeatureDataAdapter(
+            schema,
             new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
   }
 

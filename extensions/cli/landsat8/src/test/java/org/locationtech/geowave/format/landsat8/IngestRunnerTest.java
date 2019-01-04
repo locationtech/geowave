@@ -37,8 +37,9 @@ public class IngestRunnerTest {
     // Skip this test if we're on a Mac
     org.junit.Assume.assumeTrue(isNotMac());
 
-    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies()
-        .put("memory", new MemoryStoreFactoryFamily());
+    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+        "memory",
+        new MemoryStoreFactoryFamily());
 
     InstallGdal.main(new String[] {System.getenv("GDAL_DIR")});
   }
@@ -53,8 +54,8 @@ public class IngestRunnerTest {
 
     final Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
     analyzeOptions.setNBestScenes(1);
-    analyzeOptions
-        .setCqlFilter("BBOX(shape,-76.6,42.34,-76.4,42.54) and band='BQA' and sizeMB < 1");
+    analyzeOptions.setCqlFilter(
+        "BBOX(shape,-76.6,42.34,-76.4,42.54) and band='BQA' and sizeMB < 1");
     analyzeOptions.setUseCachedScenes(true);
     analyzeOptions.setWorkspaceDir(Tests.WORKSPACE_DIR);
 
@@ -75,12 +76,18 @@ public class IngestRunnerTest {
     vectorOverrideOptions.setVectorIndex("spatialindex,spatempindex");
 
     final IngestRunner runner =
-        new IngestRunner(analyzeOptions, downloadOptions, ingestOptions, vectorOverrideOptions,
+        new IngestRunner(
+            analyzeOptions,
+            downloadOptions,
+            ingestOptions,
+            vectorOverrideOptions,
             Arrays.asList("memorystore", "spatialindex"));
     final ManualOperationParams params = new ManualOperationParams();
     params.getContext().put(
-        ConfigOptions.PROPERTIES_FILE_CONTEXT, new File(IngestRunnerTest.class.getClassLoader()
-            .getResource("geowave-config.properties").toURI()));
+        ConfigOptions.PROPERTIES_FILE_CONTEXT,
+        new File(
+            IngestRunnerTest.class.getClassLoader().getResource(
+                "geowave-config.properties").toURI()));
     runner.runInternal(params);
     try (CloseableIterator<Object> results =
         getStore(params).query(QueryBuilder.newBuilder().build())) {

@@ -104,8 +104,9 @@ public class KMeansDistortionMapReduce {
         final Object value,
         final org.apache.hadoop.mapreduce.Mapper<GeoWaveInputKey, ObjectWritable, Text, CountofDoubleWritable>.Context context)
         throws IOException, InterruptedException {
-      nestedGroupCentroidAssigner
-          .findCentroidForLevel(itemWrapperFactory.create(value), centroidAssociationFn);
+      nestedGroupCentroidAssigner.findCentroidForLevel(
+          itemWrapperFactory.create(value),
+          centroidAssociationFn);
       context.write(outputKeyWritable, outputValWritable);
     }
 
@@ -116,12 +117,16 @@ public class KMeansDistortionMapReduce {
         throws IOException, InterruptedException {
       super.setup(context);
       final ScopedJobConfiguration config =
-          new ScopedJobConfiguration(context.getConfiguration(), KMeansDistortionMapReduce.class,
+          new ScopedJobConfiguration(
+              context.getConfiguration(),
+              KMeansDistortionMapReduce.class,
               KMeansDistortionMapReduce.LOGGER);
 
       try {
         nestedGroupCentroidAssigner =
-            new NestedGroupCentroidAssignment<Object>(context, KMeansDistortionMapReduce.class,
+            new NestedGroupCentroidAssignment<Object>(
+                context,
+                KMeansDistortionMapReduce.class,
                 KMeansDistortionMapReduce.LOGGER);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -130,7 +135,8 @@ public class KMeansDistortionMapReduce {
       try {
         centroidExtractor =
             config.getInstance(
-                CentroidParameters.Centroid.EXTRACTOR_CLASS, CentroidExtractor.class,
+                CentroidParameters.Centroid.EXTRACTOR_CLASS,
+                CentroidExtractor.class,
                 SimpleFeatureCentroidExtractor.class);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -139,7 +145,8 @@ public class KMeansDistortionMapReduce {
       try {
         itemWrapperFactory =
             config.getInstance(
-                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, AnalyticItemWrapperFactory.class,
+                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+                AnalyticItemWrapperFactory.class,
                 SimpleFeatureItemWrapperFactory.class);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -213,7 +220,8 @@ public class KMeansDistortionMapReduce {
             new DistortionEntry(key.toString(), batchId, kCount, distortion);
 
         context.write(
-            new GeoWaveOutputKey(DistortionDataAdapter.ADAPTER_TYPE_NAME,
+            new GeoWaveOutputKey(
+                DistortionDataAdapter.ADAPTER_TYPE_NAME,
                 DistortionGroupManagement.DISTORTIONS_INDEX_ARRAY),
             entry);
       }
@@ -225,7 +233,9 @@ public class KMeansDistortionMapReduce {
         throws IOException, InterruptedException {
       super.setup(context);
       final ScopedJobConfiguration config =
-          new ScopedJobConfiguration(context.getConfiguration(), KMeansDistortionMapReduce.class,
+          new ScopedJobConfiguration(
+              context.getConfiguration(),
+              KMeansDistortionMapReduce.class,
               KMeansDistortionMapReduce.LOGGER);
 
       final int k = config.getInt(JumpParameters.Jump.COUNT_OF_CENTROIDS, -1);
@@ -235,7 +245,9 @@ public class KMeansDistortionMapReduce {
 
       try {
         centroidManager =
-            new CentroidManagerGeoWave<Object>(context, KMeansDistortionMapReduce.class,
+            new CentroidManagerGeoWave<Object>(
+                context,
+                KMeansDistortionMapReduce.class,
                 KMeansDistortionMapReduce.LOGGER);
       } catch (final Exception e) {
         KMeansDistortionMapReduce.LOGGER.warn("Unable to initialize centroid manager", e);

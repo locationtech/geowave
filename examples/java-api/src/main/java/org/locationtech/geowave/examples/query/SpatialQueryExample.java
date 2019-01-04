@@ -114,8 +114,9 @@ public class SpatialQueryExample {
     // First point
     final SimpleFeatureBuilder sfBuilder = new SimpleFeatureBuilder(sfType);
     sfBuilder.set(
-        "geometry", GeometryUtils.GEOMETRY_FACTORY
-            .createPoint(new Coordinate(-80.211181640625, 25.848101000701597)));
+        "geometry",
+        GeometryUtils.GEOMETRY_FACTORY.createPoint(
+            new Coordinate(-80.211181640625, 25.848101000701597)));
     sfBuilder.set("filter", "Basic-Stadium");
     // When calling buildFeature, we need to pass an unique id for that
     // feature, or it will be overwritten.
@@ -179,8 +180,9 @@ public class SpatialQueryExample {
 
     // Construct the second feature.
     sfBuilder.set(
-        "geometry", GeometryUtils.GEOMETRY_FACTORY
-            .createPoint(new Coordinate(-118.26713562011719, 33.988349152677955)));
+        "geometry",
+        GeometryUtils.GEOMETRY_FACTORY.createPoint(
+            new Coordinate(-118.26713562011719, 33.988349152677955)));
     sfBuilder.set("filter", "Complex-LA");
     sfBuilder.set("latitude", 33.988349152677955);
     sfBuilder.set("longitude", -118.26713562011719);
@@ -243,11 +245,10 @@ public class SpatialQueryExample {
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     try (final CloseableIterator<SimpleFeature> iterator =
         dataStore.query(
-            bldr.addTypeName(typeName).indexName("SPATIAL_IDX").addAuthorization("root")
-                .constraints(
-                    bldr.constraintsFactory().spatialTemporalConstraints()
-                        .spatialConstraints(queryPolygon).build())
-                .build())) {
+            bldr.addTypeName(typeName).indexName("SPATIAL_IDX").addAuthorization(
+                "root").constraints(
+                    bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                        queryPolygon).build()).build())) {
 
       while (iterator.hasNext()) {
         final SimpleFeature sf = iterator.next();
@@ -362,11 +363,10 @@ public class SpatialQueryExample {
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     try (final CloseableIterator<SimpleFeature> iterator =
         dataStore.query(
-            bldr.addTypeName(typeName).indexName("SPATIAL_IDX").addAuthorization("root")
-                .constraints(
-                    bldr.constraintsFactory().spatialTemporalConstraints()
-                        .spatialConstraints(queryPolygon).build())
-                .build())) {
+            bldr.addTypeName(typeName).indexName("SPATIAL_IDX").addAuthorization(
+                "root").constraints(
+                    bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                        queryPolygon).build()).build())) {
 
       while (iterator.hasNext()) {
         final SimpleFeature sf = iterator.next();

@@ -26,7 +26,8 @@ public class RedisOptions extends StoreFactoryOptions {
   @Parameter(names = "--address", required = true, description = "The address to connect to.")
   private String address;
 
-  @Parameter(names = "--compression",
+  @Parameter(
+      names = "--compression",
       description = "Can be \"snappy\",\"lz4\", or \"none\". Defaults to snappy.",
       converter = CompressionConverter.class)
   private Compression compression = Compression.SNAPPY;

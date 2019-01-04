@@ -13,8 +13,14 @@ import org.locationtech.geowave.core.cli.spi.CLIOperationProviderSpi;
 public class DebugOperationsProvider implements CLIOperationProviderSpi {
 
   private static final Class<?>[] OPERATIONS =
-      new Class<?>[] {DebugSection.class, BBOXQuery.class, ClientSideCQLQuery.class, CQLQuery.class,
-          FullTableScan.class, MinimalFullTable.class, SparkQuery.class};
+      new Class<?>[] {
+          DebugSection.class,
+          BBOXQuery.class,
+          ClientSideCQLQuery.class,
+          CQLQuery.class,
+          FullTableScan.class,
+          MinimalFullTable.class,
+          SparkQuery.class};
 
   @Override
   public Class<?>[] getOperations() {

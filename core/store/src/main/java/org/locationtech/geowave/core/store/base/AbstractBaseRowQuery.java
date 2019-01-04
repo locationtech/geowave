@@ -51,12 +51,22 @@ abstract class AbstractBaseRowQuery<T> extends BaseQuery {
       final boolean delete) {
     final RowReader<T> reader =
         getReader(
-            operations, options, adapterStore, internalAdapterStore,
-            maxResolutionSubsamplingPerDimension, targetResolutionPerDimensionForHierarchicalIndex,
-            limit, queryMaxRangeDecomposition,
-            new NativeEntryTransformer<>(adapterStore, index, getClientFilter(options),
-                (ScanCallback<T, ?>) scanCallback, getFieldBitmask(),
-                maxResolutionSubsamplingPerDimension, !isCommonIndexAggregation()),
+            operations,
+            options,
+            adapterStore,
+            internalAdapterStore,
+            maxResolutionSubsamplingPerDimension,
+            targetResolutionPerDimensionForHierarchicalIndex,
+            limit,
+            queryMaxRangeDecomposition,
+            new NativeEntryTransformer<>(
+                adapterStore,
+                index,
+                getClientFilter(options),
+                (ScanCallback<T, ?>) scanCallback,
+                getFieldBitmask(),
+                maxResolutionSubsamplingPerDimension,
+                !isCommonIndexAggregation()),
             delete);
     return new CloseableIteratorWrapper<>(new ReaderClosableWrapper(reader), reader);
   }

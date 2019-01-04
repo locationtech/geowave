@@ -95,8 +95,8 @@ public class SFCDimensionDefinition implements NumericDimensionDefinition {
   public byte[] toBinary() {
     final byte[] dimensionBinary = PersistenceUtils.toBinary(dimensionDefinition);
     final ByteBuffer buf =
-        ByteBuffer
-            .allocate(dimensionBinary.length + VarintUtils.unsignedIntByteLength(bitsOfPrecision));
+        ByteBuffer.allocate(
+            dimensionBinary.length + VarintUtils.unsignedIntByteLength(bitsOfPrecision));
     VarintUtils.writeUnsignedInt(bitsOfPrecision, buf);
     buf.put(dimensionBinary);
     return buf.array();

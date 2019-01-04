@@ -21,20 +21,24 @@ public class MemoryStoreUtilsTest {
     assertFalse(MemoryStoreUtils.isAuthorized("aaa&ccc".getBytes(), new String[] {"aaa", "bbb"}));
 
     assertTrue(
-        MemoryStoreUtils
-            .isAuthorized("aaa&(ccc|eee)".getBytes(), new String[] {"aaa", "eee", "xxx"}));
+        MemoryStoreUtils.isAuthorized(
+            "aaa&(ccc|eee)".getBytes(),
+            new String[] {"aaa", "eee", "xxx"}));
 
     assertTrue(
-        MemoryStoreUtils
-            .isAuthorized("aaa|(ccc&eee)".getBytes(), new String[] {"bbb", "eee", "ccc"}));
+        MemoryStoreUtils.isAuthorized(
+            "aaa|(ccc&eee)".getBytes(),
+            new String[] {"bbb", "eee", "ccc"}));
 
     assertFalse(
-        MemoryStoreUtils
-            .isAuthorized("aaa|(ccc&eee)".getBytes(), new String[] {"bbb", "dddd", "ccc"}));
+        MemoryStoreUtils.isAuthorized(
+            "aaa|(ccc&eee)".getBytes(),
+            new String[] {"bbb", "dddd", "ccc"}));
 
     assertTrue(
-        MemoryStoreUtils
-            .isAuthorized("aaa|(ccc&eee)".getBytes(), new String[] {"aaa", "dddd", "ccc"}));
+        MemoryStoreUtils.isAuthorized(
+            "aaa|(ccc&eee)".getBytes(),
+            new String[] {"aaa", "dddd", "ccc"}));
 
     assertTrue(
         MemoryStoreUtils.isAuthorized("aaa".getBytes(), new String[] {"aaa", "dddd", "ccc"}));

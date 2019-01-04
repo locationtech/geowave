@@ -81,14 +81,24 @@ public class SecondaryIndexDataManager<T>
                 primaryIndexInsertionIds.getFirstPartitionAndSortKeyPair();
             if (delete) {
               secondaryIndexStore.storeJoinEntry(
-                  secondaryIndex.getName(), insertionId, adapter.getTypeName(),
-                  indexedAttributeFieldName, primaryIndexName, firstPartitionAndSortKey.getLeft(),
-                  firstPartitionAndSortKey.getRight(), new ByteArray(visibility));
+                  secondaryIndex.getName(),
+                  insertionId,
+                  adapter.getTypeName(),
+                  indexedAttributeFieldName,
+                  primaryIndexName,
+                  firstPartitionAndSortKey.getLeft(),
+                  firstPartitionAndSortKey.getRight(),
+                  new ByteArray(visibility));
             } else {
               secondaryIndexStore.deleteJoinEntry(
-                  secondaryIndex.getName(), insertionId, adapter.getTypeName(),
-                  indexedAttributeFieldName, primaryIndexName, firstPartitionAndSortKey.getLeft(),
-                  firstPartitionAndSortKey.getRight(), new ByteArray(visibility));
+                  secondaryIndex.getName(),
+                  insertionId,
+                  adapter.getTypeName(),
+                  indexedAttributeFieldName,
+                  primaryIndexName,
+                  firstPartitionAndSortKey.getLeft(),
+                  firstPartitionAndSortKey.getRight(),
+                  new ByteArray(visibility));
             }
             break;
           case PARTIAL:
@@ -96,7 +106,9 @@ public class SecondaryIndexDataManager<T>
 
             final byte[] fieldSubsetBitmask =
                 BitmaskUtils.generateFieldSubsetBitmask(
-                    primaryIndexModel, attributesToStore.toArray(new String[0]), adapter);
+                    primaryIndexModel,
+                    attributesToStore.toArray(new String[0]),
+                    adapter);
             final List<GeoWaveValue> subsetValues = new ArrayList<>();
             for (final GeoWaveValue value : kvs[0].getFieldValues()) {
               byte[] byteValue = value.getValue();
@@ -114,16 +126,23 @@ public class SecondaryIndexDataManager<T>
               subsetValues.add(new GeoWaveValueImpl(fieldMask, value.getVisibility(), byteValue));
             }
             secondaryIndexStore.storeEntry(
-                secondaryIndex.getName(), insertionId, adapter.getTypeName(),
-                indexedAttributeFieldName, dataId, subsetValues.toArray(new GeoWaveValue[] {}));
+                secondaryIndex.getName(),
+                insertionId,
+                adapter.getTypeName(),
+                indexedAttributeFieldName,
+                dataId,
+                subsetValues.toArray(new GeoWaveValue[] {}));
             break;
           case FULL:
             // assume multiple rows are duplicates, so just take the
             // first one
 
             secondaryIndexStore.storeEntry(
-                secondaryIndex.getName(), insertionId, adapter.getTypeName(),
-                indexedAttributeFieldName, dataId,
+                secondaryIndex.getName(),
+                insertionId,
+                adapter.getTypeName(),
+                indexedAttributeFieldName,
+                dataId,
                 // full simply sends over all of the
                 // attributes
                 // kvs is gauranteed to be at least one, or
@@ -136,8 +155,7 @@ public class SecondaryIndexDataManager<T>
       }
       if (delete) {
         // capture statistics
-        for (final InternalDataStatistics<T, ?, ?> associatedStatistic : secondaryIndex
-            .getAssociatedStatistics()) {
+        for (final InternalDataStatistics<T, ?, ?> associatedStatistic : secondaryIndex.getAssociatedStatistics()) {
           associatedStatistic.entryIngested(entry, kvs);
         }
       }

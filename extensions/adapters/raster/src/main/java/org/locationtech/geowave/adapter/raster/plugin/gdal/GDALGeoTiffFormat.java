@@ -46,8 +46,13 @@ public class GDALGeoTiffFormat extends BaseGDALGridFormat implements Format {
     // reading parameters
     readParameters =
         new ParameterGroup(
-            new DefaultParameterDescriptorGroup(mInfo, new GeneralParameterDescriptor[] {
-                READ_GRIDGEOMETRY2D, USE_JAI_IMAGEREAD, USE_MULTITHREADING, SUGGESTED_TILE_SIZE}));
+            new DefaultParameterDescriptorGroup(
+                mInfo,
+                new GeneralParameterDescriptor[] {
+                    READ_GRIDGEOMETRY2D,
+                    USE_JAI_IMAGEREAD,
+                    USE_MULTITHREADING,
+                    SUGGESTED_TILE_SIZE}));
   }
 
   /** @see org.geotools.data.coverage.grid.AbstractGridFormat#getReader(Object, Hints) */

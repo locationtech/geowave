@@ -75,7 +75,8 @@ public class FeatureAdapterPersistableRegistry implements PersistableRegistrySpi
         new PersistableIdAndConstructor((short) 522, SimpleFeatureUserDataConfigurationSet::new),
         new PersistableIdAndConstructor((short) 523, TimeDescriptorConfiguration::new),
         new PersistableIdAndConstructor((short) 524, VisibilityConfiguration::new),
-        new PersistableIdAndConstructor((short) 525,
+        new PersistableIdAndConstructor(
+            (short) 525,
             SimpleFeatureStatsConfigurationCollection::new),
         new PersistableIdAndConstructor((short) 526, StatsConfigurationCollection::new),
         new PersistableIdAndConstructor((short) 527, FeatureCountMinSketchConfig::new),

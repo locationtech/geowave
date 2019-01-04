@@ -67,8 +67,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RunWith(GeoWaveITRunner.class)
-@GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.CASSANDRA,
-    GeoWaveStoreType.HBASE, GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+@GeoWaveTestStore(
+    value = {
+        GeoWaveStoreType.ACCUMULO,
+        GeoWaveStoreType.CASSANDRA,
+        GeoWaveStoreType.HBASE,
+        GeoWaveStoreType.REDIS,
+        GeoWaveStoreType.ROCKSDB})
 public class SpatialTemporalQueryIT {
   private static final SimpleDateFormat CQL_DATE_FORMAT =
       new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
@@ -80,14 +85,15 @@ public class SpatialTemporalQueryIT {
   private static final int DUPLICATE_DELETION_YEAR_MIN = 1970;
   private static final int DUPLICATE_DELETION_YEAR_MAX = 1974;
   private static final Index DAY_INDEX =
-      new SpatialTemporalIndexBuilder().setPartitionStrategy(PartitionStrategy.ROUND_ROBIN)
-          .setNumPartitions(10).setPeriodicity(Unit.DAY).createIndex();
+      new SpatialTemporalIndexBuilder().setPartitionStrategy(
+          PartitionStrategy.ROUND_ROBIN).setNumPartitions(10).setPeriodicity(
+              Unit.DAY).createIndex();
   private static final Index MONTH_INDEX =
-      new SpatialTemporalIndexBuilder().setPartitionStrategy(PartitionStrategy.HASH)
-          .setNumPartitions(100).setPeriodicity(Unit.MONTH).createIndex();
+      new SpatialTemporalIndexBuilder().setPartitionStrategy(
+          PartitionStrategy.HASH).setNumPartitions(100).setPeriodicity(Unit.MONTH).createIndex();
   private static final Index YEAR_INDEX =
-      new SpatialTemporalIndexBuilder().setPartitionStrategy(PartitionStrategy.HASH)
-          .setNumPartitions(10).setPeriodicity(Unit.YEAR).createIndex();
+      new SpatialTemporalIndexBuilder().setPartitionStrategy(
+          PartitionStrategy.HASH).setNumPartitions(10).setPeriodicity(Unit.YEAR).createIndex();
   private FeatureDataAdapter timeStampAdapter;
   private FeatureDataAdapter timeRangeAdapter;
   private DataStore dataStore;
@@ -157,8 +163,8 @@ public class SpatialTemporalQueryIT {
     final Writer rangeWriters = dataStore.createWriter(timeRangeAdapter.getTypeName());
 
     try {
-      for (int day = cal.getActualMinimum(Calendar.DAY_OF_MONTH); day <= cal
-          .getActualMaximum(Calendar.DAY_OF_MONTH); day++) {
+      for (int day = cal.getActualMinimum(Calendar.DAY_OF_MONTH); day <= cal.getActualMaximum(
+          Calendar.DAY_OF_MONTH); day++) {
         final double ptVal =
             ((((day + 1.0) - cal.getActualMinimum(Calendar.DAY_OF_MONTH))
                 / ((cal.getActualMaximum(Calendar.DAY_OF_MONTH)
@@ -173,8 +179,8 @@ public class SpatialTemporalQueryIT {
       }
 
       cal = getInitialMonthCalendar();
-      for (int month = cal.getActualMinimum(Calendar.MONTH); month <= cal
-          .getActualMaximum(Calendar.MONTH); month++) {
+      for (int month = cal.getActualMinimum(Calendar.MONTH); month <= cal.getActualMaximum(
+          Calendar.MONTH); month++) {
         cal.set(Calendar.MONTH, month);
 
         final double ptVal =
@@ -189,8 +195,13 @@ public class SpatialTemporalQueryIT {
         timeWriters.write(feature);
       }
       ingestTimeRangeData(
-          cal, rangeWriters, featureTimeRangeBuilder, cal.getActualMinimum(Calendar.MONTH),
-          cal.getActualMaximum(Calendar.MONTH), Calendar.MONTH, "month");
+          cal,
+          rangeWriters,
+          featureTimeRangeBuilder,
+          cal.getActualMinimum(Calendar.MONTH),
+          cal.getActualMaximum(Calendar.MONTH),
+          Calendar.MONTH,
+          "month");
 
       cal = getInitialYearCalendar();
       for (int year = MULTI_YEAR_MIN; year <= MULTI_YEAR_MAX; year++) {
@@ -206,7 +217,12 @@ public class SpatialTemporalQueryIT {
       }
 
       ingestTimeRangeData(
-          cal, rangeWriters, featureTimeRangeBuilder, MULTI_YEAR_MIN, MULTI_YEAR_MAX, Calendar.YEAR,
+          cal,
+          rangeWriters,
+          featureTimeRangeBuilder,
+          MULTI_YEAR_MIN,
+          MULTI_YEAR_MAX,
+          Calendar.YEAR,
           "year");
 
       Point pt = geomFactory.createPoint(new Coordinate(-50, -50));
@@ -240,8 +256,13 @@ public class SpatialTemporalQueryIT {
       // Ingest data for duplicate deletion, should not overlap time
       // ranges from other tests
       ingestTimeRangeDataForDuplicateDeletion(
-          cal, rangeWriters, featureTimeRangeBuilder, DUPLICATE_DELETION_YEAR_MIN,
-          DUPLICATE_DELETION_YEAR_MAX, Calendar.YEAR, "ranged_year");
+          cal,
+          rangeWriters,
+          featureTimeRangeBuilder,
+          DUPLICATE_DELETION_YEAR_MIN,
+          DUPLICATE_DELETION_YEAR_MAX,
+          Calendar.YEAR,
+          "ranged_year");
     } finally {
       timeWriters.close();
       rangeWriters.close();
@@ -393,8 +414,14 @@ public class SpatialTemporalQueryIT {
       fidExpectedResults.add(name + ":" + i);
     }
     testQueryGivenDateRange(
-        bldr, name, fidExpectedResults, startOfQuery, endOfQuery, timeStampAdapter.getTypeName(),
-        "timestamp", "timestamp");
+        bldr,
+        name,
+        fidExpectedResults,
+        startOfQuery,
+        endOfQuery,
+        timeStampAdapter.getTypeName(),
+        "timestamp",
+        "timestamp");
   }
 
   private void testQueryGivenDateRange(
@@ -420,9 +447,10 @@ public class SpatialTemporalQueryIT {
     try (CloseableIterator<SimpleFeature> it =
         (CloseableIterator) dataStore.query(
             bldr.constraints(
-                new SpatialTemporalQuery(startOfQuery, endOfQuery,
-                    new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1))))
-                .build())) {
+                new SpatialTemporalQuery(
+                    startOfQuery,
+                    endOfQuery,
+                    new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)))).build())) {
       while (it.hasNext()) {
         final SimpleFeature feature = it.next();
         fidResults.add(feature.getID());
@@ -433,8 +461,8 @@ public class SpatialTemporalQueryIT {
     final Set<String> geotoolsFidResults = new HashSet<>();
     // now make sure geotools results match
     try (final SimpleFeatureIterator features =
-        geowaveGtDataStore.getFeatureSource(adapterId).getFeatures(CQL.toFilter(cqlPredicate))
-            .features()) {
+        geowaveGtDataStore.getFeatureSource(adapterId).getFeatures(
+            CQL.toFilter(cqlPredicate)).features()) {
       while (features.hasNext()) {
         final SimpleFeature feature = features.next();
         geotoolsFidResults.add(feature.getID());
@@ -449,7 +477,8 @@ public class SpatialTemporalQueryIT {
       final Set<String> fidResults) {
     Assert.assertEquals(
         "Expected result count does not match actual result count for " + name,
-        fidExpectedResults.size(), fidResults.size());
+        fidExpectedResults.size(),
+        fidResults.size());
     final Iterator<String> it = fidExpectedResults.iterator();
     while (it.hasNext()) {
       final String expectedFid = it.next();
@@ -464,8 +493,12 @@ public class SpatialTemporalQueryIT {
     currentGeotoolsIndex = DAY_INDEX;
     final Calendar cal = getInitialDayCalendar();
     testQueryMultipleBins(
-        cal, Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH),
-        cal.getActualMaximum(Calendar.DAY_OF_MONTH), bldr, "day");
+        cal,
+        Calendar.DAY_OF_MONTH,
+        cal.getActualMinimum(Calendar.DAY_OF_MONTH),
+        cal.getActualMaximum(Calendar.DAY_OF_MONTH),
+        bldr,
+        "day");
   }
 
   @Test
@@ -475,8 +508,12 @@ public class SpatialTemporalQueryIT {
     currentGeotoolsIndex = MONTH_INDEX;
     final Calendar cal = getInitialMonthCalendar();
     testQueryMultipleBins(
-        cal, Calendar.MONTH, cal.getActualMinimum(Calendar.MONTH),
-        cal.getActualMaximum(Calendar.MONTH), bldr, "month");
+        cal,
+        Calendar.MONTH,
+        cal.getActualMinimum(Calendar.MONTH),
+        cal.getActualMaximum(Calendar.MONTH),
+        bldr,
+        "month");
   }
 
   @Test
@@ -506,8 +543,14 @@ public class SpatialTemporalQueryIT {
     fidExpectedResults.add(name + ":firsthalfrange");
 
     testQueryGivenDateRange(
-        bldr, name, fidExpectedResults, startOfQuery, endOfQuery, timeRangeAdapter.getTypeName(),
-        "startTime", "endTime");
+        bldr,
+        name,
+        fidExpectedResults,
+        startOfQuery,
+        endOfQuery,
+        timeRangeAdapter.getTypeName(),
+        "startTime",
+        "endTime");
 
     cal.set(field, midPoint + 1);
     startOfQuery = cal.getTime();
@@ -518,8 +561,14 @@ public class SpatialTemporalQueryIT {
     fidExpectedResults.add(name + ":secondhalfrange");
 
     testQueryGivenDateRange(
-        bldr, name, fidExpectedResults, startOfQuery, endOfQuery, timeRangeAdapter.getTypeName(),
-        "startTime", "endTime");
+        bldr,
+        name,
+        fidExpectedResults,
+        startOfQuery,
+        endOfQuery,
+        timeRangeAdapter.getTypeName(),
+        "startTime",
+        "endTime");
 
     cal.set(field, min);
     startOfQuery = cal.getTime();
@@ -530,8 +579,14 @@ public class SpatialTemporalQueryIT {
     fidExpectedResults.add(name + ":firsthalfrange");
     fidExpectedResults.add(name + ":secondhalfrange");
     testQueryGivenDateRange(
-        bldr, name, fidExpectedResults, startOfQuery, endOfQuery, timeRangeAdapter.getTypeName(),
-        "startTime", "endTime");
+        bldr,
+        name,
+        fidExpectedResults,
+        startOfQuery,
+        endOfQuery,
+        timeRangeAdapter.getTypeName(),
+        "startTime",
+        "endTime");
   }
 
   @Test
@@ -542,8 +597,12 @@ public class SpatialTemporalQueryIT {
     bldr.setTypeNames(new String[] {timeRangeAdapter.getTypeName()});
     final Calendar cal = getInitialMonthCalendar();
     testTimeRangeAcrossBins(
-        cal, Calendar.MONTH, cal.getActualMinimum(Calendar.MONTH),
-        cal.getActualMaximum(Calendar.MONTH), bldr, "month");
+        cal,
+        Calendar.MONTH,
+        cal.getActualMinimum(Calendar.MONTH),
+        cal.getActualMaximum(Calendar.MONTH),
+        bldr,
+        "month");
   }
 
   @Test
@@ -578,7 +637,9 @@ public class SpatialTemporalQueryIT {
     Date endOfQuery = cal.getTime();
 
     SpatialTemporalQuery fullRangeQuery =
-        new SpatialTemporalQuery(startOfQuery, endOfQuery,
+        new SpatialTemporalQuery(
+            startOfQuery,
+            endOfQuery,
             new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)));
 
     // Create query for selecting items that should still exist
@@ -591,7 +652,9 @@ public class SpatialTemporalQueryIT {
     endOfQuery = cal.getTime();
 
     SpatialTemporalQuery sanityQuery =
-        new SpatialTemporalQuery(startOfQuery, endOfQuery,
+        new SpatialTemporalQuery(
+            startOfQuery,
+            endOfQuery,
             new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)));
 
     // Create deletion query to remove a single entry (1970-1971). Even
@@ -604,7 +667,9 @@ public class SpatialTemporalQueryIT {
     endOfQuery = cal.getTime();
 
     SpatialTemporalQuery deletionQuery =
-        new SpatialTemporalQuery(startOfQuery, endOfQuery,
+        new SpatialTemporalQuery(
+            startOfQuery,
+            endOfQuery,
             new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)));
 
     // Sanity count number of entries that have nothing to do with
@@ -635,7 +700,8 @@ public class SpatialTemporalQueryIT {
     // check and count the number of entries with duplicates
     DuplicateEntryCount dupeEntryCount =
         DuplicateEntryCount.getDuplicateCounts(
-            YEAR_INDEX, Collections.singletonList(typeId),
+            YEAR_INDEX,
+            Collections.singletonList(typeId),
             ((BaseDataStore) dataStore).getStatisticsStore());
 
     Assert.assertEquals(numExpectedEntries, dupeEntryCount.getEntriesWithDuplicatesCount());
@@ -672,7 +738,8 @@ public class SpatialTemporalQueryIT {
     // 3(1980-1987, 1987-1995, 1980-1990)
     dupeEntryCount =
         DuplicateEntryCount.getDuplicateCounts(
-            YEAR_INDEX, Collections.singletonList(typeId),
+            YEAR_INDEX,
+            Collections.singletonList(typeId),
             ((BaseDataStore) dataStore).getStatisticsStore());
 
     // if delete works, it should not count the entry as having any

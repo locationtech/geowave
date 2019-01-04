@@ -48,7 +48,10 @@ public class ClusteringUtils {
 
     final FeatureDataAdapter adapter =
         AnalyticFeature.createGeometryFeatureAdapter(
-            sampleDataTypeId, dimensionNames, sampleDataNamespaceURI, CLUSTERING_CRS);
+            sampleDataTypeId,
+            dimensionNames,
+            sampleDataNamespaceURI,
+            CLUSTERING_CRS);
 
     final ByteArray dbId = new ByteArray(sampleDataTypeId);
     if (!adapterStore.adapterExists(dbId)) {
@@ -63,8 +66,8 @@ public class ClusteringUtils {
       throws IOException {
 
     final PersistableStore store =
-        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper()
-            .getValue(propertyManagement);
+        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+            propertyManagement);
 
     final AdapterStore adapterStore = store.getDataStoreOptions().createAdapterStore();
 
@@ -83,8 +86,8 @@ public class ClusteringUtils {
   public static Index[] getIndices(final PropertyManagement propertyManagement) {
 
     final PersistableStore store =
-        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper()
-            .getValue(propertyManagement);
+        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+            propertyManagement);
 
     final IndexStore indexStore = store.getDataStoreOptions().createIndexStore();
 
@@ -108,7 +111,9 @@ public class ClusteringUtils {
     final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
     final QueryRanges ranges =
         DataStoreUtils.constraintsToQueryRanges(
-            new SpatialQuery(polygon).getIndexConstraints(index), index.getIndexStrategy(), null,
+            new SpatialQuery(polygon).getIndexConstraints(index),
+            index.getIndexStrategy(),
+            null,
             -1);
 
     return ranges;
@@ -117,12 +122,12 @@ public class ClusteringUtils {
   public static Index createIndex(final PropertyManagement propertyManagement) {
 
     final PersistableStore store =
-        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper()
-            .getValue(propertyManagement);
+        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+            propertyManagement);
 
     final IndexStore indexStore = store.getDataStoreOptions().createIndexStore();
-    return indexStore
-        .getIndex(propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_NAME));
+    return indexStore.getIndex(
+        propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_NAME));
   }
 
   public static DataTypeAdapter<?> createAdapter(final PropertyManagement propertyManagement)
@@ -130,14 +135,16 @@ public class ClusteringUtils {
 
     final Class<DimensionExtractor> dimensionExtractorClass =
         propertyManagement.getPropertyAsClass(
-            CommonParameters.Common.DIMENSION_EXTRACT_CLASS, DimensionExtractor.class);
+            CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
+            DimensionExtractor.class);
 
     return ClusteringUtils.createAdapter(
         propertyManagement.getPropertyAsString(CentroidParameters.Centroid.DATA_TYPE_ID),
         propertyManagement.getPropertyAsString(
-            CentroidParameters.Centroid.DATA_NAMESPACE_URI, BasicFeatureTypes.DEFAULT_NAMESPACE),
-        ((PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper()
-            .getValue(propertyManagement)).getDataStoreOptions().createAdapterStore(),
+            CentroidParameters.Centroid.DATA_NAMESPACE_URI,
+            BasicFeatureTypes.DEFAULT_NAMESPACE),
+        ((PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+            propertyManagement)).getDataStoreOptions().createAdapterStore(),
         dimensionExtractorClass.newInstance().getDimensionNames());
   }
 }

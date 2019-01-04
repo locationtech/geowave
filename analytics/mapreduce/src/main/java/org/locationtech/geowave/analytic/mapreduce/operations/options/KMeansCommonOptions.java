@@ -24,7 +24,8 @@ import org.locationtech.geowave.analytic.param.annotations.HullParameter;
 
 public class KMeansCommonOptions {
   @CentroidParameter(CentroidParameters.Centroid.EXTRACTOR_CLASS)
-  @Parameter(names = {"-cce", "--centroidExtractorClass"},
+  @Parameter(
+      names = {"-cce", "--centroidExtractorClass"},
       description = "Centroid Exractor Class implements org.locationtech.geowave.analytics.extract.CentroidExtractor")
   private String centroidExtractorClass;
 
@@ -33,7 +34,8 @@ public class KMeansCommonOptions {
   private String centroidIndexId;
 
   @CentroidParameter(CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS)
-  @Parameter(names = {"-cfc", "--centroidWrapperFactoryClass"},
+  @Parameter(
+      names = {"-cfc", "--centroidWrapperFactoryClass"},
       description = "A factory class that implements org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory")
   private String centroidWrapperFactoryClass;
 
@@ -42,37 +44,46 @@ public class KMeansCommonOptions {
   private String centroidZoomLevel;
 
   @ClusteringParameter(ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE)
-  @Parameter(names = {"-cct", "--clusteringConverganceTolerance"},
+  @Parameter(
+      names = {"-cct", "--clusteringConverganceTolerance"},
       description = "Convergence Tolerance")
   private String clusteringConverganceTolerance;
 
   @ClusteringParameter(ClusteringParameters.Clustering.MAX_ITERATIONS)
-  @Parameter(names = {"-cmi", "--clusteringMaxIterations"}, required = true,
+  @Parameter(
+      names = {"-cmi", "--clusteringMaxIterations"},
+      required = true,
       description = "Maximum number of iterations when finding optimal clusters")
   private String clusteringMaxIterations;
 
   @ClusteringParameter(ClusteringParameters.Clustering.MAX_REDUCER_COUNT)
-  @Parameter(names = {"-crc", "--clusteringMaxReducerCount"},
+  @Parameter(
+      names = {"-crc", "--clusteringMaxReducerCount"},
       description = "Maximum Clustering Reducer Count")
   private String clusteringMaxReducerCount;
 
   @ClusteringParameter(ClusteringParameters.Clustering.ZOOM_LEVELS)
-  @Parameter(names = {"-zl", "--clusteringZoomLevels"}, required = true,
+  @Parameter(
+      names = {"-zl", "--clusteringZoomLevels"},
+      required = true,
       description = "Number of Zoom Levels to Process")
   private String clusteringZoomLevels;
 
   @CommonParameter(CommonParameters.Common.DIMENSION_EXTRACT_CLASS)
-  @Parameter(names = {"-dde", "--commonDimensionExtractClass"},
+  @Parameter(
+      names = {"-dde", "--commonDimensionExtractClass"},
       description = "Dimension Extractor Class implements org.locationtech.geowave.analytics.extract.DimensionExtractor")
   private String commonDimensionExtractClass;
 
   @ExtractParameter(ExtractParameters.Extract.DATA_NAMESPACE_URI)
-  @Parameter(names = {"-ens", "--extractDataNamespaceUri"},
+  @Parameter(
+      names = {"-ens", "--extractDataNamespaceUri"},
       description = "Output Data Namespace URI")
   private String extractDataNamespaceUri;
 
   @ExtractParameter(ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS)
-  @Parameter(names = {"-ede", "--extractDimensionExtractClass"},
+  @Parameter(
+      names = {"-ede", "--extractDimensionExtractClass"},
       description = "Class to extract dimensions into a simple feature output")
   private String extractDimensionExtractClass;
 
@@ -81,7 +92,8 @@ public class KMeansCommonOptions {
   private String extractOutputDataTypeId;
 
   @ExtractParameter(ExtractParameters.Extract.REDUCER_COUNT)
-  @Parameter(names = {"-erc", "--extractReducerCount"},
+  @Parameter(
+      names = {"-erc", "--extractReducerCount"},
       description = "Number of Reducers For initial data extraction and de-duplication")
   private String extractReducerCount;
 
@@ -94,7 +106,8 @@ public class KMeansCommonOptions {
   private String globalParentBatchId;
 
   @HullParameter(HullParameters.Hull.DATA_NAMESPACE_URI)
-  @Parameter(names = {"-hns", "--hullDataNamespaceUri"},
+  @Parameter(
+      names = {"-hns", "--hullDataNamespaceUri"},
       description = "Data Type Namespace for a centroid item")
   private String hullDataNamespaceUri;
 
@@ -107,7 +120,8 @@ public class KMeansCommonOptions {
   private String hullIndexId;
 
   @HullParameter(HullParameters.Hull.PROJECTION_CLASS)
-  @Parameter(names = {"-hpe", "--hullProjectionClass"},
+  @Parameter(
+      names = {"-hpe", "--hullProjectionClass"},
       description = "Class to project on to 2D space. Implements org.locationtech.geowave.analytics.tools.Projection")
   private String hullProjectionClass;
 
@@ -116,7 +130,8 @@ public class KMeansCommonOptions {
   private String hullReducerCount;
 
   @HullParameter(HullParameters.Hull.WRAPPER_FACTORY_CLASS)
-  @Parameter(names = {"-hfc", "--hullWrapperFactoryClass"},
+  @Parameter(
+      names = {"-hfc", "--hullWrapperFactoryClass"},
       description = "Class to create analytic item to capture hulls. Implements org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory")
   private String hullWrapperFactoryClass;
 

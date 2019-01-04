@@ -78,7 +78,11 @@ public class RDDUtils {
 
     for (int iStrategy = 0; iStrategy < indices.length; iStrategy += 1) {
       writeToGeoWave(
-          sc, indices[iStrategy], outputStoreOptions, adapter, inputRDD.getRawRDD().values());
+          sc,
+          indices[iStrategy],
+          outputStoreOptions,
+          adapter,
+          inputRDD.getRawRDD().values());
     }
   }
 
@@ -165,8 +169,10 @@ public class RDDUtils {
           MultiDimensionalNumericData keyTile = index.getRangeForId(partitionKey, sortKey);
           Envelope other = new Envelope();
           other.init(
-              keyTile.getMinValuesPerDimension()[0], keyTile.getMaxValuesPerDimension()[0],
-              keyTile.getMinValuesPerDimension()[1], keyTile.getMaxValuesPerDimension()[1]);
+              keyTile.getMinValuesPerDimension()[0],
+              keyTile.getMaxValuesPerDimension()[0],
+              keyTile.getMinValuesPerDimension()[1],
+              keyTile.getMaxValuesPerDimension()[1]);
           Polygon rect = JTS.toGeometry(other);
           if (!RectangleIntersects.intersects(rect, geom)) {
             it.remove();
@@ -208,11 +214,10 @@ public class RDDUtils {
     Broadcast<String> indexName = sc.broadcast(index.getName(), stringTag);
 
     // map to a pair containing the output key and the output value
-    inputRDD
-        .mapToPair(
-            feat -> new Tuple2<GeoWaveOutputKey, SimpleFeature>(
-                new GeoWaveOutputKey(typeName.value(), indexName.value()), feat))
-        .saveAsNewAPIHadoopDataset(job.getConfiguration());
+    inputRDD.mapToPair(
+        feat -> new Tuple2<GeoWaveOutputKey, SimpleFeature>(
+            new GeoWaveOutputKey(typeName.value(), indexName.value()),
+            feat)).saveAsNewAPIHadoopDataset(job.getConfiguration());
   }
 
   public static Broadcast<? extends NumericIndexStrategy> broadcastIndexStrategy(

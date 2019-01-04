@@ -110,7 +110,10 @@ public class GeoWaveAvroFeatureWriter implements FieldWriter<SimpleFeature, Obje
 
     final AvroFeatureDefinition fd =
         GeoWaveAvroFeatureUtils.buildFeatureDefinition(
-            avroObjectToReuse.getFeatureType(), sft, defaultClassifications, defaultClassification);
+            avroObjectToReuse.getFeatureType(),
+            sft,
+            defaultClassifications,
+            defaultClassification);
     avroObjectToReuse.setFeatureType(fd);
 
     final AvroAttributeValues av = GeoWaveAvroFeatureUtils.buildAttributeValue(sf, sft);

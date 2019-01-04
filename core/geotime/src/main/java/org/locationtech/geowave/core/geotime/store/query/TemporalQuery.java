@@ -38,7 +38,8 @@ public class TemporalQuery extends BasicQuery {
     final List<ConstraintSet> constraints = new ArrayList<>();
     for (final TemporalRange range : temporalConstraints.getRanges()) {
       constraints.add(
-          new ConstraintSet(TimeDefinition.class,
+          new ConstraintSet(
+              TimeDefinition.class,
               new ConstraintData(
                   new NumericRange(range.getStartTime().getTime(), range.getEndTime().getTime()),
                   false)));
@@ -50,7 +51,8 @@ public class TemporalQuery extends BasicQuery {
     final List<ConstraintSet> constraints = new ArrayList<>();
     for (final Interval range : intervals) {
       constraints.add(
-          new ConstraintSet(TimeDefinition.class,
+          new ConstraintSet(
+              TimeDefinition.class,
               new ConstraintData(
                   new NumericRange(range.getStart().toEpochMilli(), range.getEnd().toEpochMilli()),
                   false)));

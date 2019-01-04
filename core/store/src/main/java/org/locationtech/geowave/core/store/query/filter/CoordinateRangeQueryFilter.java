@@ -49,7 +49,8 @@ public class CoordinateRangeQueryFilter implements QueryFilter {
       return false;
     }
     return inBounds(
-        persistenceEncoding.getInsertionPartitionKey(), persistenceEncoding.getInsertionSortKey());
+        persistenceEncoding.getInsertionPartitionKey(),
+        persistenceEncoding.getInsertionSortKey());
   }
 
   private boolean inBounds(final ByteArray partitionKey, final ByteArray sortKey) {

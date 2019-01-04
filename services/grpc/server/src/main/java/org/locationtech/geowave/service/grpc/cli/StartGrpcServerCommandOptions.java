@@ -14,7 +14,9 @@ public class StartGrpcServerCommandOptions {
   @Parameter(names = {"-p", "--port"}, required = false, description = "The port to run on")
   private Integer port = 8980;
 
-  @Parameter(names = {"-n", "--nonBlocking"}, required = false,
+  @Parameter(
+      names = {"-n", "--nonBlocking"},
+      required = false,
       description = "Should the service run as non-blocking or block until shutdown?")
   private Boolean nonBlocking = false;
 

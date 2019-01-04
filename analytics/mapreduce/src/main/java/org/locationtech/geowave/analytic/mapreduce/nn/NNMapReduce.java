@@ -122,7 +122,10 @@ public class NNMapReduce {
           public void partitionWith(final PartitionData partitionData) throws Exception {
             outputValue.setInternalAdapterId(key.getInternalAdapterId());
             AdapterWithObjectWritable.fillWritableWithAdapter(
-                serializationTool, outputValue, key.getInternalAdapterId(), key.getDataId(),
+                serializationTool,
+                outputValue,
+                key.getInternalAdapterId(),
+                key.getDataId(),
                 unwrappedValue);
             partitionDataWritable.setPartitionData(partitionData);
             context.write(partitionDataWritable, outputValue);
@@ -147,7 +150,8 @@ public class NNMapReduce {
       try {
         partitioner =
             config.getInstance(
-                PartitionParameters.Partition.PARTITIONER_CLASS, Partitioner.class,
+                PartitionParameters.Partition.PARTITIONER_CLASS,
+                Partitioner.class,
                 OrthodromicDistancePartitioner.class);
 
         partitioner.initialize(context, NNMapReduce.class);
@@ -185,8 +189,12 @@ public class NNMapReduce {
         throws IOException, InterruptedException {
 
       final NNProcessor<Object, VALUEIN> processor =
-          new NNProcessor<Object, VALUEIN>(partitioner, typeConverter, distanceProfileFn,
-              maxDistance, key.partitionData);
+          new NNProcessor<Object, VALUEIN>(
+              partitioner,
+              typeConverter,
+              distanceProfileFn,
+              maxDistance,
+              key.partitionData);
 
       processor.setUpperBoundPerPartition(maxNeighbors);
 
@@ -269,7 +277,9 @@ public class NNMapReduce {
         throws IOException, InterruptedException {
 
       final ScopedJobConfiguration config =
-          new ScopedJobConfiguration(context.getConfiguration(), NNMapReduce.class,
+          new ScopedJobConfiguration(
+              context.getConfiguration(),
+              NNMapReduce.class,
               NNMapReduce.LOGGER);
 
       serializationTool = new HadoopWritableSerializationTool(context);
@@ -277,7 +287,8 @@ public class NNMapReduce {
       try {
         distanceFn =
             config.getInstance(
-                CommonParameters.Common.DISTANCE_FUNCTION_CLASS, DistanceFn.class,
+                CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+                DistanceFn.class,
                 FeatureGeometryDistanceFn.class);
       } catch (InstantiationException | IllegalAccessException e) {
         throw new IOException(e);
@@ -289,10 +300,13 @@ public class NNMapReduce {
         LOGGER.info("Using secondary partitioning");
         partitioner =
             config.getInstance(
-                PartitionParameters.Partition.SECONDARY_PARTITIONER_CLASS, Partitioner.class,
+                PartitionParameters.Partition.SECONDARY_PARTITIONER_CLASS,
+                Partitioner.class,
                 PassthruPartitioner.class);
-        ((ParameterHelper<Double>) Partition.PARTITION_PRECISION.getHelper())
-            .setValue(context.getConfiguration(), NNMapReduce.class, new Double(1.0));
+        ((ParameterHelper<Double>) Partition.PARTITION_PRECISION.getHelper()).setValue(
+            context.getConfiguration(),
+            NNMapReduce.class,
+            new Double(1.0));
         partitioner.initialize(context, NNMapReduce.class);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -413,7 +427,8 @@ public class NNMapReduce {
           && (o.partitionData.getGroupId() != null)
           && (partitionData.getGroupId() != null)) {
         return UnsignedBytes.lexicographicalComparator().compare(
-            partitionData.getGroupId().getBytes(), o.partitionData.getGroupId().getBytes());
+            partitionData.getGroupId().getBytes(),
+            o.partitionData.getGroupId().getBytes());
       }
       return val;
     }

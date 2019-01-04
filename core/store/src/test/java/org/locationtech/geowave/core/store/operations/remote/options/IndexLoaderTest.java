@@ -37,10 +37,13 @@ public class IndexLoaderTest {
     addIndex.execute(params);
     final IndexLoader loader = new IndexLoader("index1,index2");
     Assert.assertTrue(
-        "Unable to load multiple indices from property file", loader.loadFromConfig(props));
+        "Unable to load multiple indices from property file",
+        loader.loadFromConfig(props));
     final List<IndexPluginOptions> options = loader.getLoadedIndexes();
     Assert.assertEquals(
-        "Given multiple indices an incorrect number of indices loaded", 2, options.size());
+        "Given multiple indices an incorrect number of indices loaded",
+        2,
+        options.size());
   }
 
   @Test
@@ -62,11 +65,14 @@ public class IndexLoaderTest {
     addIndexGroup.prepare(params);
     addIndexGroup.execute(params);
     final IndexLoader loader = new IndexLoader("indexGroup1");
-    Assert
-        .assertTrue("Unable to load index groups from property file", loader.loadFromConfig(props));
+    Assert.assertTrue(
+        "Unable to load index groups from property file",
+        loader.loadFromConfig(props));
     final List<IndexPluginOptions> options = loader.getLoadedIndexes();
     Assert.assertEquals(
-        "Given a single index group an incorrect number of indices loaded", 2, options.size());
+        "Given a single index group an incorrect number of indices loaded",
+        2,
+        options.size());
   }
 
   @Test
@@ -104,6 +110,7 @@ public class IndexLoaderTest {
     final List<IndexPluginOptions> options = loader.getLoadedIndexes();
     Assert.assertEquals(
         "Given the combination of indices and index groups an incorrect number of indices loaded",
-        4, options.size());
+        4,
+        options.size());
   }
 }

@@ -48,7 +48,11 @@ public class Landsat8IngestCommand extends DefaultOperation implements Command {
   public void execute(final OperationParams params) throws Exception {
     JAIExt.initJAIEXT();
     final IngestRunner runner =
-        new IngestRunner(analyzeOptions, downloadOptions, ingestOptions, vectorOverrideOptions,
+        new IngestRunner(
+            analyzeOptions,
+            downloadOptions,
+            ingestOptions,
+            vectorOverrideOptions,
             parameters);
     runner.runInternal(params);
   }

@@ -171,7 +171,12 @@ public class GeometryDataSetGenerator {
       final int numberOfCenters,
       final int minSetSize) {
     return this.generatePointSet(
-        minCenterDistanceFactor, outlierFactor, numberOfCenters, minSetSize, minAxis, maxAxis);
+        minCenterDistanceFactor,
+        outlierFactor,
+        numberOfCenters,
+        minSetSize,
+        minAxis,
+        maxAxis);
   }
 
   public List<SimpleFeature> generatePointSet(
@@ -179,8 +184,10 @@ public class GeometryDataSetGenerator {
       final double distanceFactor,
       final int points) {
     final List<SimpleFeature> pointSet = new ArrayList<>();
-    for (final Point point : CurvedDensityDataGeneratorTool
-        .generatePoints(line, distanceFactor, points)) {
+    for (final Point point : CurvedDensityDataGeneratorTool.generatePoints(
+        line,
+        distanceFactor,
+        points)) {
       pointSet.add(createFeatureWithGeometry(point));
     }
     return pointSet;
@@ -346,7 +353,8 @@ public class GeometryDataSetGenerator {
         // This random number is not used for any purpose
         // related to security or cryptography
         coordinate.setOrdinate(
-            i, constrainedMinAxis[i]
+            i,
+            constrainedMinAxis[i]
                 + (rand.nextDouble() * (constrainedMaxAxis[i] - constrainedMinAxis[i])));
       }
       shape[s] = coordinate;
@@ -533,7 +541,10 @@ public class GeometryDataSetGenerator {
         if (lastCoor != null) {
           results.addAll(
               generatePoints(
-                  line.getFactory(), toVec(coor), toVec(lastCoor), distanceFactor,
+                  line.getFactory(),
+                  toVec(coor),
+                  toVec(lastCoor),
+                  distanceFactor,
                   (int) ((points) * (distancesBetweenCoords[i++] / distanceTotal))));
         }
         lastCoor = coor;

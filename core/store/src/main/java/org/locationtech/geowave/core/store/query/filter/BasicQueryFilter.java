@@ -159,7 +159,9 @@ public class BasicQueryFilter implements QueryFilter {
     for (int d = 0; d < dimensionFields.length && ok; d++) {
       ok &=
           op.compare(
-              minPerDimension[d], maxPerDimension[d], queryRangePerDimension[d].getMin(),
+              minPerDimension[d],
+              maxPerDimension[d],
+              queryRangePerDimension[d].getMin(),
               queryRangePerDimension[d].getMax());
     }
     return ok;
@@ -173,8 +175,8 @@ public class BasicQueryFilter implements QueryFilter {
       return false;
     final List<BinnedNumericDataset> dataRanges =
         BinnedNumericDataset.applyBins(
-            ((CommonIndexedPersistenceEncoding) persistenceEncoding)
-                .getNumericData(dimensionFields),
+            ((CommonIndexedPersistenceEncoding) persistenceEncoding).getNumericData(
+                dimensionFields),
             dimensionFields);
     // check that at least one data range overlaps at least one query range
     for (final BinnedNumericDataset dataRange : dataRanges) {

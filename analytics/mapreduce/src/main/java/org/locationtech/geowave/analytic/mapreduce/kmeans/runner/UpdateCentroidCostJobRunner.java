@@ -45,7 +45,8 @@ public class UpdateCentroidCostJobRunner extends GeoWaveAnalyticJobRunner
 
     NestedGroupCentroidAssignment.setParameters(config, getScope(), runTimeProperties);
     runTimeProperties.setConfig(
-        new ParameterEnum[] {CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS}, config,
+        new ParameterEnum[] {CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS},
+        config,
         getScope());
 
     // HP Fortify "Command Injection" false positive

@@ -66,13 +66,17 @@ public class ConvexHullJobRunner extends GeoWaveAnalyticJobRunner {
   public int run(final Configuration config, final PropertyManagement runTimeProperties)
       throws Exception {
 
-    runTimeProperties
-        .storeIfEmpty(HullParameters.Hull.PROJECTION_CLASS, SimpleFeatureProjection.class);
+    runTimeProperties.storeIfEmpty(
+        HullParameters.Hull.PROJECTION_CLASS,
+        SimpleFeatureProjection.class);
     runTimeProperties.setConfig(
-        new ParameterEnum<?>[] {HullParameters.Hull.WRAPPER_FACTORY_CLASS,
-            HullParameters.Hull.PROJECTION_CLASS, HullParameters.Hull.DATA_TYPE_ID,
+        new ParameterEnum<?>[] {
+            HullParameters.Hull.WRAPPER_FACTORY_CLASS,
+            HullParameters.Hull.PROJECTION_CLASS,
+            HullParameters.Hull.DATA_TYPE_ID,
             HullParameters.Hull.INDEX_NAME},
-        config, getScope());
+        config,
+        getScope());
     setReducerCount(runTimeProperties.getPropertyAsInt(HullParameters.Hull.REDUCER_COUNT, 4));
     CentroidManagerGeoWave.setParameters(config, getScope(), runTimeProperties);
     NestedGroupCentroidAssignment.setParameters(config, getScope(), runTimeProperties);
@@ -85,10 +89,12 @@ public class ConvexHullJobRunner extends GeoWaveAnalyticJobRunner {
     addDataAdapter(
         config,
         getAdapter(
-            runTimeProperties, HullParameters.Hull.DATA_TYPE_ID,
+            runTimeProperties,
+            HullParameters.Hull.DATA_TYPE_ID,
             HullParameters.Hull.DATA_NAMESPACE_URI));
     checkIndex(
-        runTimeProperties, HullParameters.Hull.INDEX_NAME,
+        runTimeProperties,
+        HullParameters.Hull.INDEX_NAME,
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName());
     // HP Fortify "Command Injection" false positive
     // What Fortify considers "externally-influenced input"
@@ -103,17 +109,22 @@ public class ConvexHullJobRunner extends GeoWaveAnalyticJobRunner {
 
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {StoreParameters.StoreParam.INPUT_STORE,
-                StoreParameters.StoreParam.OUTPUT_STORE, GlobalParameters.Global.BATCH_ID}));
+            new ParameterEnum<?>[] {
+                StoreParameters.StoreParam.INPUT_STORE,
+                StoreParameters.StoreParam.OUTPUT_STORE,
+                GlobalParameters.Global.BATCH_ID}));
 
     params.addAll(MapReduceParameters.getParameters());
     params.addAll(NestedGroupCentroidAssignment.getParameters());
 
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {HullParameters.Hull.WRAPPER_FACTORY_CLASS,
-                HullParameters.Hull.PROJECTION_CLASS, HullParameters.Hull.REDUCER_COUNT,
-                HullParameters.Hull.DATA_TYPE_ID, HullParameters.Hull.DATA_NAMESPACE_URI,
+            new ParameterEnum<?>[] {
+                HullParameters.Hull.WRAPPER_FACTORY_CLASS,
+                HullParameters.Hull.PROJECTION_CLASS,
+                HullParameters.Hull.REDUCER_COUNT,
+                HullParameters.Hull.DATA_TYPE_ID,
+                HullParameters.Hull.DATA_NAMESPACE_URI,
                 HullParameters.Hull.INDEX_NAME}));
     return params;
   }

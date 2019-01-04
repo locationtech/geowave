@@ -54,8 +54,8 @@ public class DownloadRunner extends AnalyzeRunner {
       return;
     }
     if (!sceneDir.getParentFile().exists() && !sceneDir.getParentFile().mkdirs()) {
-      LOGGER
-          .warn("Unable to create directory '" + sceneDir.getParentFile().getAbsolutePath() + "'");
+      LOGGER.warn(
+          "Unable to create directory '" + sceneDir.getParentFile().getAbsolutePath() + "'");
     }
 
     // Download files of scene

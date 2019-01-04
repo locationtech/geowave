@@ -30,7 +30,13 @@ public class IngestWithReducerJobRunner
       final String typeName,
       final IngestFromHdfsPlugin parentPlugin,
       final IngestWithReducer ingestPlugin) {
-    super(storeOptions, indexOptions, ingestOptions, inputFile, typeName, parentPlugin,
+    super(
+        storeOptions,
+        indexOptions,
+        ingestOptions,
+        inputFile,
+        typeName,
+        parentPlugin,
         ingestPlugin);
   }
 

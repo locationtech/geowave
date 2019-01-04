@@ -107,7 +107,9 @@ public class DynamoDBReader<T> implements RowReader<T> {
       ranges.forEach(
           (queryRequest -> requests.addAll(
               addQueryRanges(
-                  tableName, queryRequest, readerParams.getAdapterIds(),
+                  tableName,
+                  queryRequest,
+                  readerParams.getAdapterIds(),
                   readerParams.getInternalAdapterStore()))));
     }
     // else if ((readerParams.getAdapterIds() != null) &&
@@ -145,7 +147,9 @@ public class DynamoDBReader<T> implements RowReader<T> {
           range.isInfiniteStopSortKey() ? null : new ByteArray(range.getEndSortKey());
       requests.add(
           getQuery(
-              tableName, range.getPartitionKey(), new ByteArrayRange(startKey, stopKey),
+              tableName,
+              range.getPartitionKey(),
+              new ByteArrayRange(startKey, stopKey),
               adapterId));
     }
     startRead(requests, tableName, false);
@@ -163,17 +167,18 @@ public class DynamoDBReader<T> implements RowReader<T> {
 
           @Override
           public Iterator<DynamoDBRow> apply(final Iterator<Map<String, AttributeValue>> input) {
-            return new GeoWaveRowMergingIterator<>(Iterators.filter(
-                Iterators.transform(input, new DynamoDBRow.GuavaRowTranslationHelper()),
-                visibilityFilter));
+            return new GeoWaveRowMergingIterator<>(
+                Iterators.filter(
+                    Iterators.transform(input, new DynamoDBRow.GuavaRowTranslationHelper()),
+                    visibilityFilter));
           }
         };
 
     if (!requests.isEmpty()) {
       if (ASYNC) {
         rawIterator =
-            Iterators
-                .concat(requests.parallelStream().map(this::executeAsyncQueryRequest).iterator());
+            Iterators.concat(
+                requests.parallelStream().map(this::executeAsyncQueryRequest).iterator());
       } else {
         rawIterator =
             Iterators.concat(requests.parallelStream().map(this::executeQueryRequest).iterator());
@@ -209,7 +214,8 @@ public class DynamoDBReader<T> implements RowReader<T> {
     }
     if (parallelDecode) {
       final ParallelDecoder<T> decoder =
-          new SimpleParallelDecoder<>(rowTransformer,
+          new SimpleParallelDecoder<>(
+              rowTransformer,
               Iterators.transform(rowIter, r -> (GeoWaveRow) r));
       try {
         decoder.startDecode();
@@ -274,8 +280,8 @@ public class DynamoDBReader<T> implements RowReader<T> {
     final QueryRequest query =
         new QueryRequest(tableName).addKeyConditionsEntry(
             DynamoDBRow.GW_PARTITION_ID_KEY,
-            new Condition().withComparisonOperator(ComparisonOperator.EQ)
-                .withAttributeValueList(new AttributeValue().withB(ByteBuffer.wrap(partitionId))));
+            new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(
+                new AttributeValue().withB(ByteBuffer.wrap(partitionId))));
     if (sortRange == null) {
       start = ByteArrayUtils.shortToByteArray(internalAdapterId);
       end = new ByteArray(start).getNextPrefix();
@@ -333,8 +339,8 @@ public class DynamoDBReader<T> implements RowReader<T> {
       final Collection<ByteArrayRange> sortKeyRanges = r.getSortKeyRanges();
       if ((sortKeyRanges != null) && !sortKeyRanges.isEmpty()) {
         sortKeyRanges.forEach(
-            (sortKeyRange -> retVal
-                .add(getQuery(tableName, partitionId, sortKeyRange, adapterId))));
+            (sortKeyRange -> retVal.add(
+                getQuery(tableName, partitionId, sortKeyRange, adapterId))));
       } else {
         retVal.add(getQuery(tableName, partitionId, null, adapterId));
       }

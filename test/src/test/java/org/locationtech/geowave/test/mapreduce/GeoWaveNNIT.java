@@ -58,9 +58,15 @@ import org.slf4j.LoggerFactory;
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.MAP_REDUCE})
 public class GeoWaveNNIT extends AbstractGeoWaveIT {
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.HBASE, GeoWaveStoreType.DYNAMODB,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStorePluginOptions;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveNNIT.class);
@@ -160,18 +166,26 @@ public class GeoWaveNNIT extends AbstractGeoWaveIT {
     final int res =
         jobRunner.run(
             MapReduceTestUtils.getConfiguration(),
-            new PropertyManagement(new ParameterEnum[] {ExtractParameters.Extract.QUERY,
-                ExtractParameters.Extract.MIN_INPUT_SPLIT,
-                ExtractParameters.Extract.MAX_INPUT_SPLIT,
-                PartitionParameters.Partition.MAX_DISTANCE,
-                PartitionParameters.Partition.DISTANCE_THRESHOLDS,
-                PartitionParameters.Partition.PARTITIONER_CLASS, StoreParam.INPUT_STORE,
-                OutputParameters.Output.HDFS_OUTPUT_PATH,
-                MapReduceParameters.MRConfig.HDFS_BASE_DIR, OutputParameters.Output.REDUCER_COUNT,
-                OutputParameters.Output.OUTPUT_FORMAT, InputParameters.Input.INPUT_FORMAT},
-                new Object[] {QueryBuilder.newBuilder().constraints(query).build(),
+            new PropertyManagement(
+                new ParameterEnum[] {
+                    ExtractParameters.Extract.QUERY,
+                    ExtractParameters.Extract.MIN_INPUT_SPLIT,
+                    ExtractParameters.Extract.MAX_INPUT_SPLIT,
+                    PartitionParameters.Partition.MAX_DISTANCE,
+                    PartitionParameters.Partition.DISTANCE_THRESHOLDS,
+                    PartitionParameters.Partition.PARTITIONER_CLASS,
+                    StoreParam.INPUT_STORE,
+                    OutputParameters.Output.HDFS_OUTPUT_PATH,
+                    MapReduceParameters.MRConfig.HDFS_BASE_DIR,
+                    OutputParameters.Output.REDUCER_COUNT,
+                    OutputParameters.Output.OUTPUT_FORMAT,
+                    InputParameters.Input.INPUT_FORMAT},
+                new Object[] {
+                    QueryBuilder.newBuilder().constraints(query).build(),
                     Integer.toString(MapReduceTestUtils.MIN_INPUT_SPLITS),
-                    Integer.toString(MapReduceTestUtils.MAX_INPUT_SPLITS), 0.2, "0.2,0.2",
+                    Integer.toString(MapReduceTestUtils.MAX_INPUT_SPLITS),
+                    0.2,
+                    "0.2,0.2",
                     OrthodromicDistancePartitioner.class,
                     new PersistableStore(dataStorePluginOptions),
                     TestUtils.TEMP_DIR
@@ -182,7 +196,8 @@ public class GeoWaveNNIT extends AbstractGeoWaveIT {
                         + File.separator
                         + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY
                         + "/t1",
-                    3, SequenceFileOutputFormatConfiguration.class,
+                    3,
+                    SequenceFileOutputFormatConfiguration.class,
                     GeoWaveInputFormatConfiguration.class}));
 
     Assert.assertEquals(0, res);
@@ -197,14 +212,16 @@ public class GeoWaveNNIT extends AbstractGeoWaveIT {
     final FileSystem fs = FileSystem.get(MapReduceTestUtils.getConfiguration());
     final FileStatus[] fss =
         fs.listStatus(
-            new Path(TestUtils.TEMP_DIR
-                + File.separator
-                + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY
-                + "/t1/pairs"));
+            new Path(
+                TestUtils.TEMP_DIR
+                    + File.separator
+                    + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY
+                    + "/t1/pairs"));
     for (final FileStatus ifs : fss) {
       if (ifs.isFile() && ifs.getPath().toString().matches(".*part-r-0000[0-9]")) {
         try (SequenceFile.Reader reader =
-            new SequenceFile.Reader(MapReduceTestUtils.getConfiguration(),
+            new SequenceFile.Reader(
+                MapReduceTestUtils.getConfiguration(),
                 Reader.file(ifs.getPath()))) {
 
           final Text key = new Text();
@@ -222,7 +239,13 @@ public class GeoWaveNNIT extends AbstractGeoWaveIT {
   private void ingest(final DataStore dataStore) throws IOException {
 
     dataGenerator.writeToGeoWave(
-        dataStore, dataGenerator.generatePointSet(
-            0.00002, 0.02, 3, 800, new double[] {-92, -37}, new double[] {-90, -35}));
+        dataStore,
+        dataGenerator.generatePointSet(
+            0.00002,
+            0.02,
+            3,
+            800,
+            new double[] {-92, -37},
+            new double[] {-90, -35}));
   }
 }

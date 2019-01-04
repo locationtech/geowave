@@ -48,10 +48,10 @@ public class BitmaskUtilsTest {
 
   @Test
   public void testGenerateBitSet() {
-    Assert
-        .assertTrue(Arrays.equals(zeroth.toByteArray(), BitmaskUtils.generateCompositeBitmask(0)));
-    Assert
-        .assertTrue(Arrays.equals(eighth.toByteArray(), BitmaskUtils.generateCompositeBitmask(8)));
+    Assert.assertTrue(
+        Arrays.equals(zeroth.toByteArray(), BitmaskUtils.generateCompositeBitmask(0)));
+    Assert.assertTrue(
+        Arrays.equals(eighth.toByteArray(), BitmaskUtils.generateCompositeBitmask(8)));
   }
 
   @Test

@@ -29,7 +29,9 @@ public class AccumuloStoreFactoryFamily extends BaseDataStoreFamily {
 
   @Override
   public GenericStoreFactory<SecondaryIndexDataStore> getSecondaryIndexDataStore() {
-    return new AccumuloSecondaryIndexDataStoreFactory(TYPE, DESCRIPTION,
+    return new AccumuloSecondaryIndexDataStoreFactory(
+        TYPE,
+        DESCRIPTION,
         new AccumuloFactoryHelper());
   }
 }

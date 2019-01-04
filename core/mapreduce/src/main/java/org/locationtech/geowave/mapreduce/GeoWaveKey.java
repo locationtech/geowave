@@ -43,8 +43,11 @@ public abstract class GeoWaveKey implements WritableComparable<GeoWaveKey>, java
   public int compareTo(final GeoWaveKey o) {
     byte[] internalAdapterIdBytes = ByteArrayUtils.shortToByteArray(adapterId);
     return WritableComparator.compareBytes(
-        internalAdapterIdBytes, 0, internalAdapterIdBytes.length,
-        ByteArrayUtils.shortToByteArray(o.adapterId), 0,
+        internalAdapterIdBytes,
+        0,
+        internalAdapterIdBytes.length,
+        ByteArrayUtils.shortToByteArray(o.adapterId),
+        0,
         ByteArrayUtils.shortToByteArray(o.adapterId).length);
   }
 

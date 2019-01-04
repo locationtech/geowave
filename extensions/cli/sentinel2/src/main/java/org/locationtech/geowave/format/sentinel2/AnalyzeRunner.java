@@ -35,11 +35,17 @@ public class AnalyzeRunner {
   protected void runInternal(final OperationParams params) throws Exception {
     try {
       try (BandFeatureIterator bands =
-          new BandFeatureIterator(sentinel2Options.providerName(), sentinel2Options.collection(),
-              sentinel2Options.platform(), sentinel2Options.location(),
-              sentinel2Options.startDate(), sentinel2Options.endDate(),
-              sentinel2Options.orbitNumber(), sentinel2Options.relativeOrbitNumber(),
-              sentinel2Options.getCqlFilter(), sentinel2Options.getWorkspaceDir())) {
+          new BandFeatureIterator(
+              sentinel2Options.providerName(),
+              sentinel2Options.collection(),
+              sentinel2Options.platform(),
+              sentinel2Options.location(),
+              sentinel2Options.startDate(),
+              sentinel2Options.endDate(),
+              sentinel2Options.orbitNumber(),
+              sentinel2Options.relativeOrbitNumber(),
+              sentinel2Options.getCqlFilter(),
+              sentinel2Options.getWorkspaceDir())) {
         final AnalysisInfo info = new AnalysisInfo();
         String prevEntityId = null;
 
@@ -151,8 +157,8 @@ public class AnalyzeRunner {
             System.out.println(
                 "Acquisition Date: "
                     + sdf.format(
-                        feature
-                            .getAttribute(SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME)));
+                        feature.getAttribute(
+                            SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME)));
             System.out.println(
                 "Location: " + feature.getAttribute(SceneFeatureIterator.LOCATION_ATTRIBUTE_NAME));
             System.out.println(
@@ -189,8 +195,8 @@ public class AnalyzeRunner {
                     + feature.getAttribute(SceneFeatureIterator.ORBIT_NUMBER_ATTRIBUTE_NAME));
             System.out.println(
                 "Relative Orbit Number: "
-                    + feature
-                        .getAttribute(SceneFeatureIterator.RELATIVE_ORBIT_NUMBER_ATTRIBUTE_NAME));
+                    + feature.getAttribute(
+                        SceneFeatureIterator.RELATIVE_ORBIT_NUMBER_ATTRIBUTE_NAME));
             first = false;
           }
           // print band info

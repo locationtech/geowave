@@ -95,7 +95,8 @@ public class StatsManager {
       if (TimeUtils.isTemporal(descriptor.getType().getBinding())) {
 
         addStats(
-            new FeatureTimeRangeStatistics(descriptor.getLocalName()), descriptor.getLocalName());
+            new FeatureTimeRangeStatistics(descriptor.getLocalName()),
+            descriptor.getLocalName());
       } else if (Geometry.class.isAssignableFrom(descriptor.getType().getBinding())) {
         addStats(
             new FeatureBoundingBoxStatistics(descriptor.getLocalName(), reprojectedType, transform),
@@ -226,8 +227,9 @@ public class StatsManager {
     }
 
     statsObjList.add(statsObj);
-    statisticsIdToFieldNameMap
-        .put(new StatisticsId(statsObj.getType(), statsObj.getExtendedId()), fieldName);
+    statisticsIdToFieldNameMap.put(
+        new StatisticsId(statsObj.getType(), statsObj.getExtendedId()),
+        fieldName);
   }
 
   // -----------------------------------------------------------------------------------

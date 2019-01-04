@@ -87,12 +87,16 @@ public class UpdateCentroidCostMapReduce {
       super.setup(context);
 
       final ScopedJobConfiguration config =
-          new ScopedJobConfiguration(context.getConfiguration(), UpdateCentroidCostMapReduce.class,
+          new ScopedJobConfiguration(
+              context.getConfiguration(),
+              UpdateCentroidCostMapReduce.class,
               UpdateCentroidCostMapReduce.LOGGER);
 
       try {
         nestedGroupCentroidAssigner =
-            new NestedGroupCentroidAssignment<>(context, UpdateCentroidCostMapReduce.class,
+            new NestedGroupCentroidAssignment<>(
+                context,
+                UpdateCentroidCostMapReduce.class,
                 UpdateCentroidCostMapReduce.LOGGER);
 
       } catch (final Exception e1) {
@@ -102,11 +106,14 @@ public class UpdateCentroidCostMapReduce {
       try {
         itemWrapperFactory =
             config.getInstance(
-                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, AnalyticItemWrapperFactory.class,
+                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+                AnalyticItemWrapperFactory.class,
                 SimpleFeatureItemWrapperFactory.class);
 
         itemWrapperFactory.initialize(
-            context, UpdateCentroidCostMapReduce.class, UpdateCentroidCostMapReduce.LOGGER);
+            context,
+            UpdateCentroidCostMapReduce.class,
+            UpdateCentroidCostMapReduce.LOGGER);
       } catch (final Exception e1) {
         throw new IOException(e1);
       }
@@ -189,7 +196,9 @@ public class UpdateCentroidCostMapReduce {
 
       try {
         centroidManager =
-            new CentroidManagerGeoWave<>(context, UpdateCentroidCostMapReduce.class,
+            new CentroidManagerGeoWave<>(
+                context,
+                UpdateCentroidCostMapReduce.class,
                 UpdateCentroidCostMapReduce.LOGGER);
         indexNames = new String[] {centroidManager.getIndexName()};
       } catch (final Exception e) {

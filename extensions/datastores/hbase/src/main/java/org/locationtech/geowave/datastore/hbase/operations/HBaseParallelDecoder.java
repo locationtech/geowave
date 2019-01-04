@@ -91,11 +91,21 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
             regionInfo.getStartKey().length == 0 ? new byte[] {0} : regionInfo.getStartKey());
         regionScan.setStopRow(
             regionInfo.getEndKey().length == 0
-                ? new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
-                    (byte) 0xFF, (byte) 0xFF, (byte) 0xFF}
+                ? new byte[] {
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF}
                 : regionInfo.getEndKey());
         scanners.add(
-            new HBaseScanner(operations.getConnection(), tableName, regionScan,
+            new HBaseScanner(
+                operations.getConnection(),
+                tableName,
+                regionScan,
                 partitionKeyLength));
       }
     } else {
@@ -166,7 +176,10 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
           continue;
         }
         scanners.add(
-            new HBaseScanner(operations.getConnection(), tableName, regionScan,
+            new HBaseScanner(
+                operations.getConnection(),
+                tableName,
+                regionScan,
                 partitionKeyLength));
       }
     }

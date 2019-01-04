@@ -42,8 +42,15 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
       final ScanCallback<T, GeoWaveRow> scanCallback,
       final Map<Short, RowMergingDataAdapter> mergingAdapters,
       final double[] maxResolutionSubsamplingPerDimension) {
-    super(adapterStore, index, scannerIt, clientFilter, scanCallback, null,
-        maxResolutionSubsamplingPerDimension, true);
+    super(
+        adapterStore,
+        index,
+        scannerIt,
+        clientFilter,
+        scanCallback,
+        null,
+        maxResolutionSubsamplingPerDimension,
+        true);
     this.mergingAdapters = mergingAdapters;
     transforms = new HashMap<Short, RowTransform>();
   }
@@ -77,7 +84,8 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
         transform.initOptions(mergingAdapter.getOptions(internalAdapterId, null));
       } catch (final IOException e) {
         LOGGER.error(
-            "Unable to initialize merge strategy for adapter: " + mergingAdapter.getTypeName(), e);
+            "Unable to initialize merge strategy for adapter: " + mergingAdapter.getTypeName(),
+            e);
       }
       transforms.put(internalAdapterId, transform);
     }
@@ -98,7 +106,8 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
     for (GeoWaveValue fieldValue : singleRow.getFieldValues()) {
       final Mergeable mergeable =
           rowTransform.getRowAsMergeableObject(
-              singleRow.getAdapterId(), new ByteArray(fieldValue.getFieldMask()),
+              singleRow.getAdapterId(),
+              new ByteArray(fieldValue.getFieldMask()),
               fieldValue.getValue());
 
       if (merged == null) {
@@ -109,13 +118,19 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
     }
 
     GeoWaveValue[] mergedFieldValues =
-        new GeoWaveValue[] {new GeoWaveValueImpl(singleRow.getFieldValues()[0].getFieldMask(),
-            singleRow.getFieldValues()[0].getVisibility(),
-            rowTransform.getBinaryFromMergedObject(merged))};
+        new GeoWaveValue[] {
+            new GeoWaveValueImpl(
+                singleRow.getFieldValues()[0].getFieldMask(),
+                singleRow.getFieldValues()[0].getVisibility(),
+                rowTransform.getBinaryFromMergedObject(merged))};
 
     return new GeoWaveRowImpl(
-        new GeoWaveKeyImpl(singleRow.getDataId(), singleRow.getAdapterId(),
-            singleRow.getPartitionKey(), singleRow.getSortKey(), singleRow.getNumberOfDuplicates()),
+        new GeoWaveKeyImpl(
+            singleRow.getDataId(),
+            singleRow.getAdapterId(),
+            singleRow.getPartitionKey(),
+            singleRow.getSortKey(),
+            singleRow.getNumberOfDuplicates()),
         mergedFieldValues);
   }
 

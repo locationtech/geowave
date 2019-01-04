@@ -80,14 +80,17 @@ public class NNJobRunnerTest {
           Assert.assertEquals(OrthodromicDistancePartitioner.class, wrapper.getClass());
 
           final Partitioner<?> secondary =
-              configWrapper
-                  .getInstance(Partition.SECONDARY_PARTITIONER_CLASS, Partitioner.class, null);
+              configWrapper.getInstance(
+                  Partition.SECONDARY_PARTITIONER_CLASS,
+                  Partitioner.class,
+                  null);
 
           Assert.assertEquals(OrthodromicDistancePartitioner.class, secondary.getClass());
 
           final DistanceFn<?> distancFn =
               configWrapper.getInstance(
-                  CommonParameters.Common.DISTANCE_FUNCTION_CLASS, DistanceFn.class,
+                  CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+                  DistanceFn.class,
                   GeometryCentroidDistanceFn.class);
 
           Assert.assertEquals(FeatureCentroidDistanceFn.class, distancFn.getClass());
@@ -122,8 +125,9 @@ public class NNJobRunnerTest {
     runTimeProperties.store(MRConfig.HDFS_BASE_DIR, "/");
 
     DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies()
-        .put("memory", new MemoryStoreFactoryFamily());
+    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+        "memory",
+        new MemoryStoreFactoryFamily());
     pluginOptions.selectPlugin("memory");
     MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
@@ -132,13 +136,15 @@ public class NNJobRunnerTest {
 
     runTimeProperties.store(StoreParam.INPUT_STORE, store);
 
-    runTimeProperties
-        .store(CommonParameters.Common.DISTANCE_FUNCTION_CLASS, FeatureCentroidDistanceFn.class);
+    runTimeProperties.store(
+        CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+        FeatureCentroidDistanceFn.class);
 
     runTimeProperties.store(Partition.PARTITIONER_CLASS, OrthodromicDistancePartitioner.class);
 
-    runTimeProperties
-        .store(Partition.SECONDARY_PARTITIONER_CLASS, OrthodromicDistancePartitioner.class);
+    runTimeProperties.store(
+        Partition.SECONDARY_PARTITIONER_CLASS,
+        OrthodromicDistancePartitioner.class);
 
     runTimeProperties.store(Partition.MAX_DISTANCE, Double.valueOf(0.4));
 

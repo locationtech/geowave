@@ -36,8 +36,13 @@ public class ConfigServicesIT extends BaseServiceIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigServicesIT.class);
   private static ConfigServiceClient configServiceClient;
 
-  @GeoWaveTestStore({GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE, GeoWaveStoreType.HBASE,
-      GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.DYNAMODB, GeoWaveStoreType.REDIS,
+  @GeoWaveTestStore({
+      GeoWaveStoreType.ACCUMULO,
+      GeoWaveStoreType.BIGTABLE,
+      GeoWaveStoreType.HBASE,
+      GeoWaveStoreType.CASSANDRA,
+      GeoWaveStoreType.DYNAMODB,
+      GeoWaveStoreType.REDIS,
       GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStorePluginOptions;
 
@@ -76,16 +81,22 @@ public class ConfigServicesIT extends BaseServiceIT {
   @Test
   public void testAddStoreReRoute() {
     TestUtils.assertStatusCode(
-        "Should Create Store", 201,
+        "Should Create Store",
+        201,
         configServiceClient.addStoreReRoute(
-            storeName, dataStorePluginOptions.getType(), null,
+            storeName,
+            dataStorePluginOptions.getType(),
+            null,
             dataStorePluginOptions.getOptionsAsMap()));
 
     muteLogging();
     TestUtils.assertStatusCode(
-        "Should fail to create duplicate store", 400,
+        "Should fail to create duplicate store",
+        400,
         configServiceClient.addStoreReRoute(
-            storeName, dataStorePluginOptions.getType(), null,
+            storeName,
+            dataStorePluginOptions.getType(),
+            null,
             dataStorePluginOptions.getOptionsAsMap()));
     unmuteLogging();
   }
@@ -158,13 +169,17 @@ public class ConfigServicesIT extends BaseServiceIT {
     unmuteLogging();
 
     TestUtils.assertStatusCode(
-        "This should return 404, one of the indexes listed does not exist", 404, thirdAdd);
+        "This should return 404, one of the indexes listed does not exist",
+        404,
+        thirdAdd);
   }
 
   @Test
   public void testRemoveStore() {
     configServiceClient.addStoreReRoute(
-        "test_remove_store", dataStorePluginOptions.getType(), null,
+        "test_remove_store",
+        dataStorePluginOptions.getType(),
+        null,
         dataStorePluginOptions.getOptionsAsMap());
 
     final Response firstRemove = configServiceClient.removeStore("test_remove_store");
@@ -174,8 +189,10 @@ public class ConfigServicesIT extends BaseServiceIT {
     final Response secondRemove = configServiceClient.removeStore("test_remove_store");
     unmuteLogging();
 
-    TestUtils
-        .assertStatusCode("This should return 404, that store does not exist", 404, secondRemove);
+    TestUtils.assertStatusCode(
+        "This should return 404, that store does not exist",
+        404,
+        secondRemove);
   }
 
   @Test
@@ -190,8 +207,10 @@ public class ConfigServicesIT extends BaseServiceIT {
     final Response secondRemove = configServiceClient.removeIndex("test_remove_index");
     unmuteLogging();
 
-    TestUtils
-        .assertStatusCode("This should return 404, that index does not exist", 404, secondRemove);
+    TestUtils.assertStatusCode(
+        "This should return 404, that index does not exist",
+        404,
+        secondRemove);
   }
 
   @Test
@@ -213,7 +232,9 @@ public class ConfigServicesIT extends BaseServiceIT {
     unmuteLogging();
 
     TestUtils.assertStatusCode(
-        "This should return 404, that index group does not exist", 404, secondRemove);
+        "This should return 404, that index group does not exist",
+        404,
+        secondRemove);
   }
 
   @Test

@@ -57,8 +57,13 @@ import org.opengis.feature.simple.SimpleFeatureType;
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
   @GeoWaveTestStore(
-      value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.HBASE,
-          GeoWaveStoreType.DYNAMODB, GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;
 
   private static final Logger LOGGER = Logger.getLogger(AbstractGeoWaveIT.class);
@@ -104,7 +109,12 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     final double northLat = 45;
 
     ingestAndQueryMixedVisibilityRasters(
-        coverageName, tileSize, westLon, eastLon, southLat, northLat);
+        coverageName,
+        tileSize,
+        westLon,
+        eastLon,
+        southLat,
+        northLat);
 
     TestUtils.deleteAll(dataStoreOptions);
   }
@@ -119,7 +129,12 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     final double northLat = 45;
 
     ingestAndQueryComplexVisibilityRasters(
-        coverageName, tileSize, westLon, eastLon, southLat, northLat);
+        coverageName,
+        tileSize,
+        westLon,
+        eastLon,
+        southLat,
+        northLat);
 
     TestUtils.deleteAll(dataStoreOptions);
   }
@@ -137,7 +152,10 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     final DataStore dataStore = dataStoreOptions.createDataStore();
     final RasterDataAdapter adapter =
         RasterUtils.createDataAdapterTypeDouble(
-            coverageName, numBands, tileSize, new NoDataMergeStrategy());
+            coverageName,
+            numBands,
+            tileSize,
+            new NoDataMergeStrategy());
     final WritableRaster raster1 = RasterUtils.createRasterTypeDouble(numBands, tileSize);
     final WritableRaster raster2 = RasterUtils.createRasterTypeDouble(numBands, tileSize);
 
@@ -147,13 +165,23 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
       // Write the first raster w/ vis info
       writer.write(
           RasterUtils.createCoverageTypeDouble(
-              coverageName, westLon, eastLon, southLat, northLat, raster1),
+              coverageName,
+              westLon,
+              eastLon,
+              southLat,
+              northLat,
+              raster1),
           getRasterVisWriter("(a&b)|c"));
 
       // Write the second raster w/ no vis info
       writer.write(
           RasterUtils.createCoverageTypeDouble(
-              coverageName, westLon, eastLon, southLat, northLat, raster2));
+              coverageName,
+              westLon,
+              eastLon,
+              southLat,
+              northLat,
+              raster2));
     }
 
     // First, query w/ no authorizations. We should get
@@ -291,8 +319,8 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
 
     try (CloseableIterator<?> it =
         dataStore.query(
-            QueryBuilder.newBuilder().addTypeName(coverageName).addAuthorization("a")
-                .addAuthorization("b").build())) {
+            QueryBuilder.newBuilder().addTypeName(coverageName).addAuthorization(
+                "a").addAuthorization("b").build())) {
 
       final GridCoverage coverage = (GridCoverage) it.next();
       final Raster raster = coverage.getRenderedImage().getData();
@@ -349,7 +377,10 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     final DataStore dataStore = dataStoreOptions.createDataStore();
     final RasterDataAdapter adapter =
         RasterUtils.createDataAdapterTypeDouble(
-            coverageName, numBands, tileSize, new NoDataMergeStrategy());
+            coverageName,
+            numBands,
+            tileSize,
+            new NoDataMergeStrategy());
     final WritableRaster raster1 = RasterUtils.createRasterTypeDouble(numBands, tileSize);
     final WritableRaster raster2 = RasterUtils.createRasterTypeDouble(numBands, tileSize);
 
@@ -359,13 +390,23 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
       // Write the first raster w/ vis info
       writer.write(
           RasterUtils.createCoverageTypeDouble(
-              coverageName, westLon, eastLon, southLat, northLat, raster1),
+              coverageName,
+              westLon,
+              eastLon,
+              southLat,
+              northLat,
+              raster1),
           getRasterVisWriter("a"));
 
       // Write the second raster w/ no vis info
       writer.write(
           RasterUtils.createCoverageTypeDouble(
-              coverageName, westLon, eastLon, southLat, northLat, raster2));
+              coverageName,
+              westLon,
+              eastLon,
+              southLat,
+              northLat,
+              raster2));
     }
 
     // First, query w/ no authorizations. We should get
@@ -466,15 +507,18 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     final short internalAdapterId = internalDataStore.getAdapterId(adapter.getTypeName());
 
     final StatisticsId statsId =
-        DifferingFieldVisibilityEntryCount.STATS_TYPE.newBuilder()
-            .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName()).build().getId();
+        DifferingFieldVisibilityEntryCount.STATS_TYPE.newBuilder().indexName(
+            TestUtils.DEFAULT_SPATIAL_INDEX.getName()).build().getId();
     try (CloseableIterator<DifferingFieldVisibilityEntryCount> differingVisibilitiesIt =
-        (CloseableIterator) statsStore
-            .getDataStatistics(internalAdapterId, statsId.getExtendedId(), statsId.getType())) {
+        (CloseableIterator) statsStore.getDataStatistics(
+            internalAdapterId,
+            statsId.getExtendedId(),
+            statsId.getType())) {
       final DifferingFieldVisibilityEntryCount differingVisibilities =
           differingVisibilitiesIt.next();
       Assert.assertEquals(
-          "Exactly half the entries should have differing visibility", TOTAL_FEATURES / 2,
+          "Exactly half the entries should have differing visibility",
+          TOTAL_FEATURES / 2,
           differingVisibilities.getEntriesWithDifferingFieldVisibilities());
       testQueryMixed(store, statsStore, internalAdapterId, false);
       testQueryMixed(store, statsStore, internalAdapterId, true);
@@ -563,26 +607,50 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     // open for exactly (5 * total_Features / 8)
     // for other fields there is exactly
     testQuery(
-        store, statsStore, internalAdapterId, new String[] {}, spatial, (5 * TOTAL_FEATURES) / 8,
+        store,
+        statsStore,
+        internalAdapterId,
+        new String[] {},
+        spatial,
+        (5 * TOTAL_FEATURES) / 8,
         ((TOTAL_FEATURES / 8) * 4) + (TOTAL_FEATURES / 2));
 
     for (final String auth : new String[] {"a", "b", "c"}) {
       testQuery(
-          store, statsStore, internalAdapterId, new String[] {auth}, spatial,
-          (6 * TOTAL_FEATURES) / 8, (((2 * TOTAL_FEATURES) / 8) * 4) + ((2 * TOTAL_FEATURES) / 2));
+          store,
+          statsStore,
+          internalAdapterId,
+          new String[] {auth},
+          spatial,
+          (6 * TOTAL_FEATURES) / 8,
+          (((2 * TOTAL_FEATURES) / 8) * 4) + ((2 * TOTAL_FEATURES) / 2));
     }
 
     // order shouldn't matter, but let's make sure here
-    for (final String[] auths : new String[][] {new String[] {"a", "b"}, new String[] {"b", "a"},
-        new String[] {"a", "c"}, new String[] {"c", "a"}, new String[] {"b", "c"},
+    for (final String[] auths : new String[][] {
+        new String[] {"a", "b"},
+        new String[] {"b", "a"},
+        new String[] {"a", "c"},
+        new String[] {"c", "a"},
+        new String[] {"b", "c"},
         new String[] {"c", "b"}}) {
       testQuery(
-          store, statsStore, internalAdapterId, auths, spatial, (7 * TOTAL_FEATURES) / 8,
+          store,
+          statsStore,
+          internalAdapterId,
+          auths,
+          spatial,
+          (7 * TOTAL_FEATURES) / 8,
           (((3 * TOTAL_FEATURES) / 8) * 4) + ((3 * TOTAL_FEATURES) / 2));
     }
 
     testQuery(
-        store, statsStore, internalAdapterId, new String[] {"a", "b", "c"}, spatial, TOTAL_FEATURES,
+        store,
+        statsStore,
+        internalAdapterId,
+        new String[] {"a", "b", "c"},
+        spatial,
+        TOTAL_FEATURES,
         TOTAL_FEATURES * 4);
   }
 
@@ -599,8 +667,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
             QueryBuilder.newBuilder().setAuthorizations(auths).constraints(
                 spatial
                     ? new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)))
-                    : null)
-                .build())) {
+                    : null).build())) {
       int resultCount = 0;
       int nonNullFieldsCount = 0;
       while (it.hasNext()) {
@@ -617,43 +684,47 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
               + (spatial ? "spatial query" : "full table scan")
               + " with auths "
               + Arrays.toString(auths),
-          expectedResultCount, resultCount);
+          expectedResultCount,
+          resultCount);
 
       Assert.assertEquals(
           "Unexpected non-null field count for "
               + (spatial ? "spatial query" : "full table scan")
               + " with auths "
               + Arrays.toString(auths),
-          expectedNonNullFieldCount, nonNullFieldsCount);
+          expectedNonNullFieldCount,
+          nonNullFieldsCount);
     }
 
     final Long count =
         (Long) store.aggregate(
-            AggregationQueryBuilder.newBuilder().count(getType().getTypeName())
-                .setAuthorizations(auths)
-                .constraints(
+            AggregationQueryBuilder.newBuilder().count(getType().getTypeName()).setAuthorizations(
+                auths).constraints(
                     spatial
                         ? new SpatialQuery(
                             new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)))
-                        : null)
-                .build());
+                        : null).build());
     Assert.assertEquals(
         "Unexpected aggregation result count for "
             + (spatial ? "spatial query" : "full table scan")
             + " with auths "
             + Arrays.toString(auths),
-        expectedResultCount, count.intValue());
+        expectedResultCount,
+        count.intValue());
 
     try (final CloseableIterator<CountDataStatistics<?>> statsIt =
-        (CloseableIterator) statsStore
-            .getDataStatistics(internalAdapterId, CountDataStatistics.STATS_TYPE, auths)) {
+        (CloseableIterator) statsStore.getDataStatistics(
+            internalAdapterId,
+            CountDataStatistics.STATS_TYPE,
+            auths)) {
       final CountDataStatistics<?> stats = statsIt.next();
       Assert.assertEquals(
           "Unexpected stats result count for "
               + (spatial ? "spatial query" : "full table scan")
               + " with auths "
               + Arrays.toString(auths),
-          expectedResultCount, stats.getCount());
+          expectedResultCount,
+          stats.getCount());
     }
   }
 

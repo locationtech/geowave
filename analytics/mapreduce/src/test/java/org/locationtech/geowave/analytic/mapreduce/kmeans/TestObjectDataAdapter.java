@@ -199,8 +199,7 @@ public class TestObjectDataAdapter extends AbstractDataAdapter<TestObject>
   @Override
   public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldId) {
     int i = 0;
-    for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model
-        .getDimensions()) {
+    for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
       if (fieldId.equals(dimensionField.getFieldName())) {
         return i;
       }
@@ -220,8 +219,7 @@ public class TestObjectDataAdapter extends AbstractDataAdapter<TestObject>
   public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
     if (position < model.getDimensions().length) {
       int i = 0;
-      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model
-          .getDimensions()) {
+      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
         if (i == position) {
           return dimensionField.getFieldName();
         }

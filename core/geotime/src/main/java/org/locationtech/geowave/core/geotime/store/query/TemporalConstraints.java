@@ -76,7 +76,9 @@ public class TemporalConstraints {
     }
     if ((nextNeighbor != null) && nextNeighbor.getStartTime().before(range.getEndTime())) {
       constraints.add(
-          pos, new TemporalRange(range.getStartTime(),
+          pos,
+          new TemporalRange(
+              range.getStartTime(),
               TemporalConstraints.max(nextNeighbor.getEndTime(), range.getEndTime())));
     } else {
       constraints.add(pos, range);
@@ -139,7 +141,8 @@ public class TemporalConstraints {
           continue;
         }
         newSet.add(
-            new TemporalRange(max(lRange.getStartTime(), rRange.getStartTime()),
+            new TemporalRange(
+                max(lRange.getStartTime(), rRange.getStartTime()),
                 min(lRange.getEndTime(), rRange.getEndTime())));
       }
     }

@@ -28,12 +28,16 @@ public class CentroidAssociationFnTest {
     expectedPairings.add(
         new CentroidPairing<Long>(new LongCentroid(10, "", 0), new LongCentroid(345, "", 0), 335));
     expectedPairings.add(
-        new CentroidPairing<Long>(new LongCentroid(1000, "", 0), new LongCentroid(764, "", 0),
+        new CentroidPairing<Long>(
+            new LongCentroid(1000, "", 0),
+            new LongCentroid(764, "", 0),
             236));
     expectedPairings.add(
         new CentroidPairing<Long>(new LongCentroid(10, "", 0), new LongCentroid(89, "", 0), 79));
     expectedPairings.add(
-        new CentroidPairing<Long>(new LongCentroid(1000, "", 0), new LongCentroid(900, "", 0),
+        new CentroidPairing<Long>(
+            new LongCentroid(1000, "", 0),
+            new LongCentroid(900, "", 0),
             100));
     for (final CentroidPairing<Long> pairing : expectedPairings) {
       expectedCost += pairing.getDistance();
@@ -54,8 +58,10 @@ public class CentroidAssociationFnTest {
     });
     final List<AnalyticItemWrapper<Long>> dataSet =
         Arrays.asList(
-            (AnalyticItemWrapper<Long>) new LongCentroid(345, "", 0), new LongCentroid(764, "", 0),
-            new LongCentroid(89, "", 0), new LongCentroid(900, "", 0));
+            (AnalyticItemWrapper<Long>) new LongCentroid(345, "", 0),
+            new LongCentroid(764, "", 0),
+            new LongCentroid(89, "", 0),
+            new LongCentroid(900, "", 0));
     final List<AnalyticItemWrapper<Long>> centroidSet =
         Arrays.asList(
             (AnalyticItemWrapper<Long>) new LongCentroid(10, "", 0),

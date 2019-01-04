@@ -95,8 +95,9 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
   @BeforeClass
   public static void extractTestFiles() throws URISyntaxException {
     ZipUtils.unZipFile(
-        new File(MapReduceTestEnvironment.class.getClassLoader()
-            .getResource(TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
+        new File(
+            MapReduceTestEnvironment.class.getClassLoader().getResource(
+                TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
         TestUtils.TEST_CASE_BASE);
 
     startMillis = System.currentTimeMillis();
@@ -124,9 +125,15 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     EXPECTED, UNEXPECTED, ERROR
   }
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.HBASE, GeoWaveStoreType.DYNAMODB, GeoWaveStoreType.CASSANDRA,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStorePluginOptions;
 
   @Override
@@ -138,7 +145,9 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
   public void testIngestAndQueryGeneralGpx() throws Exception {
     TestUtils.deleteAll(dataStorePluginOptions);
     MapReduceTestUtils.testMapReduceIngest(
-        dataStorePluginOptions, DimensionalityType.SPATIAL, GENERAL_GPX_INPUT_GPX_DIR);
+        dataStorePluginOptions,
+        DimensionalityType.SPATIAL,
+        GENERAL_GPX_INPUT_GPX_DIR);
     final File gpxInputDir = new File(GENERAL_GPX_INPUT_GPX_DIR);
     final File expectedResultsDir = new File(GENERAL_GPX_EXPECTED_RESULTS_DIR);
     final List<URL> expectedResultsResources = new ArrayList<>();
@@ -177,7 +186,9 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
             expectedResultsResources.toArray(new URL[expectedResultsResources.size()]));
     runTestJob(
         expectedResults,
-        TestUtils.resourceToQuery(new File(GENERAL_GPX_FILTER_FILE).toURI().toURL()), null, null);
+        TestUtils.resourceToQuery(new File(GENERAL_GPX_FILTER_FILE).toURI().toURL()),
+        null,
+        null);
   }
 
   @Test
@@ -185,8 +196,10 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     TestUtils.deleteAll(dataStorePluginOptions);
     // ingest the data set into multiple indices and then try several query
     // methods, by adapter and by index
-    MapReduceTestUtils
-        .testMapReduceIngest(dataStorePluginOptions, DimensionalityType.ALL, OSM_GPX_INPUT_DIR);
+    MapReduceTestUtils.testMapReduceIngest(
+        dataStorePluginOptions,
+        DimensionalityType.ALL,
+        OSM_GPX_INPUT_DIR);
     final DataTypeAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
 
     for (final DataTypeAdapter<SimpleFeature> adapter : adapters) {
@@ -202,8 +215,8 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
       adapterIdToResultsMap.put(
           adapter.getTypeName(),
           TestUtils.getExpectedResults(
-              geowaveStore
-                  .query(QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).build())));
+              geowaveStore.query(
+                  QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).build())));
     }
 
     final List<DataTypeAdapter<?>> firstTwoAdapters = new ArrayList<>();
@@ -213,8 +226,8 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     final ExpectedResults firstTwoAdaptersResults =
         TestUtils.getExpectedResults(
             geowaveStore.query(
-                QueryBuilder.newBuilder().addTypeName(adapters[0].getTypeName())
-                    .addTypeName(adapters[1].getTypeName()).build()));
+                QueryBuilder.newBuilder().addTypeName(adapters[0].getTypeName()).addTypeName(
+                    adapters[1].getTypeName()).build()));
 
     final ExpectedResults fullDataSetResults =
         TestUtils.getExpectedResults(geowaveStore.query(QueryBuilder.newBuilder().build()));
@@ -222,7 +235,8 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     // just for sanity verify its greater than 0 (ie. that data was actually
     // ingested in the first place)
     Assert.assertTrue(
-        "There is no data ingested from OSM GPX test files", fullDataSetResults.count > 0);
+        "There is no data ingested from OSM GPX test files",
+        fullDataSetResults.count > 0);
 
     // now that we have expected results, run map-reduce export and
     // re-ingest it
@@ -240,7 +254,10 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     // then try the first 2 adapters, and may as well try with both indices
     // set (should be the default behavior anyways)
     runTestJob(
-        firstTwoAdaptersResults, null, new DataTypeAdapter[] {adapters[0], adapters[1]}, null);
+        firstTwoAdaptersResults,
+        null,
+        new DataTypeAdapter[] {adapters[0], adapters[1]},
+        null);
 
     // now try all adapters and the spatial temporal index, the result
     // should be the full data set
@@ -288,7 +305,9 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     Assert.assertTrue("Export Vector Data map reduce job failed", res == 0);
     TestUtils.deleteAll(dataStorePluginOptions);
     MapReduceTestUtils.testMapReduceIngest(
-        dataStorePluginOptions, DimensionalityType.ALL, "avro",
+        dataStorePluginOptions,
+        DimensionalityType.ALL,
+        "avro",
         TestUtils.TEMP_DIR
             + File.separator
             + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY
@@ -358,7 +377,8 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
         buf.putLong(hashedCentroid);
       }
       conf.set(
-          MapReduceTestUtils.EXPECTED_RESULTS_KEY, ByteArrayUtils.byteArrayToString(buf.array()));
+          MapReduceTestUtils.EXPECTED_RESULTS_KEY,
+          ByteArrayUtils.byteArrayToString(buf.array()));
 
       GeoWaveInputFormat.setStoreOptions(conf, dataStoreOptions);
       job.setJarByClass(this.getClass());

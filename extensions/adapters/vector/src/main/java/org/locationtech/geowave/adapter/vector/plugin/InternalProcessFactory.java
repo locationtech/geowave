@@ -15,7 +15,9 @@ import org.locationtech.geowave.adapter.vector.render.InternalDistributedRenderP
 public class InternalProcessFactory extends AnnotatedBeanProcessFactory {
 
   public InternalProcessFactory() {
-    super(Text.text("Internal GeoWave Process Factory"), "internal",
+    super(
+        Text.text("Internal GeoWave Process Factory"),
+        "internal",
         InternalDistributedRenderProcess.class);
   }
 

@@ -48,9 +48,15 @@ import org.slf4j.LoggerFactory;
 public class GeoWaveVectorSerializationIT extends AbstractGeoWaveIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveVectorSerializationIT.class);
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.HBASE, GeoWaveStoreType.DYNAMODB,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
 
   private static long startMillis;
@@ -104,7 +110,8 @@ public class GeoWaveVectorSerializationIT extends AbstractGeoWaveIT {
     args.put(BigDecimal.class, new BigDecimal("939384.93840238409237483617837483"));
     args.put(Calendar.class, Calendar.getInstance());
     args.put(
-        String.class, "This is my string. There are many like it, but this one is mine.\n"
+        String.class,
+        "This is my string. There are many like it, but this one is mine.\n"
             + "My string is my best friend. It is my life. I must master it as I must master my life.");
     args.put(long[].class, new long[] {12345l, 6789l, 1011l, 1213111111111111l});
     args.put(int[].class, new int[] {-55, -44, -33, -934839, 55});
@@ -118,8 +125,8 @@ public class GeoWaveVectorSerializationIT extends AbstractGeoWaveIT {
 
     for (final Map.Entry<Class, Object> arg : args.entrySet()) {
       builder.add(
-          ab.binding(arg.getKey()).nillable(false)
-              .buildDescriptor(arg.getKey().getName().toString()));
+          ab.binding(arg.getKey()).nillable(false).buildDescriptor(
+              arg.getKey().getName().toString()));
     }
 
     final SimpleFeatureType serTestType = builder.buildFeatureType();

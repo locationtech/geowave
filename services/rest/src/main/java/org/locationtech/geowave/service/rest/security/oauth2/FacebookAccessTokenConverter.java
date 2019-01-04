@@ -55,8 +55,9 @@ public class FacebookAccessTokenConverter extends DefaultAccessTokenConverter {
     String clientId = (String) map.get(CLIENT_ID);
     parameters.put(CLIENT_ID, clientId);
     Set<String> resourceIds =
-        new LinkedHashSet<>(map.containsKey(AUD) ? (Collection<String>) map.get(AUD)
-            : Collections.<String>emptySet());
+        new LinkedHashSet<>(
+            map.containsKey(AUD) ? (Collection<String>) map.get(AUD)
+                : Collections.<String>emptySet());
     OAuth2Request request =
         new OAuth2Request(parameters, clientId, null, true, scope, resourceIds, null, null, null);
     return new OAuth2Authentication(request, user);

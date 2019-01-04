@@ -109,7 +109,11 @@ public class KdeCommand extends ServiceEnabledCommand<Void> {
     }
 
     final KDEJobRunner runner =
-        new KDEJobRunner(kdeOptions, inputStoreOptions, outputStoreOptions, configFile,
+        new KDEJobRunner(
+            kdeOptions,
+            inputStoreOptions,
+            outputStoreOptions,
+            configFile,
             outputPrimaryIndex);
     return runner;
   }

@@ -54,8 +54,10 @@ public class FeatureSerializationTest {
     final Input input = new InputChunked();
     input.setBuffer(output.getBuffer());
     final SimpleFeature f2 =
-        (SimpleFeature) kryo.getSerializer(SimpleFeatureImpl.class)
-            .read(kryo, input, SimpleFeatureImpl.class);
+        (SimpleFeature) kryo.getSerializer(SimpleFeatureImpl.class).read(
+            kryo,
+            input,
+            SimpleFeatureImpl.class);
     assertEquals(feature, f2);
   }
 }

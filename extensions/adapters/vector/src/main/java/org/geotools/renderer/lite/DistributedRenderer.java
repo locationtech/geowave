@@ -51,8 +51,8 @@ public class DistributedRenderer extends StreamingRenderer {
       // employed and strip all transformations
       if (transformLfts.transformation instanceof ProcessFunction) {
         if ((((ProcessFunction) transformLfts.transformation).getName() != null)
-            && ((ProcessFunction) transformLfts.transformation).getName()
-                .equals(DistributedRenderProcess.PROCESS_NAME)) {
+            && ((ProcessFunction) transformLfts.transformation).getName().equals(
+                DistributedRenderProcess.PROCESS_NAME)) {
           transformLfts.transformation = null;
         }
       }
@@ -122,8 +122,7 @@ public class DistributedRenderer extends StreamingRenderer {
 
     public DistributedRenderResult getResult(final BufferedImage parentImage) {
       final List<CompositeGroupResult> compositeGroups = new ArrayList<>();
-      for (final Entry<Graphics2D, List<Pair<BufferedImage, Composite>>> e : compositeGroupGraphicsToStyleGraphicsMapping
-          .entrySet()) {
+      for (final Entry<Graphics2D, List<Pair<BufferedImage, Composite>>> e : compositeGroupGraphicsToStyleGraphicsMapping.entrySet()) {
         final Graphics2D compositeGroupGraphic = e.getKey();
         final List<Pair<PersistableRenderedImage, PersistableComposite>> orderedStyles =
             Lists.transform(
@@ -157,7 +156,8 @@ public class DistributedRenderer extends StreamingRenderer {
         }
       }
 
-      return new DistributedRenderResult(new PersistableRenderedImage(parentImage),
+      return new DistributedRenderResult(
+          new PersistableRenderedImage(parentImage),
           compositeGroups);
     }
   }

@@ -80,8 +80,13 @@ public class BaseQueryOptions {
       final AggregationQuery<?, ?, ?> query,
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore) {
-    this(query.getCommonQueryOptions(), query.getDataTypeQueryOptions(),
-        query.getIndexQueryOptions(), adapterStore, internalAdapterStore, null);
+    this(
+        query.getCommonQueryOptions(),
+        query.getDataTypeQueryOptions(),
+        query.getIndexQueryOptions(),
+        adapterStore,
+        internalAdapterStore,
+        null);
   }
 
   public BaseQueryOptions(
@@ -89,8 +94,13 @@ public class BaseQueryOptions {
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
       final ScanCallback<?, ?> scanCallback) {
-    this(query.getCommonQueryOptions(), query.getDataTypeQueryOptions(),
-        query.getIndexQueryOptions(), adapterStore, internalAdapterStore, scanCallback);
+    this(
+        query.getCommonQueryOptions(),
+        query.getDataTypeQueryOptions(),
+        query.getIndexQueryOptions(),
+        adapterStore,
+        internalAdapterStore,
+        scanCallback);
   }
 
   public BaseQueryOptions(
@@ -117,11 +127,11 @@ public class BaseQueryOptions {
     maxRangeDecomposition =
         (Integer) commonOptions.getHints().get(DataStoreUtils.MAX_RANGE_DECOMPOSITION);
     maxResolutionSubsamplingPerDimension =
-        (double[]) commonOptions.getHints()
-            .get(DataStoreUtils.MAX_RESOLUTION_SUBSAMPLING_PER_DIMENSION);
+        (double[]) commonOptions.getHints().get(
+            DataStoreUtils.MAX_RESOLUTION_SUBSAMPLING_PER_DIMENSION);
     targetResolutionPerDimensionForHierarchicalIndex =
-        (double[]) commonOptions.getHints()
-            .get(DataStoreUtils.TARGET_RESOLUTION_PER_DIMENSION_FOR_HIERARCHICAL_INDEX);
+        (double[]) commonOptions.getHints().get(
+            DataStoreUtils.TARGET_RESOLUTION_PER_DIMENSION_FOR_HIERARCHICAL_INDEX);
     authorizations = commonOptions.getAuthorizations();
 
     if ((typeOptions instanceof AggregateTypeQueryOptions)
@@ -143,7 +153,8 @@ public class BaseQueryOptions {
         if (adapterId != null) {
           final DataTypeAdapter<?> adapter = adapterStore.getAdapter(adapterId);
           aggregationAdapterPair =
-              new ImmutablePair<>(new InternalDataAdapterWrapper<>(adapter, adapterId),
+              new ImmutablePair<>(
+                  new InternalDataAdapterWrapper<>(adapter, adapterId),
                   ((AggregateTypeQueryOptions) typeOptions).getAggregation());
         } else {
           throw new IllegalArgumentException("Type name " + typeName + " does not exist");
@@ -164,7 +175,8 @@ public class BaseQueryOptions {
         if (adapterId != null) {
           final DataTypeAdapter<?> adapter = adapterStore.getAdapter(adapterId);
           fieldIdsAdapterPair =
-              new ImmutablePair<>(((FilterByTypeQueryOptions) typeOptions).getFieldNames(),
+              new ImmutablePair<>(
+                  ((FilterByTypeQueryOptions) typeOptions).getFieldNames(),
                   new InternalDataAdapterWrapper<>(adapter, adapterId));
         } else {
           throw new IllegalArgumentException("Type name " + typeName + " does not exist");
@@ -181,7 +193,8 @@ public class BaseQueryOptions {
           ArrayUtils.toPrimitive(
               Collections2.filter(
                   Lists.transform(
-                      Arrays.asList(typeOptions.getTypeNames()), new Function<String, Short>() {
+                      Arrays.asList(typeOptions.getTypeNames()),
+                      new Function<String, Short>() {
                         @Override
                         public Short apply(final String input) {
                           return internalAdapterStore.getAdapterId(input);

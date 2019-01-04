@@ -21,11 +21,14 @@ public class DynamoDBDataStore extends BaseMapReduceDataStore {
   public static final String TYPE = "dynamodb";
 
   public DynamoDBDataStore(final DynamoDBOperations operations) {
-    super(new IndexStoreImpl(operations, operations.getOptions().getBaseOptions()),
+    super(
+        new IndexStoreImpl(operations, operations.getOptions().getBaseOptions()),
         new AdapterStoreImpl(operations, operations.getOptions().getBaseOptions()),
         new DataStatisticsStoreImpl(operations, operations.getOptions().getBaseOptions()),
         new AdapterIndexMappingStoreImpl(operations, operations.getOptions().getBaseOptions()),
-        new SecondaryIndexStoreImpl(), operations, operations.getOptions().getBaseOptions(),
+        new SecondaryIndexStoreImpl(),
+        operations,
+        operations.getOptions().getBaseOptions(),
         new InternalAdapterStoreImpl(operations));
   }
 }

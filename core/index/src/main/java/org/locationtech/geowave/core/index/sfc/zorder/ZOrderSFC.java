@@ -115,8 +115,9 @@ public class ZOrderSFC implements SpaceFillingCurve {
         ZOrderUtils.encode(normalizedMins, cardinalityPerDimension, query.getDimensionCount());
     final byte[] maxZorder =
         ZOrderUtils.encode(normalizedMaxes, cardinalityPerDimension, query.getDimensionCount());
-    return new RangeDecomposition(new ByteArrayRange[] {
-        new ByteArrayRange(new ByteArray(minZorder), new ByteArray(maxZorder))});
+    return new RangeDecomposition(
+        new ByteArrayRange[] {
+            new ByteArrayRange(new ByteArray(minZorder), new ByteArray(maxZorder))});
   }
 
   /** * {@inheritDoc} */
@@ -189,7 +190,8 @@ public class ZOrderSFC implements SpaceFillingCurve {
 
   @Override
   public long[] normalizeRange(final double minValue, final double maxValue, final int d) {
-    return new long[] {(long) (dimensionDefs[d].normalize(minValue) * binsPerDimension),
+    return new long[] {
+        (long) (dimensionDefs[d].normalize(minValue) * binsPerDimension),
         (long) (dimensionDefs[d].normalize(maxValue) * binsPerDimension)};
   }
 }

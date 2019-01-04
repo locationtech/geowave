@@ -38,15 +38,18 @@ public class OSMRelationMapper extends OSMMapperBase<AvroRelation> {
     int i = 0;
     for (final AvroRelationMember rm : relation.getMembers()) {
       put(
-          m, ColumnFamily.RELATION,
+          m,
+          ColumnFamily.RELATION,
           ColumnQualifier.getRelationMember(ColumnQualifier.REFERENCE_ROLEID_PREFIX, i),
           rm.getRole());
       put(
-          m, ColumnFamily.RELATION,
+          m,
+          ColumnFamily.RELATION,
           ColumnQualifier.getRelationMember(ColumnQualifier.REFERENCE_MEMID_PREFIX, i),
           rm.getMember());
       put(
-          m, ColumnFamily.RELATION,
+          m,
+          ColumnFamily.RELATION,
           ColumnQualifier.getRelationMember(ColumnQualifier.REFERENCE_TYPE_PREFIX, i),
           rm.getMemberType().toString());
       i++;

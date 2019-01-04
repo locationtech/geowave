@@ -35,10 +35,15 @@ import org.locationtech.geowave.mapreduce.BaseMapReduceDataStore;
 
 public class CassandraDataStore extends BaseMapReduceDataStore {
   public CassandraDataStore(final CassandraOperations operations, final CassandraOptions options) {
-    super(new IndexStoreImpl(operations, options), new AdapterStoreImpl(operations, options),
+    super(
+        new IndexStoreImpl(operations, options),
+        new AdapterStoreImpl(operations, options),
         new DataStatisticsStoreImpl(operations, options),
-        new AdapterIndexMappingStoreImpl(operations, options), new SecondaryIndexStoreImpl(),
-        operations, options, new InternalAdapterStoreImpl(operations));
+        new AdapterIndexMappingStoreImpl(operations, options),
+        new SecondaryIndexStoreImpl(),
+        operations,
+        options,
+        new InternalAdapterStoreImpl(operations));
   }
 
   @Override
@@ -65,7 +70,17 @@ public class CassandraDataStore extends BaseMapReduceDataStore {
       final Integer maxSplits) throws IOException, InterruptedException {
     context.getConfiguration().setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
     return super.getSplits(
-        commonOptions, typeOptions, indexOptions, constraints, adapterStore, aimStore, statsStore,
-        internalAdapterStore, indexStore, context, minSplits, maxSplits);
+        commonOptions,
+        typeOptions,
+        indexOptions,
+        constraints,
+        adapterStore,
+        aimStore,
+        statsStore,
+        internalAdapterStore,
+        indexStore,
+        context,
+        minSplits,
+        maxSplits);
   }
 }

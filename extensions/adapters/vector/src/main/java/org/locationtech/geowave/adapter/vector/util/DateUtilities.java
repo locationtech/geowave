@@ -61,11 +61,14 @@ public class DateUtilities {
       Date end = null;
 
       StatisticsQuery<Interval> query =
-          VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(startField)
-              .build();
+          VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+              startField).build();
       try (CloseableIterator<InternalDataStatistics<?, ?, ?>> timeStatIt =
           statisticsStore.getDataStatistics(
-              adapterId, query.getExtendedId(), query.getStatsType(), new String[0])) {
+              adapterId,
+              query.getExtendedId(),
+              query.getStatsType(),
+              new String[0])) {
         if (timeStatIt.hasNext()) {
           final InternalDataStatistics<?, ?, ?> timeStat = timeStatIt.next();
           if (timeStat instanceof FeatureTimeRangeStatistics) {
@@ -75,11 +78,14 @@ public class DateUtilities {
         }
       }
       query =
-          VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(endField)
-              .build();
+          VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+              endField).build();
       try (CloseableIterator<InternalDataStatistics<?, ?, ?>> timeStatIt =
           statisticsStore.getDataStatistics(
-              adapterId, query.getExtendedId(), query.getStatsType(), new String[0])) {
+              adapterId,
+              query.getExtendedId(),
+              query.getStatsType(),
+              new String[0])) {
         if (timeStatIt.hasNext()) {
           final InternalDataStatistics<?, ?, ?> timeStat = timeStatIt.next();
           if (timeStat instanceof FeatureTimeRangeStatistics) {
@@ -96,11 +102,14 @@ public class DateUtilities {
       // Look up the time range stat for this adapter
 
       final StatisticsQuery<Interval> query =
-          VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(timeField)
-              .build();
+          VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+              timeField).build();
       try (CloseableIterator<InternalDataStatistics<?, ?, ?>> timeStatIt =
           statisticsStore.getDataStatistics(
-              adapterId, query.getExtendedId(), query.getStatsType(), new String[0])) {
+              adapterId,
+              query.getExtendedId(),
+              query.getStatsType(),
+              new String[0])) {
         if (timeStatIt.hasNext()) {
           final InternalDataStatistics<?, ?, ?> timeStat = timeStatIt.next();
           if (timeStat instanceof FeatureTimeRangeStatistics) {

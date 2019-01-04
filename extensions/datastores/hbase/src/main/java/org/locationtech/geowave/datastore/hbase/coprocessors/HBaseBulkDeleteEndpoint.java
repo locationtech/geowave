@@ -263,8 +263,10 @@ public class HBaseBulkDeleteEndpoint extends BulkDeleteService
       int noOfVersionsToDelete = 0;
       if (timestamp == null) {
         for (final Cell kv : deleteRow) {
-          delete
-              .addColumn(CellUtil.cloneFamily(kv), CellUtil.cloneQualifier(kv), kv.getTimestamp());
+          delete.addColumn(
+              CellUtil.cloneFamily(kv),
+              CellUtil.cloneQualifier(kv),
+              kv.getTimestamp());
           noOfVersionsToDelete++;
         }
       } else {

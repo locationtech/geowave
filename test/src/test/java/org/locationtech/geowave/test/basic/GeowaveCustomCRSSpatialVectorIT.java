@@ -33,9 +33,15 @@ public class GeowaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
 
   private static final String CQL_DELETE_STR = "STATE = 'TX'";
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.HBASE, GeoWaveStoreType.DYNAMODB,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
 
   private static long startMillis;
@@ -75,8 +81,12 @@ public class GeowaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
 
     // ingest both lines and points
     TestUtils.testLocalIngest(
-        dataStore, DimensionalityType.SPATIAL, TestUtils.CUSTOM_CRSCODE, HAIL_SHAPEFILE_FILE,
-        "geotools-vector", nthreads);
+        dataStore,
+        DimensionalityType.SPATIAL,
+        TestUtils.CUSTOM_CRSCODE,
+        HAIL_SHAPEFILE_FILE,
+        "geotools-vector",
+        nthreads);
 
     long dur = (System.currentTimeMillis() - mark);
     LOGGER.debug("Ingest (points) duration = " + dur + " ms with " + nthreads + " thread(s).");
@@ -84,8 +94,12 @@ public class GeowaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
     mark = System.currentTimeMillis();
 
     TestUtils.testLocalIngest(
-        dataStore, DimensionalityType.SPATIAL, TestUtils.CUSTOM_CRSCODE,
-        TORNADO_TRACKS_SHAPEFILE_FILE, "geotools-vector", nthreads);
+        dataStore,
+        DimensionalityType.SPATIAL,
+        TestUtils.CUSTOM_CRSCODE,
+        TORNADO_TRACKS_SHAPEFILE_FILE,
+        "geotools-vector",
+        nthreads);
 
     dur = (System.currentTimeMillis() - mark);
     LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
@@ -95,9 +109,13 @@ public class GeowaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
 
       testQuery(
           new File(TEST_BOX_FILTER_FILE).toURI().toURL(),
-          new URL[] {new File(HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),
+          new URL[] {
+              new File(HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),
               new File(TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()},
-          TestUtils.createWebMercatorSpatialIndex(), "bounding box constraint only", crs, true);
+          TestUtils.createWebMercatorSpatialIndex(),
+          "bounding box constraint only",
+          crs,
+          true);
 
       dur = (System.currentTimeMillis() - mark);
       LOGGER.debug("BBOX query duration = " + dur + " ms.");
@@ -105,9 +123,13 @@ public class GeowaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
 
       testQuery(
           new File(TEST_POLYGON_FILTER_FILE).toURI().toURL(),
-          new URL[] {new File(HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL(),
+          new URL[] {
+              new File(HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL(),
               new File(TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()},
-          TestUtils.createWebMercatorSpatialIndex(), "polygon constraint only", crs, true);
+          TestUtils.createWebMercatorSpatialIndex(),
+          "polygon constraint only",
+          crs,
+          true);
 
       dur = (System.currentTimeMillis() - mark);
       LOGGER.debug("POLY query duration = " + dur + " ms.");
@@ -122,9 +144,12 @@ public class GeowaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
 
     try {
       testStats(
-          new URL[] {new File(HAIL_SHAPEFILE_FILE).toURI().toURL(),
+          new URL[] {
+              new File(HAIL_SHAPEFILE_FILE).toURI().toURL(),
               new File(TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()},
-          TestUtils.createWebMercatorSpatialIndex(), false, CRS.decode(TestUtils.CUSTOM_CRSCODE));
+          TestUtils.createWebMercatorSpatialIndex(),
+          false,
+          CRS.decode(TestUtils.CUSTOM_CRSCODE));
     } catch (final Exception e) {
       e.printStackTrace();
       TestUtils.deleteAll(dataStore);

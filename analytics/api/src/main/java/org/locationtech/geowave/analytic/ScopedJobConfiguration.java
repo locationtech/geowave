@@ -67,9 +67,10 @@ public class ScopedJobConfiguration {
         }
         logger.warn("Using default for property " + propName);
       }
-      return jobConfiguration
-          .getClass(GeoWaveConfiguratorBase.enumToConfKey(scope, property), defaultValue, iface)
-          .newInstance();
+      return jobConfiguration.getClass(
+          GeoWaveConfiguratorBase.enumToConfKey(scope, property),
+          defaultValue,
+          iface).newInstance();
     } catch (final Exception ex) {
       logger.error("Cannot instantiate " + GeoWaveConfiguratorBase.enumToConfKey(scope, property));
       throw ex;

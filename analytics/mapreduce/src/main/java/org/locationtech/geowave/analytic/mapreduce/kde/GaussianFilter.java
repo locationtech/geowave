@@ -67,7 +67,14 @@ public class GaussianFilter {
       double contributionScaleFactor,
       final ValueRange[] valueRangePerDimension) {
     incrementBBox(
-        lon, lon, lat, lat, results, numXPosts, numYPosts, contributionScaleFactor,
+        lon,
+        lon,
+        lat,
+        lat,
+        results,
+        numXPosts,
+        numYPosts,
+        contributionScaleFactor,
         valueRangePerDimension);
   }
 
@@ -95,8 +102,13 @@ public class GaussianFilter {
       final double blur = getBlurFromOffset(offset, gaussianKernel, maxOffset);
       final List<BinPositionAndContribution> positionsAndContributions =
           getPositionsAndContributionPt(
-              numDimensions, 0, binLocationPerDimension, blur, new int[numDimensions],
-              binsPerDimension, offset);
+              numDimensions,
+              0,
+              binLocationPerDimension,
+              blur,
+              new int[numDimensions],
+              binsPerDimension,
+              offset);
       for (final BinPositionAndContribution positionAndContribution : positionsAndContributions) {
         results.increment(positionAndContribution.position, positionAndContribution.contribution);
       }
@@ -146,8 +158,14 @@ public class GaussianFilter {
       final double blur = getBlurFromOffset(offset, gaussianKernel, maxOffset);
       final List<BinPositionAndContribution> positionsAndContributions =
           getPositionsAndContribution(
-              numDimensions, 0, minBinLocationPerDimension, maxBinLocationPerDimension, blur,
-              new int[numDimensions], binsPerDimension, offset);
+              numDimensions,
+              0,
+              minBinLocationPerDimension,
+              maxBinLocationPerDimension,
+              blur,
+              new int[numDimensions],
+              binsPerDimension,
+              offset);
       for (final BinPositionAndContribution positionAndContribution : positionsAndContributions) {
         results.increment(
             positionAndContribution.position,
@@ -204,7 +222,10 @@ public class GaussianFilter {
         currentOffsetsPerDimension[currentDimension] = i;
         offsets.addAll(
             getOffsets(
-                numDimensions, currentDimension + 1, currentOffsetsPerDimension, gaussianKernel,
+                numDimensions,
+                currentDimension + 1,
+                currentOffsetsPerDimension,
+                gaussianKernel,
                 maxOffset));
       }
     }
@@ -234,7 +255,8 @@ public class GaussianFilter {
     final List<BinPositionAndContribution> positions = new ArrayList<BinPositionAndContribution>();
     if (currentDimension == numDimensions) {
       positions.add(
-          new BinPositionAndContribution(getPosition(finalIndexPerDimension, binsPerDimension),
+          new BinPositionAndContribution(
+              getPosition(finalIndexPerDimension, binsPerDimension),
               currentContribution));
     } else {
       final int floorOfLocation = (int) (locationPerDimension[currentDimension]);
@@ -244,8 +266,13 @@ public class GaussianFilter {
           && (floorLocation[currentDimension] < binsPerDimension[currentDimension])) {
         positions.addAll(
             getPositionsAndContributionPt(
-                numDimensions, currentDimension + 1, locationPerDimension, currentContribution,
-                floorLocation, binsPerDimension, offset));
+                numDimensions,
+                currentDimension + 1,
+                locationPerDimension,
+                currentContribution,
+                floorLocation,
+                binsPerDimension,
+                offset));
       }
     }
     return positions;
@@ -263,7 +290,8 @@ public class GaussianFilter {
     final List<BinPositionAndContribution> positions = new ArrayList<BinPositionAndContribution>();
     if (currentDimension == numDimensions) {
       positions.add(
-          new BinPositionAndContribution(getPosition(finalIndexPerDimension, binsPerDimension),
+          new BinPositionAndContribution(
+              getPosition(finalIndexPerDimension, binsPerDimension),
               currentContribution));
     } else {
       final int floorOfLocation = (int) (minLocationPerDimension[currentDimension]);
@@ -273,8 +301,13 @@ public class GaussianFilter {
           && (floorLocation[currentDimension] < binsPerDimension[currentDimension])) {
         positions.addAll(
             getPositionsAndContribution(
-                numDimensions, currentDimension + 1, minLocationPerDimension,
-                maxLocationPerDimension, currentContribution, floorLocation, binsPerDimension,
+                numDimensions,
+                currentDimension + 1,
+                minLocationPerDimension,
+                maxLocationPerDimension,
+                currentContribution,
+                floorLocation,
+                binsPerDimension,
                 offset));
       }
       final int ceilOfLocation = (int) Math.ceil(maxLocationPerDimension[currentDimension]);
@@ -291,8 +324,13 @@ public class GaussianFilter {
           middleLocation[currentDimension] = location;
           positions.addAll(
               getPositionsAndContribution(
-                  numDimensions, currentDimension + 1, minLocationPerDimension,
-                  maxLocationPerDimension, currentContribution, middleLocation, binsPerDimension,
+                  numDimensions,
+                  currentDimension + 1,
+                  minLocationPerDimension,
+                  maxLocationPerDimension,
+                  currentContribution,
+                  middleLocation,
+                  binsPerDimension,
                   offset));
         }
       }

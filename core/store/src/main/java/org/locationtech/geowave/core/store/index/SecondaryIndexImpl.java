@@ -44,7 +44,11 @@ public class SecondaryIndexImpl<T>
       final String fieldName,
       final List<InternalDataStatistics<T, ?, ?>> associatedStatistics,
       final SecondaryIndexType secondaryIndexType) {
-    this(indexStrategy, fieldName, associatedStatistics, secondaryIndexType,
+    this(
+        indexStrategy,
+        fieldName,
+        associatedStatistics,
+        secondaryIndexType,
         Collections.<String>emptyList());
   }
 

@@ -90,10 +90,14 @@ public class ServerSideOperationsObserver extends BaseRegionObserver {
       return super.preFlush(e, store, scanner);
     }
     return super.preFlush(
-        e, store,
+        e,
+        store,
         wrapScannerWithOps(
-            e.getEnvironment().getRegionInfo().getTable(), scanner, null,
-            ServerOpScope.MINOR_COMPACTION, INTERNAL_SCANNER_FACTORY));
+            e.getEnvironment().getRegionInfo().getTable(),
+            scanner,
+            null,
+            ServerOpScope.MINOR_COMPACTION,
+            INTERNAL_SCANNER_FACTORY));
   }
 
   @Override
@@ -107,11 +111,16 @@ public class ServerSideOperationsObserver extends BaseRegionObserver {
       return super.preCompact(e, store, scanner, scanType, request);
     }
     return super.preCompact(
-        e, store,
+        e,
+        store,
         wrapScannerWithOps(
-            e.getEnvironment().getRegionInfo().getTable(), scanner, null,
-            ServerOpScope.MAJOR_COMPACTION, INTERNAL_SCANNER_FACTORY),
-        scanType, request);
+            e.getEnvironment().getRegionInfo().getTable(),
+            scanner,
+            null,
+            ServerOpScope.MAJOR_COMPACTION,
+            INTERNAL_SCANNER_FACTORY),
+        scanType,
+        request);
   }
 
   @Override
@@ -143,9 +152,13 @@ public class ServerSideOperationsObserver extends BaseRegionObserver {
       return super.postScannerOpen(e, scan, s);
     }
     return super.postScannerOpen(
-        e, scan,
+        e,
+        scan,
         wrapScannerWithOps(
-            e.getEnvironment().getRegionInfo().getTable(), s, scan, ServerOpScope.SCAN,
+            e.getEnvironment().getRegionInfo().getTable(),
+            s,
+            scan,
+            ServerOpScope.SCAN,
             REGION_SCANNER_FACTORY));
   }
 
@@ -184,19 +197,19 @@ public class ServerSideOperationsObserver extends BaseRegionObserver {
             uniqueOpsWithOptionKeys.put(uniqueOp, optionKeys);
           }
           if (key.length() > (uniqueOp.length() + 1 + SERVER_OP_OPTIONS_PREFIX_LENGTH)) {
-            if (key
-                .substring(uniqueOp.length(), uniqueOp.length() + SERVER_OP_OPTIONS_PREFIX_LENGTH)
-                .equals(ServerSideOperationUtils.SERVER_OP_OPTIONS_PREFIX)) {
-              optionKeys
-                  .add(key.substring(uniqueOp.length() + 1 + SERVER_OP_OPTIONS_PREFIX_LENGTH));
+            if (key.substring(
+                uniqueOp.length(),
+                uniqueOp.length() + SERVER_OP_OPTIONS_PREFIX_LENGTH).equals(
+                    ServerSideOperationUtils.SERVER_OP_OPTIONS_PREFIX)) {
+              optionKeys.add(
+                  key.substring(uniqueOp.length() + 1 + SERVER_OP_OPTIONS_PREFIX_LENGTH));
             }
           }
         }
       }
     }
 
-    for (final Entry<String, List<String>> uniqueOpAndOptions : uniqueOpsWithOptionKeys
-        .entrySet()) {
+    for (final Entry<String, List<String>> uniqueOpAndOptions : uniqueOpsWithOptionKeys.entrySet()) {
       final String uniqueOp = uniqueOpAndOptions.getKey();
       final String priorityStr =
           config.get(uniqueOp + ServerSideOperationUtils.SERVER_OP_PRIORITY_KEY);
@@ -228,8 +241,12 @@ public class ServerSideOperationsObserver extends BaseRegionObserver {
       final String[] uniqueOpSplit = uniqueOp.split("\\.");
       opStore.addOperation(
           HBaseUtils.readConfigSafeTableName(uniqueOpSplit[1]),
-          HBaseUtils.readConfigSafeTableName(uniqueOpSplit[2]), uniqueOpSplit[3], priority, scopes,
-          ByteArrayUtils.byteArrayFromString(classIdStr), optionsMap);
+          HBaseUtils.readConfigSafeTableName(uniqueOpSplit[2]),
+          uniqueOpSplit[3],
+          priority,
+          scopes,
+          ByteArrayUtils.byteArrayFromString(classIdStr),
+          optionsMap);
     }
     super.start(e);
   }

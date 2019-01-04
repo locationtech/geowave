@@ -86,7 +86,8 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
     boolean defaultEchoEnabled =
         propsUtils.getBoolean(Constants.CONSOLE_DEFAULT_ECHO_ENABLED_KEY, false);
     LOGGER.debug(
-        "Default console echo is {}", new Object[] {defaultEchoEnabled ? "enabled" : "disabled"});
+        "Default console echo is {}",
+        new Object[] {defaultEchoEnabled ? "enabled" : "disabled"});
     getConsole().print(promptMessage);
     char[] responseChars = getConsole().readPassword(defaultEchoEnabled);
     String response = new String(responseChars);
@@ -109,7 +110,8 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
     boolean passwordEchoEnabled =
         propsUtils.getBoolean(Constants.CONSOLE_PASSWORD_ECHO_ENABLED_KEY, defaultEchoEnabled);
     LOGGER.debug(
-        "Password console echo is {}", new Object[] {passwordEchoEnabled ? "enabled" : "disabled"});
+        "Password console echo is {}",
+        new Object[] {passwordEchoEnabled ? "enabled" : "disabled"});
     getConsole().print(promptMessage);
     char[] passwordChars = getConsole().readPassword(passwordEchoEnabled);
     String strPassword = new String(passwordChars);

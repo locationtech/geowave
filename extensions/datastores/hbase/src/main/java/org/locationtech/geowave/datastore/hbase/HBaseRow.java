@@ -33,10 +33,8 @@ public class HBaseRow implements GeoWaveRow {
         result.getMap();
     List<GeoWaveValue> fieldValueList = new ArrayList();
 
-    for (final Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> cfEntry : rowMapping
-        .entrySet()) {
-      for (final Entry<byte[], NavigableMap<Long, byte[]>> cqEntry : cfEntry.getValue()
-          .entrySet()) {
+    for (final Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> cfEntry : rowMapping.entrySet()) {
+      for (final Entry<byte[], NavigableMap<Long, byte[]>> cqEntry : cfEntry.getValue().entrySet()) {
         for (Entry<Long, byte[]> cqEntryValue : cqEntry.getValue().entrySet()) {
           byte[] byteValue = cqEntryValue.getValue();
           byte[] qualifier = cqEntry.getKey();

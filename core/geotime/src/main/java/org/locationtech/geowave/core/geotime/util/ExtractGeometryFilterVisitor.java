@@ -103,8 +103,9 @@ public class ExtractGeometryFilterVisitor extends NullFilterVisitor {
       final CoordinateReferenceSystem crs,
       final String attributeOfInterest) {
     final ExtractGeometryFilterVisitorResult geoAndCompareOpData =
-        (ExtractGeometryFilterVisitorResult) filter
-            .accept(new ExtractGeometryFilterVisitor(crs, attributeOfInterest), null);
+        (ExtractGeometryFilterVisitorResult) filter.accept(
+            new ExtractGeometryFilterVisitor(crs, attributeOfInterest),
+            null);
     final Geometry geo = geoAndCompareOpData.getGeometry();
     // empty or infinite geometry simply return null as we can't create
     // linear constraints from
@@ -167,8 +168,11 @@ public class ExtractGeometryFilterVisitor extends NullFilterVisitor {
       final BoundingBox referencedBBox = filter.getBounds();
       Geometry bounds =
           new GeometryFactory().toGeometry(
-              new Envelope(referencedBBox.getMinX(), referencedBBox.getMaxX(),
-                  referencedBBox.getMinY(), referencedBBox.getMaxY()));
+              new Envelope(
+                  referencedBBox.getMinX(),
+                  referencedBBox.getMaxX(),
+                  referencedBBox.getMinY(),
+                  referencedBBox.getMaxY()));
 
       if ((crs != null)
           && (referencedBBox.getCoordinateReferenceSystem() != null)
@@ -237,7 +241,8 @@ public class ExtractGeometryFilterVisitor extends NullFilterVisitor {
             // geometry but set predicate to null
             finalResult =
                 new ExtractGeometryFilterVisitorResult(
-                    finalResult.getGeometry().intersection(currentGeom), null);
+                    finalResult.getGeometry().intersection(currentGeom),
+                    null);
           }
         } else {
           finalResult = new ExtractGeometryFilterVisitorResult(finalResult.getGeometry(), null);
@@ -263,7 +268,8 @@ public class ExtractGeometryFilterVisitor extends NullFilterVisitor {
   @Override
   public Object visit(final Or filter, final Object data) {
     ExtractGeometryFilterVisitorResult finalResult =
-        new ExtractGeometryFilterVisitorResult(new GeometryFactory().toGeometry(new Envelope()),
+        new ExtractGeometryFilterVisitorResult(
+            new GeometryFactory().toGeometry(new Envelope()),
             null);
     for (final Filter f : filter.getChildren()) {
       final Object obj = f.accept(this, data);
@@ -277,11 +283,13 @@ public class ExtractGeometryFilterVisitor extends NullFilterVisitor {
         } else if (!Double.isInfinite(currentArea) && !Double.isNaN(currentArea)) {
           if (currentResult.matchPredicate(finalResult)) {
             finalResult =
-                new ExtractGeometryFilterVisitorResult(finalResult.getGeometry().union(currentGeom),
+                new ExtractGeometryFilterVisitorResult(
+                    finalResult.getGeometry().union(currentGeom),
                     currentResult.getCompareOp());
           } else {
             finalResult =
-                new ExtractGeometryFilterVisitorResult(finalResult.getGeometry().union(currentGeom),
+                new ExtractGeometryFilterVisitorResult(
+                    finalResult.getGeometry().union(currentGeom),
                     null);
           }
         } else {
@@ -373,7 +381,8 @@ public class ExtractGeometryFilterVisitor extends NullFilterVisitor {
     if (bbox != null) {
       return geometryAndDegrees.getLeft().union(bbox);
     } else {
-      return new ExtractGeometryFilterVisitorResult(geometryAndDegrees.getLeft(),
+      return new ExtractGeometryFilterVisitorResult(
+          geometryAndDegrees.getLeft(),
           CompareOperation.INTERSECTS);
     }
   }

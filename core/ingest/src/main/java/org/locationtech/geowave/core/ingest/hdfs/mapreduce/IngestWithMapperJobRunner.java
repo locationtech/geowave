@@ -27,7 +27,13 @@ public class IngestWithMapperJobRunner extends AbstractMapReduceIngest<IngestWit
       final String formatPluginName,
       final IngestFromHdfsPlugin<?, ?> plugin,
       final IngestWithMapper<?, ?> mapperIngest) {
-    super(storeOptions, indexOptions, ingestOptions, inputFile, formatPluginName, plugin,
+    super(
+        storeOptions,
+        indexOptions,
+        ingestOptions,
+        inputFile,
+        formatPluginName,
+        plugin,
         mapperIngest);
   }
 

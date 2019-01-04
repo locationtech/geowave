@@ -28,35 +28,43 @@ public class RasterOptionProvider implements IngestFormatOptions {
   private static final Logger LOGGER = LoggerFactory.getLogger(RasterOptionProvider.class);
   private static Map<String, RasterMergeStrategyProviderSpi> registeredMergeStrategies = null;
 
-  @Parameter(names = "--pyramid",
+  @Parameter(
+      names = "--pyramid",
       description = "Build an image pyramid on ingest for quick reduced resolution query")
   private final boolean buildPyramid = false;
 
   @Parameter(names = "--crs", description = "A CRS override for the provided raster file")
   private final String crs = null;
 
-  @Parameter(names = "--histogram",
+  @Parameter(
+      names = "--histogram",
       description = "Build a histogram of samples per band on ingest for performing band equalization")
   private final boolean buildHistogram = false;
 
-  @Parameter(names = "--tileSize",
+  @Parameter(
+      names = "--tileSize",
       description = "Optional parameter to set the tile size stored (default is 256)")
   private final int tileSize = RasterDataAdapter.DEFAULT_TILE_SIZE;
 
-  @Parameter(names = "--coverage",
+  @Parameter(
+      names = "--coverage",
       description = "Optional parameter to set the coverage name (default is the file name)")
   private final String coverageName = null;
 
-  @Parameter(names = "--nodata", variableArity = true,
+  @Parameter(
+      names = "--nodata",
+      variableArity = true,
       description = "Optional parameter to set 'no data' values, if 1 value is giving it is applied for each band, if multiple are given then the first totalNoDataValues/totalBands are applied to the first band and so on, so each band can have multiple differing 'no data' values if needed",
       converter = DoubleConverter.class)
   private final List<Double> nodata = new ArrayList<>();
 
-  @Parameter(names = "--separateBands",
+  @Parameter(
+      names = "--separateBands",
       description = "Optional parameter to separate each band into its own coverage name. By default the coverage name will have '_Bn' appended to it where `n` is the band's index.")
   private final boolean separateBands = false;
 
-  @Parameter(names = "--mergeStrategy",
+  @Parameter(
+      names = "--mergeStrategy",
       description = "Optional parameter to choose a tile merge strategy used for mosaic.  Default behavior will be `none`.  Alternatively 'no-data' will mosaic the most recent tile over previous tiles, except where there are no data values.")
   private final String mergeStrategy = NoMergeStrategyProvider.NAME;
 

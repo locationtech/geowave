@@ -32,7 +32,9 @@ public class GeometryCalculationsTest {
     GeometryCalculations calculator = new GeometryCalculations(crs);
     List<Geometry> geos =
         calculator.buildSurroundingGeometries(
-            new double[] {50000, 50000}, SI.METRE, new Coordinate(30, 30));
+            new double[] {50000, 50000},
+            SI.METRE,
+            new Coordinate(30, 30));
     assertEquals(1, geos.size());
     Geometry geo = geos.get(0);
     double lastDist = Double.NaN;
@@ -59,7 +61,9 @@ public class GeometryCalculationsTest {
 
     geos =
         calculator.buildSurroundingGeometries(
-            new double[] {100000, 100000}, SI.METRE, new Coordinate(179.9999999996, 0));
+            new double[] {100000, 100000},
+            SI.METRE,
+            new Coordinate(179.9999999996, 0));
     assertEquals(2, geos.size());
     geo = geos.get(0);
     envelope = geo.getEnvelopeInternal();

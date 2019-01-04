@@ -33,8 +33,8 @@ public class FullTableScan extends AbstractGeoWaveQuery {
       DataStorePluginOptions pluginOptions) {
     long count = 0;
     try (final CloseableIterator<Object> it =
-        dataStore
-            .query(QueryBuilder.newBuilder().addTypeName(typeName).indexName(indexName).build())) {
+        dataStore.query(
+            QueryBuilder.newBuilder().addTypeName(typeName).indexName(indexName).build())) {
       while (it.hasNext()) {
         if (debug) {
           System.out.println(it.next());

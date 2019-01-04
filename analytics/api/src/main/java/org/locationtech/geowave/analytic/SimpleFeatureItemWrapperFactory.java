@@ -76,7 +76,8 @@ public class SimpleFeatureItemWrapperFactory implements AnalyticItemWrapperFacto
     @Override
     public void incrementAssociationCount(final long increment) {
       item.setAttribute(
-          ClusterFeatureAttribute.COUNT.attrName(), getAssociationCount() + increment);
+          ClusterFeatureAttribute.COUNT.attrName(),
+          getAssociationCount() + increment);
     }
 
     @Override
@@ -174,16 +175,22 @@ public class SimpleFeatureItemWrapperFactory implements AnalyticItemWrapperFacto
     final Geometry geometry =
         (Geometry) feature.getAttribute(ClusterFeatureAttribute.GEOMETRY.attrName());
 
-    return new SimpleFeatureAnalyticItemWrapper(AnalyticFeature.createGeometryFeature(
-        feature.getFeatureType(),
-        feature.getAttribute(ClusterFeatureAttribute.BATCH_ID.attrName()).toString(),
-        UUID.randomUUID().toString(),
-        getAttribute(feature, ClusterFeatureAttribute.NAME.attrName()), groupID,
-        ((Double) feature.getAttribute(ClusterFeatureAttribute.WEIGHT.attrName())).doubleValue(),
-        geometry.getFactory().createPoint(coordinate), extraNames, extraValues,
-        ((Integer) feature.getAttribute(ClusterFeatureAttribute.ZOOM_LEVEL.attrName())).intValue(),
-        ((Integer) feature.getAttribute(ClusterFeatureAttribute.ITERATION.attrName())).intValue()
-            + 1,
-        ((Long) feature.getAttribute(ClusterFeatureAttribute.COUNT.attrName())).longValue()));
+    return new SimpleFeatureAnalyticItemWrapper(
+        AnalyticFeature.createGeometryFeature(
+            feature.getFeatureType(),
+            feature.getAttribute(ClusterFeatureAttribute.BATCH_ID.attrName()).toString(),
+            UUID.randomUUID().toString(),
+            getAttribute(feature, ClusterFeatureAttribute.NAME.attrName()),
+            groupID,
+            ((Double) feature.getAttribute(
+                ClusterFeatureAttribute.WEIGHT.attrName())).doubleValue(),
+            geometry.getFactory().createPoint(coordinate),
+            extraNames,
+            extraValues,
+            ((Integer) feature.getAttribute(
+                ClusterFeatureAttribute.ZOOM_LEVEL.attrName())).intValue(),
+            ((Integer) feature.getAttribute(
+                ClusterFeatureAttribute.ITERATION.attrName())).intValue() + 1,
+            ((Long) feature.getAttribute(ClusterFeatureAttribute.COUNT.attrName())).longValue()));
   }
 }

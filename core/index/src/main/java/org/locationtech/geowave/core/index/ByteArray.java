@@ -150,8 +150,15 @@ public class ByteArray implements java.io.Serializable, Comparable<ByteArray> {
       // it doesn't seem right, so instead, let's append several 0xFF
       // bytes
       return ByteArrayUtils.combineArrays(
-          rowKeyPrefix, new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
-              (byte) 0xFF, (byte) 0xFF});
+          rowKeyPrefix,
+          new byte[] {
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF});
     }
 
     final byte[] newStopRow = Arrays.copyOfRange(rowKeyPrefix, 0, offset);

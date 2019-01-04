@@ -16,7 +16,9 @@ import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.cassandra.CassandraStoreFactoryFamily;
 
 public class CassandraRequiredOptions extends StoreFactoryOptions {
-  @Parameter(names = "--contactPoints", required = true,
+  @Parameter(
+      names = "--contactPoints",
+      required = true,
       description = "A single contact point or a comma delimited set of contact points to connect to the Cassandra cluster.")
   private String contactPoints;
 

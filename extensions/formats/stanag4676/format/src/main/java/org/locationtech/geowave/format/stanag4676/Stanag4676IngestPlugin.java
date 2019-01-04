@@ -110,8 +110,10 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
       final URL file,
       final String[] indexNames,
       final String globalVisibility) {
-    return ingestWithMapper()
-        .toGeoWaveData(toAvroObjects(file).next(), indexNames, globalVisibility);
+    return ingestWithMapper().toGeoWaveData(
+        toAvroObjects(file).next(),
+        indexNames,
+        globalVisibility);
   }
 
   @Override
@@ -176,7 +178,8 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
               ? new GlobalVisibilityHandler(globalVisibility)
               : null;
 
-      return new DataTypeAdapter[] {new FeatureDataAdapter(pointType, fieldVisiblityHandler),
+      return new DataTypeAdapter[] {
+          new FeatureDataAdapter(pointType, fieldVisiblityHandler),
           new FeatureDataAdapter(motionPointType, fieldVisiblityHandler),
           new FeatureDataAdapter(trackType, fieldVisiblityHandler),
           new FeatureDataAdapter(missionSummaryType, fieldVisiblityHandler),
@@ -271,7 +274,8 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
           lastEvent = event;
 
           final EarthVector currentEv =
-              new EarthVector(EarthVector.degToRad(event.Latitude.get()),
+              new EarthVector(
+                  EarthVector.degToRad(event.Latitude.get()),
                   EarthVector.degToRad(event.Longitude.get()),
                   Length.fromM(event.Elevation.get()).getKM());
 
@@ -286,15 +290,17 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
           prevEv = currentEv;
 
           final Geometry geometry =
-              GeometryUtils.GEOMETRY_FACTORY
-                  .createPoint(new Coordinate(event.Longitude.get(), event.Latitude.get()));
+              GeometryUtils.GEOMETRY_FACTORY.createPoint(
+                  new Coordinate(event.Longitude.get(), event.Latitude.get()));
 
           ptBuilder.add(geometry);
 
-          if (!FloatCompareUtils
-              .checkDoublesEqual(event.DetailLatitude.get(), Stanag4676EventWritable.NO_DETAIL)
+          if (!FloatCompareUtils.checkDoublesEqual(
+              event.DetailLatitude.get(),
+              Stanag4676EventWritable.NO_DETAIL)
               && !FloatCompareUtils.checkDoublesEqual(
-                  event.DetailLongitude.get(), Stanag4676EventWritable.NO_DETAIL)) {
+                  event.DetailLongitude.get(),
+                  Stanag4676EventWritable.NO_DETAIL)) {
             detail_coord_sequence.add(event.DetailLongitude.get());
             detail_coord_sequence.add(event.DetailLatitude.get());
           }
@@ -303,16 +309,18 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
           Double detailLongitude = null;
           Double detailElevation = null;
           Geometry detailGeometry = null;
-          if (!FloatCompareUtils
-              .checkDoublesEqual(event.DetailLatitude.get(), Stanag4676EventWritable.NO_DETAIL)
+          if (!FloatCompareUtils.checkDoublesEqual(
+              event.DetailLatitude.get(),
+              Stanag4676EventWritable.NO_DETAIL)
               && !FloatCompareUtils.checkDoublesEqual(
-                  event.DetailLongitude.get(), Stanag4676EventWritable.NO_DETAIL)) {
+                  event.DetailLongitude.get(),
+                  Stanag4676EventWritable.NO_DETAIL)) {
             detailLatitude = event.DetailLatitude.get();
             detailLongitude = event.DetailLongitude.get();
             detailElevation = event.DetailElevation.get();
             detailGeometry =
-                GeometryUtils.GEOMETRY_FACTORY
-                    .createPoint(new Coordinate(detailLongitude, detailLatitude));
+                GeometryUtils.GEOMETRY_FACTORY.createPoint(
+                    new Coordinate(detailLongitude, detailLatitude));
           }
           ptBuilder.add(detailGeometry);
           ptBuilder.add(mission);
@@ -343,7 +351,9 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
           ptBuilder.add(Integer.valueOf(event.PixelColumn.get()));
 
           geowaveData.add(
-              new GeoWaveData<Object>(Stanag4676Utils.TRACK_POINT, indexNames,
+              new GeoWaveData<Object>(
+                  Stanag4676Utils.TRACK_POINT,
+                  indexNames,
                   ptBuilder.buildFeature(event.TrackItemUUID.toString())));
         }
         // build collection of motion events
@@ -352,8 +362,8 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
           numMotionPoints++;
 
           motionBuilder.add(
-              GeometryUtils.GEOMETRY_FACTORY
-                  .createPoint(new Coordinate(event.Longitude.get(), event.Latitude.get())));
+              GeometryUtils.GEOMETRY_FACTORY.createPoint(
+                  new Coordinate(event.Longitude.get(), event.Latitude.get())));
 
           motionBuilder.add(mission);
           motionBuilder.add(trackNumber);
@@ -395,7 +405,9 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
           motionBuilder.add(Integer.valueOf(event.PixelColumn.get()));
 
           geowaveData.add(
-              new GeoWaveData<Object>(Stanag4676Utils.MOTION_POINT, indexNames,
+              new GeoWaveData<Object>(
+                  Stanag4676Utils.MOTION_POINT,
+                  indexNames,
                   motionBuilder.buildFeature(event.TrackItemUUID.toString())));
         } else if (event.EventType.get() == 2) {
           final Date date = new Date(event.TimeStamp.get());
@@ -421,19 +433,21 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
           objectClassRel += event.ObjectClassRel.toString();
           objectClassTimes += dateStr;
         } else if (event.EventType.get() == 3) {
-          missionFrameBuilder
-              .add(GeometryUtils.geometryFromBinary(event.Geometry.getBytes(), null));
+          missionFrameBuilder.add(
+              GeometryUtils.geometryFromBinary(event.Geometry.getBytes(), null));
           missionFrameBuilder.add(event.MissionUUID.toString());
           missionFrameBuilder.add(new Date(event.TimeStamp.get()));
           missionFrameBuilder.add(event.FrameNumber.get());
 
           geowaveData.add(
-              new GeoWaveData<Object>(Stanag4676Utils.MISSION_FRAME, indexNames,
+              new GeoWaveData<Object>(
+                  Stanag4676Utils.MISSION_FRAME,
+                  indexNames,
                   missionFrameBuilder.buildFeature(UUID.randomUUID().toString())));
         } else if (event.EventType.get() == 4) {
 
-          missionSummaryBuilder
-              .add(GeometryUtils.geometryFromBinary(event.Geometry.getBytes(), null));
+          missionSummaryBuilder.add(
+              GeometryUtils.geometryFromBinary(event.Geometry.getBytes(), null));
           missionSummaryBuilder.add(event.MissionUUID.toString());
           missionSummaryBuilder.add(new Date(event.TimeStamp.get()));
           missionSummaryBuilder.add(new Date(event.EndTimeStamp.get()));
@@ -443,14 +457,18 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
           missionSummaryBuilder.add(event.ObjectClass.toString());
 
           geowaveData.add(
-              new GeoWaveData<Object>(Stanag4676Utils.MISSION_SUMMARY, indexNames,
+              new GeoWaveData<Object>(
+                  Stanag4676Utils.MISSION_SUMMARY,
+                  indexNames,
                   missionSummaryBuilder.buildFeature(UUID.randomUUID().toString())));
         }
         if (event.Image != null) {
           final byte[] imageBytes = event.Image.getBytes();
           if ((imageBytes != null) && (imageBytes.length > 0)) {
             geowaveData.add(
-                new GeoWaveData(ImageChipDataAdapter.ADAPTER_TYPE_NAME, IMAGE_CHIP_AS_ARRAY,
+                new GeoWaveData(
+                    ImageChipDataAdapter.ADAPTER_TYPE_NAME,
+                    IMAGE_CHIP_AS_ARRAY,
                     new ImageChip(mission, trackUuid, event.TimeStamp.get(), imageBytes)));
           }
         }
@@ -498,14 +516,18 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
         Double lastEventDetailLatitude = null;
         Double lastEventDetailLongitude = null;
 
-        if (!FloatCompareUtils
-            .checkDoublesEqual(firstEvent.DetailLatitude.get(), Stanag4676EventWritable.NO_DETAIL)
+        if (!FloatCompareUtils.checkDoublesEqual(
+            firstEvent.DetailLatitude.get(),
+            Stanag4676EventWritable.NO_DETAIL)
             && !FloatCompareUtils.checkDoublesEqual(
-                firstEvent.DetailLongitude.get(), Stanag4676EventWritable.NO_DETAIL)
+                firstEvent.DetailLongitude.get(),
+                Stanag4676EventWritable.NO_DETAIL)
             && !FloatCompareUtils.checkDoublesEqual(
-                lastEvent.DetailLatitude.get(), Stanag4676EventWritable.NO_DETAIL)
+                lastEvent.DetailLatitude.get(),
+                Stanag4676EventWritable.NO_DETAIL)
             && !FloatCompareUtils.checkDoublesEqual(
-                lastEvent.DetailLongitude.get(), Stanag4676EventWritable.NO_DETAIL)) {
+                lastEvent.DetailLongitude.get(),
+                Stanag4676EventWritable.NO_DETAIL)) {
           firstEventDetailLatitude = firstEvent.DetailLatitude.get();
           firstEventDetailLongitude = firstEvent.DetailLongitude.get();
           lastEventDetailLatitude = lastEvent.DetailLatitude.get();
@@ -525,8 +547,8 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
         trackBuilder.add(stopCount);
         final double stopDurationSeconds = stopDuration / 1000.0;
         trackBuilder.add(stopDurationSeconds);
-        trackBuilder
-            .add(stopDurationContibCount > 0 ? stopDurationSeconds / stopDurationContibCount : 0.0);
+        trackBuilder.add(
+            stopDurationContibCount > 0 ? stopDurationSeconds / stopDurationContibCount : 0.0);
         // TODO consider more sophisticated tie between track
         // classification and accumulo visibility
         trackBuilder.add(trackClassification);
@@ -537,7 +559,9 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
         trackBuilder.add(objectClassTimes);
 
         geowaveData.add(
-            new GeoWaveData<Object>(Stanag4676Utils.TRACK, indexNames,
+            new GeoWaveData<Object>(
+                Stanag4676Utils.TRACK,
+                indexNames,
                 trackBuilder.buildFeature(trackUuid)));
       }
       return new CloseableIterator.Wrapper<>(geowaveData.iterator());
@@ -564,8 +588,8 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
         }
         final List<CloseableIterator<GeoWaveData<Object>>> iterators = new ArrayList<>();
         for (final Entry<Text, List<Stanag4676EventWritable>> entry : trackUuidMap.entrySet()) {
-          iterators
-              .add(toGeoWaveData(entry.getKey(), indexNames, globalVisibility, entry.getValue()));
+          iterators.add(
+              toGeoWaveData(entry.getKey(), indexNames, globalVisibility, entry.getValue()));
         }
         return new CloseableIterator.Wrapper<>(Iterators.concat(iterators.iterator()));
       }

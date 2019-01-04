@@ -21,7 +21,8 @@ public class GeoToolsVectorDataOptions implements IngestFormatOptions {
   @ParametersDelegate
   private CQLFilterOptionProvider cqlFilterOptionProvider = new CQLFilterOptionProvider();
 
-  @Parameter(names = "--type",
+  @Parameter(
+      names = "--type",
       description = "Optional parameter that specifies specific type name(s) from the source file",
       required = false)
   private List<String> featureTypeNames = new ArrayList<>();

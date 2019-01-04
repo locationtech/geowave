@@ -123,7 +123,8 @@ public class GeoWaveIndexedRDD implements Serializable {
                     Tuple2<GeoWaveInputKey, SimpleFeature> valuePair =
                         new Tuple2<>(t._1, inputFeature);
                     Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> indexPair =
-                        new Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>(id,
+                        new Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>(
+                            id,
                             valuePair);
                     result.add(indexPair);
                   }
@@ -152,59 +153,59 @@ public class GeoWaveIndexedRDD implements Serializable {
     }
     if (rawGeometryRDD == null || recalculate) {
       rawGeometryRDD =
-          geowaveRDD.getRawRDD()
-              .filter(
-                  t -> (t._2.getDefaultGeometry() != null
-                      && !((Geometry) t._2.getDefaultGeometry()).getEnvelopeInternal().isNull()))
-              .flatMapToPair(
-                  new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArray, Tuple2<GeoWaveInputKey, Geometry>>() {
-                    @Override
-                    public Iterator<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>> call(
-                        Tuple2<GeoWaveInputKey, SimpleFeature> t) throws Exception {
+          geowaveRDD.getRawRDD().filter(
+              t -> (t._2.getDefaultGeometry() != null
+                  && !((Geometry) t._2.getDefaultGeometry()).getEnvelopeInternal().isNull())).flatMapToPair(
+                      new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArray, Tuple2<GeoWaveInputKey, Geometry>>() {
+                        @Override
+                        public Iterator<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>> call(
+                            Tuple2<GeoWaveInputKey, SimpleFeature> t) throws Exception {
 
-                      // Pull feature to index from tuple
-                      SimpleFeature inputFeature = t._2;
-                      // If we are dealing with null or empty
-                      // geometry we can't properly compare this
-                      // feature.
-                      Geometry geom = (Geometry) inputFeature.getDefaultGeometry();
+                          // Pull feature to index from tuple
+                          SimpleFeature inputFeature = t._2;
+                          // If we are dealing with null or empty
+                          // geometry we can't properly compare this
+                          // feature.
+                          Geometry geom = (Geometry) inputFeature.getDefaultGeometry();
 
-                      Envelope internalEnvelope = geom.getEnvelopeInternal();
-                      // If we have to buffer geometry for
-                      // predicate expand bounds
-                      internalEnvelope.expandBy(bufferAmount);
+                          Envelope internalEnvelope = geom.getEnvelopeInternal();
+                          // If we have to buffer geometry for
+                          // predicate expand bounds
+                          internalEnvelope.expandBy(bufferAmount);
 
-                      // Get data range from expanded envelope
-                      MultiDimensionalNumericData boundsRange =
-                          GeometryUtils.getBoundsFromEnvelope(internalEnvelope);
+                          // Get data range from expanded envelope
+                          MultiDimensionalNumericData boundsRange =
+                              GeometryUtils.getBoundsFromEnvelope(internalEnvelope);
 
-                      NumericIndexStrategy index = indexStrategy.value();
-                      InsertionIds insertIds = index.getInsertionIds(boundsRange, 80);
+                          NumericIndexStrategy index = indexStrategy.value();
+                          InsertionIds insertIds = index.getInsertionIds(boundsRange, 80);
 
-                      // If we didnt expand the envelope for
-                      // buffering we can trim the indexIds by the
-                      // geometry
-                      if (bufferAmount == 0.0) {
-                        insertIds = RDDUtils.trimIndexIds(insertIds, geom, index);
-                      }
+                          // If we didnt expand the envelope for
+                          // buffering we can trim the indexIds by the
+                          // geometry
+                          if (bufferAmount == 0.0) {
+                            insertIds = RDDUtils.trimIndexIds(insertIds, geom, index);
+                          }
 
-                      // Flattened output array.
-                      List<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>> result =
-                          Lists.newArrayListWithCapacity(insertIds.getSize());
+                          // Flattened output array.
+                          List<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>> result =
+                              Lists.newArrayListWithCapacity(insertIds.getSize());
 
-                      for (Iterator<ByteArray> iter =
-                          insertIds.getCompositeInsertionIds().iterator(); iter.hasNext();) {
-                        ByteArray id = iter.next();
+                          for (Iterator<ByteArray> iter =
+                              insertIds.getCompositeInsertionIds().iterator(); iter.hasNext();) {
+                            ByteArray id = iter.next();
 
-                        Tuple2<GeoWaveInputKey, Geometry> valuePair = new Tuple2<>(t._1, geom);
-                        Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> indexPair =
-                            new Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>(id, valuePair);
-                        result.add(indexPair);
-                      }
+                            Tuple2<GeoWaveInputKey, Geometry> valuePair = new Tuple2<>(t._1, geom);
+                            Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> indexPair =
+                                new Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>(
+                                    id,
+                                    valuePair);
+                            result.add(indexPair);
+                          }
 
-                      return result.iterator();
-                    }
-                  });
+                          return result.iterator();
+                        }
+                      });
     }
 
     return rawGeometryRDD;

@@ -53,8 +53,8 @@ public class InputStoreParameterHelper implements ParameterHelper<PersistableSto
   @Override
   public PersistableStore getValue(final PropertyManagement propertyManagement) {
     try {
-      return (PersistableStore) propertyManagement
-          .getProperty(StoreParameters.StoreParam.INPUT_STORE);
+      return (PersistableStore) propertyManagement.getProperty(
+          StoreParameters.StoreParam.INPUT_STORE);
     } catch (final Exception e) {
       LOGGER.error("Unable to deserialize data store", e);
       return null;

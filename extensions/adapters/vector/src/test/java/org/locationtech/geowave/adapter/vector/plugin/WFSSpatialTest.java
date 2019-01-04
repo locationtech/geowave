@@ -46,12 +46,15 @@ public class WFSSpatialTest extends BaseDataStoreTest {
     dataStore = createDataStore();
     type =
         DataUtilities.createType(
-            "geostuff", "geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,pid:String");
+            "geostuff",
+            "geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,pid:String");
 
     dataStore.createSchema(type);
     query =
-        new Query("geostuff", CQL.toFilter(
-            "BBOX(geometry,27.20,41.30,27.30,41.20) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z"),
+        new Query(
+            "geostuff",
+            CQL.toFilter(
+                "BBOX(geometry,27.20,41.30,27.30,41.20) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z"),
             new String[] {"geometry", "pid"});
   }
 

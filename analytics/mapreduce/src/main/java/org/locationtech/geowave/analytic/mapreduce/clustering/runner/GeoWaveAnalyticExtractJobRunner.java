@@ -89,7 +89,8 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner
             GeoWaveConfiguratorBase.enumToConfKey(
                 SimpleFeatureOutputReducer.class,
                 ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS),
-            SimpleFeatureGeometryExtractor.class, DimensionExtractor.class);
+            SimpleFeatureGeometryExtractor.class,
+            DimensionExtractor.class);
 
     GeoWaveOutputFormat.addDataAdapter(
         job.getConfiguration(),
@@ -115,7 +116,9 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner
       throws InstantiationException, IllegalAccessException {
     final DimensionExtractor<?> extractor = dimensionExtractorClass.newInstance();
     return AnalyticFeature.createGeometryFeatureAdapter(
-        outputDataTypeID, extractor.getDimensionNames(), namespaceURI,
+        outputDataTypeID,
+        extractor.getDimensionNames(),
+        namespaceURI,
         ClusteringUtils.CLUSTERING_CRS);
   }
 
@@ -136,22 +139,29 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner
 
     runTimeProperties.storeIfEmpty(ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID, "centroid");
     runTimeProperties.setConfig(
-        new ParameterEnum[] {MapReduceParameters.MRConfig.HDFS_BASE_DIR,
-            ExtractParameters.Extract.REDUCER_COUNT, ExtractParameters.Extract.DATA_NAMESPACE_URI,
+        new ParameterEnum[] {
+            MapReduceParameters.MRConfig.HDFS_BASE_DIR,
+            ExtractParameters.Extract.REDUCER_COUNT,
+            ExtractParameters.Extract.DATA_NAMESPACE_URI,
             ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID},
-        config, SimpleFeatureOutputReducer.class);
+        config,
+        SimpleFeatureOutputReducer.class);
 
     config.set(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(SimpleFeatureOutputReducer.class, ExtractParameters.Extract.GROUP_ID),
-        runTimeProperties
-            .getPropertyAsString(ExtractParameters.Extract.GROUP_ID, UUID.randomUUID().toString()));
+        GeoWaveConfiguratorBase.enumToConfKey(
+            SimpleFeatureOutputReducer.class,
+            ExtractParameters.Extract.GROUP_ID),
+        runTimeProperties.getPropertyAsString(
+            ExtractParameters.Extract.GROUP_ID,
+            UUID.randomUUID().toString()));
 
     config.set(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(SimpleFeatureOutputReducer.class, GlobalParameters.Global.BATCH_ID),
-        runTimeProperties
-            .getPropertyAsString(GlobalParameters.Global.BATCH_ID, UUID.randomUUID().toString()));
+        GeoWaveConfiguratorBase.enumToConfKey(
+            SimpleFeatureOutputReducer.class,
+            GlobalParameters.Global.BATCH_ID),
+        runTimeProperties.getPropertyAsString(
+            GlobalParameters.Global.BATCH_ID,
+            UUID.randomUUID().toString()));
 
     final Query query = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
 
@@ -161,8 +171,9 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner
         runTimeProperties.getPropertyAsInt(ExtractParameters.Extract.MAX_INPUT_SPLIT, 10000));
     if (query != null) {
       if (query.getQueryConstraints() != null) {
-        GeoWaveInputFormat
-            .setQueryConstraints(config, (QueryConstraints) query.getQueryConstraints());
+        GeoWaveInputFormat.setQueryConstraints(
+            config,
+            (QueryConstraints) query.getQueryConstraints());
         setQueryConstraints((QueryConstraints) query.getQueryConstraints());
       }
 
@@ -173,14 +184,18 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner
 
       if (query.getDataTypeQueryOptions() != null) {
         GeoWaveInputFormat.setDataTypeQueryOptions(
-            config, query.getDataTypeQueryOptions(), dataStoreOptions.createAdapterStore(),
+            config,
+            query.getDataTypeQueryOptions(),
+            dataStoreOptions.createAdapterStore(),
             dataStoreOptions.createInternalAdapterStore());
         setDataTypeQueryOptions(query.getDataTypeQueryOptions());
       }
 
       if (query.getIndexQueryOptions() != null) {
         GeoWaveInputFormat.setIndexQueryOptions(
-            config, query.getIndexQueryOptions(), dataStoreOptions.createIndexStore());
+            config,
+            query.getIndexQueryOptions(),
+            dataStoreOptions.createIndexStore());
         setIndexQueryOptions(query.getIndexQueryOptions());
       }
     }
@@ -195,9 +210,11 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner
 
     config.setClass(
         GeoWaveConfiguratorBase.enumToConfKey(
-            SimpleFeatureOutputReducer.class, ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS),
+            SimpleFeatureOutputReducer.class,
+            ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS),
         runTimeProperties.getPropertyAsClass(
-            ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS, DimensionExtractor.class,
+            ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
+            DimensionExtractor.class,
             SimpleFeatureGeometryExtractor.class),
         DimensionExtractor.class);
 
@@ -214,7 +231,8 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner
         fs.delete(
             // HPFortify "Path Manipulation"
             // False positive - path is internally managed
-            getHdfsOutputPath(), true);
+            getHdfsOutputPath(),
+            true);
       }
 
       return ToolRunner.run(config, this, new String[] {});
@@ -226,13 +244,16 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner
     final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {ExtractParameters.Extract.REDUCER_COUNT,
+            new ParameterEnum<?>[] {
+                ExtractParameters.Extract.REDUCER_COUNT,
                 ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
                 ExtractParameters.Extract.DATA_NAMESPACE_URI,
                 ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
                 ExtractParameters.Extract.MIN_INPUT_SPLIT,
-                ExtractParameters.Extract.MAX_INPUT_SPLIT, ExtractParameters.Extract.QUERY,
-                StoreParam.INPUT_STORE, GlobalParameters.Global.BATCH_ID}));
+                ExtractParameters.Extract.MAX_INPUT_SPLIT,
+                ExtractParameters.Extract.QUERY,
+                StoreParam.INPUT_STORE,
+                GlobalParameters.Global.BATCH_ID}));
 
     params.addAll(MapReduceParameters.getParameters());
     return params;

@@ -69,9 +69,10 @@ public class IndexLoader {
       final IndexPluginOptions indexOptions = loadIndexPluginOptions(props, index);
 
       if ((indexGroupOptions != null) && (indexOptions != null)) {
-        throw new ParameterException("Aborting because there is both an index group "
-            + "and index with the name: "
-            + indexName);
+        throw new ParameterException(
+            "Aborting because there is both an index group "
+                + "and index with the name: "
+                + indexName);
       } else if (indexOptions != null) {
         loadedIndices.put(index, indexOptions);
       } else if (indexGroupOptions != null) {

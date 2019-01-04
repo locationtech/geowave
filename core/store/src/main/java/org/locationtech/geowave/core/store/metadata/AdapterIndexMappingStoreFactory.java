@@ -24,7 +24,8 @@ public class AdapterIndexMappingStoreFactory extends BaseStoreFactory<AdapterInd
 
   @Override
   public AdapterIndexMappingStore createStore(final StoreFactoryOptions options) {
-    return new AdapterIndexMappingStoreImpl(helper.createOperations(options),
+    return new AdapterIndexMappingStoreImpl(
+        helper.createOperations(options),
         options.getStoreOptions());
   }
 }

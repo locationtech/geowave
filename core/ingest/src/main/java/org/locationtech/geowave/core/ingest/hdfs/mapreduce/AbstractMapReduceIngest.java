@@ -76,7 +76,10 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 
   public String getJobName() {
     return String.format(
-        JOB_NAME, formatPluginName, inputFile.toString(), dataStoreOptions.getGeoWaveNamespace(),
+        JOB_NAME,
+        formatPluginName,
+        inputFile.toString(),
+        dataStoreOptions.getGeoWaveNamespace(),
         getIngestDescription());
   }
 

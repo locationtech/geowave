@@ -123,12 +123,14 @@ public class KSamplerMapReduce {
       if (rank > 0.0000000001) {
         final AnalyticItemWrapper<Object> wrapper = itemWrapperFactory.create(value);
         outputKey.setDataId(
-            new ByteArray(keyManager.putData(
-                nestedGroupCentroidAssigner.getGroupForLevel(wrapper), 1.0 - rank, // sorts
-                // in
-                // ascending
-                // order
-                key.getDataId().getBytes())));
+            new ByteArray(
+                keyManager.putData(
+                    nestedGroupCentroidAssigner.getGroupForLevel(wrapper),
+                    1.0 - rank, // sorts
+                    // in
+                    // ascending
+                    // order
+                    key.getDataId().getBytes())));
         outputKey.setInternalAdapterId(key.getInternalAdapterId());
         outputKey.setGeoWaveKey(key.getGeoWaveKey());
         context.write(outputKey, currentValue);
@@ -142,13 +144,17 @@ public class KSamplerMapReduce {
       super.setup(context);
 
       final ScopedJobConfiguration config =
-          new ScopedJobConfiguration(context.getConfiguration(), KSamplerMapReduce.class,
+          new ScopedJobConfiguration(
+              context.getConfiguration(),
+              KSamplerMapReduce.class,
               KSamplerMapReduce.LOGGER);
       sampleSize = config.getInt(SampleParameters.Sample.SAMPLE_SIZE, 1);
 
       try {
         nestedGroupCentroidAssigner =
-            new NestedGroupCentroidAssignment<>(context, KSamplerMapReduce.class,
+            new NestedGroupCentroidAssignment<>(
+                context,
+                KSamplerMapReduce.class,
                 KSamplerMapReduce.LOGGER);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -157,7 +163,8 @@ public class KSamplerMapReduce {
       try {
         samplingFunction =
             config.getInstance(
-                SampleParameters.Sample.SAMPLE_RANK_FUNCTION, SamplingRankFunction.class,
+                SampleParameters.Sample.SAMPLE_RANK_FUNCTION,
+                SamplingRankFunction.class,
                 RandomSamplingRankFunction.class);
 
         samplingFunction.initialize(context, KSamplerMapReduce.class, KSamplerMapReduce.LOGGER);
@@ -167,7 +174,8 @@ public class KSamplerMapReduce {
       try {
         itemWrapperFactory =
             config.getInstance(
-                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, AnalyticItemWrapperFactory.class,
+                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+                AnalyticItemWrapperFactory.class,
                 SimpleFeatureItemWrapperFactory.class);
 
         itemWrapperFactory.initialize(context, KSamplerMapReduce.class, KSamplerMapReduce.LOGGER);
@@ -206,7 +214,8 @@ public class KSamplerMapReduce {
           final AnalyticItemWrapper<T> centroid = createCentroid(groupID, sampleItem);
           if (centroid != null) {
             context.write(
-                new GeoWaveOutputKey(sampleDataTypeName, indexNames), centroid.getWrappedItem());
+                new GeoWaveOutputKey(sampleDataTypeName, indexNames),
+                centroid.getWrappedItem());
             outputCount++;
             outputCounts.put(groupID, outputCount);
           }
@@ -220,7 +229,10 @@ public class KSamplerMapReduce {
       final Point point = centroidExtractor.getCentroid(item.getWrappedItem());
       final AnalyticItemWrapper<T> nextCentroid =
           itemWrapperFactory.createNextItem(
-              item.getWrappedItem(), groupID, point.getCoordinate(), item.getExtraDimensions(),
+              item.getWrappedItem(),
+              groupID,
+              point.getCoordinate(),
+              item.getExtraDimensions(),
               item.getDimensionValues());
 
       nextCentroid.setBatchID(batchID);
@@ -237,7 +249,9 @@ public class KSamplerMapReduce {
       super.setup(context);
 
       final ScopedJobConfiguration config =
-          new ScopedJobConfiguration(context.getConfiguration(), KSamplerMapReduce.class,
+          new ScopedJobConfiguration(
+              context.getConfiguration(),
+              KSamplerMapReduce.class,
               KSamplerMapReduce.LOGGER);
 
       maxCount = config.getInt(SampleParameters.Sample.SAMPLE_SIZE, 1);
@@ -256,7 +270,8 @@ public class KSamplerMapReduce {
       try {
         centroidExtractor =
             config.getInstance(
-                CentroidParameters.Centroid.EXTRACTOR_CLASS, CentroidExtractor.class,
+                CentroidParameters.Centroid.EXTRACTOR_CLASS,
+                CentroidExtractor.class,
                 SimpleFeatureCentroidExtractor.class);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -265,7 +280,8 @@ public class KSamplerMapReduce {
       try {
         itemWrapperFactory =
             config.getInstance(
-                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, AnalyticItemWrapperFactory.class,
+                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+                AnalyticItemWrapperFactory.class,
                 SimpleFeatureItemWrapperFactory.class);
 
         itemWrapperFactory.initialize(context, KSamplerMapReduce.class, KSamplerMapReduce.LOGGER);

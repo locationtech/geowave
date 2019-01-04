@@ -58,8 +58,14 @@ public class AccumuloKeyValuePairGenerator<T> {
         final Mutation m = AccumuloWriter.rowToMutation(row);
         for (final ColumnUpdate cu : m.getUpdates()) {
           keyValuePairs.add(
-              new KeyValue(new Key(m.getRow(), cu.getColumnFamily(), cu.getColumnQualifier(),
-                  cu.getColumnVisibility(), cu.getTimestamp()), cu.getValue()));
+              new KeyValue(
+                  new Key(
+                      m.getRow(),
+                      cu.getColumnFamily(),
+                      cu.getColumnQualifier(),
+                      cu.getColumnVisibility(),
+                      cu.getTimestamp()),
+                  cu.getValue()));
         }
       }
     }

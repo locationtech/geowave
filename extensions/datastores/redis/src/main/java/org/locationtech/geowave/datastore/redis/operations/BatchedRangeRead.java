@@ -133,7 +133,11 @@ public class BatchedRangeRead<T> {
 
   private RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getSet(final byte[] partitionKey) {
     return RedisUtils.getRowSet(
-        client, compression, setNamePrefix, partitionKey, groupByRowAndSortByTimePair.getRight());
+        client,
+        compression,
+        setNamePrefix,
+        partitionKey,
+        groupByRowAndSortByTimePair.getRight());
   }
 
   public CloseableIterator<T> results() {
@@ -172,8 +176,8 @@ public class BatchedRangeRead<T> {
       // precision we need to make
       // sure the end is inclusive
       return transformAndFilter(
-          setCache.get(partitionKey).entryRange(
-              r.startScore, true, r.endScore, r.endScore <= r.startScore),
+          setCache.get(
+              partitionKey).entryRange(r.startScore, true, r.endScore, r.endScore <= r.startScore),
           r.partitionKey);
     }).iterator()));
   }
@@ -200,7 +204,9 @@ public class BatchedRangeRead<T> {
             readSemaphore.acquire();
             final RFuture<Collection<ScoredEntry<GeoWaveRedisPersistedRow>>> f =
                 setCache.get(partitionKey).entryRangeAsync(
-                    r.startScore, true, r.endScore,
+                    r.startScore,
+                    true,
+                    r.endScore,
                     // if we don't have enough
                     // precision we need to make
                     // sure the end is inclusive
@@ -245,8 +251,8 @@ public class BatchedRangeRead<T> {
           try {
             results.put(RowConsumer.POISON);
           } catch (final InterruptedException e) {
-            LOGGER
-                .error("Interrupted while finishing blocking queue, this may result in deadlock!");
+            LOGGER.error(
+                "Interrupted while finishing blocking queue, this may result in deadlock!");
           }
         }
       }
@@ -272,26 +278,27 @@ public class BatchedRangeRead<T> {
         sortByKeyIfRequired(
             isSortFinalResultsBySortKey,
             (Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<>(
-                Iterators
-                    .filter(
-                        Iterators.transform(
-                            groupByRowAndSortByTimePair.getLeft()
-                                ? RedisUtils
-                                    .groupByRow(result, groupByRowAndSortByTimePair.getRight())
-                                : result,
-                            new Function<ScoredEntry<GeoWaveRedisPersistedRow>, GeoWaveRedisRow>() {
+                Iterators.filter(
+                    Iterators.transform(
+                        groupByRowAndSortByTimePair.getLeft()
+                            ? RedisUtils.groupByRow(result, groupByRowAndSortByTimePair.getRight())
+                            : result,
+                        new Function<ScoredEntry<GeoWaveRedisPersistedRow>, GeoWaveRedisRow>() {
 
-                              @Override
-                              public GeoWaveRedisRow apply(
-                                  final ScoredEntry<GeoWaveRedisPersistedRow> entry) {
-                            // @formatter:off
+                          @Override
+                          public GeoWaveRedisRow apply(
+                              final ScoredEntry<GeoWaveRedisPersistedRow> entry) {
+                        // @formatter:off
                                     // wrap the persisted row with additional metadata
                                     // @formatter:on
-                                return new GeoWaveRedisRow(entry.getValue(), adapterId,
-                                    partitionKey, RedisUtils.getSortKey(entry.getScore()));
-                              }
-                            }),
-                        filter))));
+                            return new GeoWaveRedisRow(
+                                entry.getValue(),
+                                adapterId,
+                                partitionKey,
+                                RedisUtils.getSortKey(entry.getScore()));
+                          }
+                        }),
+                    filter))));
   }
 
   private static Iterator<GeoWaveRow> sortByKeyIfRequired(

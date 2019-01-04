@@ -74,10 +74,13 @@ public class RocksDBReader<T> implements RowReader<T> {
                 readerParams.getInternalAdapterStore().getTypeName(adapterId),
                 readerParams.getIndex().getName());
         final Stream<CloseableIterator<GeoWaveRow>> streamIt =
-            RocksDBUtils.getPartitions(client.getSubDirectory(), indexNamePrefix).stream()
-                .map(p -> {
+            RocksDBUtils.getPartitions(client.getSubDirectory(), indexNamePrefix).stream().map(
+                p -> {
                   return RocksDBUtils.getIndexTableFromPrefix(
-                      client, indexNamePrefix, adapterId, p.getBytes(),
+                      client,
+                      indexNamePrefix,
+                      adapterId,
+                      p.getBytes(),
                       groupByRowAndSortByTime.getRight()).iterator();
                 });
         iterators.addAll(streamIt.collect(Collectors.toList()));
@@ -102,17 +105,19 @@ public class RocksDBReader<T> implements RowReader<T> {
       final Set<String> authorizations,
       final boolean async) {
     final Iterator<CloseableIterator> it =
-        Arrays.stream(ArrayUtils.toObject(readerParams.getAdapterIds()))
-            .map(
-                adapterId -> new BatchedRangeRead(client,
-                    RocksDBUtils.getTablePrefix(
-                        readerParams.getInternalAdapterStore().getTypeName(adapterId),
-                        readerParams.getIndex().getName()),
-                    adapterId, ranges, readerParams.getRowTransformer(),
-                    new ClientVisibilityFilter(authorizations), async,
-                    RocksDBUtils.isGroupByRowAndIsSortByTime(readerParams, adapterId),
-                    RocksDBUtils.isSortByKeyRequired(readerParams)).results())
-            .iterator();
+        Arrays.stream(ArrayUtils.toObject(readerParams.getAdapterIds())).map(
+            adapterId -> new BatchedRangeRead(
+                client,
+                RocksDBUtils.getTablePrefix(
+                    readerParams.getInternalAdapterStore().getTypeName(adapterId),
+                    readerParams.getIndex().getName()),
+                adapterId,
+                ranges,
+                readerParams.getRowTransformer(),
+                new ClientVisibilityFilter(authorizations),
+                async,
+                RocksDBUtils.isGroupByRowAndIsSortByTime(readerParams, adapterId),
+                RocksDBUtils.isSortByKeyRequired(readerParams)).results()).iterator();
     final CloseableIterator<T>[] itArray = Iterators.toArray(it, CloseableIterator.class);
     return new CloseableIteratorWrapper<>(new Closeable() {
       AtomicBoolean closed = new AtomicBoolean(false);
@@ -135,12 +140,16 @@ public class RocksDBReader<T> implements RowReader<T> {
     final ByteArray stopKey =
         range.isInfiniteStopSortKey() ? null : new ByteArray(range.getEndSortKey());
     final SinglePartitionQueryRanges partitionRange =
-        new SinglePartitionQueryRanges(new ByteArray(range.getPartitionKey()),
+        new SinglePartitionQueryRanges(
+            new ByteArray(range.getPartitionKey()),
             Collections.singleton(new ByteArrayRange(startKey, stopKey)));
     final Set<String> authorizations =
         Sets.newHashSet(recordReaderParams.getAdditionalAuthorizations());
     return createIterator(
-        client, recordReaderParams, Collections.singleton(partitionRange), authorizations,
+        client,
+        recordReaderParams,
+        Collections.singleton(partitionRange),
+        authorizations,
         // there should already be sufficient parallelism created by
         // input splits for record reader use cases
         false);
@@ -152,11 +161,13 @@ public class RocksDBReader<T> implements RowReader<T> {
       final Iterator<GeoWaveRow> results,
       final BaseReaderParams<T> params,
       final Set<String> authorizations) {
-    return new CloseableIteratorWrapper<>(closeable, params.getRowTransformer().apply(
-        sortBySortKeyIfRequired(
-            params,
-            (Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator(
-                Iterators.filter(results, new ClientVisibilityFilter(authorizations))))));
+    return new CloseableIteratorWrapper<>(
+        closeable,
+        params.getRowTransformer().apply(
+            sortBySortKeyIfRequired(
+                params,
+                (Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator(
+                    Iterators.filter(results, new ClientVisibilityFilter(authorizations))))));
   }
 
   private static Iterator<GeoWaveRow> sortBySortKeyIfRequired(

@@ -497,9 +497,18 @@ public class AccumuloUtils {
         final List<Map<Key, Value>> fieldValueMapList = new ArrayList();
         fieldValueMapList.add(WholeRowIterator.decodeRow(row.getKey(), row.getValue()));
         return BaseDataStoreUtils.decodeRow(
-            new AccumuloRow(row.getKey().getRow().copyBytes(),
-                index.getIndexStrategy().getPartitionKeyLength(), fieldValueMapList, false),
-            clientFilter, null, adapterStore, index, null, null, true);
+            new AccumuloRow(
+                row.getKey().getRow().copyBytes(),
+                index.getIndexStrategy().getPartitionKeyLength(),
+                fieldValueMapList,
+                false),
+            clientFilter,
+            null,
+            adapterStore,
+            index,
+            null,
+            null,
+            true);
       } catch (final IOException | AdapterException e) {
         // May need to address repeating adaptor log in this class, or
         // calling class.

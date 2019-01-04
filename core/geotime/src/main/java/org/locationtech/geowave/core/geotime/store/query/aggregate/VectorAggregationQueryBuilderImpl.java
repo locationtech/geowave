@@ -30,7 +30,8 @@ public class VectorAggregationQueryBuilderImpl<P extends Persistable, R>
       final String geomFieldName) {
     options =
         new AggregateTypeQueryOptions(
-            new OptimalVectorBoundingBoxAggregation<>(new FieldNameParam(geomFieldName)), typeName);
+            new OptimalVectorBoundingBoxAggregation<>(new FieldNameParam(geomFieldName)),
+            typeName);
     return this;
   }
 
@@ -46,7 +47,8 @@ public class VectorAggregationQueryBuilderImpl<P extends Persistable, R>
       final String timeFieldName) {
     options =
         new AggregateTypeQueryOptions(
-            new VectorBoundingBoxAggregation(new FieldNameParam(timeFieldName)), typeName);
+            new VectorBoundingBoxAggregation(new FieldNameParam(timeFieldName)),
+            typeName);
     return this;
   }
 }

@@ -67,8 +67,10 @@ public class VectorMRExportJobRunner extends Configured implements Tool {
       conf = new Configuration();
       setConf(conf);
     }
-    GeoWaveConfiguratorBase
-        .setRemoteInvocationParams(hdfsHostPort, mrOptions.getResourceManagerHostPort(), conf);
+    GeoWaveConfiguratorBase.setRemoteInvocationParams(
+        hdfsHostPort,
+        mrOptions.getResourceManagerHostPort(),
+        conf);
     final String[] typeNames = mrOptions.getTypeNames();
     final PersistentAdapterStore adapterStore = storeOptions.createAdapterStore();
     final InternalAdapterStore internalAdapterStore = storeOptions.createInternalAdapterStore();
@@ -94,8 +96,8 @@ public class VectorMRExportJobRunner extends Configured implements Tool {
     if (mrOptions.getIndexName() != null) {
       final Index index = indexStore.getIndex(mrOptions.getIndexName());
       if (index == null) {
-        JCommander.getConsole()
-            .println("Unable to find index '" + mrOptions.getIndexName() + "' in store");
+        JCommander.getConsole().println(
+            "Unable to find index '" + mrOptions.getIndexName() + "' in store");
         return -1;
       }
       bldr.indexName(mrOptions.getIndexName());

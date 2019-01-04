@@ -78,11 +78,13 @@ public class NewTokenCommand extends DefaultOperation implements Command {
                     // Exception handling will catch if
                     // backupFile is null
                     String decryptedValue =
-                        SecurityUtils
-                            .decryptHexEncodedValue(configValue, backupFile.getCanonicalPath());
+                        SecurityUtils.decryptHexEncodedValue(
+                            configValue,
+                            backupFile.getCanonicalPath());
                     String encryptedValue =
-                        SecurityUtils
-                            .encryptAndHexEncodeValue(decryptedValue, tokenFile.getCanonicalPath());
+                        SecurityUtils.encryptAndHexEncodeValue(
+                            decryptedValue,
+                            tokenFile.getCanonicalPath());
                     configProps.put(configKey, encryptedValue);
                     updated = true;
                   }
@@ -98,7 +100,8 @@ public class NewTokenCommand extends DefaultOperation implements Command {
           }
         } catch (Exception ex) {
           sLog.error(
-              "An error occurred creating a new encryption token: " + ex.getLocalizedMessage(), ex);
+              "An error occurred creating a new encryption token: " + ex.getLocalizedMessage(),
+              ex);
         }
       } else {
         generateNewEncryptionToken(tokenFile);

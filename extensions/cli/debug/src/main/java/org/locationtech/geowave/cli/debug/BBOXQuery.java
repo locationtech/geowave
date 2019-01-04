@@ -68,14 +68,13 @@ public class BBOXQuery extends AbstractGeoWaveQuery {
     if (useAggregation) {
 
       final VectorAggregationQueryBuilder<Persistable, Long> bldr =
-          (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder().count(typeName)
-              .indexName(indexName);
+          (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder().count(
+              typeName).indexName(indexName);
       final Long countResult =
           dataStore.aggregate(
               bldr.constraints(
-                  bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(geom)
-                      .build())
-                  .build());
+                  bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                      geom).build()).build());
 
       if (countResult != null) {
         count += countResult;
@@ -89,9 +88,8 @@ public class BBOXQuery extends AbstractGeoWaveQuery {
       try (final CloseableIterator<SimpleFeature> it =
           dataStore.query(
               bldr.constraints(
-                  bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(geom)
-                      .build())
-                  .build())) {
+                  bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                      geom).build()).build())) {
 
         stopWatch.stop();
         System.out.println("Ran BBOX query in " + stopWatch.toString());

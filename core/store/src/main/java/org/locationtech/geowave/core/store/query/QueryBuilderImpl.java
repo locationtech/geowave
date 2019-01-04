@@ -71,7 +71,10 @@ public class QueryBuilderImpl<T, R extends QueryBuilder<T, R>>
 
   @Override
   public Query<T> build() {
-    return new Query<>(newCommonQueryOptions(), newFilterByTypeQueryOptions(),
-        newIndexQueryOptions(), constraints);
+    return new Query<>(
+        newCommonQueryOptions(),
+        newFilterByTypeQueryOptions(),
+        newIndexQueryOptions(),
+        constraints);
   }
 }

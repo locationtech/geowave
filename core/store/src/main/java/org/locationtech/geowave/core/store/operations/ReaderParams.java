@@ -49,9 +49,19 @@ public class ReaderParams<T> extends BaseReaderParams<T> {
       final List<MultiDimensionalNumericData> constraints,
       final GeoWaveRowIteratorTransformer<T> rowTransformer,
       final String[] additionalAuthorizations) {
-    super(index, adapterStore, internalAdapterStore, adapterIds,
-        maxResolutionSubsamplingPerDimension, aggregation, fieldSubsets, isMixedVisibility,
-        isAuthorizationsLimiting, limit, maxRangeDecomposition, rowTransformer,
+    super(
+        index,
+        adapterStore,
+        internalAdapterStore,
+        adapterIds,
+        maxResolutionSubsamplingPerDimension,
+        aggregation,
+        fieldSubsets,
+        isMixedVisibility,
+        isAuthorizationsLimiting,
+        limit,
+        maxRangeDecomposition,
+        rowTransformer,
         additionalAuthorizations);
     this.isServersideAggregation = isServersideAggregation;
     this.isClientsideRowMerging = isClientsideRowMerging;

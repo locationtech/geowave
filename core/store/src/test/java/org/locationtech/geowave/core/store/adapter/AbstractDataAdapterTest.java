@@ -51,9 +51,15 @@ public class AbstractDataAdapterTest {
         mockAbstractDataAdapter.encode(beforeValue, testIndexModel);
     final Integer afterValue =
         mockAbstractDataAdapter.decode(
-            new IndexedAdapterPersistenceEncoding(testEncoding.getInternalAdapterId(),
-                testEncoding.getDataId(), null, null, 1, testEncoding.getCommonData(),
-                new PersistentDataset<byte[]>(), testEncoding.getAdapterExtendedData()),
+            new IndexedAdapterPersistenceEncoding(
+                testEncoding.getInternalAdapterId(),
+                testEncoding.getDataId(),
+                null,
+                null,
+                1,
+                testEncoding.getCommonData(),
+                new PersistentDataset<byte[]>(),
+                testEncoding.getAdapterExtendedData()),
             new PrimaryIndex(null, testIndexModel));
 
     Assert.assertEquals("EncodeDecode_test", beforeValue, afterValue);
@@ -73,8 +79,8 @@ public class AbstractDataAdapterTest {
         new MockAbstractDataAdapter(indexFieldHandlers, nativeFieldHandlers);
 
     final MockAbstractDataAdapter obj =
-        (MockAbstractDataAdapter) PersistenceUtils
-            .fromBinary(PersistenceUtils.toBinary(mockAbstractDataAdapter));
+        (MockAbstractDataAdapter) PersistenceUtils.fromBinary(
+            PersistenceUtils.toBinary(mockAbstractDataAdapter));
 
     // TODO is there another test?
     Assert.assertNotNull(obj);

@@ -65,8 +65,12 @@ public class QueryOptionsIT {
   private static Index index =
       new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
-  @GeoWaveTestStore({GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.HBASE, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore({
+      GeoWaveStoreType.ACCUMULO,
+      GeoWaveStoreType.HBASE,
+      GeoWaveStoreType.BIGTABLE,
+      GeoWaveStoreType.REDIS,
+      GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;
 
   @BeforeClass
@@ -91,14 +95,14 @@ public class QueryOptionsIT {
     int numResults = 0;
     try (final CloseableIterator<SimpleFeature> results =
         (CloseableIterator) dataStoreOptions.createDataStore().query(
-            QueryBuilder.newBuilder().addTypeName(dataAdapter1.getTypeName())
-                .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(spatialQuery)
-                .build())) {
+            QueryBuilder.newBuilder().addTypeName(dataAdapter1.getTypeName()).indexName(
+                TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(spatialQuery).build())) {
       while (results.hasNext()) {
         numResults++;
         final SimpleFeature currFeat = results.next();
         Assert.assertTrue(
-            "Expected state to be 'Texas'", currFeat.getAttribute(STATE_ATTRIBUTE).equals("Texas"));
+            "Expected state to be 'Texas'",
+            currFeat.getAttribute(STATE_ATTRIBUTE).equals("Texas"));
       }
     }
     Assert.assertTrue("Expected 3 results but returned " + numResults, 3 == numResults);
@@ -109,13 +113,14 @@ public class QueryOptionsIT {
     int numResults = 0;
     try (final CloseableIterator<SimpleFeature> results =
         (CloseableIterator) dataStoreOptions.createDataStore().query(
-            QueryBuilder.newBuilder().indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName())
-                .constraints(spatialQuery).build())) {
+            QueryBuilder.newBuilder().indexName(
+                TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(spatialQuery).build())) {
       while (results.hasNext()) {
         numResults++;
         final SimpleFeature currFeat = results.next();
         Assert.assertTrue(
-            "Expected state to be 'Texas'", currFeat.getAttribute(STATE_ATTRIBUTE).equals("Texas"));
+            "Expected state to be 'Texas'",
+            currFeat.getAttribute(STATE_ATTRIBUTE).equals("Texas"));
       }
     }
     Assert.assertTrue("Expected 6 results but returned " + numResults, 6 == numResults);
@@ -125,13 +130,14 @@ public class QueryOptionsIT {
   public void testQueryEmptyOptions() throws IOException {
     int numResults = 0;
     try (final CloseableIterator<SimpleFeature> results =
-        (CloseableIterator) dataStoreOptions.createDataStore()
-            .query(QueryBuilder.newBuilder().constraints(spatialQuery).build())) {
+        (CloseableIterator) dataStoreOptions.createDataStore().query(
+            QueryBuilder.newBuilder().constraints(spatialQuery).build())) {
       while (results.hasNext()) {
         numResults++;
         final SimpleFeature currFeat = results.next();
         Assert.assertTrue(
-            "Expected state to be 'Texas'", currFeat.getAttribute(STATE_ATTRIBUTE).equals("Texas"));
+            "Expected state to be 'Texas'",
+            currFeat.getAttribute(STATE_ATTRIBUTE).equals("Texas"));
       }
     }
     Assert.assertTrue("Expected 6 results but returned " + numResults, 6 == numResults);
@@ -178,36 +184,84 @@ public class QueryOptionsIT {
     // http://en.wikipedia.org/wiki/List_of_United_States_cities_by_population
     points.add(
         buildSimpleFeature(
-            builder, "New York", "New York", 8405837, 302.6, new Coordinate(-73.9385, 40.6643)));
+            builder,
+            "New York",
+            "New York",
+            8405837,
+            302.6,
+            new Coordinate(-73.9385, 40.6643)));
     points.add(
         buildSimpleFeature(
-            builder, "Los Angeles", "California", 3884307, 468.7,
+            builder,
+            "Los Angeles",
+            "California",
+            3884307,
+            468.7,
             new Coordinate(-118.4108, 34.0194)));
     points.add(
         buildSimpleFeature(
-            builder, "Chicago", "Illinois", 2718782, 227.6, new Coordinate(-87.6818, 41.8376)));
+            builder,
+            "Chicago",
+            "Illinois",
+            2718782,
+            227.6,
+            new Coordinate(-87.6818, 41.8376)));
     points.add(
         buildSimpleFeature(
-            builder, "Houston", "Texas", 2195914, 599.6, new Coordinate(-95.3863, 29.7805)));
+            builder,
+            "Houston",
+            "Texas",
+            2195914,
+            599.6,
+            new Coordinate(-95.3863, 29.7805)));
     points.add(
         buildSimpleFeature(
-            builder, "Philadelphia", "Pennsylvania", 1553165, 134.1,
+            builder,
+            "Philadelphia",
+            "Pennsylvania",
+            1553165,
+            134.1,
             new Coordinate(-75.1333, 40.0094)));
     points.add(
         buildSimpleFeature(
-            builder, "Phoenix", "Arizona", 1513367, 516.7, new Coordinate(-112.088, 33.5722)));
+            builder,
+            "Phoenix",
+            "Arizona",
+            1513367,
+            516.7,
+            new Coordinate(-112.088, 33.5722)));
     points.add(
         buildSimpleFeature(
-            builder, "San Antonio", "Texas", 1409019, 460.9, new Coordinate(-98.5251, 29.4724)));
+            builder,
+            "San Antonio",
+            "Texas",
+            1409019,
+            460.9,
+            new Coordinate(-98.5251, 29.4724)));
     points.add(
         buildSimpleFeature(
-            builder, "San Diego", "California", 1355896, 325.2, new Coordinate(-117.135, 32.8153)));
+            builder,
+            "San Diego",
+            "California",
+            1355896,
+            325.2,
+            new Coordinate(-117.135, 32.8153)));
     points.add(
         buildSimpleFeature(
-            builder, "Dallas", "Texas", 1257676, 340.5, new Coordinate(-96.7967, 32.7757)));
+            builder,
+            "Dallas",
+            "Texas",
+            1257676,
+            340.5,
+            new Coordinate(-96.7967, 32.7757)));
     points.add(
         buildSimpleFeature(
-            builder, "San Jose", "California", 998537, 176.5, new Coordinate(-121.8193, 37.2969)));
+            builder,
+            "San Jose",
+            "California",
+            998537,
+            176.5,
+            new Coordinate(-121.8193, 37.2969)));
     return points;
   }
 

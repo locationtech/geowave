@@ -171,8 +171,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
           if (typeBuilder == null) {
             typeBuilder = new SimpleFeatureTypeBuilder();
 
-            for (final Map.Entry<String, FeatureAttributeProtos> mapEntry : f.getFeatureMap()
-                .entrySet()) {
+            for (final Map.Entry<String, FeatureAttributeProtos> mapEntry : f.getFeatureMap().entrySet()) {
               switch (mapEntry.getValue().getValueCase()) {
                 case VALSTRING: {
                   typeBuilder.add(mapEntry.getKey(), String.class);
@@ -250,8 +249,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
         } // end first-time initialization
 
         // Set the values for all the attributes in the feature
-        for (final Map.Entry<String, FeatureAttributeProtos> attribute : f.getFeatureMap()
-            .entrySet()) {
+        for (final Map.Entry<String, FeatureAttributeProtos> attribute : f.getFeatureMap().entrySet()) {
           switch (attribute.getValue().getValueCase()) {
             case VALSTRING: {
               featureBuilder.set(attribute.getKey(), attribute.getValue().getValString());
@@ -277,8 +275,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
               Geometry geom = null;
               try {
                 geom =
-                    new WKBReader(JTSFactoryFinder.getGeometryFactory())
-                        .read(attribute.getValue().getValGeometry().toByteArray());
+                    new WKBReader(JTSFactoryFinder.getGeometryFactory()).read(
+                        attribute.getValue().getValGeometry().toByteArray());
               } catch (FactoryRegistryException | org.locationtech.jts.io.ParseException e) {
                 LOGGER.error("Failed to parse string for geometry", e);
               }
@@ -303,8 +301,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
         }
 
         final StringResponseProtos resp =
-            StringResponseProtos.newBuilder().setResponseValue(String.valueOf(++totalCount))
-                .build();
+            StringResponseProtos.newBuilder().setResponseValue(
+                String.valueOf(++totalCount)).build();
         responseObserver.onNext(resp);
       }
 
@@ -325,8 +323,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
         writer.flush();
         writer.close();
         final StringResponseProtos resp =
-            StringResponseProtos.newBuilder().setResponseValue("Ingest completed successfully")
-                .build();
+            StringResponseProtos.newBuilder().setResponseValue(
+                "Ingest completed successfully").build();
         responseObserver.onNext(resp);
         responseObserver.onCompleted();
       }
@@ -421,8 +419,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
 
     try {
       queryGeom =
-          new WKBReader(JTSFactoryFinder.getGeometryFactory())
-              .read(request.getGeometry().toByteArray());
+          new WKBReader(JTSFactoryFinder.getGeometryFactory()).read(
+              request.getGeometry().toByteArray());
     } catch (final FactoryRegistryException | org.locationtech.jts.io.ParseException e) {
       LOGGER.error("Exception encountered creating query geometry", e);
     }
@@ -430,9 +428,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
     try (final CloseableIterator<SimpleFeature> iterator =
         dataStore.query(
             bldr.constraints(
-                bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(queryGeom)
-                    .build())
-                .build())) {
+                bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                    queryGeom).build()).build())) {
       while (iterator.hasNext()) {
         final SimpleFeature simpleFeature = iterator.next();
         final SimpleFeatureType type = simpleFeature.getType();
@@ -495,8 +492,8 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
 
     try {
       queryGeom =
-          new WKBReader(JTSFactoryFinder.getGeometryFactory())
-              .read(request.getSpatialParams().getGeometry().toByteArray());
+          new WKBReader(JTSFactoryFinder.getGeometryFactory()).read(
+              request.getSpatialParams().getGeometry().toByteArray());
       stBldr = stBldr.spatialConstraints(queryGeom);
 
       stBldr =

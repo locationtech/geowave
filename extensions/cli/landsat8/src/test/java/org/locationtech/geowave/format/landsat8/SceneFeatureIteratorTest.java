@@ -76,8 +76,13 @@ public class SceneFeatureIteratorTest {
 
     List<SimpleFeature> features = new ArrayList<>();
     try (SceneFeatureIterator iterator =
-        new SceneFeatureIterator(onlyScenesSinceLastRun, useCachedScenes, nBestScenesByPathRow,
-            nBestScenes, cqlFilter, workspaceDir)) {
+        new SceneFeatureIterator(
+            onlyScenesSinceLastRun,
+            useCachedScenes,
+            nBestScenesByPathRow,
+            nBestScenes,
+            cqlFilter,
+            workspaceDir)) {
       while (iterator.hasNext()) {
         features.add(iterator.next());
       }
@@ -90,7 +95,8 @@ public class SceneFeatureIteratorTest {
             allOf(
                 hasProperties(),
                 inBounds(
-                    new Envelope2D(new DirectPosition2D(-76.6, 42.34),
+                    new Envelope2D(
+                        new DirectPosition2D(-76.6, 42.34),
                         new DirectPosition2D(-76.4, 42.54))))));
   }
 }

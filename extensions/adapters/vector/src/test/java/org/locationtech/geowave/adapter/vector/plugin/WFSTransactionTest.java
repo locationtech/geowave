@@ -48,12 +48,15 @@ public class WFSTransactionTest extends BaseDataStoreTest {
   public void setup() throws SchemaException, CQLException, IOException, GeoWavePluginException {
     dataStore = createDataStore();
     type =
-        DataUtilities
-            .createType("geostuff", "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String");
+        DataUtilities.createType(
+            "geostuff",
+            "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String");
 
     dataStore.createSchema(type);
     query =
-        new Query("geostuff", CQL.toFilter("BBOX(geometry,27.20,41.20,27.30,41.30)"),
+        new Query(
+            "geostuff",
+            CQL.toFilter("BBOX(geometry,27.20,41.20,27.30,41.30)"),
             new String[] {"geometry", "pid"});
   }
 
@@ -109,14 +112,15 @@ public class WFSTransactionTest extends BaseDataStoreTest {
     // stats check
     final Transaction transaction3 = new DefaultTransaction();
     reader =
-        ((GeoWaveFeatureSource) ((GeoWaveGTDataStore) dataStore)
-            .getFeatureSource("geostuff", transaction3)).getReaderInternal(query);
+        ((GeoWaveFeatureSource) ((GeoWaveGTDataStore) dataStore).getFeatureSource(
+            "geostuff",
+            transaction3)).getReaderInternal(query);
     Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> transStats =
         ((GeoWaveFeatureReader) reader).getTransaction().getDataStatistics();
     assertNotNull(
         transStats.get(
-            FeatureNumericRangeStatistics.STATS_TYPE.newBuilder().fieldName("pop").build()
-                .getId()));
+            FeatureNumericRangeStatistics.STATS_TYPE.newBuilder().fieldName(
+                "pop").build().getId()));
     transaction3.close();
   }
 

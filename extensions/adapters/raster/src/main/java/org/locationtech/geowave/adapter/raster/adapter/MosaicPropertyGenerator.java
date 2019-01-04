@@ -20,7 +20,9 @@ public class MosaicPropertyGenerator extends PropertyGeneratorImpl {
   private static final long serialVersionUID = 1L;
 
   public MosaicPropertyGenerator() {
-    super(new String[] {"sourceThreshold"}, new Class[] {double[][].class},
+    super(
+        new String[] {"sourceThreshold"},
+        new Class[] {double[][].class},
         new Class[] {RenderedOp.class});
   }
 

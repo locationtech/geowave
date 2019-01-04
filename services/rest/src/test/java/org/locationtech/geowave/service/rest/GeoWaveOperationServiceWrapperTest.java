@@ -76,7 +76,8 @@ public class GeoWaveOperationServiceWrapperTest {
     classUnderTest.setRequest(new Request(Method.GET, "foo.bar"));
     classUnderTest.restGet();
     Assert.assertEquals(
-        successStatusIs200, classUnderTest.getResponse().getStatus().equals(Status.SUCCESS_OK));
+        successStatusIs200,
+        classUnderTest.getResponse().getStatus().equals(Status.SUCCESS_OK));
   }
 
   @Test
@@ -91,7 +92,8 @@ public class GeoWaveOperationServiceWrapperTest {
     classUnderTest.setResponse(new Response(null));
     classUnderTest.restPost(mockedRequest(MediaType.APPLICATION_JSON));
     Assert.assertEquals(
-        successStatusIs200, classUnderTest.getResponse().getStatus().equals(Status.SUCCESS_OK));
+        successStatusIs200,
+        classUnderTest.getResponse().getStatus().equals(Status.SUCCESS_OK));
   }
 
   @Test
@@ -110,6 +112,7 @@ public class GeoWaveOperationServiceWrapperTest {
     // TODO: Returns 500. Error Caught at
     // "final Context appContext = Application.getCurrent().getContext();"
     Assert.assertEquals(
-        successStatusIs200, classUnderTest.getResponse().getStatus().equals(Status.SUCCESS_OK));
+        successStatusIs200,
+        classUnderTest.getResponse().getStatus().equals(Status.SUCCESS_OK));
   }
 }

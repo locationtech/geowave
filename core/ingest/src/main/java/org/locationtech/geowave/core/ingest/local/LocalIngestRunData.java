@@ -99,8 +99,8 @@ public class LocalIngestRunData implements Closeable {
    * @throws Exception
    */
   public Writer getIndexWriter(final String typeName, final List<Index> indices) throws Exception {
-    return indexWriterPool
-        .borrowObject(new TypeNameKeyWithIndices(typeName, indices.toArray(new Index[0])));
+    return indexWriterPool.borrowObject(
+        new TypeNameKeyWithIndices(typeName, indices.toArray(new Index[0])));
   }
 
   /**
@@ -130,7 +130,8 @@ public class LocalIngestRunData implements Closeable {
     public synchronized Writer<?> create(final TypeNameKeyWithIndices adapterWithIndices)
         throws Exception {
       dataStore.addType(
-          adapterStore.getAdapter(adapterWithIndices.typeName), adapterWithIndices.indices);
+          adapterStore.getAdapter(adapterWithIndices.typeName),
+          adapterWithIndices.indices);
       return dataStore.createWriter(adapterWithIndices.typeName);
     }
 

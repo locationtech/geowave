@@ -74,8 +74,9 @@ public class ServerSideOperationStore {
 
     private Collection<HBaseServerOp> getOperations(final ServerOpScope scope) {
       return Collections2.filter(
-          Collections2
-              .transform(map.values(), new Function<ServerSideOperationValue, HBaseServerOp>() {
+          Collections2.transform(
+              map.values(),
+              new Function<ServerSideOperationValue, HBaseServerOp>() {
                 @Override
                 public HBaseServerOp apply(final ServerSideOperationValue input) {
                   return input.getOperation(scope);

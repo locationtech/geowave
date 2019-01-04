@@ -71,7 +71,9 @@ public class KMeansDistortionMapReduceTest {
 
   final SimpleFeatureType ftype =
       AnalyticFeature.createGeometryFeatureAdapter(
-          "centroid", new String[] {"extra1"}, "http://geowave.test.net",
+          "centroid",
+          new String[] {"extra1"},
+          "http://geowave.test.net",
           ClusteringUtils.CLUSTERING_CRS).getFeatureType();
   final FeatureDataAdapter testObjectAdapter = new FeatureDataAdapter(ftype);
   short adapterId = 1234;
@@ -93,34 +95,44 @@ public class KMeansDistortionMapReduceTest {
 
     mapDriver.getConfiguration().setClass(
         GeoWaveConfiguratorBase.enumToConfKey(
-            KMeansDistortionMapReduce.class, CommonParameters.Common.DISTANCE_FUNCTION_CLASS),
-        FeatureCentroidDistanceFn.class, DistanceFn.class);
+            KMeansDistortionMapReduce.class,
+            CommonParameters.Common.DISTANCE_FUNCTION_CLASS),
+        FeatureCentroidDistanceFn.class,
+        DistanceFn.class);
     testObjectAdapter.init(index);
     JobContextAdapterStore.addDataAdapter(mapDriver.getConfiguration(), testObjectAdapter);
 
     JobContextAdapterStore.addDataAdapter(reduceDriver.getConfiguration(), testObjectAdapter);
 
-    JobContextInternalAdapterStore
-        .addTypeName(mapDriver.getConfiguration(), testObjectAdapter.getTypeName(), adapterId);
-    JobContextInternalAdapterStore
-        .addTypeName(reduceDriver.getConfiguration(), testObjectAdapter.getTypeName(), adapterId);
+    JobContextInternalAdapterStore.addTypeName(
+        mapDriver.getConfiguration(),
+        testObjectAdapter.getTypeName(),
+        adapterId);
+    JobContextInternalAdapterStore.addTypeName(
+        reduceDriver.getConfiguration(),
+        testObjectAdapter.getTypeName(),
+        adapterId);
     final PropertyManagement propManagement = new PropertyManagement();
     propManagement.store(
         CentroidParameters.Centroid.INDEX_NAME,
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName());
     propManagement.store(CentroidParameters.Centroid.DATA_TYPE_ID, ftype.getTypeName());
 
-    propManagement
-        .store(CentroidParameters.Centroid.DATA_NAMESPACE_URI, ftype.getName().getNamespaceURI());
-    propManagement.store(GlobalParameters.Global.BATCH_ID, batchId);
-    propManagement
-        .store(CentroidParameters.Centroid.EXTRACTOR_CLASS, SimpleFeatureCentroidExtractor.class);
     propManagement.store(
-        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, SimpleFeatureItemWrapperFactory.class);
+        CentroidParameters.Centroid.DATA_NAMESPACE_URI,
+        ftype.getName().getNamespaceURI());
+    propManagement.store(GlobalParameters.Global.BATCH_ID, batchId);
+    propManagement.store(
+        CentroidParameters.Centroid.EXTRACTOR_CLASS,
+        SimpleFeatureCentroidExtractor.class);
+    propManagement.store(
+        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+        SimpleFeatureItemWrapperFactory.class);
 
     final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies()
-        .put("memory", new MemoryStoreFactoryFamily());
+    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+        "memory",
+        new MemoryStoreFactoryFamily());
     pluginOptions.selectPlugin("memory");
     final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
@@ -130,7 +142,9 @@ public class KMeansDistortionMapReduceTest {
     propManagement.store(StoreParam.INPUT_STORE, store);
 
     NestedGroupCentroidAssignment.setParameters(
-        mapDriver.getConfiguration(), KMeansDistortionMapReduce.class, propManagement);
+        mapDriver.getConfiguration(),
+        KMeansDistortionMapReduce.class,
+        propManagement);
 
     serializations();
 
@@ -138,15 +152,26 @@ public class KMeansDistortionMapReduceTest {
 
     final SimpleFeature feature =
         AnalyticFeature.createGeometryFeature(
-            ftype, batchId, "123", "fred", grp1, 20.30203,
-            factory.createPoint(new Coordinate(02.33, 0.23)), new String[] {"extra1"},
-            new double[] {0.022}, 1, 1, 0);
+            ftype,
+            batchId,
+            "123",
+            "fred",
+            grp1,
+            20.30203,
+            factory.createPoint(new Coordinate(02.33, 0.23)),
+            new String[] {"extra1"},
+            new double[] {0.022},
+            1,
+            1,
+            0);
 
     propManagement.store(CentroidParameters.Centroid.ZOOM_LEVEL, 1);
     ingest(pluginOptions.createDataStore(), testObjectAdapter, index, feature);
 
     CentroidManagerGeoWave.setParameters(
-        reduceDriver.getConfiguration(), KMeansDistortionMapReduce.class, propManagement);
+        reduceDriver.getConfiguration(),
+        KMeansDistortionMapReduce.class,
+        propManagement);
   }
 
   private void ingest(
@@ -180,11 +205,21 @@ public class KMeansDistortionMapReduceTest {
 
     final ObjectWritable ow = new ObjectWritable();
     ow.set(
-        new FeatureWritable(ftype,
+        new FeatureWritable(
+            ftype,
             AnalyticFeature.createGeometryFeature(
-                ftype, batchId, "123", "fred", grp1, 20.30203,
-                factory.createPoint(new Coordinate(02.33, 0.23)), new String[] {"extra1"},
-                new double[] {0.022}, 1, 1, 0)));
+                ftype,
+                batchId,
+                "123",
+                "fred",
+                grp1,
+                20.30203,
+                factory.createPoint(new Coordinate(02.33, 0.23)),
+                new String[] {"extra1"},
+                new double[] {0.022},
+                1,
+                1,
+                0)));
 
     mapDriver.withInput(inputKey, ow);
 

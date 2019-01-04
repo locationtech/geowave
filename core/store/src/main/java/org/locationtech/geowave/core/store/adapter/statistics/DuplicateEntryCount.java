@@ -119,8 +119,11 @@ public class DuplicateEntryCount<T>
     DuplicateEntryCount combinedDuplicateCount = null;
     for (final short adapterId : adapterIdsToQuery) {
       try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> adapterVisibilityCountIt =
-          statisticsStore
-              .getDataStatistics(adapterId, index.getName(), STATS_TYPE, authorizations)) {
+          statisticsStore.getDataStatistics(
+              adapterId,
+              index.getName(),
+              STATS_TYPE,
+              authorizations)) {
         if (adapterVisibilityCountIt.hasNext()) {
           final DuplicateEntryCount adapterVisibilityCount =
               (DuplicateEntryCount) adapterVisibilityCountIt.next();

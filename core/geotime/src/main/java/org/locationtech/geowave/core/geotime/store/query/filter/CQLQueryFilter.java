@@ -54,8 +54,9 @@ public class CQLQueryFilter implements QueryFilter {
     if ((filter != null) && (indexModel != null) && (adapter != null)) {
       final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<>();
       if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
-        ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
-            .convertUnknownValues(adapter, indexModel);
+        ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
+            adapter,
+            indexModel);
         final PersistentDataset<Object> existingExtValues =
             ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
         if (existingExtValues != null) {
@@ -63,15 +64,21 @@ public class CQLQueryFilter implements QueryFilter {
         }
       }
       final IndexedAdapterPersistenceEncoding encoding =
-          new IndexedAdapterPersistenceEncoding(persistenceEncoding.getInternalAdapterId(),
-              persistenceEncoding.getDataId(), persistenceEncoding.getInsertionPartitionKey(),
-              persistenceEncoding.getInsertionSortKey(), persistenceEncoding.getDuplicateCount(),
-              persistenceEncoding.getCommonData(), new PersistentDataset<byte[]>(),
+          new IndexedAdapterPersistenceEncoding(
+              persistenceEncoding.getInternalAdapterId(),
+              persistenceEncoding.getDataId(),
+              persistenceEncoding.getInsertionPartitionKey(),
+              persistenceEncoding.getInsertionSortKey(),
+              persistenceEncoding.getDuplicateCount(),
+              persistenceEncoding.getCommonData(),
+              new PersistentDataset<byte[]>(),
               adapterExtendedValues);
 
       final SimpleFeature feature =
           adapter.decode(
-              encoding, new PrimaryIndex(null, // because we
+              encoding,
+              new PrimaryIndex(
+                  null, // because we
                   // know the
                   // feature data
                   // adapter doesn't use the numeric

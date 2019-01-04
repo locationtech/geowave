@@ -80,7 +80,8 @@ public class MemoryLockManager extends AbstractLockingManagement {
       lockToRelease.resetExpireTime();
   }
 
-  @SuppressFBWarnings(value = {"MWN_MISMATCHED_WAIT"},
+  @SuppressFBWarnings(
+      value = {"MWN_MISMATCHED_WAIT"},
       justification = "incorrect flag; lock held (in synchronized block)")
   @Override
   public void lock(AuthorizedLock lock, String featureID) {
@@ -107,8 +108,8 @@ public class MemoryLockManager extends AbstractLockingManagement {
             // only wait a little, because the feature lock could be
             // stale
             // flagged as mismatched wait...but this is correct
-            featureLock
-                .wait(Math.min(5000, featureLock.getExpireTime() - System.currentTimeMillis()));
+            featureLock.wait(
+                Math.min(5000, featureLock.getExpireTime() - System.currentTimeMillis()));
           } catch (InterruptedException ex) {
           } catch (Exception e) {
             LOGGER.error(

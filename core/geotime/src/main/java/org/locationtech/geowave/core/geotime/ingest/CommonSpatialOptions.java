@@ -14,15 +14,21 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeOptions;
 
 public abstract class CommonSpatialOptions implements DimensionalityTypeOptions {
-  @Parameter(names = {"-c", "--crs"}, required = false,
+  @Parameter(
+      names = {"-c", "--crs"},
+      required = false,
       description = "The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.")
   protected String crs = GeometryUtils.DEFAULT_CRS_STR;
 
-  @Parameter(names = {"-gp", "--geometryPrecision"}, required = false,
+  @Parameter(
+      names = {"-gp", "--geometryPrecision"},
+      required = false,
       description = "The maximum precision of the geometry when encoding.  Lower precision will save more disk space when encoding. (Between -8 and 7)")
   protected int geometryPrecision = GeometryUtils.MAX_GEOMETRY_PRECISION;
 
-  @Parameter(names = {"-fp", "--fullGeometryPrecision"}, required = false,
+  @Parameter(
+      names = {"-fp", "--fullGeometryPrecision"},
+      required = false,
       description = "If specified, geometry will be encoded losslessly.  Uses more disk space.")
   protected boolean fullGeometryPrecision = false;
 

@@ -122,7 +122,10 @@ public class DataStoreUtils {
     final byte[] valueBytes = value.getValue();
     final FlattenedDataSet dataSet =
         DataStoreUtils.decomposeFlattenedFields(
-            fieldMask, valueBytes, value.getVisibility(), commonIndexFieldIds.size() - 1);
+            fieldMask,
+            valueBytes,
+            value.getVisibility(),
+            commonIndexFieldIds.size() - 1);
     final List<FlattenedFieldInfo> fieldInfos = dataSet.getFieldsRead();
 
     for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
@@ -145,8 +148,7 @@ public class DataStoreUtils {
 
   public static List<String> getUniqueDimensionFields(final CommonIndexModel model) {
     final List<String> dimensionFieldIds = new ArrayList<>();
-    for (final NumericDimensionField<? extends CommonIndexValue> dimension : model
-        .getDimensions()) {
+    for (final NumericDimensionField<? extends CommonIndexValue> dimension : model.getDimensions()) {
       if (!dimensionFieldIds.contains(dimension.getFieldName())) {
         dimensionFieldIds.add(dimension.getFieldName());
       }
@@ -163,9 +165,8 @@ public class DataStoreUtils {
     for (final SinglePartitionQueryRanges partitionRange : queryRanges.getPartitionQueryRanges()) {
       final RowRangeHistogramStatistics rangeStats =
           (RowRangeHistogramStatistics) stats.get(
-              StatisticsQueryBuilder.newBuilder().factory().rowHistogram()
-                  .indexName(index.getName()).partition(partitionRange.getPartitionKey()).build()
-                  .getId());
+              StatisticsQueryBuilder.newBuilder().factory().rowHistogram().indexName(
+                  index.getName()).partition(partitionRange.getPartitionKey()).build().getId());
       if (rangeStats == null) {
         return Long.MAX_VALUE - 1;
       }
@@ -258,7 +259,8 @@ public class DataStoreUtils {
       for (int i = 0; i < fieldPositions.size(); i++) {
         final Integer fieldPosition = fieldPositions.get(i);
         if ((maxFieldPosition > -1) && (fieldPosition > maxFieldPosition)) {
-          return new FlattenedDataSet(fieldInfoList,
+          return new FlattenedDataSet(
+              fieldInfoList,
               new FlattenedUnreadDataSingleRow(input, i, fieldPositions));
         }
         final int fieldLength = input.getInt();
@@ -280,8 +282,7 @@ public class DataStoreUtils {
       final IndexMetaData... hints) {
     SubStrategy targetIndexStrategy = null;
     if ((targetResolutionPerDimensionForHierarchicalIndex != null)
-        && (targetResolutionPerDimensionForHierarchicalIndex.length == indexStrategy
-            .getOrderedDimensionDefinitions().length)) {
+        && (targetResolutionPerDimensionForHierarchicalIndex.length == indexStrategy.getOrderedDimensionDefinitions().length)) {
       // determine the correct tier to query for the given resolution
       final HierarchicalNumericIndexStrategy strategy =
           CompoundHierarchicalIndexStrategyWrapper.findHierarchicalStrategy(indexStrategy);
@@ -452,9 +453,12 @@ public class DataStoreUtils {
       }
 
       final ReaderParamsBuilder<GeoWaveRow> paramsBuilder =
-          new ReaderParamsBuilder<>(index, adapterStore, internalAdapterStore,
-              GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER).isClientsideRowMerging(true)
-                  .maxRangeDecomposition(options.getMaxRangeDecomposition());
+          new ReaderParamsBuilder<>(
+              index,
+              adapterStore,
+              internalAdapterStore,
+              GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER).isClientsideRowMerging(
+                  true).maxRangeDecomposition(options.getMaxRangeDecomposition());
 
       final short[] adapterIds = new short[1];
 
@@ -465,8 +469,13 @@ public class DataStoreUtils {
         try (RowWriter writer = operations.createWriter(index, adapter.getValue());
             RowReader<GeoWaveRow> reader = operations.createReader(paramsBuilder.build())) {
           final RewritingMergingEntryIterator<?> iterator =
-              new RewritingMergingEntryIterator(adapterStore, index, reader,
-                  Maps.transformValues(mergingAdapters, v -> v.getAdapter()), writer, deleter);
+              new RewritingMergingEntryIterator(
+                  adapterStore,
+                  index,
+                  reader,
+                  Maps.transformValues(mergingAdapters, v -> v.getAdapter()),
+                  writer,
+                  deleter);
           while (iterator.hasNext()) {
             iterator.next();
           }

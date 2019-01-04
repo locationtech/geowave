@@ -11,16 +11,20 @@ package org.locationtech.geowave.format.sentinel2;
 import com.beust.jcommander.Parameter;
 
 public class Sentinel2DownloadCommandLineOptions {
-  @Parameter(names = "--userident",
+  @Parameter(
+      names = "--userident",
       description = "email address to authentificate when downloading Theia imagery.",
       required = false)
   private String userIdent;
 
-  @Parameter(names = "--password",
-      description = "Password to authentificate when downloading Theia imagery.", required = false)
+  @Parameter(
+      names = "--password",
+      description = "Password to authentificate when downloading Theia imagery.",
+      required = false)
   private String password;
 
-  @Parameter(names = "--overwrite",
+  @Parameter(
+      names = "--overwrite",
       description = "An option to overwrite images that are ingested in the local workspace directory.  By default it will keep an existing image rather than downloading it again.")
   private boolean overwriteIfExists;
 

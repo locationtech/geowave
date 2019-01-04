@@ -102,8 +102,8 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
       results.show(sparkSqlOptions.getShowResults(), false);
     }
 
-    JCommander.getConsole()
-        .println("GeoWave SparkSQL query returned " + results.count() + " results");
+    JCommander.getConsole().println(
+        "GeoWave SparkSQL query returned " + results.count() + " results");
 
     if (outputDataStore != null) {
       final SqlResultsWriter sqlResultsWriter = new SqlResultsWriter(results, outputDataStore);
@@ -119,8 +119,9 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
     }
 
     if (sparkSqlOptions.getCsvOutputFile() != null) {
-      results.repartition(1).write().format("com.databricks.spark.csv").option("header", "true")
-          .mode(SaveMode.Overwrite).save(sparkSqlOptions.getCsvOutputFile());
+      results.repartition(1).write().format("com.databricks.spark.csv").option(
+          "header",
+          "true").mode(SaveMode.Overwrite).save(sparkSqlOptions.getCsvOutputFile());
     }
     sqlRunner.close();
     return null;
@@ -160,10 +161,11 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
           storeName = storeNameParts[0].trim();
           break;
         default:
-          throw new ParameterException("Ambiguous datastore"
-              + STORE_ADAPTER_DELIM
-              + "adapter designation: "
-              + storeNameParts);
+          throw new ParameterException(
+              "Ambiguous datastore"
+                  + STORE_ADAPTER_DELIM
+                  + "adapter designation: "
+                  + storeNameParts);
       }
 
       final StoreLoader inputStoreLoader = new StoreLoader(storeName);

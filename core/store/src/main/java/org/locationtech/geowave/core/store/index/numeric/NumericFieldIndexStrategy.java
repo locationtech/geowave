@@ -55,7 +55,8 @@ public class NumericFieldIndexStrategy
 
   @Override
   public InsertionIds getInsertionIds(final Number indexedData) {
-    return new InsertionIds(null,
+    return new InsertionIds(
+        null,
         Collections.singletonList(new ByteArray(toIndexByte(indexedData))));
   }
 

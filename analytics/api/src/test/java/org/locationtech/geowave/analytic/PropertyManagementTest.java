@@ -51,7 +51,8 @@ public class PropertyManagementTest {
     final PropertyManagement pm = new PropertyManagement();
 
     pm.storeAll(
-        new ParameterEnum[] {ExtractParameters.Extract.MAX_INPUT_SPLIT}, new Serializable[] {"3"});
+        new ParameterEnum[] {ExtractParameters.Extract.MAX_INPUT_SPLIT},
+        new Serializable[] {"3"});
 
     assertEquals(new Integer(3), pm.getProperty(ExtractParameters.Extract.MAX_INPUT_SPLIT));
   }
@@ -68,8 +69,9 @@ public class PropertyManagementTest {
         EmptyDimensionExtractor.class,
         pm.getPropertyAsClass(ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS));
 
-    ((ParameterEnum<Object>) ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS).getHelper()
-        .setValue(pm, "org.locationtech.geowave.analytic.extract.EmptyDimensionExtractor");
+    ((ParameterEnum<Object>) ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS).getHelper().setValue(
+        pm,
+        "org.locationtech.geowave.analytic.extract.EmptyDimensionExtractor");
 
     assertEquals(
         EmptyDimensionExtractor.class,
@@ -91,8 +93,12 @@ public class PropertyManagementTest {
 
     final Geometry testGeoFilter =
         factory.createPolygon(
-            new Coordinate[] {new Coordinate(24, 33), new Coordinate(28, 33),
-                new Coordinate(28, 31), new Coordinate(24, 31), new Coordinate(24, 33)});
+            new Coordinate[] {
+                new Coordinate(24, 33),
+                new Coordinate(28, 33),
+                new Coordinate(28, 31),
+                new Coordinate(24, 31),
+                new Coordinate(24, 33)});
     final SpatialQuery sq = new SpatialQuery(testGeoFilter);
     final PropertyManagement pm = new PropertyManagement();
     pm.store(ExtractParameters.Extract.QUERY, QueryBuilder.newBuilder().constraints(sq).build());
@@ -203,8 +209,10 @@ public class PropertyManagementTest {
           }
         };
     final PropertyManagement pm =
-        new PropertyManagement(new PropertyManagement.PropertyConverter[] {converter},
-            new ParameterEnum[] {MyLocalNSEnum.ARG1}, new Object[] {new NonSerializableExample()});
+        new PropertyManagement(
+            new PropertyManagement.PropertyConverter[] {converter},
+            new ParameterEnum[] {MyLocalNSEnum.ARG1},
+            new Object[] {new NonSerializableExample()});
     assertTrue(pm.getProperty(MyLocalNSEnum.ARG1, converter) instanceof NonSerializableExample);
   }
 

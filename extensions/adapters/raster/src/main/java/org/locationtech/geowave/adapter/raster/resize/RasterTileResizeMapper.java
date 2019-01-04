@@ -53,9 +53,12 @@ public class RasterTileResizeMapper
             final ByteArray partitionKey = ((FitToIndexGridCoverage) c).getPartitionKey();
             final ByteArray sortKey = ((FitToIndexGridCoverage) c).getSortKey();
             final GeoWaveKey geowaveKey =
-                new GeoWaveKeyImpl(helper.getNewDataId(c).getBytes(), key.getInternalAdapterId(),
+                new GeoWaveKeyImpl(
+                    helper.getNewDataId(c).getBytes(),
+                    key.getInternalAdapterId(),
                     partitionKey == null ? null : partitionKey.getBytes(),
-                    sortKey == null ? null : sortKey.getBytes(), 0);
+                    sortKey == null ? null : sortKey.getBytes(),
+                    0);
             final GeoWaveInputKey inputKey =
                 new GeoWaveInputKey(helper.getNewAdapterId(), geowaveKey, helper.getIndexName());
             context.write(inputKey, c);

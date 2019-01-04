@@ -65,7 +65,8 @@ public abstract class AbstractLockingManagement implements LockingManagement {
   @Override
   public void lock(Transaction transaction, String featureID) {
     lock(
-        transaction, featureID,
+        transaction,
+        featureID,
         transaction == Transaction.AUTO_COMMIT ? EMPTY_SET : transaction.getAuthorizations(),
         1 /* minutes */);
   }

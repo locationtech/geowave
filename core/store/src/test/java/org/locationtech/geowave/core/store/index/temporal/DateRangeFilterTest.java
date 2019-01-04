@@ -40,22 +40,39 @@ public class DateRangeFilterTest {
   @Test
   public void testAccept() throws ParseException {
     final DateRangeFilter filter =
-        new DateRangeFilter("myAttribute", format.parse("01-01-2014 11:01:01"),
-            format.parse("12-31-2014 11:01:01"), true, true);
+        new DateRangeFilter(
+            "myAttribute",
+            format.parse("01-01-2014 11:01:01"),
+            format.parse("12-31-2014 11:01:01"),
+            true,
+            true);
 
     // should match because date is in range
     final IndexedPersistenceEncoding<ByteArray> persistenceEncoding =
-        new IndexedPersistenceEncoding<ByteArray>(null, null, null, null, 0,
-            new PersistentDataset<ByteArray>("myAttribute", new ByteArray(
-                TemporalIndexStrategy.toIndexByte(format.parse("06-01-2014 11:01:01")))),
+        new IndexedPersistenceEncoding<ByteArray>(
+            null,
+            null,
+            null,
+            null,
+            0,
+            new PersistentDataset<ByteArray>(
+                "myAttribute",
+                new ByteArray(
+                    TemporalIndexStrategy.toIndexByte(format.parse("06-01-2014 11:01:01")))),
             null);
 
     Assert.assertTrue(filter.accept(null, persistenceEncoding));
 
     // should not match because date is out of range
     final IndexedPersistenceEncoding<ByteArray> persistenceEncoding2 =
-        new IndexedPersistenceEncoding<ByteArray>(null, null, null, null, 0,
-            new PersistentDataset<ByteArray>("myAttribute",
+        new IndexedPersistenceEncoding<ByteArray>(
+            null,
+            null,
+            null,
+            null,
+            0,
+            new PersistentDataset<ByteArray>(
+                "myAttribute",
                 new ByteArray(
                     Lexicoders.LONG.toByteArray(format.parse("01-01-2015 11:01:01").getTime()))),
             null);
@@ -64,8 +81,14 @@ public class DateRangeFilterTest {
 
     // should not match because of attribute mismatch
     final IndexedPersistenceEncoding<ByteArray> persistenceEncoding3 =
-        new IndexedPersistenceEncoding<ByteArray>(null, null, null, null, 0,
-            new PersistentDataset<ByteArray>("mismatch",
+        new IndexedPersistenceEncoding<ByteArray>(
+            null,
+            null,
+            null,
+            null,
+            0,
+            new PersistentDataset<ByteArray>(
+                "mismatch",
                 new ByteArray(
                     Lexicoders.LONG.toByteArray(format.parse("06-01-2014 11:01:01").getTime()))),
             null);

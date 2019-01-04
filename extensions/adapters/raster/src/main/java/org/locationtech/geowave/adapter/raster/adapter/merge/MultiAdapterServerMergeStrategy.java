@@ -76,10 +76,14 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable>
       if ((merge != null) && (merge instanceof MultiAdapterServerMergeStrategy)) {
         final MultiAdapterServerMergeStrategy<T> other = (MultiAdapterServerMergeStrategy) merge;
         mergeMaps(
-            sampleModels, adapterIdToSampleModelKey, other.sampleModels,
+            sampleModels,
+            adapterIdToSampleModelKey,
+            other.sampleModels,
             other.adapterIdToSampleModelKey);
         mergeMaps(
-            childMergeStrategies, adapterIdToChildMergeStrategyKey, other.childMergeStrategies,
+            childMergeStrategies,
+            adapterIdToChildMergeStrategyKey,
+            other.childMergeStrategies,
             other.adapterIdToChildMergeStrategyKey);
       }
     }
@@ -165,7 +169,8 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable>
     }
   }
 
-  @SuppressFBWarnings(value = {"DLS_DEAD_LOCAL_STORE"},
+  @SuppressFBWarnings(
+      value = {"DLS_DEAD_LOCAL_STORE"},
       justification = "Incorrect warning, sampleModelBinary used")
   @Override
   public byte[] toBinary() {
@@ -286,8 +291,9 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable>
     final int sampleModelAdapterIdSize = VarintUtils.readUnsignedInt(buf);
     adapterIdToSampleModelKey = new HashMap<Short, Integer>(sampleModelAdapterIdSize);
     for (int i = 0; i < sampleModelAdapterIdSize; i++) {
-      adapterIdToSampleModelKey
-          .put(VarintUtils.readUnsignedShort(buf), VarintUtils.readUnsignedInt(buf));
+      adapterIdToSampleModelKey.put(
+          VarintUtils.readUnsignedShort(buf),
+          VarintUtils.readUnsignedInt(buf));
     }
 
     final int mergeStrategySize = VarintUtils.readUnsignedInt(buf);
@@ -313,8 +319,9 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable>
     final int mergeStrategyAdapterIdSize = VarintUtils.readUnsignedInt(buf);
     adapterIdToChildMergeStrategyKey = new HashMap<Short, Integer>(mergeStrategyAdapterIdSize);
     for (int i = 0; i < mergeStrategyAdapterIdSize; i++) {
-      adapterIdToChildMergeStrategyKey
-          .put(VarintUtils.readUnsignedShort(buf), VarintUtils.readUnsignedInt(buf));
+      adapterIdToChildMergeStrategyKey.put(
+          VarintUtils.readUnsignedShort(buf),
+          VarintUtils.readUnsignedInt(buf));
     }
   }
 

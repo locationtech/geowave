@@ -112,8 +112,9 @@ public class CoordinateRangeUtils {
     public MultiRangeLookup(final MultiDimensionalCoordinateRanges[] coordinateRanges) {
       multiDimensionalIdToRangeMap = new HashMap<>();
       for (final MultiDimensionalCoordinateRanges r : coordinateRanges) {
-        multiDimensionalIdToRangeMap
-            .put(new ByteArray(r.getMultiDimensionalId()), new MultiDimensionalBinLookup(r));
+        multiDimensionalIdToRangeMap.put(
+            new ByteArray(r.getMultiDimensionalId()),
+            new MultiDimensionalBinLookup(r));
       }
     }
 

@@ -96,16 +96,22 @@ import org.slf4j.LoggerFactory;
 
 public class RasterUtils {
   private static final RenderingHints DEFAULT_RENDERING_HINTS =
-      new RenderingHints(new ImmutableMap.Builder()
-          .put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY)
-          .put(
-              RenderingHints.KEY_ALPHA_INTERPOLATION,
-              RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY)
-          .put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-          .put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY)
-          .put(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE)
-          .put(JAI.KEY_BORDER_EXTENDER, BorderExtender.createInstance(BorderExtender.BORDER_COPY))
-          .put(Hints.LENIENT_DATUM_SHIFT, Boolean.TRUE).build());
+      new RenderingHints(
+          new ImmutableMap.Builder().put(
+              RenderingHints.KEY_RENDERING,
+              RenderingHints.VALUE_RENDER_QUALITY).put(
+                  RenderingHints.KEY_ALPHA_INTERPOLATION,
+                  RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY).put(
+                      RenderingHints.KEY_ANTIALIASING,
+                      RenderingHints.VALUE_ANTIALIAS_ON).put(
+                          RenderingHints.KEY_COLOR_RENDERING,
+                          RenderingHints.VALUE_COLOR_RENDER_QUALITY).put(
+                              RenderingHints.KEY_DITHERING,
+                              RenderingHints.VALUE_DITHER_ENABLE).put(
+                                  JAI.KEY_BORDER_EXTENDER,
+                                  BorderExtender.createInstance(BorderExtender.BORDER_COPY)).put(
+                                      Hints.LENIENT_DATUM_SHIFT,
+                                      Boolean.TRUE).build());
 
   public static final CoordinateOperationFactory OPERATION_FACTORY =
       new BufferedCoordinateOperationFactory(new Hints(Hints.LENIENT_DATUM_SHIFT, Boolean.TRUE));
@@ -130,9 +136,13 @@ public class RasterUtils {
     final Envelope sampleEnvelope = gridCoverage.getEnvelope();
 
     final ReferencedEnvelope sampleReferencedEnvelope =
-        new ReferencedEnvelope(new org.locationtech.jts.geom.Envelope(sampleEnvelope.getMinimum(0),
-            sampleEnvelope.getMaximum(0), sampleEnvelope.getMinimum(1),
-            sampleEnvelope.getMaximum(1)), gridCoverage.getCoordinateReferenceSystem());
+        new ReferencedEnvelope(
+            new org.locationtech.jts.geom.Envelope(
+                sampleEnvelope.getMinimum(0),
+                sampleEnvelope.getMaximum(0),
+                sampleEnvelope.getMinimum(1),
+                sampleEnvelope.getMaximum(1)),
+            gridCoverage.getCoordinateReferenceSystem());
 
     ReferencedEnvelope projectedReferenceEnvelope = sampleReferencedEnvelope;
     if ((targetCrs != null) && !targetCrs.equals(sourceCrs)) {
@@ -155,11 +165,14 @@ public class RasterUtils {
       final MathTransform gridCrsToWorldCrs =
           CRS.findMathTransform(
               gridCoverage.getCoordinateReferenceSystem(),
-              projectedReferenceEnvelope.getCoordinateReferenceSystem(), true);
+              projectedReferenceEnvelope.getCoordinateReferenceSystem(),
+              true);
       final Coordinate[] polyCoords =
           getWorldCoordinates(
-              sampleEnvelope.getMinimum(0), sampleEnvelope.getMinimum(1),
-              sampleEnvelope.getMaximum(0), sampleEnvelope.getMaximum(1),
+              sampleEnvelope.getMinimum(0),
+              sampleEnvelope.getMinimum(1),
+              sampleEnvelope.getMaximum(0),
+              sampleEnvelope.getMaximum(1),
               gridCrsToWorldCrs.isIdentity() ? 2
                   : (int) Math.min(
                       Math.max((avgSpan * MIN_SEGMENTS) / SIMPLIFICATION_MAX_DEGREES, MIN_SEGMENTS),
@@ -192,8 +205,9 @@ public class RasterUtils {
     final List<Geometry> geometry = new ArrayList<Geometry>();
     geometry.add(geometry1);
     geometry.add(geometry2);
-    return DouglasPeuckerSimplifier
-        .simplify(combineIntoOneGeometry(geometry), SIMPLIFICATION_MAX_DEGREES);
+    return DouglasPeuckerSimplifier.simplify(
+        combineIntoOneGeometry(geometry),
+        SIMPLIFICATION_MAX_DEGREES);
   }
 
   private static Geometry combineIntoOneGeometry(final Collection<Geometry> geometries) {
@@ -238,16 +252,37 @@ public class RasterUtils {
       final int numPointsPerSegment) {
     final Point2D[] coordinates = new Point2D[((numPointsPerSegment - 1) * 4) + 1];
     fillCoordinates(
-        true, minX, minY, maxY, (maxY - minY) / (numPointsPerSegment - 1), 0, coordinates);
-    fillCoordinates(
-        false, maxY, minX, maxX, (maxX - minX) / (numPointsPerSegment - 1), numPointsPerSegment - 1,
+        true,
+        minX,
+        minY,
+        maxY,
+        (maxY - minY) / (numPointsPerSegment - 1),
+        0,
         coordinates);
     fillCoordinates(
-        true, maxX, maxY, minY, (maxY - minY) / (numPointsPerSegment - 1),
-        (numPointsPerSegment - 1) * 2, coordinates);
+        false,
+        maxY,
+        minX,
+        maxX,
+        (maxX - minX) / (numPointsPerSegment - 1),
+        numPointsPerSegment - 1,
+        coordinates);
     fillCoordinates(
-        false, minY, maxX, minX, (maxX - minX) / (numPointsPerSegment - 1),
-        (numPointsPerSegment - 1) * 3, coordinates);
+        true,
+        maxX,
+        maxY,
+        minY,
+        (maxY - minY) / (numPointsPerSegment - 1),
+        (numPointsPerSegment - 1) * 2,
+        coordinates);
+    fillCoordinates(
+        false,
+        minY,
+        maxX,
+        minX,
+        (maxX - minX) / (numPointsPerSegment - 1),
+        (numPointsPerSegment - 1) * 3,
+        coordinates);
     return coordinates;
   }
 
@@ -371,7 +406,11 @@ public class RasterUtils {
           // data value for that band
           Arrays.fill(noDataFilledArray, noDataValues[b][0]);
           raster.setSamples(
-              raster.getMinX(), raster.getMinY(), raster.getWidth(), raster.getHeight(), b,
+              raster.getMinX(),
+              raster.getMinY(),
+              raster.getWidth(),
+              raster.getHeight(),
+              b,
               noDataFilledArray);
         }
       }
@@ -445,7 +484,10 @@ public class RasterUtils {
     if (image == null) {
       image =
           getEmptyImage(
-              imageWidth, imageHeight, backgroundColor, null, // the transparent color
+              imageWidth,
+              imageHeight,
+              backgroundColor,
+              null, // the transparent color
               // will be used later
               defaultColorModel);
     }
@@ -454,8 +496,11 @@ public class RasterUtils {
 
     if (xAxisSwitch) {
       final Rectangle2D tmp =
-          new Rectangle2D.Double(requestEnvelope.getMinimum(1), requestEnvelope.getMinimum(0),
-              requestEnvelope.getSpan(1), requestEnvelope.getSpan(0));
+          new Rectangle2D.Double(
+              requestEnvelope.getMinimum(1),
+              requestEnvelope.getMinimum(0),
+              requestEnvelope.getSpan(1),
+              requestEnvelope.getSpan(0));
       resultEnvelope = new GeneralEnvelope(tmp);
       resultEnvelope.setCoordinateReferenceSystem(requestEnvelope.getCoordinateReferenceSystem());
     } else {
@@ -467,7 +512,9 @@ public class RasterUtils {
         || (Math.abs(scaleY - 1) > FloatCompareUtils.COMP_EPSILON)) {
       image =
           rescaleImageViaPlanarImage(
-              interpolation, rescaleX * (width / imageWidth), rescaleY * (height / imageHeight),
+              interpolation,
+              rescaleX * (width / imageWidth),
+              rescaleY * (height / imageHeight),
               image);
     }
     RenderedImage result = image;
@@ -534,7 +581,8 @@ public class RasterUtils {
 
   private static long i = 0;
 
-  @SuppressFBWarnings(value = {"RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT"},
+  @SuppressFBWarnings(
+      value = {"RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT"},
       justification = "incorrect; drawImage has side effects")
   public static BufferedImage toBufferedImage(final Image image, final int type) {
     final BufferedImage bi = new BufferedImage(image.getWidth(null), image.getHeight(null), type);
@@ -626,9 +674,11 @@ public class RasterUtils {
       final Color outputTransparentColor,
       final ColorModel defaultColorModel) {
     BufferedImage emptyImage =
-        new BufferedImage(defaultColorModel,
+        new BufferedImage(
+            defaultColorModel,
             defaultColorModel.createCompatibleWritableRaster(width, height),
-            defaultColorModel.isAlphaPremultiplied(), null);
+            defaultColorModel.isAlphaPremultiplied(),
+            null);
 
     final Graphics2D g2D = (Graphics2D) emptyImage.getGraphics();
     final Color save = g2D.getColor();
@@ -638,16 +688,20 @@ public class RasterUtils {
 
     if (outputTransparentColor != null) {
       emptyImage =
-          new RenderedImageAdapter(ImageUtilities.maskColor(outputTransparentColor, emptyImage))
-              .getAsBufferedImage();
+          new RenderedImageAdapter(
+              ImageUtilities.maskColor(outputTransparentColor, emptyImage)).getAsBufferedImage();
     }
     return emptyImage;
   }
 
   public static WritableRaster createRasterTypeDouble(final int numBands, final int tileSize) {
     final WritableRaster raster =
-        RasterFactory
-            .createBandedRaster(DataBuffer.TYPE_DOUBLE, tileSize, tileSize, numBands, null);
+        RasterFactory.createBandedRaster(
+            DataBuffer.TYPE_DOUBLE,
+            tileSize,
+            tileSize,
+            numBands,
+            null);
     final double[] defaultValues = new double[tileSize * tileSize * numBands];
     Arrays.fill(defaultValues, Double.NaN);
     raster.setDataElements(0, 0, tileSize, tileSize, defaultValues);
@@ -667,7 +721,13 @@ public class RasterUtils {
       final int tileSize,
       final RasterTileMergeStrategy<?> mergeStrategy) {
     return createDataAdapterTypeDouble(
-        coverageName, numBands, tileSize, null, null, null, mergeStrategy);
+        coverageName,
+        numBands,
+        tileSize,
+        null,
+        null,
+        null,
+        mergeStrategy);
   }
 
   public static RasterDataAdapter createDataAdapterTypeDouble(
@@ -687,12 +747,28 @@ public class RasterUtils {
       bitsPerSample[i] = DataBuffer.getDataTypeSize(DataBuffer.TYPE_DOUBLE);
     }
     final SampleModel sampleModel = createRasterTypeDouble(numBands, tileSize).getSampleModel();
-    return new RasterDataAdapter(coverageName, sampleModel,
-        new ComponentColorModel(new BogusColorSpace(numBands), bitsPerSample, false, false,
-            Transparency.OPAQUE, DataBuffer.TYPE_DOUBLE),
-        new HashMap<String, String>(), tileSize, minsPerBand, maxesPerBand, namesPerBand,
-        noDataValuesPerBand, backgroundValuesPerBand, null, false, Interpolation.INTERP_NEAREST,
-        false, mergeStrategy);
+    return new RasterDataAdapter(
+        coverageName,
+        sampleModel,
+        new ComponentColorModel(
+            new BogusColorSpace(numBands),
+            bitsPerSample,
+            false,
+            false,
+            Transparency.OPAQUE,
+            DataBuffer.TYPE_DOUBLE),
+        new HashMap<String, String>(),
+        tileSize,
+        minsPerBand,
+        maxesPerBand,
+        namesPerBand,
+        noDataValuesPerBand,
+        backgroundValuesPerBand,
+        null,
+        false,
+        Interpolation.INTERP_NEAREST,
+        false,
+        mergeStrategy);
   }
 
   public static GridCoverage2D createCoverageTypeDouble(
@@ -706,12 +782,17 @@ public class RasterUtils {
     Envelope mapExtent;
     try {
       mapExtent =
-          new ReferencedEnvelope(westLon, eastLon, southLat, northLat,
+          new ReferencedEnvelope(
+              westLon,
+              eastLon,
+              southLat,
+              northLat,
               GeometryUtils.getDefaultCRS());
     } catch (final IllegalArgumentException e) {
       LOGGER.warn("Unable to use default CRS", e);
       mapExtent =
-          new Envelope2D(new DirectPosition2D(westLon, southLat),
+          new Envelope2D(
+              new DirectPosition2D(westLon, southLat),
               new DirectPosition2D(eastLon, northLat));
     }
     return gcf.create(coverageName, raster, mapExtent);
@@ -728,8 +809,16 @@ public class RasterUtils {
       final String[] namePerBand,
       final WritableRaster raster) {
     return createCoverageTypeDouble(
-        coverageName, westLon, eastLon, southLat, northLat, minPerBand, maxPerBand, namePerBand,
-        raster, GeometryUtils.DEFAULT_CRS_STR);
+        coverageName,
+        westLon,
+        eastLon,
+        southLat,
+        northLat,
+        minPerBand,
+        maxPerBand,
+        namePerBand,
+        raster,
+        GeometryUtils.DEFAULT_CRS_STR);
   }
 
   public static GridCoverage2D createCoverageTypeDouble(
@@ -762,7 +851,8 @@ public class RasterUtils {
     } catch (final IllegalArgumentException e) {
       LOGGER.warn("Unable to use default CRS", e);
       mapExtent =
-          new Envelope2D(new DirectPosition2D(westLon, southLat),
+          new Envelope2D(
+              new DirectPosition2D(westLon, southLat),
               new DirectPosition2D(eastLon, northLat));
     }
     final GridSampleDimension[] bands = new GridSampleDimension[raster.getNumBands()];

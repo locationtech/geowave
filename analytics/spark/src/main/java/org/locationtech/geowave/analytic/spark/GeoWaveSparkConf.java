@@ -30,7 +30,8 @@ public class GeoWaveSparkConf implements Serializable {
         defaultConfig.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
     defaultConfig =
         defaultConfig.set(
-            "spark.kryo.registrator", "org.locationtech.geowave.analytic.spark.GeoWaveRegistrator");
+            "spark.kryo.registrator",
+            "org.locationtech.geowave.analytic.spark.GeoWaveRegistrator");
     return defaultConfig;
   }
 
@@ -41,7 +42,8 @@ public class GeoWaveSparkConf implements Serializable {
     newConf = newConf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
     newConf =
         newConf.set(
-            "spark.kryo.registrator", "org.locationtech.geowave.analytic.spark.GeoWaveRegistrator");
+            "spark.kryo.registrator",
+            "org.locationtech.geowave.analytic.spark.GeoWaveRegistrator");
     return newConf;
   }
 

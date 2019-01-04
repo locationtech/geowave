@@ -52,8 +52,9 @@ public class NoDataMergeStrategy implements RasterTileMergeStrategy<NoDataMetada
       for (int b = 0; b < thisRaster.getNumBands(); b++) {
         for (int x = thisRaster.getMinX(); x < maxX; x++) {
           for (int y = thisRaster.getMinY(); y < maxY; y++) {
-            if (thisTileMetadata
-                .isNoData(new SampleIndex(x, y, b), thisRaster.getSampleDouble(x, y, b))) {
+            if (thisTileMetadata.isNoData(
+                new SampleIndex(x, y, b),
+                thisRaster.getSampleDouble(x, y, b))) {
               final double sample = nextRaster.getSampleDouble(x, y, b);
               if ((nextTileMetadata == null)
                   || !nextTileMetadata.isNoData(new SampleIndex(x, y, b), sample)) {
@@ -70,8 +71,11 @@ public class NoDataMergeStrategy implements RasterTileMergeStrategy<NoDataMetada
       }
       if (recalculateMetadata) {
         thisTile.setMetadata(
-            NoDataMetadataFactory
-                .mergeMetadata(thisTileMetadata, thisRaster, nextTileMetadata, nextRaster));
+            NoDataMetadataFactory.mergeMetadata(
+                thisTileMetadata,
+                thisRaster,
+                nextTileMetadata,
+                nextRaster));
       }
     }
   }
@@ -116,6 +120,8 @@ public class NoDataMergeStrategy implements RasterTileMergeStrategy<NoDataMetada
           tileGridCoverage.getRenderedImage().getData());
     }
     return NoDataMetadataFactory.createMetadata(
-        dataAdapter.getNoDataValuesPerBand(), null, tileGridCoverage.getRenderedImage().getData());
+        dataAdapter.getNoDataValuesPerBand(),
+        null,
+        tileGridCoverage.getRenderedImage().getData());
   }
 }

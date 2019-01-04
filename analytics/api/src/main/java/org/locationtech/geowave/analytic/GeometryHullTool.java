@@ -242,7 +242,10 @@ public class GeometryHullTool {
     for (int i = 1; i < s; i++) {
       final Edge newEdge =
           createEdgeWithSideEffects(
-              geoCoordinateList[i], geoCoordinateList[i + 1], innerPoints, edges);
+              geoCoordinateList[i],
+              geoCoordinateList[i + 1],
+              innerPoints,
+              edges);
       newEdge.connectLast(lastEdge);
       lastEdge = newEdge;
     }
@@ -344,7 +347,10 @@ public class GeometryHullTool {
     for (int i = 1; i < s; i++) {
       final Edge newEdge =
           createEdgeWithSideEffects(
-              geoCoordinateList[i], geoCoordinateList[i + 1], innerPoints, edges);
+              geoCoordinateList[i],
+              geoCoordinateList[i + 1],
+              innerPoints,
+              edges);
       newEdge.connectLast(lastEdge);
       lastEdge = newEdge;
     }
@@ -498,8 +504,7 @@ public class GeometryHullTool {
       final Pair<Integer, Integer> closestCoordinates) {
     Coordinate[] leftCoords = shape1.getCoordinates(), rightCoords = shape2.getCoordinates();
     int startLeft, startRight;
-    if ((leftCoords[closestCoordinates.getLeft()].x < rightCoords[closestCoordinates
-        .getRight()].x)) {
+    if ((leftCoords[closestCoordinates.getLeft()].x < rightCoords[closestCoordinates.getRight()].x)) {
       startLeft = closestCoordinates.getLeft();
       startRight = closestCoordinates.getRight();
     } else {
@@ -551,9 +556,13 @@ public class GeometryHullTool {
     final List<Coordinate> newCoordinateSet = new ArrayList<Coordinate>();
     final Direction leftSet =
         leftClockwise
-            ? new IncreaseDirection(upperCoords.getLeft(), lowerCoords.getLeft() + 1,
+            ? new IncreaseDirection(
+                upperCoords.getLeft(),
+                lowerCoords.getLeft() + 1,
                 leftCoords.length)
-            : new DecreaseDirection(upperCoords.getLeft(), lowerCoords.getLeft() - 1,
+            : new DecreaseDirection(
+                upperCoords.getLeft(),
+                lowerCoords.getLeft() - 1,
                 leftCoords.length);
     newCoordinateSet.add(leftCoords[upperCoords.getLeft()]);
     while (leftSet.hasNext()) {
@@ -561,17 +570,21 @@ public class GeometryHullTool {
     }
     final Direction rightSet =
         rightClockwise
-            ? new IncreaseDirection(lowerCoords.getRight(), upperCoords.getRight() + 1,
+            ? new IncreaseDirection(
+                lowerCoords.getRight(),
+                upperCoords.getRight() + 1,
                 rightCoords.length)
-            : new DecreaseDirection(lowerCoords.getRight(), upperCoords.getRight() - 1,
+            : new DecreaseDirection(
+                lowerCoords.getRight(),
+                upperCoords.getRight() - 1,
                 rightCoords.length);
     newCoordinateSet.add(rightCoords[lowerCoords.getRight()]);
     while (rightSet.hasNext()) {
       newCoordinateSet.add(rightCoords[rightSet.next()]);
     }
     newCoordinateSet.add(leftCoords[upperCoords.getLeft()]);
-    return shape1.getFactory()
-        .createPolygon(newCoordinateSet.toArray(new Coordinate[newCoordinateSet.size()]));
+    return shape1.getFactory().createPolygon(
+        newCoordinateSet.toArray(new Coordinate[newCoordinateSet.size()]));
   }
 
   private Pair<Integer, Integer> walk(
@@ -584,13 +597,17 @@ public class GeometryHullTool {
 
     final int upPos =
         takeBiggestStep(
-            visited, shape2Coords[start2], shape1Coords,
+            visited,
+            shape2Coords[start2],
+            shape1Coords,
             factory.createLeftFootDirection(start1, shape1Coords.length));
 
     // even if the left foot was stationary, try to move the right foot
     final int downPos =
         takeBiggestStep(
-            visited, shape1Coords[upPos], shape2Coords,
+            visited,
+            shape1Coords[upPos],
+            shape2Coords,
             factory.createRightFootDirection(start2, shape2Coords.length));
 
     // if the right step moved, then see if another l/r step can be taken

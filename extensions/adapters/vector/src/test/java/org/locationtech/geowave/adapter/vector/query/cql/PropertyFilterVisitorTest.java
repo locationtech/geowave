@@ -38,32 +38,32 @@ public class PropertyFilterVisitorTest {
     final PropertyConstraintSet constraints =
         (PropertyConstraintSet) query.getFilter().accept(visitor, null);
     NumberRangeFilter nf =
-        (NumberRangeFilter) ((NumericLessThanConstraint) constraints.getConstraintsByName("a"))
-            .getFilter();
+        (NumberRangeFilter) ((NumericLessThanConstraint) constraints.getConstraintsByName(
+            "a")).getFilter();
     assertTrue(nf.getLowerValue().doubleValue() == Double.MIN_VALUE);
     assertEquals(9, nf.getUpperValue().longValue());
     assertFalse(nf.isInclusiveHigh());
     assertTrue(nf.isInclusiveLow());
 
     nf =
-        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName("e"))
-            .getFilter();
+        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName(
+            "e")).getFilter();
     assertEquals(11, nf.getLowerValue().longValue());
     assertTrue(nf.getUpperValue().doubleValue() == Double.MAX_VALUE);
     assertTrue(nf.isInclusiveHigh());
     assertTrue(nf.isInclusiveLow());
 
     nf =
-        (NumberRangeFilter) ((NumericEqualsConstraint) constraints.getConstraintsByName("c"))
-            .getFilter();
+        (NumberRangeFilter) ((NumericEqualsConstraint) constraints.getConstraintsByName(
+            "c")).getFilter();
     assertEquals(12, nf.getLowerValue().longValue());
     assertEquals(12, nf.getUpperValue().longValue());
     assertTrue(nf.isInclusiveHigh());
     assertTrue(nf.isInclusiveLow());
 
     nf =
-        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName("g"))
-            .getFilter();
+        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName(
+            "g")).getFilter();
     assertEquals(13, nf.getLowerValue().longValue());
     assertTrue(nf.getUpperValue().doubleValue() == Double.MAX_VALUE);
 
@@ -71,32 +71,32 @@ public class PropertyFilterVisitorTest {
     assertFalse(nf.isInclusiveLow());
 
     nf =
-        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName("f"))
-            .getFilter();
+        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName(
+            "f")).getFilter();
     assertEquals(12, nf.getUpperValue().longValue());
     assertTrue(nf.getLowerValue().doubleValue() == Double.MIN_VALUE);
     assertTrue(nf.isInclusiveHigh());
     assertTrue(nf.isInclusiveLow());
 
     nf =
-        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName("h"))
-            .getFilter();
+        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName(
+            "h")).getFilter();
     assertEquals(4, nf.getLowerValue().longValue());
     assertEquals(6, nf.getUpperValue().longValue());
     assertTrue(nf.isInclusiveHigh());
     assertTrue(nf.isInclusiveLow());
 
     nf =
-        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName("k"))
-            .getFilter();
+        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName(
+            "k")).getFilter();
     assertEquals(4, nf.getLowerValue().longValue());
     assertEquals(6, nf.getUpperValue().longValue());
     assertFalse(nf.isInclusiveHigh());
     assertFalse(nf.isInclusiveLow());
 
     nf =
-        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName("l"))
-            .getFilter();
+        (NumberRangeFilter) ((NumericQueryConstraint) constraints.getConstraintsByName(
+            "l")).getFilter();
     assertEquals(4, nf.getLowerValue().longValue());
     assertEquals(6, nf.getUpperValue().longValue());
     assertTrue(nf.isInclusiveHigh());
@@ -113,8 +113,8 @@ public class PropertyFilterVisitorTest {
     final PropertyConstraintSet constraints =
         (PropertyConstraintSet) query.getFilter().accept(visitor, null);
     final TextExactMatchFilter tf =
-        (TextExactMatchFilter) ((TextQueryConstraint) constraints.getConstraintsByName("b"))
-            .getFilter();
+        (TextExactMatchFilter) ((TextQueryConstraint) constraints.getConstraintsByName(
+            "b")).getFilter();
     assertEquals("10", tf.getMatchValue());
     assertTrue(tf.isCaseSensitive());
   }

@@ -50,8 +50,10 @@ public class CoordinateCircleDistanceFn implements DistanceFn<Coordinate> {
       calc.setStartingGeographicPoint(c1.x, c1.y);
       calc.setDestinationGeographicPoint(c2.x, c2.y);
       return ((DefaultEllipsoid) calc.getEllipsoid()).orthodromicDistance(
-          calc.getStartingGeographicPoint().getX(), calc.getStartingGeographicPoint().getY(),
-          calc.getDestinationGeographicPoint().getX(), calc.getDestinationGeographicPoint().getY());
+          calc.getStartingGeographicPoint().getX(),
+          calc.getStartingGeographicPoint().getY(),
+          calc.getDestinationGeographicPoint().getX(),
+          calc.getDestinationGeographicPoint().getY());
     }
   }
 

@@ -51,23 +51,37 @@ public class BoundaryDistancePartitionerTest {
 
     final SimpleFeatureType ftype =
         AnalyticFeature.createGeometryFeatureAdapter(
-            "centroid", new String[] {"extra1"}, BasicFeatureTypes.DEFAULT_NAMESPACE,
+            "centroid",
+            new String[] {"extra1"},
+            BasicFeatureTypes.DEFAULT_NAMESPACE,
             ClusteringUtils.CLUSTERING_CRS).getFeatureType();
     final GeometryFactory factory = new GeometryFactory();
     SimpleFeature feature =
         AnalyticFeature.createGeometryFeature(
-            ftype, "b1", "123", "fred", "NA", 20.30203, factory.createPoint(new Coordinate(0, 0)),
-            new String[] {"extra1"}, new double[] {0.022}, 1, 1, 0);
+            ftype,
+            "b1",
+            "123",
+            "fred",
+            "NA",
+            20.30203,
+            factory.createPoint(new Coordinate(0, 0)),
+            new String[] {"extra1"},
+            new double[] {0.022},
+            1,
+            1,
+            0);
 
     final PropertyManagement propertyManagement = new PropertyManagement();
 
     propertyManagement.store(PartitionParameters.Partition.DISTANCE_THRESHOLDS, "10000");
 
-    propertyManagement
-        .store(CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS, SpatialIndexModelBuilder.class);
+    propertyManagement.store(
+        CommonParameters.Common.INDEX_MODEL_BUILDER_CLASS,
+        SpatialIndexModelBuilder.class);
 
     propertyManagement.store(
-        ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS, SimpleFeatureGeometryExtractor.class);
+        ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
+        SimpleFeatureGeometryExtractor.class);
     propertyManagement.store(GlobalParameters.Global.CRS_ID, "EPSG:4326");
     propertyManagement.store(PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT, "m");
 
@@ -91,9 +105,18 @@ public class BoundaryDistancePartitionerTest {
 
     feature =
         AnalyticFeature.createGeometryFeature(
-            ftype, "b1", "123", "fred", "NA", 20.30203,
-            factory.createPoint(new Coordinate(-179.99999996, 0)), new String[] {"extra1"},
-            new double[] {0.022}, 1, 1, 0);
+            ftype,
+            "b1",
+            "123",
+            "fred",
+            "NA",
+            20.30203,
+            factory.createPoint(new Coordinate(-179.99999996, 0)),
+            new String[] {"extra1"},
+            new double[] {0.022},
+            1,
+            1,
+            0);
 
     partitions = partitioner.getCubeIdentifiers(feature);
     assertEquals(4, partitions.size());
@@ -101,12 +124,24 @@ public class BoundaryDistancePartitionerTest {
 
     feature =
         AnalyticFeature.createGeometryFeature(
-            ftype, "b1", "123", "fred", "NA", 20.30203,
+            ftype,
+            "b1",
+            "123",
+            "fred",
+            "NA",
+            20.30203,
             factory.createLinearRing(
-                new Coordinate[] {new Coordinate(88, 0), new Coordinate(88, 0.001),
-                    new Coordinate(88.001, 0.001), new Coordinate(88.001, 0),
+                new Coordinate[] {
+                    new Coordinate(88, 0),
+                    new Coordinate(88, 0.001),
+                    new Coordinate(88.001, 0.001),
+                    new Coordinate(88.001, 0),
                     new Coordinate(88, 0)}),
-            new String[] {"extra1"}, new double[] {0.022}, 1, 1, 0);
+            new String[] {"extra1"},
+            new double[] {0.022},
+            1,
+            1,
+            0);
 
     partitions = partitioner.getCubeIdentifiers(feature);
     assertTrue(hasNPrimary(partitions, 4));

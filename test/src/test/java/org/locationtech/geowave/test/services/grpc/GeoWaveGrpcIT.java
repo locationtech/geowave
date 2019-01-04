@@ -46,9 +46,15 @@ import org.slf4j.LoggerFactory;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.MAP_REDUCE, Environment.KAFKA,})
-@GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-    GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.DYNAMODB, GeoWaveStoreType.HBASE,
-    GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+@GeoWaveTestStore(
+    value = {
+        GeoWaveStoreType.ACCUMULO,
+        GeoWaveStoreType.BIGTABLE,
+        GeoWaveStoreType.CASSANDRA,
+        GeoWaveStoreType.DYNAMODB,
+        GeoWaveStoreType.HBASE,
+        GeoWaveStoreType.REDIS,
+        GeoWaveStoreType.ROCKSDB})
 public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGrpcIT.class);
   private static File configFile = null;
@@ -113,7 +119,8 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     client.configHDFSCommand();
     map = client.listCommand();
     Assert.assertEquals(
-        GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs(), map.get("hdfs.defaultFS.url"));
+        GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs(),
+        map.get("hdfs.defaultFS.url"));
     org.apache.log4j.Logger.getRootLogger().setLevel(Level.WARN);
 
     // Core Ingest Tests
@@ -377,17 +384,20 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
 
     result = client.RemoveIndexGroupCommand();
     Assert.assertEquals(
-        "indexgroup." + GeoWaveGrpcTestUtils.indexName + "-group successfully removed", result);
+        "indexgroup." + GeoWaveGrpcTestUtils.indexName + "-group successfully removed",
+        result);
 
     result = client.RemoveIndexCommand();
-    Assert
-        .assertEquals("index." + GeoWaveGrpcTestUtils.indexName + " successfully removed", result);
+    Assert.assertEquals(
+        "index." + GeoWaveGrpcTestUtils.indexName + " successfully removed",
+        result);
 
     Assert.assertTrue(client.RemoveAdapterCommand());
 
     result = client.RemoveStoreCommand();
-    Assert
-        .assertEquals("store." + GeoWaveGrpcTestUtils.storeName + " successfully removed", result);
+    Assert.assertEquals(
+        "store." + GeoWaveGrpcTestUtils.storeName + " successfully removed",
+        result);
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
     LOGGER.warn("* FINISHED core store tests *");

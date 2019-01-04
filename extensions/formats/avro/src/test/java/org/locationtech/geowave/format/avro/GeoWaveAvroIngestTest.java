@@ -83,7 +83,8 @@ public class GeoWaveAvroIngestTest {
 
   private boolean validate(final URL file) {
     try (DataFileStream<AvroSimpleFeatureCollection> ds =
-        new DataFileStream<>(file.openStream(),
+        new DataFileStream<>(
+            file.openStream(),
             new SpecificDatumReader<AvroSimpleFeatureCollection>(
                 AvroSimpleFeatureCollection.getClassSchema()))) {
       if (ds.getHeader() != null) {

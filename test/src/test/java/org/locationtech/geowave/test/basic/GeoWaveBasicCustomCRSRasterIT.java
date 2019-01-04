@@ -46,9 +46,15 @@ import org.slf4j.LoggerFactory;
 public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
   private static final double DOUBLE_TOLERANCE = 1E-10d;
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.DYNAMODB, GeoWaveStoreType.HBASE,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicCustomCRSRasterIT.class);
@@ -117,25 +123,51 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
     final double maxY = SpatialDimensionalityTypeProvider.DEFAULT_UNBOUNDED_CRS_INTERVAL / 2048;
 
     ingestGeneralPurpose(
-        summingCoverageName, summingTileSize, minX, maxX, minY, maxY, summingNumBands,
-        summingNumRasters, new GeoWaveBasicRasterIT.SummingMergeStrategy());
+        summingCoverageName,
+        summingTileSize,
+        minX,
+        maxX,
+        minY,
+        maxY,
+        summingNumBands,
+        summingNumRasters,
+        new GeoWaveBasicRasterIT.SummingMergeStrategy());
 
     ingestGeneralPurpose(
-        sumAndAveragingCoverageName, sumAndAveragingTileSize, minX, maxX, minY, maxY,
-        sumAndAveragingNumBands, sumAndAveragingNumRasters,
+        sumAndAveragingCoverageName,
+        sumAndAveragingTileSize,
+        minX,
+        maxX,
+        minY,
+        maxY,
+        sumAndAveragingNumBands,
+        sumAndAveragingNumRasters,
         new GeoWaveBasicRasterIT.SumAndAveragingMergeStrategy());
 
     ingestNoDataMergeStrategy(noDataCoverageName, noDataTileSize, minX, maxX, minY, maxY);
 
     queryGeneralPurpose(
-        summingCoverageName, summingTileSize, minX, maxX, minY, maxY, summingNumBands,
-        summingNumRasters, new GeoWaveBasicRasterIT.SummingExpectedValue());
+        summingCoverageName,
+        summingTileSize,
+        minX,
+        maxX,
+        minY,
+        maxY,
+        summingNumBands,
+        summingNumRasters,
+        new GeoWaveBasicRasterIT.SummingExpectedValue());
 
     queryNoDataMergeStrategy(noDataCoverageName, noDataTileSize);
 
     queryGeneralPurpose(
-        sumAndAveragingCoverageName, sumAndAveragingTileSize, minX, maxX, minY, maxY,
-        sumAndAveragingNumBands, sumAndAveragingNumRasters,
+        sumAndAveragingCoverageName,
+        sumAndAveragingTileSize,
+        minX,
+        maxX,
+        minY,
+        maxY,
+        sumAndAveragingNumBands,
+        sumAndAveragingNumRasters,
         new GeoWaveBasicRasterIT.SumAndAveragingExpectedValue());
 
     TestUtils.deleteAll(dataStoreOptions);
@@ -173,24 +205,36 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
 
           for (int b = 1; b < 7; b++) {
             Assert.assertEquals(
-                "x=" + x + ",y=" + y + ",b=" + b, TestUtils.getTileValue(x, y, b, tileSize),
-                raster.getSampleDouble(x, y, b), DELTA);
+                "x=" + x + ",y=" + y + ",b=" + b,
+                TestUtils.getTileValue(x, y, b, tileSize),
+                raster.getSampleDouble(x, y, b),
+                DELTA);
           }
           if ((y % 2) == 0) {
             Assert.assertEquals(
-                "x=" + x + ",y=" + y + ",b=0", TestUtils.getTileValue(x, y, 0, tileSize),
-                raster.getSampleDouble(x, y, 0), DELTA);
+                "x=" + x + ",y=" + y + ",b=0",
+                TestUtils.getTileValue(x, y, 0, tileSize),
+                raster.getSampleDouble(x, y, 0),
+                DELTA);
           } else {
             Assert.assertEquals(
-                "x=" + x + ",y=" + y + ",b=0", Double.NaN, raster.getSampleDouble(x, y, 0), DELTA);
+                "x=" + x + ",y=" + y + ",b=0",
+                Double.NaN,
+                raster.getSampleDouble(x, y, 0),
+                DELTA);
           }
           if ((x > ((tileSize * 3) / 4)) && (y > ((tileSize * 3) / 4))) {
             Assert.assertEquals(
-                "x=" + x + ",y=" + y + ",b=7", Double.NaN, raster.getSampleDouble(x, y, 7), DELTA);
+                "x=" + x + ",y=" + y + ",b=7",
+                Double.NaN,
+                raster.getSampleDouble(x, y, 7),
+                DELTA);
           } else {
             Assert.assertEquals(
-                "x=" + x + ",y=" + y + ",b=7", TestUtils.getTileValue(x, y, 7, tileSize),
-                raster.getSampleDouble(x, y, 7), DELTA);
+                "x=" + x + ",y=" + y + ",b=7",
+                TestUtils.getTileValue(x, y, 7, tileSize),
+                raster.getSampleDouble(x, y, 7),
+                DELTA);
           }
         }
       }
@@ -211,7 +255,10 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
     final DataStore dataStore = dataStoreOptions.createDataStore();
     final RasterDataAdapter adapter =
         RasterUtils.createDataAdapterTypeDouble(
-            coverageName, numBands, tileSize, new NoDataMergeStrategy());
+            coverageName,
+            numBands,
+            tileSize,
+            new NoDataMergeStrategy());
     final WritableRaster raster1 = RasterUtils.createRasterTypeDouble(numBands, tileSize);
     final WritableRaster raster2 = RasterUtils.createRasterTypeDouble(numBands, tileSize);
 
@@ -251,7 +298,10 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
     final DataStore dataStore = dataStoreOptions.createDataStore();
     final RasterDataAdapter basicAdapter =
         RasterUtils.createDataAdapterTypeDouble(
-            coverageName, numBands, tileSize, new NoDataMergeStrategy());
+            coverageName,
+            numBands,
+            tileSize,
+            new NoDataMergeStrategy());
     final RasterDataAdapter mergeStrategyOverriddenAdapter =
         new RasterDataAdapter(basicAdapter, coverageName, mergeStrategy);
     basicAdapter.getMetadata().put("test-key", "test-value");
@@ -286,13 +336,11 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
 
     try (CloseableIterator<?> it =
         dataStore.query(
-            QueryBuilder.newBuilder().addTypeName(coverageName)
-                .constraints(
-                    new IndexOnlySpatialQuery(
-                        new GeometryFactory()
-                            .toGeometry(new Envelope(westLon, eastLon, southLat, northLat)),
-                        TestUtils.CUSTOM_CRSCODE))
-                .build())) {
+            QueryBuilder.newBuilder().addTypeName(coverageName).constraints(
+                new IndexOnlySpatialQuery(
+                    new GeometryFactory().toGeometry(
+                        new Envelope(westLon, eastLon, southLat, northLat)),
+                    TestUtils.CUSTOM_CRSCODE)).build())) {
       // the expected outcome is:
       // band 1,2,3,4,5,6 has every value set correctly, band 0 has every
       // even row set correctly and every odd row should be NaN, and band
@@ -308,7 +356,8 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
             Assert.assertEquals(
                 "x=" + x + ",y=" + y + ",b=" + b,
                 expectedValue.getExpectedValue(x, y, b, numRasters, tileSize),
-                raster.getSampleDouble(x, y, b), DOUBLE_TOLERANCE);
+                raster.getSampleDouble(x, y, b),
+                DOUBLE_TOLERANCE);
           }
         }
       }

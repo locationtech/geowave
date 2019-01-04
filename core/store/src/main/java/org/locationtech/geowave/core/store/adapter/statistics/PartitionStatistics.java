@@ -114,8 +114,8 @@ public class PartitionStatistics<T>
   @Override
   public String toString() {
     final StringBuffer buffer =
-        new StringBuffer(statisticsType.getString()).append(" (").append(extendedId).append(")")
-            .append("=");
+        new StringBuffer(statisticsType.getString()).append(" (").append(extendedId).append(
+            ")").append("=");
     if (!partitions.isEmpty()) {
       for (final ByteArray p : partitions) {
         if ((p == null) || (p.getBytes() == null)) {

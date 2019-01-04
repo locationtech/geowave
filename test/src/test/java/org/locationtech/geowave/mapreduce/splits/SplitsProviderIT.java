@@ -64,9 +64,15 @@ import org.slf4j.LoggerFactory;
 @Environments({Environment.MAP_REDUCE})
 public class SplitsProviderIT extends AbstractGeoWaveIT {
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.HBASE, GeoWaveStoreType.DYNAMODB, GeoWaveStoreType.CASSANDRA,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStorePluginOptions;
 
   private static final Logger LOGGER =
@@ -180,8 +186,16 @@ public class SplitsProviderIT extends AbstractGeoWaveIT {
           dataStore.getSplits(
               new CommonQueryOptions(),
               new FilterByTypeQueryOptions<>(new String[] {fda.getTypeName()}),
-              new QuerySingleIndex(idx.getName()), new EverythingQuery(), mas, aim, stats, ias, is,
-              new JobContextImpl(new Configuration(), new JobID()), minSplits, maxSplits);
+              new QuerySingleIndex(idx.getName()),
+              new EverythingQuery(),
+              mas,
+              aim,
+              stats,
+              ias,
+              is,
+              new JobContextImpl(new Configuration(), new JobID()),
+              minSplits,
+              maxSplits);
     } catch (final IOException e) {
       LOGGER.error("IOException thrown when calling getSplits", e);
     } catch (final InterruptedException e) {
@@ -201,10 +215,20 @@ public class SplitsProviderIT extends AbstractGeoWaveIT {
           final SplitInfo splitInfo = gwSplit.getInfo(indexName);
           for (final RangeLocationPair p : splitInfo.getRangeLocationPairs()) {
             final RecordReaderParams<?> readerParams =
-                new RecordReaderParams<>(splitInfo.getIndex(), as, ias,
-                    new short[] {ias.getAdapterId(fda.getTypeName())}, null, null, null,
-                    splitInfo.isMixedVisibility(), splitInfo.isAuthorizationsLimiting(),
-                    p.getRange(), null, null, GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
+                new RecordReaderParams<>(
+                    splitInfo.getIndex(),
+                    as,
+                    ias,
+                    new short[] {ias.getAdapterId(fda.getTypeName())},
+                    null,
+                    null,
+                    null,
+                    splitInfo.isMixedVisibility(),
+                    splitInfo.isAuthorizationsLimiting(),
+                    p.getRange(),
+                    null,
+                    null,
+                    GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
             try (RowReader<?> reader = ops.createReader(readerParams)) {
               while (reader.hasNext()) {
                 reader.next();

@@ -46,7 +46,9 @@ public class GeoWaveRedisRowCodec extends BaseCodec {
         if (in.read(value) != value.length) {
           LOGGER.warn("unable to read value");
         }
-        return new GeoWaveRedisPersistedRow((short) numDuplicates, dataId,
+        return new GeoWaveRedisPersistedRow(
+            (short) numDuplicates,
+            dataId,
             new GeoWaveValueImpl(fieldMask, visibility, value));
       }
     }

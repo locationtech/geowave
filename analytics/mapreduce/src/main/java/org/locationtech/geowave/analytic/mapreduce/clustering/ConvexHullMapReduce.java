@@ -113,16 +113,21 @@ public class ConvexHullMapReduce {
       super.setup(context);
 
       final ScopedJobConfiguration config =
-          new ScopedJobConfiguration(context.getConfiguration(), ConvexHullMapReduce.class,
+          new ScopedJobConfiguration(
+              context.getConfiguration(),
+              ConvexHullMapReduce.class,
               ConvexHullMapReduce.LOGGER);
       try {
         itemWrapperFactory =
             config.getInstance(
-                HullParameters.Hull.WRAPPER_FACTORY_CLASS, AnalyticItemWrapperFactory.class,
+                HullParameters.Hull.WRAPPER_FACTORY_CLASS,
+                AnalyticItemWrapperFactory.class,
                 SimpleFeatureItemWrapperFactory.class);
 
-        itemWrapperFactory
-            .initialize(context, ConvexHullMapReduce.class, ConvexHullMapReduce.LOGGER);
+        itemWrapperFactory.initialize(
+            context,
+            ConvexHullMapReduce.class,
+            ConvexHullMapReduce.LOGGER);
       } catch (final Exception e1) {
 
         throw new IOException(e1);
@@ -130,7 +135,9 @@ public class ConvexHullMapReduce {
 
       try {
         nestedGroupCentroidAssigner =
-            new NestedGroupCentroidAssignment<T>(context, ConvexHullMapReduce.class,
+            new NestedGroupCentroidAssignment<T>(
+                context,
+                ConvexHullMapReduce.class,
                 ConvexHullMapReduce.LOGGER);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -194,13 +201,22 @@ public class ConvexHullMapReduce {
 
       final SimpleFeature newPolygonFeature =
           AnalyticFeature.createGeometryFeature(
-              outputAdapter.getFeatureType(), centroid.getBatchID(), UUID.randomUUID().toString(),
-              centroid.getName(), centroid.getGroupID(), centroid.getCost(), currentHull,
-              new String[0], new double[0], centroid.getZoomLevel(), centroid.getIterationID(),
+              outputAdapter.getFeatureType(),
+              centroid.getBatchID(),
+              UUID.randomUUID().toString(),
+              centroid.getName(),
+              centroid.getGroupID(),
+              centroid.getCost(),
+              currentHull,
+              new String[0],
+              new double[0],
+              centroid.getZoomLevel(),
+              centroid.getIterationID(),
               centroid.getAssociationCount());
       // new center
-      context
-          .write(new GeoWaveOutputKey(outputAdapter.getTypeName(), indexNames), newPolygonFeature);
+      context.write(
+          new GeoWaveOutputKey(outputAdapter.getTypeName(), indexNames),
+          newPolygonFeature);
     }
 
     private static <T> Geometry compress(
@@ -228,12 +244,16 @@ public class ConvexHullMapReduce {
         throws IOException, InterruptedException {
 
       final ScopedJobConfiguration config =
-          new ScopedJobConfiguration(context.getConfiguration(), ConvexHullMapReduce.class,
+          new ScopedJobConfiguration(
+              context.getConfiguration(),
+              ConvexHullMapReduce.class,
               ConvexHullMapReduce.LOGGER);
       super.setup(context);
       try {
         centroidManager =
-            new CentroidManagerGeoWave<T>(context, ConvexHullMapReduce.class,
+            new CentroidManagerGeoWave<T>(
+                context,
+                ConvexHullMapReduce.class,
                 ConvexHullMapReduce.LOGGER);
       } catch (final Exception e) {
         ConvexHullMapReduce.LOGGER.warn("Unable to initialize centroid manager", e);
@@ -243,7 +263,8 @@ public class ConvexHullMapReduce {
       try {
         projectionFunction =
             config.getInstance(
-                HullParameters.Hull.PROJECTION_CLASS, Projection.class,
+                HullParameters.Hull.PROJECTION_CLASS,
+                Projection.class,
                 SimpleFeatureProjection.class);
 
         projectionFunction.initialize(context, ConvexHullMapReduce.class);
@@ -256,15 +277,18 @@ public class ConvexHullMapReduce {
 
       outputAdapter =
           AnalyticFeature.createGeometryFeatureAdapter(
-              polygonDataTypeId, new String[0],
+              polygonDataTypeId,
+              new String[0],
               config.getString(
-                  HullParameters.Hull.DATA_NAMESPACE_URI, BasicFeatureTypes.DEFAULT_NAMESPACE),
+                  HullParameters.Hull.DATA_NAMESPACE_URI,
+                  BasicFeatureTypes.DEFAULT_NAMESPACE),
               ClusteringUtils.CLUSTERING_CRS);
 
       indexNames =
-          new String[] {config.getString(
-              HullParameters.Hull.INDEX_NAME,
-              new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName())};
+          new String[] {
+              config.getString(
+                  HullParameters.Hull.INDEX_NAME,
+                  new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName())};
     }
   }
 }

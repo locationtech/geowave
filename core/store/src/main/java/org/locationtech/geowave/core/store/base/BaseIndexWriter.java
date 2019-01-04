@@ -115,8 +115,9 @@ class BaseIndexWriter<T> implements Writer<T> {
     if (customFieldVisibilityWriter != DataStoreUtils.UNCONSTRAINED_VISIBILITY) {
       for (final GeoWaveValue value : ingestInfo.getValues()) {
         if ((value.getVisibility() != null) && (value.getVisibility().length > 0)) {
-          if (!operations
-              .ensureAuthorizations(null, StringUtils.stringFromBinary(value.getVisibility()))) {
+          if (!operations.ensureAuthorizations(
+              null,
+              StringUtils.stringFromBinary(value.getVisibility()))) {
             LOGGER.error(
                 "Unable to set authorizations for ingested visibility '"
                     + StringUtils.stringFromBinary(value.getVisibility())

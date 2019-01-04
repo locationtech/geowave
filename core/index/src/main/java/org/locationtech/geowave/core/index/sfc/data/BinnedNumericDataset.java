@@ -116,7 +116,8 @@ public class BinnedNumericDataset implements MultiDimensionalNumericData {
       if (current == null) {
         rangePerDimension = new NumericRange[binRangesPerDimension.length];
         next =
-            new BinnedNumericDataset(binRangesPerDimension[dimension][i].getBinId(),
+            new BinnedNumericDataset(
+                binRangesPerDimension[dimension][i].getBinId(),
                 new BasicNumericDataset(rangePerDimension));
 
       } else {
@@ -127,13 +128,15 @@ public class BinnedNumericDataset implements MultiDimensionalNumericData {
           rangePerDimension[d] = current.getDataPerDimension()[d];
         }
         final byte[] combinedBinId =
-            ByteArrayUtils
-                .combineArrays(current.getBinId(), binRangesPerDimension[dimension][i].getBinId());
+            ByteArrayUtils.combineArrays(
+                current.getBinId(),
+                binRangesPerDimension[dimension][i].getBinId());
         next = new BinnedNumericDataset(combinedBinId, new BasicNumericDataset(rangePerDimension));
       }
 
       rangePerDimension[dimension] =
-          new NumericRange(binRangesPerDimension[dimension][i].getNormalizedMin(),
+          new NumericRange(
+              binRangesPerDimension[dimension][i].getNormalizedMin(),
               binRangesPerDimension[dimension][i].getNormalizedMax());
       generatePermutations(binRangesPerDimension, result, dimension + 1, next);
     }

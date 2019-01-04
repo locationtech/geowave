@@ -71,7 +71,8 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
     }
     GeoWaveConfiguratorBase.setRemoteInvocationParams(
         rasterResizeOptions.getHdfsHostPort(),
-        rasterResizeOptions.getJobTrackerOrResourceManHostPort(), conf);
+        rasterResizeOptions.getJobTrackerOrResourceManHostPort(),
+        conf);
     conf.set(OLD_TYPE_NAME_KEY, rasterResizeOptions.getInputCoverageName());
     conf.set(NEW_TYPE_NAME_KEY, rasterResizeOptions.getOutputCoverageName());
     final Job job = new Job(conf);
@@ -95,10 +96,12 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
     job.setOutputValueClass(GridCoverage.class);
     job.setNumReduceTasks(8);
 
-    GeoWaveInputFormat
-        .setMinimumSplitCount(job.getConfiguration(), rasterResizeOptions.getMinSplits());
-    GeoWaveInputFormat
-        .setMaximumSplitCount(job.getConfiguration(), rasterResizeOptions.getMaxSplits());
+    GeoWaveInputFormat.setMinimumSplitCount(
+        job.getConfiguration(),
+        rasterResizeOptions.getMinSplits());
+    GeoWaveInputFormat.setMaximumSplitCount(
+        job.getConfiguration(),
+        rasterResizeOptions.getMaxSplits());
 
     GeoWaveInputFormat.setStoreOptions(job.getConfiguration(), inputStoreOptions);
 
@@ -110,16 +113,19 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
         inputStoreOptions.createAdapterStore().getAdapter(internalAdapterId).getAdapter();
 
     if (adapter == null) {
-      throw new IllegalArgumentException("Adapter for coverage '"
-          + rasterResizeOptions.getInputCoverageName()
-          + "' does not exist in namespace '"
-          + inputStoreOptions.getGeoWaveNamespace()
-          + "'");
+      throw new IllegalArgumentException(
+          "Adapter for coverage '"
+              + rasterResizeOptions.getInputCoverageName()
+              + "' does not exist in namespace '"
+              + inputStoreOptions.getGeoWaveNamespace()
+              + "'");
     }
 
     final RasterDataAdapter newAdapter =
-        new RasterDataAdapter((RasterDataAdapter) adapter,
-            rasterResizeOptions.getOutputCoverageName(), rasterResizeOptions.getOutputTileSize());
+        new RasterDataAdapter(
+            (RasterDataAdapter) adapter,
+            rasterResizeOptions.getOutputCoverageName(),
+            rasterResizeOptions.getOutputTileSize());
 
     JobContextAdapterStore.addDataAdapter(job.getConfiguration(), adapter);
     JobContextAdapterStore.addDataAdapter(job.getConfiguration(), newAdapter);
@@ -145,10 +151,14 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
         outputStoreOptions.createInternalAdapterStore().addTypeName(newAdapter.getTypeName());
     // what if the adapter IDs are the same, but the internal IDs are
     // different (unlikely corner case, but seemingly possible)
-    JobContextInternalAdapterStore
-        .addTypeName(job.getConfiguration(), newAdapter.getTypeName(), newInternalAdapterId);
-    JobContextInternalAdapterStore
-        .addTypeName(job.getConfiguration(), adapter.getTypeName(), internalAdapterId);
+    JobContextInternalAdapterStore.addTypeName(
+        job.getConfiguration(),
+        newAdapter.getTypeName(),
+        newInternalAdapterId);
+    JobContextInternalAdapterStore.addTypeName(
+        job.getConfiguration(),
+        adapter.getTypeName(),
+        internalAdapterId);
 
     job.getConfiguration().setInt(OLD_ADAPTER_ID_KEY, internalAdapterId);
 
@@ -158,8 +168,8 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
         // this is done primarily to ensure stats merging is enabled
         // before the
         // distributed ingest
-        outputStoreOptions.createDataStoreOperations().createMetadataWriter(MetadataType.STATS)
-            .close();
+        outputStoreOptions.createDataStoreOperations().createMetadataWriter(
+            MetadataType.STATS).close();
       } catch (final Exception e) {
         LOGGER.error("Unable to create stats writer", e);
       }
@@ -173,8 +183,8 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
 
     final CloseableIterator<Object> obj =
         outputStoreOptions.createDataStore().query(
-            QueryBuilder.newBuilder().addTypeName(rasterResizeOptions.getOutputCoverageName())
-                .indexName(index.getName()).build());
+            QueryBuilder.newBuilder().addTypeName(
+                rasterResizeOptions.getOutputCoverageName()).indexName(index.getName()).build());
     while (obj.hasNext()) {
       obj.next();
     }

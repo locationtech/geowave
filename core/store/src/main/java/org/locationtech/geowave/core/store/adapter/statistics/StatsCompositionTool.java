@@ -137,8 +137,7 @@ public class StatsCompositionTool<T> implements IngestCallback<T>, ScanCallback<
           // which is used by the stats manager within a feature data
           // adapter etc.
           if (s instanceof DataStatisticsSet) {
-            for (final InternalDataStatistics<T, ?, ?> statInSet : ((DataStatisticsSet) s)
-                .getStatisticsSet()) {
+            for (final InternalDataStatistics<T, ?, ?> statInSet : ((DataStatisticsSet) s).getStatisticsSet()) {
               statisticsStore.incorporateStatistics(statInSet);
             }
           } else {

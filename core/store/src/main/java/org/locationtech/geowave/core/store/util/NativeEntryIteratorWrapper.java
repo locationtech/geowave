@@ -51,7 +51,13 @@ public class NativeEntryIteratorWrapper<T> extends EntryIteratorWrapper<T> {
       try {
         decodedRow =
             BaseDataStoreUtils.decodeRow(
-                row, clientFilter, null, adapterStore, index, scanCallback, fieldSubsetBitmask,
+                row,
+                clientFilter,
+                null,
+                adapterStore,
+                index,
+                scanCallback,
+                fieldSubsetBitmask,
                 decodePersistenceEncoding);
 
         if (decodedRow != null) {
@@ -94,7 +100,8 @@ public class NativeEntryIteratorWrapper<T> extends EntryIteratorWrapper<T> {
         && (maxResolutionSubsamplingPerDimension.length > 0)) {
       bitPosition =
           IndexUtils.getBitPositionOnSortKeyFromSubsamplingArray(
-              index.getIndexStrategy(), maxResolutionSubsamplingPerDimension);
+              index.getIndexStrategy(),
+              maxResolutionSubsamplingPerDimension);
     }
   }
 }

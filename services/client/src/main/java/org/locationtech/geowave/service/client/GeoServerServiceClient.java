@@ -144,7 +144,10 @@ public class GeoServerServiceClient {
 
     final Response resp =
         geoServerService.addCoverageStore(
-            GeoWave_store_name, workspace, equalizerHistogramOverride, interpolationOverride,
+            GeoWave_store_name,
+            workspace,
+            equalizerHistogramOverride,
+            interpolationOverride,
             scaleTo8Bit);
     return resp;
   }

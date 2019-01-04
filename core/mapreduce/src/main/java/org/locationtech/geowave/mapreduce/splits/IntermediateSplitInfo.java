@@ -93,9 +93,12 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
         if (Arrays.equals(end, splitKey) && !rangeLocationPair.getRange().isEndSortKeyInclusive()) {
           rangeLocationPair =
               new RangeLocationPair(
-                  new GeoWaveRowRange(rangeLocationPair.getRange().getPartitionKey(),
-                      rangeLocationPair.getRange().getStartSortKey(), splitKey,
-                      rangeLocationPair.getRange().isStartSortKeyInclusive(), endKeyInclusive),
+                  new GeoWaveRowRange(
+                      rangeLocationPair.getRange().getPartitionKey(),
+                      rangeLocationPair.getRange().getStartSortKey(),
+                      splitKey,
+                      rangeLocationPair.getRange().isStartSortKeyInclusive(),
+                      endKeyInclusive),
                   location,
                   stats.cardinality(rangeLocationPair.getRange().getStartSortKey(), splitKey));
           return null;
@@ -105,16 +108,22 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
       try {
         final RangeLocationPair newPair =
             new RangeLocationPair(
-                new GeoWaveRowRange(rangeLocationPair.getRange().getPartitionKey(),
-                    rangeLocationPair.getRange().getStartSortKey(), splitKey,
-                    rangeLocationPair.getRange().isStartSortKeyInclusive(), endKeyInclusive),
+                new GeoWaveRowRange(
+                    rangeLocationPair.getRange().getPartitionKey(),
+                    rangeLocationPair.getRange().getStartSortKey(),
+                    splitKey,
+                    rangeLocationPair.getRange().isStartSortKeyInclusive(),
+                    endKeyInclusive),
                 location,
                 stats.cardinality(rangeLocationPair.getRange().getStartSortKey(), splitKey));
 
         rangeLocationPair =
             new RangeLocationPair(
-                new GeoWaveRowRange(rangeLocationPair.getRange().getPartitionKey(), splitKey,
-                    rangeLocationPair.getRange().getEndSortKey(), startKeyInclusive,
+                new GeoWaveRowRange(
+                    rangeLocationPair.getRange().getPartitionKey(),
+                    splitKey,
+                    rangeLocationPair.getRange().getEndSortKey(),
+                    startKeyInclusive,
                     rangeLocationPair.getRange().isEndSortKeyInclusive()),
                 location,
                 stats.cardinality(splitKey, rangeLocationPair.getRange().getEndSortKey()));
@@ -212,7 +221,8 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
                     Pair.of(
                         next.index,
                         new ByteArray(next.rangeLocationPair.getRange().getPartitionKey()))),
-                currentCardinality, targetCardinality);
+                currentCardinality,
+                targetCardinality);
         double splitCardinality = next.rangeLocationPair.getCardinality();
         // Stats can have inaccuracies over narrow ranges
         // thus, a split based on statistics may not be found
@@ -224,7 +234,8 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
           // Still add to the other SPLIT if there is remaining
           // pairs in this SPLIT
           addPairForIndex(
-              (!orderedSplits.isEmpty()) ? otherSplitInfo : splitInfo, next.rangeLocationPair,
+              (!orderedSplits.isEmpty()) ? otherSplitInfo : splitInfo,
+              next.rangeLocationPair,
               next.index);
         }
         nextCardinality = currentCardinality + splitCardinality;
@@ -288,11 +299,15 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
     for (final SplitInfo si : splitInfo.values()) {
       final DifferingFieldVisibilityEntryCount differingVisibilityCounts =
           DifferingFieldVisibilityEntryCount.getVisibilityCounts(
-              si.getIndex(), indexIdToAdaptersMap.get(si.getIndex().getName()), statisticsStore,
+              si.getIndex(),
+              indexIdToAdaptersMap.get(si.getIndex().getName()),
+              statisticsStore,
               authorizations);
       final FieldVisibilityCount visibilityCounts =
           FieldVisibilityCount.getVisibilityCounts(
-              si.getIndex(), indexIdToAdaptersMap.get(si.getIndex().getName()), statisticsStore,
+              si.getIndex(),
+              indexIdToAdaptersMap.get(si.getIndex().getName()),
+              statisticsStore,
               authorizations);
 
       si.setMixedVisibility(

@@ -40,7 +40,9 @@ public class ClasspathUtils {
       final URL... additionalClasspathUrls) throws IOException {
     return setupPathingJarClassPath(
         new File(dir.getParentFile().getAbsolutePath() + File.separator + "pathing", "pathing.jar"),
-        null, context, additionalClasspathUrls);
+        null,
+        context,
+        additionalClasspathUrls);
   }
 
   public static String setupPathingJarClassPath(
@@ -147,8 +149,8 @@ public class ClasspathUtils {
 
     // do not include dirs containing hadoop or accumulo site files
     if (!containsSiteFile(file)) {
-      classpathBuilder.append(" ")
-          .append(file.getAbsolutePath().replace("C:\\", "file:/C:/").replace("\\", "/"));
+      classpathBuilder.append(" ").append(
+          file.getAbsolutePath().replace("C:\\", "file:/C:/").replace("\\", "/"));
       if (file.isDirectory()) {
         classpathBuilder.append("/");
       }
@@ -172,8 +174,8 @@ public class ClasspathUtils {
   public static synchronized ClassLoader transformClassLoader(final ClassLoader classLoader) {
     if (transformerList == null) {
       final Iterator<ClassLoaderTransformerSpi> transformers =
-          new SPIServiceRegistry(ClassLoaderTransformerSpi.class)
-              .load(ClassLoaderTransformerSpi.class);
+          new SPIServiceRegistry(ClassLoaderTransformerSpi.class).load(
+              ClassLoaderTransformerSpi.class);
       transformerList = new ArrayList<>();
       while (transformers.hasNext()) {
         transformerList.add(transformers.next());

@@ -65,7 +65,8 @@ public class CassandraReader<T> implements RowReader<T> {
   private CloseableIterator<T> wrapResults(
       final CloseableIterator<CassandraRow> results,
       final Set<String> authorizations) {
-    return new CloseableIteratorWrapper<>(results,
+    return new CloseableIteratorWrapper<>(
+        results,
         rowTransformer.apply(
             (Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<>(
                 Iterators.filter(results, new ClientVisibilityFilter(authorizations)))));
@@ -79,8 +80,11 @@ public class CassandraReader<T> implements RowReader<T> {
     if ((ranges != null) && !ranges.isEmpty()) {
       iterator =
           operations.getBatchedRangeRead(
-              readerParams.getIndex().getName(), readerParams.getAdapterIds(), ranges,
-              rowTransformer, new ClientVisibilityFilter(authorizations)).results();
+              readerParams.getIndex().getName(),
+              readerParams.getAdapterIds(),
+              ranges,
+              rowTransformer,
+              new ClientVisibilityFilter(authorizations)).results();
     } else {
       // TODO figure out the query select by adapter IDs here
       final Select select = operations.getSelect(readerParams.getIndex().getName());
@@ -89,7 +93,8 @@ public class CassandraReader<T> implements RowReader<T> {
         // TODO because we aren't filtering server-side by adapter ID,
         // we will need to filter here on the client
         results =
-            new CloseableIteratorWrapper<>(results,
+            new CloseableIteratorWrapper<>(
+                results,
                 Iterators.filter(results, new Predicate<CassandraRow>() {
                   @Override
                   public boolean apply(final CassandraRow input) {
@@ -112,14 +117,17 @@ public class CassandraReader<T> implements RowReader<T> {
     final ByteArray stopKey =
         range.isInfiniteStopSortKey() ? null : new ByteArray(range.getEndSortKey());
     final SinglePartitionQueryRanges partitionRange =
-        new SinglePartitionQueryRanges(new ByteArray(range.getPartitionKey()),
+        new SinglePartitionQueryRanges(
+            new ByteArray(range.getPartitionKey()),
             Collections.singleton(new ByteArrayRange(startKey, stopKey)));
     final Set<String> authorizations =
         Sets.newHashSet(recordReaderParams.getAdditionalAuthorizations());
     iterator =
         operations.getBatchedRangeRead(
-            recordReaderParams.getIndex().getName(), adapterIds,
-            Collections.singleton(partitionRange), rowTransformer,
+            recordReaderParams.getIndex().getName(),
+            adapterIds,
+            Collections.singleton(partitionRange),
+            rowTransformer,
             new ClientVisibilityFilter(authorizations)).results();
   }
 

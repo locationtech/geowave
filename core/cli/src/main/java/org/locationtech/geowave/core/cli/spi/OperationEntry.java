@@ -37,8 +37,9 @@ public final class OperationEntry {
     this.operationClass = operationClass;
     GeowaveOperation operation = this.operationClass.getAnnotation(GeowaveOperation.class);
     if (operation == null) {
-      throw new RuntimeException("Expected Operation class to use GeowaveOperation annotation: "
-          + this.operationClass.getCanonicalName());
+      throw new RuntimeException(
+          "Expected Operation class to use GeowaveOperation annotation: "
+              + this.operationClass.getCanonicalName());
     }
     this.operationName = operation.name();
     this.parentOperationClass = operation.parentOperation();
@@ -65,10 +66,11 @@ public final class OperationEntry {
 
   public void addChild(OperationEntry child) {
     if (children.containsKey(child.getOperationName().toLowerCase(Locale.ENGLISH))) {
-      throw new RuntimeException("Duplicate operation name: "
-          + child.getOperationName()
-          + " for "
-          + this.getOperationClass().getName());
+      throw new RuntimeException(
+          "Duplicate operation name: "
+              + child.getOperationName()
+              + " for "
+              + this.getOperationClass().getName());
     }
     children.put(child.getOperationName().toLowerCase(Locale.ENGLISH), child);
   }

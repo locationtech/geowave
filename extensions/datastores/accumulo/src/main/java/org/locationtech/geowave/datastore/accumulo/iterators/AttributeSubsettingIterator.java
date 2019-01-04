@@ -140,8 +140,10 @@ public class AttributeSubsettingIterator extends TransformingIterator {
 
   /** @return an {@link IteratorSetting} for this iterator */
   public static IteratorSetting getIteratorSetting() {
-    return new IteratorSetting(AttributeSubsettingIterator.ITERATOR_PRIORITY,
-        AttributeSubsettingIterator.ITERATOR_NAME, AttributeSubsettingIterator.class);
+    return new IteratorSetting(
+        AttributeSubsettingIterator.ITERATOR_PRIORITY,
+        AttributeSubsettingIterator.ITERATOR_NAME,
+        AttributeSubsettingIterator.class);
   }
 
   /**
@@ -158,8 +160,10 @@ public class AttributeSubsettingIterator extends TransformingIterator {
       final String[] fieldNames,
       final CommonIndexModel indexModel) {
     final byte[] fieldSubsetBitmask =
-        BitmaskUtils
-            .generateFieldSubsetBitmask(indexModel, fieldNames, adapterAssociatedWithFieldIds);
+        BitmaskUtils.generateFieldSubsetBitmask(
+            indexModel,
+            fieldNames,
+            adapterAssociatedWithFieldIds);
 
     setting.addOption(FIELD_SUBSET_BITMASK, ByteArrayUtils.byteArrayToString(fieldSubsetBitmask));
   }

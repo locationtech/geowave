@@ -106,12 +106,14 @@ public class AccumuloWriter implements RowWriter {
       if ((value.getVisibility() != null) && (value.getVisibility().length > 0)) {
         mutation.put(
             new Text(ByteArrayUtils.shortToString(row.getAdapterId())),
-            new Text(value.getFieldMask()), new ColumnVisibility(value.getVisibility()),
+            new Text(value.getFieldMask()),
+            new ColumnVisibility(value.getVisibility()),
             new Value(value.getValue()));
       } else {
         mutation.put(
             new Text(ByteArrayUtils.shortToString(row.getAdapterId())),
-            new Text(value.getFieldMask()), new Value(value.getValue()));
+            new Text(value.getFieldMask()),
+            new Value(value.getValue()));
       }
     }
     return mutation;

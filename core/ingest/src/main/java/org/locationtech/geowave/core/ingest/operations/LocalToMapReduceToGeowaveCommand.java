@@ -201,8 +201,14 @@ public class LocalToMapReduceToGeowaveCommand extends ServiceEnabledCommand<Void
     {
       // Driver
       final IngestFromHdfsDriver driver =
-          new IngestFromHdfsDriver(inputStoreOptions, inputIndexOptions, ingestOptions,
-              mapReduceOptions, hdfsIngestPlugins, hdfsHostPort, basePath);
+          new IngestFromHdfsDriver(
+              inputStoreOptions,
+              inputIndexOptions,
+              ingestOptions,
+              mapReduceOptions,
+              hdfsIngestPlugins,
+              hdfsHostPort,
+              basePath);
 
       // Execute
       if (!driver.runOperation()) {

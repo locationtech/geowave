@@ -24,7 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @GeowaveOperation(name = "rmtype", parentOperation = RemoteSection.class)
-@Parameters(hidden = true,
+@Parameters(
+    hidden = true,
     commandDescription = "Remove an data type from the remote store and all associated data of that type")
 public class RemoveTypeCommand extends ServiceEnabledCommand<Void> {
   private static final Logger LOGGER = LoggerFactory.getLogger(RemoveTypeCommand.class);
@@ -79,8 +80,8 @@ public class RemoveTypeCommand extends ServiceEnabledCommand<Void> {
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
     LOGGER.info("Deleting everything in store: " + inputStoreName + " with type name: " + typeName);
-    inputStoreOptions.createDataStore()
-        .delete(QueryBuilder.newBuilder().addTypeName(typeName).build());
+    inputStoreOptions.createDataStore().delete(
+        QueryBuilder.newBuilder().addTypeName(typeName).build());
     return null;
   }
 }

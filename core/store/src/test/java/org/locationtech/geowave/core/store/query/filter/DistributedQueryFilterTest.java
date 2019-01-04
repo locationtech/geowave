@@ -28,7 +28,8 @@ public class DistributedQueryFilterTest {
   public void test() {
     List<QueryFilter> filters = new ArrayList<>();
     filters.add(
-        new BasicQueryFilter(new BasicNumericDataset(new NumericData[] {new NumericValue(0.4)}),
+        new BasicQueryFilter(
+            new BasicNumericDataset(new NumericData[] {new NumericValue(0.4)}),
             new NumericDimensionField[] {new BasicQueryTest.ExampleDimensionOne()},
             BasicQueryCompareOperation.CONTAINS));
     filters.add(new DedupeFilter());
@@ -36,14 +37,16 @@ public class DistributedQueryFilterTest {
     list.fromBinary(list.toBinary());
     assertFalse(list.logicalAnd);
     assertEquals(
-        ((BasicQueryFilter) list.filters.get(0)).compareOp, BasicQueryCompareOperation.CONTAINS);
+        ((BasicQueryFilter) list.filters.get(0)).compareOp,
+        BasicQueryCompareOperation.CONTAINS);
     assertEquals(
         ((BasicQueryFilter) list.filters.get(0)).constraints,
         new BasicNumericDataset(new NumericData[] {new NumericRange(0.4, 0.4)}));
 
     filters = new ArrayList<>();
     filters.add(
-        new BasicQueryFilter(new BasicNumericDataset(new NumericData[] {new NumericValue(0.5)}),
+        new BasicQueryFilter(
+            new BasicNumericDataset(new NumericData[] {new NumericValue(0.5)}),
             new NumericDimensionField[] {new BasicQueryTest.ExampleDimensionOne()},
             BasicQueryCompareOperation.INTERSECTS));
     filters.add(new DedupeFilter());
@@ -51,7 +54,8 @@ public class DistributedQueryFilterTest {
     list.fromBinary(list.toBinary());
     assertTrue(list.logicalAnd);
     assertEquals(
-        ((BasicQueryFilter) list.filters.get(0)).compareOp, BasicQueryCompareOperation.INTERSECTS);
+        ((BasicQueryFilter) list.filters.get(0)).compareOp,
+        BasicQueryCompareOperation.INTERSECTS);
     assertEquals(
         ((BasicQueryFilter) list.filters.get(0)).constraints,
         new BasicNumericDataset(new NumericData[] {new NumericRange(0.5, 0.5)}));

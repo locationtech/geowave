@@ -30,7 +30,9 @@ public class SerializableAdapterStoreTest {
   public void testSerialization() throws ClassNotFoundException, IOException {
     final SimpleFeatureType ftype =
         AnalyticFeature.createGeometryFeatureAdapter(
-            "centroid", new String[] {"extra1"}, BasicFeatureTypes.DEFAULT_NAMESPACE,
+            "centroid",
+            new String[] {"extra1"},
+            BasicFeatureTypes.DEFAULT_NAMESPACE,
             ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
     final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());

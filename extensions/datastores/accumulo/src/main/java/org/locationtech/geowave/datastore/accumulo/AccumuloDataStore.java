@@ -45,12 +45,15 @@ public class AccumuloDataStore extends BaseMapReduceDataStore {
   public AccumuloDataStore(
       final AccumuloOperations accumuloOperations,
       final AccumuloOptions accumuloOptions) {
-    super(new IndexStoreImpl(accumuloOperations, accumuloOptions),
+    super(
+        new IndexStoreImpl(accumuloOperations, accumuloOptions),
         new AdapterStoreImpl(accumuloOperations, accumuloOptions),
         new DataStatisticsStoreImpl(accumuloOperations, accumuloOptions),
         new AdapterIndexMappingStoreImpl(accumuloOperations, accumuloOptions),
         new AccumuloSecondaryIndexDataStore(accumuloOperations, accumuloOptions),
-        accumuloOperations, accumuloOptions, new InternalAdapterStoreImpl(accumuloOperations));
+        accumuloOperations,
+        accumuloOptions,
+        new InternalAdapterStoreImpl(accumuloOperations));
   }
 
   @Override
@@ -64,25 +67,34 @@ public class AccumuloDataStore extends BaseMapReduceDataStore {
     final String typeName = adapter.getTypeName();
     try {
       if (adapter.getAdapter() instanceof RowMergingDataAdapter) {
-        if (!((AccumuloOperations) baseOperations)
-            .isRowMergingEnabled(adapter.getAdapterId(), indexName)) {
-          if (!((AccumuloOperations) baseOperations)
-              .createTable(indexName, false, baseOptions.isEnableBlockCache())) {
+        if (!((AccumuloOperations) baseOperations).isRowMergingEnabled(
+            adapter.getAdapterId(),
+            indexName)) {
+          if (!((AccumuloOperations) baseOperations).createTable(
+              indexName,
+              false,
+              baseOptions.isEnableBlockCache())) {
             ((AccumuloOperations) baseOperations).enableVersioningIterator(indexName, false);
           }
           if (baseOptions.isServerSideLibraryEnabled()) {
             ServerOpHelper.addServerSideRowMerging(
-                ((RowMergingDataAdapter<?, ?>) adapter.getAdapter()), adapter.getAdapterId(),
-                (ServerSideOperations) baseOperations, RowMergingCombiner.class.getName(),
-                RowMergingVisibilityCombiner.class.getName(), indexName);
+                ((RowMergingDataAdapter<?, ?>) adapter.getAdapter()),
+                adapter.getAdapterId(),
+                (ServerSideOperations) baseOperations,
+                RowMergingCombiner.class.getName(),
+                RowMergingVisibilityCombiner.class.getName(),
+                indexName);
           }
         }
       }
       if (((AccumuloOptions) baseOptions).isUseLocalityGroups()
-          && !((AccumuloOperations) baseOperations)
-              .localityGroupExists(indexName, adapter.getTypeName())) {
-        ((AccumuloOperations) baseOperations)
-            .addLocalityGroup(indexName, adapter.getTypeName(), adapter.getAdapterId());
+          && !((AccumuloOperations) baseOperations).localityGroupExists(
+              indexName,
+              adapter.getTypeName())) {
+        ((AccumuloOperations) baseOperations).addLocalityGroup(
+            indexName,
+            adapter.getTypeName(),
+            adapter.getAdapterId());
       }
     } catch (AccumuloException | TableNotFoundException | AccumuloSecurityException e) {
       LOGGER.error("Unable to determine existence of locality group [" + typeName + "]", e);

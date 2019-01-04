@@ -13,15 +13,18 @@ import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions
 
 public class BasicIndexOptions {
 
-  @Parameter(names = {"--indexName"},
+  @Parameter(
+      names = {"--indexName"},
       description = "A custom name can be given to this index. Default name will be the based on configuration parameters.")
   protected String nameOverride = null;
 
-  @Parameter(names = {"-np", "--numPartitions"},
+  @Parameter(
+      names = {"-np", "--numPartitions"},
       description = "The number of partitions.  Default partitions will be 1.")
   protected int numPartitions = 1;
 
-  @Parameter(names = {"-ps", "--partitionStrategy"},
+  @Parameter(
+      names = {"-ps", "--partitionStrategy"},
       description = "The partition strategy to use.  Default will be none.")
   protected PartitionStrategy partitionStrategy = PartitionStrategy.NONE;
 

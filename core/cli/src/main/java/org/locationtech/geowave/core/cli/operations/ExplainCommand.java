@@ -24,8 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @GeowaveOperation(name = "explain", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(commandDescription = "See what arguments are missing and "
-    + "what values will be used for GeoWave commands")
+@Parameters(
+    commandDescription = "See what arguments are missing and "
+        + "what values will be used for GeoWave commands")
 public class ExplainCommand extends DefaultOperation implements Command {
 
   private static Logger LOGGER = LoggerFactory.getLogger(ExplainCommand.class);

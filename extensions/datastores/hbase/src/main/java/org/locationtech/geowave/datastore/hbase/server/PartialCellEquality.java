@@ -27,7 +27,9 @@ public class PartialCellEquality {
         Bytes.hashCode(cell.getFamilyArray(), cell.getFamilyOffset(), cell.getFamilyLength());
     final int qualifierHash =
         Bytes.hashCode(
-            cell.getQualifierArray(), cell.getQualifierOffset(), cell.getQualifierLength());
+            cell.getQualifierArray(),
+            cell.getQualifierOffset(),
+            cell.getQualifierLength());
 
     // combine the sub-hashes
     final int hash = (31 * familyHash) + qualifierHash;
@@ -58,7 +60,11 @@ public class PartialCellEquality {
 
   protected static boolean tagsEqual(final Cell a, final Cell b) {
     return Bytes.equals(
-        a.getTagsArray(), a.getTagsOffset(), a.getTagsLength(), b.getTagsArray(), b.getTagsOffset(),
+        a.getTagsArray(),
+        a.getTagsOffset(),
+        a.getTagsLength(),
+        b.getTagsArray(),
+        b.getTagsOffset(),
         b.getTagsLength());
   }
 }

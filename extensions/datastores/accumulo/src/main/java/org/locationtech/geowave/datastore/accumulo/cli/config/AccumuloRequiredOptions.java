@@ -27,22 +27,29 @@ public class AccumuloRequiredOptions extends StoreFactoryOptions {
   // This is a password label, not a password
   public static final String PASSWORD_CONFIG_KEY = "password";
 
-  @Parameter(names = {"-z", "--" + ZOOKEEPER_CONFIG_KEY},
+  @Parameter(
+      names = {"-z", "--" + ZOOKEEPER_CONFIG_KEY},
       description = "A comma-separated list of zookeeper servers that an Accumulo instance is using",
       required = true)
   private String zookeeper;
 
-  @Parameter(names = {"-i", "--" + INSTANCE_CONFIG_KEY}, description = "The Accumulo instance ID",
+  @Parameter(
+      names = {"-i", "--" + INSTANCE_CONFIG_KEY},
+      description = "The Accumulo instance ID",
       required = true)
   private String instance;
 
-  @Parameter(names = {"-u", "--" + USER_CONFIG_KEY}, description = "A valid Accumulo user ID",
+  @Parameter(
+      names = {"-u", "--" + USER_CONFIG_KEY},
+      description = "A valid Accumulo user ID",
       required = true)
   private String user;
 
-  @Parameter(names = {"-p", "--" + PASSWORD_CONFIG_KEY},
+  @Parameter(
+      names = {"-p", "--" + PASSWORD_CONFIG_KEY},
       description = "The password for the user. " + PasswordConverter.DEFAULT_PASSWORD_DESCRIPTION,
-      descriptionKey = "accumulo.pass.label", converter = PasswordConverter.class)
+      descriptionKey = "accumulo.pass.label",
+      converter = PasswordConverter.class)
   private String password;
 
   @ParametersDelegate

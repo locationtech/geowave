@@ -51,7 +51,8 @@ public class ConfigOptions {
   public static final String GEOWAVE_CACHE_FILE = "config.properties";
 
   /** Allow the user to override the config file location */
-  @Parameter(names = {"-cf", "--config-file"},
+  @Parameter(
+      names = {"-cf", "--config-file"},
       description = "Override configuration file (default is <home>/.geowave/config.properties)")
   private String configFile;
 
@@ -76,8 +77,11 @@ public class ConfigOptions {
     // What Fortify considers "user input" comes only
     // from users with OS-level access anyway
     final String cachePath =
-        String
-            .format("%s%s%s", System.getProperty("user.home"), File.separator, GEOWAVE_CACHE_PATH);
+        String.format(
+            "%s%s%s",
+            System.getProperty("user.home"),
+            File.separator,
+            GEOWAVE_CACHE_PATH);
     return new File(cachePath);
   }
 
@@ -125,7 +129,11 @@ public class ConfigOptions {
     // from users with OS-level access anyway
     final String configFile =
         String.format(
-            "%s%s%s%s%s", defaultPath.getAbsolutePath(), File.separator, version, "-",
+            "%s%s%s%s%s",
+            defaultPath.getAbsolutePath(),
+            File.separator,
+            version,
+            "-",
             GEOWAVE_CACHE_FILE);
     return new File(configFile);
   }
@@ -154,7 +162,8 @@ public class ConfigOptions {
       // to be explicitly disabled
       if (Boolean.parseBoolean(
           properties.getProperty(
-              Constants.ENCRYPTION_ENABLED_KEY, Constants.ENCRYPTION_ENABLED_DEFAULT))) {
+              Constants.ENCRYPTION_ENABLED_KEY,
+              Constants.ENCRYPTION_ENABLED_DEFAULT))) {
         // check if any values exist that need to be encrypted before
         // written to properties
         if (clazz != null) {
@@ -175,8 +184,9 @@ public class ConfigOptions {
                     try {
                       File tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(configFile);
                       encryptedValue =
-                          SecurityUtils
-                              .encryptAndHexEncodeValue(value, tokenFile.getAbsolutePath());
+                          SecurityUtils.encryptAndHexEncodeValue(
+                              value,
+                              tokenFile.getAbsolutePath());
                     } catch (Exception e) {
                       LOGGER.error(
                           "An error occurred encrypting specified password value: "
@@ -197,7 +207,8 @@ public class ConfigOptions {
       try (FileOutputStream str = new FileOutputStream(configFile)) {
         tmp.store(
             // HPFortify FP: passwords are stored encrypted
-            str, null);
+            str,
+            null);
       }
     } catch (FileNotFoundException e) {
       LOGGER.error("Could not find the property file.", e);

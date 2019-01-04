@@ -166,11 +166,16 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
           final double[][] nodata = optionProvider.getNodata(coverage.getNumSampleDimensions());
           for (int b = 0; b < coverage.getNumSampleDimensions(); b++) {
             final RasterDataAdapter adapter =
-                new RasterDataAdapter(baseName + "_B" + b, metadata,
-                    (GridCoverage2D) RasterUtils.getCoverageOperations()
-                        .selectSampleDimension(coverage, new int[] {b}),
-                    optionProvider.getTileSize(), optionProvider.isBuildPyramid(),
-                    optionProvider.isBuildHistogram(), new double[][] {nodata[b]});
+                new RasterDataAdapter(
+                    baseName + "_B" + b,
+                    metadata,
+                    (GridCoverage2D) RasterUtils.getCoverageOperations().selectSampleDimension(
+                        coverage,
+                        new int[] {b}),
+                    optionProvider.getTileSize(),
+                    optionProvider.isBuildPyramid(),
+                    optionProvider.isBuildHistogram(),
+                    new double[][] {nodata[b]});
             coverages.add(new GeoWaveData<>(adapter, indexNames, coverage));
           }
         } else {
@@ -178,7 +183,10 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
               new RasterDataAdapter(
                   optionProvider.getCoverageName() != null ? optionProvider.getCoverageName()
                       : input.getPath(),
-                  metadata, coverage, optionProvider.getTileSize(), optionProvider.isBuildPyramid(),
+                  metadata,
+                  coverage,
+                  optionProvider.getTileSize(),
+                  optionProvider.isBuildPyramid(),
                   optionProvider.isBuildHistogram(),
                   optionProvider.getNodata(coverage.getNumSampleDimensions()));
           coverages.add(new GeoWaveData<>(adapter, indexNames, coverage));

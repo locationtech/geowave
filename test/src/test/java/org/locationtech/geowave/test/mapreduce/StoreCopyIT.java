@@ -34,7 +34,10 @@ import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.MAP_REDUCE})
-@GeoWaveTestStore({GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.HBASE, GeoWaveStoreType.REDIS,
+@GeoWaveTestStore({
+    GeoWaveStoreType.ACCUMULO,
+    GeoWaveStoreType.HBASE,
+    GeoWaveStoreType.REDIS,
     GeoWaveStoreType.ROCKSDB})
 public class StoreCopyIT extends AbstractGeoWaveBasicVectorIT {
   private static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE =
@@ -78,7 +81,10 @@ public class StoreCopyIT extends AbstractGeoWaveBasicVectorIT {
     // Load some test data
     LOGGER.warn("Loading input data...");
     TestUtils.testLocalIngest(
-        inputDataStorePluginOptions, DimensionalityType.SPATIAL, HAIL_SHAPEFILE_FILE, 1);
+        inputDataStorePluginOptions,
+        DimensionalityType.SPATIAL,
+        HAIL_SHAPEFILE_FILE,
+        1);
 
     LOGGER.warn("Querying input data...");
     // Query the input store
@@ -86,12 +92,13 @@ public class StoreCopyIT extends AbstractGeoWaveBasicVectorIT {
       testQuery(
           new File(TEST_BOX_FILTER_FILE).toURI().toURL(),
           new URL[] {new File(HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),},
-          TestUtils.DEFAULT_SPATIAL_INDEX, "bounding box constraint only");
+          TestUtils.DEFAULT_SPATIAL_INDEX,
+          "bounding box constraint only");
     } catch (final Exception e) {
       e.printStackTrace();
       TestUtils.deleteAll(inputDataStorePluginOptions);
-      Assert
-          .fail("Error occurred while querying the input store: '" + e.getLocalizedMessage() + "'");
+      Assert.fail(
+          "Error occurred while querying the input store: '" + e.getLocalizedMessage() + "'");
     }
 
     LOGGER.warn("Execute storecopy job...");
@@ -138,7 +145,8 @@ public class StoreCopyIT extends AbstractGeoWaveBasicVectorIT {
       testQuery(
           new File(TEST_BOX_FILTER_FILE).toURI().toURL(),
           new URL[] {new File(HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),},
-          TestUtils.DEFAULT_SPATIAL_INDEX, "bounding box constraint only");
+          TestUtils.DEFAULT_SPATIAL_INDEX,
+          "bounding box constraint only");
     } catch (final Exception e) {
       e.printStackTrace();
       TestUtils.deleteAll(outputDataStorePluginOptions);

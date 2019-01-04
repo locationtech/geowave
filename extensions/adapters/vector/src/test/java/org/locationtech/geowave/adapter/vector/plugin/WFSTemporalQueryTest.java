@@ -44,8 +44,8 @@ public class WFSTemporalQueryTest extends BaseDataStoreTest {
   @Before
   public void setup() throws SchemaException, CQLException, IOException, GeoWavePluginException {
     dataStore = createDataStore();
-    ((GeoWaveGTDataStore) dataStore).indexStore
-        .addIndex(new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
+    ((GeoWaveGTDataStore) dataStore).indexStore.addIndex(
+        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
     type =
         DataUtilities.createType(
             "geostuff",
@@ -94,8 +94,10 @@ public class WFSTemporalQueryTest extends BaseDataStoreTest {
     populate();
     final Transaction transaction2 = new DefaultTransaction();
     final Query query =
-        new Query("geostuff", CQL.toFilter(
-            "BBOX(geometry,44,27,42,30) and start during 2005-05-16T20:32:56Z/2005-05-20T21:32:56Z and end during 2005-05-18T20:32:56Z/2005-05-22T21:32:56Z"),
+        new Query(
+            "geostuff",
+            CQL.toFilter(
+                "BBOX(geometry,44,27,42,30) and start during 2005-05-16T20:32:56Z/2005-05-20T21:32:56Z and end during 2005-05-18T20:32:56Z/2005-05-22T21:32:56Z"),
             new String[] {"geometry", "start", "end", "pid"});
     final FeatureReader<SimpleFeatureType, SimpleFeature> reader =
         dataStore.getFeatureReader(query, transaction2);

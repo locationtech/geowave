@@ -105,7 +105,9 @@ public class JsonDefinitionColumnVisibilityManagement<T>
       final String fieldName,
       final FieldVisibilityHandler<T, Object> defaultHandler,
       final String visibilityAttributeName) {
-    return new JsonDefinitionFieldLevelVisibilityHandler<T, Object>(fieldName, defaultHandler,
+    return new JsonDefinitionFieldLevelVisibilityHandler<T, Object>(
+        fieldName,
+        defaultHandler,
         visibilityAttributeName);
   }
 }

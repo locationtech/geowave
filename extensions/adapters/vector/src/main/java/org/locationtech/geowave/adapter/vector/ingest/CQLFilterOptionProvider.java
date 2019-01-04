@@ -24,7 +24,8 @@ import org.slf4j.LoggerFactory;
 public class CQLFilterOptionProvider implements Filter, Persistable {
   private static final Logger LOGGER = LoggerFactory.getLogger(CQLFilterOptionProvider.class);
 
-  @Parameter(names = "--cql",
+  @Parameter(
+      names = "--cql",
       description = "A CQL filter, only data matching this filter will be ingested",
       converter = ConvertCQLStrToFilterConverter.class)
   private FilterParameter convertedFilter = new FilterParameter(null, null);

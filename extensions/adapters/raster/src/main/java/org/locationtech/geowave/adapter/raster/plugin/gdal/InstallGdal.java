@@ -83,8 +83,8 @@ public class InstallGdal {
     if (downloadFile.exists() && (downloadFile.length() < 1)) {
       // its corrupt, delete it
       if (!downloadFile.delete()) {
-        LOGGER
-            .warn("File '" + downloadFile.getAbsolutePath() + "' is corrupt and cannot be deleted");
+        LOGGER.warn(
+            "File '" + downloadFile.getAbsolutePath() + "' is corrupt and cannot be deleted");
       }
     }
     if (!downloadFile.exists()) {
@@ -123,7 +123,8 @@ public class InstallGdal {
             if (lib.getName().startsWith(link.getName())) {
               if (link.delete()) {
                 Files.createSymbolicLink(
-                    link.getAbsoluteFile().toPath(), lib.getAbsoluteFile().toPath());
+                    link.getAbsoluteFile().toPath(),
+                    lib.getAbsoluteFile().toPath());
               }
               break;
             }

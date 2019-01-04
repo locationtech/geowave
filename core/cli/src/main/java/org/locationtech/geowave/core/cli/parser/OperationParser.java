@@ -175,8 +175,10 @@ public class OperationParser {
         operation = params.getOperationMap().get(operationEntry.getOperationName());
       } else {
         operation = operationEntry.createInstance();
-        params
-            .addOperation(operationEntry.getOperationName(), operation, operationEntry.isCommand());
+        params.addOperation(
+            operationEntry.getOperationName(),
+            operation,
+            operationEntry.isCommand());
       }
       commander.addPrefixedObject(operation);
 

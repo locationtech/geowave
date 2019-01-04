@@ -38,7 +38,8 @@ public class RecalculateStatsCommand extends AbstractStatsCommand<Void> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
 
-  @Parameter(names = {"--typeName"},
+  @Parameter(
+      names = {"--typeName"},
       description = "Optionally recalculate a single datatype's stats")
   private final String typeName = "";
 
@@ -70,20 +71,24 @@ public class RecalculateStatsCommand extends AbstractStatsCommand<Void> {
       final IndexStore indexStore = storeOptions.createIndexStore();
 
       boolean isFirstTime = true;
-      for (final Index index : mappingStore.getIndicesForAdapter(adapter.getAdapterId())
-          .getIndices(indexStore)) {
+      for (final Index index : mappingStore.getIndicesForAdapter(adapter.getAdapterId()).getIndices(
+          indexStore)) {
         @SuppressWarnings({"rawtypes", "unchecked"})
         final DataStoreStatisticsProvider provider =
             new DataStoreStatisticsProvider(adapter, index, isFirstTime);
         final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 
         try (StatsCompositionTool<?> statsTool =
-            new StatsCompositionTool(provider, storeOptions.createDataStatisticsStore(), index,
-                adapter, true)) {
+            new StatsCompositionTool(
+                provider,
+                storeOptions.createDataStatisticsStore(),
+                index,
+                adapter,
+                true)) {
           try (CloseableIterator<?> entryIt =
               ((BaseDataStore) dataStore).query(
-                  QueryBuilder.newBuilder().addTypeName(adapter.getTypeName())
-                      .indexName(index.getName()).setAuthorizations(authorizations).build(),
+                  QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+                      index.getName()).setAuthorizations(authorizations).build(),
                   (ScanCallback) statsTool)) {
             while (entryIt.hasNext()) {
               entryIt.next();

@@ -88,8 +88,7 @@ public class BasicQuery implements QueryConstraints {
       final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> newSet =
           new HashMap<>();
 
-      for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintSet.constraintsPerTypeOfDimensionDefinition
-          .entrySet()) {
+      for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintSet.constraintsPerTypeOfDimensionDefinition.entrySet()) {
         final ConstraintData data = constraintsPerTypeOfDimensionDefinition.get(entry.getKey());
 
         if (data == null) {
@@ -98,8 +97,7 @@ public class BasicQuery implements QueryConstraints {
           newSet.put(entry.getKey(), data.merge(entry.getValue()));
         }
       }
-      for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintsPerTypeOfDimensionDefinition
-          .entrySet()) {
+      for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintsPerTypeOfDimensionDefinition.entrySet()) {
         final ConstraintData data =
             constraintSet.constraintsPerTypeOfDimensionDefinition.get(entry.getKey());
 
@@ -118,8 +116,7 @@ public class BasicQuery implements QueryConstraints {
       if (constraints.isEmpty() != isEmpty()) {
         return false;
       }
-      for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintsPerTypeOfDimensionDefinition
-          .entrySet()) {
+      for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintsPerTypeOfDimensionDefinition.entrySet()) {
         final ConstraintData data =
             constraints.constraintsPerTypeOfDimensionDefinition.get(entry.getKey());
         if ((data == null) || !data.matches(entry.getValue())) {
@@ -138,8 +135,7 @@ public class BasicQuery implements QueryConstraints {
         return true;
       }
       boolean intersects = true;
-      for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintsPerTypeOfDimensionDefinition
-          .entrySet()) {
+      for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintsPerTypeOfDimensionDefinition.entrySet()) {
         final ConstraintData data =
             constraints.constraintsPerTypeOfDimensionDefinition.get(entry.getKey());
         intersects &= ((data != null) && data.intersects(entry.getValue()));
@@ -182,14 +178,14 @@ public class BasicQuery implements QueryConstraints {
       final Set<Integer> fieldsToTrim = new HashSet<>();
       for (int d = 0; d < dimensionFields.length; d++) {
         final ConstraintData nd =
-            constraintsPerTypeOfDimensionDefinition
-                .get(dimensionFields[d].getBaseDefinition().getClass());
+            constraintsPerTypeOfDimensionDefinition.get(
+                dimensionFields[d].getBaseDefinition().getClass());
         if (nd == null) {
           fieldsToTrim.add(d);
         } else {
           orderedConstraintsPerDimension[d] =
-              constraintsPerTypeOfDimensionDefinition
-                  .get(dimensionFields[d].getBaseDefinition().getClass()).range;
+              constraintsPerTypeOfDimensionDefinition.get(
+                  dimensionFields[d].getBaseDefinition().getClass()).range;
         }
       }
       if (!fieldsToTrim.isEmpty()) {
@@ -217,14 +213,15 @@ public class BasicQuery implements QueryConstraints {
       }
       return basicQuery.createQueryFilter(
           new BasicNumericDataset(orderedConstraintsPerDimension),
-          orderedConstrainedDimensionFields, unconstrainedDimensionFields, index);
+          orderedConstrainedDimensionFields,
+          unconstrainedDimensionFields,
+          index);
     }
 
     public byte[] toBinary() {
       final List<byte[]> bytes = new ArrayList<>(constraintsPerTypeOfDimensionDefinition.size());
       int totalBytes = VarintUtils.unsignedIntByteLength(bytes.size());
-      for (final Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> c : constraintsPerTypeOfDimensionDefinition
-          .entrySet()) {
+      for (final Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> c : constraintsPerTypeOfDimensionDefinition.entrySet()) {
         final byte[] className = StringUtils.stringToBinary(c.getKey().getName());
         final double min = c.getValue().range.getMin();
         final double max = c.getValue().range.getMax();
@@ -265,8 +262,9 @@ public class BasicQuery implements QueryConstraints {
         try {
           final Class<? extends NumericDimensionDefinition> cls =
               (Class<? extends NumericDimensionDefinition>) Class.forName(classNameStr);
-          constraintsPerTypeOfDimensionDefinition
-              .put(cls, new ConstraintData(new NumericRange(min, max), isDefault));
+          constraintsPerTypeOfDimensionDefinition.put(
+              cls,
+              new ConstraintData(new NumericRange(min, max), isDefault));
         } catch (final ClassNotFoundException e) {
           // HP Fortify "Improper Output Neutralization" false
           // positive
@@ -302,8 +300,11 @@ public class BasicQuery implements QueryConstraints {
       if (range.equals(cd.range)) {
         return new ConstraintData(range, isDefault);
       }
-      return new ConstraintData(new NumericRange(Math.min(cd.range.getMin(), range.getMin()),
-          Math.max(cd.range.getMax(), range.getMax())), false); // TODO: ideally, this would be set
+      return new ConstraintData(
+          new NumericRange(
+              Math.min(cd.range.getMin(), range.getMin()),
+              Math.max(cd.range.getMax(), range.getMax())),
+          false); // TODO: ideally, this would be set
       // based on some
       // logic
     }

@@ -56,8 +56,12 @@ import org.slf4j.LoggerFactory;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.MAP_REDUCE})
-@GeoWaveTestStore({GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE, GeoWaveStoreType.HBASE,
-    GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+@GeoWaveTestStore({
+    GeoWaveStoreType.ACCUMULO,
+    GeoWaveStoreType.BIGTABLE,
+    GeoWaveStoreType.HBASE,
+    GeoWaveStoreType.REDIS,
+    GeoWaveStoreType.ROCKSDB})
 public class CustomCRSKDERasterResizeIT {
   private static final String TEST_COVERAGE_NAME_PREFIX = "TEST_COVERAGE";
   private static final String TEST_RESIZE_COVERAGE_NAME_PREFIX = "TEST_RESIZE";
@@ -87,8 +91,9 @@ public class CustomCRSKDERasterResizeIT {
   @BeforeClass
   public static void extractTestFiles() throws URISyntaxException {
     ZipUtils.unZipFile(
-        new File(CustomCRSKDERasterResizeIT.class.getClassLoader()
-            .getResource(TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
+        new File(
+            CustomCRSKDERasterResizeIT.class.getClassLoader().getResource(
+                TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
         TestUtils.TEST_CASE_BASE);
     startMillis = System.currentTimeMillis();
     LOGGER.warn("-------------------------------------------------");
@@ -121,8 +126,12 @@ public class CustomCRSKDERasterResizeIT {
   public void testKDEAndRasterResize() throws Exception {
     TestUtils.deleteAll(inputDataStorePluginOptions);
     TestUtils.testLocalIngest(
-        inputDataStorePluginOptions, DimensionalityType.SPATIAL, "EPSG:4901", KDE_SHAPEFILE_FILE,
-        "geotools-vector", 1);
+        inputDataStorePluginOptions,
+        DimensionalityType.SPATIAL,
+        "EPSG:4901",
+        KDE_SHAPEFILE_FILE,
+        "geotools-vector",
+        1);
 
     File configFile = File.createTempFile("test_export", null);
     ManualOperationParams params = new ManualOperationParams();
@@ -153,11 +162,12 @@ public class CustomCRSKDERasterResizeIT {
     final double numCellsMinLevel =
         Math.round(TARGET_DECIMAL_DEGREES_SIZE / decimalDegreesPerCellMinLevel);
     final GeneralEnvelope queryEnvelope =
-        new GeneralEnvelope(new double[] {
-            // this is exactly on a tile boundary, so there will be no
-            // scaling on the tile composition/rendering
-            decimalDegreesPerCellMinLevel * cellOriginXMinLevel,
-            decimalDegreesPerCellMinLevel * cellOriginYMinLevel},
+        new GeneralEnvelope(
+            new double[] {
+                // this is exactly on a tile boundary, so there will be no
+                // scaling on the tile composition/rendering
+                decimalDegreesPerCellMinLevel * cellOriginXMinLevel,
+                decimalDegreesPerCellMinLevel * cellOriginYMinLevel},
             new double[] {
                 // these values are also on a tile boundary, to avoid
                 // scaling
@@ -195,7 +205,9 @@ public class CustomCRSKDERasterResizeIT {
           testSamplesMatch(
               TEST_COVERAGE_NAME_PREFIX,
               ((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1,
-              queryEnvelope, new Rectangle((int) (numCellsMinLevel * Math.pow(2, l)),
+              queryEnvelope,
+              new Rectangle(
+                  (int) (numCellsMinLevel * Math.pow(2, l)),
                   (int) (numCellsMinLevel * Math.pow(2, l))),
               null);
     }
@@ -231,8 +243,10 @@ public class CustomCRSKDERasterResizeIT {
     for (int l = 0; l < numLevels; l++) {
       testSamplesMatch(
           TEST_RESIZE_COVERAGE_NAME_PREFIX,
-          ((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1, queryEnvelope,
-          new Rectangle((int) (numCellsMinLevel * Math.pow(2, l)),
+          ((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1,
+          queryEnvelope,
+          new Rectangle(
+              (int) (numCellsMinLevel * Math.pow(2, l)),
               (int) (numCellsMinLevel * Math.pow(2, l))),
           initialSampleValuesPerRequestSize[l]);
     }
@@ -245,13 +259,13 @@ public class CustomCRSKDERasterResizeIT {
       final Rectangle pixelDimensions,
       double[][][] expectedResults) throws Exception {
     final StringBuilder str =
-        new StringBuilder(StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION).append("=")
-            .append(TEST_COVERAGE_NAMESPACE)
-            .append(";equalizeHistogramOverride=false;scaleTo8Bit=false;interpolationOverride=")
-            .append(Interpolation.INTERP_NEAREST);
+        new StringBuilder(StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION).append("=").append(
+            TEST_COVERAGE_NAMESPACE).append(
+                ";equalizeHistogramOverride=false;scaleTo8Bit=false;interpolationOverride=").append(
+                    Interpolation.INTERP_NEAREST);
 
-    str.append(";").append(GeoWaveStoreFinder.STORE_HINT_KEY).append("=")
-        .append(outputDataStorePluginOptions.getType());
+    str.append(";").append(GeoWaveStoreFinder.STORE_HINT_KEY).append("=").append(
+        outputDataStorePluginOptions.getType());
 
     final Map<String, String> options = outputDataStorePluginOptions.getOptionsAsMap();
 
@@ -271,7 +285,12 @@ public class CustomCRSKDERasterResizeIT {
       final String tileSizeCoverageName = coverageNamePrefix + i;
       final GridCoverage gridCoverage =
           reader.renderGridCoverage(
-              tileSizeCoverageName, pixelDimensions, queryEnvelope, Color.BLACK, null, null);
+              tileSizeCoverageName,
+              pixelDimensions,
+              queryEnvelope,
+              Color.BLACK,
+              null,
+              null);
       final RenderedImage image = gridCoverage.getRenderedImage();
       final Raster raster = image.getData();
       rasters[coverageCount++] = raster;
@@ -285,13 +304,16 @@ public class CustomCRSKDERasterResizeIT {
       } else {
         Assert.assertEquals(
             "The expected width does not match the expected width for the coverage " + i,
-            expectedResults.length, rasters[i].getWidth());
+            expectedResults.length,
+            rasters[i].getWidth());
         Assert.assertEquals(
             "The expected height does not match the expected height for the coverage " + i,
-            expectedResults[0].length, rasters[i].getHeight());
+            expectedResults[0].length,
+            rasters[i].getHeight());
         Assert.assertEquals(
             "The expected number of bands does not match the expected bands for the coverage " + i,
-            expectedResults[0][0].length, rasters[i].getNumBands());
+            expectedResults[0][0].length,
+            rasters[i].getNumBands());
       }
       for (int x = 0; x < rasters[i].getWidth(); x++) {
         for (int y = 0; y < rasters[i].getHeight(); y++) {
@@ -312,7 +334,8 @@ public class CustomCRSKDERasterResizeIT {
                       + y
                       + ",b="
                       + b,
-                  new Double(expectedResults[x][y][b]), new Double(sample));
+                  new Double(expectedResults[x][y][b]),
+                  new Double(sample));
             }
           }
         }

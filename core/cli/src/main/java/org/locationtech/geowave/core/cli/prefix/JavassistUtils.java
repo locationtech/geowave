@@ -126,7 +126,8 @@ public class JavassistUtils {
     }
     String desc =
         Descriptor.ofMethod(
-            pool.get(m.getReturnType().getName()), paramTypesCtClass.toArray(new CtClass[] {}));
+            pool.get(m.getReturnType().getName()),
+            paramTypesCtClass.toArray(new CtClass[] {}));
     CtMethod method = clz.getMethod(m.getName(), desc);
     return method;
   }
@@ -140,13 +141,15 @@ public class JavassistUtils {
   public static void copyClassAnnotations(CtClass oldClass, CtClass newClass) {
     // Load the existing annotations attributes
     AnnotationsAttribute classAnnotations =
-        (AnnotationsAttribute) oldClass.getClassFile()
-            .getAttribute(AnnotationsAttribute.visibleTag);
+        (AnnotationsAttribute) oldClass.getClassFile().getAttribute(
+            AnnotationsAttribute.visibleTag);
 
     // Clone them
     AnnotationsAttribute copyClassAttribute =
         JavassistUtils.cloneAnnotationsAttribute(
-            newClass.getClassFile2().getConstPool(), classAnnotations, ElementType.TYPE);
+            newClass.getClassFile2().getConstPool(),
+            classAnnotations,
+            ElementType.TYPE);
 
     // Set the annotations on the new class
     newClass.getClassFile().addAttribute(copyClassAttribute);
@@ -168,7 +171,9 @@ public class JavassistUtils {
     // Clone them
     AnnotationsAttribute copyMethodAttribute =
         JavassistUtils.cloneAnnotationsAttribute(
-            field.getFieldInfo2().getConstPool(), methodAnnotations, ElementType.FIELD);
+            field.getFieldInfo2().getConstPool(),
+            methodAnnotations,
+            ElementType.FIELD);
 
     // Set the annotations on the new class
     field.getFieldInfo().addAttribute(copyMethodAttribute);

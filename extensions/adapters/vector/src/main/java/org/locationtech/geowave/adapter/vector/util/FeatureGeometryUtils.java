@@ -31,13 +31,19 @@ public class FeatureGeometryUtils {
         VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(geomField).build();
     try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> geoStatIt =
         statisticsStore.getDataStatistics(
-            adapterId, query.getExtendedId(), query.getStatsType(), query.getAuthorizations())) {
+            adapterId,
+            query.getExtendedId(),
+            query.getStatsType(),
+            query.getAuthorizations())) {
       if (geoStatIt.hasNext()) {
         final InternalDataStatistics<?, ?, ?> geoStat = geoStatIt.next();
         if (geoStat != null) {
           if (geoStat instanceof FeatureBoundingBoxStatistics) {
             final FeatureBoundingBoxStatistics bbStats = (FeatureBoundingBoxStatistics) geoStat;
-            return new Envelope(bbStats.getMinX(), bbStats.getMaxX(), bbStats.getMinY(),
+            return new Envelope(
+                bbStats.getMinX(),
+                bbStats.getMaxX(),
+                bbStats.getMinY(),
                 bbStats.getMaxY());
           }
         }

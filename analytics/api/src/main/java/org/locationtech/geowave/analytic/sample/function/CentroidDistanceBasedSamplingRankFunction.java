@@ -74,9 +74,11 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements SamplingRan
       final PropertyManagement runTimeProperties) {
     NestedGroupCentroidAssignment.setParameters(config, scope, runTimeProperties);
     runTimeProperties.setConfig(
-        new ParameterEnum[] {SampleParameters.Sample.PROBABILITY_FUNCTION,
+        new ParameterEnum[] {
+            SampleParameters.Sample.PROBABILITY_FUNCTION,
             CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,},
-        config, scope);
+        config,
+        scope);
   }
 
   @SuppressWarnings("unchecked")
@@ -88,7 +90,8 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements SamplingRan
     try {
       sampleProbabilityFn =
           config.getInstance(
-              SampleParameters.Sample.PROBABILITY_FUNCTION, SampleProbabilityFn.class,
+              SampleParameters.Sample.PROBABILITY_FUNCTION,
+              SampleProbabilityFn.class,
               RandomProbabilitySampleFn.class);
     } catch (final Exception e) {
       throw new IOException(e);
@@ -97,7 +100,8 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements SamplingRan
     try {
       itemWrapperFactory =
           config.getInstance(
-              CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, AnalyticItemWrapperFactory.class,
+              CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+              AnalyticItemWrapperFactory.class,
               SimpleFeatureItemWrapperFactory.class);
 
       itemWrapperFactory.initialize(context, scope, logger);
@@ -126,8 +130,8 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements SamplingRan
             public void notify(final CentroidPairing<T> pairing) {
               try {
                 centroids.addAll(
-                    nestedGroupCentroidAssigner
-                        .getCentroidsForGroup(pairing.getCentroid().getGroupID()));
+                    nestedGroupCentroidAssigner.getCentroidsForGroup(
+                        pairing.getCentroid().getGroupID()));
               } catch (final IOException e) {
                 throw new RuntimeException(e);
               }
@@ -137,7 +141,9 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements SamplingRan
       throw new RuntimeException(e);
     }
     return sampleProbabilityFn.getProbability(
-        weight, getNormalizingConstant(centroids.get(0).getGroupID(), centroids), sampleSize);
+        weight,
+        getNormalizingConstant(centroids.get(0).getGroupID(), centroids),
+        sampleSize);
   }
 
   private double getNormalizingConstant(

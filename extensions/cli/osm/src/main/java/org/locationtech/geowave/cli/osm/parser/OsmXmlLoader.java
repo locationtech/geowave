@@ -66,9 +66,12 @@ public class OsmXmlLoader implements Sink {
     for (WayNode wn : way.getWayNodes()) {
       Node n = getNodeById(wn);
       if (n == null) {
-        throw new IOException(String.format(
-            "Error while parsing OSM XML: Node %s in Way %s (length: %s) is not declared in the document!",
-            wn.getNodeId(), way.getId(), way.getWayNodes().size()));
+        throw new IOException(
+            String.format(
+                "Error while parsing OSM XML: Node %s in Way %s (length: %s) is not declared in the document!",
+                wn.getNodeId(),
+                way.getId(),
+                way.getWayNodes().size()));
       }
       wayNodes.add(n);
     }
@@ -142,15 +145,24 @@ public class OsmXmlLoader implements Sink {
 
   public static void print(Node node) {
     System.out.format(
-        "%s: %10s (%-10s, %-10s), version %2s by %s%n", "Node", node.getId(), node.getLatitude(),
-        node.getLongitude(), String.valueOf(node.getVersion()), node.getUser().getName());
+        "%s: %10s (%-10s, %-10s), version %2s by %s%n",
+        "Node",
+        node.getId(),
+        node.getLatitude(),
+        node.getLongitude(),
+        String.valueOf(node.getVersion()),
+        node.getUser().getName());
     printTags(node.getTags());
   }
 
   public static void print(Way way) {
     System.out.format(
-        "%s: %10s, version %2s by %s with %s waypoints%n", "Way", way.getId(), way.getVersion(),
-        way.getUser().getName(), way.getWayNodes().size());
+        "%s: %10s, version %2s by %s with %s waypoints%n",
+        "Way",
+        way.getId(),
+        way.getVersion(),
+        way.getUser().getName(),
+        way.getWayNodes().size());
     printTags(way.getTags());
   }
 

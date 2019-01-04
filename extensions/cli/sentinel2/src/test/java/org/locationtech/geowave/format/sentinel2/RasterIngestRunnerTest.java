@@ -37,8 +37,9 @@ public class RasterIngestRunnerTest {
     // Skip this test if we're on a Mac
     org.junit.Assume.assumeTrue(isNotMac());
 
-    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies()
-        .put("memory", new MemoryStoreFactoryFamily());
+    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+        "memory",
+        new MemoryStoreFactoryFamily());
 
     InstallGdal.main(new String[] {System.getenv("GDAL_DIR")});
   }
@@ -102,13 +103,18 @@ public class RasterIngestRunnerTest {
     ingestOptions.setCreateHistogram(true);
 
     RasterIngestRunner runner =
-        new RasterIngestRunner(analyzeOptions, downloadOptions, ingestOptions,
+        new RasterIngestRunner(
+            analyzeOptions,
+            downloadOptions,
+            ingestOptions,
             Arrays.asList("memorystore", "spatialindex"));
 
     ManualOperationParams params = new ManualOperationParams();
     params.getContext().put(
-        ConfigOptions.PROPERTIES_FILE_CONTEXT, new File(RasterIngestRunnerTest.class
-            .getClassLoader().getResource("geowave-config.properties").toURI()));
+        ConfigOptions.PROPERTIES_FILE_CONTEXT,
+        new File(
+            RasterIngestRunnerTest.class.getClassLoader().getResource(
+                "geowave-config.properties").toURI()));
 
     runner.runInternal(params);
 

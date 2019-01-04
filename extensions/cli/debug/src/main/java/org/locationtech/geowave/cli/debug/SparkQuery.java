@@ -55,8 +55,7 @@ public class SparkQuery extends AbstractGeoWaveQuery {
     String jar = "";
     try {
       jar =
-          SpatialJoinRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI()
-              .getPath();
+          SpatialJoinRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
     } catch (final URISyntaxException e) {
       LOGGER.error("Unable to set jar location in spark configuration", e);
     }
@@ -80,8 +79,10 @@ public class SparkQuery extends AbstractGeoWaveQuery {
     rddOptions.setQuery(bldr.constraints(bldr.constraintsFactory().cqlConstraints(cqlStr)).build());
     try {
       count =
-          GeoWaveRDDLoader.loadRDD(session.sparkContext(), pluginOptions, rddOptions).getRawRDD()
-              .count();
+          GeoWaveRDDLoader.loadRDD(
+              session.sparkContext(),
+              pluginOptions,
+              rddOptions).getRawRDD().count();
     } catch (IOException e) {
       LOGGER.warn("Unable to load RDD", e);
     }

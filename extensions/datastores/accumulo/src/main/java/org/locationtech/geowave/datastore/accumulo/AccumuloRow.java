@@ -58,8 +58,10 @@ public class AccumuloRow implements GeoWaveRow {
     for (final Map<Key, Value> kvMap : fieldValueMapList) {
       for (final Entry<Key, Value> kv : kvMap.entrySet()) {
         fieldValueList.add(
-            new GeoWaveValueImpl(kv.getKey().getColumnQualifier().getBytes(),
-                kv.getKey().getColumnVisibility().getBytes(), kv.getValue().get()));
+            new GeoWaveValueImpl(
+                kv.getKey().getColumnQualifier().getBytes(),
+                kv.getKey().getColumnVisibility().getBytes(),
+                kv.getValue().get()));
       }
     }
 
@@ -78,8 +80,10 @@ public class AccumuloRow implements GeoWaveRow {
       for (final Entry<Key, Value> kv : kvMap.entrySet()) {
         fieldValueSortedMap.put(
             kv.getKey().getTimestamp(),
-            new GeoWaveValueImpl(kv.getKey().getColumnQualifier().getBytes(),
-                kv.getKey().getColumnVisibility().getBytes(), kv.getValue().get()));
+            new GeoWaveValueImpl(
+                kv.getKey().getColumnQualifier().getBytes(),
+                kv.getKey().getColumnVisibility().getBytes(),
+                kv.getValue().get()));
       }
     }
 

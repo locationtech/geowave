@@ -52,8 +52,11 @@ public class StatsManagerTest {
             "sp.geostuff",
             "geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,whennot:Date,somewhere:Polygon,pid:String");
     dataAdapter =
-        new InternalDataAdapterWrapper<>(new FeatureDataAdapter(schema,
-            new GlobalVisibilityHandler<SimpleFeature, Object>("default")), (short) -1);
+        new InternalDataAdapterWrapper<>(
+            new FeatureDataAdapter(
+                schema,
+                new GlobalVisibilityHandler<SimpleFeature, Object>("default")),
+            (short) -1);
   }
 
   @Test
@@ -63,36 +66,41 @@ public class StatsManagerTest {
     assertTrue(ids.length > 6);
     assertTrue(
         ArrayUtils.contains(
-            ids, FeatureNumericRangeStatistics.STATS_TYPE.newBuilder().fieldName("pop").build()
-                .getId()));
+            ids,
+            FeatureNumericRangeStatistics.STATS_TYPE.newBuilder().fieldName(
+                "pop").build().getId()));
     assertTrue(
         ArrayUtils.contains(
-            ids, VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName("somewhere")
-                .build().getId()));
+            ids,
+            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+                "somewhere").build().getId()));
     assertTrue(
         ArrayUtils.contains(
-            ids, VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName("geometry")
-                .build().getId()));
+            ids,
+            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+                "geometry").build().getId()));
     assertTrue(
         ArrayUtils.contains(
-            ids, VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName("when")
-                .build().getId()));
+            ids,
+            VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+                "when").build().getId()));
     assertTrue(
         ArrayUtils.contains(
-            ids, VectorStatisticsQueryBuilder.newBuilder().factory().timeRange()
-                .fieldName("whennot").build().getId()));
+            ids,
+            VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+                "whennot").build().getId()));
 
     // can each type be created uniquely
     InternalDataStatistics<SimpleFeature, ?, ?> stat =
         statsManager.createDataStatistics(
-            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName("somewhere")
-                .build().getId());
+            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+                "somewhere").build().getId());
     stat.setAdapterId((short) -1);
     assertNotNull(stat);
     assertFalse(
         stat == statsManager.createDataStatistics(
-            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName("somewhere")
-                .build().getId()));
+            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+                "somewhere").build().getId()));
 
     final FeatureBoundingBoxStatistics newStat =
         new FeatureBoundingBoxStatistics((short) -1, "somewhere");
@@ -102,13 +110,13 @@ public class StatsManagerTest {
 
     stat =
         statsManager.createDataStatistics(
-            VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName("when")
-                .build().getId());
+            VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+                "when").build().getId());
     assertNotNull(stat);
     assertFalse(
         stat == statsManager.createDataStatistics(
-            VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName("when")
-                .build().getId()));
+            VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+                "when").build().getId()));
 
     stat =
         statsManager.createDataStatistics(
@@ -116,8 +124,8 @@ public class StatsManagerTest {
     assertNotNull(stat);
     assertFalse(
         stat == statsManager.createDataStatistics(
-            FeatureNumericRangeStatistics.STATS_TYPE.newBuilder().fieldName("pop").build()
-                .getId()));
+            FeatureNumericRangeStatistics.STATS_TYPE.newBuilder().fieldName(
+                "pop").build().getId()));
   }
 
   @Test
@@ -129,14 +137,23 @@ public class StatsManagerTest {
             "geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,whennot:Date,somewhere:Polygon,pid:String");
 
     schema.getDescriptor(1).getUserData().put(
-        "stats", new StatsConfigurationCollection(Arrays
-            .asList(new FeatureFixedBinConfig(0.0, 1.0, 24), new FeatureNumericHistogramConfig())));
+        "stats",
+        new StatsConfigurationCollection(
+            Arrays.asList(
+                new FeatureFixedBinConfig(0.0, 1.0, 24),
+                new FeatureNumericHistogramConfig())));
     schema.getDescriptor(5).getUserData().put(
-        "stats", new StatsConfigurationCollection(Arrays.asList(
-            new FeatureCountMinSketchConfig(0.01, 0.97), new FeatureHyperLogLogConfig(24))));
+        "stats",
+        new StatsConfigurationCollection(
+            Arrays.asList(
+                new FeatureCountMinSketchConfig(0.01, 0.97),
+                new FeatureHyperLogLogConfig(24))));
     final InternalDataAdapter<SimpleFeature> dataAdapter =
-        new InternalDataAdapterWrapper<>(new FeatureDataAdapter(schema,
-            new GlobalVisibilityHandler<SimpleFeature, Object>("default")), (short) -1);
+        new InternalDataAdapterWrapper<>(
+            new FeatureDataAdapter(
+                schema,
+                new GlobalVisibilityHandler<SimpleFeature, Object>("default")),
+            (short) -1);
 
     final StatsManager statsManager = new StatsManager(dataAdapter, schema);
 
@@ -144,13 +161,13 @@ public class StatsManagerTest {
     assertEquals(9, ids.length);
     InternalDataStatistics<SimpleFeature, ?, ?> stat =
         statsManager.createDataStatistics(
-            FeatureFixedBinNumericStatistics.STATS_TYPE.newBuilder().fieldName("pop").build()
-                .getId());
+            FeatureFixedBinNumericStatistics.STATS_TYPE.newBuilder().fieldName(
+                "pop").build().getId());
     assertNotNull(stat);
     stat =
         statsManager.createDataStatistics(
-            FeatureNumericHistogramStatistics.STATS_TYPE.newBuilder().fieldName("pop").build()
-                .getId());
+            FeatureNumericHistogramStatistics.STATS_TYPE.newBuilder().fieldName(
+                "pop").build().getId());
     assertNotNull(stat);
     stat =
         statsManager.createDataStatistics(
@@ -158,8 +175,8 @@ public class StatsManagerTest {
     assertNotNull(stat);
     stat =
         statsManager.createDataStatistics(
-            FeatureCountMinSketchStatistics.STATS_TYPE.newBuilder().fieldName("pid").build()
-                .getId());
+            FeatureCountMinSketchStatistics.STATS_TYPE.newBuilder().fieldName(
+                "pid").build().getId());
     assertNotNull(stat);
 
     final SimpleFeatureUserDataConfigurationSet config =

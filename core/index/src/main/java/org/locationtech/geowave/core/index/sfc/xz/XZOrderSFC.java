@@ -83,8 +83,8 @@ public class XZOrderSFC implements SpaceFillingCurve {
     }
 
     if (values.length != dimensionCount * 2) {
-      LOGGER
-          .error("Point or bounding box value count does not match number of indexed dimensions.");
+      LOGGER.error(
+          "Point or bounding box value count does not match number of indexed dimensions.");
       return null;
     }
     normalize(values);
@@ -213,7 +213,8 @@ public class XZOrderSFC implements SpaceFillingCurve {
     }
 
     public XElement(XElement xElement) {
-      this(Arrays.copyOf(xElement.minsPerDimension, xElement.minsPerDimension.length),
+      this(
+          Arrays.copyOf(xElement.minsPerDimension, xElement.minsPerDimension.length),
           Arrays.copyOf(xElement.maxesPerDimension, xElement.maxesPerDimension.length),
           xElement.length);
     }

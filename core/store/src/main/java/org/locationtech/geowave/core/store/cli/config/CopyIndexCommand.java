@@ -30,7 +30,8 @@ public class CopyIndexCommand extends DefaultOperation implements Command {
   @Parameter(description = "<name> <new name>")
   private List<String> parameters = new ArrayList<String>();
 
-  @Parameter(names = {"-d", "--default"},
+  @Parameter(
+      names = {"-d", "--default"},
       description = "Make this the default index creating stores")
   private Boolean makeDefault;
 

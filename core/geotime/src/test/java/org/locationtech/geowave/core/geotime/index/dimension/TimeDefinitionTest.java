@@ -43,7 +43,8 @@ public class TimeDefinitionTest {
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
     Assert.assertEquals(
-        bin.getBinMax(), bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
+        bin.getBinMax(),
+        bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
         DELTA);
   }
 
@@ -67,7 +68,8 @@ public class TimeDefinitionTest {
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
     Assert.assertEquals(
-        bin.getBinMax(), bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
+        bin.getBinMax(),
+        bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
         DELTA);
   }
 
@@ -91,7 +93,8 @@ public class TimeDefinitionTest {
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
     Assert.assertEquals(
-        bin.getBinMin(), bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
+        bin.getBinMin(),
+        bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
         DELTA);
   }
 
@@ -116,7 +119,8 @@ public class TimeDefinitionTest {
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
     Assert.assertEquals(
-        bin.getBinMax(), bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
+        bin.getBinMax(),
+        bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
         DELTA);
   }
 
@@ -137,7 +141,8 @@ public class TimeDefinitionTest {
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
     Assert.assertEquals(
-        bin.getBinMax(), bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
+        bin.getBinMax(),
+        bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
         DELTA);
 
     calendar.set(Calendar.MINUTE, 0);
@@ -145,7 +150,8 @@ public class TimeDefinitionTest {
     calendar.set(Calendar.MILLISECOND, 0);
 
     Assert.assertEquals(
-        bin.getBinMin(), bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
+        bin.getBinMin(),
+        bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
         DELTA);
   }
 
@@ -165,14 +171,16 @@ public class TimeDefinitionTest {
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
     Assert.assertEquals(
-        bin.getBinMax(), bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
+        bin.getBinMax(),
+        bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
         DELTA);
 
     calendar.set(Calendar.SECOND, 0);
     calendar.set(Calendar.MILLISECOND, 0);
 
     Assert.assertEquals(
-        bin.getBinMin(), bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
+        bin.getBinMin(),
+        bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
         DELTA);
   }
 
@@ -197,7 +205,8 @@ public class TimeDefinitionTest {
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
     Assert.assertEquals(
-        bin.getBinMax(), bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
+        bin.getBinMax(),
+        bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
         DELTA);
   }
 
@@ -220,7 +229,8 @@ public class TimeDefinitionTest {
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
     Assert.assertEquals(
-        bin.getBinMax(), bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
+        bin.getBinMax(),
+        bin.getBinnedValue(calendar.getTimeInMillis()).getNormalizedValue(),
         DELTA);
   }
 

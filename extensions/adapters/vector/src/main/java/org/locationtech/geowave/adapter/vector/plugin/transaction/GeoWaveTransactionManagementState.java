@@ -57,8 +57,8 @@ public class GeoWaveTransactionManagementState implements GeoWaveTransactionStat
       this.transaction = null;
 
       if (typeNameDiff != null) {
-        for (final Iterator<GeoWaveTransactionManagement> i = typeNameDiff.values().iterator(); i
-            .hasNext();) {
+        for (final Iterator<GeoWaveTransactionManagement> i =
+            typeNameDiff.values().iterator(); i.hasNext();) {
           final GeoWaveTransactionManagement diff = i.next();
           diff.clear();
         }
@@ -79,8 +79,13 @@ public class GeoWaveTransactionManagementState implements GeoWaveTransactionStat
       return typeNameDiff.get(typeName);
     } else {
       final GeoWaveTransactionManagement transX =
-          new GeoWaveTransactionManagement(transactionBufferSize, components, typeName, transaction,
-              lockingManager, txID);
+          new GeoWaveTransactionManagement(
+              transactionBufferSize,
+              components,
+              typeName,
+              transaction,
+              lockingManager,
+              txID);
       typeNameDiff.put(typeName, transX);
 
       return transX;

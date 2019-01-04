@@ -100,31 +100,53 @@ public class SampleModelPersistenceUtils {
     switch (sampleModelType) {
       case TYPE_PIXEL_INTERLEAVED:
         return createPixelInterleavedSampleModel(
-            sm.getTransferType(), sm.getWidth(), sm.getHeight(), sm.getPixelStride(),
+            sm.getTransferType(),
+            sm.getWidth(),
+            sm.getHeight(),
+            sm.getPixelStride(),
             sm.getScanlineStride(),
             DataBufferPersistenceUtils.integerListToPrimitiveArray(sm.getBandOffsetsList()));
       case TYPE_BANDED:
         return createBandedSampleModel(
-            sm.getTransferType(), sm.getWidth(), sm.getHeight(), sm.getScanlineStride(),
+            sm.getTransferType(),
+            sm.getWidth(),
+            sm.getHeight(),
+            sm.getScanlineStride(),
             DataBufferPersistenceUtils.integerListToPrimitiveArray(sm.getBankIndicesList()),
             DataBufferPersistenceUtils.integerListToPrimitiveArray(sm.getBandOffsetsList()));
       case TYPE_COMPONENT_JAI:
-        return new InternalComponentSampleModelJAI(sm.getTransferType(), sm.getWidth(),
-            sm.getHeight(), sm.getPixelStride(), sm.getScanlineStride(),
+        return new InternalComponentSampleModelJAI(
+            sm.getTransferType(),
+            sm.getWidth(),
+            sm.getHeight(),
+            sm.getPixelStride(),
+            sm.getScanlineStride(),
             DataBufferPersistenceUtils.integerListToPrimitiveArray(sm.getBankIndicesList()),
             DataBufferPersistenceUtils.integerListToPrimitiveArray(sm.getBandOffsetsList()));
       case TYPE_COMPONENT:
-        return new ComponentSampleModel(sm.getTransferType(), sm.getWidth(), sm.getHeight(),
-            sm.getPixelStride(), sm.getScanlineStride(),
+        return new ComponentSampleModel(
+            sm.getTransferType(),
+            sm.getWidth(),
+            sm.getHeight(),
+            sm.getPixelStride(),
+            sm.getScanlineStride(),
             DataBufferPersistenceUtils.integerListToPrimitiveArray(sm.getBankIndicesList()),
             DataBufferPersistenceUtils.integerListToPrimitiveArray(sm.getBandOffsetsList()));
       case TYPE_SINGLE_PIXEL_PACKED:
-        return new SinglePixelPackedSampleModel(sm.getTransferType(), sm.getWidth(), sm.getHeight(),
+        return new SinglePixelPackedSampleModel(
+            sm.getTransferType(),
+            sm.getWidth(),
+            sm.getHeight(),
             sm.getScanlineStride(),
             DataBufferPersistenceUtils.integerListToPrimitiveArray(sm.getBitMasksList()));
       case TYPE_MULTI_PIXEL_PACKED:
-        return new MultiPixelPackedSampleModel(sm.getTransferType(), sm.getWidth(), sm.getHeight(),
-            sm.getPixelBitStride(), sm.getScanlineStride(), sm.getDataBitOffset());
+        return new MultiPixelPackedSampleModel(
+            sm.getTransferType(),
+            sm.getWidth(),
+            sm.getHeight(),
+            sm.getPixelBitStride(),
+            sm.getScanlineStride(),
+            sm.getDataBitOffset());
       default:
         throw new RuntimeException(
             "Unsupported sample model type for deserialization " + sampleModelType);
@@ -154,12 +176,19 @@ public class SampleModelPersistenceUtils {
       }
     }
     if (bandOffsets.length != bankIndices.length) {
-      throw new IllegalArgumentException("Band Offsets "
-          + bandOffsets.length
-          + " doesn't match Bank Indicies "
-          + bankIndices.length);
+      throw new IllegalArgumentException(
+          "Band Offsets "
+              + bandOffsets.length
+              + " doesn't match Bank Indicies "
+              + bankIndices.length);
     }
-    return new InternalComponentSampleModelJAI(dataType, width, height, 1, width, bankIndices,
+    return new InternalComponentSampleModelJAI(
+        dataType,
+        width,
+        height,
+        1,
+        width,
+        bankIndices,
         bandOffsets);
   }
 
@@ -181,18 +210,20 @@ public class SampleModelPersistenceUtils {
     }
     maxBandOff -= minBandOff;
     if (maxBandOff > scanlineStride) {
-      throw new IllegalArgumentException("max Band Offset ("
-          + maxBandOff
-          + ") must be > scanline stride ("
-          + scanlineStride
-          + ")");
+      throw new IllegalArgumentException(
+          "max Band Offset ("
+              + maxBandOff
+              + ") must be > scanline stride ("
+              + scanlineStride
+              + ")");
     }
     if ((pixelStride * width) > scanlineStride) {
-      throw new IllegalArgumentException("pixelStride*width ("
-          + pixelStride * width
-          + ") must be > scanline stride ("
-          + scanlineStride
-          + ")");
+      throw new IllegalArgumentException(
+          "pixelStride*width ("
+              + pixelStride * width
+              + ") must be > scanline stride ("
+              + scanlineStride
+              + ")");
     }
     if (pixelStride < maxBandOff) {
       throw new IllegalArgumentException(
@@ -202,14 +233,24 @@ public class SampleModelPersistenceUtils {
     switch (dataType) {
       case DataBuffer.TYPE_BYTE:
       case DataBuffer.TYPE_USHORT:
-        return new PixelInterleavedSampleModel(dataType, width, height, pixelStride, scanlineStride,
+        return new PixelInterleavedSampleModel(
+            dataType,
+            width,
+            height,
+            pixelStride,
+            scanlineStride,
             bandOffsets);
       case DataBuffer.TYPE_INT:
       case DataBuffer.TYPE_SHORT:
       case DataBuffer.TYPE_FLOAT:
       case DataBuffer.TYPE_DOUBLE:
-        return new InternalComponentSampleModelJAI(dataType, width, height, pixelStride,
-            scanlineStride, bandOffsets);
+        return new InternalComponentSampleModelJAI(
+            dataType,
+            width,
+            height,
+            pixelStride,
+            scanlineStride,
+            bandOffsets);
       default:
         throw new IllegalArgumentException("Unsupported data buffer type");
     }
@@ -430,8 +471,14 @@ public class SampleModelPersistenceUtils {
         newBankIndices[i] = bankIndices[b];
         newBandOffsets[i] = bandOffsets[b];
       }
-      return new ComponentSampleModelJAI(this.dataType, width, height, this.pixelStride,
-          this.scanlineStride, newBankIndices, newBandOffsets);
+      return new ComponentSampleModelJAI(
+          this.dataType,
+          width,
+          height,
+          this.pixelStride,
+          this.scanlineStride,
+          newBankIndices,
+          newBandOffsets);
     }
 
     /**

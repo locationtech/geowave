@@ -52,8 +52,9 @@ public class VersionIterator implements SortedKeyValueIterator<Key, Value> {
 
   @Override
   public Value getTopValue() {
-    return new Value(StringUtils
-        .stringToBinary(VersionUtils.asLineDelimitedString(VersionUtils.getVersionInfo())));
+    return new Value(
+        StringUtils.stringToBinary(
+            VersionUtils.asLineDelimitedString(VersionUtils.getVersionInfo())));
   }
 
   @Override

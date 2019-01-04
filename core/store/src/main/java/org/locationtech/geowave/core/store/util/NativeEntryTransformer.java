@@ -44,8 +44,14 @@ public class NativeEntryTransformer<T> implements GeoWaveRowIteratorTransformer<
 
   @Override
   public Iterator<T> apply(Iterator<GeoWaveRow> rowIter) {
-    return new NativeEntryIteratorWrapper<T>(adapterStore, index, rowIter, clientFilter,
-        scanCallback, fieldSubsetBitmask, maxResolutionSubsamplingPerDimension,
+    return new NativeEntryIteratorWrapper<T>(
+        adapterStore,
+        index,
+        rowIter,
+        clientFilter,
+        scanCallback,
+        fieldSubsetBitmask,
+        maxResolutionSubsamplingPerDimension,
         decodePersistenceEncoding);
   }
 }

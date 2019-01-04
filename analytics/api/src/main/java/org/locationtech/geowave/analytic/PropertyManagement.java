@@ -116,10 +116,14 @@ public class PropertyManagement implements Serializable {
     try {
       convertedValue = converter.convert(value);
     } catch (final Exception e) {
-      throw new IllegalArgumentException(String.format(
-          "Cannot store %s with value %s. Expected type = %s; Error message = %s",
-          property.self().toString(), value.toString(),
-          property.getHelper().getBaseClass().toString(), e.getLocalizedMessage()), e);
+      throw new IllegalArgumentException(
+          String.format(
+              "Cannot store %s with value %s. Expected type = %s; Error message = %s",
+              property.self().toString(),
+              value.toString(),
+              property.getHelper().getBaseClass().toString(),
+              e.getLocalizedMessage()),
+          e);
     }
     localProperties.put(property, convertedValue);
     addConverter(converter);
@@ -131,9 +135,12 @@ public class PropertyManagement implements Serializable {
       try {
         convertedValue = convertIfNecessary(property, value);
       } catch (final Exception e) {
-        throw new IllegalArgumentException(String.format(
-            "Cannot store %s with value %s:%s", property.self().toString(), value.toString(),
-            e.getLocalizedMessage()));
+        throw new IllegalArgumentException(
+            String.format(
+                "Cannot store %s with value %s:%s",
+                property.self().toString(),
+                value.toString(),
+                e.getLocalizedMessage()));
       }
       localProperties.put(property, convertedValue);
     }
@@ -161,8 +168,8 @@ public class PropertyManagement implements Serializable {
 
   public synchronized void storeAll(final ParameterEnum<?>[] names, final Object[] values) {
     if (values.length != names.length) {
-      LOGGER
-          .error("The number of values must equal the number of names passed to the store method");
+      LOGGER.error(
+          "The number of values must equal the number of names passed to the store method");
       throw new IllegalArgumentException(
           "The number of values must equal the number of names passed to the store method");
     }
@@ -185,7 +192,8 @@ public class PropertyManagement implements Serializable {
       } catch (final Exception e) {
         LOGGER.error("Property " + param.self().toString() + " is not available", e);
         throw new IllegalArgumentException(
-            "Property " + param.self().toString() + " is not available", e);
+            "Property " + param.self().toString() + " is not available",
+            e);
       }
     }
   }
@@ -327,7 +335,8 @@ public class PropertyManagement implements Serializable {
       final String[] parts = p.split(",");
       try {
         if (parts.length == 2) {
-          return new NumericRange(Double.parseDouble(parts[0].trim()),
+          return new NumericRange(
+              Double.parseDouble(parts[0].trim()),
               Double.parseDouble(parts[1].trim()));
         } else {
           return new NumericRange(0, Double.parseDouble(p));
@@ -349,7 +358,8 @@ public class PropertyManagement implements Serializable {
       }
       try {
         return validate(
-            (Class<?>) Class.forName(val.toString()), property.getHelper().getBaseClass());
+            (Class<?>) Class.forName(val.toString()),
+            property.getHelper().getBaseClass());
       } catch (final ClassNotFoundException e) {
         LOGGER.error("Class not found for property " + property, e);
       } catch (final java.lang.IllegalArgumentException ex) {
@@ -369,7 +379,8 @@ public class PropertyManagement implements Serializable {
       }
       try {
         return validate(
-            (Class<T>) Class.forName(val.toString()), property.getHelper().getBaseClass());
+            (Class<T>) Class.forName(val.toString()),
+            property.getHelper().getBaseClass());
       } catch (final ClassNotFoundException e) {
         LOGGER.error("Class not found for property " + property.self().toString());
         throw e;
@@ -394,7 +405,8 @@ public class PropertyManagement implements Serializable {
       }
       try {
         return validate(
-            (Class<T>) Class.forName(val.toString()), property.getHelper().getBaseClass());
+            (Class<T>) Class.forName(val.toString()),
+            property.getHelper().getBaseClass());
       } catch (final ClassNotFoundException e) {
         LOGGER.error("Class not found for property " + property, e);
       } catch (final java.lang.IllegalArgumentException ex) {
@@ -483,14 +495,18 @@ public class PropertyManagement implements Serializable {
     if (value != null) {
       if (value instanceof Class) {
         if (((Class<?>) value).isAssignableFrom(propertyName.getHelper().getBaseClass())) {
-          throw new IllegalArgumentException(String.format(
-              "%s does not accept class %s", propertyName.self().toString(),
-              ((Class<?>) value).getName()));
+          throw new IllegalArgumentException(
+              String.format(
+                  "%s does not accept class %s",
+                  propertyName.self().toString(),
+                  ((Class<?>) value).getName()));
         }
       } else if (!propertyName.getHelper().getBaseClass().isInstance(value)) {
-        throw new IllegalArgumentException(String.format(
-            "%s does not accept type %s", propertyName.self().toString(),
-            value.getClass().getName()));
+        throw new IllegalArgumentException(
+            String.format(
+                "%s does not accept type %s",
+                propertyName.self().toString(),
+                value.getClass().getName()));
       }
     }
     return value;
@@ -543,8 +559,11 @@ public class PropertyManagement implements Serializable {
       try {
         return toBytes(ob);
       } catch (final UnsupportedEncodingException e) {
-        throw new IllegalArgumentException(String
-            .format("Cannot convert %s to a Query: %s", ob.toString(), e.getLocalizedMessage()));
+        throw new IllegalArgumentException(
+            String.format(
+                "Cannot convert %s to a Query: %s",
+                ob.toString(),
+                e.getLocalizedMessage()));
       }
     }
 
@@ -652,8 +671,11 @@ public class PropertyManagement implements Serializable {
       try {
         return toBytes(ob);
       } catch (final UnsupportedEncodingException e) {
-        throw new IllegalArgumentException(String.format(
-            "Cannot convert %s to a Persistable: %s", ob.toString(), e.getLocalizedMessage()));
+        throw new IllegalArgumentException(
+            String.format(
+                "Cannot convert %s to a Persistable: %s",
+                ob.toString(),
+                e.getLocalizedMessage()));
       }
     }
 

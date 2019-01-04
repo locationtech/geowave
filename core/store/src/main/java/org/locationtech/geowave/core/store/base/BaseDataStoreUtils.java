@@ -171,10 +171,14 @@ public class BaseDataStoreUtils {
       final QueryFilter clientFilter,
       final ScanCallback<T, GeoWaveRow> scanCallback) {
     final IndexedAdapterPersistenceEncoding encodedRow =
-        new IndexedAdapterPersistenceEncoding(decodePackage.getDataAdapter().getAdapterId(),
-            new ByteArray(row.getDataId()), new ByteArray(row.getPartitionKey()),
-            new ByteArray(row.getSortKey()), row.getNumberOfDuplicates(),
-            decodePackage.getIndexData(), decodePackage.getUnknownData(),
+        new IndexedAdapterPersistenceEncoding(
+            decodePackage.getDataAdapter().getAdapterId(),
+            new ByteArray(row.getDataId()),
+            new ByteArray(row.getPartitionKey()),
+            new ByteArray(row.getSortKey()),
+            row.getNumberOfDuplicates(),
+            decodePackage.getIndexData(),
+            decodePackage.getUnknownData(),
             decodePackage.getExtendedData());
 
     if ((clientFilter == null)
@@ -202,11 +206,15 @@ public class BaseDataStoreUtils {
       final GeoWaveValue value) {
     final List<FlattenedFieldInfo> fieldInfos =
         DataStoreUtils.decomposeFlattenedFields(
-            value.getFieldMask(), value.getValue(), value.getVisibility(), -1).getFieldsRead();
+            value.getFieldMask(),
+            value.getValue(),
+            value.getVisibility(),
+            -1).getFieldsRead();
     for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
       final String fieldName =
           decodePackage.getDataAdapter().getFieldNameForPosition(
-              decodePackage.getIndex().getIndexModel(), fieldInfo.getFieldPosition());
+              decodePackage.getIndex().getIndexModel(),
+              fieldInfo.getFieldPosition());
       final FieldReader<? extends CommonIndexValue> indexFieldReader =
           decodePackage.getIndex().getIndexModel().getReader(fieldName);
       if (indexFieldReader != null) {
@@ -242,22 +250,26 @@ public class BaseDataStoreUtils {
     final byte[] dataId = adapter.getDataId(entry).getBytes();
     final short internalAdapterId = adapter.getAdapterId();
     if (!insertionIds.isEmpty()) {
-      for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData()
-          .getValues().entrySet()) {
+      for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
         final FieldInfo<?> fieldInfo =
             getFieldInfo(
-                indexModel, fieldValue.getKey(), fieldValue.getValue(), entry,
+                indexModel,
+                fieldValue.getKey(),
+                fieldValue.getValue(),
+                entry,
                 customFieldVisibilityWriter);
         if (fieldInfo != null) {
           fieldInfoList.add(fieldInfo);
         }
       }
-      for (final Entry<String, Object> fieldValue : encodedData.getAdapterExtendedData().getValues()
-          .entrySet()) {
+      for (final Entry<String, Object> fieldValue : encodedData.getAdapterExtendedData().getValues().entrySet()) {
         if (fieldValue.getValue() != null) {
           final FieldInfo<?> fieldInfo =
               getFieldInfo(
-                  adapter, fieldValue.getKey(), fieldValue.getValue(), entry,
+                  adapter,
+                  fieldValue.getKey(),
+                  fieldValue.getValue(),
+                  entry,
                   customFieldVisibilityWriter);
           if (fieldInfo != null) {
             fieldInfoList.add(fieldInfo);
@@ -271,7 +283,10 @@ public class BaseDataStoreUtils {
               + "] not saved.");
     }
 
-    return new IntermediaryWriteEntryInfo(dataId, internalAdapterId, insertionIds,
+    return new IntermediaryWriteEntryInfo(
+        dataId,
+        internalAdapterId,
+        insertionIds,
         BaseDataStoreUtils.composeFlattenedFields(fieldInfoList, index.getIndexModel(), adapter));
   }
 
@@ -314,13 +329,14 @@ public class BaseDataStoreUtils {
         // every list must have exactly one element
         final Pair<Integer, FieldInfo<?>> fieldInfo = list.get(0);
         bitmaskedValues[i++] =
-            new GeoWaveValueImpl(BitmaskUtils.generateCompositeBitmask(fieldInfo.getLeft()),
-                fieldInfo.getRight().getVisibility(), fieldInfo.getRight().getWrittenValue());
+            new GeoWaveValueImpl(
+                BitmaskUtils.generateCompositeBitmask(fieldInfo.getLeft()),
+                fieldInfo.getRight().getVisibility(),
+                fieldInfo.getRight().getWrittenValue());
       }
       return bitmaskedValues;
     }
-    for (final Entry<ByteArray, List<Pair<Integer, FieldInfo<?>>>> entry : vizToFieldMap
-        .entrySet()) {
+    for (final Entry<ByteArray, List<Pair<Integer, FieldInfo<?>>>> entry : vizToFieldMap.entrySet()) {
       int totalLength = 0;
       final SortedSet<Integer> fieldPositions = new TreeSet<>();
       final List<Pair<Integer, FieldInfo<?>>> fieldInfoList = entry.getValue();
@@ -357,7 +373,9 @@ public class BaseDataStoreUtils {
     final FieldVisibilityHandler<T, Object> customVisibilityHandler =
         customFieldVisibilityWriter.getFieldVisibilityHandler(fieldName);
     if (fieldWriter != null) {
-      return new FieldInfo(fieldName, fieldWriter.writeField(fieldValue),
+      return new FieldInfo(
+          fieldName,
+          fieldWriter.writeField(fieldValue),
           DataStoreUtils.mergeVisibilities(
               customVisibilityHandler.getVisibility(entry, fieldName, fieldValue),
               fieldWriter.getVisibility(entry, fieldName, fieldValue)));
@@ -410,7 +428,11 @@ public class BaseDataStoreUtils {
       final IndexStore indexStore) throws IOException {
     return reduceIndicesAndGroupByIndex(
         compileIndicesForAdapters(
-            typeNames, indexName, adapterStore, internalAdapterStore, adapterIndexMappingStore,
+            typeNames,
+            indexName,
+            adapterStore,
+            internalAdapterStore,
+            adapterIndexMappingStore,
             indexStore));
   }
 

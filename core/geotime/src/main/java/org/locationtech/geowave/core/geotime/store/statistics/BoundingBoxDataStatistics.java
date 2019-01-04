@@ -121,8 +121,9 @@ public abstract class BoundingBoxDataStatistics<T>
         new HashMap<>();
     // Create and return a new IndexRange array with an x and y axis
     // range
-    constraintsPerDimension
-        .put(LongitudeDefinition.class, new ConstraintData(rangeLongitude, true));
+    constraintsPerDimension.put(
+        LongitudeDefinition.class,
+        new ConstraintData(rangeLongitude, true));
     constraintsPerDimension.put(LatitudeDefinition.class, new ConstraintData(rangeLatitude, true));
     return new ConstraintSet(constraintsPerDimension);
   }

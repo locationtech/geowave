@@ -89,7 +89,8 @@ public class OsmPbfParser {
       parser.setupWriter(nodeWriter, wayWriter, relationWriter);
 
       Files.walkFileTree(
-          Paths.get(args.getIngestDirectory()), new SimpleFileVisitor<java.nio.file.Path>() {
+          Paths.get(args.getIngestDirectory()),
+          new SimpleFileVisitor<java.nio.file.Path>() {
             @Override
             // I couldn't figure out how to get rid of the findbugs
             // issue.

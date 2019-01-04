@@ -196,8 +196,8 @@ public class GeoServerRestClient {
             getPropertyValue(gsConfigProperties, GEOSERVER_SSL_TRUSTSTORE_PASS));
       }
       if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTSTORE_TYPE)) {
-        sslConfig
-            .trustStoreType(getPropertyValue(gsConfigProperties, GEOSERVER_SSL_TRUSTSTORE_TYPE));
+        sslConfig.trustStoreType(
+            getPropertyValue(gsConfigProperties, GEOSERVER_SSL_TRUSTSTORE_TYPE));
       }
       if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTSTORE_PROVIDER)) {
         sslConfig.trustStoreProvider(
@@ -220,8 +220,9 @@ public class GeoServerRestClient {
         // What Fortify considers "user input" comes only
         // from users with OS-level access anyway
         final File keyStoreFile =
-            new File(FileUtils
-                .formatFilePath(getPropertyValue(gsConfigProperties, GEOSERVER_SSL_KEYSTORE_FILE)));
+            new File(
+                FileUtils.formatFilePath(
+                    getPropertyValue(gsConfigProperties, GEOSERVER_SSL_KEYSTORE_FILE)));
         if (keyStoreFile != null) {
           try {
             sslConfig.keyStoreFile(keyStoreFile.getCanonicalPath());
@@ -236,8 +237,8 @@ public class GeoServerRestClient {
         }
       }
       if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_PASS)) {
-        sslConfig
-            .keyStorePassword(getPropertyValue(gsConfigProperties, GEOSERVER_SSL_KEYSTORE_PASS));
+        sslConfig.keyStorePassword(
+            getPropertyValue(gsConfigProperties, GEOSERVER_SSL_KEYSTORE_PASS));
       }
       if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEY_PASS)) {
         sslConfig.keyPassword(getPropertyValue(gsConfigProperties, GEOSERVER_SSL_KEY_PASS));
@@ -278,8 +279,9 @@ public class GeoServerRestClient {
           // if password in config props is encrypted, need to decrypt
           // it
           configValue =
-              SecurityUtils
-                  .decryptHexEncodedValue(configValue, resourceTokenFile.getCanonicalPath());
+              SecurityUtils.decryptHexEncodedValue(
+                  configValue,
+                  resourceTokenFile.getCanonicalPath());
           return configValue;
         } catch (final Exception e) {
           LOGGER.error("An error occurred decrypting password: " + e.getLocalizedMessage(), e);
@@ -621,7 +623,9 @@ public class GeoServerRestClient {
       // get the workspace names
       final JSONArray workspaceArray =
           getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)), "workspaces", "workspace");
+              JSONObject.fromObject(resp.readEntity(String.class)),
+              "workspaces",
+              "workspace");
 
       final JSONObject workspacesObj = new JSONObject();
       workspacesObj.put("workspaces", workspaceArray);
@@ -650,8 +654,9 @@ public class GeoServerRestClient {
    * @return
    */
   public Response deleteWorkspace(final String workspace) {
-    return getWebTarget().path("rest/workspaces/" + workspace).queryParam("recurse", "true")
-        .request().delete();
+    return getWebTarget().path("rest/workspaces/" + workspace).queryParam(
+        "recurse",
+        "true").request().delete();
   }
 
   /**
@@ -666,9 +671,12 @@ public class GeoServerRestClient {
       final String datastoreName,
       final boolean quietOnNotFound) {
     final Response resp =
-        getWebTarget()
-            .path("rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + ".json")
-            .queryParam("quietOnNotFound", quietOnNotFound).request().get();
+        getWebTarget().path(
+            "rest/workspaces/"
+                + workspaceName
+                + "/datastores/"
+                + datastoreName
+                + ".json").queryParam("quietOnNotFound", quietOnNotFound).request().get();
 
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       resp.bufferEntity();
@@ -691,8 +699,8 @@ public class GeoServerRestClient {
    */
   public Response getDatastores(final String workspaceName) {
     final Response resp =
-        getWebTarget().path("rest/workspaces/" + workspaceName + "/datastores.json").request()
-            .get();
+        getWebTarget().path(
+            "rest/workspaces/" + workspaceName + "/datastores.json").request().get();
 
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       resp.bufferEntity();
@@ -700,7 +708,9 @@ public class GeoServerRestClient {
       // get the datastore names
       final JSONArray datastoreArray =
           getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)), "dataStores", "dataStore");
+              JSONObject.fromObject(resp.readEntity(String.class)),
+              "dataStores",
+              "dataStore");
 
       final JSONObject dsObj = new JSONObject();
       dsObj.put("dataStores", datastoreArray);
@@ -736,12 +746,18 @@ public class GeoServerRestClient {
 
     final String dataStoreJson =
         createDatastoreJson(
-            inputStoreOptions.getType(), inputStoreOptions.getOptionsAsMap(), datastoreName,
-            lockMgmt, authMgmtPrvdr, authDataUrl, queryIndexStrategy, true);
+            inputStoreOptions.getType(),
+            inputStoreOptions.getOptionsAsMap(),
+            datastoreName,
+            lockMgmt,
+            authMgmtPrvdr,
+            authDataUrl,
+            queryIndexStrategy,
+            true);
 
     // create a new geoserver style
-    return getWebTarget().path("rest/workspaces/" + workspaceName + "/datastores").request()
-        .post(Entity.entity(dataStoreJson, MediaType.APPLICATION_JSON));
+    return getWebTarget().path("rest/workspaces/" + workspaceName + "/datastores").request().post(
+        Entity.entity(dataStoreJson, MediaType.APPLICATION_JSON));
   }
 
   /**
@@ -752,8 +768,10 @@ public class GeoServerRestClient {
    * @return
    */
   public Response deleteDatastore(final String workspaceName, final String datastoreName) {
-    return getWebTarget().path("rest/workspaces/" + workspaceName + "/datastores/" + datastoreName)
-        .queryParam("recurse", "true").request().delete();
+    return getWebTarget().path(
+        "rest/workspaces/" + workspaceName + "/datastores/" + datastoreName).queryParam(
+            "recurse",
+            "true").request().delete();
   }
 
   /**
@@ -764,8 +782,9 @@ public class GeoServerRestClient {
    */
   public Response getFeatureLayer(final String layerName, final boolean quietOnNotFound) {
     final Response resp =
-        getWebTarget().path("rest/layers/" + layerName + ".json")
-            .queryParam("quietOnNotFound", quietOnNotFound).request().get();
+        getWebTarget().path("rest/layers/" + layerName + ".json").queryParam(
+            "quietOnNotFound",
+            quietOnNotFound).request().get();
 
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       final JSONObject layer = JSONObject.fromObject(resp.readEntity(String.class));
@@ -801,7 +820,9 @@ public class GeoServerRestClient {
       // get the datastore names
       final JSONArray layerArray =
           getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)), "layers", "layer");
+              JSONObject.fromObject(resp.readEntity(String.class)),
+              "layers",
+              "layer");
 
       // holder for simple layer info (when geowaveOnly = false)
       final JSONArray layerInfoArray = new JSONArray();
@@ -843,8 +864,8 @@ public class GeoServerRestClient {
           // filter on workspace?
           if (!wsFilter || ((ws != null) && ws.equals(workspaceName))) {
             final JSONObject datastore =
-                JSONObject.fromObject(getDatastore(ds, ws, false).getEntity())
-                    .getJSONObject("dataStore");
+                JSONObject.fromObject(getDatastore(ds, ws, false).getEntity()).getJSONObject(
+                    "dataStore");
 
             // only process GeoWave layers
             if (geowaveOnly) {
@@ -858,8 +879,8 @@ public class GeoServerRestClient {
                       datastore.getJSONObject("connectionParameters").getJSONArray("entry");
                 } else if (datastore.get("connectionParameters") instanceof JSONArray) {
                   entryArray =
-                      datastore.getJSONArray("connectionParameters").getJSONObject(0)
-                          .getJSONArray("entry");
+                      datastore.getJSONArray("connectionParameters").getJSONObject(0).getJSONArray(
+                          "entry");
                 }
 
                 if (entryArray == null) {
@@ -948,11 +969,15 @@ public class GeoServerRestClient {
               MediaType.APPLICATION_JSON));
     }
 
-    return getWebTarget()
-        .path("rest/workspaces/" + workspaceName + "/datastores/" + datastoreName + "/featuretypes")
-        .request().post(
-            Entity.entity(
-                "{'featureType':{'name':'" + layerName + "'}}", MediaType.APPLICATION_JSON));
+    return getWebTarget().path(
+        "rest/workspaces/"
+            + workspaceName
+            + "/datastores/"
+            + datastoreName
+            + "/featuretypes").request().post(
+                Entity.entity(
+                    "{'featureType':{'name':'" + layerName + "'}}",
+                    MediaType.APPLICATION_JSON));
   }
 
   /**
@@ -976,7 +1001,8 @@ public class GeoServerRestClient {
 
     return getWebTarget().path("rest/layers/" + layerName + ".json").request().put(
         Entity.entity(
-            "{'layer':{'defaultStyle':{'name':'" + styleName + "'}}}", MediaType.APPLICATION_JSON));
+            "{'layer':{'defaultStyle':{'name':'" + styleName + "'}}}",
+            MediaType.APPLICATION_JSON));
   }
 
   /**
@@ -990,14 +1016,16 @@ public class GeoServerRestClient {
       final boolean quietOnNotFound) {
 
     final Response resp =
-        getWebTarget().path("rest/styles/" + styleName + ".sld")
-            .queryParam("quietOnNotFound", quietOnNotFound).request().get();
+        getWebTarget().path("rest/styles/" + styleName + ".sld").queryParam(
+            "quietOnNotFound",
+            quietOnNotFound).request().get();
 
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       final InputStream inStream = (InputStream) resp.getEntity();
 
-      return Response.ok(inStream, MediaType.APPLICATION_XML)
-          .header("Content-Disposition", "attachment; filename=\"" + styleName + ".sld\"").build();
+      return Response.ok(inStream, MediaType.APPLICATION_XML).header(
+          "Content-Disposition",
+          "attachment; filename=\"" + styleName + ".sld\"").build();
     }
 
     return resp;
@@ -1018,7 +1046,9 @@ public class GeoServerRestClient {
       // get the style names
       final JSONArray styleArray =
           getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)), "styles", "style");
+              JSONObject.fromObject(resp.readEntity(String.class)),
+              "styles",
+              "style");
 
       final JSONObject stylesObj = new JSONObject();
       stylesObj.put("styles", styleArray);
@@ -1048,8 +1078,8 @@ public class GeoServerRestClient {
     if (addStyleResponse.getStatus() != Status.CREATED.getStatusCode()) {
       return addStyleResponse;
     }
-    return getWebTarget().path("rest/styles/" + styleName).request()
-        .put(Entity.entity(fileInStream, "application/vnd.ogc.sld+xml"));
+    return getWebTarget().path("rest/styles/" + styleName).request().put(
+        Entity.entity(fileInStream, "application/vnd.ogc.sld+xml"));
   }
 
   /**
@@ -1075,9 +1105,12 @@ public class GeoServerRestClient {
       final String coverageName,
       final boolean quietOnNotFound) {
     final Response resp =
-        getWebTarget()
-            .path("rest/workspaces/" + workspaceName + "/coveragestores/" + coverageName + ".json")
-            .queryParam("quietOnNotFound", quietOnNotFound).request().get();
+        getWebTarget().path(
+            "rest/workspaces/"
+                + workspaceName
+                + "/coveragestores/"
+                + coverageName
+                + ".json").queryParam("quietOnNotFound", quietOnNotFound).request().get();
 
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       resp.bufferEntity();
@@ -1100,8 +1133,8 @@ public class GeoServerRestClient {
    */
   public Response getCoverageStores(final String workspaceName) {
     final Response resp =
-        getWebTarget().path("rest/workspaces/" + workspaceName + "/coveragestores.json").request()
-            .get();
+        getWebTarget().path(
+            "rest/workspaces/" + workspaceName + "/coveragestores.json").request().get();
 
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       resp.bufferEntity();
@@ -1109,7 +1142,8 @@ public class GeoServerRestClient {
       // get the datastore names
       final JSONArray coveragesArray =
           getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)), "coverageStores",
+              JSONObject.fromObject(resp.readEntity(String.class)),
+              "coverageStores",
               "coverageStore");
 
       final JSONObject dsObj = new JSONObject();
@@ -1152,14 +1186,19 @@ public class GeoServerRestClient {
 
     final String cvgStoreXml =
         createCoverageXml(
-            storeConfigMap, equalizeHistogramOverride, interpolationOverride, scaleTo8Bit,
-            workspaceName, cvgStoreName);
+            storeConfigMap,
+            equalizeHistogramOverride,
+            interpolationOverride,
+            scaleTo8Bit,
+            workspaceName,
+            cvgStoreName);
 
     LOGGER.debug("Add coverage store - xml params:\n" + cvgStoreXml);
 
     // create a new geoserver style
-    return getWebTarget().path("rest/workspaces/" + workspaceName + "/coveragestores").request()
-        .post(Entity.entity(cvgStoreXml, MediaType.APPLICATION_XML));
+    return getWebTarget().path(
+        "rest/workspaces/" + workspaceName + "/coveragestores").request().post(
+            Entity.entity(cvgStoreXml, MediaType.APPLICATION_XML));
   }
 
   /**
@@ -1170,9 +1209,10 @@ public class GeoServerRestClient {
    * @return
    */
   public Response deleteCoverageStore(final String workspaceName, final String cvgstoreName) {
-    return getWebTarget()
-        .path("rest/workspaces/" + workspaceName + "/coveragestores/" + cvgstoreName)
-        .queryParam("recurse", "true").request().delete();
+    return getWebTarget().path(
+        "rest/workspaces/" + workspaceName + "/coveragestores/" + cvgstoreName).queryParam(
+            "recurse",
+            "true").request().delete();
   }
 
   /**
@@ -1189,8 +1229,7 @@ public class GeoServerRestClient {
                 + workspaceName
                 + "/coveragestores/"
                 + cvsstoreName
-                + "/coverages.json")
-            .request().get();
+                + "/coverages.json").request().get();
 
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       resp.bufferEntity();
@@ -1198,7 +1237,9 @@ public class GeoServerRestClient {
       // get the datastore names
       final JSONArray coveragesArray =
           getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)), "coverages", "coverage");
+              JSONObject.fromObject(resp.readEntity(String.class)),
+              "coverages",
+              "coverage");
 
       final JSONObject dsObj = new JSONObject();
       dsObj.put("coverages", coveragesArray);
@@ -1230,8 +1271,7 @@ public class GeoServerRestClient {
                 + cvgStoreName
                 + "/coverages/"
                 + coverageName
-                + ".json")
-            .queryParam("quietOnNotFound", quietOnNotFound).request().get();
+                + ".json").queryParam("quietOnNotFound", quietOnNotFound).request().get();
 
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       resp.bufferEntity();
@@ -1268,9 +1308,12 @@ public class GeoServerRestClient {
             + "'}}";
     LOGGER.debug("Posting JSON: " + jsonString + " to " + workspaceName + "/" + cvgStoreName);
 
-    return getWebTarget()
-        .path("rest/workspaces/" + workspaceName + "/coveragestores/" + cvgStoreName + "/coverages")
-        .request().post(Entity.entity(jsonString, MediaType.APPLICATION_JSON));
+    return getWebTarget().path(
+        "rest/workspaces/"
+            + workspaceName
+            + "/coveragestores/"
+            + cvgStoreName
+            + "/coverages").request().post(Entity.entity(jsonString, MediaType.APPLICATION_JSON));
   }
 
   /**
@@ -1291,8 +1334,7 @@ public class GeoServerRestClient {
             + "/coveragestores/"
             + cvgstoreName
             + "/coverages/"
-            + coverageName)
-        .queryParam("recurse", "true").request().delete();
+            + coverageName).queryParam("recurse", "true").request().delete();
   }
 
   // Internal methods
@@ -1426,7 +1468,10 @@ public class GeoServerRestClient {
       // Method using custom URL & handler:
       final String storeConfigUrl =
           createParamUrl(
-              geowaveStoreConfig, equalizeHistogramOverride, interpolationOverride, scaleTo8Bit);
+              geowaveStoreConfig,
+              equalizeHistogramOverride,
+              interpolationOverride,
+              scaleTo8Bit);
 
       final Element urlEl = xmlDoc.createElement("url");
       urlEl.appendChild(xmlDoc.createTextNode(storeConfigUrl));
@@ -1590,8 +1635,7 @@ public class GeoServerRestClient {
     if (typeName.equals(AddOption.VECTOR.name())
         && ((adapter instanceof GeotoolsFeatureDataAdapter)
             || ((adapter instanceof InternalDataAdapter)
-                && (((InternalDataAdapter) adapter)
-                    .getAdapter() instanceof GeotoolsFeatureDataAdapter)))) {
+                && (((InternalDataAdapter) adapter).getAdapter() instanceof GeotoolsFeatureDataAdapter)))) {
       LOGGER.debug("id is all-vector and adapter is vector type");
       return info;
     }

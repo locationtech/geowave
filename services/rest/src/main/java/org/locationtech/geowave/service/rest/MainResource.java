@@ -29,8 +29,8 @@ public class MainResource extends ServerResource {
     try {
       final StringBuilder routeStringBuilder = new StringBuilder();
       final ServletContext servletContext =
-          (ServletContext) getContext().getAttributes()
-              .get("org.restlet.ext.servlet.ServletContext");
+          (ServletContext) getContext().getAttributes().get(
+              "org.restlet.ext.servlet.ServletContext");
       final String userName = (String) servletContext.getAttribute("userName");
       final String apiKey = (String) servletContext.getAttribute("apiKey");
       final ArrayList<RestRoute> availableRoutes =

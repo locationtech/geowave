@@ -62,7 +62,8 @@ public class SimpleFeatureGeoWaveWrapper implements CloseableIterator<GeoWaveDat
         dataAdapter = new FeatureDataAdapter(retypedSchema);
       } else {
         dataAdapter =
-            new FeatureDataAdapter(retypedSchema,
+            new FeatureDataAdapter(
+                retypedSchema,
                 new GlobalVisibilityHandler<SimpleFeature, Object>(visibility));
       }
     }

@@ -38,7 +38,18 @@ public class IngestServiceClient {
   public Response kafkaToGW(final String store_name, final String index_group_list) {
 
     return kafkaToGW(
-        store_name, index_group_list, null, null, null, null, null, null, null, null, null, null,
+        store_name,
+        index_group_list,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null);
   }
 
@@ -59,9 +70,19 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.kafkaToGW(
-            store_name, index_group_list, kafkaPropertyFile, visibility, groupId, zookeeperConnect,
-            autoOffsetReset, fetchMessageMaxBytes, consumerTimeoutMs, reconnectOnTimeout, batchSize,
-            extensions, formats);
+            store_name,
+            index_group_list,
+            kafkaPropertyFile,
+            visibility,
+            groupId,
+            zookeeperConnect,
+            autoOffsetReset,
+            fetchMessageMaxBytes,
+            consumerTimeoutMs,
+            reconnectOnTimeout,
+            batchSize,
+            extensions,
+            formats);
     return resp;
   }
 
@@ -84,7 +105,12 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.localToGW(
-            file_or_directory, storename, index_group_list, threads, visibility, extensions,
+            file_or_directory,
+            storename,
+            index_group_list,
+            threads,
+            visibility,
+            extensions,
             formats);
     return resp;
   }
@@ -104,7 +130,10 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.localToHdfs(
-            file_or_directory, path_to_base_directory_to_write_to, extensions, formats);
+            file_or_directory,
+            path_to_base_directory_to_write_to,
+            extensions,
+            formats);
     return resp;
   }
 
@@ -121,8 +150,15 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.localToKafka(
-            file_or_directory, kafkaPropertyFile, metadataBrokerList, requestRequiredAcks,
-            producerType, serializerClass, retryBackoffMs, extensions, formats);
+            file_or_directory,
+            kafkaPropertyFile,
+            metadataBrokerList,
+            requestRequiredAcks,
+            producerType,
+            serializerClass,
+            retryBackoffMs,
+            extensions,
+            formats);
     return resp;
   }
 
@@ -144,8 +180,15 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.localToMrGW(
-            file_or_directory, path_to_base_directory_to_write_to, store_name, index_group_list,
-            visibility, jobTrackerHostPort, resourceManger, extensions, formats);
+            file_or_directory,
+            path_to_base_directory_to_write_to,
+            store_name,
+            index_group_list,
+            visibility,
+            jobTrackerHostPort,
+            resourceManger,
+            extensions,
+            formats);
     return resp;
   }
 
@@ -156,8 +199,15 @@ public class IngestServiceClient {
       final String index_group_list) {
 
     return localToMrGW(
-        file_or_directory, path_to_base_directory_to_write_to, store_name, index_group_list, null,
-        null, null, null, null);
+        file_or_directory,
+        path_to_base_directory_to_write_to,
+        store_name,
+        index_group_list,
+        null,
+        null,
+        null,
+        null,
+        null);
   }
 
   public Response mrToGW(
@@ -172,8 +222,14 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.mrToGW(
-            path_to_base_directory_to_write_to, store_name, index_group_list, visibility,
-            jobTrackerHostPort, resourceManger, extensions, formats);
+            path_to_base_directory_to_write_to,
+            store_name,
+            index_group_list,
+            visibility,
+            jobTrackerHostPort,
+            resourceManger,
+            extensions,
+            formats);
     return resp;
   }
 
@@ -183,7 +239,13 @@ public class IngestServiceClient {
       final String index_group_list) {
 
     return mrToGW(
-        path_to_base_directory_to_write_to, store_name, index_group_list, null, null, null, null,
+        path_to_base_directory_to_write_to,
+        store_name,
+        index_group_list,
+        null,
+        null,
+        null,
+        null,
         null);
   }
 
@@ -202,8 +264,17 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.sparkToGW(
-            input_directory, store_name, index_group_list, visibility, appName, host, master,
-            numExecutors, numCores, extensions, formats);
+            input_directory,
+            store_name,
+            index_group_list,
+            visibility,
+            appName,
+            host,
+            master,
+            numExecutors,
+            numCores,
+            extensions,
+            formats);
     return resp;
   }
 
@@ -212,7 +283,16 @@ public class IngestServiceClient {
       final String store_name,
       final String index_group_list) {
     return sparkToGW(
-        input_directory, store_name, index_group_list, null, null, null, null, null, null, null,
+        input_directory,
+        store_name,
+        index_group_list,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null);
   }
 }

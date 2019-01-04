@@ -61,8 +61,13 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
     this.numThreads = numThreads;
     this.rowTransformer = rowTransformer;
     this.threadPool =
-        new ThreadPoolExecutor(numThreads, numThreads, 60, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(), Executors.defaultThreadFactory());
+        new ThreadPoolExecutor(
+            numThreads,
+            numThreads,
+            60,
+            TimeUnit.SECONDS,
+            new LinkedBlockingQueue<Runnable>(),
+            Executors.defaultThreadFactory());
     ((ThreadPoolExecutor) this.threadPool).allowCoreThreadTimeOut(true);
     results = new ArrayBlockingQueue<Object>(RESULT_BUFFER_SIZE);
   }

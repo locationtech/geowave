@@ -107,7 +107,8 @@ public class HBaseWriter implements RowWriter {
 
       put.addColumn(
           StringUtils.stringToBinary(ByteArrayUtils.shortToString(row.getAdapterId())),
-          value.getFieldMask(), value.getValue());
+          value.getFieldMask(),
+          value.getValue());
 
       if ((value.getVisibility() != null) && (value.getVisibility().length > 0)) {
         put.setCellVisibility(

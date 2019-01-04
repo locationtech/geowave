@@ -362,7 +362,12 @@ public class TestUtils {
     props.setProperty(ConfigAWSCommand.AWS_S3_ENDPOINT_URL, s3Url);
 
     sparkIngester.runOperation(
-        configFile, localOptions, "test", indexes, new VisibilityOptions(), sparkOptions,
+        configFile,
+        localOptions,
+        "test",
+        indexes,
+        new VisibilityOptions(),
+        sparkOptions,
         ingestFilePath);
 
     verifyStats(dataStore);
@@ -502,7 +507,10 @@ public class TestUtils {
       final Pair<String, String> optimalCqlQueryGeometryAndTimeFields,
       final boolean useDuring) throws IOException {
     return featureToQuery(
-        resourceToFeature(filterResource), optimalCqlQueryGeometryAndTimeFields, null, useDuring);
+        resourceToFeature(filterResource),
+        optimalCqlQueryGeometryAndTimeFields,
+        null,
+        useDuring);
   }
 
   public static SimpleFeature resourceToFeature(final URL filterResource) throws IOException {
@@ -609,7 +617,8 @@ public class TestUtils {
     // intersection operation so it will have to assume the same CRS as the
     // feature type
     return factory.intersects(
-        factory.property(optimalCqlQueryGeometryAndTimeField.getLeft()), factory.literal(jtsGeom));
+        factory.property(optimalCqlQueryGeometryAndTimeField.getLeft()),
+        factory.literal(jtsGeom));
   }
 
   protected static void replaceParameters(final Map<String, String> values, final File file)
@@ -685,7 +694,10 @@ public class TestUtils {
           if (errorPixels > maxErrorPixels) {
             Assert.fail(
                 String.format(
-                    "[%d,%d] failed to match ref=%d gen=%d", x, y, expected.getRGB(x, y),
+                    "[%d,%d] failed to match ref=%d gen=%d",
+                    x,
+                    y,
+                    expected.getRGB(x, y),
                     actual.getRGB(x, y)));
           }
         }
@@ -695,12 +707,13 @@ public class TestUtils {
       Assert.fail(
           String.format(
               "Subsampling did not work as expected; error pixels (%d) did not exceed the minimum threshold (%d)",
-              errorPixels, minErrorPixels));
+              errorPixels,
+              minErrorPixels));
     }
 
     if (errorPixels > 0) {
-      System.out
-          .println(((float) errorPixels / (float) totalPixels) + "% pixels differed from expected");
+      System.out.println(
+          ((float) errorPixels / (float) totalPixels) + "% pixels differed from expected");
     }
   }
 

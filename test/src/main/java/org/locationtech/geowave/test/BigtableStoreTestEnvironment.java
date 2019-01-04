@@ -81,8 +81,10 @@ public class BigtableStoreTestEnvironment extends StoreTestEnvironment {
       }
 
       emulator =
-          new BigtableEmulator(null, // null uses tmp dir
-              sdkDownloadUrl, sdkFile);
+          new BigtableEmulator(
+              null, // null uses tmp dir
+              sdkDownloadUrl,
+              sdkFile);
 
       // Make sure we clean up any old processes first
       if (emulator.isRunning()) {

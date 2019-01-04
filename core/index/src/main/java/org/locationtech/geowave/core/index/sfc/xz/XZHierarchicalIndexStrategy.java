@@ -141,7 +141,9 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
     if ((xzHints == null) || (xzHints.pointCurveCount > 0)) {
       partitionedRanges.addAll(
           BinnedSFCUtils.getQueryRanges(
-              binnedQueries, pointCurve, maxEstimatedRangeDecomposition, // for
+              binnedQueries,
+              pointCurve,
+              maxEstimatedRangeDecomposition, // for
               // now
               // we're
               // doing this
@@ -155,7 +157,9 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
     if ((xzHints == null) || (xzHints.xzCurveCount > 0)) {
       partitionedRanges.addAll(
           BinnedSFCUtils.getQueryRanges(
-              binnedQueries, xzCurve, maxEstimatedRangeDecomposition, // for
+              binnedQueries,
+              xzCurve,
+              maxEstimatedRangeDecomposition, // for
               // now
               // we're
               // doing this
@@ -185,7 +189,10 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
       final BigInteger pointIds = pointCurve.getEstimatedIdCount(range);
       final SinglePartitionInsertionIds pointCurveId =
           BinnedSFCUtils.getSingleBinnedInsertionId(
-              pointIds, pointCurveMultiDimensionalId, range, pointCurve);
+              pointIds,
+              pointCurveMultiDimensionalId,
+              range,
+              pointCurve);
       if (pointCurveId != null) {
         partitionIds.add(pointCurveId);
       } else {
@@ -203,8 +210,10 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
 
         partitionIds.add(
             new SinglePartitionInsertionIds(
-                new ByteArray(ByteArrayUtils
-                    .combineArrays(new byte[] {xzCurveMultiDimensionalId}, range.getBinId())),
+                new ByteArray(
+                    ByteArrayUtils.combineArrays(
+                        new byte[] {xzCurveMultiDimensionalId},
+                        range.getBinId())),
                 new ByteArray(xzId)));
       }
     }
@@ -344,14 +353,18 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
       coordinates =
           BinnedSFCUtils.getCoordinatesForId(
               ByteArrayUtils.combineArrays(
-                  partitionKey.getBytes(), sortKey == null ? null : sortKey.getBytes()),
-              baseDefinitions, pointCurve);
+                  partitionKey.getBytes(),
+                  sortKey == null ? null : sortKey.getBytes()),
+              baseDefinitions,
+              pointCurve);
     } else if (first == xzCurveMultiDimensionalId) {
       coordinates =
           BinnedSFCUtils.getCoordinatesForId(
               ByteArrayUtils.combineArrays(
-                  partitionKey.getBytes(), sortKey == null ? null : sortKey.getBytes()),
-              baseDefinitions, xzCurve);
+                  partitionKey.getBytes(),
+                  sortKey == null ? null : sortKey.getBytes()),
+              baseDefinitions,
+              xzCurve);
     } else {
       return rasterStrategy.getCoordinatesPerDimension(partitionKey, sortKey);
     }

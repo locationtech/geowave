@@ -92,43 +92,51 @@ public class KMeansJumpJobRunner extends MapReduceJobController implements Clust
     propertyManagement.storeIfEmpty(GlobalParameters.Global.BATCH_ID, UUID.randomUUID().toString());
 
     propertyManagement.storeIfEmpty(
-        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, SimpleFeatureItemWrapperFactory.class);
+        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+        SimpleFeatureItemWrapperFactory.class);
     propertyManagement.storeIfEmpty(
-        CommonParameters.Common.DISTANCE_FUNCTION_CLASS, FeatureCentroidDistanceFn.class);
+        CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+        FeatureCentroidDistanceFn.class);
     propertyManagement.storeIfEmpty(
-        CentroidParameters.Centroid.EXTRACTOR_CLASS, SimpleFeatureCentroidExtractor.class);
+        CentroidParameters.Centroid.EXTRACTOR_CLASS,
+        SimpleFeatureCentroidExtractor.class);
     propertyManagement.storeIfEmpty(
-        CommonParameters.Common.DIMENSION_EXTRACT_CLASS, SimpleFeatureGeometryExtractor.class);
+        CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
+        SimpleFeatureGeometryExtractor.class);
 
-    propertyManagement
-        .copy(CentroidParameters.Centroid.DATA_TYPE_ID, SampleParameters.Sample.DATA_TYPE_NAME);
+    propertyManagement.copy(
+        CentroidParameters.Centroid.DATA_TYPE_ID,
+        SampleParameters.Sample.DATA_TYPE_NAME);
 
-    propertyManagement
-        .copy(CentroidParameters.Centroid.INDEX_NAME, SampleParameters.Sample.INDEX_NAME);
+    propertyManagement.copy(
+        CentroidParameters.Centroid.INDEX_NAME,
+        SampleParameters.Sample.INDEX_NAME);
 
     ClusteringUtils.createAdapter(propertyManagement);
     ClusteringUtils.createIndex(propertyManagement);
 
     final String currentBatchId =
-        propertyManagement
-            .getPropertyAsString(GlobalParameters.Global.BATCH_ID, UUID.randomUUID().toString());
+        propertyManagement.getPropertyAsString(
+            GlobalParameters.Global.BATCH_ID,
+            UUID.randomUUID().toString());
 
     try {
 
       final NumericRange rangeOfIterations =
-          propertyManagement
-              .getPropertyAsRange(JumpParameters.Jump.RANGE_OF_CENTROIDS, new NumericRange(2, 200));
+          propertyManagement.getPropertyAsRange(
+              JumpParameters.Jump.RANGE_OF_CENTROIDS,
+              new NumericRange(2, 200));
       propertyManagement.store(GlobalParameters.Global.PARENT_BATCH_ID, currentBatchId);
 
       final DataStorePluginOptions dataStoreOptions =
-          ((PersistableStore) propertyManagement.getProperty(StoreParam.INPUT_STORE))
-              .getDataStoreOptions();
+          ((PersistableStore) propertyManagement.getProperty(
+              StoreParam.INPUT_STORE)).getDataStoreOptions();
 
       final DistortionGroupManagement distortionGroupManagement =
           new DistortionGroupManagement(dataStoreOptions);
 
-      for (int k = (int) Math.max(2, Math.round(rangeOfIterations.getMin())); k < Math
-          .round(rangeOfIterations.getMax()); k++) {
+      for (int k = (int) Math.max(2, Math.round(rangeOfIterations.getMin())); k < Math.round(
+          rangeOfIterations.getMax()); k++) {
 
         // regardless of the algorithm, the sample set is fixed in size
         propertyManagement.store(SampleParameters.Sample.MIN_SAMPLE_SIZE, k);
@@ -150,7 +158,8 @@ public class KMeansJumpJobRunner extends MapReduceJobController implements Clust
       @SuppressWarnings("rawtypes")
       final Class<AnalyticItemWrapperFactory> analyticItemWrapperFC =
           propertyManagement.getPropertyAsClass(
-              CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, AnalyticItemWrapperFactory.class);
+              CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+              AnalyticItemWrapperFactory.class);
 
       /**
        * Associate the batch id with the best set of groups so the caller can find the clusters for
@@ -161,7 +170,8 @@ public class KMeansJumpJobRunner extends MapReduceJobController implements Clust
               (AnalyticItemWrapperFactory<SimpleFeature>) analyticItemWrapperFC.newInstance(),
               propertyManagement.getPropertyAsString(CentroidParameters.Centroid.DATA_TYPE_ID),
               propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_NAME),
-              currentBatchId, currentZoomLevel);
+              currentBatchId,
+              currentZoomLevel);
 
       return result;
     } catch (final Exception ex) {
@@ -177,16 +187,19 @@ public class KMeansJumpJobRunner extends MapReduceJobController implements Clust
     params.addAll(kmeansRunner.parallelJobRunner.getParameters());
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {JumpParameters.Jump.RANGE_OF_CENTROIDS,
+            new ParameterEnum<?>[] {
+                JumpParameters.Jump.RANGE_OF_CENTROIDS,
                 JumpParameters.Jump.KPLUSPLUS_MIN,
                 ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
                 CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-                CentroidParameters.Centroid.INDEX_NAME, CentroidParameters.Centroid.DATA_TYPE_ID,
+                CentroidParameters.Centroid.INDEX_NAME,
+                CentroidParameters.Centroid.DATA_TYPE_ID,
                 CentroidParameters.Centroid.DATA_NAMESPACE_URI,
                 CentroidParameters.Centroid.EXTRACTOR_CLASS,
                 CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
                 CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
-                StoreParameters.StoreParam.INPUT_STORE, GlobalParameters.Global.BATCH_ID}));
+                StoreParameters.StoreParam.INPUT_STORE,
+                GlobalParameters.Global.BATCH_ID}));
     params.addAll(MapReduceParameters.getParameters());
 
     params.remove(CentroidParameters.Centroid.ZOOM_LEVEL);

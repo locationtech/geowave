@@ -22,8 +22,11 @@ public class AggregationQueryBuilderImpl<P extends Persistable, R, T, A extends 
 
   @Override
   public AggregationQuery<P, R, T> build() {
-    return new AggregationQuery<>(newCommonQueryOptions(), newAggregateTypeQueryOptions(),
-        newIndexQueryOptions(), constraints);
+    return new AggregationQuery<>(
+        newCommonQueryOptions(),
+        newAggregateTypeQueryOptions(),
+        newIndexQueryOptions(),
+        constraints);
   }
 
   @Override

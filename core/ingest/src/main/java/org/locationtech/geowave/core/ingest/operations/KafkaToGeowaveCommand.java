@@ -171,7 +171,11 @@ public class KafkaToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
     // Driver
     driver =
-        new IngestFromKafkaDriver(inputStoreOptions, inputIndexOptions, ingestPlugins, kafkaOptions,
+        new IngestFromKafkaDriver(
+            inputStoreOptions,
+            inputIndexOptions,
+            ingestPlugins,
+            kafkaOptions,
             ingestOptions);
 
     // Execute

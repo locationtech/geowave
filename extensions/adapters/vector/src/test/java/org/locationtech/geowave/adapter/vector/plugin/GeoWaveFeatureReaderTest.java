@@ -60,10 +60,10 @@ public class GeoWaveFeatureReaderTest extends BaseDataStoreTest {
         DataUtilities.createType(
             "GeoWaveFeatureReaderTest",
             "geometry:Geometry:srid=4326,start:Date,end:Date,pop:java.lang.Long,pid:String");
-    ((GeoWaveGTDataStore) dataStore).getIndexStore()
-        .addIndex(new SpatialIndexBuilder().createIndex());
-    ((GeoWaveGTDataStore) dataStore).getIndexStore()
-        .addIndex(new SpatialTemporalIndexBuilder().createIndex());
+    ((GeoWaveGTDataStore) dataStore).getIndexStore().addIndex(
+        new SpatialIndexBuilder().createIndex());
+    ((GeoWaveGTDataStore) dataStore).getIndexStore().addIndex(
+        new SpatialTemporalIndexBuilder().createIndex());
     dataStore.createSchema(type);
 
     stime = DateUtilities.parseISO("2005-05-15T20:32:56Z");
@@ -97,7 +97,9 @@ public class GeoWaveFeatureReaderTest extends BaseDataStoreTest {
     transaction1.close();
 
     query =
-        new Query("GeoWaveFeatureReaderTest", ECQL.toFilter("IN ('" + fids.get(0) + "')"),
+        new Query(
+            "GeoWaveFeatureReaderTest",
+            ECQL.toFilter("IN ('" + fids.get(0) + "')"),
             new String[] {"geometry", "pid"});
   }
 
@@ -119,7 +121,8 @@ public class GeoWaveFeatureReaderTest extends BaseDataStoreTest {
   public void testSmallBBOX() throws IllegalArgumentException, NoSuchElementException, IOException {
     final FilterFactoryImpl factory = new FilterFactoryImpl();
     final Query query =
-        new Query("GeoWaveFeatureReaderTest",
+        new Query(
+            "GeoWaveFeatureReaderTest",
             factory.bbox("geometry", 28, 41, 28.5, 41.5, "EPSG:4326"),
             new String[] {"geometry", "pid"});
 
@@ -138,7 +141,8 @@ public class GeoWaveFeatureReaderTest extends BaseDataStoreTest {
   public void testBBOX() throws IllegalArgumentException, NoSuchElementException, IOException {
     final FilterFactoryImpl factory = new FilterFactoryImpl();
     final Query query =
-        new Query("GeoWaveFeatureReaderTest",
+        new Query(
+            "GeoWaveFeatureReaderTest",
             factory.bbox("geometry", -180, -90, 180, 90, "EPSG:4326"),
             new String[] {"geometry", "pid"});
 
@@ -172,7 +176,8 @@ public class GeoWaveFeatureReaderTest extends BaseDataStoreTest {
       throws IllegalArgumentException, NoSuchElementException, IOException, CQLException {
     System.out.println(pids);
     final Query query =
-        new Query("GeoWaveFeatureReaderTest",
+        new Query(
+            "GeoWaveFeatureReaderTest",
             ECQL.toFilter("pid like '" + pids.get(0).substring(0, 1) + "%'"),
             new String[] {"geometry", "pid"});
     final FeatureReader<SimpleFeatureType, SimpleFeature> reader =

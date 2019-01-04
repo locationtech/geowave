@@ -27,8 +27,8 @@ public class NumericIndexStrategyTest {
     final InsertionIds insertionIds = strategy.getInsertionIds(number);
     final List<ByteArray> compositieInsertionIds = insertionIds.getCompositeInsertionIds();
     Assert.assertTrue(
-        compositieInsertionIds
-            .contains(new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number))));
+        compositieInsertionIds.contains(
+            new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number))));
     Assert.assertTrue(compositieInsertionIds.size() == 1);
   }
 
@@ -39,7 +39,8 @@ public class NumericIndexStrategyTest {
     Assert.assertTrue(!ranges.isMultiRange());
     Assert.assertTrue(
         ranges.getCompositeQueryRanges().get(0).equals(
-            new ByteArrayRange(new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number)),
+            new ByteArrayRange(
+                new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number)),
                 new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number)))));
   }
 
@@ -50,7 +51,8 @@ public class NumericIndexStrategyTest {
     Assert.assertTrue(!ranges.isMultiRange());
     Assert.assertTrue(
         ranges.getCompositeQueryRanges().get(0).equals(
-            new ByteArrayRange(new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number)),
+            new ByteArrayRange(
+                new ByteArray(Lexicoders.DOUBLE.toByteArray((double) number)),
                 new ByteArray(
                     Lexicoders.DOUBLE.toByteArray((double) Lexicoders.DOUBLE.getMaximumValue())))));
   }

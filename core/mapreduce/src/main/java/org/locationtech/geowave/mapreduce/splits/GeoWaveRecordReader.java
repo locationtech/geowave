@@ -109,8 +109,12 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
     // client side filtering because the filter needs to be applied across
     // indices
     sanitizedQueryOptions =
-        new BaseQueryOptions(commonOptions, typeOptions, indexOptions,
-            new AdapterStoreWrapper(adapterStore, internalAdapterStore), internalAdapterStore);
+        new BaseQueryOptions(
+            commonOptions,
+            typeOptions,
+            indexOptions,
+            new AdapterStoreWrapper(adapterStore, internalAdapterStore),
+            internalAdapterStore);
     this.isOutputWritable = isOutputWritable;
     this.adapterStore = adapterStore;
     this.internalAdapterStore = internalAdapterStore;
@@ -157,8 +161,9 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
             LOGGER.warn("Unable to find type matching an adapter dependent query");
           }
           this.constraints =
-              ((AdapterAndIndexBasedQueryConstraints) constraints)
-                  .createQueryConstraints(adapter, splitInfo.getIndex());
+              ((AdapterAndIndexBasedQueryConstraints) constraints).createQueryConstraints(
+                  adapter,
+                  splitInfo.getIndex());
         }
 
         queryFilters = constraints.createFilters(splitInfo.getIndex());
@@ -167,7 +172,10 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
         iteratorsPerRange.put(
             r,
             queryRange(
-                splitInfo.getIndex(), r.getRange(), queryFilters, splitInfo.isMixedVisibility(),
+                splitInfo.getIndex(),
+                r.getRange(),
+                queryFilters,
+                splitInfo.isMixedVisibility(),
                 splitInfo.isAuthorizationsLimiting()));
         incrementalRangeSums.put(r, sum);
         sum = sum.add(BigDecimal.valueOf(r.getCardinality()));
@@ -224,19 +232,30 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
             : queryFilters.size() == 1 ? queryFilters.get(0) : new FilterList(queryFilters);
     final RowReader reader =
         operations.createReader(
-            new RecordReaderParams(index,
-                new AdapterStoreWrapper(adapterStore, internalAdapterStore), internalAdapterStore,
+            new RecordReaderParams(
+                index,
+                new AdapterStoreWrapper(adapterStore, internalAdapterStore),
+                internalAdapterStore,
                 sanitizedQueryOptions.getAdapterIds(internalAdapterStore),
                 sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
                 sanitizedQueryOptions.getAggregation(),
-                sanitizedQueryOptions.getFieldIdsAdapterPair(), mixedVisibility,
-                authorizationsLimiting, range, sanitizedQueryOptions.getLimit(),
+                sanitizedQueryOptions.getFieldIdsAdapterPair(),
+                mixedVisibility,
+                authorizationsLimiting,
+                range,
+                sanitizedQueryOptions.getLimit(),
                 sanitizedQueryOptions.getMaxRangeDecomposition(),
                 GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
                 sanitizedQueryOptions.getAuthorizations()));
-    return new CloseableIteratorWrapper(new ReaderClosableWrapper(reader),
-        new InputFormatIteratorWrapper<>(reader, singleFilter, adapterStore, internalAdapterStore,
-            index, isOutputWritable));
+    return new CloseableIteratorWrapper(
+        new ReaderClosableWrapper(reader),
+        new InputFormatIteratorWrapper<>(
+            reader,
+            singleFilter,
+            adapterStore,
+            internalAdapterStore,
+            index,
+            isOutputWritable));
   }
 
   @Override
@@ -308,12 +327,14 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
         return currentIterator.next();
       }
 
-      @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH",
+      @SuppressFBWarnings(
+          value = "NP_NULL_ON_SOME_PATH",
           justification = "Precondition catches null")
       @Override
       public void remove() {
-        Preconditions
-            .checkState(removeFrom != null, "no calls to next() since last call to remove()");
+        Preconditions.checkState(
+            removeFrom != null,
+            "no calls to next() since last call to remove()");
         removeFrom.remove();
         removeFrom = null;
       }
@@ -353,7 +374,8 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
       // TODO GEOWAVE-1018 this doesn't account for partition keys at all
       // just look at the row progress
       return getProgressForRange(
-          range.getStartSortKey(), range.getEndSortKey(),
+          range.getStartSortKey(),
+          range.getEndSortKey(),
           GeoWaveKey.getCompositeId(currentKey.getGeoWaveKey()));
     }
     // if we can't figure it out, then claim no progress
@@ -375,7 +397,10 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
     return Math.min(
         1,
         Math.max(
-            0, getOverallProgress(
-                currentGeoWaveRangeIndexPair.getRange(), currentGeoWaveKey, progress)));
+            0,
+            getOverallProgress(
+                currentGeoWaveRangeIndexPair.getRange(),
+                currentGeoWaveKey,
+                progress)));
   }
 }

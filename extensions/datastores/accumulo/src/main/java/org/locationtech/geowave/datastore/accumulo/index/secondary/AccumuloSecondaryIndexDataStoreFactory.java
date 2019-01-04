@@ -35,7 +35,8 @@ public class AccumuloSecondaryIndexDataStoreFactory extends SecondaryIndexStoreF
       opts.setStoreOptions(new AccumuloOptions());
     }
     final DataStoreOperations accumuloOperations = helper.createOperations(opts);
-    return new AccumuloSecondaryIndexDataStore((AccumuloOperations) accumuloOperations,
+    return new AccumuloSecondaryIndexDataStore(
+        (AccumuloOperations) accumuloOperations,
         (AccumuloOptions) opts.getStoreOptions());
   }
 }

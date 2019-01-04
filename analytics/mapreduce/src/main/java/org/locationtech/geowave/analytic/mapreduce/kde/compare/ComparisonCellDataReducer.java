@@ -49,6 +49,7 @@ public class ComparisonCellDataReducer
     }
     totalKeys =
         context.getConfiguration().getLong(
-            "Entries per level (" + (isWinter ? "winter" : "summer") + ", " + level + ")", 10);
+            "Entries per level (" + (isWinter ? "winter" : "summer") + ", " + level + ")",
+            10);
   }
 }

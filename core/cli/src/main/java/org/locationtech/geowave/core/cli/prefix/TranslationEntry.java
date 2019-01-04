@@ -128,8 +128,10 @@ public class TranslationEntry {
       // (GeoWaveLabels_en_US.properties)
       ResourceBundle resourceBundle =
           ResourceBundle.getBundle(
-              bundleName, locale, ResourceBundle.Control
-                  .getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES));
+              bundleName,
+              locale,
+              ResourceBundle.Control.getNoFallbackControl(
+                  ResourceBundle.Control.FORMAT_PROPERTIES));
       if (resourceBundle != null) {
         if (resourceBundle.containsKey(descriptionKey)) {
           description = resourceBundle.getString(descriptionKey);
@@ -230,7 +232,11 @@ public class TranslationEntry {
       item = item.substring(j);
       newNames[i] =
           String.format(
-              "%s%s%s%s", prePrefix, prefix, JCommanderTranslationMap.PREFIX_SEPARATOR, item);
+              "%s%s%s%s",
+              prePrefix,
+              prefix,
+              JCommanderTranslationMap.PREFIX_SEPARATOR,
+              item);
     }
     return newNames;
   }

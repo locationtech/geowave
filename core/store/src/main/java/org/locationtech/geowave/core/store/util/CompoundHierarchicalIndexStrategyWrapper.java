@@ -67,7 +67,8 @@ public class CompoundHierarchicalIndexStrategyWrapper implements HierarchicalNum
         if (parent.getPrimarySubStrategy().equals(currentStrategyToBeReplaced)) {
           // replace primary
           currentStrategyReplacement =
-              new CompoundIndexStrategy(currentStrategyReplacement,
+              new CompoundIndexStrategy(
+                  currentStrategyReplacement,
                   parent.getSecondarySubStrategy());
         } else {
           // replace secondary
@@ -108,8 +109,10 @@ public class CompoundHierarchicalIndexStrategyWrapper implements HierarchicalNum
       final MultiDimensionalNumericData indexedRange,
       final int maxEstimatedRangeDecomposition,
       final IndexMetaData... hints) {
-    return parentStrategies.get(0)
-        .getQueryRanges(indexedRange, maxEstimatedRangeDecomposition, hints);
+    return parentStrategies.get(0).getQueryRanges(
+        indexedRange,
+        maxEstimatedRangeDecomposition,
+        hints);
   }
 
   @Override
@@ -166,7 +169,8 @@ public class CompoundHierarchicalIndexStrategyWrapper implements HierarchicalNum
     } else if (parentStrategies.isEmpty()) {
       return firstHierarchicalStrategy;
     } else {
-      return new CompoundHierarchicalIndexStrategyWrapper(parentStrategies,
+      return new CompoundHierarchicalIndexStrategyWrapper(
+          parentStrategies,
           firstHierarchicalStrategy);
     }
   }

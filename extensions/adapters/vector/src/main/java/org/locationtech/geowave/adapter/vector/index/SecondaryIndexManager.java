@@ -69,18 +69,18 @@ public class SecondaryIndexManager implements Persistable {
       if (userData.containsKey(NumericSecondaryIndexConfiguration.INDEX_KEY)) {
         secondaryIndex = NumericSecondaryIndexConfiguration.INDEX_KEY;
         secondaryIndexType =
-            SecondaryIndexType
-                .valueOf((String) userData.get(NumericSecondaryIndexConfiguration.INDEX_KEY));
+            SecondaryIndexType.valueOf(
+                (String) userData.get(NumericSecondaryIndexConfiguration.INDEX_KEY));
       } else if (userData.containsKey(TextSecondaryIndexConfiguration.INDEX_KEY)) {
         secondaryIndex = TextSecondaryIndexConfiguration.INDEX_KEY;
         secondaryIndexType =
-            SecondaryIndexType
-                .valueOf((String) userData.get(TextSecondaryIndexConfiguration.INDEX_KEY));
+            SecondaryIndexType.valueOf(
+                (String) userData.get(TextSecondaryIndexConfiguration.INDEX_KEY));
       } else if (userData.containsKey(TemporalSecondaryIndexConfiguration.INDEX_KEY)) {
         secondaryIndex = TemporalSecondaryIndexConfiguration.INDEX_KEY;
         secondaryIndexType =
-            SecondaryIndexType
-                .valueOf((String) userData.get(TemporalSecondaryIndexConfiguration.INDEX_KEY));
+            SecondaryIndexType.valueOf(
+                (String) userData.get(TemporalSecondaryIndexConfiguration.INDEX_KEY));
       }
 
       // If a valid secondary index type is provided, and the type is
@@ -126,24 +126,36 @@ public class SecondaryIndexManager implements Persistable {
         stat = new FeatureNumericHistogramStatistics(fieldName);
         statistics.add(stat);
         supportedSecondaryIndices.add(
-            new SecondaryIndexImpl<>(new NumericFieldIndexStrategy(), fieldName, statistics,
-                secondaryIndexType, fieldsForPartial));
+            new SecondaryIndexImpl<>(
+                new NumericFieldIndexStrategy(),
+                fieldName,
+                statistics,
+                secondaryIndexType,
+                fieldsForPartial));
         break;
 
       case TextSecondaryIndexConfiguration.INDEX_KEY:
         stat = new FeatureHyperLogLogStatistics(fieldName, 16);
         statistics.add(stat);
         supportedSecondaryIndices.add(
-            new SecondaryIndexImpl<>(new TextIndexStrategy(), fieldName, statistics,
-                secondaryIndexType, fieldsForPartial));
+            new SecondaryIndexImpl<>(
+                new TextIndexStrategy(),
+                fieldName,
+                statistics,
+                secondaryIndexType,
+                fieldsForPartial));
         break;
 
       case TemporalSecondaryIndexConfiguration.INDEX_KEY:
         stat = new FeatureNumericHistogramStatistics(fieldName);
         statistics.add(stat);
         supportedSecondaryIndices.add(
-            new SecondaryIndexImpl<>(new TemporalIndexStrategy(), fieldName, statistics,
-                secondaryIndexType, fieldsForPartial));
+            new SecondaryIndexImpl<>(
+                new TemporalIndexStrategy(),
+                fieldName,
+                statistics,
+                secondaryIndexType,
+                fieldsForPartial));
         break;
 
       default:

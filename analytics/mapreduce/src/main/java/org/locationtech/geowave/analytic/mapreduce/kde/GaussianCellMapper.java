@@ -51,9 +51,11 @@ public class GaussianCellMapper
     maxLevel = context.getConfiguration().getInt(KDEJobRunner.MAX_LEVEL_KEY, 25);
     valueRangePerDimension =
         new ValueRange[] {
-            new ValueRange(context.getConfiguration().getDouble(KDEJobRunner.X_MIN_KEY, -180),
+            new ValueRange(
+                context.getConfiguration().getDouble(KDEJobRunner.X_MIN_KEY, -180),
                 context.getConfiguration().getDouble(KDEJobRunner.X_MAX_KEY, 180)),
-            new ValueRange(context.getConfiguration().getDouble(KDEJobRunner.Y_MIN_KEY, -90),
+            new ValueRange(
+                context.getConfiguration().getDouble(KDEJobRunner.Y_MIN_KEY, -90),
                 context.getConfiguration().getDouble(KDEJobRunner.Y_MAX_KEY, 90))};
     inputCrsCode = context.getConfiguration().get(KDEJobRunner.INPUT_CRSCODE_KEY);
     outputCrsCode = context.getConfiguration().get(KDEJobRunner.OUTPUT_CRSCODE_KEY);
@@ -81,7 +83,10 @@ public class GaussianCellMapper
       final int numYPosts,
       final int level) {
     levelStoreMap.put(
-        level, new LevelStore(numXPosts, numYPosts,
+        level,
+        new LevelStore(
+            numXPosts,
+            numYPosts,
             new MapContextCellCounter(context, level, minLevel, maxLevel)));
   }
 
@@ -104,7 +109,9 @@ public class GaussianCellMapper
             try {
               transform =
                   CRS.findMathTransform(
-                      CRS.decode(inputCrsCode, true), CRS.decode(outputCrsCode, true), true);
+                      CRS.decode(inputCrsCode, true),
+                      CRS.decode(outputCrsCode, true),
+                      true);
             } catch (FactoryException e) {
               LOGGER.error("Unable to decode " + inputCrsCode + " CRS", e);
               throw new RuntimeException("Unable to initialize " + inputCrsCode + " object", e);
@@ -137,7 +144,11 @@ public class GaussianCellMapper
       final ValueRange[] valueRangePerDimension) {
     final LevelStore levelStore = levelStoreMap.get(level);
     GaussianFilter.incrementPt(
-        pt.getY(), pt.getX(), levelStore.counter, levelStore.numXPosts, levelStore.numYPosts,
+        pt.getY(),
+        pt.getX(),
+        levelStore.counter,
+        levelStore.numXPosts,
+        levelStore.numYPosts,
         valueRangePerDimension);
   }
 

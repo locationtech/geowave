@@ -46,10 +46,13 @@ public abstract class BaseSecondaryIndexDataStore implements SecondaryIndexDataS
       if (writer != null) {
         writer.write(
             buildJoinMutation(
-                indexedAttributeValue.getBytes(), StringUtils.stringToBinary(typeName),
+                indexedAttributeValue.getBytes(),
+                StringUtils.stringToBinary(typeName),
                 StringUtils.stringToBinary(indexedAttributeFieldName),
-                StringUtils.stringToBinary(primaryIndexName), primaryPartitionKey.getBytes(),
-                primarySortKey.getBytes(), attributeVisibility.getBytes()));
+                StringUtils.stringToBinary(primaryIndexName),
+                primaryPartitionKey.getBytes(),
+                primarySortKey.getBytes(),
+                attributeVisibility.getBytes()));
       }
     } catch (final Exception e) {
       LOGGER.error("Unable to build secondary index row mutation.", e);
@@ -70,9 +73,13 @@ public abstract class BaseSecondaryIndexDataStore implements SecondaryIndexDataS
         for (final GeoWaveValue v : values) {
           writer.write(
               buildMutation(
-                  indexedAttributeValue.getBytes(), StringUtils.stringToBinary(typeName),
-                  StringUtils.stringToBinary(indexedAttributeFieldName), dataId.getBytes(),
-                  v.getFieldMask(), v.getValue(), v.getVisibility()));
+                  indexedAttributeValue.getBytes(),
+                  StringUtils.stringToBinary(typeName),
+                  StringUtils.stringToBinary(indexedAttributeFieldName),
+                  dataId.getBytes(),
+                  v.getFieldMask(),
+                  v.getValue(),
+                  v.getVisibility()));
         }
       }
     } catch (final Exception e) {
@@ -107,9 +114,11 @@ public abstract class BaseSecondaryIndexDataStore implements SecondaryIndexDataS
       if (writer != null) {
         writer.write(
             buildJoinDeleteMutation(
-                indexedAttributeValue.getBytes(), StringUtils.stringToBinary(typeName),
+                indexedAttributeValue.getBytes(),
+                StringUtils.stringToBinary(typeName),
                 StringUtils.stringToBinary(indexedAttributeFieldName),
-                StringUtils.stringToBinary(primaryIndexName), primaryIndexPartitionKey.getBytes(),
+                StringUtils.stringToBinary(primaryIndexName),
+                primaryIndexPartitionKey.getBytes(),
                 primaryIndexSortKey.getBytes()));
       }
     } catch (final Exception e) {
@@ -131,8 +140,10 @@ public abstract class BaseSecondaryIndexDataStore implements SecondaryIndexDataS
         for (final GeoWaveValue v : values) {
           writer.write(
               buildFullDeleteMutation(
-                  indexedAttributeValue.getBytes(), StringUtils.stringToBinary(typeName),
-                  StringUtils.stringToBinary(indexedAttributeFieldName), dataId.getBytes(),
+                  indexedAttributeValue.getBytes(),
+                  StringUtils.stringToBinary(typeName),
+                  StringUtils.stringToBinary(indexedAttributeFieldName),
+                  dataId.getBytes(),
                   v.getFieldMask()));
         }
       }

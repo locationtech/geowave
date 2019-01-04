@@ -12,7 +12,8 @@ import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
 public class FeatureSerializationOptionProvider implements Persistable {
-  @Parameter(names = "--avro",
+  @Parameter(
+      names = "--avro",
       description = "A flag to indicate whether avro feature serialization should be used")
   private boolean avro = false;
 

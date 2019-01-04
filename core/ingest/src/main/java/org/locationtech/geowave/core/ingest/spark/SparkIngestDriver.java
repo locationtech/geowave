@@ -142,17 +142,18 @@ public class SparkIngestDriver implements Serializable {
       String jar = "";
       try {
         jar =
-            SparkIngestDriver.class.getProtectionDomain().getCodeSource().getLocation().toURI()
-                .getPath();
+            SparkIngestDriver.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
       } catch (final URISyntaxException e) {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }
 
       session =
-          SparkSession.builder().appName(sparkOptions.getAppName()).master(sparkOptions.getMaster())
-              .config("spark.driver.host", sparkOptions.getHost()).config("spark.jars", jar)
-              .config("spark.executor.instances", Integer.toString(numExecutors))
-              .config("spark.executor.cores", Integer.toString(numCores)).getOrCreate();
+          SparkSession.builder().appName(sparkOptions.getAppName()).master(
+              sparkOptions.getMaster()).config("spark.driver.host", sparkOptions.getHost()).config(
+                  "spark.jars",
+                  jar).config("spark.executor.instances", Integer.toString(numExecutors)).config(
+                      "spark.executor.cores",
+                      Integer.toString(numCores)).getOrCreate();
 
       jsc = JavaSparkContext.fromSparkContext(session.sparkContext());
     }
@@ -177,7 +178,12 @@ public class SparkIngestDriver implements Serializable {
         }
 
         processInput(
-            configFile, localInput, inputStoreName, indexList, ingestOptions, configProperties,
+            configFile,
+            localInput,
+            inputStoreName,
+            indexList,
+            ingestOptions,
+            configProperties,
             inputFiles.iterator());
       });
     } else if (isHDFS) {
@@ -190,7 +196,12 @@ public class SparkIngestDriver implements Serializable {
       }
       fileRDD.foreachPartition(uri -> {
         processInput(
-            configFile, localInput, inputStoreName, indexList, ingestOptions, configProperties,
+            configFile,
+            localInput,
+            inputStoreName,
+            indexList,
+            ingestOptions,
+            configProperties,
             uri);
       });
     }
@@ -221,7 +232,9 @@ public class SparkIngestDriver implements Serializable {
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
     if (!inputStoreLoader.loadFromConfig(
-        configProperties, DataStorePluginOptions.getStoreNamespace(inputStoreName), configFile)) {
+        configProperties,
+        DataStorePluginOptions.getStoreNamespace(inputStoreName),
+        configFile)) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
@@ -239,7 +252,9 @@ public class SparkIngestDriver implements Serializable {
     for (Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
 
       if (!IngestUtils.checkIndexesAgainstProvider(
-          pluginEntry.getKey(), pluginEntry.getValue(), indexOptions)) {
+          pluginEntry.getKey(),
+          pluginEntry.getValue(),
+          indexOptions)) {
         continue;
       }
 
@@ -250,8 +265,13 @@ public class SparkIngestDriver implements Serializable {
     }
 
     LocalFileIngestDriver localIngestDriver =
-        new LocalFileIngestDriver(inputStoreOptions, indexOptions, localFileIngestPlugins,
-            ingestOptions, localInput, 1);
+        new LocalFileIngestDriver(
+            inputStoreOptions,
+            indexOptions,
+            localFileIngestPlugins,
+            ingestOptions,
+            localInput,
+            1);
 
     localIngestDriver.startExecutor();
 
@@ -260,19 +280,23 @@ public class SparkIngestDriver implements Serializable {
 
       List<PluginVisitor<LocalFileIngestPlugin<?>>> pluginVisitors =
           new ArrayList<>(localFileIngestPlugins.size());
-      for (final Entry<String, LocalFileIngestPlugin<?>> localPlugin : localFileIngestPlugins
-          .entrySet()) {
+      for (final Entry<String, LocalFileIngestPlugin<?>> localPlugin : localFileIngestPlugins.entrySet()) {
         pluginVisitors.add(
-            new PluginVisitor<LocalFileIngestPlugin<?>>(localPlugin.getValue(),
-                localPlugin.getKey(), localInput.getExtensions()));
+            new PluginVisitor<LocalFileIngestPlugin<?>>(
+                localPlugin.getValue(),
+                localPlugin.getKey(),
+                localInput.getExtensions()));
       }
 
       while (inputFiles.hasNext()) {
         final URL file = inputFiles.next().toURL();
         for (final PluginVisitor<LocalFileIngestPlugin<?>> visitor : pluginVisitors) {
           if (visitor.supportsFile(file)) {
-            localIngestDriver
-                .processFile(file, visitor.getTypeName(), visitor.getLocalPluginBase(), runData);
+            localIngestDriver.processFile(
+                file,
+                visitor.getTypeName(),
+                visitor.getLocalPluginBase(),
+                runData);
           }
         }
       }
@@ -332,8 +356,10 @@ public class SparkIngestDriver implements Serializable {
     }
 
     return (S3FileSystem) new S3FileSystemProvider().getFileSystem(
-        new URI(s3EndpointUrl), Collections.singletonMap(
-            S3FileSystemProvider.AMAZON_S3_FACTORY_CLASS, GeoWaveAmazonS3Factory.class.getName()));
+        new URI(s3EndpointUrl),
+        Collections.singletonMap(
+            S3FileSystemProvider.AMAZON_S3_FACTORY_CLASS,
+            GeoWaveAmazonS3Factory.class.getName()));
   }
 
   public static void setHdfsURLStreamHandlerFactory() throws NoSuchFieldException,
@@ -359,7 +385,8 @@ public class SparkIngestDriver implements Serializable {
       } catch (IllegalAccessException e1) {
         LOGGER.error("Could not access URLStreamHandler factory field on URL class: {}", e1);
         throw new RuntimeException(
-            "Could not access URLStreamHandler factory field on URL class: {}", e1);
+            "Could not access URLStreamHandler factory field on URL class: {}",
+            e1);
       }
     }
   }

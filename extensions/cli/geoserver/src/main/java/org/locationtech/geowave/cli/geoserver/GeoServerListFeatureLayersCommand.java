@@ -26,7 +26,9 @@ public class GeoServerListFeatureLayersCommand extends GeoServerCommand<String> 
   @Parameter(names = {"-ds", "--datastore"}, required = false, description = "Datastore Name")
   private String datastore = null;
 
-  @Parameter(names = {"-g", "--geowaveOnly"}, required = false,
+  @Parameter(
+      names = {"-g", "--geowaveOnly"},
+      required = false,
       description = "Show only GeoWave feature layers (default: false)")
   private Boolean geowaveOnly = false;
 

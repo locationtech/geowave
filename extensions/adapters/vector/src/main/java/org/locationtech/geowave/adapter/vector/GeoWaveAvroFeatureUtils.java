@@ -75,8 +75,8 @@ public class GeoWaveAvroFeatureUtils {
 
       attributes.add(localName);
       types.add(attr.getType().getBinding().getCanonicalName());
-      classifications
-          .add(getClassification(localName, defaultClassifications, defaultClassification));
+      classifications.add(
+          getClassification(localName, defaultClassifications, defaultClassification));
     }
 
     fd.setAttributeNames(attributes);
@@ -110,9 +110,10 @@ public class GeoWaveAvroFeatureUtils {
     }
 
     if (classification == null) {
-      throw new IOException("No default classification was provided, and no classification for: '"
-          + localName
-          + "' was provided");
+      throw new IOException(
+          "No default classification was provided, and no classification for: '"
+              + localName
+              + "' was provided");
     }
 
     return classification;
@@ -132,8 +133,8 @@ public class GeoWaveAvroFeatureUtils {
 
     final List<ByteBuffer> values = new ArrayList<>(sft.getAttributeCount());
 
-    attributeValue
-        .setSerializationVersion(ByteBuffer.wrap(new byte[] {FieldUtils.SERIALIZATION_VERSION}));
+    attributeValue.setSerializationVersion(
+        ByteBuffer.wrap(new byte[] {FieldUtils.SERIALIZATION_VERSION}));
 
     attributeValue.setFid(sf.getID());
 
@@ -169,7 +170,8 @@ public class GeoWaveAvroFeatureUtils {
     final AvroFeatureDefinition featureDefinition = sfc.getFeatureType();
     return avroSimpleFeatureToGTSimpleFeature(
         avroFeatureDefinitionToGTSimpleFeatureType(featureDefinition),
-        featureDefinition.getAttributeTypes(), sfc.getValue());
+        featureDefinition.getAttributeTypes(),
+        sfc.getValue());
   }
 
   public static SimpleFeatureType avroFeatureDefinitionToGTSimpleFeatureType(
@@ -216,8 +218,8 @@ public class GeoWaveAvroFeatureUtils {
         }
       } else {
         final FieldReader<?> fr =
-            FieldUtils
-                .getDefaultReaderForClass(Class.forName(jtsCompatibility(attributeTypes.get(i))));
+            FieldUtils.getDefaultReaderForClass(
+                Class.forName(jtsCompatibility(attributeTypes.get(i))));
         sfb.add(fr.readField(val.array(), serializationVersion));
       }
     }

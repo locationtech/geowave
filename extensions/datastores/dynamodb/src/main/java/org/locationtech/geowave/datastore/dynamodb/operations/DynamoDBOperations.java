@@ -117,9 +117,10 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
     final ScanRequest request = new ScanRequest(qName);
     final ScanResult scanResult = client.scan(request);
     final Iterator<DynamoDBRow> everything =
-        new GeoWaveRowMergingIterator<>(Iterators.transform(
-            new LazyPaginatedScan(scanResult, request, client),
-            new DynamoDBRow.GuavaRowTranslationHelper()));
+        new GeoWaveRowMergingIterator<>(
+            Iterators.transform(
+                new LazyPaginatedScan(scanResult, request, client),
+                new DynamoDBRow.GuavaRowTranslationHelper()));
     return Iterators.filter(everything, new Predicate<DynamoDBRow>() {
 
       @Override
@@ -184,17 +185,18 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
         final boolean tableCreated =
             TableUtils.createTableIfNotExists(
                 client,
-                new CreateTableRequest().withTableName(qName)
-                    .withAttributeDefinitions(
-                        new AttributeDefinition(DynamoDBRow.GW_PARTITION_ID_KEY,
-                            ScalarAttributeType.B),
-                        new AttributeDefinition(DynamoDBRow.GW_RANGE_KEY, ScalarAttributeType.B))
-                    .withKeySchema(
-                        new KeySchemaElement(DynamoDBRow.GW_PARTITION_ID_KEY, KeyType.HASH),
-                        new KeySchemaElement(DynamoDBRow.GW_RANGE_KEY, KeyType.RANGE))
-                    .withProvisionedThroughput(
-                        new ProvisionedThroughput(Long.valueOf(options.getReadCapacity()),
-                            Long.valueOf(options.getWriteCapacity()))));
+                new CreateTableRequest().withTableName(qName).withAttributeDefinitions(
+                    new AttributeDefinition(DynamoDBRow.GW_PARTITION_ID_KEY, ScalarAttributeType.B),
+                    new AttributeDefinition(
+                        DynamoDBRow.GW_RANGE_KEY,
+                        ScalarAttributeType.B)).withKeySchema(
+                            new KeySchemaElement(DynamoDBRow.GW_PARTITION_ID_KEY, KeyType.HASH),
+                            new KeySchemaElement(
+                                DynamoDBRow.GW_RANGE_KEY,
+                                KeyType.RANGE)).withProvisionedThroughput(
+                                    new ProvisionedThroughput(
+                                        Long.valueOf(options.getReadCapacity()),
+                                        Long.valueOf(options.getWriteCapacity()))));
         if (tableCreated) {
           try {
             TableUtils.waitUntilActive(client, qName);
@@ -219,15 +221,22 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
         final boolean tableCreated =
             TableUtils.createTableIfNotExists(
                 client,
-                new CreateTableRequest().withTableName(tableName)
-                    .withAttributeDefinitions(
-                        new AttributeDefinition(METADATA_PRIMARY_ID_KEY, ScalarAttributeType.B))
-                    .withKeySchema(new KeySchemaElement(METADATA_PRIMARY_ID_KEY, KeyType.HASH))
-                    .withAttributeDefinitions(
-                        new AttributeDefinition(METADATA_TIMESTAMP_KEY, ScalarAttributeType.N))
-                    .withKeySchema(new KeySchemaElement(METADATA_TIMESTAMP_KEY, KeyType.RANGE))
-                    .withProvisionedThroughput(
-                        new ProvisionedThroughput(Long.valueOf(5), Long.valueOf(5))));
+                new CreateTableRequest().withTableName(tableName).withAttributeDefinitions(
+                    new AttributeDefinition(
+                        METADATA_PRIMARY_ID_KEY,
+                        ScalarAttributeType.B)).withKeySchema(
+                            new KeySchemaElement(
+                                METADATA_PRIMARY_ID_KEY,
+                                KeyType.HASH)).withAttributeDefinitions(
+                                    new AttributeDefinition(
+                                        METADATA_TIMESTAMP_KEY,
+                                        ScalarAttributeType.N)).withKeySchema(
+                                            new KeySchemaElement(
+                                                METADATA_TIMESTAMP_KEY,
+                                                KeyType.RANGE)).withProvisionedThroughput(
+                                                    new ProvisionedThroughput(
+                                                        Long.valueOf(5),
+                                                        Long.valueOf(5))));
         if (tableCreated) {
           try {
             TableUtils.waitUntilActive(client, tableName);
@@ -278,7 +287,11 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
       InternalAdapterStore internalAdapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore) {
     return DataStoreUtils.mergeData(
-        this, options.getStoreOptions(), index, adapterStore, internalAdapterStore,
+        this,
+        options.getStoreOptions(),
+        index,
+        adapterStore,
+        internalAdapterStore,
         adapterIndexMappingStore);
   }
 
@@ -292,8 +305,8 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
   @Override
   public boolean metadataExists(final MetadataType type) throws IOException {
     try {
-      return TableStatus.ACTIVE.name()
-          .equals(client.describeTable(getMetadataTableName(type)).getTable().getTableStatus());
+      return TableStatus.ACTIVE.name().equals(
+          client.describeTable(getMetadataTableName(type)).getTable().getTableStatus());
     } catch (final AmazonDynamoDBException e) {
       LOGGER.info("Unable to check existence of table", e);
     }
@@ -308,8 +321,10 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
   public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
     return new QueryAndDeleteByRow<>(
         createRowDeleter(
-            readerParams.getIndex().getName(), readerParams.getAdapterStore(),
-            readerParams.getInternalAdapterStore(), readerParams.getAdditionalAuthorizations()),
+            readerParams.getIndex().getName(),
+            readerParams.getAdapterStore(),
+            readerParams.getInternalAdapterStore(),
+            readerParams.getAdditionalAuthorizations()),
         createReader(readerParams));
   }
 }

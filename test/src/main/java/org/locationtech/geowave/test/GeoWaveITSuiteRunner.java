@@ -31,8 +31,10 @@ public class GeoWaveITSuiteRunner extends Suite {
       Statement newStatement = super.withAfterClasses(statement);
       final Method tearDownMethod = GeoWaveITSuiteRunner.class.getDeclaredMethod("tearDown");
       tearDownMethod.setAccessible(true);
-      return new RunAfters(newStatement,
-          Collections.singletonList(new FrameworkMethod(tearDownMethod)), this);
+      return new RunAfters(
+          newStatement,
+          Collections.singletonList(new FrameworkMethod(tearDownMethod)),
+          this);
     } catch (NoSuchMethodException | SecurityException e) {
       LOGGER.warn("Unable to find tearDown method", e);
     }

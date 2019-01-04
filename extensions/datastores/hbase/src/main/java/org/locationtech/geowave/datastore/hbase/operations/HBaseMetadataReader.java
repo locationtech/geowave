@@ -91,12 +91,16 @@ public class HBaseMetadataReader implements MetadataReader {
               } else {
                 resultantCQ = columnQualifier;
               }
-              return new GeoWaveMetadata(result.getRow(), resultantCQ, null,
+              return new GeoWaveMetadata(
+                  result.getRow(),
+                  resultantCQ,
+                  null,
                   getMergedStats(result, clientsideStatsMerge));
             }
           });
       if (rS instanceof ResultScanner) {
-        return new CloseableIteratorWrapper<>(new ScannerClosableWrapper((ResultScanner) rS),
+        return new CloseableIteratorWrapper<>(
+            new ScannerClosableWrapper((ResultScanner) rS),
             transformedIt);
       } else {
         return new CloseableIterator.Wrapper<>(transformedIt);

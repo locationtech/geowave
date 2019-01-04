@@ -108,7 +108,10 @@ public class SwaggerOperationParser<T> {
     for (final RestField<?> field : fields) {
       final JsonObject[] field_obj_array =
           processField(
-              field.getName(), field.getType(), field.getDescription(), field.isRequired());
+              field.getName(),
+              field.getType(),
+              field.getDescription(),
+              field.isRequired());
       if (field_obj_array != null) {
         for (final JsonObject field_obj : field_obj_array) {
           fields_obj.add(field_obj);

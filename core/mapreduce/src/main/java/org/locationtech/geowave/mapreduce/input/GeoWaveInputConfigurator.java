@@ -67,8 +67,9 @@ public class GeoWaveInputConfigurator extends GeoWaveConfiguratorBase {
       final Class<?> implementingClass,
       final Configuration configuration) {
     final String queryStr =
-        configuration
-            .get(enumToConfKey(implementingClass, InputConfig.DATA_TYPE_QUERY_OPTIONS), "");
+        configuration.get(
+            enumToConfKey(implementingClass, InputConfig.DATA_TYPE_QUERY_OPTIONS),
+            "");
     if ((queryStr != null) && !queryStr.isEmpty()) {
       final byte[] queryBytes = ByteArrayUtils.byteArrayFromString(queryStr);
       return (DataTypeQueryOptions<?>) PersistenceUtils.fromBinary(queryBytes);

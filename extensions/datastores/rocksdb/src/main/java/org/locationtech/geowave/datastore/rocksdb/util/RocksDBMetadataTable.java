@@ -57,12 +57,17 @@ public class RocksDBMetadataTable {
       prevTime = time;
       key =
           Bytes.concat(
-              value.getPrimaryId(), secondaryId, Longs.toByteArray(time), visibility,
+              value.getPrimaryId(),
+              secondaryId,
+              Longs.toByteArray(time),
+              visibility,
               new byte[] {(byte) value.getPrimaryId().length, (byte) visibility.length});
     } else {
       key =
           Bytes.concat(
-              value.getPrimaryId(), secondaryId, visibility,
+              value.getPrimaryId(),
+              secondaryId,
+              visibility,
               new byte[] {(byte) value.getPrimaryId().length, (byte) visibility.length});
     }
     put(key, value.getValue());

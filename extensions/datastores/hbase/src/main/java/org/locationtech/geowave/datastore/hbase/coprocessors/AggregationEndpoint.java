@@ -78,8 +78,8 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
 
     // Get the aggregation type
     final Aggregation aggregation =
-        (Aggregation) URLClassloaderUtils
-            .fromClassId(request.getAggregation().getClassId().toByteArray());
+        (Aggregation) URLClassloaderUtils.fromClassId(
+            request.getAggregation().getClassId().toByteArray());
 
     // Handle aggregation params
     if (request.getAggregation().hasParams()) {
@@ -178,8 +178,14 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
       try {
         final Object result =
             getValue(
-                aggregation, filterList, dataAdapter, internalAdapterId, hdFilter,
-                request.getBlockCaching(), request.getCacheSize(), authorizations);
+                aggregation,
+                filterList,
+                dataAdapter,
+                internalAdapterId,
+                hdFilter,
+                request.getBlockCaching(),
+                request.getCacheSize(),
+                authorizations);
 
         URLClassloaderUtils.initClassLoader();
         final byte[] bvalue = aggregation.resultToBinary(result);

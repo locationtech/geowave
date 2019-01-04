@@ -75,7 +75,13 @@ public class RedisReader<T> implements RowReader<T> {
     final Set<String> authorizations = Sets.newHashSet(readerParams.getAdditionalAuthorizations());
     if ((ranges != null) && !ranges.isEmpty()) {
       return createIterator(
-          client, compression, readerParams, namespace, ranges, authorizations, async);
+          client,
+          compression,
+          readerParams,
+          namespace,
+          ranges,
+          authorizations,
+          async);
     } else {
       final Iterator<GeoWaveRedisRow>[] iterators =
           new Iterator[readerParams.getAdapterIds().length];
@@ -85,16 +91,22 @@ public class RedisReader<T> implements RowReader<T> {
             RedisUtils.isGroupByRowAndIsSortByTime(readerParams, adapterId);
         final String setNamePrefix =
             RedisUtils.getRowSetPrefix(
-                namespace, readerParams.getInternalAdapterStore().getTypeName(adapterId),
+                namespace,
+                readerParams.getInternalAdapterStore().getTypeName(adapterId),
                 readerParams.getIndex().getName());
         final Stream<Pair<ByteArray, Iterator<ScoredEntry<GeoWaveRedisPersistedRow>>>> streamIt =
             RedisUtils.getPartitions(client, setNamePrefix).stream().map(p -> {
               final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> result =
-                  RedisUtils
-                      .getRowSet(
-                          client, compression, setNamePrefix, p.getBytes(),
-                          groupByRowAndSortByTime.getRight())
-                      .entryRange(Double.NEGATIVE_INFINITY, true, Double.POSITIVE_INFINITY, true);
+                  RedisUtils.getRowSet(
+                      client,
+                      compression,
+                      setNamePrefix,
+                      p.getBytes(),
+                      groupByRowAndSortByTime.getRight()).entryRange(
+                          Double.NEGATIVE_INFINITY,
+                          true,
+                          Double.POSITIVE_INFINITY,
+                          true);
               final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> it =
                   groupByRowAndSortByTime.getLeft()
                       ? RedisUtils.groupByRow(result, groupByRowAndSortByTime.getRight())
@@ -103,13 +115,14 @@ public class RedisReader<T> implements RowReader<T> {
             });
         iterators[i++] =
             Iterators.concat(
-                streamIt
-                    .map(
-                        p -> Iterators.transform(
-                            p.getRight(),
-                            pr -> new GeoWaveRedisRow(pr.getValue(), adapterId,
-                                p.getLeft().getBytes(), RedisUtils.getSortKey(pr.getScore()))))
-                    .iterator());
+                streamIt.map(
+                    p -> Iterators.transform(
+                        p.getRight(),
+                        pr -> new GeoWaveRedisRow(
+                            pr.getValue(),
+                            adapterId,
+                            p.getLeft().getBytes(),
+                            RedisUtils.getSortKey(pr.getScore())))).iterator());
       }
       return wrapResults(Iterators.concat(iterators), readerParams, authorizations);
     }
@@ -124,17 +137,21 @@ public class RedisReader<T> implements RowReader<T> {
       final Set<String> authorizations,
       final boolean async) {
     final Iterator<CloseableIterator> it =
-        Arrays.stream(ArrayUtils.toObject(readerParams.getAdapterIds()))
-            .map(
-                adapterId -> new BatchedRangeRead(client, compression,
-                    RedisUtils.getRowSetPrefix(
-                        namespace, readerParams.getInternalAdapterStore().getTypeName(adapterId),
-                        readerParams.getIndex().getName()),
-                    adapterId, ranges, readerParams.getRowTransformer(),
-                    new ClientVisibilityFilter(authorizations), async,
-                    RedisUtils.isGroupByRowAndIsSortByTime(readerParams, adapterId),
-                    RedisUtils.isSortByKeyRequired(readerParams)).results())
-            .iterator();
+        Arrays.stream(ArrayUtils.toObject(readerParams.getAdapterIds())).map(
+            adapterId -> new BatchedRangeRead(
+                client,
+                compression,
+                RedisUtils.getRowSetPrefix(
+                    namespace,
+                    readerParams.getInternalAdapterStore().getTypeName(adapterId),
+                    readerParams.getIndex().getName()),
+                adapterId,
+                ranges,
+                readerParams.getRowTransformer(),
+                new ClientVisibilityFilter(authorizations),
+                async,
+                RedisUtils.isGroupByRowAndIsSortByTime(readerParams, adapterId),
+                RedisUtils.isSortByKeyRequired(readerParams)).results()).iterator();
     final CloseableIterator<T>[] itArray = Iterators.toArray(it, CloseableIterator.class);
     return new CloseableIteratorWrapper<>(new Closeable() {
       AtomicBoolean closed = new AtomicBoolean(false);
@@ -159,12 +176,17 @@ public class RedisReader<T> implements RowReader<T> {
     final ByteArray stopKey =
         range.isInfiniteStopSortKey() ? null : new ByteArray(range.getEndSortKey());
     final SinglePartitionQueryRanges partitionRange =
-        new SinglePartitionQueryRanges(new ByteArray(range.getPartitionKey()),
+        new SinglePartitionQueryRanges(
+            new ByteArray(range.getPartitionKey()),
             Collections.singleton(new ByteArrayRange(startKey, stopKey)));
     final Set<String> authorizations =
         Sets.newHashSet(recordReaderParams.getAdditionalAuthorizations());
     return createIterator(
-        client, compression, recordReaderParams, namespace, Collections.singleton(partitionRange),
+        client,
+        compression,
+        recordReaderParams,
+        namespace,
+        Collections.singleton(partitionRange),
         authorizations,
         // there should already be sufficient parallelism created by
         // input splits for record reader use cases
@@ -176,11 +198,12 @@ public class RedisReader<T> implements RowReader<T> {
       final Iterator<GeoWaveRedisRow> results,
       final BaseReaderParams<T> params,
       final Set<String> authorizations) {
-    return new CloseableIterator.Wrapper<>(params.getRowTransformer().apply(
-        sortBySortKeyIfRequired(
-            params,
-            (Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<>(
-                Iterators.filter(results, new ClientVisibilityFilter(authorizations))))));
+    return new CloseableIterator.Wrapper<>(
+        params.getRowTransformer().apply(
+            sortBySortKeyIfRequired(
+                params,
+                (Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<>(
+                    Iterators.filter(results, new ClientVisibilityFilter(authorizations))))));
   }
 
   private static Iterator<GeoWaveRow> sortBySortKeyIfRequired(

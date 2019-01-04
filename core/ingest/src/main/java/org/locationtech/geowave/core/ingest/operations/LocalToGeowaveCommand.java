@@ -48,7 +48,8 @@ public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
   @ParametersDelegate
   private IngestFormatPluginOptions pluginFormats = new IngestFormatPluginOptions();
 
-  @Parameter(names = {"-t", "--threads"},
+  @Parameter(
+      names = {"-t", "--threads"},
       description = "number of threads to use for ingest, default to 1 (optional)")
   private int threads = 1;
 
@@ -163,8 +164,13 @@ public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
     // Driver
     final LocalFileIngestDriver driver =
-        new LocalFileIngestDriver(inputStoreOptions, inputIndexOptions, ingestPlugins,
-            ingestOptions, localInputOptions, threads);
+        new LocalFileIngestDriver(
+            inputStoreOptions,
+            inputIndexOptions,
+            ingestPlugins,
+            ingestOptions,
+            localInputOptions,
+            threads);
 
     // Execute
     if (!driver.runOperation(inputPath, configFile)) {

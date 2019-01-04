@@ -20,10 +20,12 @@ public class TestAccumuloPersistableRegistry implements PersistableRegistrySpi {
     return new PersistableIdAndConstructor[] {
         new PersistableIdAndConstructor((short) 10250, GeoBoundingBoxStatistics::new),
         new PersistableIdAndConstructor((short) 10251, TestGeometryAdapter::new),
-        new PersistableIdAndConstructor((short) 10252,
+        new PersistableIdAndConstructor(
+            (short) 10252,
             AccumuloOptionsTest.TestGeometryAdapter::new),
         new PersistableIdAndConstructor((short) 10253, AnotherAdapter::new),
-        new PersistableIdAndConstructor((short) 10254,
+        new PersistableIdAndConstructor(
+            (short) 10254,
             AccumuloRangeQueryTest.TestGeometryAdapter::new),};
   }
 }

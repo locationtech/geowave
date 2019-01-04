@@ -63,8 +63,11 @@ public class ConfigUtils {
       for (final TranslationEntry entry : entries) {
         if (includeHidden || !entry.isHidden()) {
           final ConfigOption opt =
-              new ConfigOption(entry.getAsPropertyName(), entry.getDescription(),
-                  !entry.isRequired(), entry.getParam().getType());
+              new ConfigOption(
+                  entry.getAsPropertyName(),
+                  entry.getDescription(),
+                  !entry.isRequired(),
+                  entry.getParam().getType());
           opt.setPassword(entry.isPassword());
           options.add(opt);
         }

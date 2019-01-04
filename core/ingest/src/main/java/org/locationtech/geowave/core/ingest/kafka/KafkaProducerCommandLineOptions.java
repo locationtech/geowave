@@ -13,27 +13,32 @@ import com.beust.jcommander.Parameter;
 public class KafkaProducerCommandLineOptions extends KafkaCommandLineOptions {
 
   @PropertyReference("metadata.broker.list")
-  @Parameter(names = "--metadataBrokerList",
+  @Parameter(
+      names = "--metadataBrokerList",
       description = "This is for bootstrapping and the producer will only use it for getting metadata (topics, partitions and replicas). The socket connections for sending the actual data will be established based on the broker information returned in the metadata. The format is host1:port1,host2:port2, and the list can be a subset of brokers or a VIP pointing to a subset of brokers.")
   private String metadataBrokerList;
 
   @PropertyReference("request.required.acks")
-  @Parameter(names = "--requestRequiredAcks",
+  @Parameter(
+      names = "--requestRequiredAcks",
       description = "This value controls when a produce request is considered completed. Specifically, how many other brokers must have committed the data to their log and acknowledged this to the leader?")
   private String requestRequiredAcks;
 
   @PropertyReference("producer.type")
-  @Parameter(names = "--producerType",
+  @Parameter(
+      names = "--producerType",
       description = "This parameter specifies whether the messages are sent asynchronously in a background thread. Valid values are (1) async for asynchronous send and (2) sync for synchronous send. By setting the producer to async we allow batching together of requests (which is great for throughput) but open the possibility of a failure of the client machine dropping unsent data.")
   private String producerType;
 
   @PropertyReference("serializer.class")
-  @Parameter(names = "--serializerClass",
+  @Parameter(
+      names = "--serializerClass",
       description = "The serializer class for messages. The default encoder takes a byte[] and returns the same byte[].")
   private String serializerClass;
 
   @PropertyReference("retry.backoff.ms")
-  @Parameter(names = "--retryBackoffMs",
+  @Parameter(
+      names = "--retryBackoffMs",
       description = "The amount of time to wait before attempting to retry a failed produce request to a given topic partition. This avoids repeated sending-and-failing in a tight loop.")
   private String retryBackoffMs;
 

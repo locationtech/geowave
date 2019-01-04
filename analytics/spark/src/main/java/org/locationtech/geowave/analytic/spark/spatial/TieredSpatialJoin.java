@@ -168,8 +168,8 @@ public class TieredSpatialJoin extends JoinStrategy {
     JavaFutureAction<List<Byte>> leftFuture =
         leftIndex.setName("LeftIndex").keys().map(t -> t.getBytes()[0]).distinct(4).collectAsync();
     JavaFutureAction<List<Byte>> rightFuture =
-        rightIndex.setName("RightIndex").keys().map(t -> t.getBytes()[0]).distinct(4)
-            .collectAsync();
+        rightIndex.setName("RightIndex").keys().map(t -> t.getBytes()[0]).distinct(
+            4).collectAsync();
 
     // Get the result of future
     List<Byte> rightDataTiers = Lists.newArrayList(rightFuture.get());
@@ -218,10 +218,11 @@ public class TieredSpatialJoin extends JoinStrategy {
     boolean commonRightExist = commonRightTiers != ArrayUtils.EMPTY_BYTE_OBJECT_ARRAY;
     if (commonRightExist) {
       commonRightRDD =
-          rightRDD.getGeoWaveRDD().getRawRDD().filter(t -> t._2.getDefaultGeometry() != null)
-              .mapValues((Function<SimpleFeature, Geometry>) t -> {
-                return (Geometry) t.getDefaultGeometry();
-              }).distinct(largePartitionerCount).rdd().toJavaRDD();
+          rightRDD.getGeoWaveRDD().getRawRDD().filter(
+              t -> t._2.getDefaultGeometry() != null).mapValues(
+                  (Function<SimpleFeature, Geometry>) t -> {
+                    return (Geometry) t.getDefaultGeometry();
+                  }).distinct(largePartitionerCount).rdd().toJavaRDD();
     }
 
     JavaRDD<Tuple2<GeoWaveInputKey, Geometry>> commonLeftRDD = null;
@@ -229,10 +230,11 @@ public class TieredSpatialJoin extends JoinStrategy {
     boolean commonLeftExist = commonLeftTiers != ArrayUtils.EMPTY_BYTE_OBJECT_ARRAY;
     if (commonLeftExist) {
       commonLeftRDD =
-          leftRDD.getGeoWaveRDD().getRawRDD().filter(t -> t._2.getDefaultGeometry() != null)
-              .mapValues((Function<SimpleFeature, Geometry>) t -> {
-                return (Geometry) t.getDefaultGeometry();
-              }).distinct(largePartitionerCount).rdd().toJavaRDD();
+          leftRDD.getGeoWaveRDD().getRawRDD().filter(
+              t -> t._2.getDefaultGeometry() != null).mapValues(
+                  (Function<SimpleFeature, Geometry>) t -> {
+                    return (Geometry) t.getDefaultGeometry();
+                  }).distinct(largePartitionerCount).rdd().toJavaRDD();
     }
 
     // Iterate through left tiers. Joining higher right and same level tiers
@@ -258,7 +260,11 @@ public class TieredSpatialJoin extends JoinStrategy {
 
         JavaPairRDD<GeoWaveInputKey, ByteArray> finalMatches =
             this.joinAndCompareTiers(
-                leftTier, rightTier, geomPredicate, highestPartCount, partitioner);
+                leftTier,
+                rightTier,
+                geomPredicate,
+                highestPartCount,
+                partitioner);
         this.addMatches(finalMatches);
       }
 
@@ -277,12 +283,19 @@ public class TieredSpatialJoin extends JoinStrategy {
       if (rightTiers != null) {
         JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> reprojected =
             this.reprojectToTier(
-                rightTiers, leftTierId, broadcastStrategy, getBufferAmount(BuildSide.RIGHT),
+                rightTiers,
+                leftTierId,
+                broadcastStrategy,
+                getBufferAmount(BuildSide.RIGHT),
                 partitioner);
 
         JavaPairRDD<GeoWaveInputKey, ByteArray> finalMatches =
             this.joinAndCompareTiers(
-                leftTier, reprojected, geomPredicate, highestPartCount, partitioner);
+                leftTier,
+                reprojected,
+                geomPredicate,
+                highestPartCount,
+                partitioner);
 
         this.addMatches(finalMatches);
       }
@@ -314,12 +327,19 @@ public class TieredSpatialJoin extends JoinStrategy {
 
       JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> reprojected =
           this.reprojectToTier(
-              leftTiers, rightTierId, broadcastStrategy, getBufferAmount(BuildSide.LEFT),
+              leftTiers,
+              rightTierId,
+              broadcastStrategy,
+              getBufferAmount(BuildSide.LEFT),
               partitioner);
 
       finalMatches =
           this.joinAndCompareTiers(
-              reprojected, rightTier, geomPredicate, highestPartCount, partitioner);
+              reprojected,
+              rightTier,
+              geomPredicate,
+              highestPartCount,
+              partitioner);
 
       this.addMatches(finalMatches);
     }
@@ -348,13 +368,13 @@ public class TieredSpatialJoin extends JoinStrategy {
               rightRDD.getGeoWaveRDD().getRawRDD().subtractByKey(this.combinedResults).cache()));
     } else {
       this.setLeftResults(
-          new GeoWaveRDD(leftRDD.getGeoWaveRDD().getRawRDD().join(this.combinedResults)
-              .mapToPair(t -> new Tuple2<GeoWaveInputKey, SimpleFeature>(t._1(), t._2._1()))
-              .cache()));
+          new GeoWaveRDD(
+              leftRDD.getGeoWaveRDD().getRawRDD().join(this.combinedResults).mapToPair(
+                  t -> new Tuple2<GeoWaveInputKey, SimpleFeature>(t._1(), t._2._1())).cache()));
       this.setRightResults(
-          new GeoWaveRDD(rightRDD.getGeoWaveRDD().getRawRDD().join(this.combinedResults)
-              .mapToPair(t -> new Tuple2<GeoWaveInputKey, SimpleFeature>(t._1(), t._2._1()))
-              .cache()));
+          new GeoWaveRDD(
+              rightRDD.getGeoWaveRDD().getRawRDD().join(this.combinedResults).mapToPair(
+                  t -> new Tuple2<GeoWaveInputKey, SimpleFeature>(t._1(), t._2._1())).cache()));
     }
 
     leftIndex.unpersist();
@@ -407,16 +427,20 @@ public class TieredSpatialJoin extends JoinStrategy {
     if (SpatialDimensionalityTypeProvider.isSpatial(indexStrategy)) {
       return TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
           SpatialDimensionalityTypeProvider.SPATIAL_DIMENSIONS,
-          new int[] {SpatialDimensionalityTypeProvider.LONGITUDE_BITS,
+          new int[] {
+              SpatialDimensionalityTypeProvider.LONGITUDE_BITS,
               SpatialDimensionalityTypeProvider.LATITUDE_BITS},
           SFCType.HILBERT);
     } else if (SpatialTemporalDimensionalityTypeProvider.isSpatialTemporal(indexStrategy)) {
       SpatialTemporalOptions options = new SpatialTemporalOptions();
       return TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
           SpatialTemporalDimensionalityTypeProvider.SPATIAL_TEMPORAL_DIMENSIONS,
-          new int[] {options.getBias().getSpatialPrecision(),
-              options.getBias().getSpatialPrecision(), options.getBias().getTemporalPrecision()},
-          SFCType.HILBERT, options.getMaxDuplicates());
+          new int[] {
+              options.getBias().getSpatialPrecision(),
+              options.getBias().getSpatialPrecision(),
+              options.getBias().getTemporalPrecision()},
+          SFCType.HILBERT,
+          options.getMaxDuplicates());
     }
 
     return null;
@@ -517,8 +541,8 @@ public class TieredSpatialJoin extends JoinStrategy {
                 }
               }
               return results;
-            }).mapToPair(Tuple2::swap).reduceByKey(partitioner, (id1, id2) -> id1)
-            .persist(StorageLevel.MEMORY_ONLY_SER());
+            }).mapToPair(Tuple2::swap).reduceByKey(partitioner, (id1, id2) -> id1).persist(
+                StorageLevel.MEMORY_ONLY_SER());
 
     return finalMatches;
   }

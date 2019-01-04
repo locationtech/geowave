@@ -34,33 +34,57 @@ public class AnalyticFeatureTest {
       NoSuchAuthorityCodeException, FactoryException, CQLException, ParseException {
     final SimpleFeatureType ftype =
         AnalyticFeature.createGeometryFeatureAdapter(
-            "centroid", new String[] {"extra1"}, BasicFeatureTypes.DEFAULT_NAMESPACE,
+            "centroid",
+            new String[] {"extra1"},
+            BasicFeatureTypes.DEFAULT_NAMESPACE,
             ClusteringUtils.CLUSTERING_CRS).getFeatureType();
     final GeometryFactory factory = new GeometryFactory();
     SimpleFeature feature =
         AnalyticFeature.createGeometryFeature(
-            ftype, "b1", "123", "fred", "NA", 20.30203,
-            factory.createPoint(new Coordinate(02.33, 0.23)), new String[] {"extra1"},
-            new double[] {0.022}, 1, 1, 0);
+            ftype,
+            "b1",
+            "123",
+            "fred",
+            "NA",
+            20.30203,
+            factory.createPoint(new Coordinate(02.33, 0.23)),
+            new String[] {"extra1"},
+            new double[] {0.022},
+            1,
+            1,
+            0);
     assertEquals(
-        new Coordinate(02.33, 0.23), ((Geometry) feature.getDefaultGeometry()).getCoordinate());
+        new Coordinate(02.33, 0.23),
+        ((Geometry) feature.getDefaultGeometry()).getCoordinate());
     System.out.println(((Geometry) feature.getDefaultGeometry()).getPrecisionModel());
     System.out.println(((Geometry) feature.getDefaultGeometry()).getEnvelope());
 
     feature =
         AnalyticFeature.createGeometryFeature(
-            ftype, "b1", "123", "fred", "NA", 20.30203,
-            factory.createPoint(new Coordinate(02.33, 0.23)), new String[] {"extra1"},
-            new double[] {0.022}, 10, 1, 0);
+            ftype,
+            "b1",
+            "123",
+            "fred",
+            "NA",
+            20.30203,
+            factory.createPoint(new Coordinate(02.33, 0.23)),
+            new String[] {"extra1"},
+            new double[] {0.022},
+            10,
+            1,
+            0);
 
     assertEquals(
-        new Coordinate(02.33, 0.23), ((Geometry) feature.getDefaultGeometry()).getCoordinate());
+        new Coordinate(02.33, 0.23),
+        ((Geometry) feature.getDefaultGeometry()).getCoordinate());
 
     assertEquals(
-        "geometry", feature.getFeatureType().getGeometryDescriptor().getName().getLocalPart());
+        "geometry",
+        feature.getFeatureType().getGeometryDescriptor().getName().getLocalPart());
 
     assertEquals(
-        new Integer(10), feature.getAttribute(ClusterFeatureAttribute.ZOOM_LEVEL.attrName()));
+        new Integer(10),
+        feature.getAttribute(ClusterFeatureAttribute.ZOOM_LEVEL.attrName()));
 
     Filter gtFilter = ECQL.toFilter("BBOX(geometry,2,0,3,1) and level = 10");
     assertTrue(gtFilter.evaluate(feature));

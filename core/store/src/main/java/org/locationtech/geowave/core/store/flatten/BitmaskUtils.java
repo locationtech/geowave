@@ -146,16 +146,16 @@ public class BitmaskUtils {
     final SortedSet<Integer> fieldPositions = new TreeSet<Integer>();
 
     // dimension fields must also be included
-    for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel
-        .getDimensions()) {
+    for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
       fieldPositions.add(
-          adapterAssociatedWithFieldIds
-              .getPositionOfOrderedField(indexModel, dimension.getFieldName()));
+          adapterAssociatedWithFieldIds.getPositionOfOrderedField(
+              indexModel,
+              dimension.getFieldName()));
     }
 
     for (final String fieldName : fieldNames) {
-      fieldPositions
-          .add(adapterAssociatedWithFieldIds.getPositionOfOrderedField(indexModel, fieldName));
+      fieldPositions.add(
+          adapterAssociatedWithFieldIds.getPositionOfOrderedField(indexModel, fieldName));
     }
     return generateCompositeBitmask(fieldPositions);
   }

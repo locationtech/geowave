@@ -68,7 +68,10 @@ public class RedisUtils {
       final byte[] partitionKey,
       final boolean requiresTimestamp) {
     return getRowSet(
-        client, compression, getRowSetName(setNamePrefix, partitionKey), requiresTimestamp);
+        client,
+        compression,
+        getRowSetName(setNamePrefix, partitionKey),
+        requiresTimestamp);
   }
 
   public static String getRowSetName(
@@ -94,7 +97,9 @@ public class RedisUtils {
       Compression compression,
       final String setName,
       final boolean requiresTimestamp) {
-    return new RedisScoredSetWrapper<>(client, setName,
+    return new RedisScoredSetWrapper<>(
+        client,
+        setName,
         compression.getCodec(
             requiresTimestamp ? GeoWaveRedisRowWithTimestampCodec.SINGLETON
                 : GeoWaveRedisRowCodec.SINGLETON));
@@ -109,7 +114,10 @@ public class RedisUtils {
       final byte[] partitionKey,
       final boolean requiresTimestamp) {
     return getRowSet(
-        client, compression, getRowSetPrefix(namespace, typeName, indexName), partitionKey,
+        client,
+        compression,
+        getRowSetPrefix(namespace, typeName, indexName),
+        partitionKey,
         requiresTimestamp);
   }
 
@@ -160,13 +168,11 @@ public class RedisUtils {
   public static Set<ByteArray> getPartitions(
       final RedissonClient client,
       final String setNamePrefix) {
-    return Streams.stream(client.getKeys().getKeysByPattern(setNamePrefix + "*"))
-        .map(
-            str -> str.length() > (setNamePrefix.length() + 1)
-                ? new ByteArray(
-                    ByteArrayUtils.byteArrayFromString(str.substring(setNamePrefix.length() + 1)))
-                : new ByteArray())
-        .collect(Collectors.toSet());
+    return Streams.stream(client.getKeys().getKeysByPattern(setNamePrefix + "*")).map(
+        str -> str.length() > (setNamePrefix.length() + 1)
+            ? new ByteArray(
+                ByteArrayUtils.byteArrayFromString(str.substring(setNamePrefix.length() + 1)))
+            : new ByteArray()).collect(Collectors.toSet());
   }
 
   public static Iterator<GeoWaveMetadata> groupByIds(final Iterable<GeoWaveMetadata> result) {
@@ -186,8 +192,9 @@ public class RedisUtils {
         r -> multimap.put(Pair.of(r.getScore(), new ByteArray(r.getValue().getDataId())), r));
     if (sortByTime) {
       multimap.asMap().forEach(
-          (k, v) -> Collections
-              .sort((List<ScoredEntry<GeoWaveRedisPersistedRow>>) v, TIMESTAMP_COMPARATOR));
+          (k, v) -> Collections.sort(
+              (List<ScoredEntry<GeoWaveRedisPersistedRow>>) v,
+              TIMESTAMP_COMPARATOR));
     }
     return multimap.values().iterator();
   }

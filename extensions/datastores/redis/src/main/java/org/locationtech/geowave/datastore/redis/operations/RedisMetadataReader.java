@@ -47,8 +47,10 @@ public class RedisMetadataReader implements MetadataReader {
         // score of the next prefix to subset the data
         results =
             set.valueRange(
-                RedisUtils.getScore(query.getPrimaryId()), true,
-                RedisUtils.getScore(ByteArray.getNextPrefix(query.getPrimaryId())), false);
+                RedisUtils.getScore(query.getPrimaryId()),
+                true,
+                RedisUtils.getScore(ByteArray.getNextPrefix(query.getPrimaryId())),
+                false);
       }
     } else {
       results = set;

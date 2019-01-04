@@ -176,8 +176,7 @@ public class KDEJobRunner extends Configured implements Tool {
       final Map<String, String> configOptions = outputDataStoreOptions.getOptionsAsMap();
       final StoreFactoryOptions options =
           ConfigUtils.populateOptionsFromList(
-              outputDataStoreOptions.getFactoryFamily().getDataStoreFactory()
-                  .createOptionsInstance(),
+              outputDataStoreOptions.getFactoryFamily().getDataStoreFactory().createOptionsInstance(),
               configOptions);
       options.setGeowaveNamespace(outputDataStoreOptions.getGeoWaveNamespace() + "_tmp");
       outputDataStoreOptions = new DataStorePluginOptions(options);
@@ -195,7 +194,8 @@ public class KDEJobRunner extends Configured implements Tool {
 
     GeoWaveConfiguratorBase.setRemoteInvocationParams(
         kdeCommandLineOptions.getHdfsHostPort(),
-        kdeCommandLineOptions.getJobTrackerOrResourceManHostPort(), conf);
+        kdeCommandLineOptions.getJobTrackerOrResourceManHostPort(),
+        conf);
 
     conf.setInt(MAX_LEVEL_KEY, kdeCommandLineOptions.getMaxLevel());
     conf.setInt(MIN_LEVEL_KEY, kdeCommandLineOptions.getMinLevel());
@@ -244,10 +244,12 @@ public class KDEJobRunner extends Configured implements Tool {
       bldr = bldr.indexName(kdeCommandLineOptions.getIndexName());
     }
 
-    GeoWaveInputFormat
-        .setMinimumSplitCount(job.getConfiguration(), kdeCommandLineOptions.getMinSplits());
-    GeoWaveInputFormat
-        .setMaximumSplitCount(job.getConfiguration(), kdeCommandLineOptions.getMaxSplits());
+    GeoWaveInputFormat.setMinimumSplitCount(
+        job.getConfiguration(),
+        kdeCommandLineOptions.getMinSplits());
+    GeoWaveInputFormat.setMaximumSplitCount(
+        job.getConfiguration(),
+        kdeCommandLineOptions.getMaxSplits());
 
     GeoWaveInputFormat.setStoreOptions(job.getConfiguration(), inputDataStoreOptions);
 
@@ -267,8 +269,8 @@ public class KDEJobRunner extends Configured implements Tool {
       if ((bbox != null) && !bbox.equals(GeometryUtils.infinity())) {
         bldr =
             bldr.constraints(
-                bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(bbox)
-                    .build());
+                bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                    bbox).build());
       }
     }
     GeoWaveInputFormat.setQuery(conf, bldr.build(), adapterStore, internalAdapterStore, indexStore);
@@ -276,26 +278,28 @@ public class KDEJobRunner extends Configured implements Tool {
     try {
       fs = FileSystem.get(conf);
       fs.delete(
-          new Path("/tmp/"
-              + inputDataStoreOptions.getGeoWaveNamespace()
-              + "_stats_"
-              + kdeCommandLineOptions.getMinLevel()
-              + "_"
-              + kdeCommandLineOptions.getMaxLevel()
-              + "_"
-              + kdeCommandLineOptions.getCoverageName()),
+          new Path(
+              "/tmp/"
+                  + inputDataStoreOptions.getGeoWaveNamespace()
+                  + "_stats_"
+                  + kdeCommandLineOptions.getMinLevel()
+                  + "_"
+                  + kdeCommandLineOptions.getMaxLevel()
+                  + "_"
+                  + kdeCommandLineOptions.getCoverageName()),
           true);
       FileOutputFormat.setOutputPath(
           job,
-          new Path("/tmp/"
-              + inputDataStoreOptions.getGeoWaveNamespace()
-              + "_stats_"
-              + kdeCommandLineOptions.getMinLevel()
-              + "_"
-              + kdeCommandLineOptions.getMaxLevel()
-              + "_"
-              + kdeCommandLineOptions.getCoverageName()
-              + "/basic"));
+          new Path(
+              "/tmp/"
+                  + inputDataStoreOptions.getGeoWaveNamespace()
+                  + "_stats_"
+                  + kdeCommandLineOptions.getMinLevel()
+                  + "_"
+                  + kdeCommandLineOptions.getMaxLevel()
+                  + "_"
+                  + kdeCommandLineOptions.getCoverageName()
+                  + "/basic"));
 
       final boolean job1Success = job.waitForCompletion(true);
       boolean job2Success = false;
@@ -324,17 +328,21 @@ public class KDEJobRunner extends Configured implements Tool {
         statsReducer.setOutputFormatClass(getJob2OutputFormatClass());
         FileInputFormat.setInputPaths(
             statsReducer,
-            new Path("/tmp/"
-                + inputDataStoreOptions.getGeoWaveNamespace()
-                + "_stats_"
-                + kdeCommandLineOptions.getMinLevel()
-                + "_"
-                + kdeCommandLineOptions.getMaxLevel()
-                + "_"
-                + kdeCommandLineOptions.getCoverageName()
-                + "/basic"));
+            new Path(
+                "/tmp/"
+                    + inputDataStoreOptions.getGeoWaveNamespace()
+                    + "_stats_"
+                    + kdeCommandLineOptions.getMinLevel()
+                    + "_"
+                    + kdeCommandLineOptions.getMaxLevel()
+                    + "_"
+                    + kdeCommandLineOptions.getCoverageName()
+                    + "/basic"));
         setupJob2Output(
-            conf, statsReducer, outputDataStoreOptions.getGeoWaveNamespace(), kdeCoverageName,
+            conf,
+            statsReducer,
+            outputDataStoreOptions.getGeoWaveNamespace(),
+            kdeCoverageName,
             outputPrimaryIndex);
         job2Success = statsReducer.waitForCompletion(true);
         if (job2Success) {
@@ -392,14 +400,15 @@ public class KDEJobRunner extends Configured implements Tool {
       }
 
       fs.delete(
-          new Path("/tmp/"
-              + inputDataStoreOptions.getGeoWaveNamespace()
-              + "_stats_"
-              + kdeCommandLineOptions.getMinLevel()
-              + "_"
-              + kdeCommandLineOptions.getMaxLevel()
-              + "_"
-              + kdeCommandLineOptions.getCoverageName()),
+          new Path(
+              "/tmp/"
+                  + inputDataStoreOptions.getGeoWaveNamespace()
+                  + "_stats_"
+                  + kdeCommandLineOptions.getMinLevel()
+                  + "_"
+                  + kdeCommandLineOptions.getMaxLevel()
+                  + "_"
+                  + kdeCommandLineOptions.getCoverageName()),
           true);
       return (job1Success && job2Success && postJob2Success) ? 0 : 1;
     } finally {
@@ -417,11 +426,12 @@ public class KDEJobRunner extends Configured implements Tool {
   }
 
   protected void setupEntriesPerLevel(final Job job1, final Configuration conf) throws IOException {
-    for (int l = kdeCommandLineOptions.getMinLevel(); l <= kdeCommandLineOptions
-        .getMaxLevel(); l++) {
+    for (int l =
+        kdeCommandLineOptions.getMinLevel(); l <= kdeCommandLineOptions.getMaxLevel(); l++) {
       conf.setLong(
-          "Entries per level.level" + l, job1.getCounters().getGroup("Entries per level")
-              .findCounter("level " + Long.valueOf(l)).getValue());
+          "Entries per level.level" + l,
+          job1.getCounters().getGroup("Entries per level").findCounter(
+              "level " + Long.valueOf(l)).getValue());
     }
   }
 
@@ -498,8 +508,13 @@ public class KDEJobRunner extends Configured implements Tool {
       final Index index) throws Exception {
     final DataTypeAdapter<?> adapter =
         RasterUtils.createDataAdapterTypeDouble(
-            coverageName, KDEReducer.NUM_BANDS, TILE_SIZE, KDEReducer.MINS_PER_BAND,
-            KDEReducer.MAXES_PER_BAND, KDEReducer.NAME_PER_BAND, null);
+            coverageName,
+            KDEReducer.NUM_BANDS,
+            TILE_SIZE,
+            KDEReducer.MINS_PER_BAND,
+            KDEReducer.MAXES_PER_BAND,
+            KDEReducer.NAME_PER_BAND,
+            null);
     setup(statsReducer, statsNamespace, adapter, index);
   }
 

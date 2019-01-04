@@ -54,8 +54,8 @@ public class DownloadRunner extends AnalyzeRunner {
       }
     }
     if (!localPath.getParentFile().exists() && !localPath.getParentFile().mkdirs()) {
-      LOGGER
-          .warn("Unable to create directory '" + localPath.getParentFile().getAbsolutePath() + "'");
+      LOGGER.warn(
+          "Unable to create directory '" + localPath.getParentFile().getAbsolutePath() + "'");
     }
     InputStream in = null;
     // first download the gzipped file
@@ -76,7 +76,8 @@ public class DownloadRunner extends AnalyzeRunner {
         FileUtils.moveFile(localTempPath, localPath);
       } catch (final IOException | InterruptedException e) {
         LOGGER.error(
-            "Unable to read image from public S3 '" + downloadUrl + "'; retry round " + ++retry, e);
+            "Unable to read image from public S3 '" + downloadUrl + "'; retry round " + ++retry,
+            e);
       } finally {
         if (in != null) {
           IOUtils.closeQuietly(in);
@@ -96,17 +97,18 @@ public class DownloadRunner extends AnalyzeRunner {
     final int path = (int) band.getAttribute(SceneFeatureIterator.PATH_ATTRIBUTE_NAME);
     final int row = (int) band.getAttribute(SceneFeatureIterator.ROW_ATTRIBUTE_NAME);
     final String entity = (String) band.getAttribute(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME);
-    return new File(workspaceDirectory
-        + File.separator
-        + DOWNLOAD_DIRECTORY
-        + File.separator
-        + path
-        + File.separator
-        + row
-        + File.separator
-        + entity
-        + File.separator
-        + band.getID()
-        + ".TIF");
+    return new File(
+        workspaceDirectory
+            + File.separator
+            + DOWNLOAD_DIRECTORY
+            + File.separator
+            + path
+            + File.separator
+            + row
+            + File.separator
+            + entity
+            + File.separator
+            + band.getID()
+            + ".TIF");
   }
 }

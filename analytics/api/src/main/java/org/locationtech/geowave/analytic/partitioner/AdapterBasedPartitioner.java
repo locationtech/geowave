@@ -118,8 +118,7 @@ public class AdapterBasedPartitioner extends AbstractPartitioner<AdapterDataEntr
     for (int i = 0; i < definitions.length; i++) {
       fullRangesPerDimension[i] = definitions[i].getFullRange();
       wrapsAroundBoundary[i] =
-          getIndex().getIndexModel().getDimensions()[i]
-              .getBaseDefinition() instanceof LongitudeDefinition;
+          getIndex().getIndexModel().getDimensions()[i].getBaseDefinition() instanceof LongitudeDefinition;
     }
   }
 
@@ -127,9 +126,12 @@ public class AdapterBasedPartitioner extends AbstractPartitioner<AdapterDataEntr
   public void initialize(final JobContext context, final Class<?> scope) throws IOException {
     super.initialize(context, scope);
     adapterStore =
-        new SerializableAdapterStore(new PersistentAdapterStoreAsTransient(
-            ((PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper()
-                .getValue(context, scope, null)).getDataStoreOptions()));
+        new SerializableAdapterStore(
+            new PersistentAdapterStoreAsTransient(
+                ((PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+                    context,
+                    scope,
+                    null)).getDataStoreOptions()));
 
     init();
   }
@@ -179,7 +181,8 @@ public class AdapterBasedPartitioner extends AbstractPartitioner<AdapterDataEntr
     final double maxdiff = upperBound - fullRangesPerDimension[d].getMax();
     if (wrapsAroundBoundary[d] && (mindiff < 0)) {
       currentData[d] =
-          new NumericRange(fullRangesPerDimension[d].getMax() + mindiff,
+          new NumericRange(
+              fullRangesPerDimension[d].getMax() + mindiff,
               fullRangesPerDimension[d].getMax());
       addToList(resultList, currentData, distances, dimensionsData, d + 1);
       currentData[d] = new NumericRange(fullRangesPerDimension[d].getMin(), upperBound);
@@ -188,7 +191,8 @@ public class AdapterBasedPartitioner extends AbstractPartitioner<AdapterDataEntr
       currentData[d] = new NumericRange(lowerBound, fullRangesPerDimension[d].getMax());
       addToList(resultList, currentData, distances, dimensionsData, d + 1);
       currentData[d] =
-          new NumericRange(fullRangesPerDimension[d].getMin(),
+          new NumericRange(
+              fullRangesPerDimension[d].getMin(),
               fullRangesPerDimension[d].getMin() + maxdiff);
       addToList(resultList, currentData, distances, dimensionsData, d + 1);
     } else {
@@ -215,7 +219,8 @@ public class AdapterBasedPartitioner extends AbstractPartitioner<AdapterDataEntr
     @Override
     public void addAdapter(final DataTypeAdapter<?> adapter) {
       adapterStore.addAdapter(
-          new InternalDataAdapterWrapper(adapter,
+          new InternalDataAdapterWrapper(
+              adapter,
               internalAdapterStore.addTypeName(adapter.getTypeName())));
     }
 
@@ -232,7 +237,8 @@ public class AdapterBasedPartitioner extends AbstractPartitioner<AdapterDataEntr
     @Override
     public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
       final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
-      return new CloseableIteratorWrapper<>(it,
+      return new CloseableIteratorWrapper<>(
+          it,
           Iterators.transform(it, new Function<InternalDataAdapter<?>, DataTypeAdapter<?>>() {
 
             @Override

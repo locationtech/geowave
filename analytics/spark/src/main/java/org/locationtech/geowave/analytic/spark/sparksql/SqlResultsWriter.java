@@ -54,8 +54,8 @@ public class SqlResultsWriter {
   public void writeResults(String typeName) {
     if (typeName == null) {
       typeName = DEFAULT_TYPE_NAME;
-      LOGGER
-          .warn("Using default type name (adapter id): '" + DEFAULT_TYPE_NAME + "' for SQL output");
+      LOGGER.warn(
+          "Using default type name (adapter id): '" + DEFAULT_TYPE_NAME + "' for SQL output");
     }
 
     final StructType schema = results.schema();

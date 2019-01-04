@@ -51,6 +51,7 @@ public class FeatureCentroidDistanceFn implements DistanceFn<SimpleFeature> {
   public double measure(final SimpleFeature x, final SimpleFeature y) {
 
     return coordinateDistanceFunction.measure(
-        getGeometry(x).getCentroid().getCoordinate(), getGeometry(y).getCentroid().getCoordinate());
+        getGeometry(x).getCentroid().getCoordinate(),
+        getGeometry(y).getCentroid().getCoordinate());
   }
 }

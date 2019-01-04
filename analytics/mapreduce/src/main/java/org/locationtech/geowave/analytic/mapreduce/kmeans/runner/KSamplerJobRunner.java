@@ -84,8 +84,9 @@ public class KSamplerJobRunner extends GeoWaveAnalyticJobRunner implements MapRe
     final InternalAdapterStore internalAdapterStore = getInternalAdapterStore(runTimeProperties);
     Short sampleInternalAdapterId =
         internalAdapterStore.getAdapterId(
-            runTimeProperties
-                .getPropertyAsString(SampleParameters.Sample.DATA_TYPE_NAME, "sample"));
+            runTimeProperties.getPropertyAsString(
+                SampleParameters.Sample.DATA_TYPE_NAME,
+                "sample"));
     if (sampleInternalAdapterId == null) {
       return null;
     }
@@ -110,18 +111,25 @@ public class KSamplerJobRunner extends GeoWaveAnalyticJobRunner implements MapRe
     runTimeProperties.store(CentroidParameters.Centroid.ZOOM_LEVEL, zoomLevel);
 
     runTimeProperties.storeIfEmpty(
-        SampleParameters.Sample.INDEX_NAME, new SpatialTemporalDimensionalityTypeProvider()
-            .createIndex(new SpatialTemporalOptions()).getName());
+        SampleParameters.Sample.INDEX_NAME,
+        new SpatialTemporalDimensionalityTypeProvider().createIndex(
+            new SpatialTemporalOptions()).getName());
     runTimeProperties.setConfig(
-        new ParameterEnum[] {GlobalParameters.Global.BATCH_ID, SampleParameters.Sample.INDEX_NAME,
-            SampleParameters.Sample.SAMPLE_SIZE, SampleParameters.Sample.DATA_TYPE_NAME,
+        new ParameterEnum[] {
+            GlobalParameters.Global.BATCH_ID,
+            SampleParameters.Sample.INDEX_NAME,
+            SampleParameters.Sample.SAMPLE_SIZE,
+            SampleParameters.Sample.DATA_TYPE_NAME,
             CentroidParameters.Centroid.EXTRACTOR_CLASS,
             CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
             CentroidParameters.Centroid.ZOOM_LEVEL},
-        config, getScope());
+        config,
+        getScope());
 
-    ((ParameterEnum<Class<?>>) SampleParameters.Sample.SAMPLE_RANK_FUNCTION).getHelper()
-        .setValue(config, getScope(), samplingRankFunctionClass);
+    ((ParameterEnum<Class<?>>) SampleParameters.Sample.SAMPLE_RANK_FUNCTION).getHelper().setValue(
+        config,
+        getScope(),
+        samplingRankFunctionClass);
 
     NestedGroupCentroidAssignment.setParameters(config, getScope(), runTimeProperties);
 

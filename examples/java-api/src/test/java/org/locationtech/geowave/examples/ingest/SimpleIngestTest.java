@@ -49,8 +49,8 @@ public class SimpleIngestTest {
   protected static Set<Point> getStoredPointSet(final DataStore ds) {
     final CloseableIterator itr =
         ds.query(
-            QueryBuilder.newBuilder().constraints(new BasicQuery(new BasicQuery.Constraints()))
-                .build());
+            QueryBuilder.newBuilder().constraints(
+                new BasicQuery(new BasicQuery.Constraints())).build());
     final Set<Point> readPoints = new TreeSet<>();
     while (itr.hasNext()) {
       final Object n = itr.next();

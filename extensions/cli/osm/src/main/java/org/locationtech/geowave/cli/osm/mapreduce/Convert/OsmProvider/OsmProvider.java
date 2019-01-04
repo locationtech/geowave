@@ -62,12 +62,14 @@ public class OsmProvider {
   public OsmProvider(final OSMIngestCommandArgs args, final AccumuloRequiredOptions store)
       throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
     conn =
-        new ZooKeeperInstance(store.getInstance(), store.getZookeeper())
-            .getConnector(store.getUser(), new PasswordToken(store.getPassword()));
+        new ZooKeeperInstance(store.getInstance(), store.getZookeeper()).getConnector(
+            store.getUser(),
+            new PasswordToken(store.getPassword()));
     bs =
         conn.createBatchScanner(
             args.getQualifiedTableName(),
-            new Authorizations(args.getVisibilityOptions().getVisibility()), 1);
+            new Authorizations(args.getVisibilityOptions().getVisibility()),
+            1);
   }
 
   public Geometry processRelation(
@@ -105,8 +107,9 @@ public class OsmProvider {
           }
         }
         polygons.add(
-            GeometryUtils.GEOMETRY_FACTORY
-                .createPolygon(lr, tempInner.toArray(new LinearRing[tempInner.size()])));
+            GeometryUtils.GEOMETRY_FACTORY.createPolygon(
+                lr,
+                tempInner.toArray(new LinearRing[tempInner.size()])));
       }
 
       if (polygons.size() == 0) {
@@ -118,8 +121,8 @@ public class OsmProvider {
         return polygons.get(0);
       }
 
-      return GeometryUtils.GEOMETRY_FACTORY
-          .createMultiPolygon(polygons.toArray(new Polygon[polygons.size()]));
+      return GeometryUtils.GEOMETRY_FACTORY.createMultiPolygon(
+          polygons.toArray(new Polygon[polygons.size()]));
     }
     LOGGER.info("Unsupported relation type for relation: " + osmunion.Id);
     // todo admin boundaries, routes, etc:
@@ -295,7 +298,8 @@ public class OsmProvider {
       }
 
       if (Schema.arraysEqual(
-          row.getKey().getColumnQualifierData(), StringUtils.stringToBinary(ColumnQualifier.ID))) {
+          row.getKey().getColumnQualifierData(),
+          StringUtils.stringToBinary(ColumnQualifier.ID))) {
         id = longReader.readField(row.getValue().get());
       } else if (Schema.arraysEqual(
           row.getKey().getColumnQualifierData(),
@@ -406,7 +410,8 @@ public class OsmProvider {
           StringUtils.stringToBinary(ColumnQualifier.LATITUDE))) {
         crd.y = doubleReader.readField(row.getValue().get());
       } else if (Schema.arraysEqual(
-          row.getKey().getColumnQualifierData(), StringUtils.stringToBinary(ColumnQualifier.ID))) {
+          row.getKey().getColumnQualifierData(),
+          StringUtils.stringToBinary(ColumnQualifier.ID))) {
         id = longReader.readField(row.getValue().get());
       }
 

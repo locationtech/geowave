@@ -45,8 +45,12 @@ public class RedisWriter implements RowWriter {
   }
 
   private RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getSet(final byte[] partitionKey) {
-    return RedisUtils
-        .getRowSet(client, compression, setNamePrefix, partitionKey, isTimestampRequired);
+    return RedisUtils.getRowSet(
+        client,
+        compression,
+        setNamePrefix,
+        partitionKey,
+        isTimestampRequired);
   }
 
   @Override
@@ -68,9 +72,14 @@ public class RedisWriter implements RowWriter {
       setCache.get(partitionKey).add(
           RedisUtils.getScore(row.getSortKey()),
           isTimestampRequired
-              ? new GeoWaveRedisPersistedTimestampRow((short) row.getNumberOfDuplicates(),
-                  row.getDataId(), value, Instant.now())
-              : new GeoWaveRedisPersistedRow((short) row.getNumberOfDuplicates(), row.getDataId(),
+              ? new GeoWaveRedisPersistedTimestampRow(
+                  (short) row.getNumberOfDuplicates(),
+                  row.getDataId(),
+                  value,
+                  Instant.now())
+              : new GeoWaveRedisPersistedRow(
+                  (short) row.getNumberOfDuplicates(),
+                  row.getDataId(),
                   value));
     }
   }

@@ -31,9 +31,11 @@ public class QABandToIceMaskConverter implements Landsat8BandConverterSpi {
     final Object attrValue = bandMetadata.getAttribute(BandFeatureIterator.BAND_ATTRIBUTE_NAME);
     if ("BQA".equalsIgnoreCase(attrValue.toString())) {
       final MultiPixelPackedSampleModel newSampleModel =
-          new MultiPixelPackedSampleModel(DataBuffer.TYPE_BYTE,
+          new MultiPixelPackedSampleModel(
+              DataBuffer.TYPE_BYTE,
               originalBandData.getRenderedImage().getWidth(),
-              originalBandData.getRenderedImage().getHeight(), 2);
+              originalBandData.getRenderedImage().getHeight(),
+              2);
       final WritableRaster nextRaster = Raster.createWritableRaster(newSampleModel, null);
       final RenderedImage image = originalBandData.getRenderedImage();
       final Raster data = image.getData();
@@ -44,8 +46,10 @@ public class QABandToIceMaskConverter implements Landsat8BandConverterSpi {
         }
       }
       final GridCoverage2D nextCov =
-          new GridCoverageFactory()
-              .create(coverageName, nextRaster, originalBandData.getEnvelope());
+          new GridCoverageFactory().create(
+              coverageName,
+              nextRaster,
+              originalBandData.getEnvelope());
       return nextCov;
     }
     return originalBandData;

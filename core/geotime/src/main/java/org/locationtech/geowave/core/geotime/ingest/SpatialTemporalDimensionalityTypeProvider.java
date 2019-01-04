@@ -54,13 +54,16 @@ public class SpatialTemporalDimensionalityTypeProvider
   // TODO should we use different default IDs for all the different
   // options, for now lets just use one
   public static final NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS =
-      new NumericDimensionDefinition[] {new LongitudeDefinition(), new LatitudeDefinition(true),
+      new NumericDimensionDefinition[] {
+          new LongitudeDefinition(),
+          new LatitudeDefinition(true),
           new TimeDefinition(SpatialTemporalOptions.DEFAULT_PERIODICITY)};
 
   @SuppressWarnings("rawtypes")
   public static NumericDimensionField[] getSpatialTemporalFields(
       final @Nullable Integer geometryPrecision) {
-    return new NumericDimensionField[] {new LongitudeField(geometryPrecision),
+    return new NumericDimensionField[] {
+        new LongitudeField(geometryPrecision),
         new LatitudeField(geometryPrecision, true),
         new TimeField(SpatialTemporalOptions.DEFAULT_PERIODICITY)};
   }
@@ -121,10 +124,13 @@ public class SpatialTemporalDimensionalityTypeProvider
       for (int d = 0; d < (dimensions.length - 1); d++) {
         final CoordinateSystemAxis csa = cs.getAxis(d);
         dimensions[d] =
-            new CustomCRSBoundedSpatialDimension((byte) d, csa.getMinimumValue(),
+            new CustomCRSBoundedSpatialDimension(
+                (byte) d,
+                csa.getMinimumValue(),
                 csa.getMaximumValue());
         fields[d] =
-            new CustomCRSSpatialField((CustomCRSBoundedSpatialDimension) dimensions[d],
+            new CustomCRSSpatialField(
+                (CustomCRSBoundedSpatialDimension) dimensions[d],
                 geometryPrecision);
       }
 
@@ -158,10 +164,14 @@ public class SpatialTemporalDimensionalityTypeProvider
     return new CustomNameIndex(
         XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
             dimensions,
-            new int[] {options.bias.getSpatialPrecision(), options.bias.getSpatialPrecision(),
+            new int[] {
+                options.bias.getSpatialPrecision(),
+                options.bias.getSpatialPrecision(),
                 options.bias.getTemporalPrecision()},
-            SFCType.HILBERT, options.maxDuplicates),
-        indexModel, combinedId);
+            SFCType.HILBERT,
+            options.maxDuplicates),
+        indexModel,
+        combinedId);
   }
 
   public static CoordinateReferenceSystem decodeCRS(final String crsCode) {
@@ -227,11 +237,12 @@ public class SpatialTemporalDimensionalityTypeProvider
       final Bias convertedValue = Bias.fromString(value);
 
       if (convertedValue == null) {
-        throw new ParameterException("Value "
-            + value
-            + "can not be converted to an index bias. "
-            + "Available values are: "
-            + StringUtils.join(Bias.values(), ", ").toLowerCase(Locale.ENGLISH));
+        throw new ParameterException(
+            "Value "
+                + value
+                + "can not be converted to an index bias. "
+                + "Available values are: "
+                + StringUtils.join(Bias.values(), ", ").toLowerCase(Locale.ENGLISH));
       }
       return convertedValue;
     }
@@ -244,11 +255,12 @@ public class SpatialTemporalDimensionalityTypeProvider
       final Unit convertedValue = Unit.fromString(value);
 
       if (convertedValue == null) {
-        throw new ParameterException("Value "
-            + value
-            + "can not be converted to Unit. "
-            + "Available values are: "
-            + StringUtils.join(Unit.values(), ", ").toLowerCase(Locale.ENGLISH));
+        throw new ParameterException(
+            "Value "
+                + value
+                + "can not be converted to Unit. "
+                + "Available values are: "
+                + StringUtils.join(Unit.values(), ", ").toLowerCase(Locale.ENGLISH));
       }
       return convertedValue;
     }

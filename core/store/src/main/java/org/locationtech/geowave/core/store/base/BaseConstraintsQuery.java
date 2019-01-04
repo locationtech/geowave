@@ -69,10 +69,20 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
       final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
       final FieldVisibilityCount visibilityCounts,
       final String[] authorizations) {
-    this(adapterIds, index, query != null ? query.getIndexConstraints(index) : null,
-        query != null ? query.createFilters(index) : null, clientDedupeFilter, scanCallback,
-        aggregation, fieldIdsAdapterPair, indexMetaData, duplicateCounts, differingVisibilityCounts,
-        visibilityCounts, authorizations);
+    this(
+        adapterIds,
+        index,
+        query != null ? query.getIndexConstraints(index) : null,
+        query != null ? query.createFilters(index) : null,
+        clientDedupeFilter,
+        scanCallback,
+        aggregation,
+        fieldIdsAdapterPair,
+        indexMetaData,
+        duplicateCounts,
+        differingVisibilityCounts,
+        visibilityCounts,
+        authorizations);
   }
 
   public BaseConstraintsQuery(
@@ -89,8 +99,14 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
       final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
       final FieldVisibilityCount visibilityCounts,
       final String[] authorizations) {
-    super(adapterIds, index, scanCallback, fieldIdsAdapterPair, differingVisibilityCounts,
-        visibilityCounts, authorizations);
+    super(
+        adapterIds,
+        index,
+        scanCallback,
+        fieldIdsAdapterPair,
+        differingVisibilityCounts,
+        visibilityCounts,
+        authorizations);
     this.constraints = constraints;
     this.aggregation = aggregation;
     this.indexMetaData = indexMetaData != null ? indexMetaData : new IndexMetaData[] {};
@@ -145,9 +161,14 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
         // Aggregate client-side
         final CloseableIterator<Object> it =
             super.query(
-                datastoreOperations, options, adapterStore, internalAdapterStore,
+                datastoreOperations,
+                options,
+                adapterStore,
+                internalAdapterStore,
                 maxResolutionSubsamplingPerDimension,
-                targetResolutionPerDimensionForHierarchicalIndex, limit, queryMaxRangeDecomposition,
+                targetResolutionPerDimensionForHierarchicalIndex,
+                limit,
+                queryMaxRangeDecomposition,
                 false);
         return BaseDataStoreUtils.aggregate(it, (Aggregation<?, ?, Object>) aggregation.getValue());
       } else {
@@ -169,10 +190,16 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
         }
         try (final RowReader<GeoWaveRow> reader =
             getReader(
-                datastoreOperations, options, adapterStore, internalAdapterStore,
+                datastoreOperations,
+                options,
+                adapterStore,
+                internalAdapterStore,
                 maxResolutionSubsamplingPerDimension,
-                targetResolutionPerDimensionForHierarchicalIndex, limit, queryMaxRangeDecomposition,
-                GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER, false)) {
+                targetResolutionPerDimensionForHierarchicalIndex,
+                limit,
+                queryMaxRangeDecomposition,
+                GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
+                false)) {
           Object mergedAggregationResult = null;
           final Aggregation<?, Object, Object> agg =
               (Aggregation<?, Object, Object>) aggregation.getValue();
@@ -201,9 +228,15 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
       }
     }
     return super.query(
-        datastoreOperations, options, adapterStore, internalAdapterStore,
-        maxResolutionSubsamplingPerDimension, targetResolutionPerDimensionForHierarchicalIndex,
-        limit, queryMaxRangeDecomposition, delete);
+        datastoreOperations,
+        options,
+        adapterStore,
+        internalAdapterStore,
+        maxResolutionSubsamplingPerDimension,
+        targetResolutionPerDimensionForHierarchicalIndex,
+        limit,
+        queryMaxRangeDecomposition,
+        delete);
   }
 
   @Override
@@ -222,7 +255,9 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
       final List<MultiDimensionalCoordinateRangesArray> coords = getCoordinateRanges();
       if (!coords.isEmpty()) {
         clientFilters.add(
-            0, new CoordinateRangeQueryFilter(index.getIndexStrategy(),
+            0,
+            new CoordinateRangeQueryFilter(
+                index.getIndexStrategy(),
                 coords.toArray(new MultiDimensionalCoordinateRangesArray[] {})));
       }
     } else {
@@ -273,7 +308,10 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
       final int maxRangeDecomposition,
       final double[] targetResolutionPerDimensionForHierarchicalIndex) {
     return DataStoreUtils.constraintsToQueryRanges(
-        constraints, index.getIndexStrategy(), targetResolutionPerDimensionForHierarchicalIndex,
-        maxRangeDecomposition, indexMetaData);
+        constraints,
+        index.getIndexStrategy(),
+        targetResolutionPerDimensionForHierarchicalIndex,
+        maxRangeDecomposition,
+        indexMetaData);
   }
 }

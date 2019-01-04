@@ -35,8 +35,10 @@ public class AccumuloMetadataDeleter implements MetadataDeleter {
     // the nature of metadata deleter is that primary ID is always
     // well-defined and it is deleting a single entry at a time
     return operations.delete(
-        AbstractGeoWavePersistence.METADATA_TABLE, new ByteArray(query.getPrimaryId()),
-        metadataTypeName, query.getSecondaryId() != null ? query.getSecondaryId() : null,
+        AbstractGeoWavePersistence.METADATA_TABLE,
+        new ByteArray(query.getPrimaryId()),
+        metadataTypeName,
+        query.getSecondaryId() != null ? query.getSecondaryId() : null,
         query.getAuthorizations());
   }
 

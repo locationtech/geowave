@@ -59,7 +59,9 @@ public class KMeansParallelJobRunner extends MapReduceJobController implements C
 
     // sts of child runners
     init(
-        new MapReduceJobRunner[] {sampleSetsRunner, stripWeakCentroidsRunner, // run this one more
+        new MapReduceJobRunner[] {
+            sampleSetsRunner,
+            stripWeakCentroidsRunner, // run this one more
             // time with
             // 'smaller' size
             kmeansJobRunner},
@@ -97,13 +99,17 @@ public class KMeansParallelJobRunner extends MapReduceJobController implements C
     propertyManagement.storeIfEmpty(GlobalParameters.Global.BATCH_ID, UUID.randomUUID().toString());
 
     propertyManagement.storeIfEmpty(
-        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, SimpleFeatureItemWrapperFactory.class);
+        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+        SimpleFeatureItemWrapperFactory.class);
     propertyManagement.storeIfEmpty(
-        CommonParameters.Common.DISTANCE_FUNCTION_CLASS, FeatureCentroidDistanceFn.class);
+        CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
+        FeatureCentroidDistanceFn.class);
     propertyManagement.storeIfEmpty(
-        CentroidParameters.Centroid.EXTRACTOR_CLASS, SimpleFeatureCentroidExtractor.class);
+        CentroidParameters.Centroid.EXTRACTOR_CLASS,
+        SimpleFeatureCentroidExtractor.class);
     propertyManagement.storeIfEmpty(
-        CommonParameters.Common.DIMENSION_EXTRACT_CLASS, SimpleFeatureGeometryExtractor.class);
+        CommonParameters.Common.DIMENSION_EXTRACT_CLASS,
+        SimpleFeatureGeometryExtractor.class);
 
     stripWeakCentroidsRunner.setRange(
         propertyManagement.getPropertyAsInt(SampleParameters.Sample.MIN_SAMPLE_SIZE, 2),

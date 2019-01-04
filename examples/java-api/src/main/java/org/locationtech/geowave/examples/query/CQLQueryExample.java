@@ -82,11 +82,9 @@ public class CQLQueryExample {
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     try (final CloseableIterator<SimpleFeature> iterator =
         dataStore.query(
-            bldr.indexName(index.getName()).addTypeName(ADAPTER.getTypeName())
-                .constraints(
-                    bldr.constraintsFactory().cqlConstraints(
-                        "BBOX(geometry,-77.6167,38.6833,-76.6,38.9200) and locationName like 'W%'"))
-                .build())) {
+            bldr.indexName(index.getName()).addTypeName(ADAPTER.getTypeName()).constraints(
+                bldr.constraintsFactory().cqlConstraints(
+                    "BBOX(geometry,-77.6167,38.6833,-76.6,38.9200) and locationName like 'W%'")).build())) {
 
       while (iterator.hasNext()) {
         System.out.println("Query match: " + iterator.next().getID());
@@ -128,8 +126,9 @@ public class CQLQueryExample {
 
     // TURN ON SECONDARY INDEXING
     final SimpleFeatureType type = sftBuilder.buildFeatureType();
-    type.getDescriptor("locationName").getUserData()
-        .put(TextSecondaryIndexConfiguration.INDEX_KEY, "FULL");
+    type.getDescriptor("locationName").getUserData().put(
+        TextSecondaryIndexConfiguration.INDEX_KEY,
+        "FULL");
     return type;
   }
 

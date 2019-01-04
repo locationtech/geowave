@@ -99,7 +99,9 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements Fil
     pluginVisitors = new ArrayList<PluginVisitor<P>>(localPlugins.size());
     for (final Entry<String, P> localPluginBase : localPlugins.entrySet()) {
       pluginVisitors.add(
-          new PluginVisitor<P>(localPluginBase.getValue(), localPluginBase.getKey(),
+          new PluginVisitor<P>(
+              localPluginBase.getValue(),
+              localPluginBase.getKey(),
               userExtensions));
     }
     this.driver = driver;

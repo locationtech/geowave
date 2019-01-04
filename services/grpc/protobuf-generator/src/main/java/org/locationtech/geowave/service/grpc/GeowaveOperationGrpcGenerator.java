@@ -136,8 +136,7 @@ public class GeowaveOperationGrpcGenerator {
 
           try {
             paramType =
-                ((ParameterizedType) parentClass.getGenericSuperclass())
-                    .getActualTypeArguments()[0];
+                ((ParameterizedType) parentClass.getGenericSuperclass()).getActualTypeArguments()[0];
             success = true;
           } catch (final Exception e) {
             continue;

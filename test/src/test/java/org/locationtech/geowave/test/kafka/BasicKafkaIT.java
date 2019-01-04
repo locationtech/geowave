@@ -62,9 +62,15 @@ public class BasicKafkaIT extends AbstractGeoWaveIT {
       TestUtils.TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
   protected static final String OSM_GPX_INPUT_DIR = TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/";
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.HBASE, GeoWaveStoreType.DYNAMODB, GeoWaveStoreType.CASSANDRA,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStorePluginOptions;
 
   @Override
@@ -117,23 +123,28 @@ public class BasicKafkaIT extends AbstractGeoWaveIT {
         final InternalDataAdapter<?> internalDataAdapter = adapterIterator.next();
         final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
         final StatisticsId statsId =
-            VectorStatisticsQueryBuilder.newBuilder().factory().bbox()
-                .fieldName(adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build()
-                .getId();
+            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+                adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build().getId();
         // query by the full bounding box, make sure there is more than
         // 0 count and make sure the count matches the number of results
         try (final CloseableIterator<BoundingBoxDataStatistics<?>> bboxStatIt =
             (CloseableIterator) statsStore.getDataStatistics(
-                internalDataAdapter.getAdapterId(), statsId.getExtendedId(), statsId.getType())) {
+                internalDataAdapter.getAdapterId(),
+                statsId.getExtendedId(),
+                statsId.getType())) {
           final BoundingBoxDataStatistics<?> bboxStat = bboxStatIt.next();
           try (final CloseableIterator<CountDataStatistics<SimpleFeature>> countStatIt =
               (CloseableIterator) statsStore.getDataStatistics(
-                  internalDataAdapter.getAdapterId(), CountDataStatistics.STATS_TYPE)) {
+                  internalDataAdapter.getAdapterId(),
+                  CountDataStatistics.STATS_TYPE)) {
             final CountDataStatistics<?> countStat = countStatIt.next();
             // then query it
             final GeometryFactory factory = new GeometryFactory();
             final Envelope env =
-                new Envelope(bboxStat.getMinX(), bboxStat.getMaxX(), bboxStat.getMinY(),
+                new Envelope(
+                    bboxStat.getMinX(),
+                    bboxStat.getMaxX(),
+                    bboxStat.getMinY(),
                     bboxStat.getMaxY());
             final Geometry spatialFilter = factory.toGeometry(env);
             final QueryConstraints query = new SpatialQuery(spatialFilter);
@@ -149,12 +160,14 @@ public class BasicKafkaIT extends AbstractGeoWaveIT {
                     + "' adapter should have the same results from a spatial query of '"
                     + env
                     + "' as its total count statistic",
-                countStat.getCount(), resultCount);
+                countStat.getCount(),
+                resultCount);
             assertEquals(
                 "'"
                     + adapter.getTypeName()
                     + "' adapter entries ingested does not match expected count",
-                EXPECTED_COUNT_PER_ADAPTER_ID.get(adapter.getTypeName()), new Integer(resultCount));
+                EXPECTED_COUNT_PER_ADAPTER_ID.get(adapter.getTypeName()),
+                new Integer(resultCount));
             adapterCount++;
           }
         }
@@ -170,8 +183,8 @@ public class BasicKafkaIT extends AbstractGeoWaveIT {
 
     final CloseableIterator<?> accumuloResults =
         geowaveStore.query(
-            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName())
-                .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName()).build());
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+                TestUtils.DEFAULT_SPATIAL_INDEX.getName()).build());
 
     int resultCount = 0;
     while (accumuloResults.hasNext()) {

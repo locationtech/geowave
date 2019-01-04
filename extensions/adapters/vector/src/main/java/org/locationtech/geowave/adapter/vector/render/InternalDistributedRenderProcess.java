@@ -30,13 +30,16 @@ import org.opengis.feature.simple.SimpleFeature;
  * For example, a pixel size of 3 would skip an estimated 3x3 pixel cell in GeoWave's row IDs. Note
  * that rows are only skipped when a feature successfully passes filters.
  */
-@DescribeProcess(title = "InternalDistributedRender",
+@DescribeProcess(
+    title = "InternalDistributedRender",
     description = "This process will enable GeoWave to render WMS requests within the server and then this will be responsible for compositing the result client-side.")
 public class InternalDistributedRenderProcess {
-  @DescribeResult(name = "result",
+  @DescribeResult(
+      name = "result",
       description = "This is just a pass-through, the key is to provide enough information within invertQuery to perform a map to screen transform")
   public GridCoverage2D execute(
-      @DescribeParameter(name = "data",
+      @DescribeParameter(
+          name = "data",
           description = "Feature collection containing the rendered image") final SimpleFeatureCollection features)
       throws ProcessException {
     // vector-to-raster render transform that take a single feature that

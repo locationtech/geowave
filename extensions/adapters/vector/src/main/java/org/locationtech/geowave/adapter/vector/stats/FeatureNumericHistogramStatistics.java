@@ -104,11 +104,11 @@ public class FeatureNumericHistogramStatistics extends
     if (percentage < percentageNegative) {
       // subtract one from percentage since negative is negated so
       // percentage is inverted
-      return -negativeHistogram
-          .getValueAtPercentile((1.0 - (percentage / percentageNegative)) * 100.0);
+      return -negativeHistogram.getValueAtPercentile(
+          (1.0 - (percentage / percentageNegative)) * 100.0);
     } else {
-      return positiveHistogram
-          .getValueAtPercentile((percentage / (1.0 - percentageNegative)) * 100.0);
+      return positiveHistogram.getValueAtPercentile(
+          (percentage / (1.0 - percentageNegative)) * 100.0);
     }
   }
 

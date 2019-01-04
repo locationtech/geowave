@@ -117,8 +117,9 @@ public class JobContextAdapterIndexMappingStore implements AdapterIndexMappingSt
         }
       }
       adapterCache.remove(internalAdapterId);
-      adapterCache
-          .put(mapping.getAdapterId(), new AdapterToIndexMapping(internalAdapterId, newIndices));
+      adapterCache.put(
+          mapping.getAdapterId(),
+          new AdapterToIndexMapping(internalAdapterId, newIndices));
     } else {
       // otherwise just remove the mapping
       adapterCache.remove(internalAdapterId);

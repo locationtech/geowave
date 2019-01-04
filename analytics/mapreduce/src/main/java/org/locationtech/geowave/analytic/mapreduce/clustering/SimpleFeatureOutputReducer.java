@@ -92,8 +92,18 @@ public class SimpleFeatureOutputReducer extends GeoWaveReducer {
     final String inputID = StringUtils.stringFromBinary(key.getDataId().getBytes());
     final SimpleFeature pointFeature =
         AnalyticFeature.createGeometryFeature(
-            outputAdapter.getFeatureType(), batchID, inputID, inputID, groupID, 0.0, geometry,
-            dimExtractor.getDimensionNames(), extraDims, 1, 1, 0);
+            outputAdapter.getFeatureType(),
+            batchID,
+            inputID,
+            inputID,
+            groupID,
+            0.0,
+            geometry,
+            dimExtractor.getDimensionNames(),
+            extraDims,
+            1,
+            1,
+            0);
 
     return pointFeature;
   }
@@ -117,7 +127,8 @@ public class SimpleFeatureOutputReducer extends GeoWaveReducer {
     try {
       dimExtractor =
           config.getInstance(
-              ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS, DimensionExtractor.class,
+              ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS,
+              DimensionExtractor.class,
               EmptyDimensionExtractor.class);
     } catch (final Exception e1) {
       LOGGER.warn(
@@ -126,16 +137,20 @@ public class SimpleFeatureOutputReducer extends GeoWaveReducer {
                   SimpleFeatureOutputReducer.class,
                   ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS),
           e1);
-      throw new IOException("Invalid configuration for "
-          + GeoWaveConfiguratorBase.enumToConfKey(
-              SimpleFeatureOutputReducer.class, ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS));
+      throw new IOException(
+          "Invalid configuration for "
+              + GeoWaveConfiguratorBase.enumToConfKey(
+                  SimpleFeatureOutputReducer.class,
+                  ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS));
     }
 
     outputAdapter =
         AnalyticFeature.createGeometryFeatureAdapter(
-            outputDataTypeID, dimExtractor.getDimensionNames(),
+            outputDataTypeID,
+            dimExtractor.getDimensionNames(),
             config.getString(
-                ExtractParameters.Extract.DATA_NAMESPACE_URI, BasicFeatureTypes.DEFAULT_NAMESPACE),
+                ExtractParameters.Extract.DATA_NAMESPACE_URI,
+                BasicFeatureTypes.DEFAULT_NAMESPACE),
             ClusteringUtils.CLUSTERING_CRS);
   }
 }

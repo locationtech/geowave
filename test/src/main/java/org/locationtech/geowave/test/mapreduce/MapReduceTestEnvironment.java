@@ -93,8 +93,8 @@ public class MapReduceTestEnvironment implements TestEnvironment {
           configFile = null;
         }
       } else {
-        FileUtils
-            .deleteDirectory(new File(hdfsBaseDirectory.replace("file:", "").replace("/C:", "")));
+        FileUtils.deleteDirectory(
+            new File(hdfsBaseDirectory.replace("file:", "").replace("/C:", "")));
       }
     } catch (final IOException e) {
       LOGGER.error("Unable to delete HDFS temp directory", e);

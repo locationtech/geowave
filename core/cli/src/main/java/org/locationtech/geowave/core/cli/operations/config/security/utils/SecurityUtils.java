@@ -39,7 +39,8 @@ public class SecurityUtils {
           return getEncryptionService(resourceLocation).decryptHexEncoded(value);
         } catch (Throwable t) {
           LOGGER.error(
-              "Encountered exception during content decryption: " + t.getLocalizedMessage(), t);
+              "Encountered exception during content decryption: " + t.getLocalizedMessage(),
+              t);
         }
       } else {
         LOGGER.debug(
@@ -71,7 +72,8 @@ public class SecurityUtils {
           return getEncryptionService(resourceLocation).encryptAndHexEncode(value);
         } catch (Throwable t) {
           LOGGER.error(
-              "Encountered exception during content encryption: " + t.getLocalizedMessage(), t);
+              "Encountered exception during content encryption: " + t.getLocalizedMessage(),
+              t);
         }
       } else {
         LOGGER.debug(
@@ -100,8 +102,8 @@ public class SecurityUtils {
       throws Throwable {
     if (encService == null) {
       if (resourceLocation != null && !"".equals(resourceLocation.trim())) {
-        LOGGER
-            .trace("Setting resource location for encryption service: [" + resourceLocation + "]");
+        LOGGER.trace(
+            "Setting resource location for encryption service: [" + resourceLocation + "]");
         encService = new GeoWaveEncryption(resourceLocation);
       } else {
         encService = new GeoWaveEncryption();

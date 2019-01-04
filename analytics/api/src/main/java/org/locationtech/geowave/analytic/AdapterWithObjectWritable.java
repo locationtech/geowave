@@ -95,8 +95,9 @@ public class AdapterWithObjectWritable implements Writable {
       final AdapterWithObjectWritable writableToExtract) {
     final short internalAdapterId = writableToExtract.getInternalAdapterId();
     final Object innerObj = writableToExtract.objectWritable.get();
-    return (innerObj instanceof Writable) ? serializationTool
-        .getHadoopWritableSerializerForAdapter(internalAdapterId).fromWritable((Writable) innerObj)
+    return (innerObj instanceof Writable)
+        ? serializationTool.getHadoopWritableSerializerForAdapter(internalAdapterId).fromWritable(
+            (Writable) innerObj)
         : innerObj;
   }
 

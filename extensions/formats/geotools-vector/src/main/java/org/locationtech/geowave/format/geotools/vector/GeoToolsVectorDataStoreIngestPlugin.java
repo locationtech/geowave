@@ -79,8 +79,8 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
   public void init(final URL baseDirectory) {}
 
   private static boolean isPropertiesFile(URL file) {
-    return FilenameUtils.getName(file.getPath()).toLowerCase(Locale.ENGLISH)
-        .endsWith(PROPERTIES_EXTENSION);
+    return FilenameUtils.getName(file.getPath()).toLowerCase(Locale.ENGLISH).endsWith(
+        PROPERTIES_EXTENSION);
   }
 
   private static DataStore getDataStore(final URL file) throws IOException {
@@ -173,8 +173,13 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
           LOGGER.error("Unable to ingest data source for feature name '" + name + "'", e);
         }
       }
-      return new SimpleFeatureGeoWaveWrapper(featureCollections, indexNames, visibility, dataStore,
-          retypingPlugin, filter);
+      return new SimpleFeatureGeoWaveWrapper(
+          featureCollections,
+          indexNames,
+          visibility,
+          dataStore,
+          retypingPlugin,
+          filter);
     }
 
     LOGGER.error("Unable to get a datastore instance, getDataStore returned null");

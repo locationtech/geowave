@@ -117,7 +117,8 @@ public class TemporalBinningStrategy implements BinningStrategy {
     final Calendar valueCal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
     valueCal.setTimeInMillis((long) value);
 
-    return new BinValue(getBinId(valueCal),
+    return new BinValue(
+        getBinId(valueCal),
         valueCal.getTimeInMillis() - epochCal.getTimeInMillis());
   }
 
@@ -150,7 +151,8 @@ public class TemporalBinningStrategy implements BinningStrategy {
     return binSizeMillis;
   }
 
-  @SuppressFBWarnings(value = {"SF_SWITCH_FALLTHROUGH", "SF_SWITCH_NO_DEFAULT"},
+  @SuppressFBWarnings(
+      value = {"SF_SWITCH_FALLTHROUGH", "SF_SWITCH_NO_DEFAULT"},
       justification = "Fallthrough intentional for time parsing; default case is provided")
   protected void setToEpoch(final Calendar value) {
     // reset appropriate values to 0 based on the unit
@@ -255,7 +257,8 @@ public class TemporalBinningStrategy implements BinningStrategy {
     }
   }
 
-  @SuppressFBWarnings(value = {"SF_SWITCH_FALLTHROUGH", "SF_SWITCH_NO_DEFAULT"},
+  @SuppressFBWarnings(
+      value = {"SF_SWITCH_FALLTHROUGH", "SF_SWITCH_NO_DEFAULT"},
       justification = "Fallthrough intentional for time parsing")
   private Calendar getStartEpoch(final byte[] binId) {
     final String str = StringUtils.stringFromBinary(binId);
@@ -349,7 +352,10 @@ public class TemporalBinningStrategy implements BinningStrategy {
       // we have the millis for range, but to normalize for this bin we
       // need to subtract the epoch of the bin
       bins.add(
-          new BinRange(getBinId(cal), startMillis - epochIterator, endMillis - epochIterator,
+          new BinRange(
+              getBinId(cal),
+              startMillis - epochIterator,
+              endMillis - epochIterator,
               fullExtent));
       epochIterator = nextEpoch;
       // iterate until we reach our end epoch

@@ -76,7 +76,8 @@ public abstract class StoreFactoryOptions {
         propsUtils.getBoolean(Constants.CONSOLE_PASSWORD_ECHO_ENABLED_KEY, defaultEchoEnabled);
     LOGGER.debug(
         "Default console echo is {}, Password console echo is {}",
-        new Object[] {defaultEchoEnabled ? "enabled" : "disabled",
+        new Object[] {
+            defaultEchoEnabled ? "enabled" : "disabled",
             passwordEchoEnabled ? "enabled" : "disabled"});
     for (Field field : this.getClass().getDeclaredFields()) {
       for (Annotation annotation : field.getAnnotations()) {

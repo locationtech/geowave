@@ -42,11 +42,14 @@ public class BigTableDataStoreFactory extends BaseDataStoreFactory {
     HBaseOptions hbaseOptions = ((BigTableOptions) options).getHBaseOptions();
     // make sure to explicitly use the constructor with
     // BigTableDataStatisticsStore
-    return new HBaseDataStore(new IndexStoreImpl(bigtableOperations, hbaseOptions),
+    return new HBaseDataStore(
+        new IndexStoreImpl(bigtableOperations, hbaseOptions),
         new AdapterStoreImpl(bigtableOperations, hbaseOptions),
         new BigTableDataStatisticsStore(bigtableOperations, hbaseOptions),
         new AdapterIndexMappingStoreImpl(bigtableOperations, hbaseOptions),
-        new SecondaryIndexStoreImpl(), bigtableOperations, hbaseOptions,
+        new SecondaryIndexStoreImpl(),
+        bigtableOperations,
+        hbaseOptions,
         new InternalAdapterStoreImpl(bigtableOperations));
   }
 }

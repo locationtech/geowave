@@ -74,13 +74,16 @@ public class MergeDataCommand extends DefaultOperation implements Command {
 
     for (final IndexPluginOptions i : inputIndexOptions) {
       final Index index = i.createIndex();
-      if (!operations
-          .mergeData(index, adapterStore, internalAdapterStore, adapterIndexMappingStore)) {
-        JCommander.getConsole()
-            .println("Unable to merge data within index '" + index.getName() + "'");
+      if (!operations.mergeData(
+          index,
+          adapterStore,
+          internalAdapterStore,
+          adapterIndexMappingStore)) {
+        JCommander.getConsole().println(
+            "Unable to merge data within index '" + index.getName() + "'");
       } else {
-        JCommander.getConsole()
-            .println("Data successfully merged within index '" + index.getName() + "'");
+        JCommander.getConsole().println(
+            "Data successfully merged within index '" + index.getName() + "'");
       }
     }
   }

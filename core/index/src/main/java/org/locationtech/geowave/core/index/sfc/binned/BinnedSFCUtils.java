@@ -56,7 +56,8 @@ public class BinnedSFCUtils {
       }, binnedQuery.getBinId());
 
       queryRanges.add(
-          new SinglePartitionQueryRanges(new ByteArray(tierAndBinId),
+          new SinglePartitionQueryRanges(
+              new ByteArray(tierAndBinId),
               Arrays.asList(rangeDecomp.getRanges())));
     }
     return queryRanges;
@@ -74,7 +75,8 @@ public class BinnedSFCUtils {
         final long[] range =
             sfc.normalizeRange(
                 binRangesPerDimension[d][i].getNormalizedMin(),
-                binRangesPerDimension[d][i].getNormalizedMax(), d);
+                binRangesPerDimension[d][i].getNormalizedMax(),
+                d);
         coordinateRangesPerDimension[d][i] =
             new CoordinateRange(range[0], range[1], binRangesPerDimension[d][i].getBinId());
       }
@@ -104,7 +106,8 @@ public class BinnedSFCUtils {
         }
       }
       if (singleId != null) {
-        return new SinglePartitionInsertionIds(new ByteArray(tierAndBinId),
+        return new SinglePartitionInsertionIds(
+            new ByteArray(tierAndBinId),
             new ByteArray(singleId));
       }
     }
@@ -139,7 +142,10 @@ public class BinnedSFCUtils {
         final int dimension = entry.getKey();
         final NumericRange range =
             baseDefinitions[dimension].getDenormalizedRange(
-                new BinRange(entry.getValue(), data[dimension].getMin(), data[dimension].getMax(),
+                new BinRange(
+                    entry.getValue(),
+                    data[dimension].getMin(),
+                    data[dimension].getMax(),
                     false));
         data[dimension] = range;
       }

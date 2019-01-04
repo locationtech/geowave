@@ -44,9 +44,11 @@ public class BasicDimensionDefinition implements NumericDimensionDefinition {
 
   @Override
   public BinRange[] getNormalizedRanges(final NumericData range) {
-    return new BinRange[] {new BinRange(
-        // by default clamp to the min and max
-        clamp(range.getMin()), clamp(range.getMax()))};
+    return new BinRange[] {
+        new BinRange(
+            // by default clamp to the min and max
+            clamp(range.getMin()),
+            clamp(range.getMax()))};
   }
 
   @Override

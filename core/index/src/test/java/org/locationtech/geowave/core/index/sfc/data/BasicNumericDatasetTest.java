@@ -16,8 +16,11 @@ public class BasicNumericDatasetTest {
   private double DELTA = 1e-15;
 
   private BasicNumericDataset basicNumericDatasetRanges =
-      new BasicNumericDataset(new NumericData[] {new NumericRange(10, 50), new NumericRange(25, 95),
-          new NumericRange(-50, 50)});
+      new BasicNumericDataset(
+          new NumericData[] {
+              new NumericRange(10, 50),
+              new NumericRange(25, 95),
+              new NumericRange(-50, 50)});
 
   private BasicNumericDataset basicNumericDatasetValues =
       new BasicNumericDataset(

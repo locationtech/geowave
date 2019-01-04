@@ -94,7 +94,8 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
     }
     try (CloseableIterator<GeoWaveMetadata> it =
         reader.query(
-            new MetadataQuery(ByteArrayUtils.shortToByteArray(adapterId),
+            new MetadataQuery(
+                ByteArrayUtils.shortToByteArray(adapterId),
                 INTERNAL_TO_EXTERNAL_ID))) {
       if (!it.hasNext()) {
         if (warnIfNotExists) {
@@ -221,10 +222,16 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
         if (writer != null) {
           final byte[] adapterIdBytes = ByteArrayUtils.shortToByteArray(adapterId);
           writer.write(
-              new GeoWaveMetadata(StringUtils.stringToBinary(typeName), EXTERNAL_TO_INTERNAL_ID,
-                  null, adapterIdBytes));
+              new GeoWaveMetadata(
+                  StringUtils.stringToBinary(typeName),
+                  EXTERNAL_TO_INTERNAL_ID,
+                  null,
+                  adapterIdBytes));
           writer.write(
-              new GeoWaveMetadata(adapterIdBytes, INTERNAL_TO_EXTERNAL_ID, null,
+              new GeoWaveMetadata(
+                  adapterIdBytes,
+                  INTERNAL_TO_EXTERNAL_ID,
+                  null,
                   StringUtils.stringToBinary(typeName)));
         }
       } catch (final Exception e) {
@@ -245,8 +252,11 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
     if (typeName != null) {
       externalDeleted =
           AbstractGeoWavePersistence.deleteObjects(
-              new ByteArray(typeName), EXTERNAL_TO_INTERNAL_BYTEARRAYID, operations,
-              MetadataType.INTERNAL_ADAPTER, null);
+              new ByteArray(typeName),
+              EXTERNAL_TO_INTERNAL_BYTEARRAYID,
+              operations,
+              MetadataType.INTERNAL_ADAPTER,
+              null);
       cache.remove(typeName);
     }
     boolean internalDeleted = false;
@@ -254,15 +264,22 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
       internalDeleted =
           AbstractGeoWavePersistence.deleteObjects(
               new ByteArray(ByteArrayUtils.shortToByteArray(internalAdapterId)),
-              INTERNAL_TO_EXTERNAL_BYTEARRAYID, operations, MetadataType.INTERNAL_ADAPTER, null);
+              INTERNAL_TO_EXTERNAL_BYTEARRAYID,
+              operations,
+              MetadataType.INTERNAL_ADAPTER,
+              null);
     }
     return internalDeleted && externalDeleted;
   }
 
   @Override
   public void removeAll() {
-    AbstractGeoWavePersistence
-        .deleteObjects(null, null, operations, MetadataType.INTERNAL_ADAPTER, null);
+    AbstractGeoWavePersistence.deleteObjects(
+        null,
+        null,
+        operations,
+        MetadataType.INTERNAL_ADAPTER,
+        null);
     cache.clear();
   }
 
@@ -281,8 +298,11 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
     final CloseableIterator<GeoWaveMetadata> results =
         reader.query(new MetadataQuery(null, INTERNAL_TO_EXTERNAL_ID));
     try (CloseableIterator<String> it =
-        new CloseableIteratorWrapper<>(results, Iterators
-            .transform(results, input -> StringUtils.stringFromBinary(input.getValue())))) {
+        new CloseableIteratorWrapper<>(
+            results,
+            Iterators.transform(
+                results,
+                input -> StringUtils.stringFromBinary(input.getValue())))) {
       return Iterators.toArray(it, String.class);
     }
   }
@@ -296,8 +316,11 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
     final CloseableIterator<GeoWaveMetadata> results =
         reader.query(new MetadataQuery(null, EXTERNAL_TO_INTERNAL_ID));
     try (CloseableIterator<Short> it =
-        new CloseableIteratorWrapper<>(results, Iterators
-            .transform(results, input -> ByteArrayUtils.byteArrayToShort(input.getValue())))) {
+        new CloseableIteratorWrapper<>(
+            results,
+            Iterators.transform(
+                results,
+                input -> ByteArrayUtils.byteArrayToShort(input.getValue())))) {
       return ArrayUtils.toPrimitive(Iterators.toArray(it, Short.class));
     }
   }

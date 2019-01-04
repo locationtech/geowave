@@ -52,20 +52,25 @@ public class BasicParameterHelper implements ParameterHelper<Object> {
       final ParameterEnum configItem) {
     if (val != null) {
       if (val instanceof Long) {
-        config
-            .setLong(GeoWaveConfiguratorBase.enumToConfKey(scope, configItem.self()), ((Long) val));
+        config.setLong(
+            GeoWaveConfiguratorBase.enumToConfKey(scope, configItem.self()),
+            ((Long) val));
       } else if (val instanceof Double) {
         config.setDouble(
-            GeoWaveConfiguratorBase.enumToConfKey(scope, configItem.self()), ((Double) val));
+            GeoWaveConfiguratorBase.enumToConfKey(scope, configItem.self()),
+            ((Double) val));
       } else if (val instanceof Boolean) {
         config.setBoolean(
-            GeoWaveConfiguratorBase.enumToConfKey(scope, configItem.self()), ((Boolean) val));
+            GeoWaveConfiguratorBase.enumToConfKey(scope, configItem.self()),
+            ((Boolean) val));
       } else if (val instanceof Integer) {
         config.setInt(
-            GeoWaveConfiguratorBase.enumToConfKey(scope, configItem.self()), ((Integer) val));
+            GeoWaveConfiguratorBase.enumToConfKey(scope, configItem.self()),
+            ((Integer) val));
       } else if (val instanceof Class) {
         config.setClass(
-            GeoWaveConfiguratorBase.enumToConfKey(scope, configItem.self()), ((Class) val),
+            GeoWaveConfiguratorBase.enumToConfKey(scope, configItem.self()),
+            ((Class) val),
             ((Class) val));
       } else if (val instanceof byte[]) {
         config.set(
@@ -85,8 +90,8 @@ public class BasicParameterHelper implements ParameterHelper<Object> {
     final ScopedJobConfiguration scopedConfig =
         new ScopedJobConfiguration(context.getConfiguration(), scope);
     if (baseClass.isAssignableFrom(Integer.class)) {
-      return Integer
-          .valueOf(scopedConfig.getInt(parent.self(), ((Integer) defaultValue).intValue()));
+      return Integer.valueOf(
+          scopedConfig.getInt(parent.self(), ((Integer) defaultValue).intValue()));
     } else if (baseClass.isAssignableFrom(String.class)) {
       return scopedConfig.getString(parent.self(), defaultValue.toString());
     } else if (baseClass.isAssignableFrom(Double.class)) {

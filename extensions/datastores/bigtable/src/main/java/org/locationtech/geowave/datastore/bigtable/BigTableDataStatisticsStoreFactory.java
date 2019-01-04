@@ -35,7 +35,8 @@ public class BigTableDataStatisticsStoreFactory extends DataStatisticsStoreFacto
 
     final DataStoreOperations bigtableOperations = helper.createOperations(options);
 
-    return new BigTableDataStatisticsStore(bigtableOperations,
+    return new BigTableDataStatisticsStore(
+        bigtableOperations,
         ((BigTableOptions) options).getHBaseOptions());
   }
 }

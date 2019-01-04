@@ -53,13 +53,14 @@ public class ChooseHeuristicMatchQueryStrategyTest {
   protected final List<Index> indices =
       Arrays.asList(
           IMAGE_CHIP_INDEX1,
-          new SpatialTemporalIndexBuilder().setNumPartitions(5)
-              .setBias(SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED)
-              .setPeriodicity(Unit.YEAR).createIndex(),
-          new SpatialTemporalIndexBuilder().setNumPartitions(10)
-              .setBias(SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED)
-              .setPeriodicity(Unit.DAY).createIndex(),
-          new SpatialIndexBuilder().createIndex(), IMAGE_CHIP_INDEX2);
+          new SpatialTemporalIndexBuilder().setNumPartitions(5).setBias(
+              SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED).setPeriodicity(
+                  Unit.YEAR).createIndex(),
+          new SpatialTemporalIndexBuilder().setNumPartitions(10).setBias(
+              SpatialTemporalDimensionalityTypeProvider.Bias.BALANCED).setPeriodicity(
+                  Unit.DAY).createIndex(),
+          new SpatialIndexBuilder().createIndex(),
+          IMAGE_CHIP_INDEX2);
 
   @Test
   public void testChooseTemporalWithoutStatsHouseHour() {
@@ -69,7 +70,8 @@ public class ChooseHeuristicMatchQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(HOUSE, HOUSE, HOUR)), strategy);
+            new BasicQuery(createConstraints(HOUSE, HOUSE, HOUR)),
+            strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
@@ -83,7 +85,8 @@ public class ChooseHeuristicMatchQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(HOUSE, HOUSE, DAY)), strategy);
+            new BasicQuery(createConstraints(HOUSE, HOUSE, DAY)),
+            strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
@@ -97,7 +100,8 @@ public class ChooseHeuristicMatchQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(HOUSE, HOUSE, WEEK)), strategy);
+            new BasicQuery(createConstraints(HOUSE, HOUSE, WEEK)),
+            strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
@@ -111,7 +115,8 @@ public class ChooseHeuristicMatchQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(BLOCK, BLOCK, HOUR)), strategy);
+            new BasicQuery(createConstraints(BLOCK, BLOCK, HOUR)),
+            strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
@@ -125,7 +130,8 @@ public class ChooseHeuristicMatchQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(BLOCK, BLOCK, DAY)), strategy);
+            new BasicQuery(createConstraints(BLOCK, BLOCK, DAY)),
+            strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
@@ -139,7 +145,8 @@ public class ChooseHeuristicMatchQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(BLOCK, BLOCK, WEEK)), strategy);
+            new BasicQuery(createConstraints(BLOCK, BLOCK, WEEK)),
+            strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
@@ -153,7 +160,8 @@ public class ChooseHeuristicMatchQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(CITY, CITY, HOUR)), strategy);
+            new BasicQuery(createConstraints(CITY, CITY, HOUR)),
+            strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
@@ -167,7 +175,8 @@ public class ChooseHeuristicMatchQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(CITY, CITY, DAY)), strategy);
+            new BasicQuery(createConstraints(CITY, CITY, DAY)),
+            strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
@@ -181,7 +190,8 @@ public class ChooseHeuristicMatchQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(CITY, CITY, WEEK)), strategy);
+            new BasicQuery(createConstraints(CITY, CITY, WEEK)),
+            strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
@@ -191,8 +201,11 @@ public class ChooseHeuristicMatchQueryStrategyTest {
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
       final BasicQuery query,
       final ChooseHeuristicMatchIndexQueryStrategy strategy) {
-    return strategy
-        .getIndices(stats, query, indices.toArray(new Index[indices.size()]), Maps.newHashMap());
+    return strategy.getIndices(
+        stats,
+        query,
+        indices.toArray(new Index[indices.size()]),
+        Maps.newHashMap());
   }
 
   public static class ConstrainedIndexValue extends NumericRange implements CommonIndexValue {
@@ -222,14 +235,17 @@ public class ChooseHeuristicMatchQueryStrategyTest {
   private Constraints createConstraints(final double lat, final double lon, final double time) {
     final ConstraintSet cs1 = new ConstraintSet();
     cs1.addConstraint(
-        LatitudeDefinition.class, new ConstraintData(new ConstrainedIndexValue(0, lat), true));
+        LatitudeDefinition.class,
+        new ConstraintData(new ConstrainedIndexValue(0, lat), true));
 
     cs1.addConstraint(
-        LongitudeDefinition.class, new ConstraintData(new ConstrainedIndexValue(0, lon), true));
+        LongitudeDefinition.class,
+        new ConstraintData(new ConstrainedIndexValue(0, lon), true));
 
     final ConstraintSet cs2a = new ConstraintSet();
     cs2a.addConstraint(
-        TimeDefinition.class, new ConstraintData(new ConstrainedIndexValue(0, time), true));
+        TimeDefinition.class,
+        new ConstraintData(new ConstrainedIndexValue(0, time), true));
 
     return new Constraints(Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
   }

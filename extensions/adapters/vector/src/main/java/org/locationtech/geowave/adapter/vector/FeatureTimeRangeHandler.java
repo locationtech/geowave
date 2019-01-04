@@ -73,7 +73,9 @@ public class FeatureTimeRangeHandler implements IndexFieldHandler<SimpleFeature,
     } else {
       visibility = new byte[] {};
     }
-    return new TimeRange(TimeUtils.getTimeMillis(startObj), TimeUtils.getTimeMillis(endObj),
+    return new TimeRange(
+        TimeUtils.getTimeMillis(startObj),
+        TimeUtils.getTimeMillis(endObj),
         visibility);
   }
 

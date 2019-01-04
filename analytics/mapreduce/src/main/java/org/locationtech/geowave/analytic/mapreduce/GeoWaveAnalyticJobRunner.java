@@ -110,23 +110,23 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured
   public PersistentAdapterStore getAdapterStore(final PropertyManagement runTimeProperties)
       throws Exception {
     final PersistableStore store =
-        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper()
-            .getValue(runTimeProperties);
+        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+            runTimeProperties);
     return store.getDataStoreOptions().createAdapterStore();
   }
 
   public InternalAdapterStore getInternalAdapterStore(final PropertyManagement runTimeProperties)
       throws Exception {
     final PersistableStore store =
-        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper()
-            .getValue(runTimeProperties);
+        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+            runTimeProperties);
     return store.getDataStoreOptions().createInternalAdapterStore();
   }
 
   public IndexStore getIndexStore(final PropertyManagement runTimeProperties) throws Exception {
     final PersistableStore store =
-        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper()
-            .getValue(runTimeProperties);
+        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+            runTimeProperties);
     return store.getDataStoreOptions().createIndexStore();
   }
 
@@ -138,31 +138,42 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured
         && runTimeProperties.hasProperty(InputParameters.Input.INPUT_FORMAT)) {
       inputFormat =
           runTimeProperties.getClassInstance(
-              InputParameters.Input.INPUT_FORMAT, FormatConfiguration.class, null);
+              InputParameters.Input.INPUT_FORMAT,
+              FormatConfiguration.class,
+              null);
     }
     if (inputFormat != null) {
-      InputParameters.Input.INPUT_FORMAT.getHelper()
-          .setValue(configuration, getScope(), inputFormat.getClass());
+      InputParameters.Input.INPUT_FORMAT.getHelper().setValue(
+          configuration,
+          getScope(),
+          inputFormat.getClass());
       inputFormat.setup(runTimeProperties, configuration);
     }
     if ((outputFormat == null)
         && runTimeProperties.hasProperty(OutputParameters.Output.OUTPUT_FORMAT)) {
       outputFormat =
           runTimeProperties.getClassInstance(
-              OutputParameters.Output.OUTPUT_FORMAT, FormatConfiguration.class, null);
+              OutputParameters.Output.OUTPUT_FORMAT,
+              FormatConfiguration.class,
+              null);
     }
 
     if (outputFormat != null) {
-      OutputParameters.Output.OUTPUT_FORMAT.getHelper()
-          .setValue(configuration, getScope(), outputFormat.getClass());
+      OutputParameters.Output.OUTPUT_FORMAT.getHelper().setValue(
+          configuration,
+          getScope(),
+          outputFormat.getClass());
       outputFormat.setup(runTimeProperties, configuration);
     }
 
-    runTimeProperties
-        .setConfig(new ParameterEnum[] {StoreParam.INPUT_STORE}, configuration, getScope());
+    runTimeProperties.setConfig(
+        new ParameterEnum[] {StoreParam.INPUT_STORE},
+        configuration,
+        getScope());
 
     OutputParameters.Output.REDUCER_COUNT.getHelper().setValue(
-        configuration, getScope(),
+        configuration,
+        getScope(),
         runTimeProperties.getPropertyAsInt(OutputParameters.Output.REDUCER_COUNT, reducerCount));
     return mapReduceIntegrater.submit(configuration, runTimeProperties, this);
   }
@@ -171,8 +182,10 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured
       final Configuration config,
       final InternalDataAdapter<?> adapter) {
     JobContextAdapterStore.addDataAdapter(config, adapter.getAdapter());
-    JobContextInternalAdapterStore
-        .addTypeName(config, adapter.getTypeName(), adapter.getAdapterId());
+    JobContextInternalAdapterStore.addTypeName(
+        config,
+        adapter.getTypeName(),
+        adapter.getAdapterId());
   }
 
   public static void addIndex(final Configuration config, final Index index) {
@@ -190,16 +203,20 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured
         new ScopedJobConfiguration(job.getConfiguration(), getScope());
 
     final FormatConfiguration inputFormat =
-        configWrapper
-            .getInstance(InputParameters.Input.INPUT_FORMAT, FormatConfiguration.class, null);
+        configWrapper.getInstance(
+            InputParameters.Input.INPUT_FORMAT,
+            FormatConfiguration.class,
+            null);
 
     if (inputFormat != null) {
       job.setInputFormatClass((Class<? extends InputFormat>) inputFormat.getFormatClass());
     }
 
     final FormatConfiguration outputFormat =
-        configWrapper
-            .getInstance(OutputParameters.Output.OUTPUT_FORMAT, FormatConfiguration.class, null);
+        configWrapper.getInstance(
+            OutputParameters.Output.OUTPUT_FORMAT,
+            FormatConfiguration.class,
+            null);
 
     if (outputFormat != null) {
       job.setOutputFormatClass((Class<? extends OutputFormat>) outputFormat.getFormatClass());
@@ -234,7 +251,9 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured
     }
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {StoreParam.INPUT_STORE, Output.REDUCER_COUNT,
+            new ParameterEnum<?>[] {
+                StoreParam.INPUT_STORE,
+                Output.REDUCER_COUNT,
                 Output.OUTPUT_FORMAT}));
     return params;
   }
@@ -258,11 +277,15 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured
         internalAdapterStore.getAdapterId(projectionDataTypeId);
     if (convexHullInternalAdapterId == null) {
       final String namespaceURI =
-          runTimeProperties.storeIfEmpty(dataNameSpaceEnum, BasicFeatureTypes.DEFAULT_NAMESPACE)
-              .toString();
+          runTimeProperties.storeIfEmpty(
+              dataNameSpaceEnum,
+              BasicFeatureTypes.DEFAULT_NAMESPACE).toString();
       final FeatureDataAdapter adapter =
           AnalyticFeature.createGeometryFeatureAdapter(
-              projectionDataTypeId, new String[0], namespaceURI, ClusteringUtils.CLUSTERING_CRS);
+              projectionDataTypeId,
+              new String[0],
+              namespaceURI,
+              ClusteringUtils.CLUSTERING_CRS);
       final short internalAdapterId = internalAdapterStore.addTypeName(adapter.getTypeName());
       final InternalDataAdapter<?> internalAdapter =
           new InternalDataAdapterWrapper<>(adapter, internalAdapterId);
@@ -286,8 +309,10 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured
       final Index defaultSpatialIndex =
           new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
       index =
-          new CustomNameIndex(defaultSpatialIndex.getIndexStrategy(),
-              defaultSpatialIndex.getIndexModel(), indexName);
+          new CustomNameIndex(
+              defaultSpatialIndex.getIndexStrategy(),
+              defaultSpatialIndex.getIndexModel(),
+              indexName);
       indexStore.addIndex(index);
     }
     return indexName;

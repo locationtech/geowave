@@ -14,7 +14,8 @@ public class StatsCommandLineOptions {
 
   public StatsCommandLineOptions() {}
 
-  @Parameter(names = "--auth",
+  @Parameter(
+      names = "--auth",
       description = "The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.")
   private String authorizations;
 

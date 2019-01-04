@@ -51,8 +51,14 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
       final FieldVisibilityCount visibilityCounts,
       final String... authorizations) {
-    super(adapterIds, index, fieldIdsAdapterPair, scanCallback, differingVisibilityCounts,
-        visibilityCounts, authorizations);
+    super(
+        adapterIds,
+        index,
+        fieldIdsAdapterPair,
+        scanCallback,
+        differingVisibilityCounts,
+        visibilityCounts,
+        authorizations);
   }
 
   protected List<QueryFilter> getClientFilters() {
@@ -72,11 +78,18 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       final boolean delete) {
     final RowReader<?> reader =
         getReader(
-            datastoreOperations, options, adapterStore, internalAdapterStore,
-            maxResolutionSubsamplingPerDimension, targetResolutionPerDimensionForHierarchicalIndex,
-            limit, queryMaxRangeDecomposition,
+            datastoreOperations,
+            options,
+            adapterStore,
+            internalAdapterStore,
+            maxResolutionSubsamplingPerDimension,
+            targetResolutionPerDimensionForHierarchicalIndex,
+            limit,
+            queryMaxRangeDecomposition,
             getRowTransformer(
-                options, adapterStore, maxResolutionSubsamplingPerDimension,
+                options,
+                adapterStore,
+                maxResolutionSubsamplingPerDimension,
                 !isCommonIndexAggregation()),
             delete);
     if (reader == null) {
@@ -113,9 +126,16 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
     }
 
     return super.getReader(
-        datastoreOperations, options, adapterStore, internalAdapterStore,
-        maxResolutionSubsamplingPerDimension, targetResolutionPerDimensionForHierarchicalIndex,
-        limit, queryMaxRangeDecomposition, rowTransformer, delete);
+        datastoreOperations,
+        options,
+        adapterStore,
+        internalAdapterStore,
+        maxResolutionSubsamplingPerDimension,
+        targetResolutionPerDimensionForHierarchicalIndex,
+        limit,
+        queryMaxRangeDecomposition,
+        rowTransformer,
+        delete);
   }
 
   protected Map<Short, RowMergingDataAdapter> getMergingAdapters(
@@ -147,8 +167,14 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
           @SuppressWarnings({"rawtypes", "unchecked"})
           @Override
           public Iterator<T> apply(final Iterator<GeoWaveRow> input) {
-            return new MergingEntryIterator(adapterStore, index, input, clientFilter, scanCallback,
-                mergingAdapters, maxResolutionSubsamplingPerDimension);
+            return new MergingEntryIterator(
+                adapterStore,
+                index,
+                input,
+                clientFilter,
+                scanCallback,
+                mergingAdapters,
+                maxResolutionSubsamplingPerDimension);
           }
         };
       }
@@ -159,8 +185,13 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       @SuppressWarnings({"rawtypes", "unchecked"})
       @Override
       public Iterator<T> apply(final Iterator<GeoWaveRow> input) {
-        return new NativeEntryIteratorWrapper(adapterStore, index, input, clientFilter,
-            scanCallback, getFieldBitmask(),
+        return new NativeEntryIteratorWrapper(
+            adapterStore,
+            index,
+            input,
+            clientFilter,
+            scanCallback,
+            getFieldBitmask(),
             // Don't do client side subsampling if server side is
             // enabled.
             ((options != null) && options.isServerSideLibraryEnabled()) ? null

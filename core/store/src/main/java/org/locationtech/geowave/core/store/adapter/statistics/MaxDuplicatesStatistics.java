@@ -41,7 +41,9 @@ public class MaxDuplicatesStatistics<T>
 
   @Override
   public InternalDataStatistics<T, Integer, IndexStatisticsQueryBuilder<Integer>> duplicate() {
-    return (InternalDataStatistics) new MaxDuplicatesStatistics<>(adapterId, extendedId,
+    return (InternalDataStatistics) new MaxDuplicatesStatistics<>(
+        adapterId,
+        extendedId,
         maxDuplicates);
   }
 

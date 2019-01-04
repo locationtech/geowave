@@ -31,7 +31,8 @@ public class CassandraDataStoreFactory extends BaseDataStoreFactory {
       throw new AssertionError("Expected " + CassandraRequiredOptions.class.getSimpleName());
     }
 
-    return new CassandraDataStore((CassandraOperations) helper.createOperations(options),
+    return new CassandraDataStore(
+        (CassandraOperations) helper.createOperations(options),
         (CassandraOptions) options.getStoreOptions());
   }
 }

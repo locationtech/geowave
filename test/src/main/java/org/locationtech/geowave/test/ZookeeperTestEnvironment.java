@@ -46,25 +46,29 @@ public class ZookeeperTestEnvironment implements TestEnvironment {
           ClassLoader hbaseMiniClusterCl = HBaseMiniClusterClassLoader.getInstance(prevCl);
           Thread.currentThread().setContextClassLoader(hbaseMiniClusterCl);
           Configuration conf =
-              (Configuration) Class
-                  .forName("org.apache.hadoop.hbase.HBaseConfiguration", true, hbaseMiniClusterCl)
-                  .getMethod("create").invoke(null);
+              (Configuration) Class.forName(
+                  "org.apache.hadoop.hbase.HBaseConfiguration",
+                  true,
+                  hbaseMiniClusterCl).getMethod("create").invoke(null);
           conf.setInt("test.hbase.zookeeper.property.clientPort", 2181);
           System.setProperty(
-              "test.build.data.basedirectory", conf.get("zookeeper.temp.dir", DEFAULT_ZK_TEMP_DIR));
+              "test.build.data.basedirectory",
+              conf.get("zookeeper.temp.dir", DEFAULT_ZK_TEMP_DIR));
           zookeeperLocalCluster =
-              Class.forName("org.apache.hadoop.hbase.HBaseTestingUtility", true, hbaseMiniClusterCl)
-                  .getConstructor(Configuration.class).newInstance(conf);
-          zookeeperLocalCluster.getClass().getMethod("startMiniZKCluster")
-              .invoke(zookeeperLocalCluster);
+              Class.forName(
+                  "org.apache.hadoop.hbase.HBaseTestingUtility",
+                  true,
+                  hbaseMiniClusterCl).getConstructor(Configuration.class).newInstance(conf);
+          zookeeperLocalCluster.getClass().getMethod("startMiniZKCluster").invoke(
+              zookeeperLocalCluster);
           Thread.currentThread().setContextClassLoader(prevCl);
         } catch (final Exception e) {
           LOGGER.error("Exception starting zookeeperLocalCluster: " + e, e);
           Assert.fail();
         }
         Object zkCluster =
-            zookeeperLocalCluster.getClass().getMethod("getZkCluster")
-                .invoke(zookeeperLocalCluster);
+            zookeeperLocalCluster.getClass().getMethod("getZkCluster").invoke(
+                zookeeperLocalCluster);
         zookeeper =
             "127.0.0.1:" + zkCluster.getClass().getMethod("getClientPort").invoke(zkCluster);
       }
@@ -74,10 +78,10 @@ public class ZookeeperTestEnvironment implements TestEnvironment {
   @Override
   public void tearDown() throws Exception {
     try {
-      zookeeperLocalCluster.getClass().getMethod("shutdownMiniZKCluster")
-          .invoke(zookeeperLocalCluster);
-      if (!(Boolean) zookeeperLocalCluster.getClass().getMethod("cleanupTestDir")
-          .invoke(zookeeperLocalCluster)) {
+      zookeeperLocalCluster.getClass().getMethod("shutdownMiniZKCluster").invoke(
+          zookeeperLocalCluster);
+      if (!(Boolean) zookeeperLocalCluster.getClass().getMethod("cleanupTestDir").invoke(
+          zookeeperLocalCluster)) {
         LOGGER.warn("Unable to delete mini zookeeper temporary directory");
       }
     } catch (final Exception e) {

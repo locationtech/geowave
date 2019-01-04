@@ -47,17 +47,23 @@ public class CQLDelete extends DefaultOperation implements Command {
   @Parameter(names = "--cql", required = true, description = "CQL Filter for delete")
   private String cqlStr;
 
-  @Parameter(names = "--indexName", required = false,
+  @Parameter(
+      names = "--indexName",
+      required = false,
       description = "The name of the index (optional)",
       converter = StringToByteArrayConverter.class)
   private String indexName;
 
-  @Parameter(names = "--typeName", required = false,
+  @Parameter(
+      names = "--typeName",
+      required = false,
       description = "Optional ability to provide a type name for the data adapter",
       converter = StringToByteArrayConverter.class)
   private String typeName;
 
-  @Parameter(names = "--debug", required = false,
+  @Parameter(
+      names = "--debug",
+      required = false,
       description = "Print out additional info for debug purposes")
   private boolean debug = false;
 
@@ -92,8 +98,8 @@ public class CQLDelete extends DefaultOperation implements Command {
     final GeotoolsFeatureDataAdapter adapter;
     if (typeName != null) {
       adapter =
-          (GeotoolsFeatureDataAdapter) adapterStore
-              .getAdapter(internalAdapterStore.getAdapterId(typeName)).getAdapter();
+          (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
+              internalAdapterStore.getAdapterId(typeName)).getAdapter();
     } else {
       final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
       adapter = (GeotoolsFeatureDataAdapter) it.next().getAdapter();
@@ -123,8 +129,8 @@ public class CQLDelete extends DefaultOperation implements Command {
 
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     final Query<SimpleFeature> query =
-        bldr.addTypeName(typeName).indexName(indexName)
-            .constraints(bldr.constraintsFactory().cqlConstraints(cqlStr)).build();
+        bldr.addTypeName(typeName).indexName(indexName).constraints(
+            bldr.constraintsFactory().cqlConstraints(cqlStr)).build();
     final boolean success = dataStore.delete(query);
 
     if (debug) {

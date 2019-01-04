@@ -24,6 +24,7 @@ public class TestObjectDistanceFn implements DistanceFn<TestObject> {
   public double measure(TestObject x, TestObject y) {
 
     return coordinateDistanceFunction.measure(
-        getGeometry(x).getCentroid().getCoordinate(), getGeometry(y).getCentroid().getCoordinate());
+        getGeometry(x).getCentroid().getCoordinate(),
+        getGeometry(y).getCentroid().getCoordinate());
   }
 }

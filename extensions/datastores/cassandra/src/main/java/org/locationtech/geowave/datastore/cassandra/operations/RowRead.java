@@ -43,13 +43,16 @@ public class RowRead {
     if ((partitionKey != null) && (sortKey != null)) {
       final BoundStatement boundRead = new BoundStatement(preparedRead);
       boundRead.set(
-          CassandraField.GW_SORT_KEY.getBindMarkerName(), ByteBuffer.wrap(sortKey),
+          CassandraField.GW_SORT_KEY.getBindMarkerName(),
+          ByteBuffer.wrap(sortKey),
           ByteBuffer.class);
       boundRead.set(
-          CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(), internalAdapterId,
+          CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
+          internalAdapterId,
           TypeCodec.smallInt());
       boundRead.set(
-          CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(), ByteBuffer.wrap(partitionKey),
+          CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
+          ByteBuffer.wrap(partitionKey),
           ByteBuffer.class);
       try (CloseableIterator<CassandraRow> it = operations.executeQuery(boundRead)) {
         if (it.hasNext()) {

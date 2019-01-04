@@ -30,8 +30,8 @@ public class DefaultGeoWaveAWSCredentialsProviderTest {
     File temp = File.createTempFile("temp", Long.toString(System.nanoTime()));
     temp.mkdirs();
     S3Mock mockS3 =
-        new S3Mock.Builder().withPort(8001).withFileBackend(temp.getAbsolutePath())
-            .withInMemoryBackend().build();
+        new S3Mock.Builder().withPort(8001).withFileBackend(
+            temp.getAbsolutePath()).withInMemoryBackend().build();
     mockS3.start();
     IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
     SparkIngestDriver sparkDriver = new SparkIngestDriver();

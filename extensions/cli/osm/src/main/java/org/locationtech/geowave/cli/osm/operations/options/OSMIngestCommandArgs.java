@@ -30,11 +30,16 @@ public class OSMIngestCommandArgs {
   @Parameter(names = {"-jn", "--jobName"}, required = false, description = "Name of mapreduce job")
   private String jobName = "Ingest (" + System.getProperty("user.name") + ")";
 
-  @Parameter(names = {"-t", "--type"}, required = true, converter = UpperCaseConverter.class,
+  @Parameter(
+      names = {"-t", "--type"},
+      required = true,
+      converter = UpperCaseConverter.class,
       description = "Mapper type - one of node, way, or relation")
   private String mapperType;
 
-  @Parameter(names = {"-m", "--mappingFile"}, required = false,
+  @Parameter(
+      names = {"-m", "--mappingFile"},
+      required = false,
       description = "Mapping file, imposm3 form")
   private String mappingFile = null;
 
@@ -142,9 +147,9 @@ public class OSMIngestCommandArgs {
 
   public String serializeToString() {
     StringBuilder sb = new StringBuilder();
-    sb.append(osmNamespace).append(separator).append(visibilityOptions.getVisibility())
-        .append(separator).append(hdfsBasePath).append(separator).append(jobName).append(separator)
-        .append(mapperType);
+    sb.append(osmNamespace).append(separator).append(visibilityOptions.getVisibility()).append(
+        separator).append(hdfsBasePath).append(separator).append(jobName).append(separator).append(
+            mapperType);
     return sb.toString();
   }
 

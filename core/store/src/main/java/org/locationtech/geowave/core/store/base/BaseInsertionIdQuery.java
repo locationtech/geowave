@@ -32,11 +32,23 @@ class BaseInsertionIdQuery<T> extends BaseConstraintsQuery {
       final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
       final FieldVisibilityCount visibilityCounts,
       final String[] authorizations) {
-    super(new short[] {adapter.getAdapterId()}, index, query, dedupeFilter, scanCallback, null,
-        null, null, null, differingVisibilityCounts, visibilityCounts, authorizations);
+    super(
+        new short[] {adapter.getAdapterId()},
+        index,
+        query,
+        dedupeFilter,
+        scanCallback,
+        null,
+        null,
+        null,
+        null,
+        differingVisibilityCounts,
+        visibilityCounts,
+        authorizations);
     this.ranges =
-        new InsertionIds(query.getPartitionKey(), Lists.newArrayList(query.getSortKey()))
-            .asQueryRanges();
+        new InsertionIds(
+            query.getPartitionKey(),
+            Lists.newArrayList(query.getSortKey())).asQueryRanges();
   }
 
   @Override

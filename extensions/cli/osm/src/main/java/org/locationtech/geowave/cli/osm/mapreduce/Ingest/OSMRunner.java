@@ -84,9 +84,13 @@ public class OSMRunner extends Configured implements Tool {
   private void enableLocalityGroups(final OSMIngestCommandArgs argv)
       throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
     final AccumuloOperations bao =
-        new AccumuloOperations(accumuloOptions.getZookeeper(), accumuloOptions.getInstance(),
-            accumuloOptions.getUser(), accumuloOptions.getPassword(),
-            accumuloOptions.getGeoWaveNamespace(), new AccumuloOptions());
+        new AccumuloOperations(
+            accumuloOptions.getZookeeper(),
+            accumuloOptions.getInstance(),
+            accumuloOptions.getUser(),
+            accumuloOptions.getPassword(),
+            accumuloOptions.getGeoWaveNamespace(),
+            new AccumuloOptions());
     bao.createTable(argv.getOsmTableName(), true, true);
   }
 
@@ -141,12 +145,15 @@ public class OSMRunner extends Configured implements Tool {
     job.setOutputValueClass(Mutation.class);
     job.setOutputFormatClass(AccumuloOutputFormat.class);
     AccumuloOutputFormat.setConnectorInfo(
-        job, accumuloOptions.getUser(), new PasswordToken(accumuloOptions.getPassword()));
+        job,
+        accumuloOptions.getUser(),
+        new PasswordToken(accumuloOptions.getPassword()));
     AccumuloOutputFormat.setCreateTables(job, true);
     AccumuloOutputFormat.setDefaultTableName(job, ingestOptions.getQualifiedTableName());
     AccumuloOutputFormat.setZooKeeperInstance(
-        job, new ClientConfiguration().withInstance(accumuloOptions.getInstance())
-            .withZkHosts(accumuloOptions.getZookeeper()));
+        job,
+        new ClientConfiguration().withInstance(accumuloOptions.getInstance()).withZkHosts(
+            accumuloOptions.getZookeeper()));
 
     // reducer
     job.setNumReduceTasks(0);

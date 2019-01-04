@@ -67,9 +67,13 @@ public class AccumuloRangeQueryTest {
   private DataTypeAdapter<TestGeometry> adapter;
   private final GeometryFactory factory = new GeometryFactory();
   private final TestGeometry testdata =
-      new TestGeometry(factory.createPolygon(
-          new Coordinate[] {new Coordinate(1.025, 1.032), new Coordinate(1.026, 1.032),
-              new Coordinate(1.026, 1.033), new Coordinate(1.025, 1.032)}),
+      new TestGeometry(
+          factory.createPolygon(
+              new Coordinate[] {
+                  new Coordinate(1.025, 1.032),
+                  new Coordinate(1.026, 1.032),
+                  new Coordinate(1.026, 1.033),
+                  new Coordinate(1.025, 1.032)}),
           "test_shape_1");
 
   @Before
@@ -93,14 +97,17 @@ public class AccumuloRangeQueryTest {
   public void testIntersection() {
     final Geometry testGeo =
         factory.createPolygon(
-            new Coordinate[] {new Coordinate(1.0249, 1.0319), new Coordinate(1.0261, 1.0319),
-                new Coordinate(1.0261, 1.0323), new Coordinate(1.0249, 1.0319)});
+            new Coordinate[] {
+                new Coordinate(1.0249, 1.0319),
+                new Coordinate(1.0261, 1.0319),
+                new Coordinate(1.0261, 1.0323),
+                new Coordinate(1.0249, 1.0319)});
     final QueryConstraints intersectQuery = new SpatialQuery(testGeo);
     Assert.assertTrue(testdata.geom.intersects(testGeo));
     final CloseableIterator<TestGeometry> resultOfIntersect =
         (CloseableIterator) mockDataStore.query(
-            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(index.getName())
-                .constraints(intersectQuery).build());
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+                index.getName()).constraints(intersectQuery).build());
     Assert.assertTrue(resultOfIntersect.hasNext());
   }
 
@@ -110,8 +117,8 @@ public class AccumuloRangeQueryTest {
     final QueryConstraints largeQuery = new SpatialQuery(largeGeo);
     final CloseableIterator itr =
         mockDataStore.query(
-            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(index.getName())
-                .constraints(largeQuery).build());
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+                index.getName()).constraints(largeQuery).build());
     int numfeats = 0;
     while (itr.hasNext()) {
       itr.next();
@@ -130,12 +137,20 @@ public class AccumuloRangeQueryTest {
   public void testInterning() throws ParseException {
     final Geometry g =
         GeometryUtils.GEOMETRY_FACTORY.createPolygon(
-            new Coordinate[] {new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(1, 1),
-                new Coordinate(0, 1), new Coordinate(0, 0)});
+            new Coordinate[] {
+                new Coordinate(0, 0),
+                new Coordinate(1, 0),
+                new Coordinate(1, 1),
+                new Coordinate(0, 1),
+                new Coordinate(0, 0)});
     final Geometry gNewInstance =
         GeometryUtils.GEOMETRY_FACTORY.createPolygon(
-            new Coordinate[] {new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(1, 1),
-                new Coordinate(0, 1), new Coordinate(0, 0)});
+            new Coordinate[] {
+                new Coordinate(0, 0),
+                new Coordinate(1, 0),
+                new Coordinate(1, 1),
+                new Coordinate(0, 1),
+                new Coordinate(0, 0)});
     final WKBWriter wkbWriter = new WKBWriter();
     final byte[] b = wkbWriter.write(g);
     final byte[] b2 = new byte[b.length];
@@ -153,26 +168,34 @@ public class AccumuloRangeQueryTest {
   @Test
   public void testMiss() {
     final QueryConstraints intersectQuery =
-        new SpatialQuery(factory.createPolygon(
-            new Coordinate[] {new Coordinate(1.0247, 1.0319), new Coordinate(1.0249, 1.0319),
-                new Coordinate(1.0249, 1.0323), new Coordinate(1.0247, 1.0319)}));
+        new SpatialQuery(
+            factory.createPolygon(
+                new Coordinate[] {
+                    new Coordinate(1.0247, 1.0319),
+                    new Coordinate(1.0249, 1.0319),
+                    new Coordinate(1.0249, 1.0323),
+                    new Coordinate(1.0247, 1.0319)}));
     final CloseableIterator<TestGeometry> resultOfIntersect =
         (CloseableIterator) mockDataStore.query(
-            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(index.getName())
-                .constraints(intersectQuery).build());
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+                index.getName()).constraints(intersectQuery).build());
     Assert.assertFalse(resultOfIntersect.hasNext());
   }
 
   @Test
   public void testEncompass() {
     final QueryConstraints encompassQuery =
-        new SpatialQuery(factory.createPolygon(
-            new Coordinate[] {new Coordinate(1.0249, 1.0319), new Coordinate(1.0261, 1.0319),
-                new Coordinate(1.0261, 1.0331), new Coordinate(1.0249, 1.0319)}));
+        new SpatialQuery(
+            factory.createPolygon(
+                new Coordinate[] {
+                    new Coordinate(1.0249, 1.0319),
+                    new Coordinate(1.0261, 1.0319),
+                    new Coordinate(1.0261, 1.0331),
+                    new Coordinate(1.0249, 1.0319)}));
     final CloseableIterator<TestGeometry> resultOfIntersect =
         (CloseableIterator) mockDataStore.query(
-            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(index.getName())
-                .constraints(encompassQuery).build());
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+                index.getName()).constraints(encompassQuery).build());
     Assert.assertTrue(resultOfIntersect.hasNext());
     final TestGeometry geom1 = resultOfIntersect.next();
     Assert.assertEquals("test_shape_1", geom1.id);
@@ -196,8 +219,8 @@ public class AccumuloRangeQueryTest {
       coords.add(new Coordinate(x, y));
     }
     coords.add(coords.get(0));
-    return GeometryUtils.GEOMETRY_FACTORY
-        .createPolygon(coords.toArray(new Coordinate[coords.size()]));
+    return GeometryUtils.GEOMETRY_FACTORY.createPolygon(
+        coords.toArray(new Coordinate[coords.size()]));
   }
 
   protected static class TestGeometry {
@@ -338,8 +361,7 @@ public class AccumuloRangeQueryTest {
     @Override
     public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldId) {
       int i = 0;
-      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model
-          .getDimensions()) {
+      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
         if (fieldId.equals(dimensionField.getFieldName())) {
           return i;
         }
@@ -357,8 +379,7 @@ public class AccumuloRangeQueryTest {
     public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
       if (position < model.getDimensions().length) {
         int i = 0;
-        for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model
-            .getDimensions()) {
+        for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
           if (i == position) {
             return dimensionField.getFieldName();
           }

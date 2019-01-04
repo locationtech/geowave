@@ -45,8 +45,11 @@ public class MapReduceParameters {
 
   public static final Collection<ParameterEnum<?>> getParameters() {
     return Arrays.asList(
-        new ParameterEnum<?>[] {MRConfig.CONFIG_FILE, MRConfig.HDFS_BASE_DIR,
-            MRConfig.HDFS_HOST_PORT, MRConfig.JOBTRACKER_HOST_PORT,
+        new ParameterEnum<?>[] {
+            MRConfig.CONFIG_FILE,
+            MRConfig.HDFS_BASE_DIR,
+            MRConfig.HDFS_HOST_PORT,
+            MRConfig.JOBTRACKER_HOST_PORT,
             MRConfig.YARN_RESOURCE_MANAGER});
   }
 }

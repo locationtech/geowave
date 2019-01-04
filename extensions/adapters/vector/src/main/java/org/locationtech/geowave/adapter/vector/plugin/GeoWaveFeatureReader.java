@@ -167,8 +167,10 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       final TemporalConstraintsSet timeBounds) {
     final Constraints timeConstraints =
         QueryIndexHelper.composeTimeBoundedConstraints(
-            components.getAdapter().getFeatureType(), components.getAdapter().getTimeDescriptors(),
-            statsMap, timeBounds);
+            components.getAdapter().getFeatureType(),
+            components.getAdapter().getTimeDescriptors(),
+            statsMap,
+            timeBounds);
 
     final GeoConstraintsWrapper geoConstraints =
         QueryIndexHelper.composeGeometricConstraints(getFeatureType(), statsMap, jtsBounds);
@@ -213,7 +215,9 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       return getNoData();
     }
     return interweaveTransaction(
-        issuer.getLimit(), issuer.getFilter(), new CloseableIteratorWrapper<>(new Closeable() {
+        issuer.getLimit(),
+        issuer.getFilter(),
+        new CloseableIteratorWrapper<>(new Closeable() {
           @Override
           public void close() throws IOException {
             for (final CloseableIterator<SimpleFeature> result : results) {
@@ -231,8 +235,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     }
     boolean hasLatitude = false;
     boolean hasLongitude = false;
-    for (final NumericDimensionDefinition dimension : index.getIndexStrategy()
-        .getOrderedDimensionDefinitions()) {
+    for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
       if (dimension instanceof LatitudeDefinition) {
         hasLatitude = true;
       }
@@ -249,8 +252,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         || (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
       return false;
     }
-    for (final NumericDimensionDefinition dimension : index.getIndexStrategy()
-        .getOrderedDimensionDefinitions()) {
+    for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
       if (dimension instanceof TimeDefinition) {
         return true;
       }
@@ -273,11 +275,14 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     @Override
     public CloseableIterator<SimpleFeature> query(final Index index, final BasicQuery query) {
       VectorQueryBuilder bldr =
-          VectorQueryBuilder.newBuilder().addTypeName(components.getAdapter().getTypeName())
-              .indexName(index.getName()).setAuthorizations(transaction.composeAuthorizations())
-              .constraints(
-                  OptimalCQLQuery
-                      .createOptimalQuery(filter, components.getAdapter(), index, query));
+          VectorQueryBuilder.newBuilder().addTypeName(
+              components.getAdapter().getTypeName()).indexName(index.getName()).setAuthorizations(
+                  transaction.composeAuthorizations()).constraints(
+                      OptimalCQLQuery.createOptimalQuery(
+                          filter,
+                          components.getAdapter(),
+                          index,
+                          query));
       if (limit != null) {
         bldr = bldr.limit(limit);
       }
@@ -308,11 +313,14 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     @Override
     public CloseableIterator<SimpleFeature> query(final Index index, final BasicQuery query) {
       VectorAggregationQueryBuilder<Persistable, Long> bldr =
-          (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder()
-              .count(components.getAdapter().getTypeName()).indexName(index.getName())
-              .setAuthorizations(transaction.composeAuthorizations()).constraints(
-                  OptimalCQLQuery
-                      .createOptimalQuery(filter, components.getAdapter(), index, query));
+          (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder().count(
+              components.getAdapter().getTypeName()).indexName(index.getName()).setAuthorizations(
+                  transaction.composeAuthorizations()).constraints(
+                      OptimalCQLQuery.createOptimalQuery(
+                          filter,
+                          components.getAdapter(),
+                          index,
+                          query));
       if (limit != null) {
         bldr = bldr.limit(limit);
       }
@@ -348,11 +356,14 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     public CloseableIterator<SimpleFeature> query(final Index index, final BasicQuery query) {
 
       VectorQueryBuilder bldr =
-          VectorQueryBuilder.newBuilder().addTypeName(components.getAdapter().getTypeName())
-              .indexName(index.getName()).setAuthorizations(transaction.composeAuthorizations())
-              .constraints(
-                  OptimalCQLQuery
-                      .createOptimalQuery(filter, components.getAdapter(), index, query));
+          VectorQueryBuilder.newBuilder().addTypeName(
+              components.getAdapter().getTypeName()).indexName(index.getName()).setAuthorizations(
+                  transaction.composeAuthorizations()).constraints(
+                      OptimalCQLQuery.createOptimalQuery(
+                          filter,
+                          components.getAdapter(),
+                          index,
+                          query));
       if (limit != null) {
         bldr = bldr.limit(limit);
       }
@@ -367,7 +378,8 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       try {
         final AffineTransform worldToScreen =
             RendererUtilities.worldToScreenTransform(
-                new ReferencedEnvelope(new Envelope(west, east, south, north),
+                new ReferencedEnvelope(
+                    new Envelope(west, east, south, north),
                     envelope.getCoordinateReferenceSystem()),
                 new Rectangle(width, height));
         final MathTransform2D fullTransform =
@@ -376,7 +388,9 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         try {
           final double[] spans =
               Decimator.computeGeneralizationDistances(
-                  fullTransform.inverse(), new Rectangle(width, height), pixelSize);
+                  fullTransform.inverse(),
+                  new Rectangle(width, height),
+                  pixelSize);
           bldr = bldr.addHint(DataStoreUtils.MAX_RESOLUTION_SUBSAMPLING_PER_DIMENSION, spans);
           return components.getDataStore().query(bldr.build());
         } catch (final TransformException e) {
@@ -402,17 +416,19 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     @Override
     public CloseableIterator<SimpleFeature> query(final Index index, final BasicQuery query) {
       final VectorAggregationQueryBuilder<DistributedRenderOptions, DistributedRenderResult> bldr =
-          (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder()
-              .indexName(index.getName()).setAuthorizations(transaction.composeAuthorizations());
+          (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder().indexName(
+              index.getName()).setAuthorizations(transaction.composeAuthorizations());
       bldr.aggregate(
-          components.getAdapter().getTypeName(), new DistributedRenderAggregation(renderOptions))
-          .constraints(
+          components.getAdapter().getTypeName(),
+          new DistributedRenderAggregation(renderOptions)).constraints(
               OptimalCQLQuery.createOptimalQuery(filter, components.getAdapter(), index, query));
       final DistributedRenderResult result = components.getDataStore().aggregate(bldr.build());
-      return new CloseableIterator.Wrapper(Iterators.singletonIterator(
-          SimpleFeatureBuilder.build(
-              GeoWaveFeatureCollection.getDistributedRenderFeatureType(),
-              new Object[] {result, renderOptions}, "render")));
+      return new CloseableIterator.Wrapper(
+          Iterators.singletonIterator(
+              SimpleFeatureBuilder.build(
+                  GeoWaveFeatureCollection.getDistributedRenderFeatureType(),
+                  new Object[] {result, renderOptions},
+                  "render")));
     }
   }
 
@@ -435,7 +451,8 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       final ReferencedEnvelope envelope,
       final Integer limit) {
     return issueQuery(
-        jtsBounds, timeBounds,
+        jtsBounds,
+        timeBounds,
         new EnvelopeQueryIssuer(width, height, pixelSize, filter, limit, envelope));
   }
 
@@ -463,8 +480,9 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       final String queryIndexName =
           ((writeIndices != null) && (writeIndices.length > 0)) ? writeIndices[0].getName() : null;
       VectorQueryBuilder bldr =
-          VectorQueryBuilder.newBuilder().addTypeName(components.getAdapter().getTypeName())
-              .indexName(queryIndexName).setAuthorizations(transaction.composeAuthorizations());
+          VectorQueryBuilder.newBuilder().addTypeName(
+              components.getAdapter().getTypeName()).indexName(queryIndexName).setAuthorizations(
+                  transaction.composeAuthorizations());
       if (limit != null) {
         bldr = bldr.limit(limit);
       }
@@ -472,8 +490,8 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         bldr = bldr.subsetFields(components.getAdapter().getTypeName(), getSubset());
       }
 
-      return components.getDataStore()
-          .query(bldr.constraints(bldr.constraintsFactory().dataIds(ids)).build());
+      return components.getDataStore().query(
+          bldr.constraints(bldr.constraintsFactory().dataIds(ids)).build());
     }
     return issueQuery(jtsBounds, timeBounds, new BaseIssuer(filter, limit));
   }
@@ -493,8 +511,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     final List<InternalDataStatistics<SimpleFeature, ?, ?>> stats = new LinkedList<>();
     final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap =
         transaction.getDataStatistics();
-    for (final Map.Entry<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stat : statsMap
-        .entrySet()) {
+    for (final Map.Entry<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stat : statsMap.entrySet()) {
       if ((stat.getValue() instanceof FieldNameStatistic)
           && ((FieldNameStatistic) stat.getValue()).getFieldName().endsWith(name)) {
         stats.add(stat.getValue());
@@ -506,13 +523,16 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
   protected TemporalConstraintsSet clipIndexedTemporalConstraints(
       final TemporalConstraintsSet constraintsSet) {
     return QueryIndexHelper.clipIndexedTemporalConstraints(
-        transaction.getDataStatistics(), components.getAdapter().getTimeDescriptors(),
+        transaction.getDataStatistics(),
+        components.getAdapter().getTimeDescriptors(),
         constraintsSet);
   }
 
   protected Geometry clipIndexedBBOXConstraints(final Geometry bbox) {
-    return QueryIndexHelper
-        .clipIndexedBBOXConstraints(getFeatureType(), bbox, transaction.getDataStatistics());
+    return QueryIndexHelper.clipIndexedBBOXConstraints(
+        getFeatureType(),
+        bbox,
+        transaction.getDataStatistics());
   }
 
   private BasicQuery composeQuery(
@@ -533,9 +553,11 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     // temporalConstraints));
     // }
     // else {
-    return new SpatialQuery(geoConstraints.getConstraints().merge(temporalConstraints),
-        geoConstraints.getGeometry(), GeometryUtils
-            .getCrsCode(components.getAdapter().getFeatureType().getCoordinateReferenceSystem()));
+    return new SpatialQuery(
+        geoConstraints.getConstraints().merge(temporalConstraints),
+        geoConstraints.getGeometry(),
+        GeometryUtils.getCrsCode(
+            components.getAdapter().getFeatureType().getCoordinateReferenceSystem()));
     // }
   }
 

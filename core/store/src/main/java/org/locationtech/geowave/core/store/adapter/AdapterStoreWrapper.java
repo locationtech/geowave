@@ -55,12 +55,14 @@ public class AdapterStoreWrapper implements PersistentAdapterStore {
   @Override
   public CloseableIterator<InternalDataAdapter<?>> getAdapters() {
     final CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters();
-    return new CloseableIteratorWrapper<>(it,
+    return new CloseableIteratorWrapper<>(
+        it,
         Iterators.transform(it, new Function<DataTypeAdapter<?>, InternalDataAdapter<?>>() {
 
           @Override
           public InternalDataAdapter<?> apply(final DataTypeAdapter<?> input) {
-            return new InternalDataAdapterWrapper<>((DataTypeAdapter<?>) input,
+            return new InternalDataAdapterWrapper<>(
+                (DataTypeAdapter<?>) input,
                 internalAdapterStore.getAdapterId(input.getTypeName()));
           }
         }));

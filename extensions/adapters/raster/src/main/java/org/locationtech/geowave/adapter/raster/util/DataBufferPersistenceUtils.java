@@ -148,22 +148,34 @@ public class DataBufferPersistenceUtils {
     // Restore the transient DataBuffer.
     switch (buffer.getType()) {
       case DataBuffer.TYPE_BYTE:
-        return new DataBufferByte((byte[][]) listToByte(buffer.getByteDb().getBanksList()),
-            buffer.getSize(), offsets);
+        return new DataBufferByte(
+            (byte[][]) listToByte(buffer.getByteDb().getBanksList()),
+            buffer.getSize(),
+            offsets);
       case DataBuffer.TYPE_SHORT:
-        return new DataBufferShort(intToShort(listToInt(buffer.getSint().getBanksList())),
-            buffer.getSize(), offsets);
+        return new DataBufferShort(
+            intToShort(listToInt(buffer.getSint().getBanksList())),
+            buffer.getSize(),
+            offsets);
       case DataBuffer.TYPE_USHORT:
-        return new DataBufferUShort(intToShort(listToInt(buffer.getSint().getBanksList())),
-            buffer.getSize(), offsets);
+        return new DataBufferUShort(
+            intToShort(listToInt(buffer.getSint().getBanksList())),
+            buffer.getSize(),
+            offsets);
       case DataBuffer.TYPE_INT:
-        return new DataBufferInt(listToInt(buffer.getSint().getBanksList()), buffer.getSize(),
+        return new DataBufferInt(
+            listToInt(buffer.getSint().getBanksList()),
+            buffer.getSize(),
             offsets);
       case DataBuffer.TYPE_FLOAT:
-        return new DataBufferFloat(listToFloat(buffer.getFlt().getBanksList()), buffer.getSize(),
+        return new DataBufferFloat(
+            listToFloat(buffer.getFlt().getBanksList()),
+            buffer.getSize(),
             offsets);
       case DataBuffer.TYPE_DOUBLE:
-        return new DataBufferDouble(listToDouble(buffer.getDbl().getBanksList()), buffer.getSize(),
+        return new DataBufferDouble(
+            listToDouble(buffer.getDbl().getBanksList()),
+            buffer.getSize(),
             offsets);
       default:
         throw new RuntimeException(

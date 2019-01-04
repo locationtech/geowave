@@ -16,7 +16,10 @@ import org.locationtech.geowave.core.cli.spi.CLIOperationProviderSpi;
 
 public class AnalyticOperationCLIProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
-      new Class<?>[] {AnalyticSection.class, KmeansSparkCommand.class, SparkSqlCommand.class,
+      new Class<?>[] {
+          AnalyticSection.class,
+          KmeansSparkCommand.class,
+          SparkSqlCommand.class,
           SpatialJoinCommand.class};
 
   @Override

@@ -71,11 +71,11 @@ public class FeatureBoundingBoxStatistics extends BoundingBoxDataStatistics<Simp
     final Object o;
     if ((reprojectedType != null)
         && (transform != null)
-        && !reprojectedType.getCoordinateReferenceSystem()
-            .equals(entry.getType().getCoordinateReferenceSystem())) {
+        && !reprojectedType.getCoordinateReferenceSystem().equals(
+            entry.getType().getCoordinateReferenceSystem())) {
       o =
-          GeometryUtils.crsTransform(entry, reprojectedType, transform)
-              .getAttribute(getFieldName());
+          GeometryUtils.crsTransform(entry, reprojectedType, transform).getAttribute(
+              getFieldName());
     } else {
       o = entry.getAttribute(getFieldName());
     }

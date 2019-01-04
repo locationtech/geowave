@@ -39,12 +39,15 @@ import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 public class RoundRobinKeyIndexStrategyTest {
 
   private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS =
-      new NumericDimensionDefinition[] {new BasicDimensionDefinition(-180, 180),
+      new NumericDimensionDefinition[] {
+          new BasicDimensionDefinition(-180, 180),
           new BasicDimensionDefinition(-90, 90)};
 
   private static final NumericIndexStrategy sfcIndexStrategy =
-      TieredSFCIndexFactory
-          .createSingleTierStrategy(SPATIAL_DIMENSIONS, new int[] {16, 16}, SFCType.HILBERT);
+      TieredSFCIndexFactory.createSingleTierStrategy(
+          SPATIAL_DIMENSIONS,
+          new int[] {16, 16},
+          SFCType.HILBERT);
 
   private static final CompoundIndexStrategy compoundIndexStrategy =
       new CompoundIndexStrategy(new RoundRobinKeyIndexStrategy(), sfcIndexStrategy);
@@ -130,12 +133,14 @@ public class RoundRobinKeyIndexStrategyTest {
     Assert.assertTrue(testIds.containsAll(compoundIndexIds));
     final SinglePartitionInsertionIds id2 = ids2.getPartitionKeys().iterator().next();
     final MultiDimensionalCoordinates sfcIndexCoordinatesPerDim =
-        sfcIndexStrategy
-            .getCoordinatesPerDimension(id2.getPartitionKey(), id2.getSortKeys().get(0));
+        sfcIndexStrategy.getCoordinatesPerDimension(
+            id2.getPartitionKey(),
+            id2.getSortKeys().get(0));
     // the first 2 bytes are the partition keys
     final MultiDimensionalCoordinates coordinatesPerDim =
         compoundIndexStrategy.getCoordinatesPerDimension(
-            new ByteArray(Arrays.copyOfRange(ids.get(0).getBytes(), 0, 2)), new ByteArray(
+            new ByteArray(Arrays.copyOfRange(ids.get(0).getBytes(), 0, 2)),
+            new ByteArray(
                 Arrays.copyOfRange(ids.get(0).getBytes(), 2, ids.get(0).getBytes().length)));
 
     Assert.assertTrue(sfcIndexCoordinatesPerDim.equals(coordinatesPerDim));

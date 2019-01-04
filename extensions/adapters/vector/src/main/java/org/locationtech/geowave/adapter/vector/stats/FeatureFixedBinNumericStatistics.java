@@ -139,7 +139,11 @@ public class FeatureFixedBinNumericStatistics extends FixedBinNumericStatistics<
     public InternalDataStatistics<SimpleFeature, FixedBinNumericHistogram, FieldStatisticsQueryBuilder<FixedBinNumericHistogram>> create(
         final Short internalDataAdapterId,
         final String fieldName) {
-      return new FeatureFixedBinNumericStatistics(internalDataAdapterId, fieldName, bins, minValue,
+      return new FeatureFixedBinNumericStatistics(
+          internalDataAdapterId,
+          fieldName,
+          bins,
+          minValue,
           maxValue);
     }
 

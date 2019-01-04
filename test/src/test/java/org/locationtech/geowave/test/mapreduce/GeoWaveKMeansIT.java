@@ -63,7 +63,10 @@ import org.slf4j.LoggerFactory;
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.MAP_REDUCE})
 public class GeoWaveKMeansIT {
-  @GeoWaveTestStore({GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE, GeoWaveStoreType.REDIS,
+  @GeoWaveTestStore({
+      GeoWaveStoreType.ACCUMULO,
+      GeoWaveStoreType.BIGTABLE,
+      GeoWaveStoreType.REDIS,
       GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStorePluginOptions;
 
@@ -113,14 +116,32 @@ public class GeoWaveKMeansIT {
   private void testIngest(final DataStore dataStore) throws IOException {
 
     dataGenerator.writeToGeoWave(
-        dataStore, dataGenerator.generatePointSet(
-            0.15, 0.2, 3, 800, new double[] {-100, -45}, new double[] {-90, -35}));
+        dataStore,
+        dataGenerator.generatePointSet(
+            0.15,
+            0.2,
+            3,
+            800,
+            new double[] {-100, -45},
+            new double[] {-90, -35}));
     dataGenerator.writeToGeoWave(
-        dataStore, dataGenerator
-            .generatePointSet(0.15, 0.2, 6, 600, new double[] {0, 0}, new double[] {10, 10}));
+        dataStore,
+        dataGenerator.generatePointSet(
+            0.15,
+            0.2,
+            6,
+            600,
+            new double[] {0, 0},
+            new double[] {10, 10}));
     dataGenerator.writeToGeoWave(
-        dataStore, dataGenerator
-            .generatePointSet(0.15, 0.2, 4, 900, new double[] {65, 35}, new double[] {75, 45}));
+        dataStore,
+        dataGenerator.generatePointSet(
+            0.15,
+            0.2,
+            4,
+            900,
+            new double[] {65, 35},
+            new double[] {75, 45}));
   }
 
   @Test
@@ -137,23 +158,36 @@ public class GeoWaveKMeansIT {
     final int res =
         jobRunner.run(
             MapReduceTestUtils.getConfiguration(),
-            new PropertyManagement(new ParameterEnum[] {ExtractParameters.Extract.QUERY,
-                ExtractParameters.Extract.MIN_INPUT_SPLIT,
-                ExtractParameters.Extract.MAX_INPUT_SPLIT,
-                ClusteringParameters.Clustering.ZOOM_LEVELS,
-                ClusteringParameters.Clustering.MAX_ITERATIONS,
-                ClusteringParameters.Clustering.RETAIN_GROUP_ASSIGNMENTS,
-                ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID, StoreParam.INPUT_STORE,
-                GlobalParameters.Global.BATCH_ID, MapReduceParameters.MRConfig.HDFS_BASE_DIR,
-                SampleParameters.Sample.MAX_SAMPLE_SIZE, SampleParameters.Sample.MIN_SAMPLE_SIZE},
-                new Object[] {QueryBuilder.newBuilder().constraints(query).build(),
-                    MapReduceTestUtils.MIN_INPUT_SPLITS, MapReduceTestUtils.MAX_INPUT_SPLITS, 2, 2,
-                    false, "centroid", new PersistableStore(dataStorePluginOptions), "bx1",
+            new PropertyManagement(
+                new ParameterEnum[] {
+                    ExtractParameters.Extract.QUERY,
+                    ExtractParameters.Extract.MIN_INPUT_SPLIT,
+                    ExtractParameters.Extract.MAX_INPUT_SPLIT,
+                    ClusteringParameters.Clustering.ZOOM_LEVELS,
+                    ClusteringParameters.Clustering.MAX_ITERATIONS,
+                    ClusteringParameters.Clustering.RETAIN_GROUP_ASSIGNMENTS,
+                    ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
+                    StoreParam.INPUT_STORE,
+                    GlobalParameters.Global.BATCH_ID,
+                    MapReduceParameters.MRConfig.HDFS_BASE_DIR,
+                    SampleParameters.Sample.MAX_SAMPLE_SIZE,
+                    SampleParameters.Sample.MIN_SAMPLE_SIZE},
+                new Object[] {
+                    QueryBuilder.newBuilder().constraints(query).build(),
+                    MapReduceTestUtils.MIN_INPUT_SPLITS,
+                    MapReduceTestUtils.MAX_INPUT_SPLITS,
+                    2,
+                    2,
+                    false,
+                    "centroid",
+                    new PersistableStore(dataStorePluginOptions),
+                    "bx1",
                     TestUtils.TEMP_DIR
                         + File.separator
                         + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY
                         + "/t1",
-                    3, 2}));
+                    3,
+                    2}));
 
     Assert.assertEquals(0, res);
 
@@ -164,11 +198,21 @@ public class GeoWaveKMeansIT {
         dataStorePluginOptions.createInternalAdapterStore();
     final int resultCounLevel1 =
         countResults(
-            dataStore, indexStore, adapterStore, internalAdapterStore, "bx1", 1, // level
+            dataStore,
+            indexStore,
+            adapterStore,
+            internalAdapterStore,
+            "bx1",
+            1, // level
             1);
     final int resultCounLevel2 =
         countResults(
-            dataStore, indexStore, adapterStore, internalAdapterStore, "bx1", 2, // level
+            dataStore,
+            indexStore,
+            adapterStore,
+            internalAdapterStore,
+            "bx1",
+            2, // level
             resultCounLevel1);
     Assert.assertTrue(resultCounLevel2 >= 2);
     // for travis-ci to run, we want to limit the memory consumption
@@ -183,22 +227,33 @@ public class GeoWaveKMeansIT {
         jobRunner2.run(
             MapReduceTestUtils.getConfiguration(),
             new PropertyManagement(
-                new ParameterEnum[] {ExtractParameters.Extract.QUERY,
+                new ParameterEnum[] {
+                    ExtractParameters.Extract.QUERY,
                     ExtractParameters.Extract.MIN_INPUT_SPLIT,
                     ExtractParameters.Extract.MAX_INPUT_SPLIT,
                     ClusteringParameters.Clustering.ZOOM_LEVELS,
-                    ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID, StoreParam.INPUT_STORE,
-                    GlobalParameters.Global.BATCH_ID, MapReduceParameters.MRConfig.HDFS_BASE_DIR,
-                    JumpParameters.Jump.RANGE_OF_CENTROIDS, JumpParameters.Jump.KPLUSPLUS_MIN,
+                    ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
+                    StoreParam.INPUT_STORE,
+                    GlobalParameters.Global.BATCH_ID,
+                    MapReduceParameters.MRConfig.HDFS_BASE_DIR,
+                    JumpParameters.Jump.RANGE_OF_CENTROIDS,
+                    JumpParameters.Jump.KPLUSPLUS_MIN,
                     ClusteringParameters.Clustering.MAX_ITERATIONS},
-                new Object[] {QueryBuilder.newBuilder().constraints(query).build(),
-                    MapReduceTestUtils.MIN_INPUT_SPLITS, MapReduceTestUtils.MAX_INPUT_SPLITS, 2,
-                    "centroid", new PersistableStore(dataStorePluginOptions), "bx2",
+                new Object[] {
+                    QueryBuilder.newBuilder().constraints(query).build(),
+                    MapReduceTestUtils.MIN_INPUT_SPLITS,
+                    MapReduceTestUtils.MAX_INPUT_SPLITS,
+                    2,
+                    "centroid",
+                    new PersistableStore(dataStorePluginOptions),
+                    "bx2",
                     TestUtils.TEMP_DIR
                         + File.separator
                         + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY
                         + "/t2",
-                    new NumericRange(4, 7), 5, 2}));
+                    new NumericRange(4, 7),
+                    5,
+                    2}));
 
     Assert.assertEquals(0, res2);
 
@@ -211,7 +266,12 @@ public class GeoWaveKMeansIT {
         countResults(dataStore, indexStore, adapterStore, internalAdapterStore, "bx2", 1, 1);
     final int jumpRresultCounLevel2 =
         countResults(
-            dataStore, indexStore, adapterStore, internalAdapterStore, "bx2", 2,
+            dataStore,
+            indexStore,
+            adapterStore,
+            internalAdapterStore,
+            "bx2",
+            2,
             jumpRresultCounLevel1);
     Assert.assertTrue(jumpRresultCounLevel1 >= 2);
     Assert.assertTrue(jumpRresultCounLevel2 >= 2);
@@ -230,16 +290,28 @@ public class GeoWaveKMeansIT {
       throws AccumuloException, AccumuloSecurityException, IOException {
 
     final CentroidManager<SimpleFeature> centroidManager =
-        new CentroidManagerGeoWave<>(dataStore, indexStore, adapterStore,
-            new SimpleFeatureItemWrapperFactory(), "centroid",
-            internalAdapterStore.addTypeName("centroid"), TestUtils.DEFAULT_SPATIAL_INDEX.getName(),
-            batchID, level);
+        new CentroidManagerGeoWave<>(
+            dataStore,
+            indexStore,
+            adapterStore,
+            new SimpleFeatureItemWrapperFactory(),
+            "centroid",
+            internalAdapterStore.addTypeName("centroid"),
+            TestUtils.DEFAULT_SPATIAL_INDEX.getName(),
+            batchID,
+            level);
 
     final CentroidManager<SimpleFeature> hullManager =
-        new CentroidManagerGeoWave<>(dataStore, indexStore, adapterStore,
-            new SimpleFeatureItemWrapperFactory(), "convex_hull",
+        new CentroidManagerGeoWave<>(
+            dataStore,
+            indexStore,
+            adapterStore,
+            new SimpleFeatureItemWrapperFactory(),
+            "convex_hull",
             internalAdapterStore.addTypeName("convex_hull"),
-            TestUtils.DEFAULT_SPATIAL_INDEX.getName(), batchID, level);
+            TestUtils.DEFAULT_SPATIAL_INDEX.getName(),
+            batchID,
+            level);
 
     int childCount = 0;
     int parentCount = 0;

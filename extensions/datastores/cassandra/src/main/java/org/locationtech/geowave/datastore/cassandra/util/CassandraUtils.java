@@ -28,29 +28,40 @@ public class CassandraUtils {
       retVal[i] = new BoundStatement(insertionStatement);
       retVal[i].set(
           CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(row.getPartitionKey()), ByteBuffer.class);
-      retVal[i].set(
-          CassandraField.GW_SORT_KEY.getBindMarkerName(), ByteBuffer.wrap(row.getSortKey()),
+          ByteBuffer.wrap(row.getPartitionKey()),
           ByteBuffer.class);
       retVal[i].set(
-          CassandraField.GW_DATA_ID_KEY.getBindMarkerName(), ByteBuffer.wrap(row.getDataId()),
+          CassandraField.GW_SORT_KEY.getBindMarkerName(),
+          ByteBuffer.wrap(row.getSortKey()),
+          ByteBuffer.class);
+      retVal[i].set(
+          CassandraField.GW_DATA_ID_KEY.getBindMarkerName(),
+          ByteBuffer.wrap(row.getDataId()),
           ByteBuffer.class);
       retVal[i].set(
           CassandraField.GW_FIELD_VISIBILITY_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(value.getVisibility()), ByteBuffer.class);
-      retVal[i]
-          .set(CassandraField.GW_NANO_TIME_KEY.getBindMarkerName(), nanoBuffer, ByteBuffer.class);
+          ByteBuffer.wrap(value.getVisibility()),
+          ByteBuffer.class);
+      retVal[i].set(
+          CassandraField.GW_NANO_TIME_KEY.getBindMarkerName(),
+          nanoBuffer,
+          ByteBuffer.class);
       retVal[i].set(
           CassandraField.GW_FIELD_MASK_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(value.getFieldMask()), ByteBuffer.class);
+          ByteBuffer.wrap(value.getFieldMask()),
+          ByteBuffer.class);
       retVal[i].set(
-          CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(), row.getAdapterId(), Short.class);
+          CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
+          row.getAdapterId(),
+          Short.class);
       retVal[i].set(
-          CassandraField.GW_VALUE_KEY.getBindMarkerName(), ByteBuffer.wrap(value.getValue()),
+          CassandraField.GW_VALUE_KEY.getBindMarkerName(),
+          ByteBuffer.wrap(value.getValue()),
           ByteBuffer.class);
       retVal[i].set(
           CassandraField.GW_NUM_DUPLICATES_KEY.getBindMarkerName(),
-          (byte) row.getNumberOfDuplicates(), byte.class);
+          (byte) row.getNumberOfDuplicates(),
+          byte.class);
       // ByteBuffer.wrap(new byte[] {
       // (byte) row.getNumberOfDuplicates()
       i++;

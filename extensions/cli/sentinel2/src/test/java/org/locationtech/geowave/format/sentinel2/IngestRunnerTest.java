@@ -37,8 +37,9 @@ public class IngestRunnerTest {
     // Skip this test if we're on a Mac
     org.junit.Assume.assumeTrue(isNotMac());
 
-    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies()
-        .put("memory", new MemoryStoreFactoryFamily());
+    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+        "memory",
+        new MemoryStoreFactoryFamily());
 
     InstallGdal.main(new String[] {System.getenv("GDAL_DIR")});
   }
@@ -106,13 +107,19 @@ public class IngestRunnerTest {
     vectorOverrideOptions.setVectorIndex("spatialindex,spatempindex");
 
     IngestRunner runner =
-        new IngestRunner(analyzeOptions, downloadOptions, ingestOptions, vectorOverrideOptions,
+        new IngestRunner(
+            analyzeOptions,
+            downloadOptions,
+            ingestOptions,
+            vectorOverrideOptions,
             Arrays.asList("memorystore", "spatialindex"));
 
     ManualOperationParams params = new ManualOperationParams();
     params.getContext().put(
-        ConfigOptions.PROPERTIES_FILE_CONTEXT, new File(IngestRunnerTest.class.getClassLoader()
-            .getResource("geowave-config.properties").toURI()));
+        ConfigOptions.PROPERTIES_FILE_CONTEXT,
+        new File(
+            IngestRunnerTest.class.getClassLoader().getResource(
+                "geowave-config.properties").toURI()));
 
     runner.runInternal(params);
 

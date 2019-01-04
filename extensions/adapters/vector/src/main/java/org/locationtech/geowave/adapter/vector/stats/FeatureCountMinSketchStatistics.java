@@ -173,7 +173,10 @@ public class FeatureCountMinSketchStatistics extends
     public InternalDataStatistics<SimpleFeature, CountMinSketch, FieldStatisticsQueryBuilder<CountMinSketch>> create(
         final Short internalDataAdapterId,
         final String fieldName) {
-      return new FeatureCountMinSketchStatistics(internalDataAdapterId, fieldName, errorFactor,
+      return new FeatureCountMinSketchStatistics(
+          internalDataAdapterId,
+          fieldName,
+          errorFactor,
           probabilityOfCorrectness);
     }
 

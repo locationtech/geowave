@@ -25,20 +25,28 @@ public class GeoServerAddCoverageStoreCommand extends GeoServerCommand<String> {
   @Parameter(names = {"-ws", "--workspace"}, required = false, description = "workspace name")
   private String workspace = null;
 
-  @Parameter(names = {"-cs", "--coverageStore"}, required = false,
+  @Parameter(
+      names = {"-cs", "--coverageStore"},
+      required = false,
       description = "coverage store name")
   private String coverageStore = null;
 
-  @Parameter(names = {"-histo", "--equalizeHistogramOverride"}, required = false,
+  @Parameter(
+      names = {"-histo", "--equalizeHistogramOverride"},
+      required = false,
       description = "This parameter will override the behavior to always perform histogram equalization if a histogram exists.  Valid values are true and false.",
       arity = 1)
   private Boolean equalizeHistogramOverride = null;
 
-  @Parameter(names = {"-interp", "--interpolationOverride"}, required = false,
+  @Parameter(
+      names = {"-interp", "--interpolationOverride"},
+      required = false,
       description = "This will override the default interpolation stored for each layer.  Valid values are 0, 1, 2, 3 for NearestNeighbor, Bilinear, Bicubic, and Bicubic (polynomial variant) resepctively. ")
   private String interpolationOverride = null;
 
-  @Parameter(names = {"-scale", "--scaleTo8Bit"}, required = false,
+  @Parameter(
+      names = {"-scale", "--scaleTo8Bit"},
+      required = false,
       description = "By default, integer values will automatically be scaled to 8-bit and floating point values will not.  This can be overridden setting this value to true or false.",
       arity = 1)
   private Boolean scaleTo8Bit = null;
@@ -67,7 +75,11 @@ public class GeoServerAddCoverageStoreCommand extends GeoServerCommand<String> {
 
     final Response addStoreResponse =
         geoserverClient.addCoverageStore(
-            workspace, coverageStore, gwStore, equalizeHistogramOverride, interpolationOverride,
+            workspace,
+            coverageStore,
+            gwStore,
+            equalizeHistogramOverride,
+            interpolationOverride,
             scaleTo8Bit);
 
     if ((addStoreResponse.getStatus() == Status.OK.getStatusCode())

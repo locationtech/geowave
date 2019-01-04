@@ -134,7 +134,8 @@ public class GDELTIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroWho
   }
 
   @Override
-  @SuppressFBWarnings(value = {"REC_CATCH_EXCEPTION"},
+  @SuppressFBWarnings(
+      value = {"REC_CATCH_EXCEPTION"},
       justification = "Intentionally catching any possible exception as there may be unknown format issues in a file and we don't want to error partially through parsing")
   protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
       final AvroWholeFile hfile,
@@ -150,7 +151,8 @@ public class GDELTIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroWho
       zip.getNextEntry();
     } catch (final IOException e) {
       LOGGER.error(
-          "Failed to read ZipEntry from GDELT input file: " + hfile.getOriginalFilePath(), e);
+          "Failed to read ZipEntry from GDELT input file: " + hfile.getOriginalFilePath(),
+          e);
     }
 
     final InputStreamReader isr = new InputStreamReader(zip, StringUtils.UTF8_CHARSET);
@@ -223,8 +225,9 @@ public class GDELTIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroWho
 
           final Coordinate cord = new Coordinate(lon, lat);
 
-          gdeltEventBuilder
-              .set(GDELTUtils.GDELT_GEOMETRY_ATTRIBUTE, geometryFactory.createPoint(cord));
+          gdeltEventBuilder.set(
+              GDELTUtils.GDELT_GEOMETRY_ATTRIBUTE,
+              geometryFactory.createPoint(cord));
 
           gdeltEventBuilder.set(GDELTUtils.GDELT_EVENT_ID_ATTRIBUTE, eventId);
 
@@ -270,8 +273,9 @@ public class GDELTIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroWho
 
             numMentions = vals[GDELTUtils.NUM_MENTIONS_COLUMN_ID];
             if ((numMentions != null) && !numMentions.isEmpty()) {
-              gdeltEventBuilder
-                  .set(GDELTUtils.NUM_MENTIONS_ATTRIBUTE, Integer.parseInt(numMentions));
+              gdeltEventBuilder.set(
+                  GDELTUtils.NUM_MENTIONS_ATTRIBUTE,
+                  Integer.parseInt(numMentions));
             }
 
             numSources = vals[GDELTUtils.NUM_SOURCES_COLUMN_ID];
@@ -281,8 +285,9 @@ public class GDELTIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroWho
 
             numArticles = vals[GDELTUtils.NUM_ARTICLES_COLUMN_ID];
             if ((numArticles != null) && !numArticles.isEmpty()) {
-              gdeltEventBuilder
-                  .set(GDELTUtils.NUM_ARTICLES_ATTRIBUTE, Integer.parseInt(numArticles));
+              gdeltEventBuilder.set(
+                  GDELTUtils.NUM_ARTICLES_ATTRIBUTE,
+                  Integer.parseInt(numArticles));
             }
 
             avgTone = vals[GDELTUtils.AVG_TONE_COLUMN_ID];

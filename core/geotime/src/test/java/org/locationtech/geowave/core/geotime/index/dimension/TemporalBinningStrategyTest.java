@@ -225,7 +225,8 @@ public class TemporalBinningStrategyTest {
     binStrategy = new TemporalBinningStrategy(Unit.MONTH);
     ranges =
         binStrategy.getNormalizedRanges(
-            new NumericRange(startCal.getTimeInMillis(),
+            new NumericRange(
+                startCal.getTimeInMillis(),
                 startCal.getTimeInMillis() + (TemporalBinningStrategy.MILLIS_PER_DAY)));
 
     Assert.assertEquals(2, ranges.length);
@@ -259,14 +260,16 @@ public class TemporalBinningStrategyTest {
     binStrategy = new TemporalBinningStrategy(Unit.MONTH);
     ranges =
         binStrategy.getNormalizedRanges(
-            new NumericRange(startCal.getTimeInMillis(),
+            new NumericRange(
+                startCal.getTimeInMillis(),
                 startCal.getTimeInMillis() + (TemporalBinningStrategy.MILLIS_PER_DAY)));
 
     Assert.assertEquals(1, ranges.length);
     // add 2 days and now we should end up with 2 bins
     ranges =
         binStrategy.getNormalizedRanges(
-            new NumericRange(startCal.getTimeInMillis(),
+            new NumericRange(
+                startCal.getTimeInMillis(),
                 startCal.getTimeInMillis() + (TemporalBinningStrategy.MILLIS_PER_DAY * 2)));
 
     Assert.assertEquals(2, ranges.length);
@@ -283,7 +286,8 @@ public class TemporalBinningStrategyTest {
     // if we add 365 days to this we should get 2 year bins
     final BinRange[] ranges =
         binStrategy.getNormalizedRanges(
-            new NumericRange(startCal.getTimeInMillis(),
+            new NumericRange(
+                startCal.getTimeInMillis(),
                 startCal.getTimeInMillis() + (TemporalBinningStrategy.MILLIS_PER_DAY * 365)));
     Assert.assertEquals(2, ranges.length);
   }
@@ -299,14 +303,16 @@ public class TemporalBinningStrategyTest {
     // if we add 365 days to this we should get 1 year bin
     BinRange[] ranges =
         binStrategy.getNormalizedRanges(
-            new NumericRange(startCal.getTimeInMillis(),
+            new NumericRange(
+                startCal.getTimeInMillis(),
                 startCal.getTimeInMillis() + (TemporalBinningStrategy.MILLIS_PER_DAY * 365)));
     Assert.assertEquals(1, ranges.length);
     // if we add 366 days to this we should get 2 year bins, and the second
     // bin should be the epoch
     ranges =
         binStrategy.getNormalizedRanges(
-            new NumericRange(startCal.getTimeInMillis(),
+            new NumericRange(
+                startCal.getTimeInMillis(),
                 startCal.getTimeInMillis() + (TemporalBinningStrategy.MILLIS_PER_DAY * 366)));
     Assert.assertEquals(2, ranges.length);
 

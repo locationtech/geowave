@@ -57,8 +57,13 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
   private static FeatureDataAdapter dataAdapter;
 
   @GeoWaveTestStore(
-      value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.HBASE,
-          GeoWaveStoreType.DYNAMODB, GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
 
   @Override
@@ -78,7 +83,10 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
 
   private static final Collection<String> ALL_ATTRIBUTES =
       Arrays.asList(
-          CITY_ATTRIBUTE, STATE_ATTRIBUTE, POPULATION_ATTRIBUTE, LAND_AREA_ATTRIBUTE,
+          CITY_ATTRIBUTE,
+          STATE_ATTRIBUTE,
+          POPULATION_ATTRIBUTE,
+          LAND_AREA_ATTRIBUTE,
           GEOMETRY_ATTRIBUTE);
 
   // points used to construct bounding box for queries
@@ -125,9 +133,8 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
 
     final CloseableIterator<SimpleFeature> results =
         (CloseableIterator) dataStore.createDataStore().query(
-            QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName())
-                .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(spatialQuery)
-                .build());
+            QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName()).indexName(
+                TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(spatialQuery).build());
 
     // query expects to match 3 cities from Texas, which should each contain
     // non-null values for each SimpleFeature attribute
@@ -138,13 +145,14 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
   public void testServerSideFiltering() throws IOException {
 
     QueryBuilder<?, ?> bldr =
-        QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName())
-            .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName())
-            .subsetFields(dataAdapter.getTypeName(), CITY_ATTRIBUTE);
+        QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName()).indexName(
+            TestUtils.DEFAULT_SPATIAL_INDEX.getName()).subsetFields(
+                dataAdapter.getTypeName(),
+                CITY_ATTRIBUTE);
 
     CloseableIterator<SimpleFeature> results =
-        (CloseableIterator<SimpleFeature>) dataStore.createDataStore()
-            .query(bldr.constraints(spatialQuery).build());
+        (CloseableIterator<SimpleFeature>) dataStore.createDataStore().query(
+            bldr.constraints(spatialQuery).build());
 
     // query expects to match 3 cities from Texas, which should each contain
     // non-null values for a subset of attributes (city) and nulls for the
@@ -153,13 +161,14 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
     // included
     verifyResults(results, 3, expectedAttributes);
     bldr =
-        QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName())
-            .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName())
-            .subsetFields(dataAdapter.getTypeName(), GEOMETRY_ATTRIBUTE);
+        QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName()).indexName(
+            TestUtils.DEFAULT_SPATIAL_INDEX.getName()).subsetFields(
+                dataAdapter.getTypeName(),
+                GEOMETRY_ATTRIBUTE);
     // now try just geometry
     results =
-        (CloseableIterator<SimpleFeature>) dataStore.createDataStore()
-            .query(bldr.constraints(spatialQuery).build());
+        (CloseableIterator<SimpleFeature>) dataStore.createDataStore().query(
+            bldr.constraints(spatialQuery).build());
 
     // query expects to match 3 cities from Texas, which should each contain
     // non-null values for geometry and null values for all other attributes
@@ -175,16 +184,16 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
 
     final CloseableIterator<SimpleFeature> results =
         (CloseableIterator) dataStore.createDataStore().query(
-            QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName())
-                .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(spatialQuery)
-                .build());
+            QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName()).indexName(
+                TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(spatialQuery).build());
 
     // query expects to match 3 cities from Texas, which should each contain
     // non-null values for a subset of attributes (city, population) and
     // nulls for the rest
     verifyResults(
         // performs filtering client side
-        new FeatureTranslatingIterator(simpleFeatureType, attributesSubset, results), 3,
+        new FeatureTranslatingIterator(simpleFeatureType, attributesSubset, results),
+        3,
         attributesSubset);
   }
 
@@ -208,7 +217,8 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
 
         if (attributesExpected.contains(currentAttribute)) {
           Assert.assertNotNull(
-              "Expected non-null " + currentAttribute + " value!", currentAttributeValue);
+              "Expected non-null " + currentAttribute + " value!",
+              currentAttributeValue);
         } else {
           Assert.assertNull("Expected null " + currentAttribute + " value!", currentAttributeValue);
         }
@@ -274,32 +284,64 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
     // http://en.wikipedia.org/wiki/List_of_United_States_cities_by_population
     points.add(
         buildSimpleFeature(
-            "New York", "New York", 8405837, 302.6, new Coordinate(-73.9385, 40.6643)));
+            "New York",
+            "New York",
+            8405837,
+            302.6,
+            new Coordinate(-73.9385, 40.6643)));
     points.add(
         buildSimpleFeature(
-            "Los Angeles", "California", 3884307, 468.7, new Coordinate(-118.4108, 34.0194)));
+            "Los Angeles",
+            "California",
+            3884307,
+            468.7,
+            new Coordinate(-118.4108, 34.0194)));
     points.add(
         buildSimpleFeature(
-            "Chicago", "Illinois", 2718782, 227.6, new Coordinate(-87.6818, 41.8376)));
+            "Chicago",
+            "Illinois",
+            2718782,
+            227.6,
+            new Coordinate(-87.6818, 41.8376)));
     points.add(
         buildSimpleFeature("Houston", "Texas", 2195914, 599.6, new Coordinate(-95.3863, 29.7805)));
     points.add(
         buildSimpleFeature(
-            "Philadelphia", "Pennsylvania", 1553165, 134.1, new Coordinate(-75.1333, 40.0094)));
+            "Philadelphia",
+            "Pennsylvania",
+            1553165,
+            134.1,
+            new Coordinate(-75.1333, 40.0094)));
     points.add(
         buildSimpleFeature(
-            "Phoenix", "Arizona", 1513367, 516.7, new Coordinate(-112.088, 33.5722)));
+            "Phoenix",
+            "Arizona",
+            1513367,
+            516.7,
+            new Coordinate(-112.088, 33.5722)));
     points.add(
         buildSimpleFeature(
-            "San Antonio", "Texas", 1409019, 460.9, new Coordinate(-98.5251, 29.4724)));
+            "San Antonio",
+            "Texas",
+            1409019,
+            460.9,
+            new Coordinate(-98.5251, 29.4724)));
     points.add(
         buildSimpleFeature(
-            "San Diego", "California", 1355896, 325.2, new Coordinate(-117.135, 32.8153)));
+            "San Diego",
+            "California",
+            1355896,
+            325.2,
+            new Coordinate(-117.135, 32.8153)));
     points.add(
         buildSimpleFeature("Dallas", "Texas", 1257676, 340.5, new Coordinate(-96.7967, 32.7757)));
     points.add(
         buildSimpleFeature(
-            "San Jose", "California", 998537, 176.5, new Coordinate(-121.8193, 37.2969)));
+            "San Jose",
+            "California",
+            998537,
+            176.5,
+            new Coordinate(-121.8193, 37.2969)));
 
     return points;
   }

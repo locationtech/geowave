@@ -74,8 +74,9 @@ public class ConfigCacheIT {
     configFile = File.createTempFile("test_config", null);
     operationParams = new ManualOperationParams();
     operationParams.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
-    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies()
-        .put("memory", new MemoryStoreFactoryFamily());
+    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+        "memory",
+        new MemoryStoreFactoryFamily());
   }
 
   @After
@@ -110,8 +111,9 @@ public class ConfigCacheIT {
     Assert.assertEquals(
         "namespace",
         props.getProperty("store.abc.opts." + StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION));
-    Assert
-        .assertEquals("abc", props.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE));
+    Assert.assertEquals(
+        "abc",
+        props.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE));
   }
 
   @Test

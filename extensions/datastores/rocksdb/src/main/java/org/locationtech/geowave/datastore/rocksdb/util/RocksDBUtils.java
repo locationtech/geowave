@@ -51,7 +51,11 @@ public class RocksDBUtils {
       final byte[] partitionKey,
       final boolean requiresTimestamp) {
     return getIndexTable(
-        client, getTableName(namePrefix, partitionKey), adapterId, partitionKey, requiresTimestamp);
+        client,
+        getTableName(namePrefix, partitionKey),
+        adapterId,
+        partitionKey,
+        requiresTimestamp);
   }
 
   public static String getTableName(
@@ -89,17 +93,20 @@ public class RocksDBUtils {
       final byte[] partitionKey,
       final boolean requiresTimestamp) {
     return getIndexTable(
-        client, getTablePrefix(typeName, indexName), adapterId, partitionKey, requiresTimestamp);
+        client,
+        getTablePrefix(typeName, indexName),
+        adapterId,
+        partitionKey,
+        requiresTimestamp);
   }
 
   public static Set<ByteArray> getPartitions(final String directory, final String tableNamePrefix) {
-    return Arrays.stream(new File(directory).list((dir, name) -> name.startsWith(tableNamePrefix)))
-        .map(
+    return Arrays.stream(
+        new File(directory).list((dir, name) -> name.startsWith(tableNamePrefix))).map(
             str -> str.length() > (tableNamePrefix.length() + 1)
                 ? new ByteArray(
                     ByteArrayUtils.byteArrayFromString(str.substring(tableNamePrefix.length() + 1)))
-                : new ByteArray())
-        .collect(Collectors.toSet());
+                : new ByteArray()).collect(Collectors.toSet());
   }
 
   public static boolean isSortByTime(final InternalDataAdapter<?> adapter) {

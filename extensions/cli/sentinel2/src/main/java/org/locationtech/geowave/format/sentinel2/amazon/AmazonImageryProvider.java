@@ -193,8 +193,12 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
     if ((envelope != null) && (envelope.isNull() == false)) {
       searchUrl +=
           String.format(
-              Locale.ENGLISH, "box=%.6f,%.6f,%.6f,%.6f&", envelope.getMinX(), envelope.getMinY(),
-              envelope.getMaxX(), envelope.getMaxY());
+              Locale.ENGLISH,
+              "box=%.6f,%.6f,%.6f,%.6f&",
+              envelope.getMinX(),
+              envelope.getMinY(),
+              envelope.getMaxX(),
+              envelope.getMaxY());
     }
     if (startDate != null) {
       searchUrl += "startDate=" + dateFormat.format(startDate) + "&";
@@ -252,10 +256,12 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
             String s3Path = properties.getString("s3Path");
             String[] path = s3Path.split("/");
             feature.setAttribute(
-                SceneFeatureIterator.LOCATION_ATTRIBUTE_NAME, "T" + path[1] + path[2] + path[3]);
+                SceneFeatureIterator.LOCATION_ATTRIBUTE_NAME,
+                "T" + path[1] + path[2] + path[3]);
             feature.setAttribute(SceneFeatureIterator.BANDS_ATTRIBUTE_NAME, AWS_RASTER_BANDS_NAMES);
             feature.setAttribute(
-                SceneFeatureIterator.SCENE_DOWNLOAD_ATTRIBUTE_NAME, DOWNLOAD_URL + s3Path);
+                SceneFeatureIterator.SCENE_DOWNLOAD_ATTRIBUTE_NAME,
+                DOWNLOAD_URL + s3Path);
 
             // Normalize values of this AWS repository.
             InputStream inputStream = null;
@@ -282,11 +288,12 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
 
               final String platform = name.substring(0, 4);
               final String level =
-                  (String) feature
-                      .getAttribute(SceneFeatureIterator.PROCESSING_LEVEL_ATTRIBUTE_NAME);
+                  (String) feature.getAttribute(
+                      SceneFeatureIterator.PROCESSING_LEVEL_ATTRIBUTE_NAME);
               if (!level.startsWith("LEVEL")) {
                 feature.setAttribute(
-                    SceneFeatureIterator.PROCESSING_LEVEL_ATTRIBUTE_NAME, "LEVEL" + level);
+                    SceneFeatureIterator.PROCESSING_LEVEL_ATTRIBUTE_NAME,
+                    "LEVEL" + level);
               }
               if (platform.equalsIgnoreCase("S2A_")) {
                 feature.setAttribute(SceneFeatureIterator.PLATFORM_ATTRIBUTE_NAME, "SENTINEL2A");

@@ -104,13 +104,17 @@ public class OSMConversionRunner extends Configured implements Tool {
     // input format
 
     AbstractInputFormat.setConnectorInfo(
-        job, accumuloOptions.getUser(), new PasswordToken(accumuloOptions.getPassword()));
+        job,
+        accumuloOptions.getUser(),
+        new PasswordToken(accumuloOptions.getPassword()));
     InputFormatBase.setInputTableName(job, ingestOptions.getQualifiedTableName());
     AbstractInputFormat.setZooKeeperInstance(
-        job, new ClientConfiguration().withInstance(accumuloOptions.getInstance())
-            .withZkHosts(accumuloOptions.getZookeeper()));
+        job,
+        new ClientConfiguration().withInstance(accumuloOptions.getInstance()).withZkHosts(
+            accumuloOptions.getZookeeper()));
     AbstractInputFormat.setScanAuthorizations(
-        job, new Authorizations(ingestOptions.getVisibilityOptions().getVisibility()));
+        job,
+        new Authorizations(ingestOptions.getVisibilityOptions().getVisibility()));
 
     final IteratorSetting is = new IteratorSetting(50, "WholeRow", WholeRowIterator.class);
     InputFormatBase.addIterator(job, is);
@@ -123,9 +127,15 @@ public class OSMConversionRunner extends Configured implements Tool {
     GeoWaveOutputFormat.setStoreOptions(job.getConfiguration(), inputStoreOptions);
     final AccumuloOptions options = new AccumuloOptions();
     final AdapterStore as =
-        new AdapterStoreImpl(new AccumuloOperations(accumuloOptions.getZookeeper(),
-            accumuloOptions.getInstance(), accumuloOptions.getUser(), accumuloOptions.getPassword(),
-            accumuloOptions.getGeoWaveNamespace(), options), options);
+        new AdapterStoreImpl(
+            new AccumuloOperations(
+                accumuloOptions.getZookeeper(),
+                accumuloOptions.getInstance(),
+                accumuloOptions.getUser(),
+                accumuloOptions.getPassword(),
+                accumuloOptions.getGeoWaveNamespace(),
+                options),
+            options);
     for (final FeatureDataAdapter fda : FeatureDefinitionSet.featureAdapters.values()) {
       as.addAdapter(fda);
       GeoWaveOutputFormat.addDataAdapter(job.getConfiguration(), fda);

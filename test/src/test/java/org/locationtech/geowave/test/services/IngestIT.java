@@ -57,9 +57,15 @@ public class IngestIT extends BaseServiceIT {
 
   private static final String testName = "IngestIT";
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.HBASE, GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.DYNAMODB,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;
 
   private static long startMillis;
@@ -81,11 +87,11 @@ public class IngestIT extends BaseServiceIT {
   }
 
   public static void extractTestFiles() throws URISyntaxException {
-    ZipUtils
-        .unZipFile(
-            new File(MapReduceTestEnvironment.class.getClassLoader()
-                .getResource(TEST_MAPREDUCE_DATA_ZIP_RESOURCE_PATH).toURI()),
-            TestUtils.TEST_CASE_BASE);
+    ZipUtils.unZipFile(
+        new File(
+            MapReduceTestEnvironment.class.getClassLoader().getResource(
+                TEST_MAPREDUCE_DATA_ZIP_RESOURCE_PATH).toURI()),
+        TestUtils.TEST_CASE_BASE);
   }
 
   @AfterClass
@@ -96,7 +102,10 @@ public class IngestIT extends BaseServiceIT {
   @Before
   public void initialize() {
     configServiceClient.addStoreReRoute(
-        storeName, dataStoreOptions.getType(), null, dataStoreOptions.getOptionsAsMap());
+        storeName,
+        dataStoreOptions.getType(),
+        null,
+        dataStoreOptions.getOptionsAsMap());
     configServiceClient.addSpatialIndex(spatialIndex);
     configServiceClient.configHDFS(MapReduceTestEnvironment.getInstance().getHdfs());
   }
@@ -165,17 +174,37 @@ public class IngestIT extends BaseServiceIT {
 
     r =
         ingestServiceClient.kafkaToGW(
-            storeName, spatialIndex, null, null, "testGroup",
-            ZookeeperTestEnvironment.getInstance().getZookeeper(), null, null, null, null, null,
-            null, "gpx");
+            storeName,
+            spatialIndex,
+            null,
+            null,
+            "testGroup",
+            ZookeeperTestEnvironment.getInstance().getZookeeper(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "gpx");
     assertFinalIngestStatus("Should successfully ingest from kafka to geowave", "COMPLETE", r, 50);
 
     muteLogging();
     r =
         ingestServiceClient.kafkaToGW(
-            "nonexistent-store", spatialIndex, null, null, "testGroup",
-            ZookeeperTestEnvironment.getInstance().getZookeeper(), null, null, null, null, null,
-            null, "gpx");
+            "nonexistent-store",
+            spatialIndex,
+            null,
+            null,
+            "testGroup",
+            ZookeeperTestEnvironment.getInstance().getZookeeper(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "gpx");
     assertFinalIngestStatus("Should fail to ingest for nonexistent store", "ERROR", r, 500);
     unmuteLogging();
   }
@@ -184,7 +213,9 @@ public class IngestIT extends BaseServiceIT {
   public void listplugins() {
     // should always return 200
     TestUtils.assertStatusCode(
-        "Should successfully list plugins", 200, ingestServiceClient.listPlugins());
+        "Should successfully list plugins",
+        200,
+        ingestServiceClient.listPlugins());
   }
 
   /**
@@ -201,7 +232,10 @@ public class IngestIT extends BaseServiceIT {
     muteLogging();
     r = ingestServiceClient.localToGW(OSM_GPX_INPUT_DIR, "nonexistent-store", spatialIndex);
     assertFinalIngestStatus(
-        "Should fail to complete ingest for nonexistent store", "ERROR", r, 500);
+        "Should fail to complete ingest for nonexistent store",
+        "ERROR",
+        r,
+        500);
     unmuteLogging();
   }
 
@@ -223,26 +257,56 @@ public class IngestIT extends BaseServiceIT {
 
     Response r =
         ingestServiceClient.localToMrGW(
-            OSM_GPX_INPUT_DIR, hdfsBaseDirectory, storeName, spatialIndex, null, hdfsJobTracker,
-            null, null, "gpx");
+            OSM_GPX_INPUT_DIR,
+            hdfsBaseDirectory,
+            storeName,
+            spatialIndex,
+            null,
+            hdfsJobTracker,
+            null,
+            null,
+            "gpx");
     assertFinalIngestStatus("Should successfully complete ingest", "COMPLETE", r, 500);
 
     r =
         ingestServiceClient.mrToGW(
-            hdfsBaseDirectory, storeName, spatialIndex, null, hdfsJobTracker, null, null, "gpx");
+            hdfsBaseDirectory,
+            storeName,
+            spatialIndex,
+            null,
+            hdfsJobTracker,
+            null,
+            null,
+            "gpx");
     assertFinalIngestStatus(
-        "Should successfully ingest from MapReduce to geowave", "COMPLETE", r, 500);
+        "Should successfully ingest from MapReduce to geowave",
+        "COMPLETE",
+        r,
+        500);
 
     muteLogging();
     r =
         ingestServiceClient.localToMrGW(
-            OSM_GPX_INPUT_DIR, hdfsBaseDirectory, storeName, "nonexistent-index", null,
-            hdfsJobTracker, null, null, "gpx");
+            OSM_GPX_INPUT_DIR,
+            hdfsBaseDirectory,
+            storeName,
+            "nonexistent-index",
+            null,
+            hdfsJobTracker,
+            null,
+            null,
+            "gpx");
     assertFinalIngestStatus("Should fail to ingest for nonexistent index", "ERROR", r, 500);
 
     r =
         ingestServiceClient.mrToGW(
-            hdfsBaseDirectory, "nonexistent-store", spatialIndex, null, hdfsJobTracker, null, null,
+            hdfsBaseDirectory,
+            "nonexistent-store",
+            spatialIndex,
+            null,
+            hdfsJobTracker,
+            null,
+            null,
             "gpx");
     assertFinalIngestStatus("Should fail to ingest for nonexistent store", "ERROR", r, 500);
     unmuteLogging();

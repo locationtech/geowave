@@ -39,15 +39,21 @@ public class JsonDefinitionColumnVisibilityManagementTest {
   final GeometryFactory factory = new GeometryFactory(new PrecisionModel(PrecisionModel.FIXED));
   final FieldVisibilityHandler<SimpleFeature, Object> simplePIDHandler =
       manager.createVisibilityHandler(
-          "pid", new GlobalVisibilityHandler<SimpleFeature, Object>("default"), "vis");
+          "pid",
+          new GlobalVisibilityHandler<SimpleFeature, Object>("default"),
+          "vis");
 
   final FieldVisibilityHandler<SimpleFeature, Object> simplePOPHandler =
       manager.createVisibilityHandler(
-          "pop", new GlobalVisibilityHandler<SimpleFeature, Object>("default"), "vis");
+          "pop",
+          new GlobalVisibilityHandler<SimpleFeature, Object>("default"),
+          "vis");
 
   final FieldVisibilityHandler<SimpleFeature, Object> simpleGEOHandler =
       manager.createVisibilityHandler(
-          "geometry", new GlobalVisibilityHandler<SimpleFeature, Object>("default"), "vis");
+          "geometry",
+          new GlobalVisibilityHandler<SimpleFeature, Object>("default"),
+          "vis");
 
   @Before
   public void setup() throws SchemaException, CQLException {

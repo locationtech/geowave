@@ -81,8 +81,7 @@ public class KMeansRunner {
       String jar = "";
       try {
         jar =
-            KMeansRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI()
-                .getPath();
+            KMeansRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
       } catch (final URISyntaxException e) {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }
@@ -157,14 +156,14 @@ public class KMeansRunner {
 
         if (adapter instanceof FeatureDataAdapter) {
           final String geometryAttribute =
-              ((FeatureDataAdapter) adapter).getFeatureType().getGeometryDescriptor()
-                  .getLocalName();
+              ((FeatureDataAdapter) adapter).getFeatureType().getGeometryDescriptor().getLocalName();
           Filter filter;
           filter = ECQL.toFilter(cqlFilter);
 
           final ExtractGeometryFilterVisitorResult geoAndCompareOpData =
               (ExtractGeometryFilterVisitorResult) filter.accept(
-                  new ExtractGeometryFilterVisitor(GeometryUtils.getDefaultCRS(),
+                  new ExtractGeometryFilterVisitor(
+                      GeometryUtils.getDefaultCRS(),
                       geometryAttribute),
                   null);
           bbox = geoAndCompareOpData.getGeometry();
@@ -172,8 +171,8 @@ public class KMeansRunner {
 
         if ((bbox != null) && !bbox.equals(GeometryUtils.infinity())) {
           bldr.constraints(
-              bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(bbox)
-                  .build());
+              bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                  bbox).build());
         }
       }
     } catch (final CQLException e) {
@@ -215,12 +214,19 @@ public class KMeansRunner {
   public void writeToOutputStore() {
     if (outputDataStore != null) {
       // output cluster centroids (and hulls) to output datastore
-      KMeansUtils
-          .writeClusterCentroids(outputModel, outputDataStore, centroidTypeName, scaledRange);
+      KMeansUtils.writeClusterCentroids(
+          outputModel,
+          outputDataStore,
+          centroidTypeName,
+          scaledRange);
 
       if (isGenerateHulls()) {
         KMeansUtils.writeClusterHulls(
-            centroidVectors, outputModel, outputDataStore, hullTypeName, isComputeHullData());
+            centroidVectors,
+            outputModel,
+            outputDataStore,
+            hullTypeName,
+            isComputeHullData());
       }
     }
   }

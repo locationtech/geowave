@@ -66,13 +66,15 @@ public class GroupAssigmentJobRunner extends GeoWaveAnalyticJobRunner {
     // Required since the Mapper uses the input format parameters to lookup
     // the adapter
     final DataStorePluginOptions dataStoreOptions =
-        ((PersistableStore) runTimeProperties.getProperty(StoreParam.INPUT_STORE))
-            .getDataStoreOptions();
+        ((PersistableStore) runTimeProperties.getProperty(
+            StoreParam.INPUT_STORE)).getDataStoreOptions();
     GeoWaveInputFormat.setStoreOptions(config, dataStoreOptions);
     runTimeProperties.setConfig(
-        new ParameterEnum[] {CentroidParameters.Centroid.EXTRACTOR_CLASS,
+        new ParameterEnum[] {
+            CentroidParameters.Centroid.EXTRACTOR_CLASS,
             CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,},
-        config, GroupAssignmentMapReduce.class);
+        config,
+        GroupAssignmentMapReduce.class);
     NestedGroupCentroidAssignment.setParameters(config, getScope(), runTimeProperties);
     CentroidManagerGeoWave.setParameters(config, getScope(), runTimeProperties);
 
@@ -91,7 +93,8 @@ public class GroupAssigmentJobRunner extends GeoWaveAnalyticJobRunner {
 
     params.addAll(
         Arrays.asList(
-            new ParameterEnum<?>[] {StoreParameters.StoreParam.INPUT_STORE,
+            new ParameterEnum<?>[] {
+                StoreParameters.StoreParam.INPUT_STORE,
                 GlobalParameters.Global.BATCH_ID}));
 
     params.addAll(CentroidManagerGeoWave.getParameters());

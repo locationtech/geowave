@@ -36,8 +36,9 @@ public abstract class AbstractStageWholeFileToAvro<O>
     try {
       // TODO: consider a streaming mechanism in case a single file is too
       // large
-      return new CloseableIterator.Wrapper<AvroWholeFile>(Iterators.singletonIterator(
-          new AvroWholeFile(ByteBuffer.wrap(IOUtils.toByteArray(f)), f.getPath())));
+      return new CloseableIterator.Wrapper<AvroWholeFile>(
+          Iterators.singletonIterator(
+              new AvroWholeFile(ByteBuffer.wrap(IOUtils.toByteArray(f)), f.getPath())));
     } catch (final IOException e) {
       LOGGER.warn("Unable to read file", e);
     }

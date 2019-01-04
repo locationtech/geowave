@@ -82,10 +82,19 @@ final class WarpNearestOpImage extends WarpOpImage {
       final ROI sourceROI,
       Range noData,
       double[] bkg) {
-    super(source, layout, config, false, null, // extender not needed in
+    super(
+        source,
+        layout,
+        config,
+        false,
+        null, // extender not needed in
         // nearest-neighbor
         // interpolation
-        interp, warp, bkg, sourceROI, noData);
+        interp,
+        warp,
+        bkg,
+        sourceROI,
+        noData);
 
     /*
      * If the source has IndexColorModel, override the default setting in OpImage. The dest shall

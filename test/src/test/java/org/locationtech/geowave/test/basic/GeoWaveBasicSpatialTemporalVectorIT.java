@@ -50,9 +50,15 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
   private static final SimpleDateFormat CQL_DATE_FORMAT =
       new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.DYNAMODB, GeoWaveStoreType.HBASE,
-      GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
 
   private static long startMillis;
@@ -86,11 +92,16 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
   public void testIngestAndQuerySpatialTemporalPointsAndLines() throws Exception {
     // ingest both lines and points
     TestUtils.testLocalIngest(
-        dataStore, DimensionalityType.SPATIAL_TEMPORAL, HAIL_SHAPEFILE_FILE, NUM_THREADS);
+        dataStore,
+        DimensionalityType.SPATIAL_TEMPORAL,
+        HAIL_SHAPEFILE_FILE,
+        NUM_THREADS);
 
     if (!POINTS_ONLY) {
       TestUtils.testLocalIngest(
-          dataStore, DimensionalityType.SPATIAL_TEMPORAL, TORNADO_TRACKS_SHAPEFILE_FILE,
+          dataStore,
+          DimensionalityType.SPATIAL_TEMPORAL,
+          TORNADO_TRACKS_SHAPEFILE_FILE,
           NUM_THREADS);
     }
 
@@ -101,12 +112,14 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
             new URL[] {new File(HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()};
       } else {
         expectedResultsUrls =
-            new URL[] {new File(HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+            new URL[] {
+                new File(HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
                 new File(TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()};
       }
 
       testQuery(
-          new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(), expectedResultsUrls,
+          new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
+          expectedResultsUrls,
           "bounding box and time range");
     } catch (final Exception e) {
       e.printStackTrace();
@@ -125,13 +138,15 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
                 new File(HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()};
       } else {
         expectedResultsUrls =
-            new URL[] {new File(HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
-                new File(TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI()
-                    .toURL()};
+            new URL[] {
+                new File(HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+                new File(
+                    TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()};
       }
 
       testQuery(
-          new File(TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(), expectedResultsUrls,
+          new File(TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(),
+          expectedResultsUrls,
           "polygon constraint and time range");
     } catch (final Exception e) {
       e.printStackTrace();
@@ -148,7 +163,8 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
         statsInputs = new URL[] {new File(HAIL_SHAPEFILE_FILE).toURI().toURL()};
       } else {
         statsInputs =
-            new URL[] {new File(HAIL_SHAPEFILE_FILE).toURI().toURL(),
+            new URL[] {
+                new File(HAIL_SHAPEFILE_FILE).toURI().toURL(),
                 new File(TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()};
       }
 
@@ -264,8 +280,14 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
           final String cqlPredicate =
               String.format(
                   "BBOX(\"%s\",%f,%f,%f,%f) AND \"%s\" <= '%s' AND \"%s\" >= '%s'",
-                  geometryAttribute, west, south, east, north, startTimeAttribute,
-                  CQL_DATE_FORMAT.format(endDate), endTimeAttribute,
+                  geometryAttribute,
+                  west,
+                  south,
+                  east,
+                  north,
+                  startTimeAttribute,
+                  CQL_DATE_FORMAT.format(endDate),
+                  endTimeAttribute,
                   CQL_DATE_FORMAT.format(startDate));
           options.setOutputFile(
               new File(exportDir, adapter.getTypeName() + TEST_BASE_EXPORT_FILE_NAME));
@@ -276,7 +298,10 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
     }
     TestUtils.deleteAll(dataStore);
     TestUtils.testLocalIngest(
-        dataStore, DimensionalityType.SPATIAL_TEMPORAL, exportDir.getAbsolutePath(), "avro",
+        dataStore,
+        DimensionalityType.SPATIAL_TEMPORAL,
+        exportDir.getAbsolutePath(),
+        "avro",
         NUM_THREADS);
     try {
       URL[] expectedResultsUrls;
@@ -285,12 +310,14 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
             new URL[] {new File(HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()};
       } else {
         expectedResultsUrls =
-            new URL[] {new File(HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+            new URL[] {
+                new File(HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
                 new File(TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()};
       }
 
       testQuery(
-          new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(), expectedResultsUrls,
+          new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
+          expectedResultsUrls,
           "reingested bounding box and time range");
     } catch (final Exception e) {
       e.printStackTrace();

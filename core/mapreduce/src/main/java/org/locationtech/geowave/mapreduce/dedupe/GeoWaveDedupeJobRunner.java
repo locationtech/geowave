@@ -115,7 +115,9 @@ public class GeoWaveDedupeJobRunner extends AbstractGeoWaveJobRunner {
 
     final int res =
         ToolRunner.run(
-            new Configuration(), new GeoWaveDedupeJobRunner(loader.getDataStorePlugin()), args);
+            new Configuration(),
+            new GeoWaveDedupeJobRunner(loader.getDataStorePlugin()),
+            args);
     System.exit(res);
   }
 

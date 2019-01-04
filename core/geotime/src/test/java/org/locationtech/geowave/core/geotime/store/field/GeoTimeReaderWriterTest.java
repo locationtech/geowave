@@ -33,7 +33,8 @@ public class GeoTimeReaderWriterTest {
   public void init() {
     geometryExpected = new GeometryFactory().createPoint(new Coordinate(25, 32));
     geometryArrayExpected =
-        new Geometry[] {new GeometryFactory().createPoint(new Coordinate(25, 32)),
+        new Geometry[] {
+            new GeometryFactory().createPoint(new Coordinate(25, 32)),
             new GeometryFactory().createPoint(new Coordinate(26, 33)),
             new GeometryFactory().createPoint(new Coordinate(27, 34)),
             new GeometryFactory().createPoint(new Coordinate(28, 35))};

@@ -110,11 +110,11 @@ public class FacebookTokenServices extends RemoteTokenServices {
     }
     @SuppressWarnings("rawtypes")
     Map map =
-        restTemplate
-            .exchange(
-                path, HttpMethod.GET,
-                new HttpEntity<MultiValueMap<String, String>>(formData, headers), Map.class)
-            .getBody();
+        restTemplate.exchange(
+            path,
+            HttpMethod.GET,
+            new HttpEntity<MultiValueMap<String, String>>(formData, headers),
+            Map.class).getBody();
     @SuppressWarnings("unchecked")
     Map<String, Object> result = map;
     return result;

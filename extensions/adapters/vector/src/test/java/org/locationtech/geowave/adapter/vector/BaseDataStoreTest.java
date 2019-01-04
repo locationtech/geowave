@@ -31,8 +31,8 @@ public class BaseDataStoreTest {
     params.put("gwNamespace", "test_" + getClass().getName() + "_" + name.getMethodName());
     final StoreFactoryFamilySpi storeFactoryFamily = new MemoryStoreFactoryFamily();
     // delete existing data
-    new GeoWavePluginConfig(storeFactoryFamily, params).getDataStore()
-        .delete(QueryBuilder.newBuilder().build());
+    new GeoWavePluginConfig(storeFactoryFamily, params).getDataStore().delete(
+        QueryBuilder.newBuilder().build());
 
     return new GeoWaveGTDataStoreFactory(storeFactoryFamily).createNewDataStore(params);
   }

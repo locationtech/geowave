@@ -36,8 +36,7 @@ public class ListPluginsCommand extends ServiceEnabledCommand<String> {
     StringBuilder builder = new StringBuilder();
 
     builder.append("Available index types currently registered as plugins:\n");
-    for (final Entry<String, DimensionalityTypeProviderSpi> pluginProviderEntry : DimensionalityTypeRegistry
-        .getRegisteredDimensionalityTypes().entrySet()) {
+    for (final Entry<String, DimensionalityTypeProviderSpi> pluginProviderEntry : DimensionalityTypeRegistry.getRegisteredDimensionalityTypes().entrySet()) {
       final DimensionalityTypeProviderSpi pluginProvider = pluginProviderEntry.getValue();
       final String desc =
           pluginProvider.getDimensionalityTypeDescription() == null ? "no description"
@@ -47,8 +46,7 @@ public class ListPluginsCommand extends ServiceEnabledCommand<String> {
     }
 
     builder.append("\nAvailable ingest formats currently registered as plugins:\n");
-    for (final Entry<String, IngestFormatPluginProviderSpi<?, ?>> pluginProviderEntry : IngestFormatPluginRegistry
-        .getPluginProviderRegistry().entrySet()) {
+    for (final Entry<String, IngestFormatPluginProviderSpi<?, ?>> pluginProviderEntry : IngestFormatPluginRegistry.getPluginProviderRegistry().entrySet()) {
       final IngestFormatPluginProviderSpi<?, ?> pluginProvider = pluginProviderEntry.getValue();
       final String desc =
           pluginProvider.getIngestFormatDescription() == null ? "no description"
@@ -59,8 +57,7 @@ public class ListPluginsCommand extends ServiceEnabledCommand<String> {
     builder.append("\nAvailable datastores currently registered:\n");
     final Map<String, StoreFactoryFamilySpi> dataStoreFactories =
         GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies();
-    for (final Entry<String, StoreFactoryFamilySpi> dataStoreFactoryEntry : dataStoreFactories
-        .entrySet()) {
+    for (final Entry<String, StoreFactoryFamilySpi> dataStoreFactoryEntry : dataStoreFactories.entrySet()) {
       final StoreFactoryFamilySpi dataStoreFactory = dataStoreFactoryEntry.getValue();
       final String desc =
           dataStoreFactory.getDescription() == null ? "no description"

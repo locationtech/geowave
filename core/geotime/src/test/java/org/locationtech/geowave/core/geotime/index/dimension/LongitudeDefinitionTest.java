@@ -62,10 +62,14 @@ public class LongitudeDefinitionTest {
     for (int i = 0; i < binRange.length; i++) {
 
       Assert.assertEquals(
-          expectedBinRanges[i].getNormalizedMin(), binRange[i].getNormalizedMin(), DELTA);
+          expectedBinRanges[i].getNormalizedMin(),
+          binRange[i].getNormalizedMin(),
+          DELTA);
 
       Assert.assertEquals(
-          expectedBinRanges[i].getNormalizedMax(), binRange[i].getNormalizedMax(), DELTA);
+          expectedBinRanges[i].getNormalizedMax(),
+          binRange[i].getNormalizedMax(),
+          DELTA);
     }
   }
 
@@ -87,10 +91,14 @@ public class LongitudeDefinitionTest {
     for (int i = 0; i < binRange.length; i++) {
 
       Assert.assertEquals(
-          expectedBinRanges[i].getNormalizedMin(), binRange[i].getNormalizedMin(), DELTA);
+          expectedBinRanges[i].getNormalizedMin(),
+          binRange[i].getNormalizedMin(),
+          DELTA);
 
       Assert.assertEquals(
-          expectedBinRanges[i].getNormalizedMax(), binRange[i].getNormalizedMax(), DELTA);
+          expectedBinRanges[i].getNormalizedMax(),
+          binRange[i].getNormalizedMax(),
+          DELTA);
     }
   }
 

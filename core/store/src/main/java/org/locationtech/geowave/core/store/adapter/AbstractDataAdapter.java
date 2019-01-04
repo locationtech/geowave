@@ -92,8 +92,7 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
     for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : indexFieldHandlers) {
       if (indexHandler instanceof DimensionMatchingIndexFieldHandler) {
         final String[] matchedDimensionFieldNames =
-            ((DimensionMatchingIndexFieldHandler<T, ? extends CommonIndexValue, Object>) indexHandler)
-                .getSupportedIndexFieldNames();
+            ((DimensionMatchingIndexFieldHandler<T, ? extends CommonIndexValue, Object>) indexHandler).getSupportedIndexFieldNames();
 
         for (final String matchedDimensionId : matchedDimensionFieldNames) {
           fieldNameMatchingFieldHandlers.put(matchedDimensionId, indexHandler);
@@ -106,8 +105,9 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
         // class
 
         typeMatchingFieldHandlers.put(
-            GenericTypeResolver
-                .resolveTypeArguments(indexHandler.getClass(), IndexFieldHandler.class)[1],
+            GenericTypeResolver.resolveTypeArguments(
+                indexHandler.getClass(),
+                IndexFieldHandler.class)[1],
             indexHandler);
       }
     }
@@ -121,15 +121,17 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
 
     for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> defaultFieldHandler : defaultTypeMatchingHandlers) {
       final Class<?> defaultFieldHandlerClass =
-          GenericTypeResolver
-              .resolveTypeArguments(defaultFieldHandler.getClass(), IndexFieldHandler.class)[1];
+          GenericTypeResolver.resolveTypeArguments(
+              defaultFieldHandler.getClass(),
+              IndexFieldHandler.class)[1];
 
       // if the type matching handlers can already handle this class,
       // don't overload it, otherwise, use this as a default handler
 
       final IndexFieldHandler<T, ? extends CommonIndexValue, Object> existingTypeHandler =
-          FieldUtils
-              .getAssignableValueFromClassMap(defaultFieldHandlerClass, typeMatchingFieldHandlers);
+          FieldUtils.getAssignableValueFromClassMap(
+              defaultFieldHandlerClass,
+              typeMatchingFieldHandlers);
       if (existingTypeHandler == null) {
         typeMatchingFieldHandlers.put(defaultFieldHandlerClass, defaultFieldHandler);
       }
@@ -152,8 +154,7 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
     final PersistentDataset<CommonIndexValue> indexData = new PersistentDataset<CommonIndexValue>();
     final Set<String> nativeFieldsInIndex = new HashSet<String>();
 
-    for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel
-        .getDimensions()) {
+    for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 
       final IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler =
           getFieldHandler(dimension);
@@ -194,8 +195,7 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
     final RowBuilder<T, Object> builder = newBuilder();
     if (index != null) {
       final CommonIndexModel indexModel = index.getIndexModel();
-      for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel
-          .getDimensions()) {
+      for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
         final IndexFieldHandler<T, CommonIndexValue, Object> fieldHandler =
             (IndexFieldHandler<T, CommonIndexValue, Object>) getFieldHandler(dimension);
         if (fieldHandler == null) {
@@ -244,11 +244,11 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
     if (fieldHandler == null) {
       // if that fails, go for type matching
       fieldHandler =
-          FieldUtils
-              .getAssignableValueFromClassMap(
-                  GenericTypeResolver
-                      .resolveTypeArgument(dimension.getClass(), NumericDimensionField.class),
-                  typeMatchingFieldHandlers);
+          FieldUtils.getAssignableValueFromClassMap(
+              GenericTypeResolver.resolveTypeArgument(
+                  dimension.getClass(),
+                  NumericDimensionField.class),
+              typeMatchingFieldHandlers);
       fieldNameMatchingFieldHandlers.put(dimension.getFieldName(), fieldHandler);
     }
     return fieldHandler;
@@ -267,14 +267,12 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
         persistables.add((Persistable) nativeHandler);
       }
     }
-    for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : typeMatchingFieldHandlers
-        .values()) {
+    for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : typeMatchingFieldHandlers.values()) {
       if (indexHandler instanceof Persistable) {
         persistables.add((Persistable) indexHandler);
       }
     }
-    for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : fieldNameMatchingFieldHandlers
-        .values()) {
+    for (final IndexFieldHandler<T, ? extends CommonIndexValue, Object> indexHandler : fieldNameMatchingFieldHandlers.values()) {
       if (indexHandler instanceof Persistable) {
         persistables.add((Persistable) indexHandler);
       }

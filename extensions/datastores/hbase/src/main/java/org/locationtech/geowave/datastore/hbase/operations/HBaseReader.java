@@ -134,8 +134,8 @@ public class HBaseReader<T> implements RowReader<T> {
     // to be overly inclusive, but doesn't seem to produce extra results for
     // the other datastores within GeoWaveBasicSparkIT, however it does for
     // HBase
-    rscanner.setStartRow(range.getStart().getBytes())
-        .setStopRow(range.getEndAsNextPrefix().getBytes());
+    rscanner.setStartRow(range.getStart().getBytes()).setStopRow(
+        range.getEndAsNextPrefix().getBytes());
 
     if (operations.isServerSideLibraryEnabled()) {
       // Add distributable filters if requested, this has to be last
@@ -175,8 +175,9 @@ public class HBaseReader<T> implements RowReader<T> {
 
     this.scanIt =
         this.rowTransformer.apply(
-            Iterators
-                .transform(resultScanner.iterator(), e -> new HBaseRow(e, partitionKeyLength)));
+            Iterators.transform(
+                resultScanner.iterator(),
+                e -> new HBaseRow(e, partitionKeyLength)));
   }
 
   protected void initScanner() {
@@ -199,8 +200,12 @@ public class HBaseReader<T> implements RowReader<T> {
 
     if (operations.parallelDecodeEnabled()) {
       final HBaseParallelDecoder<T> parallelScanner =
-          new HBaseParallelDecoder<>(rowTransformer, scanProvider, operations,
-              readerParams.getQueryRanges().getCompositeQueryRanges(), partitionKeyLength);
+          new HBaseParallelDecoder<>(
+              rowTransformer,
+              scanProvider,
+              operations,
+              readerParams.getQueryRanges().getCompositeQueryRanges(),
+              partitionKeyLength);
 
       if (!filterList.getFilters().isEmpty()) {
         if (filterList.getFilters().size() > 1) {
@@ -263,8 +268,7 @@ public class HBaseReader<T> implements RowReader<T> {
   private void addSkipFilter(final BaseReaderParams<T> params, final FilterList filterList) {
     // Add skipping filter if requested
     if (params.getMaxResolutionSubsamplingPerDimension() != null) {
-      if (params.getMaxResolutionSubsamplingPerDimension().length != params.getIndex()
-          .getIndexStrategy().getOrderedDimensionDefinitions().length) {
+      if (params.getMaxResolutionSubsamplingPerDimension().length != params.getIndex().getIndexStrategy().getOrderedDimensionDefinitions().length) {
         LOGGER.warn(
             "Unable to subsample for table '"
                 + params.getIndex().getName()
@@ -296,8 +300,10 @@ public class HBaseReader<T> implements RowReader<T> {
 
     final List<QueryFilter> distFilters = Lists.newArrayList();
     distFilters.add(params.getFilter());
-    hbdFilter
-        .init(distFilters, params.getIndex().getIndexModel(), params.getAdditionalAuthorizations());
+    hbdFilter.init(
+        distFilters,
+        params.getIndex().getIndexModel(),
+        params.getAdditionalAuthorizations());
 
     filterList.addFilter(hbdFilter);
   }
@@ -306,7 +312,8 @@ public class HBaseReader<T> implements RowReader<T> {
     final List<MultiDimensionalCoordinateRangesArray> coords = params.getCoordinateRanges();
     if ((coords != null) && !coords.isEmpty()) {
       final HBaseNumericIndexStrategyFilter numericIndexFilter =
-          new HBaseNumericIndexStrategyFilter(params.getIndex().getIndexStrategy(),
+          new HBaseNumericIndexStrategyFilter(
+              params.getIndex().getIndexStrategy(),
               coords.toArray(new MultiDimensionalCoordinateRangesArray[] {}));
       filterList.addFilter(numericIndexFilter);
     }
@@ -362,8 +369,10 @@ public class HBaseReader<T> implements RowReader<T> {
         // this, via the datastore's AIM store.
 
         if (operations.verifyColumnFamily(
-            adapterId, true, // because they're not added
-            readerParams.getIndex().getName(), false)) {
+            adapterId,
+            true, // because they're not added
+            readerParams.getIndex().getName(),
+            false)) {
           families.add(StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId)));
         } else {
           LOGGER.warn(

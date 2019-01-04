@@ -122,11 +122,10 @@ public class GeoWaveDataStoreComponents {
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
 
     dataStore.delete(
-        bldr.setAuthorizations(transaction.composeAuthorizations())
-            .addTypeName(adapter.getTypeName())
-            .constraints(
-                bldr.constraintsFactory().dataIds(new ByteArray[] {adapter.getDataId(feature)}))
-            .build());
+        bldr.setAuthorizations(transaction.composeAuthorizations()).addTypeName(
+            adapter.getTypeName()).constraints(
+                bldr.constraintsFactory().dataIds(
+                    new ByteArray[] {adapter.getDataId(feature)})).build());
   }
 
   public void remove(final String fid, final GeoWaveTransaction transaction) throws IOException {
@@ -134,12 +133,10 @@ public class GeoWaveDataStoreComponents {
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
 
     dataStore.delete(
-        bldr.setAuthorizations(transaction.composeAuthorizations())
-            .addTypeName(adapter.getTypeName())
-            .constraints(
-                bldr.constraintsFactory()
-                    .dataIds(new ByteArray[] {new ByteArray(StringUtils.stringToBinary(fid))}))
-            .build());
+        bldr.setAuthorizations(transaction.composeAuthorizations()).addTypeName(
+            adapter.getTypeName()).constraints(
+                bldr.constraintsFactory().dataIds(
+                    new ByteArray[] {new ByteArray(StringUtils.stringToBinary(fid))})).build());
   }
 
   @SuppressWarnings("unchecked")

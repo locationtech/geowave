@@ -68,8 +68,7 @@ public class SqlQueryRunner {
       String jar = "";
       try {
         jar =
-            SqlQueryRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI()
-                .getPath();
+            SqlQueryRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
       } catch (final URISyntaxException e) {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }
@@ -133,7 +132,8 @@ public class SqlQueryRunner {
                     final JsonObject condObj = childCond.getAsJsonObject();
                     final String condClass = condObj.get("class").getAsString();
                     if (Objects.equals(
-                        condClass, "org.apache.spark.sql.catalyst.analysis.UnresolvedFunction")) {
+                        condClass,
+                        "org.apache.spark.sql.catalyst.analysis.UnresolvedFunction")) {
                       final String udfName =
                           condObj.get("name").getAsJsonObject().get("funcName").getAsString();
                       final UDFNameAndConstructor geomUDF =
@@ -249,15 +249,13 @@ public class SqlQueryRunner {
 
       // Setup store info for runner
       final Index[] leftIndices =
-          leftStore.getOrCreateAdapterIndexMappingStore()
-              .getIndicesForAdapter(
-                  leftStore.getOrCreateInternalAdapterStore().getAdapterId(leftStore.typeName))
-              .getIndices(leftStore.getOrCreateIndexStore());
+          leftStore.getOrCreateAdapterIndexMappingStore().getIndicesForAdapter(
+              leftStore.getOrCreateInternalAdapterStore().getAdapterId(
+                  leftStore.typeName)).getIndices(leftStore.getOrCreateIndexStore());
       final Index[] rightIndices =
-          rightStore.getOrCreateAdapterIndexMappingStore()
-              .getIndicesForAdapter(
-                  rightStore.getOrCreateInternalAdapterStore().getAdapterId(rightStore.typeName))
-              .getIndices(rightStore.getOrCreateIndexStore());;
+          rightStore.getOrCreateAdapterIndexMappingStore().getIndicesForAdapter(
+              rightStore.getOrCreateInternalAdapterStore().getAdapterId(
+                  rightStore.typeName)).getIndices(rightStore.getOrCreateIndexStore());;
       NumericIndexStrategy leftStrat = null;
       if (leftIndices.length > 0) {
         leftStrat = leftIndices[0].getIndexStrategy();
@@ -321,7 +319,8 @@ public class SqlQueryRunner {
 
   private String[] getTableRelations(final String[] predicateArgs) {
     final String[] outputRelations =
-        {getTableNameFromArg(predicateArgs[0].trim()),
+        {
+            getTableNameFromArg(predicateArgs[0].trim()),
             getTableNameFromArg(predicateArgs[1].trim())};
     return outputRelations;
   }

@@ -61,10 +61,11 @@ public class NumericIndexStrategyFilterIterator implements SortedKeyValueIterato
         indexStrategy = (NumericIndexStrategy) URLClassloaderUtils.fromBinary(idxStrategyBytes);
         partitionKeyLength = indexStrategy.getPartitionKeyLength();
       } else {
-        throw new IllegalArgumentException("'"
-            + INDEX_STRATEGY_KEY
-            + "' must be set for "
-            + NumericIndexStrategyFilterIterator.class.getName());
+        throw new IllegalArgumentException(
+            "'"
+                + INDEX_STRATEGY_KEY
+                + "' must be set for "
+                + NumericIndexStrategyFilterIterator.class.getName());
       }
       if (options.containsKey(COORDINATE_RANGE_KEY)) {
         final String coordRangeStr = options.get(COORDINATE_RANGE_KEY);
@@ -73,10 +74,11 @@ public class NumericIndexStrategyFilterIterator implements SortedKeyValueIterato
         arrays.fromBinary(coordRangeBytes);
         rangeCache = RangeLookupFactory.createMultiRangeLookup(arrays.getCoordinateArrays());
       } else {
-        throw new IllegalArgumentException("'"
-            + COORDINATE_RANGE_KEY
-            + "' must be set for "
-            + NumericIndexStrategyFilterIterator.class.getName());
+        throw new IllegalArgumentException(
+            "'"
+                + COORDINATE_RANGE_KEY
+                + "' must be set for "
+                + NumericIndexStrategyFilterIterator.class.getName());
       }
     } catch (final Exception e) {
       throw new IllegalArgumentException(e);
@@ -145,7 +147,8 @@ public class NumericIndexStrategyFilterIterator implements SortedKeyValueIterato
     final GeoWaveKeyImpl key = new GeoWaveKeyImpl(row.getBytes(), partitionKeyLength);
     final MultiDimensionalCoordinates coordinates =
         indexStrategy.getCoordinatesPerDimension(
-            new ByteArray(key.getPartitionKey()), new ByteArray(key.getSortKey()));
+            new ByteArray(key.getPartitionKey()),
+            new ByteArray(key.getSortKey()));
     return rangeCache.inBounds(coordinates);
   }
 }

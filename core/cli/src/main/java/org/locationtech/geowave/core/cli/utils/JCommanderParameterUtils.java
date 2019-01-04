@@ -67,7 +67,8 @@ public class JCommanderParameterUtils {
       }
     } catch (Exception e) {
       LOGGER.error(
-          "An error occurred getting converter from parameter: " + e.getLocalizedMessage(), e);
+          "An error occurred getting converter from parameter: " + e.getLocalizedMessage(),
+          e);
     }
     return converter;
   }

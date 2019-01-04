@@ -57,8 +57,12 @@ public class HBaseMergingFilter extends FilterBase {
 
         Cell singleCell =
             CellUtil.createCell(
-                singleRow, singleFam, singleQual, System.currentTimeMillis(),
-                KeyValue.Type.Put.getCode(), URLClassloaderUtils.toBinary(mergedValue));
+                singleRow,
+                singleFam,
+                singleQual,
+                System.currentTimeMillis(),
+                KeyValue.Type.Put.getCode(),
+                URLClassloaderUtils.toBinary(mergedValue));
 
         rowCells.clear();
         rowCells.add(singleCell);

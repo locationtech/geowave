@@ -174,12 +174,15 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
           if (r.isSingleValue()) {
             set =
                 internalData.subSet(
-                    new MemoryStoreEntry(p.getPartitionKey(), r.getStart()), new MemoryStoreEntry(
-                        p.getPartitionKey(), new ByteArray(r.getStart().getNextPrefix())));
+                    new MemoryStoreEntry(p.getPartitionKey(), r.getStart()),
+                    new MemoryStoreEntry(
+                        p.getPartitionKey(),
+                        new ByteArray(r.getStart().getNextPrefix())));
           } else {
             set =
-                internalData.tailSet(new MemoryStoreEntry(p.getPartitionKey(), r.getStart()))
-                    .headSet(new MemoryStoreEntry(p.getPartitionKey(), r.getEndAsNextPrefix()));
+                internalData.tailSet(
+                    new MemoryStoreEntry(p.getPartitionKey(), r.getStart())).headSet(
+                        new MemoryStoreEntry(p.getPartitionKey(), r.getEndAsNextPrefix()));
           }
           // remove unauthorized
           final Iterator<MemoryStoreEntry> it = set.iterator();
@@ -217,16 +220,21 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
           for (final GeoWaveValue v : input.getRow().getFieldValues()) {
             unreadData.add(
                 DataStoreUtils.aggregateFieldData(
-                    input.getRow(), v, commonData, readerParams.getIndex().getIndexModel(),
+                    input.getRow(),
+                    v,
+                    commonData,
+                    readerParams.getIndex().getIndexModel(),
                     commonIndexFieldNames));
           }
           return readerParams.getFilter().accept(
               readerParams.getIndex().getIndexModel(),
-              new DeferredReadCommonIndexedPersistenceEncoding(input.getRow().getAdapterId(),
+              new DeferredReadCommonIndexedPersistenceEncoding(
+                  input.getRow().getAdapterId(),
                   new ByteArray(input.getRow().getDataId()),
                   new ByteArray(input.getRow().getPartitionKey()),
                   new ByteArray(input.getRow().getSortKey()),
-                  input.getRow().getNumberOfDuplicates(), commonData,
+                  input.getRow().getNumberOfDuplicates(),
+                  commonData,
                   unreadData.isEmpty() ? null : new UnreadFieldDataList(unreadData)));
         }
         return true;
@@ -348,8 +356,14 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
         final ByteArray comparisonPartitionKey,
         final ByteArray comparisonSortKey) {
       row =
-          new GeoWaveRowImpl(new GeoWaveKeyImpl(new byte[] {0}, (short) 0, // new byte[] {},
-              comparisonPartitionKey.getBytes(), comparisonSortKey.getBytes(), 0), null);
+          new GeoWaveRowImpl(
+              new GeoWaveKeyImpl(
+                  new byte[] {0},
+                  (short) 0, // new byte[] {},
+                  comparisonPartitionKey.getBytes(),
+                  comparisonSortKey.getBytes(),
+                  0),
+              null);
     }
 
     public MemoryStoreEntry(final GeoWaveRow row) {
@@ -367,14 +381,16 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
     @Override
     public int compareTo(final MemoryStoreEntry other) {
       final int indexIdCompare =
-          UnsignedBytes.lexicographicalComparator()
-              .compare(getCompositeInsertionId(), other.getCompositeInsertionId());
+          UnsignedBytes.lexicographicalComparator().compare(
+              getCompositeInsertionId(),
+              other.getCompositeInsertionId());
       if (indexIdCompare != 0) {
         return indexIdCompare;
       }
       final int dataIdCompare =
-          UnsignedBytes.lexicographicalComparator()
-              .compare(row.getDataId(), other.getRow().getDataId());
+          UnsignedBytes.lexicographicalComparator().compare(
+              row.getDataId(),
+              other.getRow().getDataId());
       if (dataIdCompare != 0) {
         return dataIdCompare;
       }
@@ -448,29 +464,34 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
         return new CloseableIterator.Empty<>();
       }
       final SortedSet<MemoryMetadataEntry> set =
-          typeStore
-              .subSet(
-                  new MemoryMetadataEntry(
-                      new GeoWaveMetadata(query.getPrimaryId(), query.getSecondaryId(), null, null),
-                      null),
-                  new MemoryMetadataEntry(
-                      new GeoWaveMetadata(getNextPrefix(query.getPrimaryId()),
-                          getNextPrefix(query.getSecondaryId()),
-                          // this should be sufficient
-                          new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
-                              (byte) 0xFF},
-                          // this should be sufficient
-                          new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
-                              (byte) 0xFF}),
-                      new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
-                          (byte) 0xFF, (byte) 0xFF}));
+          typeStore.subSet(
+              new MemoryMetadataEntry(
+                  new GeoWaveMetadata(query.getPrimaryId(), query.getSecondaryId(), null, null),
+                  null),
+              new MemoryMetadataEntry(
+                  new GeoWaveMetadata(
+                      getNextPrefix(query.getPrimaryId()),
+                      getNextPrefix(query.getSecondaryId()),
+                      // this should be sufficient
+                      new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF},
+                      // this should be sufficient
+                      new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF}),
+                  new byte[] {
+                      (byte) 0xFF,
+                      (byte) 0xFF,
+                      (byte) 0xFF,
+                      (byte) 0xFF,
+                      (byte) 0xFF,
+                      (byte) 0xFF,
+                      (byte) 0xFF}));
       Iterator<MemoryMetadataEntry> it = set.iterator();
       if ((query.getAuthorizations() != null) && (query.getAuthorizations().length > 0)) {
         it = Iterators.filter(it, new Predicate<MemoryMetadataEntry>() {
           @Override
           public boolean apply(final MemoryMetadataEntry input) {
-            return MemoryStoreUtils
-                .isAuthorized(input.getMetadata().getVisibility(), query.getAuthorizations());
+            return MemoryStoreUtils.isAuthorized(
+                input.getMetadata().getVisibility(),
+                query.getAuthorizations());
           }
         });
       }
@@ -507,8 +528,8 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
                   && Objects.deepEquals(currentMetadata.getSecondaryId(), next.getSecondaryId())) {
                 if (currentStat == null) {
                   currentStat =
-                      (InternalDataStatistics) PersistenceUtils
-                          .fromBinary(currentMetadata.getValue());
+                      (InternalDataStatistics) PersistenceUtils.fromBinary(
+                          currentMetadata.getValue());
                 }
                 currentStat.merge((Mergeable) PersistenceUtils.fromBinary(next.getValue()));
                 vis = combineVisibilities(vis, next.getVisibility());
@@ -519,8 +540,11 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
             if (currentStat == null) {
               return currentMetadata;
             }
-            return new GeoWaveMetadata(currentMetadata.getPrimaryId(),
-                currentMetadata.getSecondaryId(), vis, PersistenceUtils.toBinary(currentStat));
+            return new GeoWaveMetadata(
+                currentMetadata.getPrimaryId(),
+                currentMetadata.getSecondaryId(),
+                vis,
+                PersistenceUtils.toBinary(currentStat));
           }
         });
       }
@@ -549,8 +573,14 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
     if (bytes == null) {
       // this is simply for memory data store test purposes and is just an
       // attempt to go to the end of the memory datastore table
-      return new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
-          (byte) 0xFF, (byte) 0xFF,};
+      return new byte[] {
+          (byte) 0xFF,
+          (byte) 0xFF,
+          (byte) 0xFF,
+          (byte) 0xFF,
+          (byte) 0xFF,
+          (byte) 0xFF,
+          (byte) 0xFF,};
     }
     return new ByteArray(bytes).getNextPrefix();
   }
@@ -697,7 +727,12 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
     // considering memory data store is for test purposes, this
     // implementation is unnecessary
     return DataStoreUtils.mergeData(
-        this, options, index, adapterStore, internalAdapterStore, adapterIndexMappingStore);
+        this,
+        options,
+        index,
+        adapterStore,
+        internalAdapterStore,
+        adapterIndexMappingStore);
   }
 
   @Override
@@ -716,8 +751,10 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
   public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
     return new QueryAndDeleteByRow<>(
         createRowDeleter(
-            readerParams.getIndex().getName(), readerParams.getAdapterStore(),
-            readerParams.getInternalAdapterStore(), readerParams.getAdditionalAuthorizations()),
+            readerParams.getIndex().getName(),
+            readerParams.getAdapterStore(),
+            readerParams.getInternalAdapterStore(),
+            readerParams.getAdditionalAuthorizations()),
         createReader(readerParams));
   }
 }

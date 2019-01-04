@@ -42,7 +42,8 @@ public abstract class GeoWaveMapper
       final Mapper<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable>.Context context)
       throws IOException, InterruptedException {
     mapNativeValue(
-        key, serializationTool.fromWritable(key.getInternalAdapterId(), value),
+        key,
+        serializationTool.fromWritable(key.getInternalAdapterId(), value),
         new NativeMapContext<GeoWaveInputKey, ObjectWritable>(context, serializationTool));
   }
 

@@ -652,7 +652,8 @@ public class JDOMUtils {
     return value;
   }
 
-  @SuppressFBWarnings(value = "NP_BOOLEAN_RETURN_NULL",
+  @SuppressFBWarnings(
+      value = "NP_BOOLEAN_RETURN_NULL",
       justification = "its private and only used by methods that check for null")
   private static Boolean getBooleanVal(final Element e, final String childTag) {
     final String text = e.getChildText(childTag);
@@ -676,7 +677,8 @@ public class JDOMUtils {
     return value;
   }
 
-  @SuppressFBWarnings(value = "NP_BOOLEAN_RETURN_NULL",
+  @SuppressFBWarnings(
+      value = "NP_BOOLEAN_RETURN_NULL",
       justification = "its private and only used by methods that check for null")
   private static Boolean getBooleanVal(final Element e) {
     final String text = e.getText();
@@ -1047,7 +1049,8 @@ public class JDOMUtils {
    * @param el
    * @return Boolean
    */
-  @SuppressFBWarnings(value = "NP_BOOLEAN_RETURN_NULL",
+  @SuppressFBWarnings(
+      value = "NP_BOOLEAN_RETURN_NULL",
       justification = "its known that it can return null")
   public static Boolean readBooleanVal(final String tag, final Element el) {
     if (el == null) {
@@ -1115,7 +1118,10 @@ public class JDOMUtils {
     if ((el == null) && tryLowerCase) {
       el =
           getChildIgnoreNamespace(
-              parentEl, childName.toLowerCase(Locale.ENGLISH), namespaces, false);
+              parentEl,
+              childName.toLowerCase(Locale.ENGLISH),
+              namespaces,
+              false);
     }
 
     return el;
@@ -1141,7 +1147,10 @@ public class JDOMUtils {
     if ((el == null) && tryLowerCase) {
       el =
           getChildrenIgnoreNamespace(
-              parentEl, childName.toLowerCase(Locale.ENGLISH), namespaces, false);
+              parentEl,
+              childName.toLowerCase(Locale.ENGLISH),
+              namespaces,
+              false);
     }
 
     if (el == null) {
@@ -1209,7 +1218,8 @@ public class JDOMUtils {
     return val;
   }
 
-  @SuppressFBWarnings(value = "NP_BOOLEAN_RETURN_NULL",
+  @SuppressFBWarnings(
+      value = "NP_BOOLEAN_RETURN_NULL",
       justification = "its known that it can return null")
   public static Boolean getBoolValIgnoreNamespace(
       final Element rootEl,

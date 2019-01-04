@@ -31,7 +31,9 @@ public class FeatureDistanceFnTest {
   public void setup() {
     featureType =
         AnalyticFeature.createGeometryFeatureAdapter(
-            "centroid", new String[] {"extra1"}, BasicFeatureTypes.DEFAULT_NAMESPACE,
+            "centroid",
+            new String[] {"extra1"},
+            BasicFeatureTypes.DEFAULT_NAMESPACE,
             ClusteringUtils.CLUSTERING_CRS).getFeatureType();
   }
 
@@ -49,8 +51,11 @@ public class FeatureDistanceFnTest {
     final SimpleFeature feature2 =
         createFeature(
             factory.createPolygon(
-                new Coordinate[] {new Coordinate(0.001, 0.001), new Coordinate(0.001, 0.002),
-                    new Coordinate(0.002, 0.002), new Coordinate(0.001, 0.001)}));
+                new Coordinate[] {
+                    new Coordinate(0.001, 0.001),
+                    new Coordinate(0.001, 0.002),
+                    new Coordinate(0.002, 0.002),
+                    new Coordinate(0.001, 0.001)}));
     testBounds(functionUnderTest.measure(feature1, feature2), 100, 200);
   }
 
@@ -60,13 +65,19 @@ public class FeatureDistanceFnTest {
     final SimpleFeature feature1 =
         createFeature(
             factory.createPolygon(
-                new Coordinate[] {new Coordinate(0.000, 0.000), new Coordinate(-0.000, -0.001),
-                    new Coordinate(-0.001, -0.001), new Coordinate(0.00, 0.00)}));
+                new Coordinate[] {
+                    new Coordinate(0.000, 0.000),
+                    new Coordinate(-0.000, -0.001),
+                    new Coordinate(-0.001, -0.001),
+                    new Coordinate(0.00, 0.00)}));
     final SimpleFeature feature2 =
         createFeature(
             factory.createPolygon(
-                new Coordinate[] {new Coordinate(0.001, 0.001), new Coordinate(0.001, 0.002),
-                    new Coordinate(0.002, 0.002), new Coordinate(0.001, 0.001)}));
+                new Coordinate[] {
+                    new Coordinate(0.001, 0.001),
+                    new Coordinate(0.001, 0.002),
+                    new Coordinate(0.002, 0.002),
+                    new Coordinate(0.001, 0.001)}));
 
     testBounds(functionUnderTest.measure(feature1, feature2), 100, 200);
   }
@@ -77,26 +88,38 @@ public class FeatureDistanceFnTest {
     final SimpleFeature feature1 =
         createFeature(
             factory.createPolygon(
-                new Coordinate[] {new Coordinate(0.000, 0.000), new Coordinate(0.0012, 0.000),
-                    new Coordinate(0.0013, 0.0015), new Coordinate(0.00, 0.00)}));
+                new Coordinate[] {
+                    new Coordinate(0.000, 0.000),
+                    new Coordinate(0.0012, 0.000),
+                    new Coordinate(0.0013, 0.0015),
+                    new Coordinate(0.00, 0.00)}));
     final SimpleFeature feature2 =
         createFeature(
             factory.createPolygon(
-                new Coordinate[] {new Coordinate(0.001, 0.001), new Coordinate(0.002, 0.001),
-                    new Coordinate(0.002, 0.002), new Coordinate(0.001, 0.001)}));
+                new Coordinate[] {
+                    new Coordinate(0.001, 0.001),
+                    new Coordinate(0.002, 0.001),
+                    new Coordinate(0.002, 0.002),
+                    new Coordinate(0.001, 0.001)}));
 
     testBounds(functionUnderTest.measure(feature1, feature2), 0, 0.00001);
 
     final SimpleFeature feature3 =
         createFeature(
             factory.createPolygon(
-                new Coordinate[] {new Coordinate(0.000, 0.000), new Coordinate(0.001, 0.001),
-                    new Coordinate(0.000, 0.001), new Coordinate(0.00, 0.00)}));
+                new Coordinate[] {
+                    new Coordinate(0.000, 0.000),
+                    new Coordinate(0.001, 0.001),
+                    new Coordinate(0.000, 0.001),
+                    new Coordinate(0.00, 0.00)}));
     final SimpleFeature feature4 =
         createFeature(
             factory.createPolygon(
-                new Coordinate[] {new Coordinate(0.001, 0.001), new Coordinate(0.002, 0.001),
-                    new Coordinate(0.002, 0.002), new Coordinate(0.001, 0.001)}));
+                new Coordinate[] {
+                    new Coordinate(0.001, 0.001),
+                    new Coordinate(0.002, 0.001),
+                    new Coordinate(0.002, 0.002),
+                    new Coordinate(0.001, 0.001)}));
     testBounds(functionUnderTest.measure(feature3, feature4), 0.0, 0.00001);
   }
 
@@ -106,7 +129,17 @@ public class FeatureDistanceFnTest {
 
   private SimpleFeature createFeature(final Geometry geometry) {
     return AnalyticFeature.createGeometryFeature(
-        featureType, "b1", UUID.randomUUID().toString(), UUID.randomUUID().toString(), "NA",
-        20.30203, geometry, new String[] {"extra1"}, new double[] {0.022}, 1, 1, 0);
+        featureType,
+        "b1",
+        UUID.randomUUID().toString(),
+        UUID.randomUUID().toString(),
+        "NA",
+        20.30203,
+        geometry,
+        new String[] {"extra1"},
+        new double[] {0.022},
+        1,
+        1,
+        0);
   }
 }

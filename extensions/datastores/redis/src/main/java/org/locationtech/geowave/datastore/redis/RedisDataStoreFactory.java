@@ -30,7 +30,8 @@ public class RedisDataStoreFactory extends BaseDataStoreFactory {
       throw new AssertionError("Expected " + RedisOptions.class.getSimpleName());
     }
 
-    return new RedisDataStore((RedisOperations) helper.createOperations(options),
+    return new RedisDataStore(
+        (RedisOperations) helper.createOperations(options),
         ((RedisOptions) options).getStoreOptions());
   }
 }

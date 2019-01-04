@@ -55,7 +55,9 @@ public class RedisRowDeleter implements RowDeleter {
   private RedisScoredSetWrapper<GeoWaveRedisPersistedRow> getSet(
       final Pair<String, Short> setNameAndAdapterId) {
     return RedisUtils.getRowSet(
-        client, compression, setNameAndAdapterId.getLeft(),
+        client,
+        compression,
+        setNameAndAdapterId.getLeft(),
         RedisUtils.isSortByTime(adapterStore.getAdapter(setNameAndAdapterId.getRight())));
   }
 
@@ -65,7 +67,9 @@ public class RedisRowDeleter implements RowDeleter {
         setCache.get(
             Pair.of(
                 RedisUtils.getRowSetName(
-                    namespace, internalAdapterStore.getTypeName(row.getAdapterId()), indexName,
+                    namespace,
+                    internalAdapterStore.getTypeName(row.getAdapterId()),
+                    indexName,
                     row.getPartitionKey()),
                 row.getAdapterId()));
     Arrays.stream(((GeoWaveRedisRow) row).getPersistedRows()).forEach(r -> set.remove(r));

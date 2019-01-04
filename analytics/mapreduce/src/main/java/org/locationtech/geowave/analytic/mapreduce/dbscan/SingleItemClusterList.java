@@ -37,8 +37,12 @@ public class SingleItemClusterList extends DBScanClusterList implements Cluster 
       final ClusterItem center,
       final NeighborListFactory<ClusterItem> factory,
       final Map<ByteArray, Cluster> index) {
-    super(center.getGeometry() instanceof Point || center.isCompressed() ? center.getGeometry()
-        : null, (int) center.getCount(), centerId, index);
+    super(
+        center.getGeometry() instanceof Point || center.isCompressed() ? center.getGeometry()
+            : null,
+        (int) center.getCount(),
+        centerId,
+        index);
 
     final Geometry clusterGeo = center.getGeometry();
 
@@ -138,8 +142,10 @@ public class SingleItemClusterList extends DBScanClusterList implements Cluster 
 
   protected Geometry compress() {
     if (getClusterPoints(false).size() > 0) {
-      return DBScanClusterList.getHullTool()
-          .createHullFromGeometry(clusterGeo, clusterPoints, true);
+      return DBScanClusterList.getHullTool().createHullFromGeometry(
+          clusterGeo,
+          clusterPoints,
+          true);
     }
     return clusterGeo;
   }

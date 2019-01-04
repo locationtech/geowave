@@ -27,8 +27,8 @@ public class RedissonClientCache {
   private final LoadingCache<String, RedissonClient> clientCache =
       Caffeine.newBuilder().build(address -> {
         final Config config = new Config();
-        config.useSingleServer().setConnectTimeout(15000).setTimeout(150000).setRetryInterval(15000)
-            .setAddress(address);
+        config.useSingleServer().setConnectTimeout(15000).setTimeout(150000).setRetryInterval(
+            15000).setAddress(address);
         return Redisson.create(config);
       });
 

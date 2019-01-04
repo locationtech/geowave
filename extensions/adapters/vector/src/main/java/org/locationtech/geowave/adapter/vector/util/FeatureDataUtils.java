@@ -77,8 +77,9 @@ public class FeatureDataUtils {
         // but it is the default in later versions of GeoTools.
         // this all depends on the authority at the time of creation
         featureType =
-            SimpleFeatureTypeBuilder
-                .retype(featureType, CRS.decode("EPSG:4326", lCaseAxis.equals("east")));
+            SimpleFeatureTypeBuilder.retype(
+                featureType,
+                CRS.decode("EPSG:4326", lCaseAxis.equals("east")));
       } catch (final FactoryException e) {
         throw new SchemaException("Cannot decode EPSG:4326", e);
       }

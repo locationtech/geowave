@@ -27,14 +27,14 @@ public class DimensionalityTypeRegistry {
   private static synchronized void initDimensionalityTypeRegistry() {
     registeredDimensionalityTypes = new HashMap<String, DimensionalityTypeProviderSpi>();
     final Iterator<DimensionalityTypeProviderSpi> dimensionalityTypesProviders =
-        new SPIServiceRegistry(DimensionalityTypeRegistry.class)
-            .load(DimensionalityTypeProviderSpi.class);
+        new SPIServiceRegistry(DimensionalityTypeRegistry.class).load(
+            DimensionalityTypeProviderSpi.class);
     int currentDefaultPriority = Integer.MIN_VALUE;
     while (dimensionalityTypesProviders.hasNext()) {
       final DimensionalityTypeProviderSpi dimensionalityTypeProvider =
           dimensionalityTypesProviders.next();
-      if (registeredDimensionalityTypes
-          .containsKey(dimensionalityTypeProvider.getDimensionalityTypeName())) {
+      if (registeredDimensionalityTypes.containsKey(
+          dimensionalityTypeProvider.getDimensionalityTypeName())) {
         LOGGER.warn(
             "Dimensionality type '"
                 + dimensionalityTypeProvider.getDimensionalityTypeName()
@@ -42,7 +42,8 @@ public class DimensionalityTypeRegistry {
                 + dimensionalityTypeProvider.getClass().getName());
       } else {
         registeredDimensionalityTypes.put(
-            dimensionalityTypeProvider.getDimensionalityTypeName(), dimensionalityTypeProvider);
+            dimensionalityTypeProvider.getDimensionalityTypeName(),
+            dimensionalityTypeProvider);
         if (dimensionalityTypeProvider.getPriority() > currentDefaultPriority) {
           currentDefaultPriority = dimensionalityTypeProvider.getPriority();
           defaultDimensionalityType = dimensionalityTypeProvider.getDimensionalityTypeName();

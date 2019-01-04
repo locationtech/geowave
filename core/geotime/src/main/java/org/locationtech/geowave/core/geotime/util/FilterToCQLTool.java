@@ -88,11 +88,16 @@ public class FilterToCQLTool {
         final Expression e2,
         final String units,
         final double distance) throws IllegalFilterException, TransformException {
-      super(new LiteralExpressionImpl(GeometryUtils.buffer(
-          getCRS(e1, e2),
-          e1 instanceof PropertyName ? e2.evaluate(null, org.locationtech.jts.geom.Geometry.class)
-              : e1.evaluate(null, org.locationtech.jts.geom.Geometry.class),
-          units, distance).getLeft()), e1 instanceof PropertyName ? e1 : e2);
+      super(
+          new LiteralExpressionImpl(
+              GeometryUtils.buffer(
+                  getCRS(e1, e2),
+                  e1 instanceof PropertyName
+                      ? e2.evaluate(null, org.locationtech.jts.geom.Geometry.class)
+                      : e1.evaluate(null, org.locationtech.jts.geom.Geometry.class),
+                  units,
+                  distance).getLeft()),
+          e1 instanceof PropertyName ? e1 : e2);
       this.units = units;
       this.distance = distance;
     }
@@ -107,9 +112,15 @@ public class FilterToCQLTool {
         final String units,
         final double distance,
         final MatchAction matchAction) throws IllegalFilterException, TransformException {
-      super(new LiteralExpressionImpl(GeometryUtils.buffer(
-          getCRS(e1, e2), e1.evaluate(null, org.locationtech.jts.geom.Geometry.class), units,
-          distance).getLeft()), e2, matchAction);
+      super(
+          new LiteralExpressionImpl(
+              GeometryUtils.buffer(
+                  getCRS(e1, e2),
+                  e1.evaluate(null, org.locationtech.jts.geom.Geometry.class),
+                  units,
+                  distance).getLeft()),
+          e2,
+          matchAction);
       this.units = units;
       this.distance = distance;
     }

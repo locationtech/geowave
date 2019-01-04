@@ -48,14 +48,14 @@ public class TdriveUtils {
 
     simpleFeatureTypeBuilder.add(
         attributeTypeBuilder.binding(Geometry.class).nillable(false).buildDescriptor("geometry"));
-    simpleFeatureTypeBuilder
-        .add(attributeTypeBuilder.binding(Double.class).nillable(false).buildDescriptor("taxiid"));
+    simpleFeatureTypeBuilder.add(
+        attributeTypeBuilder.binding(Double.class).nillable(false).buildDescriptor("taxiid"));
     simpleFeatureTypeBuilder.add(
         attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("pointinstance"));
-    simpleFeatureTypeBuilder
-        .add(attributeTypeBuilder.binding(Date.class).nillable(true).buildDescriptor("Timestamp"));
-    simpleFeatureTypeBuilder
-        .add(attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Latitude"));
+    simpleFeatureTypeBuilder.add(
+        attributeTypeBuilder.binding(Date.class).nillable(true).buildDescriptor("Timestamp"));
+    simpleFeatureTypeBuilder.add(
+        attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Latitude"));
     simpleFeatureTypeBuilder.add(
         attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Longitude"));
 

@@ -49,8 +49,9 @@ public class CQLQueryFilterTest {
   @Before
   public void setup() throws SchemaException, CQLException {
     type =
-        DataUtilities
-            .createType("geostuff", "geom:Geometry:srid=4326,pop:java.lang.Long,pid:String");
+        DataUtilities.createType(
+            "geostuff",
+            "geom:Geometry:srid=4326,pop:java.lang.Long,pid:String");
 
     final List<AttributeDescriptor> descriptors = type.getAttributeDescriptors();
     defaults = new Object[descriptors.size()];
@@ -85,8 +86,8 @@ public class CQLQueryFilterTest {
         dFilterList.accept(
             spatialIndex.getIndexModel(),
             getEncodings(
-                spatialIndex, adapter.encode(createFeature(), spatialIndex.getIndexModel()))
-                    .get(0)));
+                spatialIndex,
+                adapter.encode(createFeature(), spatialIndex.getIndexModel())).get(0)));
   }
 
   private static List<IndexedAdapterPersistenceEncoding> getEncodings(
@@ -98,9 +99,14 @@ public class CQLQueryFilterTest {
     for (final SinglePartitionInsertionIds partitionIds : ids.getPartitionKeys()) {
       for (final ByteArray sortKey : partitionIds.getSortKeys()) {
         encodings.add(
-            new IndexedAdapterPersistenceEncoding(encoding.getInternalAdapterId(),
-                encoding.getDataId(), partitionIds.getPartitionKey(), sortKey, ids.getSize(),
-                encoding.getCommonData(), encoding.getUnknownData(),
+            new IndexedAdapterPersistenceEncoding(
+                encoding.getInternalAdapterId(),
+                encoding.getDataId(),
+                partitionIds.getPartitionKey(),
+                sortKey,
+                ids.getSize(),
+                encoding.getCommonData(),
+                encoding.getUnknownData(),
                 encoding.getAdapterExtendedData()));
       }
     }

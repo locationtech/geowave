@@ -40,12 +40,15 @@ import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 public class HashKeyIndexStrategyTest {
 
   private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS =
-      new NumericDimensionDefinition[] {new BasicDimensionDefinition(-180, 180),
+      new NumericDimensionDefinition[] {
+          new BasicDimensionDefinition(-180, 180),
           new BasicDimensionDefinition(-90, 90)};
 
   private static final NumericIndexStrategy sfcIndexStrategy =
-      TieredSFCIndexFactory
-          .createSingleTierStrategy(SPATIAL_DIMENSIONS, new int[] {16, 16}, SFCType.HILBERT);
+      TieredSFCIndexFactory.createSingleTierStrategy(
+          SPATIAL_DIMENSIONS,
+          new int[] {16, 16},
+          SFCType.HILBERT);
 
   private static final HashKeyIndexStrategy hashIdexStrategy = new HashKeyIndexStrategy(3);
   private static final CompoundIndexStrategy compoundIndexStrategy =
@@ -110,8 +113,9 @@ public class HashKeyIndexStrategyTest {
     for (final SinglePartitionInsertionIds partitionKey : id.getPartitionKeys()) {
       for (final ByteArray sortKey : partitionKey.getSortKeys()) {
         final MultiDimensionalCoordinates coords =
-            compoundIndexStrategy
-                .getCoordinatesPerDimension(partitionKey.getPartitionKey(), sortKey);
+            compoundIndexStrategy.getCoordinatesPerDimension(
+                partitionKey.getPartitionKey(),
+                sortKey);
         assertTrue(coords.getCoordinate(0).getCoordinate() > 0);
         assertTrue(coords.getCoordinate(1).getCoordinate() > 0);
       }

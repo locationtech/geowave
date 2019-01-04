@@ -259,7 +259,10 @@ public class GeoWaveGTDataStore extends ContentDataStore {
 
   @Override
   protected ContentFeatureSource createFeatureSource(final ContentEntry entry) throws IOException {
-    return new GeoWaveFeatureSource(entry, Query.ALL, getAdapter(entry.getTypeName()),
+    return new GeoWaveFeatureSource(
+        entry,
+        Query.ALL,
+        getAdapter(entry.getTypeName()),
         transactionsAllocator);
   }
 
@@ -293,8 +296,11 @@ public class GeoWaveGTDataStore extends ContentDataStore {
         state = (GeoWaveTransactionState) transaction.getState(this);
         if (state == null) {
           state =
-              new GeoWaveTransactionManagementState(transactionBufferSize, source.getComponents(),
-                  transaction, (LockingManagement) lockingManager);
+              new GeoWaveTransactionManagementState(
+                  transactionBufferSize,
+                  source.getComponents(),
+                  transaction,
+                  (LockingManagement) lockingManager);
           transaction.putState(this, state);
         }
       }
@@ -344,8 +350,8 @@ public class GeoWaveGTDataStore extends ContentDataStore {
     }
 
     if (currentSelectionsList.isEmpty()) {
-      currentSelectionsList
-          .add(new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
+      currentSelectionsList.add(
+          new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
     }
 
     return currentSelectionsList.toArray(new Index[currentSelectionsList.size()]);

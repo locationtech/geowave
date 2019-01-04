@@ -192,8 +192,14 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final Connector connector,
       final String tableNamespace,
       final AccumuloOptions options) {
-    this(DEFAULT_NUM_THREADS, DEFAULT_TIMEOUT_MILLIS, DEFAULT_BYTE_BUFFER_SIZE,
-        DEFAULT_AUTHORIZATION, tableNamespace, connector, options);
+    this(
+        DEFAULT_NUM_THREADS,
+        DEFAULT_TIMEOUT_MILLIS,
+        DEFAULT_BYTE_BUFFER_SIZE,
+        DEFAULT_AUTHORIZATION,
+        tableNamespace,
+        connector,
+        options);
   }
 
   /**
@@ -252,7 +258,9 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
   public boolean createIndex(final Index index) throws IOException {
     return createTable(
-        index.getName(), options.isServerSideLibraryEnabled(), options.isEnableBlockCache());
+        index.getName(),
+        options.isServerSideLibraryEnabled(),
+        options.isEnableBlockCache());
   }
 
   public synchronized boolean createTable(
@@ -293,11 +301,12 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     RowIterator rowIterator;
     try {
       rowIterator =
-          new RowIterator(connector.createScanner(
-              getQualifiedTableName(tableName),
-              (authorization == null) ? new Authorizations(additionalAuthorizations)
-                  : new Authorizations(
-                      (String[]) ArrayUtils.add(additionalAuthorizations, authorization))));
+          new RowIterator(
+              connector.createScanner(
+                  getQualifiedTableName(tableName),
+                  (authorization == null) ? new Authorizations(additionalAuthorizations)
+                      : new Authorizations(
+                          (String[]) ArrayUtils.add(additionalAuthorizations, authorization))));
       while (rowIterator.hasNext()) {
         rowIterator.next();
       }
@@ -342,7 +351,8 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       connector.tableOperations().delete(tableName);
     }
     DataAdapterAndIndexCache.getInstance(
-        RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID, tableNamespace,
+        RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID,
+        tableNamespace,
         AccumuloStoreFactoryFamily.TYPE).deleteAll();
     locGrpCache.clear();
     ensuredAuthorizationCache.clear();
@@ -356,7 +366,11 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final byte[] columnQualifier,
       final String... additionalAuthorizations) {
     return this.delete(
-        tableName, Arrays.asList(rowId), columnFamily, columnQualifier, additionalAuthorizations);
+        tableName,
+        Arrays.asList(rowId),
+        columnFamily,
+        columnQualifier,
+        additionalAuthorizations);
   }
 
   public boolean deleteAll(
@@ -504,7 +518,8 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final String... additionalAuthorizations) throws TableNotFoundException {
     return connector.createBatchScanner(
         getQualifiedTableName(tableName),
-        new Authorizations(getAuthorizations(additionalAuthorizations)), numThreads);
+        new Authorizations(getAuthorizations(additionalAuthorizations)),
+        numThreads);
   }
 
   @Override
@@ -565,9 +580,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final String... additionalAuthorizations) throws TableNotFoundException {
     return connector.createBatchDeleter(
         getQualifiedTableName(tableName),
-        new Authorizations(getAuthorizations(additionalAuthorizations)), numThreads,
-        new BatchWriterConfig().setMaxWriteThreads(numThreads).setMaxMemory(byteBufferSize)
-            .setTimeout(timeoutMillis, TimeUnit.MILLISECONDS));
+        new Authorizations(getAuthorizations(additionalAuthorizations)),
+        numThreads,
+        new BatchWriterConfig().setMaxWriteThreads(numThreads).setMaxMemory(
+            byteBufferSize).setTimeout(timeoutMillis, TimeUnit.MILLISECONDS));
   }
 
   public long getCacheTimeoutMillis() {
@@ -601,7 +617,8 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       }
     } catch (TableNotFoundException | AccumuloSecurityException | AccumuloException e) {
       LOGGER.warn(
-          "Unable to add partition '" + partition.getHexString() + "' to table '" + qName + "'", e);
+          "Unable to add partition '" + partition.getHexString() + "' to table '" + qName + "'",
+          e);
     }
   }
 
@@ -659,8 +676,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
               while (it.hasNext()) {
                 final IteratorScope scope = it.next();
                 final IteratorSetting setting =
-                    connector.tableOperations()
-                        .getIteratorSetting(qName, iteratorConfig.getIteratorName(), scope);
+                    connector.tableOperations().getIteratorSetting(
+                        qName,
+                        iteratorConfig.getIteratorName(),
+                        scope);
                 if (setting != null) {
                   final Map<String, String> existingOptions = setting.getOptions();
                   configuredOptions = iteratorConfig.getOptions(existingOptions);
@@ -690,8 +709,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
             }
           }
           if (mustDelete) {
-            connector.tableOperations()
-                .removeIterator(qName, iteratorConfig.getIteratorName(), existingScopes);
+            connector.tableOperations().removeIterator(
+                qName,
+                iteratorConfig.getIteratorName(),
+                existingScopes);
             exists = false;
           }
           if (!exists) {
@@ -700,8 +721,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
             }
             connector.tableOperations().attachIterator(
                 qName,
-                new IteratorSetting(iteratorConfig.getIteratorPriority(),
-                    iteratorConfig.getIteratorName(), iteratorConfig.getIteratorClass(),
+                new IteratorSetting(
+                    iteratorConfig.getIteratorPriority(),
+                    iteratorConfig.getIteratorName(),
+                    iteratorConfig.getIteratorClass(),
                     configuredOptions),
                 configuredScopes);
           }
@@ -715,8 +738,12 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
   public static AccumuloOperations createOperations(final AccumuloRequiredOptions options)
       throws AccumuloException, AccumuloSecurityException {
-    return new AccumuloOperations(options.getZookeeper(), options.getInstance(), options.getUser(),
-        options.getPassword(), options.getGeoWaveNamespace(),
+    return new AccumuloOperations(
+        options.getZookeeper(),
+        options.getInstance(),
+        options.getUser(),
+        options.getPassword(),
+        options.getGeoWaveNamespace(),
         (AccumuloOptions) options.getStoreOptions());
   }
 
@@ -814,8 +841,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
         }
       }
       if (params.getMaxResolutionSubsamplingPerDimension() != null) {
-        if (params.getMaxResolutionSubsamplingPerDimension().length != params.getIndex()
-            .getIndexStrategy().getOrderedDimensionDefinitions().length) {
+        if (params.getMaxResolutionSubsamplingPerDimension().length != params.getIndex().getIndexStrategy().getOrderedDimensionDefinitions().length) {
           LOGGER.warn(
               "Unable to subsample for table '"
                   + tableName
@@ -864,18 +890,23 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     if (params.isServersideAggregation()) {
       if (params.isMixedVisibility()) {
         iteratorSettings =
-            new IteratorSetting(QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
-                QueryFilterIterator.QUERY_ITERATOR_NAME, WholeRowAggregationIterator.class);
+            new IteratorSetting(
+                QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+                QueryFilterIterator.QUERY_ITERATOR_NAME,
+                WholeRowAggregationIterator.class);
       } else {
         iteratorSettings =
-            new IteratorSetting(QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
-                QueryFilterIterator.QUERY_ITERATOR_NAME, AggregationIterator.class);
+            new IteratorSetting(
+                QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+                QueryFilterIterator.QUERY_ITERATOR_NAME,
+                AggregationIterator.class);
       }
       if (!(params.getAggregation().getRight() instanceof CommonIndexAggregation)
           && (params.getAggregation().getLeft() != null)) {
         iteratorSettings.addOption(
-            AggregationIterator.ADAPTER_OPTION_NAME, ByteArrayUtils
-                .byteArrayToString(PersistenceUtils.toBinary(params.getAggregation().getLeft())));
+            AggregationIterator.ADAPTER_OPTION_NAME,
+            ByteArrayUtils.byteArrayToString(
+                PersistenceUtils.toBinary(params.getAggregation().getLeft())));
       }
       final Aggregation aggr = params.getAggregation().getRight();
       iteratorSettings.addOption(
@@ -895,12 +926,16 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       if (iteratorSettings == null) {
         if (params.isMixedVisibility()) {
           iteratorSettings =
-              new IteratorSetting(QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
-                  QueryFilterIterator.QUERY_ITERATOR_NAME, WholeRowQueryFilterIterator.class);
+              new IteratorSetting(
+                  QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+                  QueryFilterIterator.QUERY_ITERATOR_NAME,
+                  WholeRowQueryFilterIterator.class);
         } else {
           iteratorSettings =
-              new IteratorSetting(QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
-                  QueryFilterIterator.QUERY_ITERATOR_NAME, QueryFilterIterator.class);
+              new IteratorSetting(
+                  QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+                  QueryFilterIterator.QUERY_ITERATOR_NAME,
+                  QueryFilterIterator.class);
         }
       }
       iteratorSettings.addOption(
@@ -909,8 +944,9 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       if (!iteratorSettings.getOptions().containsKey(QueryFilterIterator.MODEL)) {
         // it may already be added as an option if its an aggregation
         iteratorSettings.addOption(
-            QueryFilterIterator.MODEL, ByteArrayUtils
-                .byteArrayToString(PersistenceUtils.toBinary(params.getIndex().getIndexModel())));
+            QueryFilterIterator.MODEL,
+            ByteArrayUtils.byteArrayToString(
+                PersistenceUtils.toBinary(params.getIndex().getIndexModel())));
         iteratorSettings.addOption(
             QueryFilterIterator.PARTITION_KEY_LENGTH,
             Integer.toString(params.getIndex().getIndexStrategy().getPartitionKeyLength()));
@@ -918,8 +954,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     } else if ((iteratorSettings == null) && params.isMixedVisibility()) {
       // we have to at least use a whole row iterator
       iteratorSettings =
-          new IteratorSetting(QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
-              QueryFilterIterator.QUERY_ITERATOR_NAME, WholeRowIterator.class);
+          new IteratorSetting(
+              QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+              QueryFilterIterator.QUERY_ITERATOR_NAME,
+              WholeRowIterator.class);
     }
     if (!usingDistributableFilter) {
       // it ends up being duplicative and slower to add both a
@@ -938,19 +976,21 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     final List<MultiDimensionalCoordinateRangesArray> coords = params.getCoordinateRanges();
     if ((coords != null) && !coords.isEmpty()) {
       final IteratorSetting iteratorSetting =
-          new IteratorSetting(NumericIndexStrategyFilterIterator.IDX_FILTER_ITERATOR_PRIORITY,
+          new IteratorSetting(
+              NumericIndexStrategyFilterIterator.IDX_FILTER_ITERATOR_PRIORITY,
               NumericIndexStrategyFilterIterator.IDX_FILTER_ITERATOR_NAME,
               NumericIndexStrategyFilterIterator.class);
 
       iteratorSetting.addOption(
-          NumericIndexStrategyFilterIterator.INDEX_STRATEGY_KEY, ByteArrayUtils
-              .byteArrayToString(PersistenceUtils.toBinary(params.getIndex().getIndexStrategy())));
+          NumericIndexStrategyFilterIterator.INDEX_STRATEGY_KEY,
+          ByteArrayUtils.byteArrayToString(
+              PersistenceUtils.toBinary(params.getIndex().getIndexStrategy())));
 
       iteratorSetting.addOption(
           NumericIndexStrategyFilterIterator.COORDINATE_RANGE_KEY,
           ByteArrayUtils.byteArrayToString(
-              new ArrayOfArrays(coords.toArray(new MultiDimensionalCoordinateRangesArray[] {}))
-                  .toBinary()));
+              new ArrayOfArrays(
+                  coords.toArray(new MultiDimensionalCoordinateRangesArray[] {})).toBinary()));
       scanner.addScanIterator(iteratorSetting);
     }
   }
@@ -965,7 +1005,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
         final IteratorSetting iteratorSetting = AttributeSubsettingIterator.getIteratorSetting();
 
         AttributeSubsettingIterator.setFieldNames(
-            iteratorSetting, associatedAdapter, fieldNames, params.getIndex().getIndexModel());
+            iteratorSetting,
+            associatedAdapter,
+            fieldNames,
+            params.getIndex().getIndexModel());
 
         iteratorSetting.addOption(
             AttributeSubsettingIterator.WHOLE_ROW_ENCODED_KEY,
@@ -982,8 +1025,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     if (params.isMixedVisibility()) {
       // we have to at least use a whole row iterator
       final IteratorSetting iteratorSettings =
-          new IteratorSetting(QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
-              QueryFilterIterator.QUERY_ITERATOR_NAME, WholeRowIterator.class);
+          new IteratorSetting(
+              QueryFilterIterator.QUERY_ITERATOR_PRIORITY,
+              QueryFilterIterator.QUERY_ITERATOR_NAME,
+              WholeRowIterator.class);
       scanner.addScanIterator(iteratorSettings);
     }
   }
@@ -995,10 +1040,13 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
     addConstraintsScanIteratorSettings(params, scanner, options);
 
-    return new AccumuloReader<>(scanner, params.getRowTransformer(),
+    return new AccumuloReader<>(
+        scanner,
+        params.getRowTransformer(),
         params.getIndex().getIndexStrategy().getPartitionKeyLength(),
         params.isMixedVisibility() && !params.isServersideAggregation(),
-        params.isClientsideRowMerging(), true);
+        params.isClientsideRowMerging(),
+        true);
   }
 
   protected <T> Scanner getScanner(final RecordReaderParams<T> params) {
@@ -1012,7 +1060,8 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       } else {
         scanner.setRange(
             AccumuloSplitsProvider.toAccumuloRange(
-                range, params.getIndex().getIndexStrategy().getPartitionKeyLength()));
+                range,
+                params.getIndex().getIndexStrategy().getPartitionKeyLength()));
       }
       if ((params.getLimit() != null)
           && (params.getLimit() > 0)
@@ -1021,8 +1070,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
         scanner.setBatchSize(Math.min(1024, params.getLimit()));
       }
       if (params.getMaxResolutionSubsamplingPerDimension() != null) {
-        if (params.getMaxResolutionSubsamplingPerDimension().length != params.getIndex()
-            .getIndexStrategy().getOrderedDimensionDefinitions().length) {
+        if (params.getMaxResolutionSubsamplingPerDimension().length != params.getIndex().getIndexStrategy().getOrderedDimensionDefinitions().length) {
           LOGGER.warn(
               "Unable to subsample for table '"
                   + tableName
@@ -1067,9 +1115,13 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   public <T> RowReader<T> createReader(final RecordReaderParams<T> readerParams) {
     final ScannerBase scanner = getScanner(readerParams);
     addConstraintsScanIteratorSettings(readerParams, scanner, options);
-    return new AccumuloReader<>(scanner, readerParams.getRowTransformer(),
+    return new AccumuloReader<>(
+        scanner,
+        readerParams.getRowTransformer(),
         readerParams.getIndex().getIndexStrategy().getPartitionKeyLength(),
-        readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(), false, false);
+        readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(),
+        false,
+        false);
   }
 
   @Override
@@ -1090,7 +1142,9 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
     final String tableName = index.getName();
     if (createTable(
-        tableName, options.isServerSideLibraryEnabled(), options.isEnableBlockCache())) {
+        tableName,
+        options.isServerSideLibraryEnabled(),
+        options.isEnableBlockCache())) {
       try {
         if (options.isUseLocalityGroups()
             && !localityGroupExists(tableName, adapter.getTypeName())) {
@@ -1103,7 +1157,9 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
     try {
       return new org.locationtech.geowave.datastore.accumulo.operations.AccumuloWriter(
-          createBatchWriter(tableName), this, tableName);
+          createBatchWriter(tableName),
+          this,
+          tableName);
     } catch (final TableNotFoundException e) {
       LOGGER.error("Table does not exist", e);
     }
@@ -1132,16 +1188,20 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
           final BasicOptionProvider optionProvider = new BasicOptionProvider(new HashMap<>());
           ServerOpHelper.addServerSideMerging(
-              this, DataStatisticsStoreImpl.STATISTICS_COMBINER_NAME,
-              DataStatisticsStoreImpl.STATS_COMBINER_PRIORITY, MergingCombiner.class.getName(),
-              MergingVisibilityCombiner.class.getName(), optionProvider,
+              this,
+              DataStatisticsStoreImpl.STATISTICS_COMBINER_NAME,
+              DataStatisticsStoreImpl.STATS_COMBINER_PRIORITY,
+              MergingCombiner.class.getName(),
+              MergingVisibilityCombiner.class.getName(),
+              optionProvider,
               AbstractGeoWavePersistence.METADATA_TABLE);
         }
       }
     }
     try {
       return new AccumuloMetadataWriter(
-          createBatchWriter(AbstractGeoWavePersistence.METADATA_TABLE), metadataType);
+          createBatchWriter(AbstractGeoWavePersistence.METADATA_TABLE),
+          metadataType);
     } catch (final TableNotFoundException e) {
       LOGGER.error("Unable to create metadata writer", e);
     }
@@ -1168,7 +1228,12 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       return compactTable(index.getName());
     } else {
       return DataStoreUtils.mergeData(
-          this, options, index, adapterStore, internalAdapterStore, adapterIndexMappingStore);
+          this,
+          options,
+          index,
+          adapterStore,
+          internalAdapterStore,
+          adapterIndexMappingStore);
     }
   }
 
@@ -1203,11 +1268,14 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
       if (enable) {
         connector.tableOperations().attachIterator(
-            qName, new IteratorSetting(20, "vers", VersioningIterator.class.getName()),
+            qName,
+            new IteratorSetting(20, "vers", VersioningIterator.class.getName()),
             EnumSet.allOf(IteratorScope.class));
       } else {
-        connector.tableOperations()
-            .removeIterator(qName, "vers", EnumSet.allOf(IteratorScope.class));
+        connector.tableOperations().removeIterator(
+            qName,
+            "vers",
+            EnumSet.allOf(IteratorScope.class));
       }
     }
   }
@@ -1303,8 +1371,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final ServerOpScope scope) {
     try {
       final IteratorSetting setting =
-          connector.tableOperations()
-              .getIteratorSetting(getQualifiedTableName(index), serverOpName, toAccumulo(scope));
+          connector.tableOperations().getIteratorSetting(
+              getQualifiedTableName(index),
+              serverOpName,
+              toAccumulo(scope));
       if (setting != null) {
         return setting.getOptions();
       }
@@ -1321,8 +1391,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final ImmutableSet<ServerOpScope> scopes) {
 
     try {
-      connector.tableOperations()
-          .removeIterator(getQualifiedTableName(index), serverOpName, toEnumSet(scopes));
+      connector.tableOperations().removeIterator(
+          getQualifiedTableName(index),
+          serverOpName,
+          toEnumSet(scopes));
     } catch (AccumuloSecurityException | AccumuloException | TableNotFoundException e) {
       LOGGER.error("Unable to remove iterator", e);
     }
@@ -1361,7 +1433,8 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
   public boolean isRowMergingEnabled(final short internalAdapterId, final String indexId) {
     return DataAdapterAndIndexCache.getInstance(
-        RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID, tableNamespace,
+        RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID,
+        tableNamespace,
         AccumuloStoreFactoryFamily.TYPE).add(internalAdapterId, indexId);
   }
 
@@ -1403,8 +1476,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       // slower delete by row technique
       final RowDeleter rowDeleter =
           createRowDeleter(
-              readerParams.getIndex().getName(), readerParams.getAdapterStore(),
-              readerParams.getInternalAdapterStore(), readerParams.getAdditionalAuthorizations());
+              readerParams.getIndex().getName(),
+              readerParams.getAdapterStore(),
+              readerParams.getInternalAdapterStore(),
+              readerParams.getAdditionalAuthorizations());
       if (rowDeleter != null) {
         return new QueryAndDeleteByRow<>(rowDeleter, createReader(readerParams));
       }
@@ -1419,9 +1494,12 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     scanner.removeScanIterator(BatchDeleter.class.getName() + ".NOVALUE");
     // this is applicable to accumulo versions >= 1.9
     scanner.removeScanIterator(BatchDeleter.class.getName().replaceAll("[.]", "_") + "_NOVALUE");
-    return new AccumuloDeleter<>((BatchDeleter) scanner, readerParams.getRowTransformer(),
+    return new AccumuloDeleter<>(
+        (BatchDeleter) scanner,
+        readerParams.getRowTransformer(),
         readerParams.getIndex().getIndexStrategy().getPartitionKeyLength(),
         readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(),
-        readerParams.isClientsideRowMerging(), true);
+        readerParams.isClientsideRowMerging(),
+        true);
   }
 }

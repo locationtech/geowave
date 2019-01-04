@@ -94,8 +94,8 @@ public class FeatureDefinitionSet {
       }
       if (at != null) {
         sftb.add(
-            atb.binding(at.getClassType()).nillable(true)
-                .buildDescriptor(normalizeOsmNames(ad.name)));
+            atb.binding(at.getClassType()).nillable(true).buildDescriptor(
+                normalizeOsmNames(ad.name)));
       }
     }
     SimpleFeatureType sft = sftb.buildFeatureType();

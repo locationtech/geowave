@@ -33,7 +33,7 @@ public class TextIndexStrategyTest {
         strategy.getQueryRanges(new TextQueryConstraint(fieldId, value, false));
     Assert.assertTrue(ranges.getCompositeQueryRanges().size() == 1);
     Assert.assertTrue(
-        ranges.getCompositeQueryRanges().get(0)
-            .equals(new ByteArrayRange(new ByteArray(value), new ByteArray(value))));
+        ranges.getCompositeQueryRanges().get(0).equals(
+            new ByteArrayRange(new ByteArray(value), new ByteArray(value))));
   }
 }

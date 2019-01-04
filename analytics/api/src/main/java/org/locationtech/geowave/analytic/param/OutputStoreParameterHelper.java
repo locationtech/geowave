@@ -53,8 +53,8 @@ public class OutputStoreParameterHelper implements ParameterHelper<PersistableSt
   @Override
   public PersistableStore getValue(final PropertyManagement propertyManagement) {
     try {
-      return (PersistableStore) propertyManagement
-          .getProperty(StoreParameters.StoreParam.OUTPUT_STORE);
+      return (PersistableStore) propertyManagement.getProperty(
+          StoreParameters.StoreParam.OUTPUT_STORE);
     } catch (final Exception e) {
       LOGGER.error("Unable to deserialize data store", e);
       return null;

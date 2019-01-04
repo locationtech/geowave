@@ -25,21 +25,33 @@ public class HBaseMiniClusterClassLoader extends URLClassLoader {
   private static final String[] CLASS_PREFIX_EXEMPTIONS =
       new String[] {
           // Java standard library:
-          "com.sun.", "sun.", "java.", "javax.", "org.ietf", "org.omg", "org.w3c", "org.xml",
+          "com.sun.",
+          "sun.",
+          "java.",
+          "javax.",
+          "org.ietf",
+          "org.omg",
+          "org.w3c",
+          "org.xml",
           "sunw.",
           // logging
-          "org.apache.commons.logging", "org.apache.log4j", "com.hadoop",
+          "org.apache.commons.logging",
+          "org.apache.log4j",
+          "com.hadoop",
           // Hadoop/HBase/ZK:
-          "org.apache.hadoop.security", "org.apache.hadoop.conf", "org.apache.hadoop.fs",
-          "org.apache.hadoop.util", "org.apache.hadoop.io"};
+          "org.apache.hadoop.security",
+          "org.apache.hadoop.conf",
+          "org.apache.hadoop.fs",
+          "org.apache.hadoop.util",
+          "org.apache.hadoop.io"};
 
   private static ClassLoader hbaseMiniClusterCl;
 
   public static synchronized ClassLoader getInstance(final ClassLoader parentCl) {
     if (hbaseMiniClusterCl == null) {
       hbaseMiniClusterCl =
-          java.security.AccessController
-              .doPrivileged(new java.security.PrivilegedAction<ClassLoader>() {
+          java.security.AccessController.doPrivileged(
+              new java.security.PrivilegedAction<ClassLoader>() {
                 @Override
                 public ClassLoader run() {
                   return new HBaseMiniClusterClassLoader(parentCl);
@@ -75,7 +87,8 @@ public class HBaseMiniClusterClassLoader extends URLClassLoader {
     try {
       final String jarPath =
           ClasspathUtils.setupPathingJarClassPath(
-              new File("target/hbase/lib"), HBaseMiniClusterClassLoader.class);
+              new File("target/hbase/lib"),
+              HBaseMiniClusterClassLoader.class);
       addURL(new File(jarPath).toURI().toURL());
     } catch (IOException e1) {
       // TODO Auto-generated catch block

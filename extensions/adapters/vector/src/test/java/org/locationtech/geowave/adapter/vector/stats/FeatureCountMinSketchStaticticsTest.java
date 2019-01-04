@@ -50,7 +50,8 @@ public class FeatureCountMinSketchStaticticsTest {
   public void setup() throws SchemaException, CQLException, ParseException {
     schema = DataUtilities.createType("sp.geostuff", "geometry:Geometry:srid=4326,pid:String");
     dataAdapter =
-        new FeatureDataAdapter(schema,
+        new FeatureDataAdapter(
+            schema,
             new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
   }
 

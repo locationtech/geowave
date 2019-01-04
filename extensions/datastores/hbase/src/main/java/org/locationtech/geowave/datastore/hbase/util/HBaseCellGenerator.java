@@ -51,8 +51,12 @@ public class HBaseCellGenerator<T> {
         for (final GeoWaveValue value : row.getFieldValues()) {
           Cell cell =
               CellUtil.createCell(
-                  GeoWaveKey.getCompositeId(row), adapterId, row.getDataId(),
-                  System.currentTimeMillis(), KeyValue.Type.Put.getCode(), value.getValue());
+                  GeoWaveKey.getCompositeId(row),
+                  adapterId,
+                  row.getDataId(),
+                  System.currentTimeMillis(),
+                  KeyValue.Type.Put.getCode(),
+                  value.getValue());
 
           keyValuePairs.add(cell);
         }

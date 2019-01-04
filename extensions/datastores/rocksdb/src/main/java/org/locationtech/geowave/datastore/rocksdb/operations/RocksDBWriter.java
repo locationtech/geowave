@@ -42,7 +42,11 @@ public class RocksDBWriter implements RowWriter {
 
   private RocksDBIndexTable getTable(final byte[] partitionKey) {
     return RocksDBUtils.getIndexTableFromPrefix(
-        client, indexNamePrefix, adapterId, partitionKey, isTimestampRequired);
+        client,
+        indexNamePrefix,
+        adapterId,
+        partitionKey,
+        isTimestampRequired);
   }
 
   @Override
@@ -61,8 +65,11 @@ public class RocksDBWriter implements RowWriter {
       partitionKey = new ByteArray(row.getPartitionKey());
     }
     for (final GeoWaveValue value : row.getFieldValues()) {
-      tableCache.get(partitionKey)
-          .add(row.getSortKey(), row.getDataId(), (short) row.getNumberOfDuplicates(), value);
+      tableCache.get(partitionKey).add(
+          row.getSortKey(),
+          row.getDataId(),
+          (short) row.getNumberOfDuplicates(),
+          value);
     }
   }
 

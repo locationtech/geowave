@@ -88,8 +88,8 @@ class IntermediaryWriteEntryInfo {
 
   public GeoWaveRow[] getRows() {
     final GeoWaveKey[] keys = GeoWaveKeyImpl.createKeys(insertionIds, dataId, internalAdapterId);
-    return Arrays.stream(keys).map(k -> new GeoWaveRowImpl(k, entryValues))
-        .toArray(new ArrayGenerator());
+    return Arrays.stream(keys).map(k -> new GeoWaveRowImpl(k, entryValues)).toArray(
+        new ArrayGenerator());
   }
 
   private static class ArrayGenerator implements IntFunction<GeoWaveRow[]> {

@@ -51,7 +51,8 @@ public class RestFieldFactory {
         // for just getting the fields we don't need to waste time on
         // using reflection to get an instance, that is only necessary
         // for setting values
-        null, instanceType,
+        null,
+        instanceType,
         (ParameterInitializer<RestField<?>>) (
             final Field field,
             final Parameter parameter,
@@ -62,13 +63,17 @@ public class RestFieldFactory {
             final Field mainParamField,
             final int subfieldOrdinal,
             final int totalSize,
-            final Object instance) -> new BasicRestField(name, isList ? List.class : String.class,
-                "main parameter", true));
+            final Object instance) -> new BasicRestField(
+                name,
+                isList ? List.class : String.class,
+                "main parameter",
+                true));
   }
 
   public static List<RestFieldValue<?>> createRestFieldValues(final Object instance) {
     return internalCreateRestFields(
-        instance, instance.getClass(),
+        instance,
+        instance.getClass(),
         (ParameterInitializer<RestFieldValue<?>>) (
             final Field field,
             final Parameter parameter,
@@ -80,10 +85,18 @@ public class RestFieldFactory {
             final int subfieldOrdinal,
             final int totalSize,
             final Object i) -> isList
-                ? new ListMainParam(subfieldOrdinal, totalSize, mainParamField,
-                    new BasicRestField<List>(name, List.class, "main parameter", true), instance)
-                : new StringMainParam(subfieldOrdinal, totalSize, mainParamField,
-                    new BasicRestField<>(name, String.class, "main parameter", true), instance));
+                ? new ListMainParam(
+                    subfieldOrdinal,
+                    totalSize,
+                    mainParamField,
+                    new BasicRestField<List>(name, List.class, "main parameter", true),
+                    instance)
+                : new StringMainParam(
+                    subfieldOrdinal,
+                    totalSize,
+                    mainParamField,
+                    new BasicRestField<>(name, String.class, "main parameter", true),
+                    instance));
   }
 
   private static <T extends RestField<?>> List<T> internalCreateRestFields(
@@ -95,12 +108,16 @@ public class RestFieldFactory {
     for (final Field field : FieldUtils.getFieldsWithAnnotation(instanceType, Parameter.class)) {
       retVal.addAll(
           internalCreateRestFields(
-              field, field.getAnnotation(Parameter.class), instance, parameterInitializer,
+              field,
+              field.getAnnotation(Parameter.class),
+              instance,
+              parameterInitializer,
               mainParamInitializer));
     }
 
-    for (final Field field : FieldUtils
-        .getFieldsWithAnnotation(instanceType, ParametersDelegate.class)) {
+    for (final Field field : FieldUtils.getFieldsWithAnnotation(
+        instanceType,
+        ParametersDelegate.class)) {
       try {
         final Class<?> delegateInstanceType;
         Object delegateInstance;
@@ -121,7 +138,9 @@ public class RestFieldFactory {
                 final Class<?> mapValueInstanceType = mapValueInstance.getClass();
                 retVal.addAll(
                     internalCreateRestFields(
-                        mapValueInstance, mapValueInstanceType, parameterInitializer,
+                        mapValueInstance,
+                        mapValueInstanceType,
+                        parameterInitializer,
                         mainParamInitializer));
               }
             }
@@ -136,7 +155,9 @@ public class RestFieldFactory {
         }
         retVal.addAll(
             internalCreateRestFields(
-                delegateInstance, delegateInstanceType, parameterInitializer,
+                delegateInstance,
+                delegateInstanceType,
+                parameterInitializer,
                 mainParamInitializer));
 
       } catch (InstantiationException | IllegalAccessException e) {
@@ -192,7 +213,11 @@ public class RestFieldFactory {
         public T apply(final Pair<String, Boolean> input) {
           if (input != null) {
             return mainParamInitializer.apply(
-                toURLFriendlyString(input.getLeft()), input.getRight(), field, i++, totalSize,
+                toURLFriendlyString(input.getLeft()),
+                input.getRight(),
+                field,
+                i++,
+                totalSize,
                 instance);
           } else {
             return null;

@@ -32,8 +32,12 @@ public class SourceThresholdFixMosaicDescriptor extends MosaicDescriptor {
   private static final long serialVersionUID = 1L;
   /** The parameter class list for this operation. */
   private static final Class[] paramClasses =
-      {javax.media.jai.operator.MosaicType.class, javax.media.jai.PlanarImage[].class,
-          javax.media.jai.ROI[].class, double[][].class, double[].class};
+      {
+          javax.media.jai.operator.MosaicType.class,
+          javax.media.jai.PlanarImage[].class,
+          javax.media.jai.ROI[].class,
+          double[][].class,
+          double[].class};
 
   /** The parameter name list for this operation. */
   private static final String[] paramNames =

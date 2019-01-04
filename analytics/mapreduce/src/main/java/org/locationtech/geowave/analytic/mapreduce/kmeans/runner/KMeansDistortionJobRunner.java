@@ -66,8 +66,10 @@ public class KMeansDistortionJobRunner extends GeoWaveAnalyticJobRunner {
     final long milliSeconds = 1000L * 60L * 15L;
     final Configuration conf = job.getConfiguration();
     conf.setLong("mapred.task.timeout", milliSeconds);
-    ((ParameterEnum<Integer>) JumpParameters.Jump.COUNT_OF_CENTROIDS).getHelper()
-        .setValue(conf, KMeansDistortionMapReduce.class, Integer.valueOf(k));
+    ((ParameterEnum<Integer>) JumpParameters.Jump.COUNT_OF_CENTROIDS).getHelper().setValue(
+        conf,
+        KMeansDistortionMapReduce.class,
+        Integer.valueOf(k));
 
     // Required since the Mapper uses the input format parameters to lookup
     // the adapter
@@ -86,12 +88,15 @@ public class KMeansDistortionJobRunner extends GeoWaveAnalyticJobRunner {
       throws Exception {
     setReducerCount(
         runTimeProperties.getPropertyAsInt(
-            ClusteringParameters.Clustering.MAX_REDUCER_COUNT, super.getReducerCount()));
+            ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
+            super.getReducerCount()));
     runTimeProperties.setConfig(
-        new ParameterEnum[] {CentroidParameters.Centroid.EXTRACTOR_CLASS,
+        new ParameterEnum[] {
+            CentroidParameters.Centroid.EXTRACTOR_CLASS,
             CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
             GlobalParameters.Global.PARENT_BATCH_ID},
-        config, getScope());
+        config,
+        getScope());
 
     NestedGroupCentroidAssignment.setParameters(config, getScope(), runTimeProperties);
 

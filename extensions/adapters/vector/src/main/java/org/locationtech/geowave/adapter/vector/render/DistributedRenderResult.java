@@ -44,8 +44,10 @@ public class DistributedRenderResult implements Mergeable {
         // this will render to a back buffer so that
 
         compositeGroupImage =
-            parentGraphics.getDeviceConfiguration()
-                .createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+            parentGraphics.getDeviceConfiguration().createCompatibleImage(
+                width,
+                height,
+                Transparency.TRANSLUCENT);
         graphics = compositeGroupImage.createGraphics();
         graphics.setRenderingHints(parentGraphics.getRenderingHints());
       } else {
@@ -210,7 +212,8 @@ public class DistributedRenderResult implements Mergeable {
               // same
               newOrderedStyles.add(
                   Pair.of(
-                      mergeImage(thisStyle.getLeft(), otherStyle.getLeft()), thisStyle.getRight()));
+                      mergeImage(thisStyle.getLeft(), otherStyle.getLeft()),
+                      thisStyle.getRight()));
             } else {
               newOrderedStyles.add(thisStyle);
             }
@@ -225,8 +228,8 @@ public class DistributedRenderResult implements Mergeable {
         }
         if (other.orderedStyles.size() > minStyles) {
           // hopefully this is never the case, but just in case
-          newOrderedStyles
-              .addAll(other.orderedStyles.subList(minStyles, other.orderedStyles.size()));
+          newOrderedStyles.addAll(
+              other.orderedStyles.subList(minStyles, other.orderedStyles.size()));
         }
         orderedStyles = newOrderedStyles;
       }
@@ -252,11 +255,16 @@ public class DistributedRenderResult implements Mergeable {
   public BufferedImage renderComposite(final DistributedRenderOptions renderOptions) {
     final BufferedImage image =
         ImageUtils.createImage(
-            renderOptions.getMapWidth(), renderOptions.getMapHeight(), renderOptions.getPalette(),
+            renderOptions.getMapWidth(),
+            renderOptions.getMapHeight(),
+            renderOptions.getPalette(),
             renderOptions.isTransparent() || renderOptions.isMetatile());
     final Graphics2D graphics =
         ImageUtils.prepareTransparency(
-            renderOptions.isTransparent(), renderOptions.getBgColor(), image, null);
+            renderOptions.isTransparent(),
+            renderOptions.getBgColor(),
+            image,
+            null);
     for (final CompositeGroupResult compositeGroup : orderedComposites) {
       compositeGroup.render(graphics, renderOptions.getMapWidth(), renderOptions.getMapHeight());
     }
@@ -337,13 +345,13 @@ public class DistributedRenderResult implements Mergeable {
       }
       if (orderedComposites.size() > minComposites) {
         // hopefully this is never the case, but just in case
-        newOrderedComposites
-            .addAll(orderedComposites.subList(minComposites, orderedComposites.size()));
+        newOrderedComposites.addAll(
+            orderedComposites.subList(minComposites, orderedComposites.size()));
       }
       if (other.orderedComposites.size() > minComposites) {
         // hopefully this is never the case, but just in case
-        newOrderedComposites
-            .addAll(other.orderedComposites.subList(minComposites, other.orderedComposites.size()));
+        newOrderedComposites.addAll(
+            other.orderedComposites.subList(minComposites, other.orderedComposites.size()));
       }
       orderedComposites = newOrderedComposites;
     }

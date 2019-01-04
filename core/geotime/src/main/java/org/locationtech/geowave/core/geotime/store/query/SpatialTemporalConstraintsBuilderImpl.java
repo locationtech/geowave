@@ -66,7 +66,8 @@ public class SpatialTemporalConstraintsBuilderImpl implements SpatialTemporalCon
   public SpatialTemporalConstraintsBuilder addTimeRange(final Date startTime, final Date endTime) {
     return addTimeRange(
         Interval.of(
-            Instant.ofEpochMilli(startTime.getTime()), Instant.ofEpochMilli(endTime.getTime())));
+            Instant.ofEpochMilli(startTime.getTime()),
+            Instant.ofEpochMilli(endTime.getTime())));
   }
 
   @Override
@@ -87,8 +88,8 @@ public class SpatialTemporalConstraintsBuilderImpl implements SpatialTemporalCon
   @Override
   public QueryConstraints build() {
     if ((crsCode != null) && (geometry == null)) {
-      LOGGER
-          .warn("CRS code `" + crsCode + "` cannot be applied without a geometry.  Ignoring CRS.");
+      LOGGER.warn(
+          "CRS code `" + crsCode + "` cannot be applied without a geometry.  Ignoring CRS.");
     }
     if ((spatialCompareOp != null) && (geometry == null)) {
       LOGGER.warn(

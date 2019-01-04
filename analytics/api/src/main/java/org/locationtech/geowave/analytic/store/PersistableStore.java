@@ -76,8 +76,9 @@ public class PersistableStore implements Persistable {
       final int valueLength = VarintUtils.readUnsignedInt(buf);
       final byte[] valueBinary = new byte[valueLength];
       buf.get(valueBinary);
-      configOptions
-          .put(StringUtils.stringFromBinary(keyBinary), StringUtils.stringFromBinary(valueBinary));
+      configOptions.put(
+          StringUtils.stringFromBinary(keyBinary),
+          StringUtils.stringFromBinary(valueBinary));
     }
     pluginOptions = new DataStorePluginOptions();
     pluginOptions.load(configOptions, null);

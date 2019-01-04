@@ -123,7 +123,8 @@ public class WRS2GeometryStore {
           final ZipArchiveEntry entry = entries.nextElement();
           if (!entry.isDirectory()) {
             FileUtils.copyInputStreamToFile(
-                zipFile.getInputStream(entry), new File(wrs2Directory, entry.getName()));
+                zipFile.getInputStream(entry),
+                new File(wrs2Directory, entry.getName()));
             // HP Fortify "Path Traversal" false positive
             // What Fortify considers "user input" comes only
             // from users with OS-level access anyway
@@ -157,8 +158,9 @@ public class WRS2GeometryStore {
             (MultiPolygon) feature.getDefaultGeometry());
       }
     } catch (final IOException e) {
-      LOGGER
-          .error("Unable to read wrs2_asc_desc shapefile '" + wrs2Shape.getAbsolutePath() + "'", e);
+      LOGGER.error(
+          "Unable to read wrs2_asc_desc shapefile '" + wrs2Shape.getAbsolutePath() + "'",
+          e);
       throw (e);
     }
   }

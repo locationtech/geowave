@@ -32,8 +32,8 @@ public class CoordinateRangeQuery implements QueryConstraints {
 
   @Override
   public List<QueryFilter> createFilters(final Index index) {
-    return Collections
-        .singletonList(new CoordinateRangeQueryFilter(indexStrategy, coordinateRanges));
+    return Collections.singletonList(
+        new CoordinateRangeQueryFilter(indexStrategy, coordinateRanges));
   }
 
   @Override

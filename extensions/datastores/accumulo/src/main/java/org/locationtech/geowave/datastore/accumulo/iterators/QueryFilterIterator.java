@@ -148,10 +148,16 @@ public class QueryFilterIterator extends Filter {
       final PersistentDataset<CommonIndexValue> commonData) {
     final GeoWaveKey gwKey = new GeoWaveKeyImpl(key.getRow().copyBytes(), partitionKeyLength);
     final GeoWaveValue gwValue =
-        new GeoWaveValueImpl(key.getColumnQualifier().getBytes(),
-            key.getColumnVisibilityData().getBackingArray(), value.get());
-    return DataStoreUtils
-        .aggregateFieldData(gwKey, gwValue, commonData, model, commonIndexFieldNames);
+        new GeoWaveValueImpl(
+            key.getColumnQualifier().getBytes(),
+            key.getColumnVisibilityData().getBackingArray(),
+            value.get());
+    return DataStoreUtils.aggregateFieldData(
+        gwKey,
+        gwValue,
+        commonData,
+        model,
+        commonIndexFieldNames);
   }
 
   @Override
@@ -177,9 +183,14 @@ public class QueryFilterIterator extends Filter {
       final PersistentDataset<CommonIndexValue> commonData,
       final FlattenedUnreadData unreadData) {
     final GeoWaveKeyImpl rowId = new GeoWaveKeyImpl(currentRow.copyBytes(), partitionKeyLength);
-    return new DeferredReadCommonIndexedPersistenceEncoding(rowId.getAdapterId(),
-        new ByteArray(rowId.getDataId()), new ByteArray(rowId.getPartitionKey()),
-        new ByteArray(rowId.getSortKey()), rowId.getNumberOfDuplicates(), commonData, unreadData);
+    return new DeferredReadCommonIndexedPersistenceEncoding(
+        rowId.getAdapterId(),
+        new ByteArray(rowId.getDataId()),
+        new ByteArray(rowId.getPartitionKey()),
+        new ByteArray(rowId.getSortKey()),
+        rowId.getNumberOfDuplicates(),
+        commonData,
+        unreadData);
   }
 
   protected boolean applyRowFilter(final CommonIndexedPersistenceEncoding encoding) {

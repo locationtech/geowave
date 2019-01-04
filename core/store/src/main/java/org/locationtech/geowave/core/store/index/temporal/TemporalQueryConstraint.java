@@ -66,7 +66,8 @@ public class TemporalQueryConstraint implements FilterableConstraints {
 
   public QueryRanges getQueryRanges() {
     return new QueryRanges(
-        new ByteArrayRange(new ByteArray(TemporalIndexStrategy.toIndexByte(start)),
+        new ByteArrayRange(
+            new ByteArray(TemporalIndexStrategy.toIndexByte(start)),
             new ByteArray(TemporalIndexStrategy.toIndexByte(end))));
   }
 
@@ -99,7 +100,11 @@ public class TemporalQueryConstraint implements FilterableConstraints {
             upperEquals ? filterConstraints.inclusiveHigh & inclusiveHigh
                 : (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh);
 
-        return new TemporalQueryConstraint(fieldName, newStart, newEnd, newInclusiveLow,
+        return new TemporalQueryConstraint(
+            fieldName,
+            newStart,
+            newEnd,
+            newInclusiveLow,
             newInclusiveHigh);
       }
     }
@@ -136,7 +141,11 @@ public class TemporalQueryConstraint implements FilterableConstraints {
             upperEquals ? filterConstraints.inclusiveHigh | inclusiveHigh
                 : (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh);
 
-        return new TemporalQueryConstraint(fieldName, newStart, newEnd, newInclusiveLow,
+        return new TemporalQueryConstraint(
+            fieldName,
+            newStart,
+            newEnd,
+            newInclusiveLow,
             newInclusiveHigh);
       }
     }

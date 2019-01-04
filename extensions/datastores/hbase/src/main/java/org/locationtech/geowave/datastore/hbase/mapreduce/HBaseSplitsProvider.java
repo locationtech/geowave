@@ -88,18 +88,20 @@ public class HBaseSplitsProvider extends SplitsProvider {
       final List<MultiDimensionalNumericData> indexConstraints = query.getIndexConstraints(index);
       if ((maxSplits != null) && (maxSplits > 0)) {
         ranges =
-            DataStoreUtils
-                .constraintsToQueryRanges(
-                    indexConstraints, indexStrategy,
-                    targetResolutionPerDimensionForHierarchicalIndex, maxSplits, indexMetadata)
-                .getCompositeQueryRanges();
+            DataStoreUtils.constraintsToQueryRanges(
+                indexConstraints,
+                indexStrategy,
+                targetResolutionPerDimensionForHierarchicalIndex,
+                maxSplits,
+                indexMetadata).getCompositeQueryRanges();
       } else {
         ranges =
-            DataStoreUtils
-                .constraintsToQueryRanges(
-                    indexConstraints, indexStrategy,
-                    targetResolutionPerDimensionForHierarchicalIndex, -1, indexMetadata)
-                .getCompositeQueryRanges();
+            DataStoreUtils.constraintsToQueryRanges(
+                indexConstraints,
+                indexStrategy,
+                targetResolutionPerDimensionForHierarchicalIndex,
+                -1,
+                indexMetadata).getCompositeQueryRanges();
       }
     }
 
@@ -131,12 +133,10 @@ public class HBaseSplitsProvider extends SplitsProvider {
         ranges = binRanges(ranges, binnedRanges, regionLocator);
       }
     }
-    for (final Entry<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> locationEntry : binnedRanges
-        .entrySet()) {
+    for (final Entry<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> locationEntry : binnedRanges.entrySet()) {
       final String hostname = locationEntry.getKey().getHostname();
 
-      for (final Entry<HRegionInfo, List<ByteArrayRange>> regionEntry : locationEntry.getValue()
-          .entrySet()) {
+      for (final Entry<HRegionInfo, List<ByteArrayRange>> regionEntry : locationEntry.getValue().entrySet()) {
         final Map<String, SplitInfo> splitInfo = new HashMap<>();
         final List<RangeLocationPair> rangeList = new ArrayList<>();
 
@@ -146,12 +146,17 @@ public class HBaseSplitsProvider extends SplitsProvider {
           final double cardinality =
               getCardinality(
                   getHistStats(
-                      index, adapterIds, adapterStore, statsStore, statsCache,
-                      new ByteArray(gwRange.getPartitionKey()), authorizations),
+                      index,
+                      adapterIds,
+                      adapterStore,
+                      statsStore,
+                      statsCache,
+                      new ByteArray(gwRange.getPartitionKey()),
+                      authorizations),
                   gwRange);
 
-          rangeList
-              .add(new RangeLocationPair(gwRange, hostname, cardinality < 1 ? 1.0 : cardinality));
+          rangeList.add(
+              new RangeLocationPair(gwRange, hostname, cardinality < 1 ? 1.0 : cardinality));
         }
 
         if (!rangeList.isEmpty()) {
@@ -184,7 +189,8 @@ public class HBaseSplitsProvider extends SplitsProvider {
       }
 
       final ByteArrayRange regionRange =
-          new ByteArrayRange(new ByteArray(regionInfo.getStartKey()),
+          new ByteArrayRange(
+              new ByteArray(regionInfo.getStartKey()),
               new ByteArray(regionInfo.getEndKey()));
       rangeList.add(regionRange);
     }
@@ -228,7 +234,8 @@ public class HBaseSplitsProvider extends SplitsProvider {
         final ByteArrayRange thisRange =
             new ByteArrayRange(new ByteArray(startKey), new ByteArray(endKey));
         final ByteArrayRange regionRange =
-            new ByteArrayRange(new ByteArray(regionInfo.getStartKey()),
+            new ByteArrayRange(
+                new ByteArray(regionInfo.getStartKey()),
                 new ByteArray(regionInfo.getEndKey()));
 
         final ByteArrayRange overlappingRange = thisRange.intersection(regionRange);
@@ -250,15 +257,21 @@ public class HBaseSplitsProvider extends SplitsProvider {
       final GeoWaveRowRange thisRange,
       final GeoWaveRowRange otherRange) {
     final ByteArrayRange thisByteArrayRange =
-        new ByteArrayRange(new ByteArray(thisRange.getStartSortKey()),
+        new ByteArrayRange(
+            new ByteArray(thisRange.getStartSortKey()),
             new ByteArray(thisRange.getEndSortKey()));
     final ByteArrayRange otherByteArrayRange =
-        new ByteArrayRange(new ByteArray(otherRange.getStartSortKey()),
+        new ByteArrayRange(
+            new ByteArray(otherRange.getStartSortKey()),
             new ByteArray(otherRange.getEndSortKey()));
 
     final ByteArrayRange overlappingRange = thisByteArrayRange.intersection(otherByteArrayRange);
 
-    return new GeoWaveRowRange(null, overlappingRange.getStart().getBytes(),
-        overlappingRange.getEnd().getBytes(), true, false);
+    return new GeoWaveRowRange(
+        null,
+        overlappingRange.getStart().getBytes(),
+        overlappingRange.getEnd().getBytes(),
+        true,
+        false);
   }
 }

@@ -51,7 +51,8 @@ public class FeatureWritableTest {
     final SimpleFeature newFeature =
         FeatureDataUtils.buildFeature(
             featureType,
-            new Pair[] {Pair.of("geom", factory.createPoint(new Coordinate(27.25, 41.25))),
+            new Pair[] {
+                Pair.of("geom", factory.createPoint(new Coordinate(27.25, 41.25))),
                 Pair.of("count", Long.valueOf(100))});
 
     final FeatureWritable writable = new FeatureWritable(featureType, newFeature);
@@ -69,7 +70,7 @@ public class FeatureWritableTest {
 
     assertEquals(newFeature.getDefaultGeometry(), writable.getFeature().getDefaultGeometry());
     assertEquals(
-        featureType.getCoordinateReferenceSystem().getCoordinateSystem(), writable.getFeature()
-            .getFeatureType().getCoordinateReferenceSystem().getCoordinateSystem());
+        featureType.getCoordinateReferenceSystem().getCoordinateSystem(),
+        writable.getFeature().getFeatureType().getCoordinateReferenceSystem().getCoordinateSystem());
   }
 }

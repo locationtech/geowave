@@ -30,7 +30,8 @@ public class RocksDBDataStoreFactory extends BaseDataStoreFactory {
       throw new AssertionError("Expected " + RocksDBOptions.class.getSimpleName());
     }
 
-    return new RocksDBDataStore((RocksDBOperations) helper.createOperations(options),
+    return new RocksDBDataStore(
+        (RocksDBOperations) helper.createOperations(options),
         ((RocksDBOptions) options).getStoreOptions());
   }
 }

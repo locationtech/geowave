@@ -129,7 +129,9 @@ public class RasterIngestRunner extends DownloadRunner {
       indices[i++] = primaryIndex;
     }
     coverageNameTemplate =
-        new Template("name", new StringReader(ingestOptions.getCoverageName()),
+        new Template(
+            "name",
+            new StringReader(ingestOptions.getCoverageName()),
             new Configuration());
   }
 
@@ -174,7 +176,10 @@ public class RasterIngestRunner extends DownloadRunner {
     if (ingestOptions.isSubsample()) {
       coverage =
           (GridCoverage2D) RasterUtils.getCoverageOperations().filteredSubsample(
-              coverage, ingestOptions.getScale(), ingestOptions.getScale(), null);
+              coverage,
+              ingestOptions.getScale(),
+              ingestOptions.getScale(),
+              null);
     }
     // its unclear whether cropping should be done first or subsampling
     if (ingestOptions.isCropToSpatialConstraint()) {
@@ -183,7 +188,9 @@ public class RasterIngestRunner extends DownloadRunner {
       if (filter != null) {
         final ExtractGeometryFilterVisitorResult geometryAndCompareOp =
             ExtractGeometryFilterVisitor.getConstraints(
-                filter, GeometryUtils.getDefaultCRS(), SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME);
+                filter,
+                GeometryUtils.getDefaultCRS(),
+                SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME);
         Geometry geometry = geometryAndCompareOp.getGeometry();
         if (geometry != null) {
           // go ahead and intersect this with the scene geometry
@@ -200,15 +207,17 @@ public class RasterIngestRunner extends DownloadRunner {
             try {
               final MathTransform transform =
                   CRS.findMathTransform(
-                      GeometryUtils.getDefaultCRS(), coverage.getCoordinateReferenceSystem(), true);
-              params.parameter(Crop.CROP_ROI.getName().getCode())
-                  .setValue(JTS.transform(geometry, transform));
+                      GeometryUtils.getDefaultCRS(),
+                      coverage.getCoordinateReferenceSystem(),
+                      true);
+              params.parameter(Crop.CROP_ROI.getName().getCode()).setValue(
+                  JTS.transform(geometry, transform));
               final double nodataValue = getNoDataValue(band);
-              params.parameter(Crop.NODATA.getName().getCode())
-                  .setValue(RangeFactory.create(nodataValue, nodataValue));
+              params.parameter(Crop.NODATA.getName().getCode()).setValue(
+                  RangeFactory.create(nodataValue, nodataValue));
 
-              params.parameter(Crop.DEST_NODATA.getName().getCode())
-                  .setValue(new double[] {nodataValue});
+              params.parameter(Crop.DEST_NODATA.getName().getCode()).setValue(
+                  new double[] {nodataValue});
               coverage = (GridCoverage2D) op.doOperation(params, null);
               cropped = true;
             } catch (InvalidParameterValueException | ParameterNotFoundException | FactoryException
@@ -267,9 +276,15 @@ public class RasterIngestRunner extends DownloadRunner {
 
           final double nodataValue = getNoDataValue(band);
           final RasterDataAdapter adapter =
-              new RasterDataAdapter(coverageName, metadata, nextCov, ingestOptions.getTileSize(),
-                  ingestOptions.isCreatePyramid(), ingestOptions.isCreateHistogram(),
-                  new double[][] {new double[] {nodataValue}}, new NoDataMergeStrategy());
+              new RasterDataAdapter(
+                  coverageName,
+                  metadata,
+                  nextCov,
+                  ingestOptions.getTileSize(),
+                  ingestOptions.isCreatePyramid(),
+                  ingestOptions.isCreateHistogram(),
+                  new double[][] {new double[] {nodataValue}},
+                  new NoDataMergeStrategy());
           store.addType(adapter, indices);
           writer = store.createWriter(adapter.getTypeName());
           writerCache.put(coverageName, writer);
@@ -300,7 +315,8 @@ public class RasterIngestRunner extends DownloadRunner {
       System.out.println("Merging overlapping tiles...");
       for (final Index index : indices) {
         if (dataStorePluginOptions.createDataStoreOperations().mergeData(
-            index, dataStorePluginOptions.createAdapterStore(),
+            index,
+            dataStorePluginOptions.createAdapterStore(),
             dataStorePluginOptions.createInternalAdapterStore(),
             dataStorePluginOptions.createAdapterIndexMappingStore())) {
           System.out.println(
@@ -393,9 +409,15 @@ public class RasterIngestRunner extends DownloadRunner {
             noDataValues[b++] = new double[] {getNoDataValueFromName(bandName)};
           }
           final RasterDataAdapter adapter =
-              new RasterDataAdapter(coverageName, metadata, mergedCoverage,
-                  ingestOptions.getTileSize(), ingestOptions.isCreatePyramid(),
-                  ingestOptions.isCreateHistogram(), noDataValues, new NoDataMergeStrategy());
+              new RasterDataAdapter(
+                  coverageName,
+                  metadata,
+                  mergedCoverage,
+                  ingestOptions.getTileSize(),
+                  ingestOptions.isCreatePyramid(),
+                  ingestOptions.isCreateHistogram(),
+                  noDataValues,
+                  new NoDataMergeStrategy());
           store.addType(adapter, indices);
           writer = store.createWriter(adapter.getTypeName());
           writerCache.put(coverageName, writer);
@@ -407,8 +429,8 @@ public class RasterIngestRunner extends DownloadRunner {
                   + "') differ from the previous scene ('"
                   + Arrays.toString(bandsIngested)
                   + "').  To merge bands all scenes must use the same bands.  Skipping scene'"
-                  + lastSceneBands.get(0)
-                      .getAttribute(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME)
+                  + lastSceneBands.get(0).getAttribute(
+                      SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME)
                   + "'.");
           lastSceneBands.clear();
           return;
@@ -419,8 +441,8 @@ public class RasterIngestRunner extends DownloadRunner {
                 "Unable to find writer for coverage '"
                     + coverageName
                     + "'.  Skipping scene'"
-                    + lastSceneBands.get(0)
-                        .getAttribute(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME)
+                    + lastSceneBands.get(0).getAttribute(
+                        SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME)
                     + "'.");
             lastSceneBands.clear();
             return;

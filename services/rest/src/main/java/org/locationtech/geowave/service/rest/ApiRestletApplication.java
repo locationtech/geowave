@@ -105,8 +105,8 @@ public class ApiRestletApplication extends Application {
    */
   public void attachApiRoutes(final Router router) {
     final ServletContext servlet =
-        (ServletContext) router.getContext().getAttributes()
-            .get("org.restlet.ext.servlet.ServletContext");
+        (ServletContext) router.getContext().getAttributes().get(
+            "org.restlet.ext.servlet.ServletContext");
     // TODO document that this can be provided rather than discovered used
     // this servlet init param
     String apiHostPort = servlet.getInitParameter("host_port");
@@ -121,8 +121,12 @@ public class ApiRestletApplication extends Application {
     String defaultConfigFile = servlet.getInitParameter("config_file");
 
     final SwaggerApiParser apiParser =
-        new SwaggerApiParser(apiHostPort, servlet.getContextPath(), VersionUtils.getVersion(),
-            "GeoWave API", "REST API for GeoWave CLI commands");
+        new SwaggerApiParser(
+            apiHostPort,
+            servlet.getContextPath(),
+            VersionUtils.getVersion(),
+            "GeoWave API",
+            "REST API for GeoWave CLI commands");
     for (final RestRoute route : availableRoutes) {
       router.attach(
           "/" + route.getPath(),

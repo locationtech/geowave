@@ -60,8 +60,10 @@ public class NNProcessorTest {
       public List<org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData> getCubeIdentifiers(
           final Object entry) {
         return Collections.singletonList(
-            new PartitionData(new ByteArray(new byte[] {}),
-                NNProcessorTest.partition((Integer) entry), true));
+            new PartitionData(
+                new ByteArray(new byte[] {}),
+                NNProcessorTest.partition((Integer) entry),
+                true));
       }
 
       @Override
@@ -93,7 +95,8 @@ public class NNProcessorTest {
 
       @Override
       public DistanceProfile<Integer> computeProfile(final Integer item1, final Integer item2) {
-        return new DistanceProfile<Integer>(Math.abs(item1.doubleValue() - item2.doubleValue()),
+        return new DistanceProfile<Integer>(
+            Math.abs(item1.doubleValue() - item2.doubleValue()),
             item1);
       }
     }, 200, new PartitionData(new ByteArray(new byte[] {}), new ByteArray("123"), true));

@@ -98,7 +98,8 @@ public class SingleTierSubStrategy implements NumericIndexStrategy {
         ByteArrayUtils.combineArrays(
             partitionKey == null ? null : partitionKey.getBytes(),
             sortKey == null ? null : sortKey.getBytes());
-    return new MultiDimensionalCoordinates(new byte[] {tier},
+    return new MultiDimensionalCoordinates(
+        new byte[] {tier},
         BinnedSFCUtils.getCoordinatesForId(rowId, baseDefinitions, sfc));
   }
 
@@ -243,8 +244,12 @@ public class SingleTierSubStrategy implements NumericIndexStrategy {
       final IndexMetaData... hints) {
     final BinRange[][] binRangesPerDimension =
         BinnedNumericDataset.getBinnedRangesPerDimension(dataRange, baseDefinitions);
-    return new MultiDimensionalCoordinateRanges[] {BinnedSFCUtils
-        .getCoordinateRanges(binRangesPerDimension, sfc, baseDefinitions.length, tier)};
+    return new MultiDimensionalCoordinateRanges[] {
+        BinnedSFCUtils.getCoordinateRanges(
+            binRangesPerDimension,
+            sfc,
+            baseDefinitions.length,
+            tier)};
   }
 
   @Override

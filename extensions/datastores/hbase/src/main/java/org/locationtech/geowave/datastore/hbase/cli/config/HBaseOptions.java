@@ -23,7 +23,8 @@ public class HBaseOptions extends BaseDataStoreOptions {
 
   protected boolean bigTable = false;
 
-  @Parameter(names = {"--" + COPROCESSOR_JAR_KEY},
+  @Parameter(
+      names = {"--" + COPROCESSOR_JAR_KEY},
       description = "Path (HDFS URL) to the jar containing coprocessor classes")
   private String coprocessorJar;
 

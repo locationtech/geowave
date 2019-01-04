@@ -224,7 +224,9 @@ public class BigtableEmulator {
     final Executor executor = new DefaultExecutor();
     executor.setWatchdog(watchdog);
     executor.setStreamHandler(
-        new PumpStreamHandler(ByteStreams.nullOutputStream(), ByteStreams.nullOutputStream(),
+        new PumpStreamHandler(
+            ByteStreams.nullOutputStream(),
+            ByteStreams.nullOutputStream(),
             null) {
           @Override
           protected Thread createPump(

@@ -60,7 +60,8 @@ public class SecondaryIndexQueryFilterIterator extends RowFilter {
             StringUtils.stringFromBinary(key.getColumnQualifierData().getBackingArray());
         if (!cq.equals(primaryIndexId)) {
           final IndexedPersistenceEncoding<ByteArray> persistenceEncoding =
-              new IndexedPersistenceEncoding<ByteArray>(null, // not needed
+              new IndexedPersistenceEncoding<ByteArray>(
+                  null, // not needed
                   null, // not needed
                   null, // not needed
                   null, // not needed

@@ -50,10 +50,15 @@ public class GeoWaveSparkKMeansIT {
   protected static final String HAIL_SHAPEFILE_FILE = HAIL_TEST_CASE_PACKAGE + "hail.shp";
   protected static final String CQL_FILTER = "BBOX(the_geom, -100, 30, -90, 40)";
 
-  @GeoWaveTestStore(value = {GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.BIGTABLE,
-      // TODO: Dynamo test takes too long to finish on Travis (>5 minutes)
-      // GeoWaveStoreType.DYNAMODB,
-      GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          // TODO: Dynamo test takes too long to finish on Travis (>5 minutes)
+          // GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions inputDataStore;
 
   private static long startMillis;
@@ -167,8 +172,8 @@ public class GeoWaveSparkKMeansIT {
 
     try (final CloseableIterator<?> iter =
         featureStore.query(
-            QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName())
-                .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName()).build())) {
+            QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName()).indexName(
+                TestUtils.DEFAULT_SPATIAL_INDEX.getName()).build())) {
 
       while (iter.hasNext()) {
         final Object maybeFeat = iter.next();
@@ -183,8 +188,7 @@ public class GeoWaveSparkKMeansIT {
         count++;
         LOGGER.warn(count + ": " + isFeat.getID() + " - " + geom.toString());
 
-        for (final AttributeDescriptor attrDesc : isFeat.getFeatureType()
-            .getAttributeDescriptors()) {
+        for (final AttributeDescriptor attrDesc : isFeat.getFeatureType().getAttributeDescriptors()) {
           final Class<?> bindingClass = attrDesc.getType().getBinding();
           if (TimeUtils.isTemporal(bindingClass)) {
             final String timeField = attrDesc.getLocalName();

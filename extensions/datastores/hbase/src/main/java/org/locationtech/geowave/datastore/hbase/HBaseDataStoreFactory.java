@@ -37,7 +37,8 @@ public class HBaseDataStoreFactory extends BaseDataStoreFactory {
 
     final DataStoreOperations hbaseOperations = helper.createOperations(opts);
 
-    return new HBaseDataStore((HBaseOperations) hbaseOperations,
+    return new HBaseDataStore(
+        (HBaseOperations) hbaseOperations,
         (HBaseOptions) opts.getStoreOptions());
   }
 }

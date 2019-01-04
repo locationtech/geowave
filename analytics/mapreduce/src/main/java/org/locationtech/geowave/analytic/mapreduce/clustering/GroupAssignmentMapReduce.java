@@ -85,8 +85,8 @@ public class GroupAssignmentMapReduce {
               // extra instance of
               // ObjectWritable each time, so this is just a simple
               // exchange of a reference
-              outputValWritable
-                  .set(toWritableValue(key, pairing.getPairedItem().getWrappedItem()).get());
+              outputValWritable.set(
+                  toWritableValue(key, pairing.getPairedItem().getWrappedItem()).get());
               AtomicInteger ii = logCounts.get(pairing.getCentroid().getID());
 
               if (ii == null) {
@@ -97,8 +97,9 @@ public class GroupAssignmentMapReduce {
             }
           };
 
-      nestedGroupCentroidAssigner
-          .findCentroidForLevel(itemWrapperFactory.create(value), centroidAssociationFn);
+      nestedGroupCentroidAssigner.findCentroidForLevel(
+          itemWrapperFactory.create(value),
+          centroidAssociationFn);
 
       context.write(key, outputValWritable);
     }
@@ -120,12 +121,16 @@ public class GroupAssignmentMapReduce {
       super.setup(context);
 
       final ScopedJobConfiguration config =
-          new ScopedJobConfiguration(context.getConfiguration(), GroupAssignmentMapReduce.class,
+          new ScopedJobConfiguration(
+              context.getConfiguration(),
+              GroupAssignmentMapReduce.class,
               GroupAssignmentMapReduce.LOGGER);
 
       try {
         nestedGroupCentroidAssigner =
-            new NestedGroupCentroidAssignment<Object>(context, GroupAssignmentMapReduce.class,
+            new NestedGroupCentroidAssignment<Object>(
+                context,
+                GroupAssignmentMapReduce.class,
                 GroupAssignmentMapReduce.LOGGER);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -134,7 +139,8 @@ public class GroupAssignmentMapReduce {
       try {
         centroidExtractor =
             config.getInstance(
-                CentroidParameters.Centroid.EXTRACTOR_CLASS, CentroidExtractor.class,
+                CentroidParameters.Centroid.EXTRACTOR_CLASS,
+                CentroidExtractor.class,
                 SimpleFeatureCentroidExtractor.class);
       } catch (final Exception e1) {
         throw new IOException(e1);
@@ -143,11 +149,14 @@ public class GroupAssignmentMapReduce {
       try {
         itemWrapperFactory =
             config.getInstance(
-                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, AnalyticItemWrapperFactory.class,
+                CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+                AnalyticItemWrapperFactory.class,
                 SimpleFeatureItemWrapperFactory.class);
 
-        itemWrapperFactory
-            .initialize(context, GroupAssignmentMapReduce.class, GroupAssignmentMapReduce.LOGGER);
+        itemWrapperFactory.initialize(
+            context,
+            GroupAssignmentMapReduce.class,
+            GroupAssignmentMapReduce.LOGGER);
       } catch (final Exception e1) {
         throw new IOException(e1);
       }

@@ -104,13 +104,19 @@ public class RocksDBClient implements Closeable {
   private final Cache<String, CacheKey> keyCache = Caffeine.newBuilder().build();
   private final LoadingCache<IndexCacheKey, RocksDBIndexTable> indexTableCache =
       Caffeine.newBuilder().build(key -> {
-        return new RocksDBIndexTable(indexWriteOptions, indexReadOptions, key.directory,
-            key.adapterId, key.partition, key.requiresTimestamp);
+        return new RocksDBIndexTable(
+            indexWriteOptions,
+            indexReadOptions,
+            key.directory,
+            key.adapterId,
+            key.partition,
+            key.requiresTimestamp);
       });
   private final LoadingCache<CacheKey, RocksDBMetadataTable> metadataTableCache =
       Caffeine.newBuilder().build(key -> {
         new File(key.directory).mkdirs();
-        return new RocksDBMetadataTable(RocksDB.open(metadataOptions, key.directory),
+        return new RocksDBMetadataTable(
+            RocksDB.open(metadataOptions, key.directory),
             key.requiresTimestamp);
       });
   private final String subDirectory;
@@ -141,8 +147,9 @@ public class RocksDBClient implements Closeable {
     }
     final String directory = subDirectory + "/" + tableName;
     return indexTableCache.get(
-        (IndexCacheKey) keyCache
-            .get(directory, d -> new IndexCacheKey(d, adapterId, partition, requiresTimestamp)));
+        (IndexCacheKey) keyCache.get(
+            directory,
+            d -> new IndexCacheKey(d, adapterId, partition, requiresTimestamp)));
   }
 
   public synchronized RocksDBMetadataTable getMetadataTable(final MetadataType type) {
@@ -151,8 +158,8 @@ public class RocksDBClient implements Closeable {
       metadataOptions = new Options().setCreateIfMissing(true).optimizeForSmallDb();
     }
     final String directory = subDirectory + "/" + type.name();
-    return metadataTableCache
-        .get(keyCache.get(directory, d -> new CacheKey(d, type.equals(MetadataType.STATS))));
+    return metadataTableCache.get(
+        keyCache.get(directory, d -> new CacheKey(d, type.equals(MetadataType.STATS))));
   }
 
   public boolean indexTableExists(final String indexName) {

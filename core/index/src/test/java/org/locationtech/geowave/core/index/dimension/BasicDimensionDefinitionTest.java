@@ -26,7 +26,9 @@ public class BasicDimensionDefinitionTest {
     final double normalizedValue = 0.5;
 
     Assert.assertEquals(
-        normalizedValue, getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, midValue), DELTA);
+        normalizedValue,
+        getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, midValue),
+        DELTA);
   }
 
   @Test
@@ -36,7 +38,9 @@ public class BasicDimensionDefinitionTest {
     final double normalizedValue = 0.0;
 
     Assert.assertEquals(
-        normalizedValue, getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, lowerValue), DELTA);
+        normalizedValue,
+        getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, lowerValue),
+        DELTA);
   }
 
   @Test
@@ -46,7 +50,9 @@ public class BasicDimensionDefinitionTest {
     final double normalizedValue = 1.0;
 
     Assert.assertEquals(
-        normalizedValue, getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, upperValue), DELTA);
+        normalizedValue,
+        getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, upperValue),
+        DELTA);
   }
 
   @Test
@@ -56,7 +62,9 @@ public class BasicDimensionDefinitionTest {
     final double normalizedValue = 0.0;
 
     Assert.assertEquals(
-        normalizedValue, getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, value), DELTA);
+        normalizedValue,
+        getNormalizedValueUsingBounds(MINIMUM, MAXIMUM, value),
+        DELTA);
   }
 
   @Test
@@ -92,7 +100,7 @@ public class BasicDimensionDefinitionTest {
 
   private BinRange[] getNormalizedRangesUsingBounds(final double minRange, final double maxRange) {
 
-    return new BasicDimensionDefinition(MINIMUM, MAXIMUM)
-        .getNormalizedRanges(new NumericRange(minRange, maxRange));
+    return new BasicDimensionDefinition(MINIMUM, MAXIMUM).getNormalizedRanges(
+        new NumericRange(minRange, maxRange));
   }
 }

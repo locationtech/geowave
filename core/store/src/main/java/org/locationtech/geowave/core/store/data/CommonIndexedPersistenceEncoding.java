@@ -43,8 +43,14 @@ public class CommonIndexedPersistenceEncoding extends IndexedPersistenceEncoding
       final int duplicateCount,
       final PersistentDataset<CommonIndexValue> commonData,
       final PersistentDataset<byte[]> unknownData) {
-    super(internalAdapterId, dataId, insertionPartitionKey, insertionSortKey, duplicateCount,
-        commonData, unknownData);
+    super(
+        internalAdapterId,
+        dataId,
+        insertionPartitionKey,
+        insertionSortKey,
+        duplicateCount,
+        commonData,
+        unknownData);
   }
 
   /**
@@ -72,7 +78,8 @@ public class CommonIndexedPersistenceEncoding extends IndexedPersistenceEncoding
           // used to check the result of the index strategy
           if (LOGGER.isDebugEnabled()
               && checkCoverage(
-                  boxRangeData, index.getIndexStrategy().getRangeForId(partitionKey, sortKey))) {
+                  boxRangeData,
+                  index.getIndexStrategy().getRangeForId(partitionKey, sortKey))) {
             LOGGER.error(
                 "Index strategy produced an unmatching tile during encoding and storing an entry");
           }

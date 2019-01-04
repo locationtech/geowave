@@ -45,7 +45,8 @@ public class WFSBoundedSpatialQueryTest extends BaseDataStoreTest {
     dataStore = createDataStore();
     type =
         DataUtilities.createType(
-            "geostuff", "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
+            "geostuff",
+            "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
 
     type.getDescriptor("when").getUserData().put("time", false);
     dataStore.createSchema(type);
@@ -88,8 +89,10 @@ public class WFSBoundedSpatialQueryTest extends BaseDataStoreTest {
     populate();
     Transaction transaction2 = new DefaultTransaction();
     Query query =
-        new Query("geostuff", CQL.toFilter(
-            "BBOX(geometry,44,27,42,30) and when during 2005-05-01T20:32:56Z/2005-05-29T21:32:56Z"),
+        new Query(
+            "geostuff",
+            CQL.toFilter(
+                "BBOX(geometry,44,27,42,30) and when during 2005-05-01T20:32:56Z/2005-05-29T21:32:56Z"),
             new String[] {"geometry", "when", "pid"});
     FeatureReader<SimpleFeatureType, SimpleFeature> reader =
         dataStore.getFeatureReader(query, transaction2);
@@ -105,8 +108,10 @@ public class WFSBoundedSpatialQueryTest extends BaseDataStoreTest {
 
     transaction2 = new DefaultTransaction();
     query =
-        new Query("geostuff", CQL.toFilter(
-            "BBOX(geometry,42,28,44,30) and when during 2005-05-01T20:32:56Z/2005-05-29T21:32:56Z"),
+        new Query(
+            "geostuff",
+            CQL.toFilter(
+                "BBOX(geometry,42,28,44,30) and when during 2005-05-01T20:32:56Z/2005-05-29T21:32:56Z"),
             new String[] {"geometry", "when", "pid"});
     reader = dataStore.getFeatureReader(query, transaction2);
     c = 0;

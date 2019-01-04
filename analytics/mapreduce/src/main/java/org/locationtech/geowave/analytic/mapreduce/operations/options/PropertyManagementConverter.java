@@ -123,7 +123,9 @@ public class PropertyManagementConverter {
       if (LOGGER.isDebugEnabled()) {
         LOGGER.debug(
             String.format(
-                "Analytic Property Value: %s = %s", entry.getAsPropertyName(), value.toString()));
+                "Analytic Property Value: %s = %s",
+                entry.getAsPropertyName(),
+                value.toString()));
       }
       for (ParameterEnum<?> enumVal : enumVals) {
         ((ParameterEnum<Object>) enumVal).getHelper().setValue(properties, value);

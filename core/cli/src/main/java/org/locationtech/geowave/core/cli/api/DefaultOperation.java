@@ -38,7 +38,8 @@ public abstract class DefaultOperation implements Operation {
       checkForGeoWaveDirectory(params);
     } catch (final Exception e) {
       throw new ParameterException(
-          "Error occurred during preparing phase: " + e.getLocalizedMessage(), e);
+          "Error occurred during preparing phase: " + e.getLocalizedMessage(),
+          e);
     }
     return true;
   }

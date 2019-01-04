@@ -130,8 +130,11 @@ public class Landsat8TemporalBinningStrategy implements BinningStrategy {
       // we have the millis for range, but to normalize for this bin we
       // need to subtract the epoch of the bin
       bins.add(
-          new BinRange(getBinId(epochIterator), startMillis - epochIterator,
-              endMillis - epochIterator, fullExtent));
+          new BinRange(
+              getBinId(epochIterator),
+              startMillis - epochIterator,
+              endMillis - epochIterator,
+              fullExtent));
       epochIterator = nextEpoch;
       // iterate until we reach our end epoch
     } while (!lastBin);

@@ -94,7 +94,11 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
 
   @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
-    return new RocksDBWriter(client, adapter.getAdapterId(), adapter.getTypeName(), index.getName(),
+    return new RocksDBWriter(
+        client,
+        adapter.getAdapterId(),
+        adapter.getTypeName(),
+        index.getName(),
         RocksDBUtils.isSortByTime(adapter));
   }
 
@@ -105,13 +109,15 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
 
   @Override
   public MetadataReader createMetadataReader(final MetadataType metadataType) {
-    return new RocksDBMetadataReader(RocksDBUtils.getMetadataTable(client, metadataType),
+    return new RocksDBMetadataReader(
+        RocksDBUtils.getMetadataTable(client, metadataType),
         metadataType);
   }
 
   @Override
   public MetadataDeleter createMetadataDeleter(final MetadataType metadataType) {
-    return new RocksDBMetadataDeleter(RocksDBUtils.getMetadataTable(client, metadataType),
+    return new RocksDBMetadataDeleter(
+        RocksDBUtils.getMetadataTable(client, metadataType),
         metadataType);
   }
 
@@ -124,8 +130,10 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
   public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
     return new QueryAndDeleteByRow<>(
         createRowDeleter(
-            readerParams.getIndex().getName(), readerParams.getAdapterStore(),
-            readerParams.getInternalAdapterStore(), readerParams.getAdditionalAuthorizations()),
+            readerParams.getIndex().getName(),
+            readerParams.getAdapterStore(),
+            readerParams.getInternalAdapterStore(),
+            readerParams.getAdditionalAuthorizations()),
         // intentionally don't run this reader as async because it does
         // not work well while simultaneously deleting rows
         new RocksDBReader<>(client, readerParams, false));
@@ -138,7 +146,11 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
       final InternalAdapterStore internalAdapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore) {
     return DataStoreUtils.mergeData(
-        this, options.getStoreOptions(), index, adapterStore, internalAdapterStore,
+        this,
+        options.getStoreOptions(),
+        index,
+        adapterStore,
+        internalAdapterStore,
         adapterIndexMappingStore);
   }
 

@@ -64,7 +64,10 @@ public class TypeUtils {
       reusableInstance = new AvroLongArray();
     }
     return deserialize(
-        reusableInstance, avroData, AvroLongArray.class, AvroLongArray.getClassSchema());
+        reusableInstance,
+        avroData,
+        AvroLongArray.class,
+        AvroLongArray.getClassSchema());
   }
 
   public static byte[] serializeLongArray(AvroLongArray avroObject) throws IOException {

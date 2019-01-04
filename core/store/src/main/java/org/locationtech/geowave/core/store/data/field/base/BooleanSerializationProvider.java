@@ -26,7 +26,8 @@ public class BooleanSerializationProvider implements FieldSerializationProviderS
   }
 
   private static class BooleanReader implements FieldReader<Boolean> {
-    @SuppressFBWarnings(value = {"NP_BOOLEAN_RETURN_NULL"},
+    @SuppressFBWarnings(
+        value = {"NP_BOOLEAN_RETURN_NULL"},
         justification = "matches pattern of other read* methods")
     @Override
     public Boolean readField(final byte[] fieldData) {

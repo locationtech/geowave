@@ -84,7 +84,8 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroGpxTr
         time = System.currentTimeMillis() - time;
         final String timespan =
             String.format(
-                "%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(time),
+                "%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes(time),
                 TimeUnit.MILLISECONDS.toSeconds(time)
                     - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
         LOGGER.info("Metadata parsed in in " + timespan + " for " + metadata.size() + " tracks");
@@ -176,11 +177,15 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroGpxTr
     final InputStream in = new ByteArrayInputStream(gpxTrack.getGpxfile().array());
     // LOGGER.debug("Processing track [" + gpxTrack.getTimestamp() + "]");
     try {
-      return new GPXConsumer(in, indexNames,
+      return new GPXConsumer(
+          in,
+          indexNames,
           gpxTrack.getTrackid() == null ? "" : gpxTrack.getTrackid().toString(),
-          getAdditionalData(gpxTrack), false, // waypoints, even dups, are unique, due to QGis
+          getAdditionalData(gpxTrack),
+          false, // waypoints, even dups, are unique, due to QGis
           // behavior
-          globalVisibility, extentOptProvider.getMaxExtent());
+          globalVisibility,
+          extentOptProvider.getMaxExtent());
     } catch (final Exception e) {
       LOGGER.warn("Unable to convert GpxTrack to GeoWaveData", e);
       return null;

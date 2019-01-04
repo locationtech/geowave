@@ -86,22 +86,32 @@ public class BatchedRangeRead<T> {
         final byte[] start = range.getStart() != null ? range.getStart().getBytes() : new byte[0];
         final byte[] end =
             range.getEnd() != null ? range.getEndAsNextPrefix().getBytes()
-                : new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
-                    (byte) 0xFF, (byte) 0xFF};
+                : new byte[] {
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF,
+                    (byte) 0xFF};
         boundRead.set(
-            CassandraField.GW_SORT_KEY.getLowerBoundBindMarkerName(), ByteBuffer.wrap(start),
+            CassandraField.GW_SORT_KEY.getLowerBoundBindMarkerName(),
+            ByteBuffer.wrap(start),
             ByteBuffer.class);
 
         boundRead.set(
-            CassandraField.GW_SORT_KEY.getUpperBoundBindMarkerName(), ByteBuffer.wrap(end),
+            CassandraField.GW_SORT_KEY.getUpperBoundBindMarkerName(),
+            ByteBuffer.wrap(end),
             ByteBuffer.class);
         boundRead.set(
             CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
-            ByteBuffer.wrap(r.getPartitionKey().getBytes()), ByteBuffer.class);
+            ByteBuffer.wrap(r.getPartitionKey().getBytes()),
+            ByteBuffer.class);
 
         boundRead.set(
             CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
-            Arrays.asList(ArrayUtils.toObject(adapterIds)), TypeCodec.list(TypeCodec.smallInt()));
+            Arrays.asList(ArrayUtils.toObject(adapterIds)),
+            TypeCodec.list(TypeCodec.smallInt()));
         statements.add(boundRead);
       }
     }
@@ -125,7 +135,8 @@ public class BatchedRangeRead<T> {
             final ResultSetFuture f = operations.getSession().executeAsync(s);
             futures.add(f);
             Futures.addCallback(
-                f, new QueryCallback(queryCount, results, rowTransformer, filter, readSemaphore),
+                f,
+                new QueryCallback(queryCount, results, rowTransformer, filter, readSemaphore),
                 CassandraOperations.READ_RESPONSE_THREADS);
           } catch (final InterruptedException e) {
             LOGGER.warn("Exception while executing query", e);
@@ -140,8 +151,8 @@ public class BatchedRangeRead<T> {
           try {
             results.put(RowConsumer.POISON);
           } catch (final InterruptedException e) {
-            LOGGER
-                .error("Interrupted while finishing blocking queue, this may result in deadlock!");
+            LOGGER.error(
+                "Interrupted while finishing blocking queue, this may result in deadlock!");
           }
         }
       }
@@ -191,14 +202,14 @@ public class BatchedRangeRead<T> {
                       public CassandraRow apply(final Row row) {
                         return new CassandraRow(row);
                       }
-                    }), filter)))
-            .forEachRemaining(row -> {
-              try {
-                resultQueue.put(row);
-              } catch (final InterruptedException e) {
-                LOGGER.warn("interrupted while waiting to enqueue a cassandra result", e);
-              }
-            });
+                    }),
+                    filter))).forEachRemaining(row -> {
+                      try {
+                        resultQueue.put(row);
+                      } catch (final InterruptedException e) {
+                        LOGGER.warn("interrupted while waiting to enqueue a cassandra result", e);
+                      }
+                    });
 
       } finally {
         checkFinalize();

@@ -13,32 +13,38 @@ import com.beust.jcommander.converters.IntegerConverter;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 
 public class Sentinel2RasterIngestCommandLineOptions {
-  @Parameter(names = "--histogram",
+  @Parameter(
+      names = "--histogram",
       description = "An option to store the histogram of the values of the coverage so that histogram equalization will be performed.")
   private boolean createHistogram = false;
 
-  @Parameter(names = "--pyramid",
+  @Parameter(
+      names = "--pyramid",
       description = "An option to store an image pyramid for the coverage.")
   private boolean createPyramid = false;
 
-  @Parameter(names = "--retainimages",
+  @Parameter(
+      names = "--retainimages",
       description = "An option to keep the images that are ingested in the local workspace directory.  By default it will delete the local file after it is ingested successfully.")
   private boolean retainImages = false;
 
-  @Parameter(names = "--tilesize",
+  @Parameter(
+      names = "--tilesize",
       description = "The option to set the pixel size for each tile stored in GeoWave.  The default is "
           + RasterDataAdapter.DEFAULT_TILE_SIZE
           + ".")
   private int tileSize = 512;
 
-  @Parameter(names = "--coverage", description = "The name to give to each unique coverage.  "
-      + "Freemarker templating can be used for variable substitution based on the same attributes used for filtering.  "
-      + "The default coverage name is '${"
-      + SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME
-      + "}_${"
-      + BandFeatureIterator.BAND_ATTRIBUTE_NAME
-      + "}'.  "
-      + "If ${band} is unused in the coverage name, all bands will be merged together into the same coverage.")
+  @Parameter(
+      names = "--coverage",
+      description = "The name to give to each unique coverage.  "
+          + "Freemarker templating can be used for variable substitution based on the same attributes used for filtering.  "
+          + "The default coverage name is '${"
+          + SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME
+          + "}_${"
+          + BandFeatureIterator.BAND_ATTRIBUTE_NAME
+          + "}'.  "
+          + "If ${band} is unused in the coverage name, all bands will be merged together into the same coverage.")
   private String coverageName =
       "${"
           + SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME
@@ -46,20 +52,24 @@ public class Sentinel2RasterIngestCommandLineOptions {
           + BandFeatureIterator.BAND_ATTRIBUTE_NAME
           + "}";
 
-  @Parameter(names = "--converter",
+  @Parameter(
+      names = "--converter",
       description = "Prior to ingesting an image, this converter will be used to massage the data.  The default is not to convert the data.")
   private String coverageConverter;
 
-  @Parameter(names = "--subsample",
+  @Parameter(
+      names = "--subsample",
       description = "Subsample the image prior to ingest by the scale factor provided.  The scale factor should be an integer value greater than 1.",
       converter = IntegerConverter.class)
   private int scale = 1;
 
-  @Parameter(names = "--crop",
+  @Parameter(
+      names = "--crop",
       description = "Use the spatial constraint provided in CQL to crop the image.  If no spatial constraint is provided, this will not have an effect.")
   private boolean cropToSpatialConstraint;
 
-  @Parameter(names = "--skipMerge",
+  @Parameter(
+      names = "--skipMerge",
       description = "By default the ingest will automerge overlapping tiles as a post-processing optimization step for efficient retrieval, but this will skip the merge process.")
   private boolean skipMerge;
 

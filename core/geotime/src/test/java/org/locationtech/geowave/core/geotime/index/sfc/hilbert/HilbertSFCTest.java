@@ -101,8 +101,9 @@ public class HilbertSFCTest {
         SFCFactory.createSpaceFillingCurve(SPATIAL_DIMENSIONS, SFCType.HILBERT);
 
     Assert.assertTrue(
-        SignedBytes.lexicographicalComparator()
-            .compare(hilbertSFC.getId(minValue), hilbertSFC.getId(maxValue)) < 0);
+        SignedBytes.lexicographicalComparator().compare(
+            hilbertSFC.getId(minValue),
+            hilbertSFC.getId(maxValue)) < 0);
   }
 
   // @Test(expected = IllegalArgumentException.class)

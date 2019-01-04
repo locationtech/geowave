@@ -54,8 +54,13 @@ public class PolygonDataIdQueryIT extends AbstractGeoWaveIT {
   private static Index index =
       new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
-  @GeoWaveTestStore({GeoWaveStoreType.ACCUMULO, GeoWaveStoreType.CASSANDRA, GeoWaveStoreType.HBASE,
-      GeoWaveStoreType.DYNAMODB, GeoWaveStoreType.REDIS, GeoWaveStoreType.ROCKSDB})
+  @GeoWaveTestStore({
+      GeoWaveStoreType.ACCUMULO,
+      GeoWaveStoreType.CASSANDRA,
+      GeoWaveStoreType.HBASE,
+      GeoWaveStoreType.DYNAMODB,
+      GeoWaveStoreType.REDIS,
+      GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
 
   @Override
@@ -69,10 +74,9 @@ public class PolygonDataIdQueryIT extends AbstractGeoWaveIT {
   public void testPolygonDataIdQueryResults() {
     final CloseableIterator<SimpleFeature> matches =
         (CloseableIterator) dataStore.createDataStore().query(
-            QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName())
-                .indexName(TestUtils.DEFAULT_SPATIAL_INDEX.getName())
-                .constraints(new DataIdQuery(new ByteArray(StringUtils.stringToBinary(DATA_ID))))
-                .build());
+            QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName()).indexName(
+                TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(
+                    new DataIdQuery(new ByteArray(StringUtils.stringToBinary(DATA_ID)))).build());
     int numResults = 0;
     while (matches.hasNext()) {
       matches.next();
@@ -118,8 +122,11 @@ public class PolygonDataIdQueryIT extends AbstractGeoWaveIT {
           buildSimpleFeature(
               DATA_ID,
               GeometryUtils.GEOMETRY_FACTORY.createPolygon(
-                  new Coordinate[] {new Coordinate(1.0249, 1.0319), new Coordinate(1.0261, 1.0319),
-                      new Coordinate(1.0261, 1.0323), new Coordinate(1.0249, 1.0319)})));
+                  new Coordinate[] {
+                      new Coordinate(1.0249, 1.0319),
+                      new Coordinate(1.0261, 1.0319),
+                      new Coordinate(1.0261, 1.0323),
+                      new Coordinate(1.0249, 1.0319)})));
     }
   }
 

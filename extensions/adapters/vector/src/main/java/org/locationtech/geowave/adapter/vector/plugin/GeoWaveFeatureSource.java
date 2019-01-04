@@ -42,9 +42,13 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
       final TransactionsAllocator transactionAllocator) {
     super(entry, query);
     components =
-        new GeoWaveDataStoreComponents(getDataStore().getDataStore(),
-            getDataStore().getDataStatisticsStore(), getDataStore().getIndexStore(), adapter,
-            getDataStore(), transactionAllocator);
+        new GeoWaveDataStoreComponents(
+            getDataStore().getDataStore(),
+            getDataStore().getDataStatisticsStore(),
+            getDataStore().getIndexStore(),
+            adapter,
+            getDataStore(),
+            transactionAllocator);
   }
 
   public GeoWaveDataStoreComponents getComponents() {
@@ -62,9 +66,8 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
           new GeoWaveEmptyTransaction(components).getDataStatistics();
       bboxStats =
           stats.get(
-              VectorStatisticsQueryBuilder.newBuilder().factory().bbox()
-                  .fieldName(getFeatureType().getGeometryDescriptor().getLocalName()).build()
-                  .getId());
+              VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+                  getFeatureType().getGeometryDescriptor().getLocalName()).build().getId());
     }
     if (bboxStats != null) {
       minx = ((BoundingBoxDataStatistics) bboxStats).getMinX();
@@ -118,7 +121,9 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
   protected FeatureReader<SimpleFeatureType, SimpleFeature> getReaderInternal(final Query query)
       throws IOException {
     final GeoWaveTransactionState state = getDataStore().getMyTransactionState(transaction, this);
-    return new GeoWaveFeatureReader(query, state.getGeoWaveTransaction(query.getTypeName()),
+    return new GeoWaveFeatureReader(
+        query,
+        state.getGeoWaveTransaction(query.getTypeName()),
         components);
   }
 
@@ -127,7 +132,9 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
       final Query query,
       final int flags) throws IOException {
     final GeoWaveTransactionState state = getDataStore().getMyTransactionState(transaction, this);
-    return new GeoWaveFeatureWriter(components, state.getGeoWaveTransaction(query.getTypeName()),
+    return new GeoWaveFeatureWriter(
+        components,
+        state.getGeoWaveTransaction(query.getTypeName()),
         (GeoWaveFeatureReader) getReaderInternal(query));
   }
 
@@ -169,7 +176,10 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
   @Override
   protected void doUnlockInternal(final String typeName, final SimpleFeature feature)
       throws IOException {
-    getDataStore().getLockingManager()
-        .unLockFeatureID(typeName, feature.getID(), transaction, lock);
+    getDataStore().getLockingManager().unLockFeatureID(
+        typeName,
+        feature.getID(),
+        transaction,
+        lock);
   }
 }

@@ -90,8 +90,11 @@ public class HBaseNumericIndexStrategyFilter extends FilterBase {
 
   private boolean inBounds(final Cell cell) {
     GeoWaveKeyImpl cellKey =
-        new GeoWaveKeyImpl(cell.getRowArray(), indexStrategy.getPartitionKeyLength(),
-            cell.getRowOffset(), cell.getRowLength());
+        new GeoWaveKeyImpl(
+            cell.getRowArray(),
+            indexStrategy.getPartitionKeyLength(),
+            cell.getRowOffset(),
+            cell.getRowLength());
 
     ByteArray sortKey = new ByteArray(cellKey.getSortKey());
     ByteArray partitionKey = new ByteArray(cellKey.getPartitionKey());

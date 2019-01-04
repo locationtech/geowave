@@ -40,11 +40,13 @@ public class CassandraMetadataDeleter implements MetadataDeleter {
       final Where where =
           delete.where(
               QueryBuilder.eq(
-                  CassandraMetadataWriter.PRIMARY_ID_KEY, ByteBuffer.wrap(query.getPrimaryId())));
+                  CassandraMetadataWriter.PRIMARY_ID_KEY,
+                  ByteBuffer.wrap(query.getPrimaryId())));
       if (query.hasSecondaryId()) {
         where.and(
             QueryBuilder.eq(
-                CassandraMetadataWriter.SECONDARY_ID_KEY, ByteBuffer.wrap(query.getSecondaryId())));
+                CassandraMetadataWriter.SECONDARY_ID_KEY,
+                ByteBuffer.wrap(query.getSecondaryId())));
       }
     }
     // deleting by secondary ID without primary ID is not supported (and not

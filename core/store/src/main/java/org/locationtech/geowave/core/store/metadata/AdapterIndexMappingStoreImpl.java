@@ -44,7 +44,8 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
 
   public boolean mappingExists(final AdapterToIndexMapping persistedObject) {
     return objectExists(
-        new ByteArray(ByteArrayUtils.shortToByteArray(persistedObject.getAdapterId())), null);
+        new ByteArray(ByteArrayUtils.shortToByteArray(persistedObject.getAdapterId())),
+        null);
   }
 
   @Override
@@ -57,7 +58,10 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
 
     final AdapterToIndexMapping mapping =
         super.internalGetObject(
-            new ByteArray(ByteArrayUtils.shortToByteArray(adapterId)), null, false, null);
+            new ByteArray(ByteArrayUtils.shortToByteArray(adapterId)),
+            null,
+            false,
+            null);
     return (mapping != null) ? mapping : new AdapterToIndexMapping(adapterId, new String[0]);
   }
 
@@ -71,11 +75,10 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
         // combine the 2 arrays and remove duplicates (get unique set of
         // index names)
         final String[] uniqueCombinedIndices =
-            Streams
-                .concat(
-                    Arrays.stream(mapping.getIndexNames()),
-                    Arrays.stream(oldMapping.getIndexNames()))
-                .distinct().toArray(size -> new String[size]);
+            Streams.concat(
+                Arrays.stream(mapping.getIndexNames()),
+                Arrays.stream(oldMapping.getIndexNames())).distinct().toArray(
+                    size -> new String[size]);
         if (LOGGER.isInfoEnabled()) {
           LOGGER.info(
               "Updating indices for datatype to " + ArrayUtils.toString(uniqueCombinedIndices));

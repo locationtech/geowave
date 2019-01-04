@@ -43,7 +43,10 @@ public class SplitQuantileCommand extends AbstractSplitsCommand implements Comma
           final long number) {
         try {
           AccumuloUtils.setSplitsByQuantile(
-              (AccumuloDataStore) inputStoreOptions.createDataStore(), connector, namespace, index,
+              (AccumuloDataStore) inputStoreOptions.createDataStore(),
+              connector,
+              namespace,
+              index,
               (int) number);
         } catch (AccumuloException | AccumuloSecurityException | IOException
             | TableNotFoundException e) {

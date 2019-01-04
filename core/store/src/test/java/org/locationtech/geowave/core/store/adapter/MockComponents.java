@@ -191,8 +191,7 @@ public class MockComponents {
     @Override
     public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldName) {
       int i = 0;
-      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model
-          .getDimensions()) {
+      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
         if (fieldName.equals(dimensionField.getFieldName())) {
           return i;
         }
@@ -210,8 +209,7 @@ public class MockComponents {
     public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
       if (position < model.getDimensions().length) {
         int i = 0;
-        for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model
-            .getDimensions()) {
+        for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
           if (i == position) {
             return dimensionField.getFieldName();
           }
@@ -233,7 +231,9 @@ public class MockComponents {
         final CommonIndexModel indexModel,
         final DataTypeAdapter<Integer> adapter,
         final StatisticsId statisticsId) {
-      return new FieldNameStatisticVisibility<>(new TestDimensionField().fieldName, indexModel,
+      return new FieldNameStatisticVisibility<>(
+          new TestDimensionField().fieldName,
+          indexModel,
           adapter);
     }
   } // class MockAbstractDataAdapter
@@ -583,8 +583,10 @@ public class MockComponents {
       for (int d = 0; d < coordinateRangesPerDimension.length; d++) {
         coordinateRangesPerDimension[d] = new CoordinateRange[1];
         coordinateRangesPerDimension[d][0] =
-            new CoordinateRange((long) dataRange.getMinValuesPerDimension()[0],
-                (long) dataRange.getMaxValuesPerDimension()[0], new byte[] {});
+            new CoordinateRange(
+                (long) dataRange.getMinValuesPerDimension()[0],
+                (long) dataRange.getMaxValuesPerDimension()[0],
+                new byte[] {});
       }
       return new MultiDimensionalCoordinateRanges[] {
           new MultiDimensionalCoordinateRanges(new byte[] {}, coordinateRangesPerDimension)};
@@ -615,8 +617,12 @@ public class MockComponents {
     public MultiDimensionalCoordinates getCoordinatesPerDimension(
         final ByteArray partitionKey,
         final ByteArray sortKey) {
-      return new MultiDimensionalCoordinates(new byte[] {}, new Coordinate[] {new Coordinate(
-          (long) Double.parseDouble(new String(sortKey.getBytes())), new byte[] {})});
+      return new MultiDimensionalCoordinates(
+          new byte[] {},
+          new Coordinate[] {
+              new Coordinate(
+                  (long) Double.parseDouble(new String(sortKey.getBytes())),
+                  new byte[] {})});
     }
 
     @Override

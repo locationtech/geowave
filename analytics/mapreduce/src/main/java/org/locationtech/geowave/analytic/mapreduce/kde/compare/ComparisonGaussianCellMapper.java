@@ -39,7 +39,10 @@ public class ComparisonGaussianCellMapper extends GaussianCellMapper {
     super.populateLevelStore(context, numXPosts, numYPosts, level);
 
     winterLevelStoreMap.put(
-        level, new LevelStore(numXPosts, numYPosts,
+        level,
+        new LevelStore(
+            numXPosts,
+            numYPosts,
             new NegativeCellIdCounter(context, level, minLevel, maxLevel)));
   }
 
@@ -111,8 +114,13 @@ public class ComparisonGaussianCellMapper extends GaussianCellMapper {
       }
 
       GaussianFilter.incrementPt(
-          pt.getY(), pt.getX(), levelStore.counter, levelStore.numXPosts, levelStore.numYPosts,
-          contribution, valueRangePerDimension);
+          pt.getY(),
+          pt.getX(),
+          levelStore.counter,
+          levelStore.numXPosts,
+          levelStore.numYPosts,
+          contribution,
+          valueRangePerDimension);
     }
   }
 }

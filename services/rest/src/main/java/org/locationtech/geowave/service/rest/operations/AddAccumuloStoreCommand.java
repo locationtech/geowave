@@ -36,7 +36,8 @@ public class AddAccumuloStoreCommand extends ServiceEnabledCommand<String> {
   @Parameter(description = "<name>")
   private List<String> parameters = new ArrayList<String>();
 
-  @Parameter(names = {"-d", "--default"},
+  @Parameter(
+      names = {"-d", "--default"},
       description = "Make this the default store in all operations")
   private Boolean makeDefault;
 
@@ -64,8 +65,8 @@ public class AddAccumuloStoreCommand extends ServiceEnabledCommand<String> {
 
     // Converts the PW manually for rest calls
     if (requiredOptions.getPassword() != null) {
-      requiredOptions
-          .setPassword(new PasswordConverter("password").convert(requiredOptions.getPassword()));
+      requiredOptions.setPassword(
+          new PasswordConverter("password").convert(requiredOptions.getPassword()));
     }
     final File propFile = getGeoWaveConfigFile(params);
 

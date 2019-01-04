@@ -79,8 +79,14 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
 
         f.setAccessible(true);
         final DefaultArtifact a =
-            new DefaultArtifact("group", "artifact", VersionRange.createFromVersionSpec("version"),
-                null, "type", null, new DefaultArtifactHandler());
+            new DefaultArtifact(
+                "group",
+                "artifact",
+                VersionRange.createFromVersionSpec("version"),
+                null,
+                "type",
+                null,
+                new DefaultArtifactHandler());
         a.setFile(cassandraDir);
         f.set(this, a);
 
@@ -103,8 +109,13 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
         final boolean jmxRemoteEnabled,
         final int jmxPort) throws IOException {
       return super.newServiceCommandLine(
-          cassandraDir, listenAddress, rpcAddress, BigInteger.valueOf(initialToken.longValue()),
-          seeds, false, jmxPort);
+          cassandraDir,
+          listenAddress,
+          rpcAddress,
+          BigInteger.valueOf(initialToken.longValue()),
+          seeds,
+          false,
+          jmxPort);
     }
 
     @Override
@@ -113,7 +124,10 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
         final String mainClass,
         final File cassandraDir) throws IOException {
       ClasspathUtils.setupPathingJarClassPath(
-          jarFile, mainClass, this.getClass(), new File(cassandraDir, "conf").toURI().toURL());
+          jarFile,
+          mainClass,
+          this.getClass(),
+          new File(cassandraDir, "conf").toURI().toURL());
     }
 
     public void start() {
@@ -179,8 +193,14 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
 
         f.setAccessible(true);
         final DefaultArtifact a =
-            new DefaultArtifact("group", "artifact", VersionRange.createFromVersionSpec("version"),
-                null, "type", null, new DefaultArtifactHandler());
+            new DefaultArtifact(
+                "group",
+                "artifact",
+                VersionRange.createFromVersionSpec("version"),
+                null,
+                "type",
+                null,
+                new DefaultArtifactHandler());
         a.setFile(cassandraDir);
         f.set(this, a);
 
@@ -199,7 +219,10 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
         final String mainClass,
         final File cassandraDir) throws IOException {
       ClasspathUtils.setupPathingJarClassPath(
-          jarFile, mainClass, this.getClass(), new File(cassandraDir, "conf").toURI().toURL());
+          jarFile,
+          mainClass,
+          this.getClass(),
+          new File(cassandraDir, "conf").toURI().toURL());
     }
 
     public void start() {

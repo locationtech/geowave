@@ -50,7 +50,8 @@ public class DynamoDBClientPool {
           AmazonDynamoDBAsyncClientBuilder.standard().withClientConfiguration(clientConfig);
       if ((options.getEndpoint() != null) && (options.getEndpoint().length() > 0)) {
         builder.withEndpointConfiguration(
-            new EndpointConfiguration(options.getEndpoint(),
+            new EndpointConfiguration(
+                options.getEndpoint(),
                 options.getRegion() != null ? options.getRegion().getName() : "local"));
       } else {
         builder.withRegion(options.getRegion());

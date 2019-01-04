@@ -29,7 +29,11 @@ public class GeoWaveMetadataWithTimestampCodec extends BaseCodec {
       buf.readBytes(secondaryId);
       buf.readBytes(visibility);
       buf.readBytes(value);
-      return new GeoWaveTimestampMetadata(primaryId, secondaryId, visibility, value,
+      return new GeoWaveTimestampMetadata(
+          primaryId,
+          secondaryId,
+          visibility,
+          value,
           buf.readLong());
     }
   };

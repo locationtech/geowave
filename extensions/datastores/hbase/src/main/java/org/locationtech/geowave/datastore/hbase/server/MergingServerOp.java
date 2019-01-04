@@ -175,12 +175,24 @@ public class MergingServerOp implements HBaseServerOp {
       // in-place (without allocating new byte arrays) and
       // simply replacing the value with the new mergeable
       // value
-      return new KeyValue(firstCell.getRowArray(), firstCell.getRowOffset(),
-          firstCell.getRowLength(), firstCell.getFamilyArray(), firstCell.getFamilyOffset(),
-          firstCell.getFamilyLength(), firstCell.getQualifierArray(),
-          firstCell.getQualifierOffset(), firstCell.getQualifierLength(), firstCell.getTimestamp(),
-          Type.codeToType(firstCell.getTypeByte()), valueBinary, 0, valueBinary.length,
-          firstCell.getTagsArray(), firstCell.getTagsOffset(), firstCell.getTagsLength());
+      return new KeyValue(
+          firstCell.getRowArray(),
+          firstCell.getRowOffset(),
+          firstCell.getRowLength(),
+          firstCell.getFamilyArray(),
+          firstCell.getFamilyOffset(),
+          firstCell.getFamilyLength(),
+          firstCell.getQualifierArray(),
+          firstCell.getQualifierOffset(),
+          firstCell.getQualifierLength(),
+          firstCell.getTimestamp(),
+          Type.codeToType(firstCell.getTypeByte()),
+          valueBinary,
+          0,
+          valueBinary.length,
+          firstCell.getTagsArray(),
+          firstCell.getTagsOffset(),
+          firstCell.getTagsLength());
     }
   }
 
@@ -194,7 +206,8 @@ public class MergingServerOp implements HBaseServerOp {
     columnFamilyIds =
         Sets.newHashSet(
             Iterables.transform(
-                Splitter.on(",").split(columnStr), new Function<String, GeowaveColumnId>() {
+                Splitter.on(",").split(columnStr),
+                new Function<String, GeowaveColumnId>() {
 
                   @Override
                   public GeowaveColumnId apply(final String input) {

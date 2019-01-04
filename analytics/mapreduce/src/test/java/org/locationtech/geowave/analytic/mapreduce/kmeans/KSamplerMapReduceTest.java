@@ -100,13 +100,17 @@ public class KSamplerMapReduceTest {
     reduceDriver = ReduceDriver.newReduceDriver(reducer);
     final DataTypeAdapter<?> adapter =
         AnalyticFeature.createGeometryFeatureAdapter(
-            "altoids", new String[] {}, "http://geowave.test.net", ClusteringUtils.CLUSTERING_CRS);
+            "altoids",
+            new String[] {},
+            "http://geowave.test.net",
+            ClusteringUtils.CLUSTERING_CRS);
 
     final PropertyManagement propManagement = new PropertyManagement();
 
     final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies()
-        .put("memory", new MemoryStoreFactoryFamily());
+    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+        "memory",
+        new MemoryStoreFactoryFamily());
     pluginOptions.selectPlugin("memory");
     final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
@@ -123,12 +127,17 @@ public class KSamplerMapReduceTest {
     propManagement.store(GlobalParameters.Global.BATCH_ID, "b1");
     propManagement.store(CentroidParameters.Centroid.EXTRACTOR_CLASS, TestObjectExtractor.class);
     propManagement.store(
-        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS, TestObjectItemWrapperFactory.class);
+        CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
+        TestObjectItemWrapperFactory.class);
 
-    CentroidManagerGeoWave
-        .setParameters(reduceDriver.getConfiguration(), KSamplerMapReduce.class, propManagement);
-    CentroidManagerGeoWave
-        .setParameters(mapDriver.getConfiguration(), KSamplerMapReduce.class, propManagement);
+    CentroidManagerGeoWave.setParameters(
+        reduceDriver.getConfiguration(),
+        KSamplerMapReduce.class,
+        propManagement);
+    CentroidManagerGeoWave.setParameters(
+        mapDriver.getConfiguration(),
+        KSamplerMapReduce.class,
+        propManagement);
     // TODO it seems the centroid adapter is required to have been written,
     // should this initialization be handled by the runner class rather than
     // externally such as in the test?
@@ -136,57 +145,77 @@ public class KSamplerMapReduceTest {
     final InternalAdapterStore internalAdapterStore =
         store.getDataStoreOptions().createInternalAdapterStore();
     dataStore.addType(
-        adapter, new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
+        adapter,
+        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
 
     mapDriver.getConfiguration().setClass(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(KSamplerMapReduce.class, SampleParameters.Sample.SAMPLE_RANK_FUNCTION),
-        TestSamplingMidRankFunction.class, SamplingRankFunction.class);
+        GeoWaveConfiguratorBase.enumToConfKey(
+            KSamplerMapReduce.class,
+            SampleParameters.Sample.SAMPLE_RANK_FUNCTION),
+        TestSamplingMidRankFunction.class,
+        SamplingRankFunction.class);
     internalAdapterId = internalAdapterStore.getInitialAdapterId(testObjectAdapter.getTypeName());
     other = internalAdapterStore.getInitialAdapterId(adapter.getTypeName());
     JobContextAdapterStore.addDataAdapter(mapDriver.getConfiguration(), testObjectAdapter);
     JobContextAdapterStore.addDataAdapter(mapDriver.getConfiguration(), adapter);
     JobContextInternalAdapterStore.addTypeName(
-        mapDriver.getConfiguration(), testObjectAdapter.getTypeName(), internalAdapterId);
-    JobContextInternalAdapterStore
-        .addTypeName(mapDriver.getConfiguration(), adapter.getTypeName(), other);
+        mapDriver.getConfiguration(),
+        testObjectAdapter.getTypeName(),
+        internalAdapterId);
+    JobContextInternalAdapterStore.addTypeName(
+        mapDriver.getConfiguration(),
+        adapter.getTypeName(),
+        other);
 
     mapDriver.getConfiguration().setInt(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(KSamplerMapReduce.class, SampleParameters.Sample.SAMPLE_SIZE),
+        GeoWaveConfiguratorBase.enumToConfKey(
+            KSamplerMapReduce.class,
+            SampleParameters.Sample.SAMPLE_SIZE),
         2);
 
     reduceDriver.getConfiguration().setInt(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(KSamplerMapReduce.class, SampleParameters.Sample.SAMPLE_SIZE),
+        GeoWaveConfiguratorBase.enumToConfKey(
+            KSamplerMapReduce.class,
+            SampleParameters.Sample.SAMPLE_SIZE),
         2);
 
     JobContextAdapterStore.addDataAdapter(reduceDriver.getConfiguration(), adapter);
     JobContextAdapterStore.addDataAdapter(reduceDriver.getConfiguration(), testObjectAdapter);
-    JobContextInternalAdapterStore
-        .addTypeName(reduceDriver.getConfiguration(), adapter.getTypeName(), other);
     JobContextInternalAdapterStore.addTypeName(
-        reduceDriver.getConfiguration(), testObjectAdapter.getTypeName(), internalAdapterId);
+        reduceDriver.getConfiguration(),
+        adapter.getTypeName(),
+        other);
+    JobContextInternalAdapterStore.addTypeName(
+        reduceDriver.getConfiguration(),
+        testObjectAdapter.getTypeName(),
+        internalAdapterId);
 
     reduceDriver.getConfiguration().set(
         GeoWaveConfiguratorBase.enumToConfKey(
-            KSamplerMapReduce.class, SampleParameters.Sample.DATA_TYPE_NAME),
+            KSamplerMapReduce.class,
+            SampleParameters.Sample.DATA_TYPE_NAME),
         "altoids");
 
     reduceDriver.getConfiguration().setClass(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(KSamplerMapReduce.class, CentroidParameters.Centroid.EXTRACTOR_CLASS),
-        TestObjectExtractor.class, CentroidExtractor.class);
+        GeoWaveConfiguratorBase.enumToConfKey(
+            KSamplerMapReduce.class,
+            CentroidParameters.Centroid.EXTRACTOR_CLASS),
+        TestObjectExtractor.class,
+        CentroidExtractor.class);
 
     mapDriver.getConfiguration().setClass(
         GeoWaveConfiguratorBase.enumToConfKey(
-            KSamplerMapReduce.class, CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS),
-        TestObjectItemWrapperFactory.class, AnalyticItemWrapperFactory.class);
+            KSamplerMapReduce.class,
+            CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS),
+        TestObjectItemWrapperFactory.class,
+        AnalyticItemWrapperFactory.class);
 
     reduceDriver.getConfiguration().setClass(
         GeoWaveConfiguratorBase.enumToConfKey(
-            KSamplerMapReduce.class, CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS),
-        TestObjectItemWrapperFactory.class, AnalyticItemWrapperFactory.class);
+            KSamplerMapReduce.class,
+            CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS),
+        TestObjectItemWrapperFactory.class,
+        AnalyticItemWrapperFactory.class);
 
     serializations();
   }
@@ -205,9 +234,11 @@ public class KSamplerMapReduceTest {
 
     capturedObjects.clear();
     mapDriver.getConfiguration().setClass(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(KSamplerMapReduce.class, SampleParameters.Sample.SAMPLE_RANK_FUNCTION),
-        TestSamplingMidRankFunction.class, SamplingRankFunction.class);
+        GeoWaveConfiguratorBase.enumToConfKey(
+            KSamplerMapReduce.class,
+            SampleParameters.Sample.SAMPLE_RANK_FUNCTION),
+        TestSamplingMidRankFunction.class,
+        SamplingRankFunction.class);
 
     final GeoWaveInputKey inputKey = new GeoWaveInputKey();
     inputKey.setInternalAdapterId(internalAdapterId);
@@ -245,9 +276,11 @@ public class KSamplerMapReduceTest {
   public void testMapperWithZeroRank() throws IOException {
     capturedObjects.clear();
     mapDriver.getConfiguration().setClass(
-        GeoWaveConfiguratorBase
-            .enumToConfKey(KSamplerMapReduce.class, SampleParameters.Sample.SAMPLE_RANK_FUNCTION),
-        TestSamplingNoRankFunction.class, SamplingRankFunction.class);
+        GeoWaveConfiguratorBase.enumToConfKey(
+            KSamplerMapReduce.class,
+            SampleParameters.Sample.SAMPLE_RANK_FUNCTION),
+        TestSamplingNoRankFunction.class,
+        SamplingRankFunction.class);
 
     final GeoWaveInputKey inputKey = new GeoWaveInputKey();
     inputKey.setInternalAdapterId(internalAdapterId);

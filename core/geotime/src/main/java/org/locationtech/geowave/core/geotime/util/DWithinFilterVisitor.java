@@ -39,10 +39,12 @@ public class DWithinFilterVisitor extends DuplicatingFilterVisitor {
             GeometryUtils.buffer(
                 GeometryUtils.getDefaultCRS(),
                 filter.getExpression2().evaluate(extraData, Geometry.class),
-                filter.getDistanceUnits(), filter.getDistance());
+                filter.getDistanceUnits(),
+                filter.getDistance());
 
         newWithImpl =
-            new IntersectsImpl(filter.getExpression1(),
+            new IntersectsImpl(
+                filter.getExpression1(),
                 new LiteralExpressionImpl(geometryAndDegrees.getLeft()));
 
       } else if ((filter.getExpression2() instanceof PropertyName)
@@ -51,9 +53,11 @@ public class DWithinFilterVisitor extends DuplicatingFilterVisitor {
             GeometryUtils.buffer(
                 GeometryUtils.getDefaultCRS(),
                 filter.getExpression1().evaluate(extraData, Geometry.class),
-                filter.getDistanceUnits(), filter.getDistance());
+                filter.getDistanceUnits(),
+                filter.getDistance());
         newWithImpl =
-            new IntersectsImpl(new LiteralExpressionImpl(geometryAndDegrees.getLeft()),
+            new IntersectsImpl(
+                new LiteralExpressionImpl(geometryAndDegrees.getLeft()),
                 filter.getExpression2());
       }
     } catch (final TransformException e) {

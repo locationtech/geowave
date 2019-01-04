@@ -94,7 +94,8 @@ public class SimpleFeatureGenerator {
           final Geometry geom = getGeometry(osmunion, osmProvider, fd);
           if (geom == null) {
             LOGGER.error(
-                "Unable to generate geometry for {} of type {}", osmunion.Id,
+                "Unable to generate geometry for {} of type {}",
+                osmunion.Id,
                 osmunion.OsmType.toString());
             return null;
           }
@@ -122,8 +123,8 @@ public class SimpleFeatureGenerator {
       final FeatureDefinition fd) {
     switch (osm.OsmType) {
       case NODE: {
-        return GeometryUtils.GEOMETRY_FACTORY
-            .createPoint(new Coordinate(osm.Longitude, osm.Lattitude));
+        return GeometryUtils.GEOMETRY_FACTORY.createPoint(
+            new Coordinate(osm.Longitude, osm.Lattitude));
       }
       case RELATION: {
         return provider.processRelation(osm, fd);
@@ -220,8 +221,9 @@ public class SimpleFeatureGenerator {
           } catch (final IOException e) {
             LOGGER.error("Error deserializing Avro encoded Relation member set", e);
           }
-        } else if (Schema
-            .startsWith(CQ, ColumnQualifier.REFERENCE_MEMID_PREFIX.getBytes(Constants.CHARSET))) {
+        } else if (Schema.startsWith(
+            CQ,
+            ColumnQualifier.REFERENCE_MEMID_PREFIX.getBytes(Constants.CHARSET))) {
           final String s = new String(CQ.toArray(), Constants.CHARSET);
           final Integer id = Integer.valueOf(s.split("_")[1]);
           if (relationSets == null) {
@@ -231,8 +233,9 @@ public class SimpleFeatureGenerator {
             relationSets.put(id, new RelationSet());
           }
           relationSets.get(id).memId = longReader.readField(item.getValue().get());
-        } else if (Schema
-            .startsWith(CQ, ColumnQualifier.REFERENCE_ROLEID_PREFIX.getBytes(Constants.CHARSET))) {
+        } else if (Schema.startsWith(
+            CQ,
+            ColumnQualifier.REFERENCE_ROLEID_PREFIX.getBytes(Constants.CHARSET))) {
           final String s = new String(CQ.toArray(), Constants.CHARSET);
           final Integer id = Integer.valueOf(s.split("_")[1]);
           if (relationSets == null) {
@@ -242,8 +245,9 @@ public class SimpleFeatureGenerator {
             relationSets.put(id, new RelationSet());
           }
           relationSets.get(id).roleId = stringReader.readField(item.getValue().get());
-        } else if (Schema
-            .startsWith(CQ, ColumnQualifier.REFERENCE_TYPE_PREFIX.getBytes(Constants.CHARSET))) {
+        } else if (Schema.startsWith(
+            CQ,
+            ColumnQualifier.REFERENCE_TYPE_PREFIX.getBytes(Constants.CHARSET))) {
           final String s = new String(CQ.toArray(), Constants.CHARSET);
           final Integer id = Integer.valueOf(s.split("_")[1]);
           if (relationSets == null) {

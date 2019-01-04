@@ -42,7 +42,8 @@ public class GeometryCentroidDistanceFn implements DistanceFn<Geometry> {
   @Override
   public double measure(final Geometry x, final Geometry y) {
 
-    return coordinateDistanceFunction
-        .measure(x.getCentroid().getCoordinate(), y.getCentroid().getCoordinate());
+    return coordinateDistanceFunction.measure(
+        x.getCentroid().getCoordinate(),
+        y.getCentroid().getCoordinate());
   }
 }

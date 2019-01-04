@@ -31,8 +31,9 @@ import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 public class VectorIngestRunnerTest {
   @BeforeClass
   public static void setup() throws IOException {
-    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies()
-        .put("memory", new MemoryStoreFactoryFamily());
+    GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+        "memory",
+        new MemoryStoreFactoryFamily());
   }
 
   @Test
@@ -61,17 +62,20 @@ public class VectorIngestRunnerTest {
     analyzeOptions.setLocation("T30TXN");
     analyzeOptions.setStartDate(startDate);
     analyzeOptions.setEndDate(endDate);
-    analyzeOptions
-        .setCqlFilter("BBOX(shape,-1.8274,42.3253,-1.6256,42.4735) AND (band='B4' OR band='B8')");
+    analyzeOptions.setCqlFilter(
+        "BBOX(shape,-1.8274,42.3253,-1.6256,42.4735) AND (band='B4' OR band='B8')");
 
     final VectorIngestRunner runner =
-        new VectorIngestRunner(analyzeOptions,
+        new VectorIngestRunner(
+            analyzeOptions,
             Arrays.asList("memorystore", "spatialindex,spatempindex"));
 
     final ManualOperationParams params = new ManualOperationParams();
     params.getContext().put(
-        ConfigOptions.PROPERTIES_FILE_CONTEXT, new File(VectorIngestRunnerTest.class
-            .getClassLoader().getResource("geowave-config.properties").toURI()));
+        ConfigOptions.PROPERTIES_FILE_CONTEXT,
+        new File(
+            VectorIngestRunnerTest.class.getClassLoader().getResource(
+                "geowave-config.properties").toURI()));
 
     runner.runInternal(params);
 

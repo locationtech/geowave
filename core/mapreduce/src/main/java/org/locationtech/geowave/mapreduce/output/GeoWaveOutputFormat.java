@@ -91,7 +91,10 @@ public class GeoWaveOutputFormat extends OutputFormat<GeoWaveOutputKey<Object>, 
       final IndexStore jobContextIndexStore =
           new JobContextIndexStore(context, persistentIndexStore);
       final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
-      return new GeoWaveRecordWriter(context, dataStore, jobContextIndexStore,
+      return new GeoWaveRecordWriter(
+          context,
+          dataStore,
+          jobContextIndexStore,
           jobContextAdapterStore);
     } catch (final Exception e) {
       throw new IOException(e);

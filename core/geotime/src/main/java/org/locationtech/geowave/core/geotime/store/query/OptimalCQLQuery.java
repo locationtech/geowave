@@ -128,7 +128,8 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
       // there is only space and time
       final ExtractGeometryFilterVisitorResult geometryAndCompareOp =
           ExtractGeometryFilterVisitor.getConstraints(
-              cqlFilter, adapter.getFeatureType().getCoordinateReferenceSystem(),
+              cqlFilter,
+              adapter.getFeatureType().getCoordinateReferenceSystem(),
               adapter.getFeatureType().getGeometryDescriptor().getLocalName());
       final TemporalConstraintsSet timeConstraintSet =
           new ExtractTimeFilterVisitor(adapter.getTimeDescriptors()).getConstraints(cqlFilter);
@@ -146,7 +147,8 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
           // field
           final TemporalConstraints temporalConstraints =
               TimeUtils.getTemporalConstraintsForDescriptors(
-                  adapter.getTimeDescriptors(), timeConstraintSet);
+                  adapter.getTimeDescriptors(),
+                  timeConstraintSet);
           // convert to constraints
           final Constraints timeConstraints =
               SpatialTemporalQuery.createConstraints(temporalConstraints, false);
@@ -170,14 +172,17 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
         // we have to assume the geometry was transformed to the feature
         // type's CRS, but SpatialQuery assumes the default CRS if not
         // specified, so specify a CRS if necessary
-        if (GeometryUtils.getDefaultCRS()
-            .equals(adapter.getFeatureType().getCoordinateReferenceSystem())) {
+        if (GeometryUtils.getDefaultCRS().equals(
+            adapter.getFeatureType().getCoordinateReferenceSystem())) {
           baseQuery = new SpatialQuery(constraints, geometry, extractedCompareOp);
         } else {
           baseQuery =
-              new SpatialQuery(constraints, geometry,
+              new SpatialQuery(
+                  constraints,
+                  geometry,
                   GeometryUtils.getCrsCode(adapter.getFeatureType().getCoordinateReferenceSystem()),
-                  extractedCompareOp, BasicQueryCompareOperation.INTERSECTS);
+                  extractedCompareOp,
+                  BasicQueryCompareOperation.INTERSECTS);
         }
 
         // ExtractGeometryFilterVisitor sets predicate to NULL when CQL
@@ -199,7 +204,8 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
         // field
         final TemporalConstraints temporalConstraints =
             TimeUtils.getTemporalConstraintsForDescriptors(
-                adapter.getTimeDescriptors(), timeConstraintSet);
+                adapter.getTimeDescriptors(),
+                timeConstraintSet);
         baseQuery = new TemporalQuery(temporalConstraints);
       }
     }
@@ -231,7 +237,9 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
     if ((adapter instanceof InternalDataAdapter)
         && (((InternalDataAdapter) adapter).getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
       return createOptimalQuery(
-          filter, (GeotoolsFeatureDataAdapter) ((InternalDataAdapter) adapter).getAdapter(), index);
+          filter,
+          (GeotoolsFeatureDataAdapter) ((InternalDataAdapter) adapter).getAdapter(),
+          index);
     }
     LOGGER.error("Adapter is not a geotools feature adapter.  Cannot apply CQL filter.");
     return null;

@@ -163,15 +163,23 @@ public class KDEReducer
         context.write(
             new GeoWaveOutputKey(coverageName, indexList.toArray(new String[0])),
             RasterUtils.createCoverageTypeDouble(
-                coverageName, tileInfo.tileWestLon, tileInfo.tileEastLon, tileInfo.tileSouthLat,
-                tileInfo.tileNorthLat, MINS_PER_BAND, MAXES_PER_BAND, NAME_PER_BAND, raster,
+                coverageName,
+                tileInfo.tileWestLon,
+                tileInfo.tileEastLon,
+                tileInfo.tileSouthLat,
+                tileInfo.tileNorthLat,
+                MINS_PER_BAND,
+                MAXES_PER_BAND,
+                NAME_PER_BAND,
+                raster,
                 crsCode));
         currentKey++;
       }
     }
   }
 
-  @SuppressFBWarnings(value = "INT_BAD_REM_BY_1",
+  @SuppressFBWarnings(
+      value = "INT_BAD_REM_BY_1",
       justification = "The calculation is appropriate if we ever want to vary to tile size.")
   private TileInfo fromCellIndexToTileInfo(final long index) {
     final int xPost = (int) (index / numYPosts);
@@ -190,7 +198,12 @@ public class KDEReducer
     final double tileSouthLat = ((yTile * crsHeight) / numYTiles) + yMin;
     final double tileEastLon = tileWestLon + (crsWidth / numXTiles);
     final double tileNorthLat = tileSouthLat + (crsHeight / numYTiles);
-    return new TileInfo(tileWestLon, tileEastLon, tileSouthLat, tileNorthLat, x,
+    return new TileInfo(
+        tileWestLon,
+        tileEastLon,
+        tileSouthLat,
+        tileNorthLat,
+        x,
         KDEJobRunner.TILE_SIZE - y - 1); // remember java rasters go
     // from 0 at the
     // top
@@ -208,9 +221,11 @@ public class KDEReducer
     coverageName = context.getConfiguration().get(KDEJobRunner.COVERAGE_NAME_KEY, "");
     valueRangePerDimension =
         new ValueRange[] {
-            new ValueRange(context.getConfiguration().getDouble(KDEJobRunner.X_MIN_KEY, -180),
+            new ValueRange(
+                context.getConfiguration().getDouble(KDEJobRunner.X_MIN_KEY, -180),
                 context.getConfiguration().getDouble(KDEJobRunner.X_MAX_KEY, 180)),
-            new ValueRange(context.getConfiguration().getDouble(KDEJobRunner.Y_MIN_KEY, -90),
+            new ValueRange(
+                context.getConfiguration().getDouble(KDEJobRunner.Y_MIN_KEY, -90),
                 context.getConfiguration().getDouble(KDEJobRunner.Y_MAX_KEY, 90))};
     crsCode = context.getConfiguration().get(KDEJobRunner.OUTPUT_CRSCODE_KEY);
 
@@ -229,8 +244,8 @@ public class KDEReducer
       }
 
     } else {
-      indexList
-          .add(new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName());
+      indexList.add(
+          new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName());
     }
   }
 }

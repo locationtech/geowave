@@ -40,8 +40,10 @@ public class SinglePartitionInsertionIds implements Persistable {
       final SinglePartitionInsertionIds insertionId1,
       final SinglePartitionInsertionIds insertionId2) {
     partitionKey =
-        new ByteArray(ByteArrayUtils.combineArrays(
-            insertionId1.partitionKey.getBytes(), insertionId2.partitionKey.getBytes()));
+        new ByteArray(
+            ByteArrayUtils.combineArrays(
+                insertionId1.partitionKey.getBytes(),
+                insertionId2.partitionKey.getBytes()));
     if ((insertionId1.sortKeys == null) || insertionId1.sortKeys.isEmpty()) {
       sortKeys = insertionId2.sortKeys;
     } else if ((insertionId2.sortKeys == null) || insertionId2.sortKeys.isEmpty()) {

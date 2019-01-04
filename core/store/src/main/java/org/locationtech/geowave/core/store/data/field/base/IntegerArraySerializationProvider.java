@@ -52,8 +52,9 @@ public class IntegerArraySerializationProvider implements FieldSerializationProv
     @Override
     public Integer[] readField(byte[] fieldData, byte serializationVersion) {
       if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
-        return new ArrayReader<Integer>(new IntegerReader())
-            .readField(fieldData, serializationVersion);
+        return new ArrayReader<Integer>(new IntegerReader()).readField(
+            fieldData,
+            serializationVersion);
       } else {
         return readField(fieldData);
       }
