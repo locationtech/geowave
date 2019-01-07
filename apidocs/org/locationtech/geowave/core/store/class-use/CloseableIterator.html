@@ -544,13 +544,13 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html" title="type parameter in AvroPluginBase">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AvroPluginBase.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</code>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroPluginBase.html" title="type parameter in GeoWaveAvroPluginBase">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveAvroPluginBase.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroPluginBase.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</code>
 <div class="block">Converts the supported file into an Avro encoded Java object.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractStageWholeFileToAvro.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;f)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -568,21 +568,21 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.InternalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper.InternalIngestWithMapper">T</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">AbstractLocalIngestWithMapper.InternalIngestWithMapper.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.InternalIngestWithMapper.html#toGeoWaveData-org.locationtech.geowave.core.ingest.avro.AvroWholeFile-java.lang.String:A-java.lang.String-">toGeoWaveData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&nbsp;input,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">O</a>&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestWithReducer.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html#toGeoWaveData-K-java.lang.String:A-java.lang.String-java.lang.Iterable-">toGeoWaveData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">K</a>&nbsp;key,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="type parameter in IngestWithReducer">V</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper">T</a>&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractLocalIngestWithMapper.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html#toGeoWaveData-java.net.URL-java.lang.String:A-java.lang.String-">toGeoWaveData</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.InternalIngestWithMapper.html" title="type parameter in AbstractLocalIngestWithMapper.InternalIngestWithMapper">T</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractLocalIngestWithMapper.InternalIngestWithMapper.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.InternalIngestWithMapper.html#toGeoWaveData-org.locationtech.geowave.core.ingest.avro.WholeFile-java.lang.String:A-java.lang.String-">toGeoWaveData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&nbsp;input,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
@@ -621,9 +621,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIteratorWrapper.html" title="class in org.locationtech.geowave.core.store">CloseableIteratorWrapper</a>&lt;E&gt;</span></code>
-<div class="block">This is a simple wrapper around an iterator and a closeable to ensure that
- the caller can close the closeable when it is finished being used by the
- iterator.</div>
+<div class="block">This is a simple wrapper around an iterator and a closeable to ensure that the caller can close
+ the closeable when it is finished being used by the iterator.</div>
 </td>
 </tr>
 </tbody>
@@ -675,8 +674,7 @@
 <td class="colLast"><span class="typeNameLabel">DataStatisticsStore.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></span>(short&nbsp;adapterId,
                  <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
- unique statistic)</div>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a unique statistic)</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -692,8 +690,7 @@
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
                  <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
- unique statistic)</div>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a unique statistic)</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -708,8 +705,7 @@
 <td class="colLast"><span class="typeNameLabel">DataStatisticsStore.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
                  <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Get all data statistics from the store by statistics type and extended ID
- prefix</div>
+<div class="block">Get all data statistics from the store by statistics type and extended ID prefix</div>
 </td>
 </tr>
 </tbody>
@@ -885,8 +881,8 @@
 <td class="colLast"><span class="typeNameLabel">IngestPluginBase.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html#toGeoWaveData-I-java.lang.String:A-java.lang.String-">toGeoWaveData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="type parameter in IngestPluginBase">I</a>&nbsp;input,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>
-<div class="block">Convert from an expected input format to a data format that can be
- directly ingested into GeoWave</div>
+<div class="block">Convert from an expected input format to a data format that can be directly ingested into
+ GeoWave</div>
 </td>
 </tr>
 </tbody>
@@ -1067,8 +1063,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexEntryIteratorWrapper.html" title="class in org.locationtech.geowave.datastore.accumulo.index.secondary">AccumuloSecondaryIndexEntryIteratorWrapper</a>&lt;T&gt;</span></code>
-<div class="block">To be used when dealing with either a 'FULL' or 'PARTIAL' secondary index
- type</div>
+<div class="block">To be used when dealing with either a 'FULL' or 'PARTIAL' secondary index type</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -1324,11 +1319,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AvroIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/avro/AvroIngestPlugin.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveAvroIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/avro/GeoWaveAvroIngestPlugin.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AvroIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/avro/AvroIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection</a>&nbsp;featureCollection,
+<td class="colLast"><span class="typeNameLabel">GeoWaveAvroIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/avro/GeoWaveAvroIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection</a>&nbsp;featureCollection,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
@@ -1347,12 +1342,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GDELTIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestPlugin.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GDELTIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.core.ingest.avro.WholeFile-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&nbsp;hfile,
+<td class="colLast"><span class="typeNameLabel">GDELTIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.core.ingest.avro.AvroWholeFile-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&nbsp;hfile,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
@@ -1371,12 +1366,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GeoLifeIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geolife/GeoLifeIngestPlugin.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoLifeIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geolife/GeoLifeIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.core.ingest.avro.WholeFile-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&nbsp;hfile,
+<td class="colLast"><span class="typeNameLabel">GeoLifeIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geolife/GeoLifeIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.core.ingest.avro.AvroWholeFile-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&nbsp;hfile,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
@@ -1417,9 +1412,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geotools/vector/SimpleFeatureGeoWaveWrapper.html" title="class in org.locationtech.geowave.format.geotools.vector">SimpleFeatureGeoWaveWrapper</a></span></code>
-<div class="block">This is a wrapper for a GeoTools SimpleFeatureCollection as a convenience to
- ingest it into GeoWave by translating a list of SimpleFeatureCollection to a
- closeable iterator of GeoWaveData</div>
+<div class="block">This is a wrapper for a GeoTools SimpleFeatureCollection as a convenience to ingest it into
+ GeoWave by translating a list of SimpleFeatureCollection to a closeable iterator of GeoWaveData</div>
 </td>
 </tr>
 </tbody>
@@ -1467,12 +1461,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GpxIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GpxIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.format.gpx.GpxTrack-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&nbsp;gpxTrack,
+<td class="colLast"><span class="typeNameLabel">GpxIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.format.gpx.AvroGpxTrack-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&nbsp;gpxTrack,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
@@ -1492,26 +1486,26 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Stanag4676IngestPlugin.IngestWithReducerImpl.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestPlugin.IngestWithReducerImpl.html#toGeoWaveData-org.locationtech.geowave.core.ingest.avro.AvroWholeFile-java.lang.String:A-java.lang.String-">toGeoWaveData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&nbsp;input,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Stanag4676IngestPlugin.IngestWithReducerImpl.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestPlugin.IngestWithReducerImpl.html#toGeoWaveData-org.apache.hadoop.io.Text-java.lang.String:A-java.lang.String-java.lang.Iterable-">toGeoWaveData</a></span>(org.apache.hadoop.io.Text&nbsp;key,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676EventWritable.html" title="class in org.locationtech.geowave.format.stanag4676">Stanag4676EventWritable</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Stanag4676IngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestPlugin.html#toGeoWaveData-java.net.URL-java.lang.String:A-java.lang.String-">toGeoWaveData</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">Stanag4676IngestPlugin.IngestWithReducerImpl.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestPlugin.IngestWithReducerImpl.html#toGeoWaveData-org.locationtech.geowave.core.ingest.avro.WholeFile-java.lang.String:A-java.lang.String-">toGeoWaveData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&nbsp;input,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/KeyValueData.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">KeyValueData</a>&lt;org.apache.hadoop.io.Text,<a href="../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676EventWritable.html" title="class in org.locationtech.geowave.format.stanag4676">Stanag4676EventWritable</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">Stanag4676IngestPlugin.IngestWithReducerImpl.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestPlugin.IngestWithReducerImpl.html#toIntermediateMapReduceData-org.locationtech.geowave.core.ingest.avro.WholeFile-">toIntermediateMapReduceData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&nbsp;input)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">Stanag4676IngestPlugin.IngestWithReducerImpl.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestPlugin.IngestWithReducerImpl.html#toIntermediateMapReduceData-org.locationtech.geowave.core.ingest.avro.AvroWholeFile-">toIntermediateMapReduceData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1528,12 +1522,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/format/tdrive/TdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">TdrivePoint</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/format/tdrive/AvroTdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">AvroTdrivePoint</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">TdriveIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestPlugin.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">TdriveIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.format.tdrive.TdrivePoint-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/format/tdrive/TdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">TdrivePoint</a>&nbsp;tdrivePoint,
+<td class="colLast"><span class="typeNameLabel">TdriveIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.format.tdrive.AvroTdrivePoint-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/format/tdrive/AvroTdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">AvroTdrivePoint</a>&nbsp;tdrivePoint,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
@@ -1552,12 +1546,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">TwitterIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/twitter/TwitterIngestPlugin.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">TwitterIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/twitter/TwitterIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.core.ingest.avro.WholeFile-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&nbsp;hfile,
+<td class="colLast"><span class="typeNameLabel">TwitterIngestPlugin.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/twitter/TwitterIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.core.ingest.avro.AvroWholeFile-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&nbsp;hfile,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
@@ -1631,8 +1625,7 @@
 <td class="colFirst"><code>protected static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GeoWaveRecordReader.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#concatenateWithCallback-java.util.Iterator-org.locationtech.geowave.mapreduce.splits.GeoWaveRecordReader.NextRangeCallback-">concatenateWithCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RangeLocationPair.html" title="class in org.locationtech.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;&gt;&gt;&nbsp;inputs,
                        <a href="../../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in org.locationtech.geowave.mapreduce.splits">GeoWaveRecordReader.NextRangeCallback</a>&nbsp;nextRangeCallback)</code>
-<div class="block">Mostly guava's concatenate method, but there is a need for a callback
- between iterators</div>
+<div class="block">Mostly guava's concatenate method, but there is a need for a callback between iterators</div>
 </td>
 </tr>
 </tbody>

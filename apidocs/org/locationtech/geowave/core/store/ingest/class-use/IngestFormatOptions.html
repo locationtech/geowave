@@ -189,7 +189,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="type parameter in AbstractSimpleFeatureIngestFormat">I</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractSimpleFeatureIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#createAvroFormatPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createAvroFormatPlugin</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -265,27 +265,25 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">I</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">O</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">I</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">O</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestFormatPluginProviderSpi.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createAvroFormatPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createAvroFormatPlugin</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>
-<div class="block">This plugin will be used by the ingestion framework to stage intermediate
- data from a local filesystem (for example to HDFS for map reduce ingest
- or to kafka for kafka ingest).</div>
+<div class="block">This plugin will be used by the ingestion framework to stage intermediate data from a local
+ filesystem (for example to HDFS for map reduce ingest or to kafka for kafka ingest).</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">I</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">O</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestFormatPluginProviderSpi.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>
-<div class="block">This plugin will be used by the ingestion framework to read data from
- HDFS in the form of the intermediate data format, and translate the
- intermediate data into the data entries that will be written in GeoWave.</div>
+<div class="block">This plugin will be used by the ingestion framework to read data from HDFS in the form of the
+ intermediate data format, and translate the intermediate data into the data entries that will
+ be written in GeoWave.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">O</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestFormatPluginProviderSpi.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createLocalFileIngestPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createLocalFileIngestPlugin</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>
-<div class="block">This plugin will be used by the ingestion framework to read data from a
- local file system, and translate supported files into the data entries
- that will be written directly in GeoWave.</div>
+<div class="block">This plugin will be used by the ingestion framework to read data from a local file system, and
+ translate supported files into the data entries that will be written directly in GeoWave.</div>
 </td>
 </tr>
 </tbody>
@@ -375,7 +373,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AvroIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/avro/AvroIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveAvroIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/avro/GeoWaveAvroIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -392,7 +390,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GDELTIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -410,7 +408,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GeoLifeIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/geolife/GeoLifeIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -454,7 +452,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GeoToolsRasterDataStoreIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestFormat.html#createAvroFormatPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createAvroFormatPlugin</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -506,7 +504,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GeoToolsVectorDataStoreIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html#createAvroFormatPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createAvroFormatPlugin</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -532,7 +530,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GpxIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/gpx/GpxIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -563,11 +561,11 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Stanag4676IngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createAvroFormatPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createAvroFormatPlugin</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Stanag4676IngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestFormat.html#createIngestFromHdfsPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createIngestFromHdfsPlugin</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -589,7 +587,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/format/tdrive/TdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">TdrivePoint</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/format/tdrive/AvroTdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">AvroTdrivePoint</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">TdriveIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -607,7 +605,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">TwitterIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/twitter/TwitterIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>

@@ -116,11 +116,10 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PrefixedJCommander</span>
 extends com.beust.jcommander.JCommander</pre>
-<div class="block">This special JCommander instance does two things: 1. It initializes special
- Prefixed argument objects (via addPrefixedObject) and adds them to the
- JCommanders object list before parsing 2. It overrides the sub commands that
- are added to make them instances of PrefixedJCommander 3. It lazily
- initializes child commands using an Initializer interface.</div>
+<div class="block">This special JCommander instance does two things: 1. It initializes special Prefixed argument
+ objects (via addPrefixedObject) and adds them to the JCommanders object list before parsing 2. It
+ overrides the sub commands that are added to make them instances of PrefixedJCommander 3. It
+ lazily initializes child commands using an Initializer interface.</div>
 </li>
 </ul>
 </div>
@@ -221,8 +220,8 @@ extends com.beust.jcommander.JCommander</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#parseWithoutValidation-java.lang.String...-">parseWithoutValidation</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;args)</code>
-<div class="block">We replace the parseWithoutValidation() command with the setValidate
- option that we apply to all children.</div>
+<div class="block">We replace the parseWithoutValidation() command with the setValidate option that we apply to
+ all children.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -328,9 +327,8 @@ extends com.beust.jcommander.JCommander</pre>
 <li class="blockList">
 <h4>parseWithoutValidation</h4>
 <pre>public&nbsp;void&nbsp;parseWithoutValidation(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;args)</pre>
-<div class="block">We replace the parseWithoutValidation() command with the setValidate
- option that we apply to all children. This is because of bug #267 in
- JCommander.</div>
+<div class="block">We replace the parseWithoutValidation() command with the setValidate option that we apply to
+ all children. This is because of bug #267 in JCommander.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>parseWithoutValidation</code>&nbsp;in class&nbsp;<code>com.beust.jcommander.JCommander</code></dd>

@@ -80,7 +80,7 @@ org.locationtech.geowave.cli.osm.osmfeature.types.attributes
 org.locationtech.geowave.cli.osm.osmfeature.types.features
 org.locationtech.geowave.cli.osm.parser
 org.locationtech.geowave.cli.osm.types
-org.locationtech.geowave.cli.osm.types.generated
+org.locationtech.geowave.cli.osm.types.avro
 org.locationtech.geowave.core.cli
 org.locationtech.geowave.core.cli.annotations
 org.locationtech.geowave.core.cli.api

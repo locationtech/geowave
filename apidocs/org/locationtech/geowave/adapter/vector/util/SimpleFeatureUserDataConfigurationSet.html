@@ -116,8 +116,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">SimpleFeatureUserDataConfigurationSet</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
-<div class="block">Represents a set of configurations maintained within the user data of a
- simple feature type and is tracked by the type name.</div>
+<div class="block">Represents a set of configurations maintained within the user data of a simple feature type and
+ is tracked by the type name.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../../serialized-form.html#org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet">Serialized Form</a></dd>
@@ -165,17 +165,15 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/SimpleFeatureUserDataConfigurationSet.html#SimpleFeatureUserDataConfigurationSet-org.opengis.feature.simple.SimpleFeatureType-">SimpleFeatureUserDataConfigurationSet</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
-<div class="block">Constructor<br>
- Creates a new SimpleFeatureUserDataConfigurationSet configured using the
- passed in SimpleFeature type.</div>
+<div class="block">Constructor<br> Creates a new SimpleFeatureUserDataConfigurationSet configured using the passed
+ in SimpleFeature type.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/SimpleFeatureUserDataConfigurationSet.html#SimpleFeatureUserDataConfigurationSet-org.opengis.feature.simple.SimpleFeatureType-java.util.List-">SimpleFeatureUserDataConfigurationSet</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/util/SimpleFeatureUserDataConfiguration.html" title="interface in org.locationtech.geowave.core.geotime.util">SimpleFeatureUserDataConfiguration</a>&gt;&nbsp;configurations)</code>
-<div class="block">Constructor<br>
- Creates a new SimpleFeatureUserDataConfigurationSet configured using the
- passed in SimpleFeature type and adding the passed in configurations.</div>
+<div class="block">Constructor<br> Creates a new SimpleFeatureUserDataConfigurationSet configured using the passed
+ in SimpleFeature type and adding the passed in configurations.</div>
 </td>
 </tr>
 </table>
@@ -197,15 +195,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/SimpleFeatureUserDataConfigurationSet.html#addConfigurations-java.lang.String-org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration-">addConfigurations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                  <a href="../../../../../../org/locationtech/geowave/core/geotime/util/SimpleFeatureUserDataConfiguration.html" title="interface in org.locationtech.geowave.core.geotime.util">SimpleFeatureUserDataConfiguration</a>&nbsp;config)</code>
-<div class="block">Add the passed in configuration to the list of configurations for the
- specified type name</div>
+<div class="block">Add the passed in configuration to the list of configurations for the specified type name</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/SimpleFeatureUserDataConfigurationSet.html#configureFromType-org.opengis.feature.simple.SimpleFeatureType-">configureFromType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
-<div class="block">Updates the entire list of SimpleFeatureUserDataConfiguration(s) with
- information from the passed in SF type</div>
+<div class="block">Updates the entire list of SimpleFeatureUserDataConfiguration(s) with information from the
+ passed in SF type</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -228,22 +225,20 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/util/SimpleFeatureUserDataConfiguration.html" title="interface in org.locationtech.geowave.core.geotime.util">SimpleFeatureUserDataConfiguration</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/SimpleFeatureUserDataConfigurationSet.html#getConfigurationsForType-java.lang.String-">getConfigurationsForType</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
-<div class="block">Gets a List of all the SimpleFeatureUserDataConfigurations for the SFT
- specified by the 'typeName' string</div>
+<div class="block">Gets a List of all the SimpleFeatureUserDataConfigurations for the SFT specified by the
+ 'typeName' string</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/SimpleFeatureUserDataConfigurationSet.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/util/SimpleFeatureUserDataConfigurationSet.html#updateType-org.opengis.feature.simple.SimpleFeatureType-">updateType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
-<div class="block">Updates the SFT with the entire list of
- SimpleFeatureUserDataConfiguration(s)</div>
+<div class="block">Updates the SFT with the entire list of SimpleFeatureUserDataConfiguration(s)</div>
 </td>
 </tr>
 </table>
@@ -306,9 +301,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <li class="blockList">
 <h4>SimpleFeatureUserDataConfigurationSet</h4>
 <pre>public&nbsp;SimpleFeatureUserDataConfigurationSet(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</pre>
-<div class="block">Constructor<br>
- Creates a new SimpleFeatureUserDataConfigurationSet configured using the
- passed in SimpleFeature type. Will be accessed using the type name.</div>
+<div class="block">Constructor<br> Creates a new SimpleFeatureUserDataConfigurationSet configured using the passed
+ in SimpleFeature type. Will be accessed using the type name.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>type</code> - - SFT to be configured</dd>
@@ -323,10 +317,9 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <h4>SimpleFeatureUserDataConfigurationSet</h4>
 <pre>public&nbsp;SimpleFeatureUserDataConfigurationSet(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/util/SimpleFeatureUserDataConfiguration.html" title="interface in org.locationtech.geowave.core.geotime.util">SimpleFeatureUserDataConfiguration</a>&gt;&nbsp;configurations)</pre>
-<div class="block">Constructor<br>
- Creates a new SimpleFeatureUserDataConfigurationSet configured using the
- passed in SimpleFeature type and adding the passed in configurations.
- Will be accessed using the type name.</div>
+<div class="block">Constructor<br> Creates a new SimpleFeatureUserDataConfigurationSet configured using the passed
+ in SimpleFeature type and adding the passed in configurations. Will be accessed using the type
+ name.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>type</code> - </dd>
@@ -362,8 +355,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <li class="blockList">
 <h4>getConfigurationsForType</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/util/SimpleFeatureUserDataConfiguration.html" title="interface in org.locationtech.geowave.core.geotime.util">SimpleFeatureUserDataConfiguration</a>&gt;&nbsp;getConfigurationsForType(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
-<div class="block">Gets a List of all the SimpleFeatureUserDataConfigurations for the SFT
- specified by the 'typeName' string</div>
+<div class="block">Gets a List of all the SimpleFeatureUserDataConfigurations for the SFT specified by the
+ 'typeName' string</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeName</code> - - SFT configuration desired</dd>
@@ -380,8 +373,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <h4>addConfigurations</h4>
 <pre>public&nbsp;void&nbsp;addConfigurations(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                               <a href="../../../../../../org/locationtech/geowave/core/geotime/util/SimpleFeatureUserDataConfiguration.html" title="interface in org.locationtech.geowave.core.geotime.util">SimpleFeatureUserDataConfiguration</a>&nbsp;config)</pre>
-<div class="block">Add the passed in configuration to the list of configurations for the
- specified type name</div>
+<div class="block">Add the passed in configuration to the list of configurations for the specified type name</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeName</code> - - name of type which will get an added configuration</dd>
@@ -396,8 +388,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <li class="blockList">
 <h4>configureFromType</h4>
 <pre>public&nbsp;void&nbsp;configureFromType(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</pre>
-<div class="block">Updates the entire list of SimpleFeatureUserDataConfiguration(s) with
- information from the passed in SF type</div>
+<div class="block">Updates the entire list of SimpleFeatureUserDataConfiguration(s) with information from the
+ passed in SF type</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>type</code> - - SF type to be updated</dd>
@@ -411,8 +403,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <li class="blockList">
 <h4>updateType</h4>
 <pre>public&nbsp;void&nbsp;updateType(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</pre>
-<div class="block">Updates the SFT with the entire list of
- SimpleFeatureUserDataConfiguration(s)</div>
+<div class="block">Updates the SFT with the entire list of SimpleFeatureUserDataConfiguration(s)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>type</code> - - SF type to be updated</dd>
@@ -444,14 +435,12 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>

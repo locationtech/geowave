@@ -137,8 +137,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/HierarchicalNumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">HierarchicalNumericIndexStrategy</a></span></code>
-<div class="block">This interface defines a multi-tiered approach to indexing, in which a single
- strategy is reliant on a set of sub-strategies</div>
+<div class="block">This interface defines a multi-tiered approach to indexing, in which a single strategy is reliant
+ on a set of sub-strategies</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -165,8 +165,8 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html" title="class in org.locationtech.geowave.core.index">NullNumericIndexStrategy</a></span></code>
-<div class="block">This is a completely empty numeric index strategy representing no dimensions,
- and always returning empty IDs and ranges.</div>
+<div class="block">This is a completely empty numeric index strategy representing no dimensions, and always
+ returning empty IDs and ranges.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -194,15 +194,15 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/tiered/SingleTierSubStrategy.html" title="class in org.locationtech.geowave.core.index.sfc.tiered">SingleTierSubStrategy</a></span></code>
-<div class="block">This class wraps a single SpaceFillingCurve implementation with a tiered
- approach to indexing (an SFC with a tier ID).</div>
+<div class="block">This class wraps a single SpaceFillingCurve implementation with a tiered approach to indexing (an
+ SFC with a tier ID).</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html" title="class in org.locationtech.geowave.core.index.sfc.tiered">TieredSFCIndexStrategy</a></span></code>
-<div class="block">This class uses multiple SpaceFillingCurve objects, one per tier, to
- represent a single cohesive index strategy with multiple precisions</div>
+<div class="block">This class uses multiple SpaceFillingCurve objects, one per tier, to represent a single cohesive
+ index strategy with multiple precisions</div>
 </td>
 </tr>
 </tbody>
@@ -240,30 +240,26 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleIntegerIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleIntegerIndexStrategy</a></span></code>
-<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of
- signed integer values.</div>
+<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of signed integer values.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleLongIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleLongIndexStrategy</a></span></code>
-<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of
- signed long values.</div>
+<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of signed long values.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleNumericIndexStrategy</a>&lt;T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&gt;</span></code>
-<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of
- signed integer values (currently supports 16 bit, 32 bit, and 64 bit
- integers).</div>
+<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of signed integer values
+ (currently supports 16 bit, 32 bit, and 64 bit integers).</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleShortIndexStrategy.html" title="class in org.locationtech.geowave.core.index.simple">SimpleShortIndexStrategy</a></span></code>
-<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of
- signed short values.</div>
+<div class="block">A simple 1-dimensional NumericIndexStrategy that represents an index of signed short values.</div>
 </td>
 </tr>
 </tbody>
@@ -383,9 +379,9 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/CompoundHierarchicalIndexStrategyWrapper.html" title="class in org.locationtech.geowave.core.store.util">CompoundHierarchicalIndexStrategyWrapper</a></span></code>
-<div class="block">This class wraps the first occurrence of a hierarchical index within a
- compound index such that sub strategies within the hierarchy are replaced
- maintaining the rest of the structure of the compound index</div>
+<div class="block">This class wraps the first occurrence of a hierarchical index within a compound index such that
+ sub strategies within the hierarchy are replaced maintaining the rest of the structure of the
+ compound index</div>
 </td>
 </tr>
 </tbody>

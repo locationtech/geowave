@@ -162,8 +162,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html#flush--">flush</a></span>()</code>
-<div class="block">flush the underlying row writer to ensure entries queued for write are
- fully written.</div>
+<div class="block">flush the underlying row writer to ensure entries queued for write are fully written.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -182,8 +181,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry,
      <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;feldVisibilityWriter)</code>
-<div class="block">write the entry using visibilities determined by the
- fieldVisibilityyWriter</div>
+<div class="block">write the entry using visibilities determined by the fieldVisibilityyWriter</div>
 </td>
 </tr>
 </table>
@@ -238,8 +236,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;write(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry,
                           <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;feldVisibilityWriter)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">Writer</a></code></span></div>
-<div class="block">write the entry using visibilities determined by the
- fieldVisibilityyWriter</div>
+<div class="block">write the entry using visibilities determined by the fieldVisibilityyWriter</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;</code></dd>
@@ -316,9 +313,9 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <h4>flush</h4>
 <pre>public&nbsp;void&nbsp;flush()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#flush--">Writer</a></code></span></div>
-<div class="block">flush the underlying row writer to ensure entries queued for write are
- fully written. This is particularly useful for streaming data as an
- intermittent mechanism to ensure periodic updates are being stored.</div>
+<div class="block">flush the underlying row writer to ensure entries queued for write are fully written. This is
+ particularly useful for streaming data as an intermittent mechanism to ensure periodic updates
+ are being stored.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#flush--">flush</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;</code></dd>

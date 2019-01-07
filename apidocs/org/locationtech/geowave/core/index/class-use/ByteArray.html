@@ -417,7 +417,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeature</code></td>
-<td class="colLast"><span class="typeNameLabel">AvroAttributeRowBuilder.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/AvroAttributeRowBuilder.html#buildRow-org.locationtech.geowave.core.index.ByteArray-">buildRow</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveAvroAttributeRowBuilder.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/GeoWaveAvroAttributeRowBuilder.html#buildRow-org.locationtech.geowave.core.index.ByteArray-">buildRow</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeature</code></td>
@@ -1320,8 +1320,8 @@
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinates.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinates</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinatesPerDimension-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">getCoordinatesPerDimension</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
                           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey)</code>
-<div class="block">Return an integer coordinate in each dimension for the given insertion ID
- plus a bin ID if that dimension is continuous</div>
+<div class="block">Return an integer coordinate in each dimension for the given insertion ID plus a bin ID if that
+ dimension is continuous</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -1365,12 +1365,16 @@
 <tbody>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#ByteArrayRange-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">ByteArrayRange</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;start,
-              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;end)</code>&nbsp;</td>
+              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;end)</code>
+<div class="block">*</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#ByteArrayRange-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-boolean-">ByteArrayRange</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;start,
               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;end,
-              boolean&nbsp;singleValue)</code>&nbsp;</td>
+              boolean&nbsp;singleValue)</code>
+<div class="block">*</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html#InsertionIds-org.locationtech.geowave.core.index.ByteArray-">InsertionIds</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey)</code>&nbsp;</td>
@@ -1780,8 +1784,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;R,B extends <a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,B&gt;&gt;</span></code>
-<div class="block">This is a marker class extending ByteArrayId that additionally provides type
- checking with a generic.</div>
+<div class="block">This is a marker class extending ByteArrayId that additionally provides type checking with a
+ generic.</div>
 </td>
 </tr>
 </tbody>
@@ -2102,8 +2106,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SecondaryIndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexUtils.html#getPrimaryRowId-byte:A-">getPrimaryRowId</a></span>(byte[]&nbsp;cq)</code>
-<div class="block">Parses and returns the primary index row id from a composite column
- qualifier.</div>
+<div class="block">Parses and returns the primary index row id from a composite column qualifier.</div>
 </td>
 </tr>
 </tbody>
@@ -2119,8 +2122,7 @@
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><span class="typeNameLabel">SecondaryIndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexUtils.html#constructColumnQualifier-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">constructColumnQualifier</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partOne,
                         <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partTwo)</code>
-<div class="block">constructs a composite column qualifier consisting of partTwo appended to
- partOne</div>
+<div class="block">constructs a composite column qualifier consisting of partTwo appended to partOne</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -2180,8 +2182,8 @@
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedAttributeFieldName,
           <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
           <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>...&nbsp;originalFields)</code>
-<div class="block">Stores a secondary index entry that will not require a join against the
- primary index upon lookup.</div>
+<div class="block">Stores a secondary index entry that will not require a join against the primary index upon
+ lookup.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -2205,8 +2207,7 @@
               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryIndexPartitionKey,
               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryIndexSortKey,
               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;attributeVisibility)</code>
-<div class="block">Stores a secondary index entry that will require a join against the
- primary index upon lookup.</div>
+<div class="block">Stores a secondary index entry that will require a join against the primary index upon lookup.</div>
 </td>
 </tr>
 </tbody>

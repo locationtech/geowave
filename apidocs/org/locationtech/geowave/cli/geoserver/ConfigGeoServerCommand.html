@@ -207,8 +207,8 @@ extends <a href="../../../../../org/locationtech/geowave/core/cli/api/ServiceEna
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/cli/geoserver/ConfigGeoServerCommand.html#getName--">getName</a></span>()</code>
-<div class="block">this is for ease if a class wants to merely override the final portion of
- a resource name and not the entire path</div>
+<div class="block">this is for ease if a class wants to merely override the final portion of a resource name and
+ not the entire path</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -250,8 +250,8 @@ extends <a href="../../../../../org/locationtech/geowave/core/cli/api/ServiceEna
 <tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/cli/geoserver/ConfigGeoServerCommand.html#usage--">usage</a></span>()</code>
-<div class="block">Method to allow commands the option to override the default usage from
- jcommander where all the fields are printed out in alphabetical order.</div>
+<div class="block">Method to allow commands the option to override the default usage from jcommander where all the
+ fields are printed out in alphabetical order.</div>
 </td>
 </tr>
 </table>
@@ -331,9 +331,8 @@ extends <a href="../../../../../org/locationtech/geowave/core/cli/api/ServiceEna
 <h4>prepare</h4>
 <pre>public&nbsp;boolean&nbsp;prepare(<a href="../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/cli/api/Operation.html#prepare-org.locationtech.geowave.core.cli.api.OperationParams-">Operation</a></code></span></div>
-<div class="block">NOTE: ONLY USE THIS METHOD TO SET @PARAMETERSDELEGATE options. If you
- throw exceptions or do validation, then it will make help/explain
- commands not work correctly.</div>
+<div class="block">NOTE: ONLY USE THIS METHOD TO SET @PARAMETERSDELEGATE options. If you throw exceptions or do
+ validation, then it will make help/explain commands not work correctly.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/cli/api/Operation.html#prepare-org.locationtech.geowave.core.cli.api.OperationParams-">prepare</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/cli/api/Operation.html" title="interface in org.locationtech.geowave.core.cli.api">Operation</a></code></dd>
@@ -366,8 +365,8 @@ extends <a href="../../../../../org/locationtech/geowave/core/cli/api/ServiceEna
 <h4>getName</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getName()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/cli/api/ServiceEnabledCommand.html#getName--">ServiceEnabledCommand</a></code></span></div>
-<div class="block">this is for ease if a class wants to merely override the final portion of
- a resource name and not the entire path</div>
+<div class="block">this is for ease if a class wants to merely override the final portion of a resource name and
+ not the entire path</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/cli/api/ServiceEnabledCommand.html#getName--">getName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in org.locationtech.geowave.core.cli.api">ServiceEnabledCommand</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
@@ -447,13 +446,10 @@ extends <a href="../../../../../org/locationtech/geowave/core/cli/api/ServiceEna
 <h4>usage</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;usage()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/cli/api/Operation.html#usage--">Operation</a></code></span></div>
-<div class="block">Method to allow commands the option to override the default usage from
- jcommander where all the fields are printed out in alphabetical order.
- Some classes may want to put the basic/required fields first, with
- optional fields at the bottom, or however other custom usage's would be
- necessary. <br/>
- <br/>
- If method returns null, the default usage from jcommander is used</div>
+<div class="block">Method to allow commands the option to override the default usage from jcommander where all the
+ fields are printed out in alphabetical order. Some classes may want to put the basic/required
+ fields first, with optional fields at the bottom, or however other custom usage's would be
+ necessary. <br> <br> If method returns null, the default usage from jcommander is used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/cli/api/Operation.html#usage--">usage</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/cli/api/Operation.html" title="interface in org.locationtech.geowave.core.cli.api">Operation</a></code></dd>

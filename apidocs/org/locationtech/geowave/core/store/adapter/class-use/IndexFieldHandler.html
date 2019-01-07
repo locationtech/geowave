@@ -109,25 +109,23 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureGeometryHandler.html" title="class in org.locationtech.geowave.adapter.vector">FeatureGeometryHandler</a></span></code>
-<div class="block">This class handles the internal responsibility of persisting JTS geometry to
- and from a GeoWave common index field for SimpleFeature data.</div>
+<div class="block">This class handles the internal responsibility of persisting JTS geometry to and from a GeoWave
+ common index field for SimpleFeature data.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureTimeRangeHandler.html" title="class in org.locationtech.geowave.adapter.vector">FeatureTimeRangeHandler</a></span></code>
-<div class="block">This class handles the internal responsibility of persisting time ranges
- based on a start time attribute and end time attribute to and from a GeoWave
- common index field for SimpleFeature data.</div>
+<div class="block">This class handles the internal responsibility of persisting time ranges based on a start time
+ attribute and end time attribute to and from a GeoWave common index field for SimpleFeature data.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureTimestampHandler.html" title="class in org.locationtech.geowave.adapter.vector">FeatureTimestampHandler</a></span></code>
-<div class="block">This class handles the internal responsibility of persisting single timestamp
- instants based on a temporal attribute (a Java binding class of Date or
- Calendar for an attribute)to and from a GeoWave common index field for
- SimpleFeature data.</div>
+<div class="block">This class handles the internal responsibility of persisting single timestamp instants based on a
+ temporal attribute (a Java binding class of Date or Calendar for an attribute)to and from a
+ GeoWave common index field for SimpleFeature data.</div>
 </td>
 </tr>
 </tbody>
@@ -142,8 +140,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">FeatureDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#getTimeRangeHandler-org.opengis.feature.simple.SimpleFeatureType-">getTimeRangeHandler</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</code>
-<div class="block">Attempts to find a time descriptor (range or timestamp) within provided
- featureType and return index field handler for it.</div>
+<div class="block">Attempts to find a time descriptor (range or timestamp) within provided featureType and return
+ index field handler for it.</div>
 </td>
 </tr>
 </tbody>
@@ -158,8 +156,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">FeatureDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#getDefaultTypeMatchingHandlers-java.lang.Object-">getDefaultTypeMatchingHandlers</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;typeObj)</code>
-<div class="block">Get a List<> of the default index field handlers from the Simple Feature
- Type provided</div>
+<div class="block">Get a List<> of the default index field handlers from the Simple Feature Type provided</div>
 </td>
 </tr>
 </tbody>
@@ -179,15 +176,15 @@
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/DimensionMatchingIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">DimensionMatchingIndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</span></code>
-<div class="block">This is internally useful for the AbstractDataAdapter to match field handlers
- with dimensions by field ID.</div>
+<div class="block">This is internally useful for the AbstractDataAdapter to match field handlers with dimensions by
+ field ID.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</span></code>
-<div class="block">This is a persistable version of the IndexFieldHandler so that customized
- field handlers can be automatically persisted with the data adapter.</div>
+<div class="block">This is a persistable version of the IndexFieldHandler so that customized field handlers can be
+ automatically persisted with the data adapter.</div>
 </td>
 </tr>
 </tbody>

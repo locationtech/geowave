@@ -126,10 +126,9 @@ var activeTableTab = "activeTableTab";
 extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;T,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;T&gt;&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/IndexStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">IndexStatisticsQueryBuilder</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;T&gt;&gt;&gt;&gt;
 implements <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsSet</a>&lt;T,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;T&gt;&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">PartitionStatisticsQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/IndexStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">IndexStatisticsQueryBuilder</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;T&gt;&gt;&gt;&gt;</pre>
 <div class="block">This class really just needs to get ingest callbacks and collect individual
- RowRangeHistogramStatistics per partition. It should never be persisted as
- is, and is only a DataStatistic to match the current interfaces for the
- lowest impact mechanism to store histograms per partition instead of all
- together</div>
+ RowRangeHistogramStatistics per partition. It should never be persisted as is, and is only a
+ DataStatistic to match the current interfaces for the lowest impact mechanism to store histograms
+ per partition instead of all together</div>
 </li>
 </ul>
 </div>
@@ -199,8 +198,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ada
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatisticsSet.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatisticsSet.html" title="type parameter in RowRangeHistogramStatisticsSet">T</a>&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -236,8 +234,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ada
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatisticsSet.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -341,14 +338,12 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ada
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>
@@ -378,8 +373,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ada
 <pre>public&nbsp;void&nbsp;entryIngested(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatisticsSet.html" title="type parameter in RowRangeHistogramStatisticsSet">T</a>&nbsp;entry,
                           <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">IngestCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatisticsSet.html" title="type parameter in RowRangeHistogramStatisticsSet">T</a>&gt;</code></dd>

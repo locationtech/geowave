@@ -110,8 +110,10 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">Operation</span></pre>
-<div class="block">An operation in GeoWave is something that can be prepared() and executed().
- The prepare() function will look at parameters and based on their values, set</div>
+<div class="block">An operation in GeoWave is something that can be prepared() and executed(). The prepare()
+ function will look at parameters and based on their values, set @ParametersDelegate classes which
+ can soak up more parameters. Then, the parameters are parsed again before being fed into the
+ execute() command, if the operation also implements Command.</div>
 </li>
 </ul>
 </div>
@@ -139,8 +141,8 @@ var activeTableTab = "activeTableTab";
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/api/Operation.html#usage--">usage</a></span>()</code>
-<div class="block">Method to allow commands the option to override the default usage from
- jcommander where all the fields are printed out in alphabetical order.</div>
+<div class="block">Method to allow commands the option to override the default usage from jcommander where all the
+ fields are printed out in alphabetical order.</div>
 </td>
 </tr>
 </table>
@@ -165,9 +167,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>prepare</h4>
 <pre>boolean&nbsp;prepare(<a href="../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</pre>
-<div class="block">NOTE: ONLY USE THIS METHOD TO SET @PARAMETERSDELEGATE options. If you
- throw exceptions or do validation, then it will make help/explain
- commands not work correctly.</div>
+<div class="block">NOTE: ONLY USE THIS METHOD TO SET @PARAMETERSDELEGATE options. If you throw exceptions or do
+ validation, then it will make help/explain commands not work correctly.</div>
 </li>
 </ul>
 <a name="usage--">
@@ -177,13 +178,10 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>usage</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;usage()</pre>
-<div class="block">Method to allow commands the option to override the default usage from
- jcommander where all the fields are printed out in alphabetical order.
- Some classes may want to put the basic/required fields first, with
- optional fields at the bottom, or however other custom usage's would be
- necessary. <br/>
- <br/>
- If method returns null, the default usage from jcommander is used</div>
+<div class="block">Method to allow commands the option to override the default usage from jcommander where all the
+ fields are printed out in alphabetical order. Some classes may want to put the basic/required
+ fields first, with optional fields at the bottom, or however other custom usage's would be
+ necessary. <br> <br> If method returns null, the default usage from jcommander is used</div>
 </li>
 </ul>
 </li>

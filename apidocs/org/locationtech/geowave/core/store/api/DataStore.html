@@ -110,19 +110,17 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">DataStore</span></pre>
-<div class="block">A DataStore can both ingest and query data based on persisted indices and
- data type adapters. When the data is ingested it is explicitly given an index
- and a data type adapter which is then persisted to be used in subsequent
- queries. Also, implicitly statistics are maintained associated with all data
- ingested. These statistics can be queried. Furthermore, aggregations can be
- applied directly to the data which are similar to statistics, but are more
- dynamic in that any query criteria can be applied as the input of the
- aggregation. Datastores that support serverside processing will run the
- aggregation within the scope of iterating through the results for additional
- efficiency.
+<div class="block">A DataStore can both ingest and query data based on persisted indices and data type adapters.
+ When the data is ingested it is explicitly given an index and a data type adapter which is then
+ persisted to be used in subsequent queries. Also, implicitly statistics are maintained associated
+ with all data ingested. These statistics can be queried. Furthermore, aggregations can be applied
+ directly to the data which are similar to statistics, but are more dynamic in that any query
+ criteria can be applied as the input of the aggregation. Datastores that support serverside
+ processing will run the aggregation within the scope of iterating through the results for
+ additional efficiency.
 
- Here is a simple snippets of pseudocode showing how a data store can be used
- to store and retrieve your data.</div>
+ <p>Here is a simple snippets of pseudocode showing how a data store can be used to store and
+ retrieve your data.</div>
 </li>
 </ul>
 </div>
@@ -177,15 +175,13 @@ var activeTableTab = "activeTableTab";
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#copyTo-org.locationtech.geowave.core.store.api.DataStore-org.locationtech.geowave.core.store.api.Query-">copyTo</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;other,
       <a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;?&gt;&nbsp;query)</code>
-<div class="block">copy the subset of data matching this query from this store into a
- specified other store</div>
+<div class="block">copy the subset of data matching this query from this store into a specified other store</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#createWriter-java.lang.String-">createWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
-<div class="block">Returns an index writer to perform batched write operations for the given
- data type name.</div>
+<div class="block">Returns an index writer to perform batched write operations for the given data type name.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -209,8 +205,7 @@ var activeTableTab = "activeTableTab";
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#getIndices-java.lang.String-">getIndices</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
-<div class="block">Get the indices that have been used within this data store for a
- particular type.</div>
+<div class="block">Get the indices that have been used within this data store for a particular type.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -289,11 +284,10 @@ var activeTableTab = "activeTableTab";
 <pre>&lt;T&gt;&nbsp;void&nbsp;ingest(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
                 <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)
          throws <a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
-<div class="block">Ingest from URL. If this is a directory, this method will recursively
- search for valid files to ingest in the directory. This will iterate
- through registered IngestFormatPlugins to find one that works for a given
- file. The applicable ingest format plugin will choose the DataTypeAdapter
- and may even use additional indices than the one provided.</div>
+<div class="block">Ingest from URL. If this is a directory, this method will recursively search for valid files to
+ ingest in the directory. This will iterate through registered IngestFormatPlugins to find one
+ that works for a given file. The applicable ingest format plugin will choose the
+ DataTypeAdapter and may even use additional indices than the one provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>url</code> - The URL for data to read and ingest into this data store</dd>
@@ -313,10 +307,9 @@ var activeTableTab = "activeTableTab";
                 <a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="class in org.locationtech.geowave.core.store.api">IngestOptions</a>&lt;T&gt;&nbsp;options,
                 <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)
          throws <a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
-<div class="block">Ingest from URL with options. If this is a directory, this method will
- recursively search for valid files to ingest in the directory. The
- applicable ingest format plugin will choose the DataTypeAdapter and may
- even use additional indices than the one provided.</div>
+<div class="block">Ingest from URL with options. If this is a directory, this method will recursively search for
+ valid files to ingest in the directory. The applicable ingest format plugin will choose the
+ DataTypeAdapter and may even use additional indices than the one provided.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>url</code> - The URL for data to read and ingest into this data store</dd>
@@ -334,19 +327,16 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>query</h4>
 <pre>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;T&gt;&nbsp;query)</pre>
-<div class="block">Returns all data in this data store that matches the query parameter. All
- data that matches the query will be returned as an instance of the native
- data type. The Iterator must be closed when it is no longer needed - this
- wraps the underlying scanner implementation and closes underlying
+<div class="block">Returns all data in this data store that matches the query parameter. All data that matches the
+ query will be returned as an instance of the native data type. The Iterator must be closed when
+ it is no longer needed - this wraps the underlying scanner implementation and closes underlying
  resources.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - data constraints for the query and additional options for
-            processing the query</dd>
+<dd><code>query</code> - data constraints for the query and additional options for processing the query</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd>
+<dd>An iterator on all results that match the query. The iterator implements Closeable and
+         it is best practice to close the iterator after it is no longer needed.</dd>
 </dl>
 </li>
 </ul>
@@ -357,16 +347,14 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>aggregate</h4>
 <pre>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R,T&gt;&nbsp;R&nbsp;aggregate(<a href="../../../../../../org/locationtech/geowave/core/store/api/AggregationQuery.html" title="class in org.locationtech.geowave.core.store.api">AggregationQuery</a>&lt;P,R,T&gt;&nbsp;query)</pre>
-<div class="block">Perform an aggregation on the data and just return the aggregated result.
- The query criteria is very similar to querying the individual entries
- except in this case it defines the input to the aggregation function, and
- the aggregation function produces a single result. Examples of this might
- be simply counting matched entries, producing a bounding box or other
- range/extent for matched entries, or producing a histogram.</div>
+<div class="block">Perform an aggregation on the data and just return the aggregated result. The query criteria is
+ very similar to querying the individual entries except in this case it defines the input to the
+ aggregation function, and the aggregation function produces a single result. Examples of this
+ might be simply counting matched entries, producing a bounding box or other range/extent for
+ matched entries, or producing a histogram.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - the Aggregation Query, use AggregationQueryBuilder or its
-            extensions to create</dd>
+<dd><code>query</code> - the Aggregation Query, use AggregationQueryBuilder or its extensions to create</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the single result of the aggregation</dd>
 </dl>
@@ -396,9 +384,8 @@ var activeTableTab = "activeTableTab";
 <div class="block">Get data statistics that match the given query criteria</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - the query criteria, use StatisticsQueryBuilder or its
-            extensions and if you're interested in a particular common
-            statistics type use StatisticsQueryBuilder.factory()</dd>
+<dd><code>query</code> - the query criteria, use StatisticsQueryBuilder or its extensions and if you're
+        interested in a particular common statistics type use StatisticsQueryBuilder.factory()</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>An array of statistics that result from the query</dd>
 </dl>
@@ -414,14 +401,12 @@ var activeTableTab = "activeTableTab";
 <div class="block">Get a single statistical result that matches the given query criteria</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - the query criteria, use StatisticsQueryBuilder or its
-            extensions and if you're interested in a particular common
-            statistics type use StatisticsQueryBuilder.factory()</dd>
+<dd><code>query</code> - the query criteria, use StatisticsQueryBuilder or its extensions and if you're
+        interested in a particular common statistics type use StatisticsQueryBuilder.factory()</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>If the query does not define that statistics type it will return
-         null as aggregation only makes sense within a single type,
-         otherwise aggregates the results of the query into a single
-         result that is returned</dd>
+<dd>If the query does not define that statistics type it will return null as aggregation
+         only makes sense within a single type, otherwise aggregates the results of the query
+         into a single result that is returned</dd>
 </dl>
 </li>
 </ul>
@@ -446,8 +431,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>getIndices</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;getIndices(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
-<div class="block">Get the indices that have been used within this data store for a
- particular type. If data type name is null it will return all indices.</div>
+<div class="block">Get the indices that have been used within this data store for a particular type. If data type
+ name is null it will return all indices.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>An array of the indices for a given data type.</dd>
@@ -476,13 +461,11 @@ var activeTableTab = "activeTableTab";
 <h4>copyTo</h4>
 <pre>void&nbsp;copyTo(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;other,
             <a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;?&gt;&nbsp;query)</pre>
-<div class="block">copy the subset of data matching this query from this store into a
- specified other store</div>
+<div class="block">copy the subset of data matching this query from this store into a specified other store</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>other</code> - the other store to copy data into</dd>
-<dd><code>query</code> - a query to select which data to copy - use QueryBuilder or its
-            extension to create</dd>
+<dd><code>query</code> - a query to select which data to copy - use QueryBuilder or its extension to create</dd>
 </dl>
 </li>
 </ul>
@@ -494,9 +477,9 @@ var activeTableTab = "activeTableTab";
 <h4>addIndex</h4>
 <pre>void&nbsp;addIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
               <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;indices)</pre>
-<div class="block">Add new indices for the given type. If there is data in other indices for
- this type, for consistency it will need to copy all of the data into the
- new indices, which could be a long process for lots of data.</div>
+<div class="block">Add new indices for the given type. If there is data in other indices for this type, for
+ consistency it will need to copy all of the data into the new indices, which could be a long
+ process for lots of data.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeName</code> - the type</dd>
@@ -512,10 +495,9 @@ var activeTableTab = "activeTableTab";
 <h4>removeIndex</h4>
 <pre>void&nbsp;removeIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)
           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></pre>
-<div class="block">remove an index completely for all types. If this is the last index for
- any type it throws an illegal state exception, expecting the user to
- remove the type before removing the index to protect a user from losing
- any reference to their data unknowingly for a type.</div>
+<div class="block">remove an index completely for all types. If this is the last index for any type it throws an
+ illegal state exception, expecting the user to remove the type before removing the index to
+ protect a user from losing any reference to their data unknowingly for a type.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>indexName</code> - the index</dd>
@@ -533,10 +515,9 @@ var activeTableTab = "activeTableTab";
 <pre>void&nbsp;removeIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)
           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></pre>
-<div class="block">remove an index for the given type. If this is the last index for that
- type it throws an illegal state exception, expecting the user to remove
- the type before removing the index to protect a user from losing any
- reference to their data unknowingly for a type.</div>
+<div class="block">remove an index for the given type. If this is the last index for that type it throws an
+ illegal state exception, expecting the user to remove the type before removing the index to
+ protect a user from losing any reference to their data unknowingly for a type.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeName</code> - the type</dd>
@@ -569,7 +550,7 @@ var activeTableTab = "activeTableTab";
 <pre>&lt;T&gt;&nbsp;boolean&nbsp;delete(<a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;T&gt;&nbsp;query)</pre>
 <div class="block">Delete all data in this data store that matches the query parameter.
 
- Statistics are updated as required.</div>
+ <p> Statistics are updated as required.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>query</code> - the query criteria to use for deletion</dd>
@@ -585,9 +566,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>deleteAll</h4>
 <pre>void&nbsp;deleteAll()</pre>
-<div class="block">Delete ALL data and ALL metadata for this datastore. This is provided for
- convenience as a simple way to wipe a datastore cleanly, but don't be
- surprised if everything is gone.</div>
+<div class="block">Delete ALL data and ALL metadata for this datastore. This is provided for convenience as a
+ simple way to wipe a datastore cleanly, but don't be surprised if everything is gone.</div>
 </li>
 </ul>
 <a name="addType-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index...-">
@@ -598,14 +578,13 @@ var activeTableTab = "activeTableTab";
 <h4>addType</h4>
 <pre>&lt;T&gt;&nbsp;void&nbsp;addType(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;dataTypeAdapter,
                  <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;initialIndices)</pre>
-<div class="block">Add this type to the data store. This only needs to be called one time
- ever per type.</div>
+<div class="block">Add this type to the data store. This only needs to be called one time ever per type.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dataTypeAdapter</code> - the data type adapter for this type that is used to read and
-            write GeoWave entries</dd>
-<dd><code>initialIndices</code> - the initial indexing for this type, in the future additional
-            indices can be added</dd>
+<dd><code>dataTypeAdapter</code> - the data type adapter for this type that is used to read and write
+        GeoWave entries</dd>
+<dd><code>initialIndices</code> - the initial indexing for this type, in the future additional indices can
+        be added</dd>
 </dl>
 </li>
 </ul>
@@ -616,16 +595,14 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>createWriter</h4>
 <pre>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;T&gt;&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
-<div class="block">Returns an index writer to perform batched write operations for the given
- data type name. It assumes the type has already been used previously or
- added using addType and assumes one or more indices have been provided
- for this type.</div>
+<div class="block">Returns an index writer to perform batched write operations for the given data type name. It
+ assumes the type has already been used previously or added using addType and assumes one or
+ more indices have been provided for this type.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeName</code> - the type</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a writer which can be used to write entries into this datastore
-         of the given type</dd>
+<dd>a writer which can be used to write entries into this datastore of the given type</dd>
 </dl>
 </li>
 </ul>

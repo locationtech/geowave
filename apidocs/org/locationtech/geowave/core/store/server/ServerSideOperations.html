@@ -145,8 +145,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#getServerOpOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope-">getServerOpOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;serverOpName,
                   <a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&nbsp;scope)</code>
-<div class="block">get the particular existing configured options for this server op at this
- scope</div>
+<div class="block">get the particular existing configured options for this server op at this scope</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -158,8 +157,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#listServerOps-java.lang.String-">listServerOps</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index)</code>
-<div class="block">Returns a mapping of existing registered server-side operations with
- serverop name as the key and the registered scopes as the value</div>
+<div class="block">Returns a mapping of existing registered server-side operations with serverop name as the key
+ and the registered scopes as the value</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -167,9 +166,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#removeServerOp-java.lang.String-java.lang.String-com.google.common.collect.ImmutableSet-">removeServerOp</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;serverOpName,
               com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;scopes)</code>
-<div class="block">remove this server operation - because accumulo requires scopes as a
- parameter it is passed into this method, but the server op will be
- removed entirely regardless of scopes</div>
+<div class="block">remove this server operation - because accumulo requires scopes as a parameter it is passed
+ into this method, but the server op will be removed entirely regardless of scopes</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -181,8 +179,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;properties,
               com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;currentScopes,
               com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;newScopes)</code>
-<div class="block">update this server operation, the current scopes are passed in because
- accumulo requires iteratorscope as a parameter to remove the iterator.</div>
+<div class="block">update this server operation, the current scopes are passed in because accumulo requires
+ iteratorscope as a parameter to remove the iterator.</div>
 </td>
 </tr>
 </table>
@@ -214,8 +212,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <li class="blockList">
 <h4>listServerOps</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&gt;&nbsp;listServerOps(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index)</pre>
-<div class="block">Returns a mapping of existing registered server-side operations with
- serverop name as the key and the registered scopes as the value</div>
+<div class="block">Returns a mapping of existing registered server-side operations with serverop name as the key
+ and the registered scopes as the value</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the mapping</dd>
@@ -231,8 +229,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getServerOpOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index,
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;serverOpName,
                                       <a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&nbsp;scope)</pre>
-<div class="block">get the particular existing configured options for this server op at this
- scope</div>
+<div class="block">get the particular existing configured options for this server op at this scope</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the index/table</dd>
@@ -252,9 +249,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <pre>void&nbsp;removeServerOp(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;serverOpName,
                     com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;scopes)</pre>
-<div class="block">remove this server operation - because accumulo requires scopes as a
- parameter it is passed into this method, but the server op will be
- removed entirely regardless of scopes</div>
+<div class="block">remove this server operation - because accumulo requires scopes as a parameter it is passed
+ into this method, but the server op will be removed entirely regardless of scopes</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the index/table</dd>
@@ -279,8 +275,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the index/table</dd>
-<dd><code>priority</code> - the operation priority (this is merely relative, it defines
-            how to order multiple operations, from low to high)</dd>
+<dd><code>priority</code> - the operation priority (this is merely relative, it defines how to order
+        multiple operations, from low to high)</dd>
 <dd><code>serverOpName</code> - the operation name</dd>
 <dd><code>operationClass</code> - the operation class</dd>
 <dd><code>properties</code> - the operation options</dd>
@@ -301,14 +297,14 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;properties,
                     com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;currentScopes,
                     com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;newScopes)</pre>
-<div class="block">update this server operation, the current scopes are passed in because
- accumulo requires iteratorscope as a parameter to remove the iterator.
- This will update the server op to the new scope.</div>
+<div class="block">update this server operation, the current scopes are passed in because accumulo requires
+ iteratorscope as a parameter to remove the iterator. This will update the server op to the new
+ scope.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the index/table</dd>
-<dd><code>priority</code> - the operation priority (this is merely relative, it defines
-            how to order multiple operations, from low to high)</dd>
+<dd><code>priority</code> - the operation priority (this is merely relative, it defines how to order
+        multiple operations, from low to high)</dd>
 <dd><code>serverOpName</code> - the operation name</dd>
 <dd><code>operationClass</code> - the operation class</dd>
 <dd><code>properties</code> - the operation options</dd>

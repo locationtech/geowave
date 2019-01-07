@@ -116,32 +116,28 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">PropertyManagement</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
-<div class="block">Manage properties used by the Map Reduce environment that are provided
- through the API (e.g. command). Allow these arguments to be placed an 'args'
- list for 'main' executables (e.g. ToolRunner).
+<div class="block">Manage properties used by the Map Reduce environment that are provided through the API (e.g.
+ command). Allow these arguments to be placed an 'args' list for 'main' executables (e.g.
+ ToolRunner).
 
- The class supports some basic conversions.
+ <p> The class supports some basic conversions.
 
- Non-serializable objects: <a href="../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist"><code>Persistable</code></a> instances are converted to and
- from byte formats. <a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints"><code>QueryConstraints</code></a> is a special case, supporting WKT
- String. <code>Path</code> are converted to a from string representation of the
- their URI.
+ <p> Non-serializable objects: <a href="../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist"><code>Persistable</code></a> instances are converted to and from byte
+ formats. <a href="../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints"><code>QueryConstraints</code></a> is a special case, supporting WKT String. <code>Path</code> are
+ converted to a from string representation of the their URI.
 
- Serializable objects: <a href="../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data"><code>NumericRange</code></a> supports min,max in string
- representation (e.g. "1.0,2.0")
+ <p> Serializable objects: <a href="../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data"><code>NumericRange</code></a> supports min,max in string representation (e.g.
+ "1.0,2.0")
 
+ <p> NOTE: ConfigutationWrapper implementation is scopeless.
 
- NOTE: ConfigutationWrapper implementation is scopeless.
-
- EXPECTED FUTURE WORK: I am bit unsatisfied with the duality of the parameters
- base class. In one case, in is treated a description for a class value and,
- in the other case, it is treated as a description for the type of a property
- value. The former is really a descriptor of a Class of type class. Generics
- do not help due to erasure. The impact of this inconsistency is the inability
- to validate on 'store'. Instead, validation occurs on 'gets'. The ultimate
- goal is to uniformly provide feedback to parameters from command line
- arguments and property files on submission to the manager rather than on
- extraction from the manager.</div>
+ <p> EXPECTED FUTURE WORK: I am bit unsatisfied with the duality of the parameters base class. In
+ one case, in is treated a description for a class value and, in the other case, it is treated as
+ a description for the type of a property value. The former is really a descriptor of a Class of
+ type class. Generics do not help due to erasure. The impact of this inconsistency is the
+ inability to validate on 'store'. Instead, validation occurs on 'gets'. The ultimate goal is to
+ uniformly provide feedback to parameters from command line arguments and property files on
+ submission to the manager rather than on extraction from the manager.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../serialized-form.html#org.locationtech.geowave.analytic.PropertyManagement">Serialized Form</a></dd>
@@ -243,8 +239,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.html#addConverter-org.locationtech.geowave.analytic.PropertyManagement.PropertyConverter-">addConverter</a></span>(<a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;?&gt;&nbsp;converter)</code>
-<div class="block">Add to the set of converters used to take a String representation of a
- value and convert it into another serializable form.</div>
+<div class="block">Add to the set of converters used to take a String representation of a value and convert it
+ into another serializable form.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -562,8 +558,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <h4>getProperty</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;getProperty(<a href="../../../../org/locationtech/geowave/analytic/param/ParameterEnum.html" title="interface in org.locationtech.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&nbsp;property)
                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
-<div class="block">Returns the value as, without conversion from the properties. Throws an
- exception if a conversion is required to a specific type</div>
+<div class="block">Returns the value as, without conversion from the properties. Throws an exception if a
+ conversion is required to a specific type</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>property</code> - </dd>
@@ -583,8 +579,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getProperty(<a href="../../../../org/locationtech/geowave/analytic/param/ParameterEnum.html" title="interface in org.locationtech.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&nbsp;property,
                          <a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;T&gt;&nbsp;converter)
                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
-<div class="block">Returns the value after conversion. Throws an exception if a conversion
- fails.</div>
+<div class="block">Returns the value after conversion. Throws an exception if a conversion fails.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>property</code> - </dd>
@@ -757,12 +752,11 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <li class="blockList">
 <h4>addConverter</h4>
 <pre>public&nbsp;void&nbsp;addConverter(<a href="../../../../org/locationtech/geowave/analytic/PropertyManagement.PropertyConverter.html" title="interface in org.locationtech.geowave.analytic">PropertyManagement.PropertyConverter</a>&lt;?&gt;&nbsp;converter)</pre>
-<div class="block">Add to the set of converters used to take a String representation of a
- value and convert it into another serializable form.
+<div class="block">Add to the set of converters used to take a String representation of a value and convert it
+ into another serializable form.
 
- This is done if the preferred internal representation does not match that
- of a string. For example, a query is maintained as bytes even though it
- can be provided as a query</div>
+ <p> This is done if the preferred internal representation does not match that of a string. For
+ example, a query is maintained as bytes even though it can be provided as a query</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>converter</code> - </dd>

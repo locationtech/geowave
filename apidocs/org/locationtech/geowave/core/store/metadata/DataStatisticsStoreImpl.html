@@ -125,12 +125,12 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">DataStatisticsStoreImpl</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;
 implements <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a></pre>
-<div class="block">This class will persist Index objects within an Accumulo table for GeoWave
- metadata. The adapters will be persisted in an "INDEX" column family.
+<div class="block">This class will persist Index objects within an Accumulo table for GeoWave metadata. The adapters
+ will be persisted in an "INDEX" column family.
 
- There is an LRU cache associated with it so staying in sync with external
- updates is not practical - it assumes the objects are not updated often or at
- all. The objects are stored in their own table.</div>
+ <p> There is an LRU cache associated with it so staying in sync with external updates is not
+ practical - it assumes the objects are not updated often or at all. The objects are stored in
+ their own table.</div>
 </li>
 </ul>
 </div>
@@ -228,8 +228,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/DataStatisticsStoreImpl.html#getDataStatistics-short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></span>(short&nbsp;adapterId,
                  <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
- unique statistic)</div>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a unique statistic)</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -245,8 +244,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedId,
                  <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
- unique statistic)</div>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a unique statistic)</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -261,8 +259,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/DataStatisticsStoreImpl.html#getDataStatistics-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
                  <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Get all data statistics from the store by statistics type and extended ID
- prefix</div>
+<div class="block">Get all data statistics from the store by statistics type and extended ID prefix</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -291,8 +288,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/DataStatisticsStoreImpl.html#incorporateStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">incorporateStatistics</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;statistics)</code>
-<div class="block">Add the statistics to the store, overwriting existing data statistics
- with the aggregation of these statistics and the existing statistics</div>
+<div class="block">Add the statistics to the store, overwriting existing data statistics with the aggregation of
+ these statistics and the existing statistics</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -450,8 +447,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <h4>incorporateStatistics</h4>
 <pre>public&nbsp;void&nbsp;incorporateStatistics(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;statistics)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#incorporateStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">DataStatisticsStore</a></code></span></div>
-<div class="block">Add the statistics to the store, overwriting existing data statistics
- with the aggregation of these statistics and the existing statistics</div>
+<div class="block">Add the statistics to the store, overwriting existing data statistics with the aggregation of
+ these statistics and the existing statistics</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#incorporateStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">incorporateStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></dd>
@@ -519,8 +516,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
                                                                           <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">DataStatisticsStore</a></code></span></div>
-<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
- unique statistic)</div>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a unique statistic)</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></dd>
@@ -611,10 +607,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <h4>setStatistics</h4>
 <pre>public&nbsp;void&nbsp;setStatistics(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;statistics)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#setStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">DataStatisticsStore</a></code></span></div>
-<div class="block">This will write the statistics to the underlying store. Note that this
- will overwrite whatever the current persisted statistics are with the
- given statistics ID and data adapter ID. Use incorporateStatistics to
- aggregate the statistics with any existing statistics.</div>
+<div class="block">This will write the statistics to the underlying store. Note that this will overwrite whatever
+ the current persisted statistics are with the given statistics ID and data adapter ID. Use
+ incorporateStatistics to aggregate the statistics with any existing statistics.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#setStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">setStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></dd>
@@ -655,8 +650,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeStatistics-short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">removeStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a flag indicating whether a statistic had existed with the given
-         IDs and was successfully deleted.</dd>
+<dd>a flag indicating whether a statistic had existed with the given IDs and was
+         successfully deleted.</dd>
 </dl>
 </li>
 </ul>
@@ -676,8 +671,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapterId</code> - the data adapter ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the list of statistics for the given adapter, empty if it doesn't
-         exist</dd>
+<dd>the list of statistics for the given adapter, empty if it doesn't exist</dd>
 </dl>
 </li>
 </ul>
@@ -721,8 +715,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
                                                                           <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">DataStatisticsStore</a></code></span></div>
-<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
- unique statistic)</div>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a unique statistic)</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></dd>
@@ -749,8 +742,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#removeStatistics-short-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">removeStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a flag indicating whether a statistic had existed with the given
-         IDs and was successfully deleted.</dd>
+<dd>a flag indicating whether a statistic had existed with the given IDs and was
+         successfully deleted.</dd>
 </dl>
 </li>
 </ul>
@@ -768,8 +761,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the list of statistics for the given adapter, empty if it doesn't
-         exist</dd>
+<dd>the list of statistics for the given adapter, empty if it doesn't exist</dd>
 </dl>
 </li>
 </ul>
@@ -783,14 +775,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/adapte
                                                                           <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">DataStatisticsStore</a></code></span></div>
-<div class="block">Get all data statistics from the store by statistics type and extended ID
- prefix</div>
+<div class="block">Get all data statistics from the store by statistics type and extended ID prefix</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the list of statistics for the given adapter, empty if it doesn't
-         exist</dd>
+<dd>the list of statistics for the given adapter, empty if it doesn't exist</dd>
 </dl>
 </li>
 </ul>

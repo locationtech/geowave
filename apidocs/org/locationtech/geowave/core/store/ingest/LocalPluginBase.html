@@ -101,19 +101,18 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Known Subinterfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;I,O&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;O&gt;</dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;I,O&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;O&gt;</dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">AbstractLocalIngestWithMapper</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in org.locationtech.geowave.core.ingest.avro">AbstractStageWholeFileToAvro</a>, <a href="../../../../../../org/locationtech/geowave/format/avro/AvroIngestPlugin.html" title="class in org.locationtech.geowave.format.avro">AvroIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestPlugin.html" title="class in org.locationtech.geowave.format.gdelt">GDELTIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/geolife/GeoLifeIngestPlugin.html" title="class in org.locationtech.geowave.format.geolife">GeoLifeIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html" title="class in org.locationtech.geowave.format.geotools.raster">GeoToolsRasterDataStoreIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html" title="class in org.locationtech.geowave.format.geotools.vector">GeoToolsVectorDataStoreIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html" title="class in org.locationtech.geowave.format.gpx">GpxIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestPlugin.html" title="class in org.locationtech.geowave.format.stanag4676">Stanag4676IngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestPlugin.html" title="class in org.locationtech.geowave.format.tdrive">TdriveIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/twitter/TwitterIngestPlugin.html" title="class in org.locationtech.geowave.format.twitter">TwitterIngestPlugin</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">AbstractLocalIngestWithMapper</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in org.locationtech.geowave.core.ingest.avro">AbstractStageWholeFileToAvro</a>, <a href="../../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestPlugin.html" title="class in org.locationtech.geowave.format.gdelt">GDELTIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/geolife/GeoLifeIngestPlugin.html" title="class in org.locationtech.geowave.format.geolife">GeoLifeIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html" title="class in org.locationtech.geowave.format.geotools.raster">GeoToolsRasterDataStoreIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html" title="class in org.locationtech.geowave.format.geotools.vector">GeoToolsVectorDataStoreIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/avro/GeoWaveAvroIngestPlugin.html" title="class in org.locationtech.geowave.format.avro">GeoWaveAvroIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html" title="class in org.locationtech.geowave.format.gpx">GpxIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestPlugin.html" title="class in org.locationtech.geowave.format.stanag4676">Stanag4676IngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestPlugin.html" title="class in org.locationtech.geowave.format.tdrive">TdriveIngestPlugin</a>, <a href="../../../../../../org/locationtech/geowave/format/twitter/TwitterIngestPlugin.html" title="class in org.locationtech.geowave.format.twitter">TwitterIngestPlugin</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">LocalPluginBase</span></pre>
-<div class="block">This is a base interface for any plugin that reads files from a local file
- system. The plugin gets an init call at the start of ingestion with the base
- directory, and can filter files based on extension or act on a file-by-file
- basis for anything more complex.</div>
+<div class="block">This is a base interface for any plugin that reads files from a local file system. The plugin
+ gets an init call at the start of ingestion with the base directory, and can filter files based
+ on extension or act on a file-by-file basis for anything more complex.</div>
 </li>
 </ul>
 </div>
@@ -141,15 +140,13 @@ var activeTableTab = "activeTableTab";
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html#init-java.net.URL-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url)</code>
-<div class="block">Initialize the plugin and give it the base directory that is provided by
- the user.</div>
+<div class="block">Initialize the plugin and give it the base directory that is provided by the user.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html#supportsFile-java.net.URL-">supportsFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</code>
-<div class="block">This method will be called for every file that matches the given
- extensions.</div>
+<div class="block">This method will be called for every file that matches the given extensions.</div>
 </td>
 </tr>
 </table>
@@ -174,8 +171,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>getFileExtensionFilters</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;getFileExtensionFilters()</pre>
-<div class="block">Gets a list of file extensions that this plugin supports. If not
- provided, this plugin will accept all file extensions.</div>
+<div class="block">Gets a list of file extensions that this plugin supports. If not provided, this plugin will
+ accept all file extensions.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The array of file extensions supported ('.' is unnecessary)</dd>
@@ -189,13 +186,11 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>init</h4>
 <pre>void&nbsp;init(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url)</pre>
-<div class="block">Initialize the plugin and give it the base directory that is provided by
- the user.</div>
+<div class="block">Initialize the plugin and give it the base directory that is provided by the user.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>url</code> - The base directory provided as a command-line argument (if the
-            argument is a file, the base directory given will be its
-            parent directory).</dd>
+<dd><code>url</code> - The base directory provided as a command-line argument (if the argument is a file,
+        the base directory given will be its parent directory).</dd>
 </dl>
 </li>
 </ul>
@@ -206,10 +201,9 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>supportsFile</h4>
 <pre>boolean&nbsp;supportsFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</pre>
-<div class="block">This method will be called for every file that matches the given
- extensions. It is an opportunity for the plugin to perform arbitrarily
- complex acceptance filtering on a per file basis, but it is important to
- understand performance implications if the acceptance test is too
+<div class="block">This method will be called for every file that matches the given extensions. It is an
+ opportunity for the plugin to perform arbitrarily complex acceptance filtering on a per file
+ basis, but it is important to understand performance implications if the acceptance test is too
  intensive and the directory of files to recurse is large.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

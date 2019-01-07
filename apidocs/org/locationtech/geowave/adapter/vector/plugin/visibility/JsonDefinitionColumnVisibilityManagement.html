@@ -116,19 +116,18 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">JsonDefinitionColumnVisibilityManagement&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.html" title="interface in org.locationtech.geowave.adapter.vector.plugin.visibility">ColumnVisibilityManagementSpi</a>&lt;T&gt;</pre>
-<div class="block">Object defining visibility is a json structure where each attribute defines
- the visibility for a field with the same name (as the attribute).
- 
- Example: { "geometry" : "S", "eventName": "TS"}
- 
- Json attributes can also be regular expressions, matching more than one field
- name.
- 
- Example: { "geo.*" : "S", ".*" : "TS"}.
- 
- The order of the expression must be considered if one expression is more
- general than another, as shown in the example. The expression ".*" matches
- all attributes. The more specific expression "geo.*" must be ordered first.</div>
+<div class="block">Object defining visibility is a json structure where each attribute defines the visibility for a
+ field with the same name (as the attribute).
+
+ <p> Example: { "geometry" : "S", "eventName": "TS"}
+
+ <p> Json attributes can also be regular expressions, matching more than one field name.
+
+ <p> Example: { "geo.*" : "S", ".*" : "TS"}.
+
+ <p> The order of the expression must be considered if one expression is more general than
+ another, as shown in the example. The expression ".*" matches all attributes. The more specific
+ expression "geo.*" must be ordered first.</div>
 </li>
 </ul>
 </div>
@@ -226,8 +225,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html#createVisibilityHandler-java.lang.String-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-java.lang.String-">createVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;<a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="type parameter in JsonDefinitionColumnVisibilityManagement">T</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fieldName</code> - -- the name of the field for object of type T requiring
-            visibility treatment</dd>
+<dd><code>fieldName</code> - -- the name of the field for object of type T requiring visibility treatment</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 </dl>
 </li>

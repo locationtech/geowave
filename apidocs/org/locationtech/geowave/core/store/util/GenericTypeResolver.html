@@ -111,12 +111,11 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">GenericTypeResolver</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">This class is a derivative from hte Spring Framework library. Helper class
- for resolving generic types against type variables.
- 
- <p>
- Mainly intended for usage within the framework, resolving method parameter
- types even when they are declared generically.</div>
+<div class="block">This class is a derivative from hte Spring Framework library. Helper class for resolving generic
+ types against type variables.
+
+ <p> Mainly intended for usage within the framework, resolving method parameter types even when
+ they are declared generically.</div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>1.0</dd>
@@ -163,8 +162,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/TypeVariable.html?is-external=true" title="class or interface in java.lang.reflect">TypeVariable</a>&lt;?&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/GenericTypeResolver.html#getTypeVariableMap-java.lang.Class-">getTypeVariableMap</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;clazz)</code>
-<div class="block">Build a mapping of <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/TypeVariable.html?is-external=true#getName--" title="class or interface in java.lang.reflect"><code>TypeVariable names</code></a> to
- concrete <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a> for the specified <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a>.</div>
+<div class="block">Build a mapping of <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/TypeVariable.html?is-external=true#getName--" title="class or interface in java.lang.reflect"><code>TypeVariable names</code></a> to concrete <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a>
+ for the specified <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -178,18 +177,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/GenericTypeResolver.html#resolveTypeArgument-java.lang.Class-java.lang.Class-">resolveTypeArgument</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;clazz,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;genericIfc)</code>
-<div class="block">Resolve the single type argument of the given generic interface against
- the given target class which is assumed to implement the generic
- interface and possibly declare a concrete type for its type variable.</div>
+<div class="block">Resolve the single type argument of the given generic interface against the given target class
+ which is assumed to implement the generic interface and possibly declare a concrete type for
+ its type variable.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/GenericTypeResolver.html#resolveTypeArguments-java.lang.Class-java.lang.Class-">resolveTypeArguments</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;clazz,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;genericIfc)</code>
-<div class="block">Resolve the type arguments of the given generic interface against the
- given target class which is assumed to implement the generic interface
- and possibly declare concrete types for its type variables.</div>
+<div class="block">Resolve the type arguments of the given generic interface against the given target class which
+ is assumed to implement the generic interface and possibly declare concrete types for its type
+ variables.</div>
 </td>
 </tr>
 </table>
@@ -239,17 +238,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>resolveTypeArgument</h4>
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;resolveTypeArgument(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;clazz,
                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;genericIfc)</pre>
-<div class="block">Resolve the single type argument of the given generic interface against
- the given target class which is assumed to implement the generic
- interface and possibly declare a concrete type for its type variable.</div>
+<div class="block">Resolve the single type argument of the given generic interface against the given target class
+ which is assumed to implement the generic interface and possibly declare a concrete type for
+ its type variable.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>clazz</code> - the target class to check against</dd>
-<dd><code>genericIfc</code> - the generic interface or superclass to resolve the type
-            argument from</dd>
+<dd><code>genericIfc</code> - the generic interface or superclass to resolve the type argument from</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the resolved type of the argument, or <code>null</code> if not
-         resolvable</dd>
+<dd>the resolved type of the argument, or <code>null</code> if not resolvable</dd>
 </dl>
 </li>
 </ul>
@@ -261,18 +258,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>resolveTypeArguments</h4>
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]&nbsp;resolveTypeArguments(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;clazz,
                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;genericIfc)</pre>
-<div class="block">Resolve the type arguments of the given generic interface against the
- given target class which is assumed to implement the generic interface
- and possibly declare concrete types for its type variables.</div>
+<div class="block">Resolve the type arguments of the given generic interface against the given target class which
+ is assumed to implement the generic interface and possibly declare concrete types for its type
+ variables.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>clazz</code> - the target class to check against</dd>
-<dd><code>genericIfc</code> - the generic interface or superclass to resolve the type
-            argument from</dd>
+<dd><code>genericIfc</code> - the generic interface or superclass to resolve the type argument from</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the resolved type of each argument, with the array size matching
-         the number of actual type arguments, or <code>null</code> if not
-         resolvable</dd>
+<dd>the resolved type of each argument, with the array size matching the number of actual
+         type arguments, or <code>null</code> if not resolvable</dd>
 </dl>
 </li>
 </ul>
@@ -290,8 +285,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>genericType</code> - the generic type to resolve</dd>
 <dd><code>typeVariableMap</code> - the TypeVariable Map to resolved against</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the type if it resolves to a Class, or <code>Object.class</code>
-         otherwise</dd>
+<dd>the type if it resolves to a Class, or <code>Object.class</code> otherwise</dd>
 </dl>
 </li>
 </ul>
@@ -302,9 +296,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getTypeVariableMap</h4>
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/TypeVariable.html?is-external=true" title="class or interface in java.lang.reflect">TypeVariable</a>&lt;?&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&gt;&nbsp;getTypeVariableMap(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;clazz)</pre>
-<div class="block">Build a mapping of <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/TypeVariable.html?is-external=true#getName--" title="class or interface in java.lang.reflect"><code>TypeVariable names</code></a> to
- concrete <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a> for the specified <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a>. Searches all
- super types, enclosing types and interfaces.</div>
+<div class="block">Build a mapping of <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/TypeVariable.html?is-external=true#getName--" title="class or interface in java.lang.reflect"><code>TypeVariable names</code></a> to concrete <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a>
+ for the specified <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a>. Searches all super types, enclosing types and interfaces.</div>
 </li>
 </ul>
 </li>

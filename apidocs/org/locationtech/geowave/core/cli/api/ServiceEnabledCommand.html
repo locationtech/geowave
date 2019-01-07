@@ -215,8 +215,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/cli/api/Comm
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/api/ServiceEnabledCommand.html#getName--">getName</a></span>()</code>
-<div class="block">this is for ease if a class wants to merely override the final portion of
- a resource name and not the entire path</div>
+<div class="block">this is for ease if a class wants to merely override the final portion of a resource name and
+ not the entire path</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -228,8 +228,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/cli/api/Comm
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/api/ServiceEnabledCommand.html#runAsync--">runAsync</a></span>()</code>
-<div class="block">this method provides a hint to the service running the command whether it
- should be run asynchronously or not</div>
+<div class="block">this method provides a hint to the service running the command whether it should be run
+ asynchronously or not</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -336,8 +336,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/cli/api/Comm
 <li class="blockList">
 <h4>runAsync</h4>
 <pre>public&nbsp;boolean&nbsp;runAsync()</pre>
-<div class="block">this method provides a hint to the service running the command whether it
- should be run asynchronously or not</div>
+<div class="block">this method provides a hint to the service running the command whether it should be run
+ asynchronously or not</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>should this method be run asynchronously</dd>
@@ -366,11 +366,11 @@ implements <a href="../../../../../../org/locationtech/geowave/core/cli/api/Comm
 <h4>successStatusIs200</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;successStatusIs200()</pre>
 <div class="block">Get the status code to return if execution was success.
- 
- By default: POST -> 201 OTHER -> 200
- 
- Should be overridden in subclasses as needed (i.e., for a POST that does
- not create anything).</div>
+
+ <p> By default: POST -> 201 OTHER -> 200
+
+ <p> Should be overridden in subclasses as needed (i.e., for a POST that does not create
+ anything).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The potential status if REST call is successful.</dd>
@@ -407,8 +407,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/cli/api/Comm
 <li class="blockList">
 <h4>getName</h4>
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getName()</pre>
-<div class="block">this is for ease if a class wants to merely override the final portion of
- a resource name and not the entire path</div>
+<div class="block">this is for ease if a class wants to merely override the final portion of a resource name and
+ not the entire path</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the final portion of a resource name</dd>

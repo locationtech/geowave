@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.Builder.html" title="class in org.locationtech.geowave.format.gpx"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../org/locationtech/geowave/format/gpx/GpxPersistableRegistry.html" title="class in org.locationtech.geowave.format.gpx"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../org/locationtech/geowave/format/gpx/MaxExtentOptProvider.html" title="class in org.locationtech.geowave.format.gpx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -111,8 +111,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">GpxUtils</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">This is a convenience class for performing common GPX static utility methods
- such as schema validation, file parsing, and SimpleFeatureType definition.</div>
+<div class="block">This is a convenience class for performing common GPX static utility methods such as schema
+ validation, file parsing, and SimpleFeatureType definition.</div>
 </li>
 </ul>
 </div>
@@ -204,7 +204,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxUtils.html#parseDateSeconds-java.lang.String-">parseDateSeconds</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;</code></td>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxUtils.html#parseOsmMetadata-java.net.URL-">parseOsmMetadata</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;metadataFile)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -344,9 +344,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>parseOsmMetadata</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;&nbsp;parseOsmMetadata(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;metadataFile)
-                                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io">FileNotFoundException</a>,
-                                                  <a href="http://docs.oracle.com/javase/7/docs/api/javax/xml/stream/XMLStreamException.html?is-external=true" title="class or interface in javax.xml.stream">XMLStreamException</a></pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;&nbsp;parseOsmMetadata(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;metadataFile)
+                                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io">FileNotFoundException</a>,
+                                                      <a href="http://docs.oracle.com/javase/7/docs/api/javax/xml/stream/XMLStreamException.html?is-external=true" title="class or interface in javax.xml.stream">XMLStreamException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io">FileNotFoundException</a></code></dd>
@@ -434,7 +434,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.Builder.html" title="class in org.locationtech.geowave.format.gpx"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../org/locationtech/geowave/format/gpx/GpxPersistableRegistry.html" title="class in org.locationtech.geowave.format.gpx"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../org/locationtech/geowave/format/gpx/MaxExtentOptProvider.html" title="class in org.locationtech.geowave.format.gpx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

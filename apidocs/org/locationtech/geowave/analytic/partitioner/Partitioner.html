@@ -117,15 +117,12 @@ var activeTableTab = "activeTableTab";
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Provide a partition for a data item.
 
-
- Multiple partitions are permitted. Only one partition is consider primary. A
- primary partition is the partition for an item in which the item is processed
- on behalf of itself. All other partitions are those partitions that require
- visibility to the a specific item for other items to reference. This approach
- supports nearest neighbor type queries. Consider that an item can only
- discover neighbors in its partition. However, the item can be discovered as a
- nearest neighbor in those partitions in which the item participates as a none
- primary.</div>
+ <p> Multiple partitions are permitted. Only one partition is consider primary. A primary
+ partition is the partition for an item in which the item is processed on behalf of itself. All
+ other partitions are those partitions that require visibility to the a specific item for other
+ items to reference. This approach supports nearest neighbor type queries. Consider that an item
+ can only discover neighbors in its partition. However, the item can be discovered as a nearest
+ neighbor in those partitions in which the item participates as a none primary.</div>
 </li>
 </ul>
 </div>

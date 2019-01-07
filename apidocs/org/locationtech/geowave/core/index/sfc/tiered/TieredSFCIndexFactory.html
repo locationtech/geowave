@@ -111,8 +111,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">TieredSFCIndexFactory</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">A factory for creating TieredSFCIndexStrategy using various approaches for
- breaking down the bits of precision per tier</div>
+<div class="block">A factory for creating TieredSFCIndexStrategy using various approaches for breaking down the bits
+ of precision per tier</div>
 </li>
 </ul>
 </div>
@@ -242,8 +242,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>createSingleTierStrategy</h4>
 <pre>public static&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html" title="class in org.locationtech.geowave.core.index.sfc.tiered">TieredSFCIndexStrategy</a>&nbsp;createSingleTierStrategy(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefs,
                                                               <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCFactory.SFCType.html" title="enum in org.locationtech.geowave.core.index.sfc">SFCFactory.SFCType</a>&nbsp;sfc)</pre>
-<div class="block">Used to create a Single Tier Index Strategy. For example, this would be
- used to generate a strategy that has Point type spatial data.</div>
+<div class="block">Used to create a Single Tier Index Strategy. For example, this would be used to generate a
+ strategy that has Point type spatial data.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dimensionDefs</code> - an array of SFC Dimension Definition objects</dd>
@@ -262,8 +262,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html" title="class in org.locationtech.geowave.core.index.sfc.tiered">TieredSFCIndexStrategy</a>&nbsp;createSingleTierStrategy(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
                                                               int[]&nbsp;maxBitsPerDimension,
                                                               <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCFactory.SFCType.html" title="enum in org.locationtech.geowave.core.index.sfc">SFCFactory.SFCType</a>&nbsp;sfc)</pre>
-<div class="block">Used to create a Single Tier Index Strategy. For example, this would be
- used to generate a strategy that has Point type spatial data.</div>
+<div class="block">Used to create a Single Tier Index Strategy. For example, this would be used to generate a
+ strategy that has Point type spatial data.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dimensionDefs</code> - an array of SFC Dimension Definition objects</dd>
@@ -301,8 +301,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>sfcType</code> - the type of space filling curve (e.g. Hilbert)</dd>
 <dd><code>maxEstimatedDuplicatedIds</code> - the max number of duplicate SFC IDs</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an Index Strategy object with a tier for every incremental
-         cardinality between the lowest max bits of precision and 0</dd>
+<dd>an Index Strategy object with a tier for every incremental cardinality between the
+         lowest max bits of precision and 0</dd>
 </dl>
 </li>
 </ul>

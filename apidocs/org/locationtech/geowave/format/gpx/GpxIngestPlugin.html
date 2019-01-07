@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;</li>
+<li><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.format.gpx.GpxIngestPlugin</li>
@@ -114,20 +114,18 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroPluginBase</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;, <a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroSchemaProvider</a>, <a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a>, <a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a></dd>
+<dd><a href="../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroPluginBase</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;, <a href="../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroSchemaProvider</a>, <a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a>, <a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">GpxIngestPlugin</span>
-extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;</pre>
-<div class="block">This plugin is used for ingesting any GPX formatted data from a local file
- system into GeoWave as GeoTools' SimpleFeatures. It supports the default
- configuration of spatial and spatial-temporal indices and it will support
- wither directly ingesting GPX data from a local file system to GeoWave or to
- stage the data in an intermediate format in HDFS and then to ingest it into
- GeoWave using a map-reduce job. It supports OSM metadata.xml files if the
- file is directly in the root base directory that is passed in command-line to
- the ingest framework.</div>
+extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;</pre>
+<div class="block">This plugin is used for ingesting any GPX formatted data from a local file system into GeoWave as
+ GeoTools' SimpleFeatures. It supports the default configuration of spatial and spatial-temporal
+ indices and it will support wither directly ingesting GPX data from a local file system to
+ GeoWave or to stage the data in an intermediate format in HDFS and then to ingest it into GeoWave
+ using a map-reduce job. It supports OSM metadata.xml files if the file is directly in the root
+ base directory that is passed in command-line to the ingest framework.</div>
 </li>
 </ul>
 </div>
@@ -221,10 +219,9 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#getIngestWithAvroPlugin--">getIngestWithAvroPlugin</a></span>()</code>
-<div class="block">An implementation of ingestion that ingests Avro Java objects into
- GeoWave</div>
+<div class="block">An implementation of ingestion that ingests Avro Java objects into GeoWave</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -236,8 +233,8 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#getSupportedIndexableTypes--">getSupportedIndexableTypes</a></span>()</code>
-<div class="block">return a set of classes that can be indexed by this data adapter
- provider, used for compatibility checking with an index provider</div>
+<div class="block">return a set of classes that can be indexed by this data adapter provider, used for
+ compatibility checking with an index provider</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -245,36 +242,32 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#getTypes--">getTypes</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#ingestWithMapper--">ingestWithMapper</a></span>()</code>
-<div class="block">An implementation of ingestion that can be persisted to a mapper within
- the map-reduce job configuration to perform an ingest of data into
- GeoWave from intermediate data</div>
+<div class="block">An implementation of ingestion that can be persisted to a mapper within the map-reduce job
+ configuration to perform an ingest of data into GeoWave from intermediate data</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>,?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>,?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#ingestWithReducer--">ingestWithReducer</a></span>()</code>
-<div class="block">An implementation of ingestion that can be persisted to a mapper and
- reducer within the map-reduce job configuration to aggregate intermediate
- data by defined keys within a reducer and perform an ingest of data into
- GeoWave from the key-value pairs emitted by the mapper.</div>
+<div class="block">An implementation of ingestion that can be persisted to a mapper and reducer within the
+ map-reduce job configuration to aggregate intermediate data by defined keys within a reducer
+ and perform an ingest of data into GeoWave from the key-value pairs emitted by the mapper.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#init-java.net.URL-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;baseDirectory)</code>
-<div class="block">Initialize the plugin and give it the base directory that is provided by
- the user.</div>
+<div class="block">Initialize the plugin and give it the base directory that is provided by the user.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#isUseReducerPreferred--">isUseReducerPreferred</a></span>()</code>
-<div class="block">Returns a flag indicating to the ingestion framework whether it should
- try to use the ingestWithMapper() implementation or the
- ingestWithReducer() implementation in the case that both implementations
- are non-null.</div>
+<div class="block">Returns a flag indicating to the ingestion framework whether it should try to use the
+ ingestWithMapper() implementation or the ingestWithReducer() implementation in the case that
+ both implementations are non-null.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -284,19 +277,18 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#supportsFile-java.net.URL-">supportsFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</code>
-<div class="block">This method will be called for every file that matches the given
- extensions.</div>
+<div class="block">This method will be called for every file that matches the given extensions.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</code>
 <div class="block">Converts the supported file into an Avro encoded Java object.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.format.gpx.GpxTrack-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&nbsp;gpxTrack,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html#toGeoWaveDataInternal-org.locationtech.geowave.format.gpx.AvroGpxTrack-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&nbsp;gpxTrack,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
@@ -354,8 +346,8 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <h4>getFileExtensionFilters</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;getFileExtensionFilters()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html#getFileExtensionFilters--">LocalPluginBase</a></code></span></div>
-<div class="block">Gets a list of file extensions that this plugin supports. If not
- provided, this plugin will accept all file extensions.</div>
+<div class="block">Gets a list of file extensions that this plugin supports. If not provided, this plugin will
+ accept all file extensions.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The array of file extensions supported ('.' is unnecessary)</dd>
@@ -370,13 +362,11 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <h4>init</h4>
 <pre>public&nbsp;void&nbsp;init(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;baseDirectory)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html#init-java.net.URL-">LocalPluginBase</a></code></span></div>
-<div class="block">Initialize the plugin and give it the base directory that is provided by
- the user.</div>
+<div class="block">Initialize the plugin and give it the base directory that is provided by the user.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>baseDirectory</code> - The base directory provided as a command-line argument (if the
-            argument is a file, the base directory given will be its
-            parent directory).</dd>
+<dd><code>baseDirectory</code> - The base directory provided as a command-line argument (if the argument is a file,
+        the base directory given will be its parent directory).</dd>
 </dl>
 </li>
 </ul>
@@ -388,10 +378,9 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <h4>supportsFile</h4>
 <pre>public&nbsp;boolean&nbsp;supportsFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html#supportsFile-java.net.URL-">LocalPluginBase</a></code></span></div>
-<div class="block">This method will be called for every file that matches the given
- extensions. It is an opportunity for the plugin to perform arbitrarily
- complex acceptance filtering on a per file basis, but it is important to
- understand performance implications if the acceptance test is too
+<div class="block">This method will be called for every file that matches the given extensions. It is an
+ opportunity for the plugin to perform arbitrarily complex acceptance filtering on a per file
+ basis, but it is important to understand performance implications if the acceptance test is too
  intensive and the directory of files to recurse is large.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -410,7 +399,7 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <pre>protected&nbsp;org.opengis.feature.simple.SimpleFeatureType[]&nbsp;getTypes()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#getTypes--">getTypes</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#getTypes--">getTypes</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -421,7 +410,7 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <li class="blockList">
 <h4>getAvroSchema</h4>
 <pre>public&nbsp;org.apache.avro.Schema&nbsp;getAvroSchema()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html#getAvroSchema--">AvroSchemaProvider</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroSchemaProvider.html#getAvroSchema--">GeoWaveAvroSchemaProvider</a></code></span></div>
 <div class="block">Returns the Avro schema for the plugin</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -435,8 +424,8 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <ul class="blockList">
 <li class="blockList">
 <h4>toAvroObjects</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;&nbsp;toAvroObjects(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html#toAvroObjects-java.net.URL-">AvroPluginBase</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;&nbsp;toAvroObjects(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroPluginBase.html#toAvroObjects-java.net.URL-">GeoWaveAvroPluginBase</a></code></span></div>
 <div class="block">Converts the supported file into an Avro encoded Java object.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -454,15 +443,13 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <h4>isUseReducerPreferred</h4>
 <pre>public&nbsp;boolean&nbsp;isUseReducerPreferred()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#isUseReducerPreferred--">IngestFromHdfsPlugin</a></code></span></div>
-<div class="block">Returns a flag indicating to the ingestion framework whether it should
- try to use the ingestWithMapper() implementation or the
- ingestWithReducer() implementation in the case that both implementations
- are non-null.</div>
+<div class="block">Returns a flag indicating to the ingestion framework whether it should try to use the
+ ingestWithMapper() implementation or the ingestWithReducer() implementation in the case that
+ both implementations are non-null.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>If true, the framework will use ingestWithReducer() and only fall
-         back to ingestWithMapper() if necessary, otherwise the behavior
-         will be the reverse</dd>
+<dd>If true, the framework will use ingestWithReducer() and only fall back to
+         ingestWithMapper() if necessary, otherwise the behavior will be the reverse</dd>
 </dl>
 </li>
 </ul>
@@ -472,11 +459,10 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <ul class="blockList">
 <li class="blockList">
 <h4>ingestWithMapper</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;ingestWithMapper()</pre>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;ingestWithMapper()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#ingestWithMapper--">IngestFromHdfsPlugin</a></code></span></div>
-<div class="block">An implementation of ingestion that can be persisted to a mapper within
- the map-reduce job configuration to perform an ingest of data into
- GeoWave from intermediate data</div>
+<div class="block">An implementation of ingestion that can be persisted to a mapper within the map-reduce job
+ configuration to perform an ingest of data into GeoWave from intermediate data</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The implementation for ingestion with only a mapper</dd>
@@ -489,34 +475,32 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <ul class="blockList">
 <li class="blockList">
 <h4>ingestWithReducer</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>,?,?,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;ingestWithReducer()</pre>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>,?,?,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;ingestWithReducer()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#ingestWithReducer--">IngestFromHdfsPlugin</a></code></span></div>
-<div class="block">An implementation of ingestion that can be persisted to a mapper and
- reducer within the map-reduce job configuration to aggregate intermediate
- data by defined keys within a reducer and perform an ingest of data into
- GeoWave from the key-value pairs emitted by the mapper.</div>
+<div class="block">An implementation of ingestion that can be persisted to a mapper and reducer within the
+ map-reduce job configuration to aggregate intermediate data by defined keys within a reducer
+ and perform an ingest of data into GeoWave from the key-value pairs emitted by the mapper.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The implementation for ingestion with a mapper and reducer. It is
-         important to provide the correct concrete implementation of Key
-         and Value classes within the appropriate generics because the
-         framework will use reflection to set the key and value classes
-         for map-reduce.</dd>
+<dd>The implementation for ingestion with a mapper and reducer. It is important to provide
+         the correct concrete implementation of Key and Value classes within the appropriate
+         generics because the framework will use reflection to set the key and value classes for
+         map-reduce.</dd>
 </dl>
 </li>
 </ul>
-<a name="toGeoWaveDataInternal-org.locationtech.geowave.format.gpx.GpxTrack-java.lang.String:A-java.lang.String-">
+<a name="toGeoWaveDataInternal-org.locationtech.geowave.format.gpx.AvroGpxTrack-java.lang.String:A-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toGeoWaveDataInternal</h4>
-<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;toGeoWaveDataInternal(<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&nbsp;gpxTrack,
+<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;toGeoWaveDataInternal(<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&nbsp;gpxTrack,
                                                                                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
                                                                                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toGeoWaveDataInternal-I-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toGeoWaveDataInternal-I-java.lang.String:A-java.lang.String-">toGeoWaveDataInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -528,17 +512,15 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <h4>getRequiredIndices</h4>
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;getRequiredIndices()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html#getRequiredIndices--">IndexProvider</a></code></span></div>
-<div class="block">Get an array of indices that are required by this ingest implementation.
- This should be a subset of supported indices. All of these indices will
- automatically be persisted with GeoWave's metadata store (and in the job
- configuration if run as a job), whereas indices that are just "supported"
- will not automatically be persisted (only if they are the primary index).
- This is primarily useful if there is a supplemental index required by the
- ingest process that is not the primary index.</div>
+<div class="block">Get an array of indices that are required by this ingest implementation. This should be a
+ subset of supported indices. All of these indices will automatically be persisted with
+ GeoWave's metadata store (and in the job configuration if run as a job), whereas indices that
+ are just "supported" will not automatically be persisted (only if they are the primary index).
+ This is primarily useful if there is a supplemental index required by the ingest process that
+ is not the primary index.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the array of indices that are supported by this ingest
-         implementation</dd>
+<dd>the array of indices that are supported by this ingest implementation</dd>
 </dl>
 </li>
 </ul>
@@ -548,10 +530,9 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <ul class="blockList">
 <li class="blockList">
 <h4>getIngestWithAvroPlugin</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getIngestWithAvroPlugin()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html#getIngestWithAvroPlugin--">AvroFormatPlugin</a></code></span></div>
-<div class="block">An implementation of ingestion that ingests Avro Java objects into
- GeoWave</div>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getIngestWithAvroPlugin()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html#getIngestWithAvroPlugin--">GeoWaveAvroFormatPlugin</a></code></span></div>
+<div class="block">An implementation of ingestion that ingests Avro Java objects into GeoWave</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The implementation for ingestion from Avro</dd>
@@ -566,8 +547,8 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <h4>getSupportedIndexableTypes</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;[]&nbsp;getSupportedIndexableTypes()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html#getSupportedIndexableTypes--">DataAdapterProvider</a></code></span></div>
-<div class="block">return a set of classes that can be indexed by this data adapter
- provider, used for compatibility checking with an index provider</div>
+<div class="block">return a set of classes that can be indexed by this data adapter provider, used for
+ compatibility checking with an index provider</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the classes that are indexable by this adapter provider</dd>

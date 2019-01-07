@@ -124,8 +124,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">GeoWaveRecordReader&lt;T&gt;</span>
 extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;</pre>
-<div class="block">This class is used by the GeoWaveInputFormat to read data from a GeoWave data
- store.</div>
+<div class="block">This class is used by the GeoWaveInputFormat to read data from a GeoWave data store.</div>
 </li>
 </ul>
 </div>
@@ -284,8 +283,7 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 <td class="colFirst"><code>protected static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#concatenateWithCallback-java.util.Iterator-org.locationtech.geowave.mapreduce.splits.GeoWaveRecordReader.NextRangeCallback-">concatenateWithCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/RangeLocationPair.html" title="class in org.locationtech.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;&gt;&gt;&nbsp;inputs,
                        <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in org.locationtech.geowave.mapreduce.splits">GeoWaveRecordReader.NextRangeCallback</a>&nbsp;nextRangeCallback)</code>
-<div class="block">Mostly guava's concatenate method, but there is a need for a callback
- between iterators</div>
+<div class="block">Mostly guava's concatenate method, but there is a need for a callback between iterators</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -304,8 +302,7 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#initialize-org.apache.hadoop.mapreduce.InputSplit-org.apache.hadoop.mapreduce.TaskAttemptContext-">initialize</a></span>(org.apache.hadoop.mapreduce.InputSplit&nbsp;inSplit,
           org.apache.hadoop.mapreduce.TaskAttemptContext&nbsp;attempt)</code>
-<div class="block">Initialize a scanner over the given input split using this task attempt
- configuration.</div>
+<div class="block">Initialize a scanner over the given input split using this task attempt configuration.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -538,8 +535,7 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 <pre>public&nbsp;void&nbsp;initialize(org.apache.hadoop.mapreduce.InputSplit&nbsp;inSplit,
                        org.apache.hadoop.mapreduce.TaskAttemptContext&nbsp;attempt)
                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<div class="block">Initialize a scanner over the given input split using this task attempt
- configuration.</div>
+<div class="block">Initialize a scanner over the given input split using this task attempt configuration.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>initialize</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;</code></dd>
@@ -640,8 +636,7 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 <h4>concatenateWithCallback</h4>
 <pre>protected static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;&nbsp;concatenateWithCallback(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/RangeLocationPair.html" title="class in org.locationtech.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;&gt;&gt;&nbsp;inputs,
                                                                                     <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in org.locationtech.geowave.mapreduce.splits">GeoWaveRecordReader.NextRangeCallback</a>&nbsp;nextRangeCallback)</pre>
-<div class="block">Mostly guava's concatenate method, but there is a need for a callback
- between iterators</div>
+<div class="block">Mostly guava's concatenate method, but there is a need for a callback between iterators</div>
 </li>
 </ul>
 <a name="getProgress--">

@@ -124,8 +124,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">SpatialQuery</span>
 extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery</a></pre>
-<div class="block">The Spatial Query class represents a query in two dimensions. The constraint
- that is applied represents an intersection operation on the query geometry.</div>
+<div class="block">The Spatial Query class represents a query in two dimensions. The constraint that is applied
+ represents an intersection operation on the query geometry.</div>
 </li>
 </ul>
 </div>
@@ -192,8 +192,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-">SpatialQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;constraints,
             org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
             <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
-<div class="block">Convenience constructor can be used when you already have linear
- constraints for the query.</div>
+<div class="block">Convenience constructor can be used when you already have linear constraints for the query.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -201,8 +200,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
             org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
             <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
             <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</code>
-<div class="block">Convenience constructor can be used when you already have linear
- constraints for the query.</div>
+<div class="block">Convenience constructor can be used when you already have linear constraints for the query.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -219,8 +217,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-org.locationtech.jts.geom.Geometry-">SpatialQuery</a></span>(org.locationtech.jts.geom.Geometry&nbsp;queryGeometry)</code>
-<div class="block">Convenience constructor used to construct a SpatialQuery object that has
- an X and Y dimension (axis).</div>
+<div class="block">Convenience constructor used to construct a SpatialQuery object that has an X and Y dimension
+ (axis).</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -230,8 +228,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#SpatialQuery-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-">SpatialQuery</a></span>(org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
             <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
-<div class="block">Convenience constructor used to construct a SpatialQuery object that has
- an X and Y dimension (axis).</div>
+<div class="block">Convenience constructor used to construct a SpatialQuery object that has an X and Y dimension
+ (axis).</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -274,8 +272,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#getIndexConstraints-org.locationtech.geowave.core.store.api.Index-">getIndexConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
-<div class="block">Return a set of constraints to apply to the primary index based on the
- indexing strategy used.</div>
+<div class="block">Return a set of constraints to apply to the primary index based on the indexing strategy used.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -285,8 +282,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -325,8 +321,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <li class="blockList">
 <h4>SpatialQuery</h4>
 <pre>public&nbsp;SpatialQuery(org.locationtech.jts.geom.Geometry&nbsp;queryGeometry)</pre>
-<div class="block">Convenience constructor used to construct a SpatialQuery object that has
- an X and Y dimension (axis).</div>
+<div class="block">Convenience constructor used to construct a SpatialQuery object that has an X and Y dimension
+ (axis).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>queryGeometry</code> - spatial geometry of the query</dd>
@@ -382,8 +378,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <h4>SpatialQuery</h4>
 <pre>public&nbsp;SpatialQuery(org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
                     <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
-<div class="block">Convenience constructor used to construct a SpatialQuery object that has
- an X and Y dimension (axis).</div>
+<div class="block">Convenience constructor used to construct a SpatialQuery object that has an X and Y dimension
+ (axis).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>queryGeometry</code> - spatial geometry of the query</dd>
@@ -400,9 +396,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <pre>public&nbsp;SpatialQuery(<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;constraints,
                     org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
                     <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
-<div class="block">Convenience constructor can be used when you already have linear
- constraints for the query. The queryGeometry and compareOp is used for
- fine grained post filtering.</div>
+<div class="block">Convenience constructor can be used when you already have linear constraints for the query. The
+ queryGeometry and compareOp is used for fine grained post filtering.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>constraints</code> - linear constraints</dd>
@@ -445,9 +440,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
                     org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
                     <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
                     <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</pre>
-<div class="block">Convenience constructor can be used when you already have linear
- constraints for the query. The queryGeometry and compareOp is used for
- fine grained post filtering.</div>
+<div class="block">Convenience constructor can be used when you already have linear constraints for the query. The
+ queryGeometry and compareOp is used for fine grained post filtering.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>constraints</code> - linear constraints</dd>
@@ -525,10 +519,9 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <h4>getIndexConstraints</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;getIndexConstraints(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html#getIndexConstraints-org.locationtech.geowave.core.store.api.Index-">QueryConstraints</a></code></span></div>
-<div class="block">Return a set of constraints to apply to the primary index based on the
- indexing strategy used. The ordering of dimensions within the index
- stategy must match the order of dimensions in the numeric data returned
- which will represent the constraints applied to the primary index for the
+<div class="block">Return a set of constraints to apply to the primary index based on the indexing strategy used.
+ The ordering of dimensions within the index stategy must match the order of dimensions in the
+ numeric data returned which will represent the constraints applied to the primary index for the
  query.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -538,8 +531,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - The index used to generate the constraints for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>A multi-dimensional numeric data set that represents the
-         constraints for the index</dd>
+<dd>A multi-dimensional numeric data set that represents the constraints for the index</dd>
 </dl>
 </li>
 </ul>
@@ -551,16 +543,14 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#toBinary--">toBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>

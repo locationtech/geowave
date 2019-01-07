@@ -121,12 +121,12 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">AdapterStoreImpl</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;
 implements <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a></pre>
-<div class="block">This class will persist Data Adapters within an Accumulo table for GeoWave
- metadata. The adapters will be persisted in an "ADAPTER" column family.
+<div class="block">This class will persist Data Adapters within an Accumulo table for GeoWave metadata. The adapters
+ will be persisted in an "ADAPTER" column family.
 
- There is an LRU cache associated with it so staying in sync with external
- updates is not practical - it assumes the objects are not updated often or at
- all. The objects are stored in their own table.</div>
+ <p> There is an LRU cache associated with it so staying in sync with external updates is not
+ practical - it assumes the objects are not updated often or at all. The objects are stored in
+ their own table.</div>
 </li>
 </ul>
 </div>

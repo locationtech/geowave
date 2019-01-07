@@ -121,19 +121,16 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">AdapterBasedPartitioner</span>
 extends <a href="../../../../../org/locationtech/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in org.locationtech.geowave.analytic.partitioner">AbstractPartitioner</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/partitioner/AdapterBasedPartitioner.AdapterDataEntry.html" title="class in org.locationtech.geowave.analytic.partitioner">AdapterBasedPartitioner.AdapterDataEntry</a>&gt;
 implements <a href="../../../../../org/locationtech/geowave/analytic/partitioner/Partitioner.html" title="interface in org.locationtech.geowave.analytic.partitioner">Partitioner</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/partitioner/AdapterBasedPartitioner.AdapterDataEntry.html" title="class in org.locationtech.geowave.analytic.partitioner">AdapterBasedPartitioner.AdapterDataEntry</a>&gt;, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
-<div class="block">This class uses the <a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api"><code>DataTypeAdapter</code></a> to decode the dimension fields to
- be indexed. Although seemingly more flexible than the
- <a href="../../../../../org/locationtech/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="class in org.locationtech.geowave.analytic.partitioner"><code>OrthodromicDistancePartitioner</code></a>, handling different types of data
- entries, the assumption is that each object decode by the adapter provides
- the fields required according to the supplied model.
+<div class="block">This class uses the <a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api"><code>DataTypeAdapter</code></a> to decode the dimension fields to be indexed.
+ Although seemingly more flexible than the <a href="../../../../../org/locationtech/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="class in org.locationtech.geowave.analytic.partitioner"><code>OrthodromicDistancePartitioner</code></a>, handling
+ different types of data entries, the assumption is that each object decode by the adapter
+ provides the fields required according to the supplied model.
 
- The user provides the distances per dimension. It us up to the user to
- convert geographic distance into distance in degrees per longitude and
- latitude.
+ <p> The user provides the distances per dimension. It us up to the user to convert geographic
+ distance into distance in degrees per longitude and latitude.
 
- This class depends on an AdapterStore. Since an AdapterStore is not
- Serializable, the dependency is transient requiring initialization after
- serialization
+ <p> This class depends on an AdapterStore. Since an AdapterStore is not Serializable, the
+ dependency is transient requiring initialization after serialization
  <code>AdapterBasedPartitioner#initialize(ConfigurationWrapper)</code></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>

@@ -158,15 +158,14 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/AvroFeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">AvroFeatureDataAdapter</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">FeatureDataAdapter</a></span></code>
+<div class="block">This data adapter will handle all reading/writing concerns for storing and retrieving GeoTools
+ SimpleFeature objects to and from a GeoWave persistent store in Accumulo.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">FeatureDataAdapter</a></span></code>
-<div class="block">This data adapter will handle all reading/writing concerns for storing and
- retrieving GeoTools SimpleFeature objects to and from a GeoWave persistent
- store in Accumulo.</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/GeoWaveAvroFeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">GeoWaveAvroFeatureDataAdapter</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -266,10 +265,9 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;T&gt;</span></code>
-<div class="block">This class generically supports most of the operations necessary to implement
- a Data Adapter and can be easily extended to support specific data types.<br>
- Many of the details are handled by mapping IndexFieldHandler's based on
- either types or exact dimensions.</div>
+<div class="block">This class generically supports most of the operations necessary to implement a Data Adapter and
+ can be easily extended to support specific data types.<br> Many of the details are handled by
+ mapping IndexFieldHandler's based on either types or exact dimensions.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -293,8 +291,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;</span></code>
-<div class="block">This interface should be implemented by any custom data type that must be
- stored in the GeoWave index.</div>
+<div class="block">This interface should be implemented by any custom data type that must be stored in the GeoWave
+ index.</div>
 </td>
 </tr>
 </tbody>
@@ -314,8 +312,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a></span></code>
-<div class="block">This interface describes the common fields for all of the data within the
- index.</div>
+<div class="block">This interface describes the common fields for all of the data within the index.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -374,9 +371,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/mapreduce/HadoopDataAdapter.html" title="interface in org.locationtech.geowave.mapreduce">HadoopDataAdapter</a>&lt;T,W extends org.apache.hadoop.io.Writable&gt;</span></code>
-<div class="block">This is an interface that extends data adapter to allow map reduce jobs to
- easily convert hadoop writable objects to and from the geowave native
- representation of the objects.</div>
+<div class="block">This is an interface that extends data adapter to allow map reduce jobs to easily convert hadoop
+ writable objects to and from the geowave native representation of the objects.</div>
 </td>
 </tr>
 </tbody>

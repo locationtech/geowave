@@ -115,8 +115,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">NumericDimensionDefinition</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
-<div class="block">The Numeric Dimension Definition interface defines the attributes and methods
- of a class which forms the Space Filling Curve dimension.</div>
+<div class="block">The Numeric Dimension Definition interface defines the attributes and methods of a class which
+ forms the Space Filling Curve dimension.</div>
 </li>
 </ul>
 </div>
@@ -138,8 +138,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#denormalize-double-">denormalize</a></span>(double&nbsp;value)</code>
-<div class="block">Used to denormalize the numeric data set from a value between 0 and 1
- scaled to fit within its native bounds</div>
+<div class="block">Used to denormalize the numeric data set from a value between 0 and 1 scaled to fit within its
+ native bounds</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -151,15 +151,14 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>
-<div class="block">Returns a range in the native bounds of the dimension definition,
- denormalized from a bin and separate range</div>
+<div class="block">Returns a range in the native bounds of the dimension definition, denormalized from a bin and
+ separate range</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getFixedBinIdSize--">getFixedBinIdSize</a></span>()</code>
-<div class="block">If this numeric dimension definition uses bins, it is given a fixed
- length for the bin ID</div>
+<div class="block">If this numeric dimension definition uses bins, it is given a fixed length for the bin ID</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -181,8 +180,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#normalize-double-">normalize</a></span>(double&nbsp;value)</code>
-<div class="block">Used to normalize a value within the bounds of the range to a percentage
- of the range between 0 and 1</div>
+<div class="block">Used to normalize a value within the bounds of the range to a percentage of the range between 0
+ and 1</div>
 </td>
 </tr>
 </table>
@@ -223,8 +222,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>normalize</h4>
 <pre>double&nbsp;normalize(double&nbsp;value)</pre>
-<div class="block">Used to normalize a value within the bounds of the range to a percentage
- of the range between 0 and 1</div>
+<div class="block">Used to normalize a value within the bounds of the range to a percentage of the range between 0
+ and 1</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>normalized value</dd>
@@ -238,8 +237,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>denormalize</h4>
 <pre>double&nbsp;denormalize(double&nbsp;value)</pre>
-<div class="block">Used to denormalize the numeric data set from a value between 0 and 1
- scaled to fit within its native bounds</div>
+<div class="block">Used to denormalize the numeric data set from a value between 0 and 1 scaled to fit within its
+ native bounds</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the denormalized value</dd>
@@ -269,8 +268,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getDenormalizedRange</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a>&nbsp;getDenormalizedRange(<a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</pre>
-<div class="block">Returns a range in the native bounds of the dimension definition,
- denormalized from a bin and separate range</div>
+<div class="block">Returns a range in the native bounds of the dimension definition, denormalized from a bin and
+ separate range</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>range</code> - a numeric range of the data set, with a bin</dd>
@@ -286,8 +285,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getFixedBinIdSize</h4>
 <pre>int&nbsp;getFixedBinIdSize()</pre>
-<div class="block">If this numeric dimension definition uses bins, it is given a fixed
- length for the bin ID</div>
+<div class="block">If this numeric dimension definition uses bins, it is given a fixed length for the bin ID</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the fixed length for this dimensions bin ID</dd>
@@ -304,8 +302,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <div class="block">Returns the native bounds of the dimension definition</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a range representing the minimum value and the maximum value for
-         this dimension definition</dd>
+<dd>a range representing the minimum value and the maximum value for this dimension
+         definition</dd>
 </dl>
 </li>
 </ul>

@@ -116,17 +116,12 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">SecondaryIndexImpl&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndex.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndex</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentValue.html" title="class in org.locationtech.geowave.core.store.data">PersistentValue</a>&lt;?&gt;&gt;&gt;</pre>
-<div class="block">This class fully describes everything necessary to index data within GeoWave
- using secondary indexing. <br>
- The key components are the indexing strategy and the common index model. <br>
- <br>
- Attributes for SecondaryIndex include:<br>
- indexStrategy = array of fieldIndexStrategy (numeric, temporal or text)<br>
- fieldId<br>
- associatedStatistics <br>
- secondaryIndexType - (join, full, partial)<br>
- secondaryIndexId - <br>
- partialFieldIds - list of fields that are part of the ...<br></div>
+<div class="block">This class fully describes everything necessary to index data within GeoWave using secondary
+ indexing. <br> The key components are the indexing strategy and the common index model. <br> <br>
+ Attributes for SecondaryIndex include:<br> indexStrategy = array of fieldIndexStrategy (numeric,
+ temporal or text)<br> fieldId<br> associatedStatistics <br> secondaryIndexType - (join, full,
+ partial)<br> secondaryIndexId - <br> partialFieldIds - list of fields that are part of the
+ ...<br></div>
 </li>
 </ul>
 </div>
@@ -178,8 +173,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexImpl.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>
-<div class="block">Compare this object to the one passed as parameter to see if same object,
- same class and that id is the same.</div>
+<div class="block">Compare this object to the one passed as parameter to see if same object, same class and that
+ id is the same.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -219,8 +214,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexImpl.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -369,8 +363,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <li class="blockList">
 <h4>equals</h4>
 <pre>public&nbsp;boolean&nbsp;equals(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</pre>
-<div class="block">Compare this object to the one passed as parameter to see if same object,
- same class and that id is the same.</div>
+<div class="block">Compare this object to the one passed as parameter to see if same object, same class and that
+ id is the same.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -385,14 +379,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/index/
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>

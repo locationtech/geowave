@@ -170,9 +170,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/avro/AvroIngestPlugin.html" title="class in org.locationtech.geowave.format.avro">AvroIngestPlugin</a></span></code>
-<div class="block">This plugin is used for ingesting any GPX formatted data from a local file
- system into GeoWave as GeoTools' SimpleFeatures.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/avro/GeoWaveAvroIngestPlugin.html" title="class in org.locationtech.geowave.format.avro">GeoWaveAvroIngestPlugin</a></span></code>
+<div class="block">This plugin is used for ingesting any GPX formatted data from a local file system into GeoWave as
+ GeoTools' SimpleFeatures.</div>
 </td>
 </tr>
 </tbody>
@@ -186,7 +186,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AvroIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/avro/AvroIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveAvroIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/avro/GeoWaveAvroIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -216,7 +216,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GDELTIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -247,7 +247,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GeoLifeIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/geolife/GeoLifeIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -267,8 +267,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html" title="class in org.locationtech.geowave.format.gpx">GpxIngestPlugin</a></span></code>
-<div class="block">This plugin is used for ingesting any GPX formatted data from a local file
- system into GeoWave as GeoTools' SimpleFeatures.</div>
+<div class="block">This plugin is used for ingesting any GPX formatted data from a local file system into GeoWave as
+ GeoTools' SimpleFeatures.</div>
 </td>
 </tr>
 </tbody>
@@ -281,7 +281,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/format/gpx/GpxTrack.html" title="class in org.locationtech.geowave.format.gpx">GpxTrack</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.html" title="class in org.locationtech.geowave.format.gpx">AvroGpxTrack</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GpxIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/gpx/GpxIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -312,7 +312,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/format/tdrive/TdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">TdrivePoint</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/format/tdrive/AvroTdrivePoint.html" title="class in org.locationtech.geowave.format.tdrive">AvroTdrivePoint</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">TdriveIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -343,7 +343,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">TwitterIngestFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/twitter/TwitterIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>

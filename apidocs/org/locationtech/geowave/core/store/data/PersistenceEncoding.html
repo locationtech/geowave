@@ -115,13 +115,12 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">PersistenceEncoding&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">This class models all of the necessary information for persisting data in the
- data store (following the common index model) and is used internally within
- GeoWave as an intermediary object between the direct storage format and the
- native data format. It is the responsibility of the data adapter to convert
- to and from this object and the native object. It does not contain any
- information about the entry in a particular index and is used when writing an
- entry, prior to its existence in an index.</div>
+<div class="block">This class models all of the necessary information for persisting data in the data store
+ (following the common index model) and is used internally within GeoWave as an intermediary
+ object between the direct storage format and the native data format. It is the responsibility of
+ the data adapter to convert to and from this object and the native object. It does not contain
+ any information about the entry in a particular index and is used when writing an entry, prior to
+ its existence in an index.</div>
 </li>
 </ul>
 </div>
@@ -206,8 +205,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#getUnknownData--">getUnknownData</a></span>()</code>
-<div class="block">Return the data that has been persisted but not identified by a field
- reader</div>
+<div class="block">Return the data that has been persisted but not identified by a field reader</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -324,8 +322,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getUnknownData</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;getUnknownData()</pre>
-<div class="block">Return the data that has been persisted but not identified by a field
- reader</div>
+<div class="block">Return the data that has been persisted but not identified by a field reader</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the unknown data that is yet to be identified by a field reader</dd>

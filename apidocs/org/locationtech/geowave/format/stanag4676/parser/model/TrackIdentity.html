@@ -145,15 +145,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/format/stanag4676/parser/model/IffMode.html" title="enum in org.locationtech.geowave.format.stanag4676.parser.model">IffMode</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/stanag4676/parser/model/TrackIdentity.html#iffMode">iffMode</a></span></code>
-<div class="block">The identification friend foe (IFF) information associated with the
- track.</div>
+<div class="block">The identification friend foe (IFF) information associated with the track.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/stanag4676/parser/model/TrackIdentity.html#iffValue">iffValue</a></span></code>
-<div class="block">The identification friend foe (IFF) information associated with the
- track.</div>
+<div class="block">The identification friend foe (IFF) information associated with the track.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -165,8 +163,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/stanag4676/parser/model/TrackIdentity.html#sourceReliability">sourceReliability</a></span></code>
-<div class="block">A measure of reliability of the source used to determine/estimate the
- identity</div>
+<div class="block">A measure of reliability of the source used to determine/estimate the identity</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -329,8 +326,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>identity</h4>
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/format/stanag4676/parser/model/Identity.html" title="enum in org.locationtech.geowave.format.stanag4676.parser.model">Identity</a> identity</pre>
 <div class="block">identity information about a track.
- <p>
- values are derived from STANAG 1241. See <a href="../../../../../../../org/locationtech/geowave/format/stanag4676/parser/model/Identity.html" title="enum in org.locationtech.geowave.format.stanag4676.parser.model"><code>Identity</code></a></div>
+
+ <p> values are derived from STANAG 1241. See <a href="../../../../../../../org/locationtech/geowave/format/stanag4676/parser/model/Identity.html" title="enum in org.locationtech.geowave.format.stanag4676.parser.model"><code>Identity</code></a></div>
 </li>
 </ul>
 <a name="amplification">
@@ -341,9 +338,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>amplification</h4>
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/format/stanag4676/parser/model/IdentityAmplification.html" title="enum in org.locationtech.geowave.format.stanag4676.parser.model">IdentityAmplification</a> amplification</pre>
 <div class="block">identity amplifying/modifying descriptors of a track.
- <p>
- values are derived from STANAG 1241. The amplification element is filled
- only if the identity is not NULL.</div>
+
+ <p> values are derived from STANAG 1241. The amplification element is filled only if the
+ identity is not NULL.</div>
 </li>
 </ul>
 <a name="source">
@@ -364,18 +361,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>valueConfidence</h4>
 <pre>public&nbsp;int valueConfidence</pre>
 <div class="block">A measure of confidence that a correct identity is made.
- <p>
- NOTE: This value is set only when the identity is not NULL
- <p>
- Provides a level of confidence or certainty. Allowed values are 0 to 100,
- indicating a percentage of certainty. No guidance is imposed on how this
- percentage is calculated, as it will vary depending on the class from
- which the enumeration is called. The value 0 indicates no confidence; a
- value of 100 indicates the highest possible confidence. This field is
- intended to be analogous to credibility (of information) criteria
- specified in AJP 2.1, whose values range from 1 to 6, but no assignment
- of qualitative confidence statements is imposed on specific ranges of
- percentages.</div>
+
+ <p> NOTE: This value is set only when the identity is not NULL
+
+ <p> Provides a level of confidence or certainty. Allowed values are 0 to 100, indicating a
+ percentage of certainty. No guidance is imposed on how this percentage is calculated, as it
+ will vary depending on the class from which the enumeration is called. The value 0 indicates no
+ confidence; a value of 100 indicates the highest possible confidence. This field is intended to
+ be analogous to credibility (of information) criteria specified in AJP 2.1, whose values range
+ from 1 to 6, but no assignment of qualitative confidence statements is imposed on specific
+ ranges of percentages.</div>
 </li>
 </ul>
 <a name="sourceReliability">
@@ -385,19 +380,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>sourceReliability</h4>
 <pre>public&nbsp;int sourceReliability</pre>
-<div class="block">A measure of reliability of the source used to determine/estimate the
- identity
- <p>
- NOTE: This value is set only when the identity is not NULL
- <p>
- Provides a measure of confidence in the reliability of the source that
- generated the confidence value. Source may be a person, algorithm,
- exploitation/tracker system, or unit/organization. Allowed values are 0
- to 100. The value 0 indicates no reliability; a value of 100 indicates
- the highest possible reliability. This field is intended to be analogous
- to reliability (of source) criteria specified in AJP 2.1, whose values
- range from A to F, but no assignment of qualitative reliability
- statements is imposed on specific ranges of percentages.</div>
+<div class="block">A measure of reliability of the source used to determine/estimate the identity
+
+ <p> NOTE: This value is set only when the identity is not NULL
+
+ <p> Provides a measure of confidence in the reliability of the source that generated the
+ confidence value. Source may be a person, algorithm, exploitation/tracker system, or
+ unit/organization. Allowed values are 0 to 100. The value 0 indicates no reliability; a value
+ of 100 indicates the highest possible reliability. This field is intended to be analogous to
+ reliability (of source) criteria specified in AJP 2.1, whose values range from A to F, but no
+ assignment of qualitative reliability statements is imposed on specific ranges of percentages.</div>
 </li>
 </ul>
 <a name="iffMode">
@@ -407,8 +399,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>iffMode</h4>
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/format/stanag4676/parser/model/IffMode.html" title="enum in org.locationtech.geowave.format.stanag4676.parser.model">IffMode</a> iffMode</pre>
-<div class="block">The identification friend foe (IFF) information associated with the
- track.</div>
+<div class="block">The identification friend foe (IFF) information associated with the track.</div>
 </li>
 </ul>
 <a name="iffValue">
@@ -418,8 +409,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>iffValue</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> iffValue</pre>
-<div class="block">The identification friend foe (IFF) information associated with the
- track.</div>
+<div class="block">The identification friend foe (IFF) information associated with the track.</div>
 </li>
 </ul>
 <a name="unitName">
@@ -430,9 +420,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>unitName</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> unitName</pre>
 <div class="block">Name of unit being tracked per STANAG 5527 and AdatP-3.
- <p>
- Typical example is BFT, where identification of unit being tracked is
- well known.</div>
+
+ <p> Typical example is BFT, where identification of unit being tracked is well known.</div>
 </li>
 </ul>
 <a name="unitSymbol">
@@ -443,9 +432,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>unitSymbol</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> unitSymbol</pre>
 <div class="block">Symbol of unit being tracked per STANAG 5527 and APP-6A.
- <p>
- Typical example is BFT, where identification of unit being tracked is
- well known.</div>
+
+ <p> Typical example is BFT, where identification of unit being tracked is well known.</div>
 </li>
 </ul>
 </li>

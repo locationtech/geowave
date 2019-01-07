@@ -319,9 +319,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStoreWrapper.html" title="class in org.locationtech.geowave.core.store.adapter">AdapterStoreWrapper</a></span></code>
-<div class="block">Given a transient store and a internal adapter store to use to map between
- internal IDs and external IDs, we can wrap an implementation as a persistent
- adapter store</div>
+<div class="block">Given a transient store and a internal adapter store to use to map between internal IDs and
+ external IDs, we can wrap an implementation as a persistent adapter store</div>
 </td>
 </tr>
 </tbody>
@@ -361,10 +360,8 @@
          <a href="../../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&nbsp;scanCallback,
          byte[]&nbsp;fieldSubsetBitmask,
          boolean&nbsp;decodeRow)</code>
-<div class="block">Basic method that decodes a native row Currently overridden by Accumulo
- and HBase; Unification in progress
-
- Override this method if you can't pass in a GeoWaveRow!</div>
+<div class="block">Basic method that decodes a native row Currently overridden by Accumulo and HBase; Unification
+ in progress</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -517,9 +514,9 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/memory/MemoryPersistentAdapterStore.html" title="class in org.locationtech.geowave.core.store.memory">MemoryPersistentAdapterStore</a></span></code>
-<div class="block">This is a simple HashMap based in-memory implementation of the
- PersistentAdapterStore and can be useful if it is undesirable to persist and
- query objects within another storage mechanism such as an Accumulo table.</div>
+<div class="block">This is a simple HashMap based in-memory implementation of the PersistentAdapterStore and can be
+ useful if it is undesirable to persist and query objects within another storage mechanism such as
+ an Accumulo table.</div>
 </td>
 </tr>
 </tbody>
@@ -562,8 +559,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/metadata/AdapterStoreImpl.html" title="class in org.locationtech.geowave.core.store.metadata">AdapterStoreImpl</a></span></code>
-<div class="block">This class will persist Data Adapters within an Accumulo table for GeoWave
- metadata.</div>
+<div class="block">This class will persist Data Adapters within an Accumulo table for GeoWave metadata.</div>
 </td>
 </tr>
 </tbody>

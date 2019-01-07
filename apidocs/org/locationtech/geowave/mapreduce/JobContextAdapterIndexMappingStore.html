@@ -116,10 +116,9 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">JobContextAdapterIndexMappingStore</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a></pre>
-<div class="block">This class implements an adapter index mapping store by first checking the
- job context for an adapter and keeping a local cache of adapters that have
- been discovered. It will check the metadata store if it cannot find an
- adapter in the job context.</div>
+<div class="block">This class implements an adapter index mapping store by first checking the job context for an
+ adapter and keeping a local cache of adapters that have been discovered. It will check the
+ metadata store if it cannot find an adapter in the job context.</div>
 </li>
 </ul>
 </div>
@@ -159,8 +158,8 @@ implements <a href="../../../../org/locationtech/geowave/core/store/adapter/Adap
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/JobContextAdapterIndexMappingStore.html#addAdapterIndexMapping-org.locationtech.geowave.core.store.AdapterToIndexMapping-">addAdapterIndexMapping</a></span>(<a href="../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</code>
-<div class="block">If an adapter is already associated with indices and the provided indices
- do not match, update the mapping to include the combined set of indices</div>
+<div class="block">If an adapter is already associated with indices and the provided indices do not match, update
+ the mapping to include the combined set of indices</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -180,8 +179,7 @@ implements <a href="../../../../org/locationtech/geowave/core/store/adapter/Adap
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/locationtech/geowave/mapreduce/JobContextAdapterIndexMappingStore.html#remove-short-">remove</a></span>(short&nbsp;internalAdapterId)</code>
-<div class="block">Adapter to index mappings are maintain without regard to visibility
- constraints.</div>
+<div class="block">Adapter to index mappings are maintain without regard to visibility constraints.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -289,8 +287,8 @@ implements <a href="../../../../org/locationtech/geowave/core/store/adapter/Adap
 <h4>addAdapterIndexMapping</h4>
 <pre>public&nbsp;void&nbsp;addAdapterIndexMapping(<a href="../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#addAdapterIndexMapping-org.locationtech.geowave.core.store.AdapterToIndexMapping-">AdapterIndexMappingStore</a></code></span></div>
-<div class="block">If an adapter is already associated with indices and the provided indices
- do not match, update the mapping to include the combined set of indices</div>
+<div class="block">If an adapter is already associated with indices and the provided indices do not match, update
+ the mapping to include the combined set of indices</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#addAdapterIndexMapping-org.locationtech.geowave.core.store.AdapterToIndexMapping-">addAdapterIndexMapping</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>
@@ -305,8 +303,7 @@ implements <a href="../../../../org/locationtech/geowave/core/store/adapter/Adap
 <h4>remove</h4>
 <pre>public&nbsp;void&nbsp;remove(short&nbsp;internalAdapterId)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-short-">AdapterIndexMappingStore</a></code></span></div>
-<div class="block">Adapter to index mappings are maintain without regard to visibility
- constraints.</div>
+<div class="block">Adapter to index mappings are maintain without regard to visibility constraints.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-short-">remove</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>
@@ -322,8 +319,8 @@ implements <a href="../../../../org/locationtech/geowave/core/store/adapter/Adap
 <pre>public&nbsp;boolean&nbsp;remove(short&nbsp;internalAdapterId,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-short-java.lang.String-">AdapterIndexMappingStore</a></code></span></div>
-<div class="block">Remove an index for the specified adapter mapping. The method should
- return false if the adapter, or index for the adapter does not exist.</div>
+<div class="block">Remove an index for the specified adapter mapping. The method should return false if the
+ adapter, or index for the adapter does not exist.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-short-java.lang.String-">remove</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>

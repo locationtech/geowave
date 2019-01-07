@@ -196,9 +196,9 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">AbstractLocalIngestWithMapper</a>&lt;T&gt;</span></code>
-<div class="block">This class can be sub-classed as a general-purpose recipe for parallelizing
- ingestion of files either locally or by directly staging the binary of the
- file to HDFS and then ingesting it within the map phase of a map-reduce job.</div>
+<div class="block">This class can be sub-classed as a general-purpose recipe for parallelizing ingestion of files
+ either locally or by directly staging the binary of the file to HDFS and then ingesting it within
+ the map phase of a map-reduce job.</div>
 </td>
 </tr>
 </tbody>
@@ -304,9 +304,8 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="type parameter in IngestFormatPluginProviderSpi">O</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestFormatPluginProviderSpi.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#createLocalFileIngestPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">createLocalFileIngestPlugin</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>
-<div class="block">This plugin will be used by the ingestion framework to read data from a
- local file system, and translate supported files into the data entries
- that will be written directly in GeoWave.</div>
+<div class="block">This plugin will be used by the ingestion framework to read data from a local file system, and
+ translate supported files into the data entries that will be written directly in GeoWave.</div>
 </td>
 </tr>
 </tbody>
@@ -339,8 +338,8 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="type parameter in IngestOptions.Builder">T</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestOptions.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#format-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-">format</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="type parameter in IngestOptions.Builder">T</a>&gt;&nbsp;format)</code>
-<div class="block">the ingest format plugin which does the actual parsing of the files
- and converting to GeoWave entries</div>
+<div class="block">the ingest format plugin which does the actual parsing of the files and converting to GeoWave
+ entries</div>
 </td>
 </tr>
 </tbody>
@@ -397,9 +396,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/avro/AvroIngestPlugin.html" title="class in org.locationtech.geowave.format.avro">AvroIngestPlugin</a></span></code>
-<div class="block">This plugin is used for ingesting any GPX formatted data from a local file
- system into GeoWave as GeoTools' SimpleFeatures.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/avro/GeoWaveAvroIngestPlugin.html" title="class in org.locationtech.geowave.format.avro">GeoWaveAvroIngestPlugin</a></span></code>
+<div class="block">This plugin is used for ingesting any GPX formatted data from a local file system into GeoWave as
+ GeoTools' SimpleFeatures.</div>
 </td>
 </tr>
 </tbody>
@@ -455,8 +454,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.html" title="class in org.locationtech.geowave.format.geotools.raster">GeoToolsRasterDataStoreIngestPlugin</a></span></code>
-<div class="block">This plugin is used for ingesting any GeoTools supported file data store from
- a local file system directly into GeoWave as GeoTools' SimpleFeatures.</div>
+<div class="block">This plugin is used for ingesting any GeoTools supported file data store from a local file system
+ directly into GeoWave as GeoTools' SimpleFeatures.</div>
 </td>
 </tr>
 </tbody>
@@ -489,8 +488,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html" title="class in org.locationtech.geowave.format.geotools.vector">GeoToolsVectorDataStoreIngestPlugin</a></span></code>
-<div class="block">This plugin is used for ingesting any GeoTools supported file data store from
- a local file system directly into GeoWave as GeoTools' SimpleFeatures.</div>
+<div class="block">This plugin is used for ingesting any GeoTools supported file data store from a local file system
+ directly into GeoWave as GeoTools' SimpleFeatures.</div>
 </td>
 </tr>
 </tbody>
@@ -523,8 +522,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html" title="class in org.locationtech.geowave.format.gpx">GpxIngestPlugin</a></span></code>
-<div class="block">This plugin is used for ingesting any GPX formatted data from a local file
- system into GeoWave as GeoTools' SimpleFeatures.</div>
+<div class="block">This plugin is used for ingesting any GPX formatted data from a local file system into GeoWave as
+ GeoTools' SimpleFeatures.</div>
 </td>
 </tr>
 </tbody>

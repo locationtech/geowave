@@ -85,23 +85,21 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsPlugin</a>&lt;I,O&gt;</td>
 <td class="colLast">
-<div class="block">This is the main plugin interface for ingesting intermediate data into
- Geowave that has previously been staged in HDFS.</div>
+<div class="block">This is the main plugin interface for ingesting intermediate data into Geowave that has
+ previously been staged in HDFS.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;I,O&gt;</td>
 <td class="colLast">
-<div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion
- within a mapper only.</div>
+<div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion within a mapper only.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;I,K extends org.apache.hadoop.io.WritableComparable&lt;?&gt;,V extends org.apache.hadoop.io.Writable,O&gt;</td>
 <td class="colLast">
-<div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion
- with a mapper to aggregate key value pairs and a reducer to ingest data into
- GeoWave.</div>
+<div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion with a mapper to
+ aggregate key value pairs and a reducer to ingest data into GeoWave.</div>
 </td>
 </tr>
 </tbody>
@@ -118,9 +116,9 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">AbstractLocalIngestWithMapper</a>&lt;T&gt;</td>
 <td class="colLast">
-<div class="block">This class can be sub-classed as a general-purpose recipe for parallelizing
- ingestion of files either locally or by directly staging the binary of the
- file to HDFS and then ingesting it within the map phase of a map-reduce job.</div>
+<div class="block">This class can be sub-classed as a general-purpose recipe for parallelizing ingestion of files
+ either locally or by directly staging the binary of the file to HDFS and then ingesting it within
+ the map phase of a map-reduce job.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -130,8 +128,8 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">AbstractMapReduceIngest</a>&lt;T extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a> &amp; <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;?&gt;&gt;</td>
 <td class="colLast">
-<div class="block">This class can be sub-classed to run map-reduce jobs within the ingest
- framework using plugins provided by types that are discovered through SPI.</div>
+<div class="block">This class can be sub-classed to run map-reduce jobs within the ingest framework using plugins
+ provided by types that are discovered through SPI.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -141,8 +139,8 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsDriver.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestFromHdfsDriver</a></td>
 <td class="colLast">
-<div class="block">This class actually executes the ingestion of intermediate data into GeoWave
- that had been staged in HDFS.</div>
+<div class="block">This class actually executes the ingestion of intermediate data into GeoWave that had been staged
+ in HDFS.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -158,8 +156,7 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestReducer.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestReducer</a></td>
 <td class="colLast">
-<div class="block">This is the map-reduce reducer for ingestion with both the mapper and
- reducer.</div>
+<div class="block">This is the map-reduce reducer for ingestion with both the mapper and reducer.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -171,29 +168,29 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducerJobRunner.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithReducerJobRunner</a></td>
 <td class="colLast">
-<div class="block">This class will run the ingestion process by using a mapper to aggregate key
- value pairs and a reducer to ingest data into GeoWave.</div>
+<div class="block">This class will run the ingestion process by using a mapper to aggregate key value pairs and a
+ reducer to ingest data into GeoWave.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IntermediateKeyValueMapper.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IntermediateKeyValueMapper</a></td>
 <td class="colLast">
-<div class="block">This class is the mapper used when aggregating key value pairs from
- intermediate data to be ingested into GeoWave using a reducer.</div>
+<div class="block">This class is the mapper used when aggregating key value pairs from intermediate data to be
+ ingested into GeoWave using a reducer.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/KeyValueData.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">KeyValueData</a>&lt;K extends org.apache.hadoop.io.WritableComparable&lt;?&gt;,V extends org.apache.hadoop.io.Writable&gt;</td>
 <td class="colLast">
-<div class="block">The Key-Value pair that will be emitted from a mapper and used by a reducer
- in the IngestWithReducer flow.</div>
+<div class="block">The Key-Value pair that will be emitted from a mapper and used by a reducer in the
+ IngestWithReducer flow.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/MapReduceCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">MapReduceCommandLineOptions</a></td>
 <td class="colLast">
-<div class="block">This class encapsulates all of the options and parsed values specific to
- setting up the GeoWave ingestion framework to run on hadoop map-reduce.</div>
+<div class="block">This class encapsulates all of the options and parsed values specific to setting up the GeoWave
+ ingestion framework to run on hadoop map-reduce.</div>
 </td>
 </tr>
 <tr class="rowColor">

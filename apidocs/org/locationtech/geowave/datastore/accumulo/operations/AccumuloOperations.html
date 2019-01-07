@@ -116,9 +116,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">AccumuloOperations</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in org.locationtech.geowave.mapreduce">MapReduceDataStoreOperations</a>, <a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html" title="interface in org.locationtech.geowave.core.store.server">ServerSideOperations</a></pre>
-<div class="block">This class holds all parameters necessary for establishing Accumulo
- connections and provides basic factory methods for creating a batch scanner
- and a batch writer</div>
+<div class="block">This class holds all parameters necessary for establishing Accumulo connections and provides
+ basic factory methods for creating a batch scanner and a batch writer</div>
 </li>
 </ul>
 </div>
@@ -158,16 +157,15 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-org.apache.accumulo.core.client.Connector-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">AccumuloOperations</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                   <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
-<div class="block">This constructor uses reasonable defaults and only requires an Accumulo
- connector</div>
+<div class="block">This constructor uses reasonable defaults and only requires an Accumulo connector</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">AccumuloOperations</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
                   <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
-<div class="block">This constructor uses reasonable defaults and requires an Accumulo
- connector and table namespace</div>
+<div class="block">This constructor uses reasonable defaults and requires an Accumulo connector and table
+ namespace</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -178,8 +176,8 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
                   org.apache.accumulo.core.client.Connector&nbsp;connector,
                   <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
-<div class="block">This is the full constructor for the operation factory and should be used
- if any of the defaults are insufficient.</div>
+<div class="block">This is the full constructor for the operation factory and should be used if any of the
+ defaults are insufficient.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -189,8 +187,8 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;password,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
                   <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
-<div class="block">This is will create an Accumulo connector based on passed in connection
- information and credentials for convenience convenience.</div>
+<div class="block">This is will create an Accumulo connector based on passed in connection information and
+ credentials for convenience convenience.</div>
 </td>
 </tr>
 </table>
@@ -439,8 +437,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#getServerOpOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope-">getServerOpOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;serverOpName,
                   <a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&nbsp;scope)</code>
-<div class="block">get the particular existing configured options for this server op at this
- scope</div>
+<div class="block">get the particular existing configured options for this server op at this scope</div>
 </td>
 </tr>
 <tr id="i46" class="altColor">
@@ -477,8 +474,8 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <tr id="i53" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#listServerOps-java.lang.String-">listServerOps</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index)</code>
-<div class="block">Returns a mapping of existing registered server-side operations with
- serverop name as the key and the registered scopes as the value</div>
+<div class="block">Returns a mapping of existing registered server-side operations with serverop name as the key
+ and the registered scopes as the value</div>
 </td>
 </tr>
 <tr id="i54" class="altColor">
@@ -507,9 +504,8 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#removeServerOp-java.lang.String-java.lang.String-com.google.common.collect.ImmutableSet-">removeServerOp</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;serverOpName,
               com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;scopes)</code>
-<div class="block">remove this server operation - because accumulo requires scopes as a
- parameter it is passed into this method, but the server op will be
- removed entirely regardless of scopes</div>
+<div class="block">remove this server operation - because accumulo requires scopes as a parameter it is passed
+ into this method, but the server op will be removed entirely regardless of scopes</div>
 </td>
 </tr>
 <tr id="i59" class="rowColor">
@@ -530,8 +526,8 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;properties,
               com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;currentScopes,
               com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;newScopes)</code>
-<div class="block">update this server operation, the current scopes are passed in because
- accumulo requires iteratorscope as a parameter to remove the iterator.</div>
+<div class="block">update this server operation, the current scopes are passed in because accumulo requires
+ iteratorscope as a parameter to remove the iterator.</div>
 </td>
 </tr>
 </table>
@@ -587,22 +583,20 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
                           <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)
                    throws org.apache.accumulo.core.client.AccumuloException,
                           org.apache.accumulo.core.client.AccumuloSecurityException</pre>
-<div class="block">This is will create an Accumulo connector based on passed in connection
- information and credentials for convenience convenience. It will also use
- reasonable defaults for unspecified parameters.</div>
+<div class="block">This is will create an Accumulo connector based on passed in connection information and
+ credentials for convenience convenience. It will also use reasonable defaults for unspecified
+ parameters.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>zookeeperUrl</code> - The comma-delimited URLs for all zookeeper servers, this will
-            be directly used to instantiate a ZookeeperInstance</dd>
-<dd><code>instanceName</code> - The zookeeper instance name, this will be directly used to
-            instantiate a ZookeeperInstance</dd>
+<dd><code>zookeeperUrl</code> - The comma-delimited URLs for all zookeeper servers, this will be directly
+        used to instantiate a ZookeeperInstance</dd>
+<dd><code>instanceName</code> - The zookeeper instance name, this will be directly used to instantiate a
+        ZookeeperInstance</dd>
 <dd><code>userName</code> - The username for an account to establish an Accumulo connector</dd>
-<dd><code>password</code> - The password for the account to establish an Accumulo
-            connector</dd>
+<dd><code>password</code> - The password for the account to establish an Accumulo connector</dd>
 <dd><code>tableNamespace</code> - An optional string that is prefixed to any of the table names</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>org.apache.accumulo.core.client.AccumuloException</code> - Thrown if a generic exception occurs when establishing a
-             connector</dd>
+<dd><code>org.apache.accumulo.core.client.AccumuloException</code> - Thrown if a generic exception occurs when establishing a connector</dd>
 <dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code> - the credentials passed in are invalid</dd>
 </dl>
 </li>
@@ -615,8 +609,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <h4>AccumuloOperations</h4>
 <pre>public&nbsp;AccumuloOperations(org.apache.accumulo.core.client.Connector&nbsp;connector,
                           <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</pre>
-<div class="block">This constructor uses reasonable defaults and only requires an Accumulo
- connector</div>
+<div class="block">This constructor uses reasonable defaults and only requires an Accumulo connector</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>connector</code> - The connector to use for all operations</dd>
@@ -632,8 +625,8 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <pre>public&nbsp;AccumuloOperations(org.apache.accumulo.core.client.Connector&nbsp;connector,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
                           <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</pre>
-<div class="block">This constructor uses reasonable defaults and requires an Accumulo
- connector and table namespace</div>
+<div class="block">This constructor uses reasonable defaults and requires an Accumulo connector and table
+ namespace</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>connector</code> - The connector to use for all operations</dd>
@@ -655,12 +648,11 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
                           org.apache.accumulo.core.client.Connector&nbsp;connector,
                           <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</pre>
-<div class="block">This is the full constructor for the operation factory and should be used
- if any of the defaults are insufficient.</div>
+<div class="block">This is the full constructor for the operation factory and should be used if any of the
+ defaults are insufficient.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>numThreads</code> - The number of threads to use for a batch scanner and batch
-            writer</dd>
+<dd><code>numThreads</code> - The number of threads to use for a batch scanner and batch writer</dd>
 <dd><code>timeoutMillis</code> - The time out in milliseconds to use for a batch writer</dd>
 <dd><code>byteBufferSize</code> - The buffer size in bytes to use for a batch writer</dd>
 <dd><code>authorization</code> - The authorization to use for a batch scanner</dd>
@@ -1362,8 +1354,8 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <h4>listServerOps</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&gt;&nbsp;listServerOps(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#listServerOps-java.lang.String-">ServerSideOperations</a></code></span></div>
-<div class="block">Returns a mapping of existing registered server-side operations with
- serverop name as the key and the registered scopes as the value</div>
+<div class="block">Returns a mapping of existing registered server-side operations with serverop name as the key
+ and the registered scopes as the value</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#listServerOps-java.lang.String-">listServerOps</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html" title="interface in org.locationtech.geowave.core.store.server">ServerSideOperations</a></code></dd>
@@ -1382,8 +1374,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;serverOpName,
                                              <a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&nbsp;scope)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#getServerOpOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope-">ServerSideOperations</a></code></span></div>
-<div class="block">get the particular existing configured options for this server op at this
- scope</div>
+<div class="block">get the particular existing configured options for this server op at this scope</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#getServerOpOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope-">getServerOpOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html" title="interface in org.locationtech.geowave.core.store.server">ServerSideOperations</a></code></dd>
@@ -1406,9 +1397,8 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;serverOpName,
                            com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;scopes)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#removeServerOp-java.lang.String-java.lang.String-com.google.common.collect.ImmutableSet-">ServerSideOperations</a></code></span></div>
-<div class="block">remove this server operation - because accumulo requires scopes as a
- parameter it is passed into this method, but the server op will be
- removed entirely regardless of scopes</div>
+<div class="block">remove this server operation - because accumulo requires scopes as a parameter it is passed
+ into this method, but the server op will be removed entirely regardless of scopes</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#removeServerOp-java.lang.String-java.lang.String-com.google.common.collect.ImmutableSet-">removeServerOp</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html" title="interface in org.locationtech.geowave.core.store.server">ServerSideOperations</a></code></dd>
@@ -1438,8 +1428,8 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#addServerOp-java.lang.String-int-java.lang.String-java.lang.String-java.util.Map-com.google.common.collect.ImmutableSet-">addServerOp</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html" title="interface in org.locationtech.geowave.core.store.server">ServerSideOperations</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the index/table</dd>
-<dd><code>priority</code> - the operation priority (this is merely relative, it defines
-            how to order multiple operations, from low to high)</dd>
+<dd><code>priority</code> - the operation priority (this is merely relative, it defines how to order
+        multiple operations, from low to high)</dd>
 <dd><code>operationClass</code> - the operation class</dd>
 <dd><code>properties</code> - the operation options</dd>
 <dd><code>configuredScopes</code> - the scopes</dd>
@@ -1460,16 +1450,16 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
                            com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;currentScopes,
                            com.google.common.collect.ImmutableSet&lt;<a href="../../../../../../org/locationtech/geowave/core/store/server/ServerOpConfig.ServerOpScope.html" title="enum in org.locationtech.geowave.core.store.server">ServerOpConfig.ServerOpScope</a>&gt;&nbsp;newScopes)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#updateServerOp-java.lang.String-int-java.lang.String-java.lang.String-java.util.Map-com.google.common.collect.ImmutableSet-com.google.common.collect.ImmutableSet-">ServerSideOperations</a></code></span></div>
-<div class="block">update this server operation, the current scopes are passed in because
- accumulo requires iteratorscope as a parameter to remove the iterator.
- This will update the server op to the new scope.</div>
+<div class="block">update this server operation, the current scopes are passed in because accumulo requires
+ iteratorscope as a parameter to remove the iterator. This will update the server op to the new
+ scope.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html#updateServerOp-java.lang.String-int-java.lang.String-java.lang.String-java.util.Map-com.google.common.collect.ImmutableSet-com.google.common.collect.ImmutableSet-">updateServerOp</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/server/ServerSideOperations.html" title="interface in org.locationtech.geowave.core.store.server">ServerSideOperations</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the index/table</dd>
-<dd><code>priority</code> - the operation priority (this is merely relative, it defines
-            how to order multiple operations, from low to high)</dd>
+<dd><code>priority</code> - the operation priority (this is merely relative, it defines how to order
+        multiple operations, from low to high)</dd>
 <dd><code>operationClass</code> - the operation class</dd>
 <dd><code>properties</code> - the operation options</dd>
 <dd><code>currentScopes</code> - the existing scopes</dd>

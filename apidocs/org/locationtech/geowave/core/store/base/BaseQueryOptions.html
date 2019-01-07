@@ -390,13 +390,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                                                            <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
                                                                                                            <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)
                                                                                                     throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<div class="block">Return the set of adapter/index associations. If the adapters are not
- provided, then look up all of them. If the index is not provided, then
- look up all of them.
+<div class="block">Return the set of adapter/index associations. If the adapters are not provided, then look up
+ all of them. If the index is not provided, then look up all of them.
 
- DataStores are responsible for selecting a single adapter/index per
- query. For deletions, the Data Stores are interested in all the
- associations.</div>
+ <p> DataStores are responsible for selecting a single adapter/index per query. For deletions,
+ the Data Stores are interested in all the associations.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapterStore</code> - </dd>
@@ -458,8 +456,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;void&nbsp;setScanCallback(<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;?,?&gt;&nbsp;scanCallback)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>scanCallback</code> - a function called for each item discovered per the query
-            constraints</dd>
+<dd><code>scanCallback</code> - a function called for each item discovered per the query constraints</dd>
 </dl>
 </li>
 </ul>
@@ -526,8 +523,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;getAuthorizations()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>authorizations to apply to the query in addition to the
-         authorizations assigned to the data store as a whole.</dd>
+<dd>authorizations to apply to the query in addition to the authorizations assigned to the
+         data store as a whole.</dd>
 </dl>
 </li>
 </ul>
@@ -605,15 +602,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                                                                         <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore,
                                                                                                                         <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)
                                                                                                                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<div class="block">Return a set list adapter/index associations. If the adapters are not
- provided, then look up all of them. If the index is not provided, then
- look up all of them. The full set of adapter/index associations is
- reduced so that a single index is queried per adapter and the number
- indices queried is minimized.
+<div class="block">Return a set list adapter/index associations. If the adapters are not provided, then look up
+ all of them. If the index is not provided, then look up all of them. The full set of
+ adapter/index associations is reduced so that a single index is queried per adapter and the
+ number indices queried is minimized.
 
- DataStores are responsible for selecting a single adapter/index per
- query. For deletions, the Data Stores are interested in all the
- associations.</div>
+ <p> DataStores are responsible for selecting a single adapter/index per query. For deletions,
+ the Data Stores are interested in all the associations.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapterStore</code> - </dd>
@@ -634,8 +629,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[],<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;getFieldIdsAdapterPair()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a paring of fieldIds and their associated data adapter >>>>>>>
-         wip: bitmask approach</dd>
+<dd>a paring of fieldIds and their associated data adapter >>>>>>> wip: bitmask approach</dd>
 </dl>
 </li>
 </ul>

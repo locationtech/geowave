@@ -113,17 +113,16 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/AvroFeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">AvroFeatureDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/analytic/clustering/DistortionGroupManagement.DistortionDataAdapter.html" title="class in org.locationtech.geowave.analytic.clustering">DistortionGroupManagement.DistortionDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">FeatureDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/format/stanag4676/image/ImageChipDataAdapter.html" title="class in org.locationtech.geowave.format.stanag4676.image">ImageChipDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html" title="class in org.locationtech.geowave.core.store.adapter">InternalDataAdapterWrapper</a>, <a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/analytic/clustering/DistortionGroupManagement.DistortionDataAdapter.html" title="class in org.locationtech.geowave.analytic.clustering">DistortionGroupManagement.DistortionDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">FeatureDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/GeoWaveAvroFeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">GeoWaveAvroFeatureDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/format/stanag4676/image/ImageChipDataAdapter.html" title="class in org.locationtech.geowave.format.stanag4676.image">ImageChipDataAdapter</a>, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html" title="class in org.locationtech.geowave.core.store.adapter">InternalDataAdapterWrapper</a>, <a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">DataTypeAdapter&lt;T&gt;</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html" title="interface in org.locationtech.geowave.core.store.data">DataReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="interface in org.locationtech.geowave.core.store.data">DataWriter</a>&lt;T,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
-<div class="block">This interface should be implemented by any custom data type that must be
- stored in the GeoWave index. It enables storing and retrieving the data, as
- well as translating the data into values and queries that can be used to
- index. Additionally, each entry is responsible for providing visibility if
- applicable.</div>
+<div class="block">This interface should be implemented by any custom data type that must be stored in the GeoWave
+ index. It enables storing and retrieving the data, as well as translating the data into values
+ and queries that can be used to index. Additionally, each entry is responsible for providing
+ visibility if applicable.</div>
 </li>
 </ul>
 </div>
@@ -225,12 +224,10 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Data
 <li class="blockList">
 <h4>getTypeName</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getTypeName()</pre>
-<div class="block">Return the data adapter's type name. This also must be unique within a
- datastore.</div>
+<div class="block">Return the data adapter's type name. This also must be unique within a datastore.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the type name which serves as a unique identifier for this
-         adapter</dd>
+<dd>the type name which serves as a unique identifier for this adapter</dd>
 </dl>
 </li>
 </ul>
@@ -298,9 +295,9 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Data
 <h4>getPositionOfOrderedField</h4>
 <pre>int&nbsp;getPositionOfOrderedField(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
-<div class="block">for efficiency we assume fields have some pre-defined ordering. If the
- field belongs in the common index model it should be one of the first n
- positions where n is the number of fields in the common index model.</div>
+<div class="block">for efficiency we assume fields have some pre-defined ordering. If the field belongs in the
+ common index model it should be one of the first n positions where n is the number of fields in
+ the common index model.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>model</code> - the index model</dd>
@@ -324,8 +321,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Data
 <dd><code>model</code> - the index model</dd>
 <dd><code>position</code> - the position</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the field name, if its part of the common index model, it should
-         be the common field name</dd>
+<dd>the field name, if its part of the common index model, it should be the common field
+         name</dd>
 </dl>
 </li>
 </ul>

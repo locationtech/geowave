@@ -140,12 +140,11 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">WarpOpImage</span>
 extends it.geosolutions.jaiext.warp.WarpOpImage</pre>
-<div class="block">This is code entirely intended to get around an issue on line 265 of
- WarpOpImage in jai-ext. The following code does not work if the source is
- significant lower resolution than the destination and seems unnecessary in
- general:
- 
- roiTile = roi.intersect(new ROIShape(srcRectExpanded));</div>
+<div class="block">This is code entirely intended to get around an issue on line 265 of WarpOpImage in jai-ext. The
+ following code does not work if the source is significant lower resolution than the destination
+ and seems unnecessary in general:
+
+ <p> roiTile = roi.intersect(new ROIShape(srcRectExpanded));</div>
 </li>
 </ul>
 </div>
@@ -333,9 +332,8 @@ extends it.geosolutions.jaiext.warp.WarpOpImage</pre>
 <pre>protected&nbsp;void&nbsp;computeRect(javax.media.jai.PlanarImage[]&nbsp;sources,
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/WritableRaster.html?is-external=true" title="class or interface in java.awt.image">WritableRaster</a>&nbsp;dest,
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Rectangle.html?is-external=true" title="class or interface in java.awt">Rectangle</a>&nbsp;destRect)</pre>
-<div class="block">Warps a rectangle. If ROI is present, the intersection between ROI and
- tile bounds is calculated; The result ROI will be used for calculations
- inside the computeRect() method.</div>
+<div class="block">Warps a rectangle. If ROI is present, the intersection between ROI and tile bounds is
+ calculated; The result ROI will be used for calculations inside the computeRect() method.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>computeRect</code>&nbsp;in class&nbsp;<code>it.geosolutions.jaiext.warp.WarpOpImage</code></dd>

@@ -85,22 +85,22 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a></td>
 <td class="colLast">
-<div class="block">This is responsible for persisting adapter/index mappings (either in memory
- or to disk depending on the implementation).</div>
+<div class="block">This is responsible for persisting adapter/index mappings (either in memory or to disk depending
+ on the implementation).</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterStore</a>&lt;K,V extends <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&gt;</td>
 <td class="colLast">
-<div class="block">This is responsible for persisting data adapters (either in memory or to disk
- depending on the implementation).</div>
+<div class="block">This is responsible for persisting data adapters (either in memory or to disk depending on the
+ implementation).</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/DimensionMatchingIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">DimensionMatchingIndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</td>
 <td class="colLast">
-<div class="block">This is internally useful for the AbstractDataAdapter to match field handlers
- with dimensions by field ID.</div>
+<div class="block">This is internally useful for the AbstractDataAdapter to match field handlers with dimensions by
+ field ID.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -110,8 +110,8 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</td>
 <td class="colLast">
-<div class="block">This is used by the AbstractDataAdapter to translate between native values
- and persistence encoded values.</div>
+<div class="block">This is used by the AbstractDataAdapter to translate between native values and persistence
+ encoded values.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -121,8 +121,8 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></td>
 <td class="colLast">
-<div class="block">This is responsible for persisting adapter/Internal Adapter mappings (either
- in memory or to disk depending on the implementation).</div>
+<div class="block">This is responsible for persisting adapter/Internal Adapter mappings (either in memory or to disk
+ depending on the implementation).</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -132,15 +132,13 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler</a>&lt;RowType,FieldType&gt;</td>
 <td class="colLast">
-<div class="block">This is used by the AbstractDataAdapter to get individual field values from
- the row</div>
+<div class="block">This is used by the AbstractDataAdapter to get individual field values from the row</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;RowType,FieldType&gt;</td>
 <td class="colLast">
-<div class="block">This is used internally by the AbstractDataAdapter to build a row from a
- set of field values</div>
+<div class="block">This is used internally by the AbstractDataAdapter to build a row from a set of field values</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -150,8 +148,8 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</td>
 <td class="colLast">
-<div class="block">This is a persistable version of the IndexFieldHandler so that customized
- field handlers can be automatically persisted with the data adapter.</div>
+<div class="block">This is a persistable version of the IndexFieldHandler so that customized field handlers can be
+ automatically persisted with the data adapter.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -184,26 +182,23 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;T&gt;</td>
 <td class="colLast">
-<div class="block">This class generically supports most of the operations necessary to implement
- a Data Adapter and can be easily extended to support specific data types.<br>
- Many of the details are handled by mapping IndexFieldHandler's based on
- either types or exact dimensions.</div>
+<div class="block">This class generically supports most of the operations necessary to implement a Data Adapter and
+ can be easily extended to support specific data types.<br> Many of the details are handled by
+ mapping IndexFieldHandler's based on either types or exact dimensions.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">AdapterPersistenceEncoding</a></td>
 <td class="colLast">
-<div class="block">This is an implementation of persistence encoding that also contains all of
- the extended data values used to form the native type supported by this
- adapter.</div>
+<div class="block">This is an implementation of persistence encoding that also contains all of the extended data
+ values used to form the native type supported by this adapter.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStoreWrapper.html" title="class in org.locationtech.geowave.core.store.adapter">AdapterStoreWrapper</a></td>
 <td class="colLast">
-<div class="block">Given a transient store and a internal adapter store to use to map between
- internal IDs and external IDs, we can wrap an implementation as a persistent
- adapter store</div>
+<div class="block">Given a transient store and a internal adapter store to use to map between internal IDs and
+ external IDs, we can wrap an implementation as a persistent adapter store</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -213,8 +208,8 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a></td>
 <td class="colLast">
-<div class="block">This is an implements of persistence encoding that also contains all of the
- extended data values used to form the native type supported by this adapter.</div>
+<div class="block">This is an implements of persistence encoding that also contains all of the extended data values
+ used to form the native type supported by this adapter.</div>
 </td>
 </tr>
 <tr class="altColor">

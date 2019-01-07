@@ -107,15 +107,13 @@
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Find the nearest neighbors to a each item.
 
- The solution represented here partitions the data using a partitioner. The
- nearest neighbors are inspected within those partitions. Each partition is
- processed in memory. If the partitioner is agnostic to density, then the
- number of nearest neighbors inspected in a partition may exceed memory.
- Selecting the appropriate partitioning is critical. It may be best to work
- bottom up, partitioning at a finer grain and iterating through larger
- partitions.
+ <p>The solution represented here partitions the data using a partitioner. The nearest neighbors
+ are inspected within those partitions. Each partition is processed in memory. If the partitioner
+ is agnostic to density, then the number of nearest neighbors inspected in a partition may exceed
+ memory. Selecting the appropriate partitioning is critical. It may be best to work bottom up,
+ partitioning at a finer grain and iterating through larger partitions.
 
- The reducer has four extension points:</div>
+ <p>The reducer has four extension points:</div>
 </li>
 </ul>
 </div>

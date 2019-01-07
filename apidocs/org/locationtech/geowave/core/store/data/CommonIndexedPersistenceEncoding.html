@@ -125,13 +125,11 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">CommonIndexedPersistenceEncoding</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</pre>
-<div class="block">This class models all of the necessary information for persisting data in
- Accumulo (following the common index model) and is used internally within
- GeoWave as an intermediary object between the direct storage format and the
- native data format. It also contains information about the persisted object
- within a particular index such as the insertion ID in the index and the
- number of duplicates for this entry in the index, and is used when reading
- data from the index.</div>
+<div class="block">This class models all of the necessary information for persisting data in Accumulo (following the
+ common index model) and is used internally within GeoWave as an intermediary object between the
+ direct storage format and the native data format. It also contains information about the
+ persisted object within a particular index such as the insertion ID in the index and the number
+ of duplicates for this entry in the index, and is used when reading data from the index.</div>
 </li>
 </ul>
 </div>
@@ -191,16 +189,14 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Inde
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#getInsertionIds-org.locationtech.geowave.core.store.api.Index-">getInsertionIds</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
-<div class="block">Given an index, convert this persistent encoding to a set of insertion
- IDs for that index</div>
+<div class="block">Given an index, convert this persistent encoding to a set of insertion IDs for that index</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#getNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-">getNumericData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[]&nbsp;dimensions)</code>
-<div class="block">Given an ordered set of dimensions, convert this persistent encoding
- common index data into a MultiDimensionalNumericData object that can then
- be used by the Index</div>
+<div class="block">Given an ordered set of dimensions, convert this persistent encoding common index data into a
+ MultiDimensionalNumericData object that can then be used by the Index</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -274,8 +270,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Inde
 <li class="blockList">
 <h4>getInsertionIds</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;getInsertionIds(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
-<div class="block">Given an index, convert this persistent encoding to a set of insertion
- IDs for that index</div>
+<div class="block">Given an index, convert this persistent encoding to a set of insertion IDs for that index</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the index</dd>
@@ -291,9 +286,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Inde
 <li class="blockList">
 <h4>getNumericData</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;getNumericData(<a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[]&nbsp;dimensions)</pre>
-<div class="block">Given an ordered set of dimensions, convert this persistent encoding
- common index data into a MultiDimensionalNumericData object that can then
- be used by the Index</div>
+<div class="block">Given an ordered set of dimensions, convert this persistent encoding common index data into a
+ MultiDimensionalNumericData object that can then be used by the Index</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dimensions</code> - </dd>

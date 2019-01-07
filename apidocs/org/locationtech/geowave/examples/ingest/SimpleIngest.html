@@ -168,26 +168,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/examples/ingest/SimpleIngest.html#createDataAdapter-org.opengis.feature.simple.SimpleFeatureType-">createDataAdapter</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;sft)</code>
-<div class="block">The dataadapter interface describes how to serialize a data type.</div>
+<div class="block">* The dataadapter interface describes how to serialize a data type.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static org.opengis.feature.simple.SimpleFeatureType</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/examples/ingest/SimpleIngest.html#createPointFeatureType--">createPointFeatureType</a></span>()</code>
-<div class="block">A simple feature is just a mechanism for defining attributes (a feature
- is just a collection of attributes + some metadata) We need to describe
- what our data looks like so the serializer (FeatureDataAdapter for this
- case) can know how to store it.</div>
+<div class="block">* A simple feature is just a mechanism for defining attributes (a feature is just a collection
+ of attributes + some metadata) We need to describe what our data looks like so the serializer
+ (FeatureDataAdapter for this case) can know how to store it.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/examples/ingest/SimpleIngest.html#createSpatialIndex--">createSpatialIndex</a></span>()</code>
-<div class="block">We need an index model that tells us how to index the data - the index
- determines -What fields are indexed -The precision of the index -The
- range of the index (min/max values) -The range type (bounded/unbounded)
- -The number of "levels" (different precisions, needed when the values
- indexed has ranges on any dimension)</div>
+<div class="block">* We need an index model that tells us how to index the data - the index determines -What
+ fields are indexed -The precision of the index -The range of the index (min/max values) -The
+ range type (bounded/unbounded) -The number of "levels" (different precisions, needed when the
+ values indexed has ranges on any dimension)</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -206,8 +204,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/examples/ingest/SimpleIngest.html#writeExampleData-org.locationtech.geowave.core.store.api.DataStore-">writeExampleData</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;geowaveDataStore)</code>
-<div class="block">Here we will change the ingest mechanism to use a producer/consumer
- pattern</div>
+<div class="block">Here we will change the ingest mechanism to use a producer/consumer pattern</div>
 </td>
 </tr>
 </table>
@@ -286,8 +283,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>writeExampleData</h4>
 <pre>protected&nbsp;void&nbsp;writeExampleData(<a href="../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;geowaveDataStore)</pre>
-<div class="block">Here we will change the ingest mechanism to use a producer/consumer
- pattern</div>
+<div class="block">Here we will change the ingest mechanism to use a producer/consumer pattern</div>
 </li>
 </ul>
 <a name="getGriddedFeatures-org.geotools.feature.simple.SimpleFeatureBuilder-int-">
@@ -307,15 +303,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>createDataAdapter</h4>
 <pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;createDataAdapter(org.opengis.feature.simple.SimpleFeatureType&nbsp;sft)</pre>
-<div class="block">The dataadapter interface describes how to serialize a data type. Here we
- are using an implementation that understands how to serialize OGC
- SimpleFeature types.</div>
+<div class="block">* The dataadapter interface describes how to serialize a data type. Here we are using an
+ implementation that understands how to serialize OGC SimpleFeature types.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sft</code> - simple feature type you want to generate an adapter from</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>data adapter that handles serialization of the sft simple feature
-         type</dd>
+<dd>data adapter that handles serialization of the sft simple feature type</dd>
 </dl>
 </li>
 </ul>
@@ -326,11 +320,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>createSpatialIndex</h4>
 <pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;createSpatialIndex()</pre>
-<div class="block">We need an index model that tells us how to index the data - the index
- determines -What fields are indexed -The precision of the index -The
- range of the index (min/max values) -The range type (bounded/unbounded)
- -The number of "levels" (different precisions, needed when the values
- indexed has ranges on any dimension)</div>
+<div class="block">* We need an index model that tells us how to index the data - the index determines -What
+ fields are indexed -The precision of the index -The range of the index (min/max values) -The
+ range type (bounded/unbounded) -The number of "levels" (different precisions, needed when the
+ values indexed has ranges on any dimension)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>GeoWave index for a default SPATIAL index</dd>
@@ -353,11 +346,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>createPointFeatureType</h4>
 <pre>public static&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;createPointFeatureType()</pre>
-<div class="block">A simple feature is just a mechanism for defining attributes (a feature
- is just a collection of attributes + some metadata) We need to describe
- what our data looks like so the serializer (FeatureDataAdapter for this
- case) can know how to store it. Features/Attributes are also a general
- convention of GIS systems in general.</div>
+<div class="block">* A simple feature is just a mechanism for defining attributes (a feature is just a collection
+ of attributes + some metadata) We need to describe what our data looks like so the serializer
+ (FeatureDataAdapter for this case) can know how to store it. Features/Attributes are also a
+ general convention of GIS systems in general.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Simple Feature definition for our demo point feature</dd>

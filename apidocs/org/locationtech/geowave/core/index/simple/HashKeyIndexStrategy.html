@@ -116,29 +116,27 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">HashKeyIndexStrategy</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">PartitionIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</pre>
-<div class="block">Used to create determined, uniform row id prefix as one possible approach to
- prevent hot spotting.
+<div class="block">Used to create determined, uniform row id prefix as one possible approach to prevent hot
+ spotting.
 
- Before using this class, one should consider balancing options for the
- specific data store. Can one pre-split using a component of another index
- strategy (e.g. bin identifier)? How about ingest first and then do major
- compaction?
+ <p> Before using this class, one should consider balancing options for the specific data store.
+ Can one pre-split using a component of another index strategy (e.g. bin identifier)? How about
+ ingest first and then do major compaction?
 
- Consider that Accumulo 1.7 supports two balancers
+ <p> Consider that Accumulo 1.7 supports two balancers
  org.apache.accumulo.server.master.balancer.RegexGroupBalancer and
  org.apache.accumulo.server.master.balancer.GroupBalancer.
 
- This class should be used with a CompoundIndexStrategy. In addition, tablets
- should be pre-split on the number of prefix IDs. Without splits, the splits
- are at the mercy of the Big Table servers default. For example, Accumulo
- fills up one tablet before splitting, regardless of the partitioning.
+ <p> This class should be used with a CompoundIndexStrategy. In addition, tablets should be
+ pre-split on the number of prefix IDs. Without splits, the splits are at the mercy of the Big
+ Table servers default. For example, Accumulo fills up one tablet before splitting, regardless of
+ the partitioning.
 
- The key set size does not need to be large. For example, using two times the
- number of tablet servers (for growth) and presplitting, two keys per server.
- The default is 3.
+ <p> The key set size does not need to be large. For example, using two times the number of tablet
+ servers (for growth) and presplitting, two keys per server. The default is 3.
 
- There is a cost to using this approach: queries must span all prefixes. The
- number of prefixes should initially be at least the number of tablet servers.</div>
+ <p> There is a cost to using this approach: queries must span all prefixes. The number of
+ prefixes should initially be at least the number of tablet servers.</div>
 </li>
 </ul>
 </div>
@@ -200,7 +198,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Partit
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/HashKeyIndexStrategy.html#getPartitionKeyLength--">getPartitionKeyLength</a></span>()</code>
-<div class="block">Get the offset in bytes before the dimensional index.</div>
+<div class="block">* Get the offset in bytes before the dimensional index.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -221,8 +219,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Partit
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/HashKeyIndexStrategy.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -296,14 +293,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Partit
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>
@@ -339,8 +334,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Partit
 <h4>getPartitionKeyLength</h4>
 <pre>public&nbsp;int&nbsp;getPartitionKeyLength()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html#getPartitionKeyLength--">PartitionIndexStrategy</a></code></span></div>
-<div class="block">Get the offset in bytes before the dimensional index. This can accounts
- for tier IDs and bin IDs</div>
+<div class="block">* Get the offset in bytes before the dimensional index. This can accounts for tier IDs and bin
+ IDs</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html#getPartitionKeyLength--">getPartitionKeyLength</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">PartitionIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>

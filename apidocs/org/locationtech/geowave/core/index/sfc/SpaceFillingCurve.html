@@ -111,9 +111,9 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">SpaceFillingCurve</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
-<div class="block">Base class which defines common methods for any space filling curve. Hosts
- standard access methods shared between implementation. A space filling curve
- is expected to provide a reversible n-dimensional <-> 1-dimensional mapping.</div>
+<div class="block">* Base class which defines common methods for any space filling curve. Hosts standard access
+ methods shared between implementation. A space filling curve is expected to provide a reversible
+ n-dimensional <-> 1-dimensional mapping.</div>
 </li>
 </ul>
 </div>
@@ -137,46 +137,46 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeRange-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-boolean-int-">decomposeRange</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
               boolean&nbsp;overInclusiveOnEdge,
               int&nbsp;maxRanges)</code>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.</div>
+<div class="block">* Returns a collection of ranges on the 1-d space filling curve that correspond to the
+ n-dimensional range described in the query parameter.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/sfc/RangeDecomposition.html" title="class in org.locationtech.geowave.core.index.sfc">RangeDecomposition</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeRangeFully-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">decomposeRangeFully</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.</div>
+<div class="block">* Returns a collection of ranges on the 1-d space filling curve that correspond to the
+ n-dimensional range described in the query parameter.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#getCoordinates-byte:A-">getCoordinates</a></span>(byte[]&nbsp;id)</code>
-<div class="block">Gets n-dimensional coordinates from a single dimension</div>
+<div class="block">* Gets n-dimensional coordinates from a single dimension</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#getEstimatedIdCount-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getEstimatedIdCount</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data)</code>
-<div class="block">Determines the estimated number of rows a multi-dimensional range will
- span within this space filling curve</div>
+<div class="block">* Determines the estimated number of rows a multi-dimensional range will span within this space
+ filling curve</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#getId-double:A-">getId</a></span>(double[]&nbsp;values)</code>
-<div class="block">Maps a n-dimensional value to a single dimension, i.e.</div>
+<div class="block">* Maps a n-dimensional value to a single dimension, i.e.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#getInsertionIdRangePerDimension--">getInsertionIdRangePerDimension</a></span>()</code>
-<div class="block">Get the range/size of a single insertion ID for each dimension</div>
+<div class="block">* Get the range/size of a single insertion ID for each dimension</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#getRanges-byte:A-">getRanges</a></span>(byte[]&nbsp;id)</code>
-<div class="block">Gets n-dimensional ranges from a single dimension, i.e.</div>
+<div class="block">* Gets n-dimensional ranges from a single dimension, i.e.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -184,8 +184,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#normalizeRange-double-double-int-">normalizeRange</a></span>(double&nbsp;minValue,
               double&nbsp;maxValue,
               int&nbsp;dimension)</code>
-<div class="block">Determines the coordinates within this space filling curve for a
- dimension given a range</div>
+<div class="block">* Determines the coordinates within this space filling curve for a dimension given a range</div>
 </td>
 </tr>
 </table>
@@ -217,14 +216,14 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getId</h4>
 <pre>byte[]&nbsp;getId(double[]&nbsp;values)</pre>
-<div class="block">Maps a n-dimensional value to a single dimension, i.e. [12,33] -> 0033423</div>
+<div class="block">* Maps a n-dimensional value to a single dimension, i.e. [12,33] -> 0033423</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>values</code> - n-dimensional value to be encoded in the SFC. The size of
-            value corresponds to the number of dimensions</dd>
+<dd><code>values</code> - n-dimensional value to be encoded in the SFC. The size of value corresponds to
+        the number of dimensions</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>value derived from the the SFC transform. The value is left
-         padded based on the number if bits in the SFC dimension</dd>
+<dd>value derived from the the SFC transform. The value is left padded based on the number
+         if bits in the SFC dimension</dd>
 </dl>
 </li>
 </ul>
@@ -235,14 +234,12 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getRanges</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;getRanges(byte[]&nbsp;id)</pre>
-<div class="block">Gets n-dimensional ranges from a single dimension, i.e. 0033423 ->
- [12,33]</div>
+<div class="block">* Gets n-dimensional ranges from a single dimension, i.e. 0033423 -> [12,33]</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>id</code> - the SFC ID to calculate the ranges of values represented.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the valid ranges per dimension of a single SFC ID derived from
-         the the SFC transform.</dd>
+<dd>the valid ranges per dimension of a single SFC ID derived from the the SFC transform.</dd>
 </dl>
 </li>
 </ul>
@@ -253,7 +250,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getCoordinates</h4>
 <pre>long[]&nbsp;getCoordinates(byte[]&nbsp;id)</pre>
-<div class="block">Gets n-dimensional coordinates from a single dimension</div>
+<div class="block">* Gets n-dimensional coordinates from a single dimension</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>id</code> - the SFC ID to calculate the coordinates for each dimension.</dd>
@@ -269,18 +266,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>decomposeRangeFully</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/index/sfc/RangeDecomposition.html" title="class in org.locationtech.geowave.core.index.sfc">RangeDecomposition</a>&nbsp;decomposeRangeFully(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</pre>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.
+<div class="block">* Returns a collection of ranges on the 1-d space filling curve that correspond to the
+ n-dimensional range described in the query parameter.
 
- This method will decompose the range all the way down to the unit
- interval of 1.</div>
+ <p> This method will decompose the range all the way down to the unit interval of 1.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - describes the n-dimensional query window that will be
-            decomposed</dd>
+<dd><code>query</code> - describes the n-dimensional query window that will be decomposed</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an object containing the ranges on the SFC that overlap the
-         parameters supplied in the query object</dd>
+<dd>an object containing the ranges on the SFC that overlap the parameters supplied in the
+         query object</dd>
 </dl>
 </li>
 </ul>
@@ -293,19 +288,18 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <pre><a href="../../../../../../org/locationtech/geowave/core/index/sfc/RangeDecomposition.html" title="class in org.locationtech.geowave.core.index.sfc">RangeDecomposition</a>&nbsp;decomposeRange(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
                                   boolean&nbsp;overInclusiveOnEdge,
                                   int&nbsp;maxRanges)</pre>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.
+<div class="block">* Returns a collection of ranges on the 1-d space filling curve that correspond to the
+ n-dimensional range described in the query parameter.
 
- This method will roll up the ranges based on the maxRanges parameter.
- Ranges will be "connected" based on the minimization of distance between
- the end of one range and the start of the next.</div>
+ <p> This method will roll up the ranges based on the maxRanges parameter. Ranges will be
+ "connected" based on the minimization of distance between the end of one range and the start of
+ the next.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - describes the n-dimensional query window that will be
-            decomposed</dd>
+<dd><code>query</code> - describes the n-dimensional query window that will be decomposed</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an object containing the ranges on the SFC that overlap the
-         parameters supplied in the query object</dd>
+<dd>an object containing the ranges on the SFC that overlap the parameters supplied in the
+         query object</dd>
 </dl>
 </li>
 </ul>
@@ -316,15 +310,13 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getEstimatedIdCount</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;getEstimatedIdCount(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data)</pre>
-<div class="block">Determines the estimated number of rows a multi-dimensional range will
- span within this space filling curve</div>
+<div class="block">* Determines the estimated number of rows a multi-dimensional range will span within this space
+ filling curve</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - describes the n-dimensional range to estimate the row count
-            for</dd>
+<dd><code>query</code> - describes the n-dimensional range to estimate the row count for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an estimate of the row count for the ranges given within this
-         space filling curve</dd>
+<dd>an estimate of the row count for the ranges given within this space filling curve</dd>
 </dl>
 </li>
 </ul>
@@ -337,18 +329,17 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <pre>long[]&nbsp;normalizeRange(double&nbsp;minValue,
                       double&nbsp;maxValue,
                       int&nbsp;dimension)</pre>
-<div class="block">Determines the coordinates within this space filling curve for a
- dimension given a range</div>
+<div class="block">* Determines the coordinates within this space filling curve for a dimension given a range</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>minValue</code> - describes the minimum of a range in a single dimension used to
-            determine the SFC coordinate range</dd>
-<dd><code>maxValue</code> - describes the maximum of a range in a single dimension used to
-            determine the SFC coordinate range</dd>
+<dd><code>minValue</code> - describes the minimum of a range in a single dimension used to determine the
+        SFC coordinate range</dd>
+<dd><code>maxValue</code> - describes the maximum of a range in a single dimension used to determine the
+        SFC coordinate range</dd>
 <dd><code>dimension</code> - the dimension</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the range of coordinates as an array where the first element is
-         the min and the second element is the max</dd>
+<dd>the range of coordinates as an array where the first element is the min and the second
+         element is the max</dd>
 </dl>
 </li>
 </ul>
@@ -359,7 +350,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getInsertionIdRangePerDimension</h4>
 <pre>double[]&nbsp;getInsertionIdRangePerDimension()</pre>
-<div class="block">Get the range/size of a single insertion ID for each dimension</div>
+<div class="block">* Get the range/size of a single insertion ID for each dimension</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the range of a single insertion ID for each dimension</dd>

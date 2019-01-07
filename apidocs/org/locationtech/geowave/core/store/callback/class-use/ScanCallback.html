@@ -133,9 +133,8 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatsCompositionTool</a>&lt;T&gt;</span></code>
-<div class="block">This tool does not react to callbacks if the provided statistics store is
- null or the provided data adapter does not implement
- <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics"><code>DataStatisticsStore</code></a>.</div>
+<div class="block">This tool does not react to callbacks if the provided statistics store is null or the provided
+ data adapter does not implement <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics"><code>DataStatisticsStore</code></a>.</div>
 </td>
 </tr>
 </tbody>
@@ -175,10 +174,8 @@
          <a href="../../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&nbsp;scanCallback,
          byte[]&nbsp;fieldSubsetBitmask,
          boolean&nbsp;decodeRow)</code>
-<div class="block">Basic method that decodes a native row Currently overridden by Accumulo
- and HBase; Unification in progress
-
- Override this method if you can't pass in a GeoWaveRow!</div>
+<div class="block">Basic method that decodes a native row Currently overridden by Accumulo and HBase; Unification
+ in progress</div>
 </td>
 </tr>
 <tr class="rowColor">

@@ -125,9 +125,9 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">SpatialTemporalQuery</span>
 extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">SpatialQuery</a></pre>
-<div class="block">The Spatial Temporal Query class represents a query in three dimensions. The
- constraint that is applied represents an intersection operation on the query
- geometry AND a date range intersection based on startTime and endTime.</div>
+<div class="block">The Spatial Temporal Query class represents a query in three dimensions. The constraint that is
+ applied represents an intersection operation on the query geometry AND a date range intersection
+ based on startTime and endTime.</div>
 </li>
 </ul>
 </div>
@@ -188,8 +188,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;endTime,
                     org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
                     <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
-<div class="block">If more then on polygon is supplied in the geometry, then the range of
- time is partnered with each polygon constraint.</div>
+<div class="block">If more then on polygon is supplied in the geometry, then the range of time is partnered with
+ each polygon constraint.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -212,8 +212,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-org.locationtech.geowave.core.geotime.store.query.TemporalConstraints-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                     org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
                     <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</code>
-<div class="block">Applies the set of temporal constraints to the boundaries of the provided
- polygon.</div>
+<div class="block">Applies the set of temporal constraints to the boundaries of the provided polygon.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -350,10 +349,9 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;endTime,
                             org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
                             <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
-<div class="block">If more then on polygon is supplied in the geometry, then the range of
- time is partnered with each polygon constraint. Note: By default we are
- using same compareOp for 1D Time filtering as the compareOp of the
- Spatial query by calling getBaseCompareOp()</div>
+<div class="block">If more then on polygon is supplied in the geometry, then the range of time is partnered with
+ each polygon constraint. Note: By default we are using same compareOp for 1D Time filtering as
+ the compareOp of the Spatial query by calling getBaseCompareOp()</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>startTime</code> - </dd>
@@ -384,9 +382,9 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>public&nbsp;SpatialTemporalQuery(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                             org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
                             <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp)</pre>
-<div class="block">Applies the set of temporal constraints to the boundaries of the provided
- polygon. If a multi-polygon is provided, then all matching combinations
- between temporal ranges and polygons are explored.</div>
+<div class="block">Applies the set of temporal constraints to the boundaries of the provided polygon. If a
+ multi-polygon is provided, then all matching combinations between temporal ranges and polygons
+ are explored.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>constraints</code> - </dd>

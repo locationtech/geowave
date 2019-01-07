@@ -115,9 +115,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">NeighborIndex&lt;NNTYPE&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">Maintain an association between an ID of any item and its neighbors, as they
- are discovered. The index supports a bi-directional association, forming a
- graph of adjacency lists.</div>
+<div class="block">Maintain an association between an ID of any item and its neighbors, as they are discovered. The
+ index supports a bi-directional association, forming a graph of adjacency lists.</div>
 </li>
 </ul>
 </div>
@@ -222,14 +221,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>init</h4>
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborList</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborIndex.html" title="type parameter in NeighborIndex">NNTYPE</a>&gt;&nbsp;init(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;id,
                                  <a href="../../../../../org/locationtech/geowave/analytic/nn/NeighborIndex.html" title="type parameter in NeighborIndex">NNTYPE</a>&nbsp;value)</pre>
-<div class="block">Invoked when the provided node is being inspected to find neighbors.
- Creates the associated neighbor list, if not already created. Notifies
- the neighbor list that it is formally initialized. The neighbor list may
- already exist and have associated neighbors. This occurs when those
- relationships are discovered through traversing the neighbor.
- 
- This method is designed for neighbor lists do some optimizations just
- prior to the neighbor discovery process.</div>
+<div class="block">Invoked when the provided node is being inspected to find neighbors. Creates the associated
+ neighbor list, if not already created. Notifies the neighbor list that it is formally
+ initialized. The neighbor list may already exist and have associated neighbors. This occurs
+ when those relationships are discovered through traversing the neighbor.
+
+ <p> This method is designed for neighbor lists do some optimizations just prior to the neighbor
+ discovery process.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>node</code> - </dd>

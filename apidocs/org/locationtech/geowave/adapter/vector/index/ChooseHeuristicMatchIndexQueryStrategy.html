@@ -116,11 +116,10 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">ChooseHeuristicMatchIndexQueryStrategy</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/adapter/vector/index/IndexQueryStrategySPI.html" title="interface in org.locationtech.geowave.adapter.vector.index">IndexQueryStrategySPI</a></pre>
-<div class="block">This Query Strategy chooses the index that satisfies the most dimensions of
- the underlying query first and then if multiple are found it will choose the
- one that most closely preserves locality. It won't be optimized for a single
- prefix query but it will choose the index with the most dimensions defined,
- enabling more fine-grained contraints given a larger set of indexable ranges.</div>
+<div class="block">This Query Strategy chooses the index that satisfies the most dimensions of the underlying query
+ first and then if multiple are found it will choose the one that most closely preserves locality.
+ It won't be optimized for a single prefix query but it will choose the index with the most
+ dimensions defined, enabling more fine-grained contraints given a larger set of indexable ranges.</div>
 </li>
 </ul>
 </div>

@@ -104,23 +104,23 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">IngestFromKafkaDriver.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#consumeFromTopic-java.lang.String-org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin-org.locationtech.geowave.core.ingest.kafka.KafkaIngestRunData-java.util.List-">consumeFromTopic</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatPluginName,
-                <a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;T,?&gt;&nbsp;avroFormatPlugin,
+<td class="colLast"><span class="typeNameLabel">IngestFromKafkaDriver.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#consumeFromTopic-java.lang.String-org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin-org.locationtech.geowave.core.ingest.kafka.KafkaIngestRunData-java.util.List-">consumeFromTopic</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatPluginName,
+                <a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;T,?&gt;&nbsp;avroFormatPlugin,
                 <a href="../../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.kafka">KafkaIngestRunData</a>&nbsp;ingestRunData,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;queue)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">IngestFromKafkaDriver.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#consumeMessages-java.lang.String-org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin-org.locationtech.geowave.core.ingest.kafka.KafkaIngestRunData-kafka.consumer.KafkaStream-">consumeMessages</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatPluginName,
-               <a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;T,?&gt;&nbsp;avroFormatPlugin,
+<td class="colLast"><span class="typeNameLabel">IngestFromKafkaDriver.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#consumeMessages-java.lang.String-org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin-org.locationtech.geowave.core.ingest.kafka.KafkaIngestRunData-kafka.consumer.KafkaStream-">consumeMessages</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;formatPluginName,
+               <a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;T,?&gt;&nbsp;avroFormatPlugin,
                <a href="../../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.kafka">KafkaIngestRunData</a>&nbsp;ingestRunData,
                kafka.consumer.KafkaStream&lt;byte[],byte[]&gt;&nbsp;stream)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">IngestFromKafkaDriver.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#processMessage-T-org.locationtech.geowave.core.ingest.kafka.KafkaIngestRunData-org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin-">processMessage</a></span>(T&nbsp;dataRecord,
+<td class="colLast"><span class="typeNameLabel">IngestFromKafkaDriver.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#processMessage-T-org.locationtech.geowave.core.ingest.kafka.KafkaIngestRunData-org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin-">processMessage</a></span>(T&nbsp;dataRecord,
               <a href="../../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.kafka">KafkaIngestRunData</a>&nbsp;ingestRunData,
-              <a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;T,?&gt;&nbsp;plugin)</code>&nbsp;</td>
+              <a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;T,?&gt;&nbsp;plugin)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

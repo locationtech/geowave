@@ -121,12 +121,11 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">Aggregation&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R,T&gt;</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
-<div class="block">An Aggregation function that mathematically represents any commutative monoid
- (ie. a function that is both commutative and associative). For some data
- stores Aggregations will be run distributed on the server within the scope of
- iterating through the results for maximum efficiency. A third party
- Aggregation can be used, but if serverside processing is enabled, the third
- party Aggregation implementation must also be on the server classpath.</div>
+<div class="block">An Aggregation function that mathematically represents any commutative monoid (ie. a function
+ that is both commutative and associative). For some data stores Aggregations will be run
+ distributed on the server within the scope of iterating through the results for maximum
+ efficiency. A third party Aggregation can be used, but if serverside processing is enabled, the
+ third party Aggregation implementation must also be on the server classpath.</div>
 </li>
 </ul>
 </div>
@@ -160,8 +159,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">P</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getParameters--">getParameters</a></span>()</code>
-<div class="block">Returns a persistable object for any parameters that must be persisted to
- properly compute the aggregation</div>
+<div class="block">Returns a persistable object for any parameters that must be persisted to properly compute the
+ aggregation</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -224,12 +223,12 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getParameters</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">P</a>&nbsp;getParameters()</pre>
-<div class="block">Returns a persistable object for any parameters that must be persisted to
- properly compute the aggregation</div>
+<div class="block">Returns a persistable object for any parameters that must be persisted to properly compute the
+ aggregation</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>A persistable object for any parameters that must be persisted to
-         properly compute the aggregation</dd>
+<dd>A persistable object for any parameters that must be persisted to properly compute the
+         aggregation</dd>
 </dl>
 </li>
 </ul>
@@ -256,10 +255,9 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getResult</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">R</a>&nbsp;getResult()</pre>
-<div class="block">Get the current result of the aggregation. This must be mergeable and it
- is the responsibility of the caller to merge separate results if desired.
- It is the responsibility of the aggregation to start with a new instance
- of the result at the beginning of any aggregation.</div>
+<div class="block">Get the current result of the aggregation. This must be mergeable and it is the responsibility
+ of the caller to merge separate results if desired. It is the responsibility of the aggregation
+ to start with a new instance of the result at the beginning of any aggregation.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the current result of the aggregation</dd>

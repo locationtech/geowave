@@ -115,22 +115,19 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public static class <span class="typeNameLabel">SpatialQueryFilter.GeometryImage</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">This class is used for interning a PreparedGeometry. Prepared geometries
- cannot be interned since they do not extend Object.hashCode().
+<div class="block">This class is used for interning a PreparedGeometry. Prepared geometries cannot be interned
+ since they do not extend Object.hashCode().
 
- Interning a geometry assumes a geometry is already constructed on the
- heap at the time interning begins. The byte image of geometry provides a
- more efficient component to hash and associate with a single image of the
- geometry.
+ <p> Interning a geometry assumes a geometry is already constructed on the heap at the time
+ interning begins. The byte image of geometry provides a more efficient component to hash and
+ associate with a single image of the geometry.
 
- The approach of interning the Geometry prior to construction of a
- PreparedGeometry lead to excessive memory use. Thus, this class is
- constructed to hold the prepared geometry and prevent reconstruction of
- the underlying geometry from a byte array if the Geometry has been
- interned.
+ <p> The approach of interning the Geometry prior to construction of a PreparedGeometry lead to
+ excessive memory use. Thus, this class is constructed to hold the prepared geometry and prevent
+ reconstruction of the underlying geometry from a byte array if the Geometry has been interned.
 
- Using this approach increased performance of a large query unit test by
- 40% and reduced heap memory consumption by roughly 50%.</div>
+ <p> Using this approach increased performance of a large query unit test by 40% and reduced
+ heap memory consumption by roughly 50%.</div>
 </li>
 </ul>
 </div>

@@ -116,8 +116,7 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">DuplicateDeletionCallback&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html" title="interface in org.locationtech.geowave.core.store.callback">DeleteCallback</a>&lt;T,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></pre>
-<div class="block">This callback finds the duplicates for each scanned entry, and deletes them
- by insertion ID</div>
+<div class="block">This callback finds the duplicates for each scanned entry, and deletes them by insertion ID</div>
 </li>
 </ul>
 </div>
@@ -163,8 +162,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/callback/DuplicateDeletionCallback.html#entryDeleted-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryDeleted</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/callback/DuplicateDeletionCallback.html" title="type parameter in DuplicateDeletionCallback">T</a>&nbsp;entry,
             <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>
-<div class="block">This will be called after an entry is successfully deleted with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully deleted with the row IDs that were used</div>
 </td>
 </tr>
 </table>
@@ -237,8 +235,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <pre>public&nbsp;void&nbsp;entryDeleted(<a href="../../../../../../org/locationtech/geowave/core/store/callback/DuplicateDeletionCallback.html" title="type parameter in DuplicateDeletionCallback">T</a>&nbsp;entry,
                          <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">DeleteCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully deleted with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully deleted with the row IDs that were used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">entryDeleted</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html" title="interface in org.locationtech.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/callback/DuplicateDeletionCallback.html" title="type parameter in DuplicateDeletionCallback">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>

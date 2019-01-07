@@ -245,8 +245,8 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.html" title="class in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter</a></span></code>
-<div class="block">This filter can perform fine-grained acceptance testing (intersection test
- with a query geometry) with JTS geometry</div>
+<div class="block">This filter can perform fine-grained acceptance testing (intersection test with a query geometry)
+ with JTS geometry</div>
 </td>
 </tr>
 </tbody>
@@ -330,10 +330,8 @@
          <a href="../../../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&nbsp;scanCallback,
          byte[]&nbsp;fieldSubsetBitmask,
          boolean&nbsp;decodeRow)</code>
-<div class="block">Basic method that decodes a native row Currently overridden by Accumulo
- and HBase; Unification in progress
-
- Override this method if you can't pass in a GeoWaveRow!</div>
+<div class="block">Basic method that decodes a native row Currently overridden by Accumulo and HBase; Unification
+ in progress</div>
 </td>
 </tr>
 </tbody>
@@ -606,8 +604,8 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">QueryConstraints.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html#createFilters-org.locationtech.geowave.core.store.api.Index-">createFilters</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
-<div class="block">This is a list of filters (either client filters or distributed filters)
- which will be applied to the result set.</div>
+<div class="block">This is a list of filters (either client filters or distributed filters) which will be applied
+ to the result set.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -663,9 +661,8 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.html" title="class in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter</a></span></code>
-<div class="block">This filter can perform fine-grained acceptance testing on generic
- dimensions, but is limited to only using MBR (min-max in a single dimension,
- hyper-cubes in multi-dimensional space)</div>
+<div class="block">This filter can perform fine-grained acceptance testing on generic dimensions, but is limited to
+ only using MBR (min-max in a single dimension, hyper-cubes in multi-dimensional space)</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -679,15 +676,15 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/DedupeFilter.html" title="class in org.locationtech.geowave.core.store.query.filter">DedupeFilter</a></span></code>
-<div class="block">This filter will perform de-duplication using the combination of data adapter
- ID and data ID to determine uniqueness.</div>
+<div class="block">This filter will perform de-duplication using the combination of data adapter ID and data ID to
+ determine uniqueness.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/FilterList.html" title="class in org.locationtech.geowave.core.store.query.filter">FilterList</a></span></code>
-<div class="block">This class wraps a list of filters into a single filter such that if any one
- filter fails this class will fail acceptance.</div>
+<div class="block">This class wraps a list of filters into a single filter such that if any one filter fails this
+ class will fail acceptance.</div>
 </td>
 </tr>
 <tr class="altColor">

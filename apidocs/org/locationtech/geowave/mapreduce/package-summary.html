@@ -85,9 +85,8 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopDataAdapter.html" title="interface in org.locationtech.geowave.mapreduce">HadoopDataAdapter</a>&lt;T,W extends org.apache.hadoop.io.Writable&gt;</td>
 <td class="colLast">
-<div class="block">This is an interface that extends data adapter to allow map reduce jobs to
- easily convert hadoop writable objects to and from the geowave native
- representation of the objects.</div>
+<div class="block">This is an interface that extends data adapter to allow map reduce jobs to easily convert hadoop
+ writable objects to and from the geowave native representation of the objects.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -132,8 +131,8 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../org/locationtech/geowave/mapreduce/GeoWaveKey.html" title="class in org.locationtech.geowave.mapreduce">GeoWaveKey</a></td>
 <td class="colLast">
-<div class="block">This is the base class for both GeoWaveInputKey and GeoWaveOutputKey and is
- responsible for persisting the adapter ID</div>
+<div class="block">This is the base class for both GeoWaveInputKey and GeoWaveOutputKey and is responsible for
+ persisting the adapter ID</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -175,30 +174,29 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializationTool.html" title="class in org.locationtech.geowave.mapreduce">HadoopWritableSerializationTool</a></td>
 <td class="colLast">
-<div class="block">Use this class to maintain a set of serializers per adapters associated with
- the context of a single mapper or reducer.</div>
+<div class="block">Use this class to maintain a set of serializers per adapters associated with the context of a
+ single mapper or reducer.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../org/locationtech/geowave/mapreduce/JobContextAdapterIndexMappingStore.html" title="class in org.locationtech.geowave.mapreduce">JobContextAdapterIndexMappingStore</a></td>
 <td class="colLast">
-<div class="block">This class implements an adapter index mapping store by first checking the
- job context for an adapter and keeping a local cache of adapters that have
- been discovered.</div>
+<div class="block">This class implements an adapter index mapping store by first checking the job context for an
+ adapter and keeping a local cache of adapters that have been discovered.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../org/locationtech/geowave/mapreduce/JobContextAdapterStore.html" title="class in org.locationtech.geowave.mapreduce">JobContextAdapterStore</a></td>
 <td class="colLast">
-<div class="block">This class implements an adapter store by first checking the job context for
- an adapter and keeping a local cache of adapters that have been discovered.</div>
+<div class="block">This class implements an adapter store by first checking the job context for an adapter and
+ keeping a local cache of adapters that have been discovered.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../org/locationtech/geowave/mapreduce/JobContextIndexStore.html" title="class in org.locationtech.geowave.mapreduce">JobContextIndexStore</a></td>
 <td class="colLast">
-<div class="block">This class implements an index store by first checking the job context for an
- index and keeping a local cache of indices that have been discovered.</div>
+<div class="block">This class implements an index store by first checking the job context for an index and keeping a
+ local cache of indices that have been discovered.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -212,17 +210,15 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../org/locationtech/geowave/mapreduce/NativeMapContext.html" title="class in org.locationtech.geowave.mapreduce">NativeMapContext</a>&lt;KEYIN,VALUEIN&gt;</td>
 <td class="colLast">
-<div class="block">This class wraps an existing map context that will write hadoop writable
- objects as a map context that writes the native object for ease of
- implementing mapreduce jobs.</div>
+<div class="block">This class wraps an existing map context that will write hadoop writable objects as a map context
+ that writes the native object for ease of implementing mapreduce jobs.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../org/locationtech/geowave/mapreduce/NativeReduceContext.html" title="class in org.locationtech.geowave.mapreduce">NativeReduceContext</a>&lt;KEYIN,VALUEIN&gt;</td>
 <td class="colLast">
-<div class="block">This class wraps an existing reduce context that will write hadoop writable
- objects as a reduce context that writes the native object for ease of
- implementing mapreduce jobs.</div>
+<div class="block">This class wraps an existing reduce context that will write hadoop writable objects as a reduce
+ context that writes the native object for ease of implementing mapreduce jobs.</div>
 </td>
 </tr>
 <tr class="altColor">

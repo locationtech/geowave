@@ -124,15 +124,13 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">AbstractDataAdapter&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;</pre>
-<div class="block">This class generically supports most of the operations necessary to implement
- a Data Adapter and can be easily extended to support specific data types.<br>
- Many of the details are handled by mapping IndexFieldHandler's based on
- either types or exact dimensions. These handler mappings can be supplied in
- the constructor. The dimension matching handlers are used first when trying
- to decode a persistence encoded value. This can be done specifically to match
- a field (for example if there are multiple ways of encoding/decoding the same
- type). Otherwise the type matching handlers will simply match any field with
- the same type as its generic field type.</div>
+<div class="block">This class generically supports most of the operations necessary to implement a Data Adapter and
+ can be easily extended to support specific data types.<br> Many of the details are handled by
+ mapping IndexFieldHandler's based on either types or exact dimensions. These handler mappings can
+ be supplied in the constructor. The dimension matching handlers are used first when trying to
+ decode a persistence encoded value. This can be done specifically to match a field (for example
+ if there are multiple ways of encoding/decoding the same type). Otherwise the type matching
+ handlers will simply match any field with the same type as its generic field type.</div>
 </li>
 </ul>
 </div>
@@ -269,8 +267,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -497,14 +494,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>

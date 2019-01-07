@@ -120,12 +120,11 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">BasicQuery</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></pre>
-<div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions
- that match the Constraints passed into the constructor
+<div class="block">The Basic Query class represent a hyper-cube(s) query across all dimensions that match the
+ Constraints passed into the constructor
 
- NOTE: query to an index that requires a constraint and the constraint is
- missing within the query equates to an unconstrained index scan. The query
- filter is still applied.</div>
+ <p> NOTE: query to an index that requires a constraint and the constraint is missing within the
+ query equates to an unconstrained index scan. The query filter is still applied.</div>
 </li>
 </ul>
 </div>
@@ -236,8 +235,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#createFilters-org.locationtech.geowave.core.store.api.Index-">createFilters</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
-<div class="block">This is a list of filters (either client filters or distributed filters)
- which will be applied to the result set.</div>
+<div class="block">This is a list of filters (either client filters or distributed filters) which will be applied
+ to the result set.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -256,8 +255,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#getIndexConstraints-org.locationtech.geowave.core.store.api.Index-">getIndexConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;primaryIndex)</code>
-<div class="block">Return a set of constraints to apply to the primary index based on the
- indexing strategy used.</div>
+<div class="block">Return a set of constraints to apply to the primary index based on the indexing strategy used.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -287,8 +285,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -395,12 +392,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <h4>createFilters</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&gt;&nbsp;createFilters(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html#createFilters-org.locationtech.geowave.core.store.api.Index-">QueryConstraints</a></code></span></div>
-<div class="block">This is a list of filters (either client filters or distributed filters)
- which will be applied to the result set. QueryFilters of type
- DistributableQueryFilter will automatically be distributed across nodes,
- although the class must be on the classpath of each node. Fine-grained
- filtering and secondary filtering should be applied here as the primary
- index will only enable coarse-grained filtering.</div>
+<div class="block">This is a list of filters (either client filters or distributed filters) which will be applied
+ to the result set. QueryFilters of type DistributableQueryFilter will automatically be
+ distributed across nodes, although the class must be on the classpath of each node.
+ Fine-grained filtering and secondary filtering should be applied here as the primary index will
+ only enable coarse-grained filtering.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html#createFilters-org.locationtech.geowave.core.store.api.Index-">createFilters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></dd>
@@ -438,10 +434,9 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <h4>getIndexConstraints</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;getIndexConstraints(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;primaryIndex)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html#getIndexConstraints-org.locationtech.geowave.core.store.api.Index-">QueryConstraints</a></code></span></div>
-<div class="block">Return a set of constraints to apply to the primary index based on the
- indexing strategy used. The ordering of dimensions within the index
- stategy must match the order of dimensions in the numeric data returned
- which will represent the constraints applied to the primary index for the
+<div class="block">Return a set of constraints to apply to the primary index based on the indexing strategy used.
+ The ordering of dimensions within the index stategy must match the order of dimensions in the
+ numeric data returned which will represent the constraints applied to the primary index for the
  query.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -449,8 +444,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>primaryIndex</code> - The index used to generate the constraints for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>A multi-dimensional numeric data set that represents the
-         constraints for the index</dd>
+<dd>A multi-dimensional numeric data set that represents the constraints for the index</dd>
 </dl>
 </li>
 </ul>
@@ -462,14 +456,12 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>

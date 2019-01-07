@@ -111,18 +111,16 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">HadoopWritableSerializationTool</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">Use this class to maintain a set of serializers per adapters associated with
- the context of a single mapper or reducer. The intent is to support
- maintaining single set of Writable instances. By the nature of holding single
- instances of Writable instances by the serializers, this class and its
- contents may be only accessed by one 'worker' (at a time).
+<div class="block">Use this class to maintain a set of serializers per adapters associated with the context of a
+ single mapper or reducer. The intent is to support maintaining single set of Writable instances.
+ By the nature of holding single instances of Writable instances by the serializers, this class
+ and its contents may be only accessed by one 'worker' (at a time).
 
- The helper methods assume all Writable instances are wrapped in an
- ObjectWritable. The reason for this approach, consistent with other support
- classes in this package, is to allow mappers and reducers to use the generic
- ObjectWritable since entry inputs maybe be associated with different
- adapters, and thus have different associated Writable instances.
- Configuration of Hadoop Mappers and Reducers requires a specific type.</div>
+ <p> The helper methods assume all Writable instances are wrapped in an ObjectWritable. The reason
+ for this approach, consistent with other support classes in this package, is to allow mappers and
+ reducers to use the generic ObjectWritable since entry inputs maybe be associated with different
+ adapters, and thus have different associated Writable instances. Configuration of Hadoop Mappers
+ and Reducers requires a specific type.</div>
 </li>
 </ul>
 </div>

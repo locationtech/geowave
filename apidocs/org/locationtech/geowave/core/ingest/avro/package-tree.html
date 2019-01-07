@@ -81,20 +81,20 @@
 <ul>
 <li type="circle">java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang"><span class="typeNameLink">Object</span></a>
 <ul>
-<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">AbstractStageWholeFileToAvro</span></a>&lt;O&gt; (implements org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;I,O&gt;)</li>
+<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">AbstractStageWholeFileToAvro</span></a>&lt;O&gt; (implements org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;I,O&gt;)</li>
 <li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GenericAvroSerializer.html" title="class in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">GenericAvroSerializer</span></a>&lt;T&gt;</li>
 <li type="circle">org.apache.avro.data.RecordBuilderBase&lt;T&gt; (implements org.apache.avro.data.RecordBuilder&lt;T&gt;)
 <ul>
 <li type="circle">org.apache.avro.specific.SpecificRecordBuilderBase&lt;T&gt;
 <ul>
-<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.Builder.html" title="class in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">WholeFile.Builder</span></a> (implements org.apache.avro.data.RecordBuilder&lt;T&gt;)</li>
+<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.Builder.html" title="class in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">AvroWholeFile.Builder</span></a> (implements org.apache.avro.data.RecordBuilder&lt;T&gt;)</li>
 </ul>
 </li>
 </ul>
 </li>
 <li type="circle">org.apache.avro.specific.SpecificRecordBase (implements java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang">Comparable</a>&lt;T&gt;, org.apache.avro.generic.GenericRecord, org.apache.avro.specific.SpecificRecord)
 <ul>
-<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">WholeFile</span></a> (implements org.apache.avro.specific.SpecificRecord)</li>
+<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">AvroWholeFile</span></a> (implements org.apache.avro.specific.SpecificRecord)</li>
 </ul>
 </li>
 </ul>
@@ -102,23 +102,23 @@
 </ul>
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
-<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">AvroSchemaProvider</span></a>
+<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">GeoWaveAvroSchemaProvider</span></a>
 <ul>
-<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">AvroPluginBase</span></a>&lt;T&gt;
+<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">GeoWaveAvroPluginBase</span></a>&lt;T&gt;
 <ul>
-<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">AvroFormatPlugin</span></a>&lt;I,O&gt; (also extends org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a>, org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>)</li>
+<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">GeoWaveAvroFormatPlugin</span></a>&lt;I,O&gt; (also extends org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a>, org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>)</li>
 </ul>
 </li>
 </ul>
 </li>
 <li type="circle">org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest"><span class="typeNameLink">IndexProvider</span></a>
 <ul>
-<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">AvroFormatPlugin</span></a>&lt;I,O&gt; (also extends org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroPluginBase</a>&lt;T&gt;, org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>)</li>
+<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">GeoWaveAvroFormatPlugin</span></a>&lt;I,O&gt; (also extends org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroPluginBase</a>&lt;T&gt;, org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>)</li>
 </ul>
 </li>
 <li type="circle">org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest"><span class="typeNameLink">LocalPluginBase</span></a>
 <ul>
-<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">AvroFormatPlugin</span></a>&lt;I,O&gt; (also extends org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroPluginBase</a>&lt;T&gt;, org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a>)</li>
+<li type="circle">org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro"><span class="typeNameLink">GeoWaveAvroFormatPlugin</span></a>&lt;I,O&gt; (also extends org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroPluginBase</a>&lt;T&gt;, org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a>)</li>
 </ul>
 </li>
 </ul>

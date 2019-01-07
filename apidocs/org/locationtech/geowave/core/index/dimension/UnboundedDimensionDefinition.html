@@ -124,9 +124,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">UnboundedDimensionDefinition</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.dimension">BasicDimensionDefinition</a></pre>
-<div class="block">Because space filling curves require an extent (minimum & maximum), the
- unbounded implementation relies on an external binning strategy to translate
- an unbounded variable into bounded bins</div>
+<div class="block">Because space filling curves require an extent (minimum & maximum), the unbounded implementation
+ relies on an external binning strategy to translate an unbounded variable into bounded bins</div>
 </li>
 </ul>
 </div>
@@ -208,15 +207,14 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/dimension
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/dimension/UnboundedDimensionDefinition.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>
-<div class="block">Returns a range in the native bounds of the dimension definition,
- denormalized from a bin and separate range</div>
+<div class="block">Returns a range in the native bounds of the dimension definition, denormalized from a bin and
+ separate range</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/dimension/UnboundedDimensionDefinition.html#getFixedBinIdSize--">getFixedBinIdSize</a></span>()</code>
-<div class="block">If this numeric dimension definition uses bins, it is given a fixed
- length for the bin ID</div>
+<div class="block">If this numeric dimension definition uses bins, it is given a fixed length for the bin ID</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -232,8 +230,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/dimension
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/dimension/UnboundedDimensionDefinition.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -354,8 +351,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/dimension
 <h4>getDenormalizedRange</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a>&nbsp;getDenormalizedRange(<a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">NumericDimensionDefinition</a></code></span></div>
-<div class="block">Returns a range in the native bounds of the dimension definition,
- denormalized from a bin and separate range</div>
+<div class="block">Returns a range in the native bounds of the dimension definition, denormalized from a bin and
+ separate range</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
@@ -376,8 +373,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/dimension
 <h4>getFixedBinIdSize</h4>
 <pre>public&nbsp;int&nbsp;getFixedBinIdSize()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getFixedBinIdSize--">NumericDimensionDefinition</a></code></span></div>
-<div class="block">If this numeric dimension definition uses bins, it is given a fixed
- length for the bin ID</div>
+<div class="block">If this numeric dimension definition uses bins, it is given a fixed length for the bin ID</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getFixedBinIdSize--">getFixedBinIdSize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
@@ -422,16 +418,14 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/dimension
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html#toBinary--">toBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.dimension">BasicDimensionDefinition</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>

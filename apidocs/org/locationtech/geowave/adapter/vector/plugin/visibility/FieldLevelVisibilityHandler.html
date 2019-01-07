@@ -121,9 +121,8 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">FieldLevelVisibilityHandler&lt;T,CommonIndexValue&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;T,CommonIndexValue&gt;</pre>
-<div class="block">Define visibility for a specific attribute using the
- <a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility"><code>VisibilityManagement</code></a>. The visibility is determined by meta-data in a
- separate feature attribute.</div>
+<div class="block">Define visibility for a specific attribute using the <a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility"><code>VisibilityManagement</code></a>. The visibility
+ is determined by meta-data in a separate feature attribute.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="class in org.locationtech.geowave.adapter.vector.plugin.visibility"><code>JsonDefinitionColumnVisibilityManagement</code></a></dd>
@@ -214,14 +213,12 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <div class="block">Used when acting with an Index adaptor as a visibility handler. This</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fieldName</code> - - the name of the field for which to set determine the
-            visibility.</dd>
+<dd><code>fieldName</code> - - the name of the field for which to set determine the visibility.</dd>
 <dd><code>fieldVisiblityHandler</code> - default visibility handler if a specific visibility cannot be
-            determined from the contents of the attribute used to
-            determine visibility (name providied by parameter
-            'visibilityAttribute')</dd>
-<dd><code>visibilityAttribute</code> - the attribute name that contains data to discern visibility
-            for other field/attributes.</dd>
+        determined from the contents of the attribute used to determine visibility (name
+        providied by parameter 'visibilityAttribute')</dd>
+<dd><code>visibilityAttribute</code> - the attribute name that contains data to discern visibility for
+        other field/attributes.</dd>
 <dd><code>visibilityManagement</code> - </dd>
 </dl>
 </li>
@@ -247,9 +244,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dat
 <dd><code>visibilityObject</code> - an object that defines visibility for each field</dd>
 <dd><code>fieldName</code> - the field to which visibility is being requested</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>null if the default should be used, otherwise return the
-         visibility for the provide field given the instructions found in
-         the visibilityObject</dd>
+<dd>null if the default should be used, otherwise return the visibility for the provide
+         field given the instructions found in the visibilityObject</dd>
 </dl>
 </li>
 </ul>

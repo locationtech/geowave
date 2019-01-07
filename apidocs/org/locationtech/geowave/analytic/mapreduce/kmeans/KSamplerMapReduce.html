@@ -105,19 +105,17 @@
 <br>
 <pre>public class <span class="typeNameLabel">KSamplerMapReduce</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">Samples a random 'k' number of features from a population of geospatial
- features PER GROUP. Outputs the samples in SimpleFeatures. Sampling is
- achieved by picking the top ranked input objects. Rank is determined by a
- sample function implementing <a href="../../../../../../org/locationtech/geowave/analytic/sample/function/SamplingRankFunction.html" title="interface in org.locationtech.geowave.analytic.sample.function"><code>SamplingRankFunction</code></a>.
+<div class="block">Samples a random 'k' number of features from a population of geospatial features PER GROUP.
+ Outputs the samples in SimpleFeatures. Sampling is achieved by picking the top ranked input
+ objects. Rank is determined by a sample function implementing <a href="../../../../../../org/locationtech/geowave/analytic/sample/function/SamplingRankFunction.html" title="interface in org.locationtech.geowave.analytic.sample.function"><code>SamplingRankFunction</code></a>.
 
- The input features should have a groupID set if they intend to be sampled by
- group.
+ <p>The input features should have a groupID set if they intend to be sampled by group.
 
- Keys are partitioned by the group ID in an attempt to process each group in a
- separate reducer.
+ <p>Keys are partitioned by the group ID in an attempt to process each group in a separate
+ reducer.
 
- Sampled features are written to as a new SimpleFeature to a data store. The
- SimpleFeature contains attributes:</div>
+ <p>Sampled features are written to as a new SimpleFeature to a data store. The SimpleFeature
+ contains attributes:</div>
 </li>
 </ul>
 </div>

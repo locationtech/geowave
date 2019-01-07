@@ -124,13 +124,11 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">ParallelDecoder&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></pre>
-<div class="block">An abstract class that offers data stores a way to scan and decode rows in
- parallel. It is up to the data store implementation to provide
- implementations of <a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.RowProvider.html" title="class in org.locationtech.geowave.core.store.operations"><code>ParallelDecoder.RowProvider</code></a> to be used for
- providing rows from the underlying database.
+<div class="block">An abstract class that offers data stores a way to scan and decode rows in parallel. It is up to
+ the data store implementation to provide implementations of <a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.RowProvider.html" title="class in org.locationtech.geowave.core.store.operations"><code>ParallelDecoder.RowProvider</code></a>
+ to be used for providing rows from the underlying database.
 
- Note: The row transformer passed in MUST be thread-safe, as decoding happens
- in parallel.</div>
+ <p> Note: The row transformer passed in MUST be thread-safe, as decoding happens in parallel.</div>
 </li>
 </ul>
 </div>
@@ -152,8 +150,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.RowProvider.html" title="class in org.locationtech.geowave.core.store.operations">ParallelDecoder.RowProvider</a></span></code>
-<div class="block">Row provider used by the parallel decoder to get <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities"><code>GeoWaveRow</code></a>s from
- the underlying database.</div>
+<div class="block">Row provider used by the parallel decoder to get <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities"><code>GeoWaveRow</code></a>s from the underlying
+ database.</div>
 </td>
 </tr>
 </table>
@@ -178,8 +176,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.html#ParallelDecoder-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-int-">ParallelDecoder</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.html" title="type parameter in ParallelDecoder">T</a>&gt;&nbsp;rowTransformer,
                int&nbsp;numThreads)</code>
-<div class="block">Create a parallel decoder with the given row transformer and number of
- threads.</div>
+<div class="block">Create a parallel decoder with the given row transformer and number of threads.</div>
 </td>
 </tr>
 </table>
@@ -274,8 +271,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <h4>ParallelDecoder</h4>
 <pre>public&nbsp;ParallelDecoder(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.html" title="type parameter in ParallelDecoder">T</a>&gt;&nbsp;rowTransformer,
                        int&nbsp;numThreads)</pre>
-<div class="block">Create a parallel decoder with the given row transformer and number of
- threads.</div>
+<div class="block">Create a parallel decoder with the given row transformer and number of threads.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rowTransformer</code> - the thread-safe row transformer to use for decoding rows</dd>
@@ -314,8 +310,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
                                                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a list of <a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.RowProvider.html" title="class in org.locationtech.geowave.core.store.operations"><code>ParallelDecoder.RowProvider</code></a>s that provide <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities"><code>GeoWaveRow</code></a>s
-         to the decoder</dd>
+<dd>a list of <a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.RowProvider.html" title="class in org.locationtech.geowave.core.store.operations"><code>ParallelDecoder.RowProvider</code></a>s that provide <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities"><code>GeoWaveRow</code></a>s to the decoder</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>

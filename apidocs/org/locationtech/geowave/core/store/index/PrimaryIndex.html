@@ -120,8 +120,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">PrimaryIndex</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></pre>
-<div class="block">This class fully describes everything necessary to index data within GeoWave.
- The key components are the indexing strategy and the common index model.</div>
+<div class="block">This class fully describes everything necessary to index data within GeoWave. The key components
+ are the indexing strategy and the common index model.</div>
 </li>
 </ul>
 </div>
@@ -197,15 +197,15 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getIndexModel--">getIndexModel</a></span>()</code>
-<div class="block">The common index model allows for easily searching certain fields across
- all types within an index.</div>
+<div class="block">The common index model allows for easily searching certain fields across all types within an
+ index.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>
-<div class="block">get the index strategy which maps real-world values to insertion keys and
- query ranges for efficient range scans within a key-value store.</div>
+<div class="block">get the index strategy which maps real-world values to insertion keys and query ranges for
+ efficient range scans within a key-value store.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -221,8 +221,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -308,8 +307,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <h4>getIndexStrategy</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;getIndexStrategy()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getIndexStrategy--">Index</a></code></span></div>
-<div class="block">get the index strategy which maps real-world values to insertion keys and
- query ranges for efficient range scans within a key-value store.</div>
+<div class="block">get the index strategy which maps real-world values to insertion keys and query ranges for
+ efficient range scans within a key-value store.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getIndexStrategy--">getIndexStrategy</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></dd>
@@ -326,10 +325,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <h4>getIndexModel</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;getIndexModel()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getIndexModel--">Index</a></code></span></div>
-<div class="block">The common index model allows for easily searching certain fields across
- all types within an index. For example, if geometry is a common index
- field, one could ubiquitously search all types within this index
- spatially. This could apply to any field type desired.</div>
+<div class="block">The common index model allows for easily searching certain fields across all types within an
+ index. For example, if geometry is a common index field, one could ubiquitously search all
+ types within this index spatially. This could apply to any field type desired.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getIndexModel--">getIndexModel</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></dd>
@@ -389,14 +387,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>

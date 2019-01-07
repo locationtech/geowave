@@ -120,13 +120,12 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">IndexedPersistenceEncoding&lt;T&gt;</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">PersistenceEncoding</a>&lt;T&gt;</pre>
-<div class="block">This class models all of the necessary information for persisting data in the
- data store (following the common index model) and is used internally within
- GeoWave as an intermediary object between the direct storage format and the
- native data format. It also contains information about the persisted object
- within a particular index such as the insertion ID in the index and the
- number of duplicates for this entry in the index, and is used when reading
- data from the index.</div>
+<div class="block">This class models all of the necessary information for persisting data in the data store
+ (following the common index model) and is used internally within GeoWave as an intermediary
+ object between the direct storage format and the native data format. It also contains information
+ about the persisted object within a particular index such as the insertion ID in the index and
+ the number of duplicates for this entry in the index, and is used when reading data from the
+ index.</div>
 </li>
 </ul>
 </div>
@@ -311,8 +310,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Pers
 <li class="blockList">
 <h4>getDuplicateCount</h4>
 <pre>public&nbsp;int&nbsp;getDuplicateCount()</pre>
-<div class="block">Return the number of duplicates for this entry. Entries are duplicated
- when a single row ID is insufficient to index it.</div>
+<div class="block">Return the number of duplicates for this entry. Entries are duplicated when a single row ID is
+ insufficient to index it.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the number of duplicates</dd>

@@ -120,11 +120,11 @@ var activeTableTab = "activeTableTab";
 <pre>public abstract class <span class="typeNameLabel">AbstractLockingManagement</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/LockingManagement.html" title="interface in org.locationtech.geowave.adapter.vector.plugin.lock">LockingManagement</a></pre>
-<div class="block">Simplifies Lock management from the more complex Geotools approach which is
- used in several different scenarios (e.g. directory management, wfs-t, etc.)
- 
- Implementers implement three abstract methods. The Geotools still helps with
- management, providing a locking source.</div>
+<div class="block">Simplifies Lock management from the more complex Geotools approach which is used in several
+ different scenarios (e.g. directory management, wfs-t, etc.)
+
+ <p> Implementers implement three abstract methods. The Geotools still helps with management,
+ providing a locking source.</div>
 </li>
 </ul>
 </div>
@@ -222,8 +222,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AbstractLockingManagement.html#releaseAll-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-">releaseAll</a></span>(<a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock)</code>
-<div class="block">Release all locks associated with a transaction or associated
- authorizations.</div>
+<div class="block">Release all locks associated with a transaction or associated authorizations.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -236,8 +235,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AbstractLockingManagement.html#unlock-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-java.lang.String-">unlock</a></span>(<a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureID)</code>
-<div class="block">If authorized <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>AuthorizedLock.isAuthorized(AuthorizedLock)</code></a>, unlock
- the featureID</div>
+<div class="block">If authorized <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>AuthorizedLock.isAuthorized(AuthorizedLock)</code></a>, unlock the featureID</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -341,8 +339,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
 <pre>public&nbsp;void&nbsp;lock(org.geotools.data.Transaction&nbsp;transaction,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureID)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/LockingManagement.html#lock-org.geotools.data.Transaction-java.lang.String-">LockingManagement</a></code></span></div>
-<div class="block">Lock a feature for a provided transaction. This is typically used for
- modifications (updates).</div>
+<div class="block">Lock a feature for a provided transaction. This is typically used for modifications (updates).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/LockingManagement.html#lock-org.geotools.data.Transaction-java.lang.String-">lock</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/LockingManagement.html" title="interface in org.locationtech.geowave.adapter.vector.plugin.lock">LockingManagement</a></code></dd>
@@ -427,13 +424,12 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
 <pre>public abstract&nbsp;void&nbsp;lock(<a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureID)</pre>
 <div class="block">If already locked and request lock has proper authorization
- <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>AuthorizedLock.isAuthorized(AuthorizedLock)</code></a>, then return. If
- already locked and request does not have proper authorization, block
- until the lock is released or expired. If not already locked, create the
- lock.
- 
- Make sure there is some mechanism for expired locks to be discovered and
- released so that clients are not blocked indefinitely.</div>
+ <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>AuthorizedLock.isAuthorized(AuthorizedLock)</code></a>, then return. If already locked and request
+ does not have proper authorization, block until the lock is released or expired. If not already
+ locked, create the lock.
+
+ <p> Make sure there is some mechanism for expired locks to be discovered and released so that
+ clients are not blocked indefinitely.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>lock</code> - </dd>
@@ -449,8 +445,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
 <h4>unlock</h4>
 <pre>public abstract&nbsp;void&nbsp;unlock(<a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureID)</pre>
-<div class="block">If authorized <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>AuthorizedLock.isAuthorized(AuthorizedLock)</code></a>, unlock
- the featureID</div>
+<div class="block">If authorized <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>AuthorizedLock.isAuthorized(AuthorizedLock)</code></a>, unlock the featureID</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>lock</code> - </dd>
@@ -465,9 +460,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
 <li class="blockList">
 <h4>releaseAll</h4>
 <pre>public abstract&nbsp;void&nbsp;releaseAll(<a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock)</pre>
-<div class="block">Release all locks associated with a transaction or associated
- authorizations. Occurs on commit and rollback. Basically, call
- <code>TransactionLock#invalidate())</code> for all authorized locks
+<div class="block">Release all locks associated with a transaction or associated authorizations. Occurs on commit
+ and rollback. Basically, call <code>TransactionLock#invalidate())</code> for all authorized locks
  <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>AuthorizedLock.isAuthorized(AuthorizedLock)</code></a></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -482,9 +476,9 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
 <li class="blockList">
 <h4>resetAll</h4>
 <pre>public abstract&nbsp;void&nbsp;resetAll(<a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock)</pre>
-<div class="block">Reset all locks associated with a transaction. Occurs on commit and
- rollback. Basically, call <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#resetExpireTime--"><code>AuthorizedLock.resetExpireTime()</code></a> for
- all authorized locks <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>AuthorizedLock.isAuthorized(AuthorizedLock)</code></a></div>
+<div class="block">Reset all locks associated with a transaction. Occurs on commit and rollback. Basically, call
+ <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#resetExpireTime--"><code>AuthorizedLock.resetExpireTime()</code></a> for all authorized locks
+ <a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>AuthorizedLock.isAuthorized(AuthorizedLock)</code></a></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>lock</code> - </dd>

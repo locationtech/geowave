@@ -110,17 +110,16 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../org/locationtech/geowave/adapter/vector/AvroFeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">AvroFeatureDataAdapter</a>, <a href="../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">FeatureDataAdapter</a>, <a href="../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a></dd>
+<dd><a href="../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">FeatureDataAdapter</a>, <a href="../../../../org/locationtech/geowave/adapter/vector/GeoWaveAvroFeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">GeoWaveAvroFeatureDataAdapter</a>, <a href="../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">HadoopDataAdapter&lt;T,W extends org.apache.hadoop.io.Writable&gt;</span>
 extends <a href="../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;</pre>
-<div class="block">This is an interface that extends data adapter to allow map reduce jobs to
- easily convert hadoop writable objects to and from the geowave native
- representation of the objects. This allow for generally applicable map reduce
- jobs to be written using base classes for the mapper that can handle
- translations.</div>
+<div class="block">This is an interface that extends data adapter to allow map reduce jobs to easily convert hadoop
+ writable objects to and from the geowave native representation of the objects. This allow for
+ generally applicable map reduce jobs to be written using base classes for the mapper that can
+ handle translations.</div>
 </li>
 </ul>
 </div>

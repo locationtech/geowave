@@ -111,8 +111,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">GeometryHullTool</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">Set of algorithms to mere hulls and increase the gradient of convexity over
- hulls.</div>
+<div class="block">Set of algorithms to mere hulls and increase the gradient of convexity over hulls.</div>
 </li>
 </ul>
 </div>
@@ -414,14 +413,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>concaveHullParkOhMethod</h4>
 <pre>public&nbsp;org.locationtech.jts.geom.Geometry&nbsp;concaveHullParkOhMethod(org.locationtech.jts.geom.Geometry&nbsp;geometry,
                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;providedInnerPoints)</pre>
-<div class="block">Gift unwrapping (e.g. dig) concept, taking a convex hull and a set of
- inner points, add inner points to the hull without violating hull
- invariants--all points must reside on the hull or inside the hull. Based
- on: Jin-Seo Park and Se-Jong Oh.
- "A New Concave Algorithm and Concaveness Measure for n-dimensional Datasets"
- . Department of Nanobiomedical Science. Dankook University". 2010.
- 
- Per the paper, N = concaveThreshold</div>
+<div class="block">Gift unwrapping (e.g. dig) concept, taking a convex hull and a set of inner points, add inner
+ points to the hull without violating hull invariants--all points must reside on the hull or
+ inside the hull. Based on: Jin-Seo Park and Se-Jong Oh. "A New Concave Algorithm and
+ Concaveness Measure for n-dimensional Datasets" . Department of Nanobiomedical Science. Dankook
+ University". 2010.
+
+ <p> Per the paper, N = concaveThreshold</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>geometry</code> - </dd>
@@ -438,22 +436,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>concaveHull</h4>
 <pre>public&nbsp;org.locationtech.jts.geom.Geometry&nbsp;concaveHull(org.locationtech.jts.geom.Geometry&nbsp;geometry,
                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;org.locationtech.jts.geom.Coordinate&gt;&nbsp;providedInnerPoints)</pre>
-<div class="block">Gift unwrapping (e.g. dig) concept, taking a convex hull and a set of
- inner points, add inner points to the hull without violating hull
- invariants--all points must reside on the hull or inside the hull. Based
- on: Jin-Seo Park and Se-Jong Oh.
- "A New Concave Algorithm and Concaveness Measure for n-dimensional Datasets"
- . Department of Nanobiomedical Science. Dankook University". 2010.
- 
- Per the paper, N = concaveThreshold.
- 
- This algorithm evaluates remarkably faster than Park and Oh, but the
- quality of the result is marginally less. If it is acceptable to have
- some small number of points fall outside of the hull and speed is
- critical, use this method. The measure of error is difficult to calculate
- since it is not directly calculated based on the number of inner points.
- Rather, the measure is based on some number of points in proximity the
- optimal concave hull.</div>
+<div class="block">Gift unwrapping (e.g. dig) concept, taking a convex hull and a set of inner points, add inner
+ points to the hull without violating hull invariants--all points must reside on the hull or
+ inside the hull. Based on: Jin-Seo Park and Se-Jong Oh. "A New Concave Algorithm and
+ Concaveness Measure for n-dimensional Datasets" . Department of Nanobiomedical Science. Dankook
+ University". 2010.
+
+ <p> Per the paper, N = concaveThreshold.
+
+ <p> This algorithm evaluates remarkably faster than Park and Oh, but the quality of the result
+ is marginally less. If it is acceptable to have some small number of points fall outside of the
+ hull and speed is critical, use this method. The measure of error is difficult to calculate
+ since it is not directly calculated based on the number of inner points. Rather, the measure is
+ based on some number of points in proximity the optimal concave hull.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>geometry</code> - </dd>
@@ -501,8 +496,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;org.locationtech.jts.geom.Geometry&nbsp;connect(org.locationtech.jts.geom.Geometry&nbsp;shape1,
                                                   org.locationtech.jts.geom.Geometry&nbsp;shape2)</pre>
 <div class="block">Forms create edges between two shapes maintaining convexity.
- 
- Does not currently work if the shapes intersect</div>
+
+ <p> Does not currently work if the shapes intersect</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>shape1</code> - </dd>
@@ -583,10 +578,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>vertex</code> - </dd>
 <dd><code>two</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>array if doubles double[0] = length of the projection from start
-         on the line containing the segment(start to end) double[1] =
-         distance to the segment double[2] = distance to the line
-         containing the segment(start to end)</dd>
+<dd>array if doubles double[0] = length of the projection from start on the line containing
+         the segment(start to end) double[1] = distance to the segment double[2] = distance to
+         the line containing the segment(start to end)</dd>
 </dl>
 </li>
 </ul>

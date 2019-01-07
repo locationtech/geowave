@@ -116,14 +116,13 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">FixedBinNumericHistogram</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a></pre>
-<div class="block">* Fixed number of bins for a histogram. Unless configured, the range will
- expand dynamically, redistributing the data as necessary into the wider bins.
- 
- The advantage of constraining the range of the statistic is to ignore values
- outside the range, such as erroneous values. Erroneous values force extremes
- in the histogram. For example, if the expected range of values falls between
- 0 and 1 and a value of 10000 occurs, then a single bin contains the entire
- population between 0 and 1, a single bin represents the single value of
+<div class="block">* Fixed number of bins for a histogram. Unless configured, the range will expand dynamically,
+ redistributing the data as necessary into the wider bins.
+
+ <p> The advantage of constraining the range of the statistic is to ignore values outside the
+ range, such as erroneous values. Erroneous values force extremes in the histogram. For example,
+ if the expected range of values falls between 0 and 1 and a value of 10000 occurs, then a single
+ bin contains the entire population between 0 and 1, a single bin represents the single value of
  10000.</div>
 </li>
 </ul>
@@ -382,14 +381,13 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <h4>quantile</h4>
 <pre>public&nbsp;double&nbsp;quantile(double&nbsp;percentage)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#quantile-double-">NumericHistogram</a></code></span></div>
-<div class="block">Gets an approximate quantile value from the current histogram. Some
- popular quantiles are 0.5 (median), 0.95, and 0.98.</div>
+<div class="block">Gets an approximate quantile value from the current histogram. Some popular quantiles are 0.5
+ (median), 0.95, and 0.98.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#quantile-double-">quantile</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>percentage</code> - The requested quantile, must be strictly within the range
-            (0,1).</dd>
+<dd><code>percentage</code> - The requested quantile, must be strictly within the range (0,1).</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The quantile value.</dd>
 </dl>

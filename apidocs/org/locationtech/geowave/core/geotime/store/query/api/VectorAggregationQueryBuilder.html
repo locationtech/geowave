@@ -116,8 +116,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">VectorAggregationQueryBuilder&lt;P extends <a href="../../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R&gt;</span>
 extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">AggregationQueryBuilder</a>&lt;P,R,org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorAggregationQueryBuilder</a>&lt;P,R&gt;&gt;, <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/BaseVectorQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query">BaseVectorQueryBuilder</a>&lt;R,<a href="../../../../../../../../org/locationtech/geowave/core/store/api/AggregationQuery.html" title="class in org.locationtech.geowave.core.store.api">AggregationQuery</a>&lt;P,R,org.opengis.feature.simple.SimpleFeature&gt;,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorAggregationQueryBuilder</a>&lt;P,R&gt;&gt;</pre>
-<div class="block">An aggregation query builder particular for vector data. This should be
- preferentially used to build AggregationQuery's for SimpleFeature data.</div>
+<div class="block">An aggregation query builder particular for vector data. This should be preferentially used to
+ build AggregationQuery's for SimpleFeature data.</div>
 </li>
 </ul>
 </div>
@@ -146,17 +146,16 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorAggregationQueryBuilder</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">P</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">R</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html#bboxOfResultsForGeometryField-java.lang.String-java.lang.String-">bboxOfResultsForGeometryField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geomAttributeName)</code>
-<div class="block">convenience method for getting a bounding box of the results of a query
- this can be particularly useful if you want to calculate the bbox on a
- different field than the default/indexed Geometry</div>
+<div class="block">convenience method for getting a bounding box of the results of a query this can be
+ particularly useful if you want to calculate the bbox on a different field than the
+ default/indexed Geometry</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>default <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorQueryConstraintsFactory.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorQueryConstraintsFactory</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html#constraintsFactory--">constraintsFactory</a></span>()</code>
-<div class="block">This is the easiest approach to defining a set of constraints and can be
- used to create the constraints that are provided to the constraints
- method</div>
+<div class="block">This is the easiest approach to defining a set of constraints and can be used to create the
+ constraints that are provided to the constraints method</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -175,9 +174,8 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorAggregationQueryBuilder</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">P</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">R</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html#timeRangeOfResultsForTimeField-java.lang.String-java.lang.String-">timeRangeOfResultsForTimeField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;timeAttributeName)</code>
-<div class="block">convenience method for getting a time range of the results of a query
- this can be particularly useful if you want to calculate the time range
- on a specific time field</div>
+<div class="block">convenience method for getting a time range of the results of a query this can be particularly
+ useful if you want to calculate the time range on a specific time field</div>
 </td>
 </tr>
 </table>
@@ -217,9 +215,8 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api
 <h4>constraintsFactory</h4>
 <pre>default&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorQueryConstraintsFactory.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorQueryConstraintsFactory</a>&nbsp;constraintsFactory()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#constraintsFactory--">BaseQueryBuilder</a></code></span></div>
-<div class="block">This is the easiest approach to defining a set of constraints and can be
- used to create the constraints that are provided to the constraints
- method</div>
+<div class="block">This is the easiest approach to defining a set of constraints and can be used to create the
+ constraints that are provided to the constraints method</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#constraintsFactory--">constraintsFactory</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.query">BaseQueryBuilder</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">R</a>,<a href="../../../../../../../../org/locationtech/geowave/core/store/api/AggregationQuery.html" title="class in org.locationtech.geowave.core.store.api">AggregationQuery</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">P</a> extends <a href="../../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">R</a>,org.opengis.feature.simple.SimpleFeature&gt;,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorAggregationQueryBuilder</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">P</a> extends <a href="../../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">R</a>&gt;&gt;</code></dd>
@@ -251,9 +248,8 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api
 <li class="blockList">
 <h4>bboxOfResults</h4>
 <pre><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorAggregationQueryBuilder</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">P</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">R</a>&gt;&nbsp;bboxOfResults(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;typeNames)</pre>
-<div class="block">convenience method for getting a bounding box of the results of a query.
- It uses the default geometry for a feature type which is also the indexed
- geometry.</div>
+<div class="block">convenience method for getting a bounding box of the results of a query. It uses the default
+ geometry for a feature type which is also the indexed geometry.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeNames</code> - the type names to constrain by</dd>
@@ -270,9 +266,9 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api
 <h4>bboxOfResultsForGeometryField</h4>
 <pre><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorAggregationQueryBuilder</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">P</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">R</a>&gt;&nbsp;bboxOfResultsForGeometryField(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geomAttributeName)</pre>
-<div class="block">convenience method for getting a bounding box of the results of a query
- this can be particularly useful if you want to calculate the bbox on a
- different field than the default/indexed Geometry</div>
+<div class="block">convenience method for getting a bounding box of the results of a query this can be
+ particularly useful if you want to calculate the bbox on a different field than the
+ default/indexed Geometry</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeName</code> - the type name</dd>
@@ -289,10 +285,9 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api
 <li class="blockList">
 <h4>timeRangeOfResults</h4>
 <pre><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorAggregationQueryBuilder</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">P</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">R</a>&gt;&nbsp;timeRangeOfResults(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;typeNames)</pre>
-<div class="block">convenience method for getting a time range of the results of a query.
- this has to use inferred or hinted temporal attribute names if uncertain
- what implicit time attributes are being used then explicitly set
- timeAttributeName in other method</div>
+<div class="block">convenience method for getting a time range of the results of a query. this has to use inferred
+ or hinted temporal attribute names if uncertain what implicit time attributes are being used
+ then explicitly set timeAttributeName in other method</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeNames</code> - the type names to constrain by</dd>
@@ -309,9 +304,8 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api
 <h4>timeRangeOfResultsForTimeField</h4>
 <pre><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api">VectorAggregationQueryBuilder</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">P</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="type parameter in VectorAggregationQueryBuilder">R</a>&gt;&nbsp;timeRangeOfResultsForTimeField(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;timeAttributeName)</pre>
-<div class="block">convenience method for getting a time range of the results of a query
- this can be particularly useful if you want to calculate the time range
- on a specific time field</div>
+<div class="block">convenience method for getting a time range of the results of a query this can be particularly
+ useful if you want to calculate the time range on a specific time field</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeName</code> - the type names to constrain by</dd>

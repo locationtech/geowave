@@ -111,9 +111,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">JavassistUtils</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">These functions make it less of a pain to deal with Javassist. There's one to
- find methods, and one to clone annotations, which is used in several places
- within JCommanderPrefixTranslator.</div>
+<div class="block">These functions make it less of a pain to deal with Javassist. There's one to find methods, and
+ one to clone annotations, which is used in several places within JCommanderPrefixTranslator.</div>
 </li>
 </ul>
 </div>
@@ -156,33 +155,30 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/JavassistUtils.html#cloneAnnotationsAttribute-javassist.bytecode.ConstPool-javassist.bytecode.AnnotationsAttribute-java.lang.annotation.ElementType-">cloneAnnotationsAttribute</a></span>(javassist.bytecode.ConstPool&nbsp;constPool,
                          javassist.bytecode.AnnotationsAttribute&nbsp;attr,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/ElementType.html?is-external=true" title="class or interface in java.lang.annotation">ElementType</a>&nbsp;validElementType)</code>
-<div class="block">This function will take the given annotations attribute and create a new
- attribute, cloning all the annotations and specified values within the
- attribute.</div>
+<div class="block">This function will take the given annotations attribute and create a new attribute, cloning all
+ the annotations and specified values within the attribute.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/JavassistUtils.html#copyClassAnnotations-javassist.CtClass-javassist.CtClass-">copyClassAnnotations</a></span>(javassist.CtClass&nbsp;oldClass,
                     javassist.CtClass&nbsp;newClass)</code>
-<div class="block">Simple helper method to essentially clone the annotations from one class
- onto another</div>
+<div class="block">Simple helper method to essentially clone the annotations from one class onto another</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/JavassistUtils.html#copyMethodAnnotationsToField-javassist.CtMethod-javassist.CtField-">copyMethodAnnotationsToField</a></span>(javassist.CtMethod&nbsp;method,
                             javassist.CtField&nbsp;field)</code>
-<div class="block">Simple helper method to take any FIELD targetable annotations from the
- method and copy them to the new field.</div>
+<div class="block">Simple helper method to take any FIELD targetable annotations from the method and copy them to
+ the new field.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static javassist.CtMethod</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/JavassistUtils.html#findMethod-javassist.CtClass-java.lang.reflect.Method-">findMethod</a></span>(javassist.CtClass&nbsp;clz,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Method.html?is-external=true" title="class or interface in java.lang.reflect">Method</a>&nbsp;m)</code>
-<div class="block">This class will find the method in the CtClass, and return it as a
- CtMethod.</div>
+<div class="block">This class will find the method in the CtClass, and return it as a CtMethod.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -255,10 +251,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;javassist.bytecode.AnnotationsAttribute&nbsp;cloneAnnotationsAttribute(javassist.bytecode.ConstPool&nbsp;constPool,
                                                                                 javassist.bytecode.AnnotationsAttribute&nbsp;attr,
                                                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/ElementType.html?is-external=true" title="class or interface in java.lang.annotation">ElementType</a>&nbsp;validElementType)</pre>
-<div class="block">This function will take the given annotations attribute and create a new
- attribute, cloning all the annotations and specified values within the
- attribute. The annotations attribute can then be set on a method, class,
- or field.</div>
+<div class="block">This function will take the given annotations attribute and create a new attribute, cloning all
+ the annotations and specified values within the attribute. The annotations attribute can then
+ be set on a method, class, or field.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>attr</code> - </dd>
@@ -275,8 +270,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;javassist.CtMethod&nbsp;findMethod(javassist.CtClass&nbsp;clz,
                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Method.html?is-external=true" title="class or interface in java.lang.reflect">Method</a>&nbsp;m)
                                      throws javassist.NotFoundException</pre>
-<div class="block">This class will find the method in the CtClass, and return it as a
- CtMethod.</div>
+<div class="block">This class will find the method in the CtClass, and return it as a CtMethod.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>clz</code> - </dd>
@@ -295,8 +289,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>copyClassAnnotations</h4>
 <pre>public static&nbsp;void&nbsp;copyClassAnnotations(javassist.CtClass&nbsp;oldClass,
                                         javassist.CtClass&nbsp;newClass)</pre>
-<div class="block">Simple helper method to essentially clone the annotations from one class
- onto another</div>
+<div class="block">Simple helper method to essentially clone the annotations from one class onto another</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>oldClass</code> - </dd>
@@ -312,9 +305,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>copyMethodAnnotationsToField</h4>
 <pre>public static&nbsp;void&nbsp;copyMethodAnnotationsToField(javassist.CtMethod&nbsp;method,
                                                 javassist.CtField&nbsp;field)</pre>
-<div class="block">Simple helper method to take any FIELD targetable annotations from the
- method and copy them to the new field. All JCommander annotations can
- target fields as well as methods, so this should capture them all.</div>
+<div class="block">Simple helper method to take any FIELD targetable annotations from the method and copy them to
+ the new field. All JCommander annotations can target fields as well as methods, so this should
+ capture them all.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>method</code> - </dd>
@@ -355,8 +348,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>generateEmptyClass</h4>
 <pre>public static&nbsp;javassist.CtClass&nbsp;generateEmptyClass()</pre>
-<div class="block">This will generate a class which is empty. Useful for applying
- annotations to it</div>
+<div class="block">This will generate a class which is empty. Useful for applying annotations to it</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 </dl>

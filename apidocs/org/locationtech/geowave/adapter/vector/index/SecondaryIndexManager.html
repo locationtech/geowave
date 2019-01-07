@@ -116,9 +116,9 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">SecondaryIndexManager</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
-<div class="block">Class to manage secondary indexes for a Simple Feature Type. It keeps a list
- of supported secondary indices associated with all the attributes attached to
- the SimpleFeatureType provided upon instantiation.</div>
+<div class="block">Class to manage secondary indexes for a Simple Feature Type. It keeps a list of supported
+ secondary indices associated with all the attributes attached to the SimpleFeatureType provided
+ upon instantiation.</div>
 </li>
 </ul>
 </div>
@@ -142,8 +142,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/index/SecondaryIndexManager.html#SecondaryIndexManager-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.adapter.vector.stats.StatsManager-">SecondaryIndexManager</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;sft,
                      <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html" title="class in org.locationtech.geowave.adapter.vector.stats">StatsManager</a>&nbsp;statsManager)</code>
-<div class="block">Create a SecondaryIndexManager for the given DataAdapter and
- SimpleFeatureType, while providing</div>
+<div class="block">Create a SecondaryIndexManager for the given DataAdapter and SimpleFeatureType, while providing</div>
 </td>
 </tr>
 </table>
@@ -178,8 +177,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/index/SecondaryIndexManager.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -221,8 +219,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <h4>SecondaryIndexManager</h4>
 <pre>public&nbsp;SecondaryIndexManager(org.opengis.feature.simple.SimpleFeatureType&nbsp;sft,
                              <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsManager.html" title="class in org.locationtech.geowave.adapter.vector.stats">StatsManager</a>&nbsp;statsManager)</pre>
-<div class="block">Create a SecondaryIndexManager for the given DataAdapter and
- SimpleFeatureType, while providing</div>
+<div class="block">Create a SecondaryIndexManager for the given DataAdapter and SimpleFeatureType, while providing</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dataAdapter</code> - </dd>
@@ -255,16 +252,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <li class="blockList">
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.
 
- This consists of converting supported secondary indices.</div>
+ <p> This consists of converting supported secondary indices.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>
@@ -277,8 +272,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
 <div class="block">Convert a stream of binary bytes to fields and data within an object.
 
- This extracts the supported secondary indices from the binary stream and
- adds them in this object.</div>
+ <p> This extracts the supported secondary indices from the binary stream and adds them in this
+ object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>

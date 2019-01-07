@@ -116,11 +116,10 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">IngestWithReducer&lt;I,K extends org.apache.hadoop.io.WritableComparable&lt;?&gt;,V extends org.apache.hadoop.io.Writable,O&gt;</span>
 extends <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
-<div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion
- with a mapper to aggregate key value pairs and a reducer to ingest data into
- GeoWave. The implementation will be directly persisted to the job
- configuration and called to generate key value pairs from intermediate data
- in the mapper and to produce GeoWaveData to be written in the reducer.</div>
+<div class="block">This interface is used by the IngestFromHdfsPlugin to implement ingestion with a mapper to
+ aggregate key value pairs and a reducer to ingest data into GeoWave. The implementation will be
+ directly persisted to the job configuration and called to generate key value pairs from
+ intermediate data in the mapper and to produce GeoWaveData to be written in the reducer.</div>
 </li>
 </ul>
 </div>

@@ -120,8 +120,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public static class <span class="typeNameLabel">GeoWaveOutputFormat.GeoWaveRecordWriter</span>
 extends org.apache.hadoop.mapreduce.RecordWriter&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in org.locationtech.geowave.mapreduce.output">GeoWaveOutputKey</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</pre>
-<div class="block">A base class to be used to create <code>RecordWriter</code> instances that
- write to GeoWave.</div>
+<div class="block">A base class to be used to create <code>RecordWriter</code> instances that write to GeoWave.</div>
 </li>
 </ul>
 </div>
@@ -222,10 +221,9 @@ extends org.apache.hadoop.mapreduce.RecordWriter&lt;<a href="../../../../../org/
 <pre>public&nbsp;void&nbsp;write(<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in org.locationtech.geowave.mapreduce.output">GeoWaveOutputKey</a>&nbsp;ingestKey,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)
            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<div class="block">Push a mutation into a table. If table is null, the defaultTable will
- be used. If canCreateTable is set, the table will be created if it
- does not exist. The table name must only contain alphanumerics and
- underscore.</div>
+<div class="block">Push a mutation into a table. If table is null, the defaultTable will be used. If
+ canCreateTable is set, the table will be created if it does not exist. The table name must
+ only contain alphanumerics and underscore.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>write</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.RecordWriter&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in org.locationtech.geowave.mapreduce.output">GeoWaveOutputKey</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>

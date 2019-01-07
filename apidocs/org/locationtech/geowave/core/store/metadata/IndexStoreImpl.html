@@ -121,12 +121,12 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">IndexStoreImpl</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;
 implements <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a></pre>
-<div class="block">This class will persist Index objects within an Accumulo table for GeoWave
- metadata. The indices will be persisted in an "INDEX" column family.
+<div class="block">This class will persist Index objects within an Accumulo table for GeoWave metadata. The indices
+ will be persisted in an "INDEX" column family.
 
- There is an LRU cache associated with it so staying in sync with external
- updates is not practical - it assumes the objects are not updated often or at
- all. The objects are stored in their own table.</div>
+ <p> There is an LRU cache associated with it so staying in sync with external updates is not
+ practical - it assumes the objects are not updated often or at all. The objects are stored in
+ their own table.</div>
 </li>
 </ul>
 </div>

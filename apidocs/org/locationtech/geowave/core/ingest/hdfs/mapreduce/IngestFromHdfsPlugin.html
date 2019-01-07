@@ -101,29 +101,26 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>I</code> - the type for intermediate data, it must match the type supported
-            by the Avro schema</dd>
+<dd><code>I</code> - the type for intermediate data, it must match the type supported by the Avro schema</dd>
 <dd><code>O</code> - the type that represents each data entry being ingested</dd>
 </dl>
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroSchemaProvider</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroSchemaProvider</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">AbstractLocalIngestWithMapper</a>, <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/avro/AvroIngestPlugin.html" title="class in org.locationtech.geowave.format.avro">AvroIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestPlugin.html" title="class in org.locationtech.geowave.format.gdelt">GDELTIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/geolife/GeoLifeIngestPlugin.html" title="class in org.locationtech.geowave.format.geolife">GeoLifeIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html" title="class in org.locationtech.geowave.format.gpx">GpxIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestPlugin.html" title="class in org.locationtech.geowave.format.stanag4676">Stanag4676IngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestPlugin.html" title="class in org.locationtech.geowave.format.tdrive">TdriveIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/twitter/TwitterIngestPlugin.html" title="class in org.locationtech.geowave.format.twitter">TwitterIngestPlugin</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractLocalIngestWithMapper.html" title="class in org.locationtech.geowave.core.ingest.hdfs.mapreduce">AbstractLocalIngestWithMapper</a>, <a href="../../../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestPlugin.html" title="class in org.locationtech.geowave.format.gdelt">GDELTIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/geolife/GeoLifeIngestPlugin.html" title="class in org.locationtech.geowave.format.geolife">GeoLifeIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/avro/GeoWaveAvroIngestPlugin.html" title="class in org.locationtech.geowave.format.avro">GeoWaveAvroIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/gpx/GpxIngestPlugin.html" title="class in org.locationtech.geowave.format.gpx">GpxIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/stanag4676/Stanag4676IngestPlugin.html" title="class in org.locationtech.geowave.format.stanag4676">Stanag4676IngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/tdrive/TdriveIngestPlugin.html" title="class in org.locationtech.geowave.format.tdrive">TdriveIngestPlugin</a>, <a href="../../../../../../../org/locationtech/geowave/format/twitter/TwitterIngestPlugin.html" title="class in org.locationtech.geowave.format.twitter">TwitterIngestPlugin</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">IngestFromHdfsPlugin&lt;I,O&gt;</span>
-extends <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a>, <a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroSchemaProvider</a></pre>
-<div class="block">This is the main plugin interface for ingesting intermediate data into
- Geowave that has previously been staged in HDFS. Although both of the
- available map-reduce ingestion techniques can be implemented (one that simply
- uses the mapper only, and another that uses the reducer as well), the
- framework will choose only one based on this plugin's preference, so it is
- unnecessary to implement both (in this case returning null is expected if its
- not implemented).</div>
+extends <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">IndexProvider</a>, <a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroSchemaProvider</a></pre>
+<div class="block">This is the main plugin interface for ingesting intermediate data into Geowave that has
+ previously been staged in HDFS. Although both of the available map-reduce ingestion techniques
+ can be implemented (one that simply uses the mapper only, and another that uses the reducer as
+ well), the framework will choose only one based on this plugin's preference, so it is unnecessary
+ to implement both (in this case returning null is expected if its not implemented).</div>
 </li>
 </ul>
 </div>
@@ -145,27 +142,24 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/ingest
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">I</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">O</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#ingestWithMapper--">ingestWithMapper</a></span>()</code>
-<div class="block">An implementation of ingestion that can be persisted to a mapper within
- the map-reduce job configuration to perform an ingest of data into
- GeoWave from intermediate data</div>
+<div class="block">An implementation of ingestion that can be persisted to a mapper within the map-reduce job
+ configuration to perform an ingest of data into GeoWave from intermediate data</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">I</a>,?,?,<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">O</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#ingestWithReducer--">ingestWithReducer</a></span>()</code>
-<div class="block">An implementation of ingestion that can be persisted to a mapper and
- reducer within the map-reduce job configuration to aggregate intermediate
- data by defined keys within a reducer and perform an ingest of data into
- GeoWave from the key-value pairs emitted by the mapper.</div>
+<div class="block">An implementation of ingestion that can be persisted to a mapper and reducer within the
+ map-reduce job configuration to aggregate intermediate data by defined keys within a reducer
+ and perform an ingest of data into GeoWave from the key-value pairs emitted by the mapper.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html#isUseReducerPreferred--">isUseReducerPreferred</a></span>()</code>
-<div class="block">Returns a flag indicating to the ingestion framework whether it should
- try to use the ingestWithMapper() implementation or the
- ingestWithReducer() implementation in the case that both implementations
- are non-null.</div>
+<div class="block">Returns a flag indicating to the ingestion framework whether it should try to use the
+ ingestWithMapper() implementation or the ingestWithReducer() implementation in the case that
+ both implementations are non-null.</div>
 </td>
 </tr>
 </table>
@@ -177,11 +171,11 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/ingest
 <code><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IndexProvider.html#getRequiredIndices--">getRequiredIndices</a></code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.ingest.avro.AvroSchemaProvider">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.ingest.avro.GeoWaveAvroSchemaProvider">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroSchemaProvider</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html#getAvroSchema--">getAvroSchema</a></code></li>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.ingest.avro.<a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroSchemaProvider</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroSchemaProvider.html#getAvroSchema--">getAvroSchema</a></code></li>
 </ul>
 </li>
 </ul>
@@ -204,15 +198,13 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/ingest
 <li class="blockList">
 <h4>isUseReducerPreferred</h4>
 <pre>boolean&nbsp;isUseReducerPreferred()</pre>
-<div class="block">Returns a flag indicating to the ingestion framework whether it should
- try to use the ingestWithMapper() implementation or the
- ingestWithReducer() implementation in the case that both implementations
- are non-null.</div>
+<div class="block">Returns a flag indicating to the ingestion framework whether it should try to use the
+ ingestWithMapper() implementation or the ingestWithReducer() implementation in the case that
+ both implementations are non-null.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>If true, the framework will use ingestWithReducer() and only fall
-         back to ingestWithMapper() if necessary, otherwise the behavior
-         will be the reverse</dd>
+<dd>If true, the framework will use ingestWithReducer() and only fall back to
+         ingestWithMapper() if necessary, otherwise the behavior will be the reverse</dd>
 </dl>
 </li>
 </ul>
@@ -223,9 +215,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/ingest
 <li class="blockList">
 <h4>ingestWithMapper</h4>
 <pre><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">I</a>,<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">O</a>&gt;&nbsp;ingestWithMapper()</pre>
-<div class="block">An implementation of ingestion that can be persisted to a mapper within
- the map-reduce job configuration to perform an ingest of data into
- GeoWave from intermediate data</div>
+<div class="block">An implementation of ingestion that can be persisted to a mapper within the map-reduce job
+ configuration to perform an ingest of data into GeoWave from intermediate data</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The implementation for ingestion with only a mapper</dd>
@@ -239,17 +230,15 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/ingest
 <li class="blockList">
 <h4>ingestWithReducer</h4>
 <pre><a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in org.locationtech.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">I</a>,?,?,<a href="../../../../../../../org/locationtech/geowave/core/ingest/hdfs/mapreduce/IngestFromHdfsPlugin.html" title="type parameter in IngestFromHdfsPlugin">O</a>&gt;&nbsp;ingestWithReducer()</pre>
-<div class="block">An implementation of ingestion that can be persisted to a mapper and
- reducer within the map-reduce job configuration to aggregate intermediate
- data by defined keys within a reducer and perform an ingest of data into
- GeoWave from the key-value pairs emitted by the mapper.</div>
+<div class="block">An implementation of ingestion that can be persisted to a mapper and reducer within the
+ map-reduce job configuration to aggregate intermediate data by defined keys within a reducer
+ and perform an ingest of data into GeoWave from the key-value pairs emitted by the mapper.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The implementation for ingestion with a mapper and reducer. It is
-         important to provide the correct concrete implementation of Key
-         and Value classes within the appropriate generics because the
-         framework will use reflection to set the key and value classes
-         for map-reduce.</dd>
+<dd>The implementation for ingestion with a mapper and reducer. It is important to provide
+         the correct concrete implementation of Key and Value classes within the appropriate
+         generics because the framework will use reflection to set the key and value classes for
+         map-reduce.</dd>
 </dl>
 </li>
 </ul>

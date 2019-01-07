@@ -120,10 +120,10 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">LongitudeDefinition</span>
 extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.dimension">BasicDimensionDefinition</a></pre>
-<div class="block">The Longitude Definition class is a convenience class used to define a
- dimension which is associated with the X axis on a Cartesian plane.
- 
- Minimum bounds = -180 and maximum bounds = 180</div>
+<div class="block">The Longitude Definition class is a convenience class used to define a dimension which is
+ associated with the X axis on a Cartesian plane.
+
+ <p> Minimum bounds = -180 and maximum bounds = 180</div>
 </li>
 </ul>
 </div>
@@ -158,8 +158,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimens
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/LongitudeDefinition.html#LongitudeDefinition--">LongitudeDefinition</a></span>()</code>
-<div class="block">Convenience constructor used to construct a longitude dimension object
- which sits on a Cartesian plane.</div>
+<div class="block">Convenience constructor used to construct a longitude dimension object which sits on a
+ Cartesian plane.</div>
 </td>
 </tr>
 </table>
@@ -198,8 +198,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimens
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/LongitudeDefinition.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -238,8 +237,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimens
 <li class="blockList">
 <h4>LongitudeDefinition</h4>
 <pre>public&nbsp;LongitudeDefinition()</pre>
-<div class="block">Convenience constructor used to construct a longitude dimension object
- which sits on a Cartesian plane.</div>
+<div class="block">Convenience constructor used to construct a longitude dimension object which sits on a
+ Cartesian plane.</div>
 </li>
 </ul>
 </li>
@@ -257,9 +256,9 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimens
 <li class="blockList">
 <h4>getNormalizedRanges</h4>
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]&nbsp;getNormalizedRanges(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;range)</pre>
-<div class="block">Method is used to normalize the ranges on a Cartesian plane. If the
- values are outside of the bounds [ -180, 180 ], two Bin ranges might be
- created to account for the possible date line crossing.</div>
+<div class="block">Method is used to normalize the ranges on a Cartesian plane. If the values are outside of the
+ bounds [ -180, 180 ], two Bin ranges might be created to account for the possible date line
+ crossing.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
@@ -296,16 +295,14 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimens
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html#toBinary--">toBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.dimension">BasicDimensionDefinition</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>

@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageRunData.html" title="class in org.locationtech.geowave.core.ingest.hdfs">StageRunData</a>&gt;</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageRunData.html" title="class in org.locationtech.geowave.core.ingest.hdfs">StageRunData</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.core.ingest.hdfs.StageToHdfsDriver</li>
@@ -115,9 +115,9 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">StageToHdfsDriver</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageRunData.html" title="class in org.locationtech.geowave.core.ingest.hdfs">StageRunData</a>&gt;</pre>
-<div class="block">This class actually executes the staging of data to HDFS based on the
- available type plugin providers that are discovered through SPI.</div>
+extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageRunData.html" title="class in org.locationtech.geowave.core.ingest.hdfs">StageRunData</a>&gt;</pre>
+<div class="block">This class actually executes the staging of data to HDFS based on the available type plugin
+ providers that are discovered through SPI.</div>
 </li>
 </ul>
 </div>
@@ -151,7 +151,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageToHdfsDriver.html#StageToHdfsDriver-java.util.Map-java.lang.String-java.lang.String-org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions-">StageToHdfsDriver</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageToHdfsDriver.html#StageToHdfsDriver-java.util.Map-java.lang.String-java.lang.String-org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions-">StageToHdfsDriver</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;basePath,
                  <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;inputOptions)</code>&nbsp;</td>
@@ -173,9 +173,9 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageToHdfsDriver.html#processFile-java.net.URL-java.lang.String-org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin-org.locationtech.geowave.core.ingest.hdfs.StageRunData-">processFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageToHdfsDriver.html#processFile-java.net.URL-java.lang.String-org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin-org.locationtech.geowave.core.ingest.hdfs.StageRunData-">processFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-           <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&nbsp;plugin,
+           <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;&nbsp;plugin,
            <a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageRunData.html" title="class in org.locationtech.geowave.core.ingest.hdfs">StageRunData</a>&nbsp;runData)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -218,7 +218,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>StageToHdfsDriver</h4>
-<pre>public&nbsp;StageToHdfsDriver(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
+<pre>public&nbsp;StageToHdfsDriver(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;basePath,
                          <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;inputOptions)</pre>
@@ -232,7 +232,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="processFile-java.net.URL-java.lang.String-org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin-org.locationtech.geowave.core.ingest.hdfs.StageRunData-">
+<a name="processFile-java.net.URL-java.lang.String-org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin-org.locationtech.geowave.core.ingest.hdfs.StageRunData-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -240,11 +240,11 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <h4>processFile</h4>
 <pre>protected&nbsp;void&nbsp;processFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-                           <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&nbsp;plugin,
+                           <a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;&nbsp;plugin,
                            <a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageRunData.html" title="class in org.locationtech.geowave.core.ingest.hdfs">StageRunData</a>&nbsp;runData)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html#processFile-java.net.URL-java.lang.String-P-R-">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageRunData.html" title="class in org.locationtech.geowave.core.ingest.hdfs">StageRunData</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html#processFile-java.net.URL-java.lang.String-P-R-">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/hdfs/StageRunData.html" title="class in org.locationtech.geowave.core.ingest.hdfs">StageRunData</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

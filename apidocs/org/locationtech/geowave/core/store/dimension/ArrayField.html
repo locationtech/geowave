@@ -180,8 +180,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#denormalize-double-">denormalize</a></span>(double&nbsp;value)</code>
-<div class="block">Used to denormalize the numeric data set from a value between 0 and 1
- scaled to fit within its native bounds</div>
+<div class="block">Used to denormalize the numeric data set from a value between 0 and 1 scaled to fit within its
+ native bounds</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -205,22 +205,21 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>
-<div class="block">Returns a range in the native bounds of the dimension definition,
- denormalized from a bin and separate range</div>
+<div class="block">Returns a range in the native bounds of the dimension definition, denormalized from a bin and
+ separate range</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#getFieldName--">getFieldName</a></span>()</code>
-<div class="block">Returns an identifier that is unique for a given data type (field IDs
- should be distinct per row)</div>
+<div class="block">Returns an identifier that is unique for a given data type (field IDs should be distinct per
+ row)</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#getFixedBinIdSize--">getFixedBinIdSize</a></span>()</code>
-<div class="block">If this numeric dimension definition uses bins, it is given a fixed
- length for the bin ID</div>
+<div class="block">If this numeric dimension definition uses bins, it is given a fixed length for the bin ID</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -248,8 +247,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>abstract <a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayWrapper.html" title="class in org.locationtech.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#getReader--">getReader</a></span>()</code>
-<div class="block">Get a reader that can handle deserializing binary data into values for
- this field</div>
+<div class="block">Get a reader that can handle deserializing binary data into values for this field</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -261,15 +259,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#normalize-double-">normalize</a></span>(double&nbsp;value)</code>
-<div class="block">Used to normalize a value within the bounds of the range to a percentage
- of the range between 0 and 1</div>
+<div class="block">Used to normalize a value within the bounds of the range to a percentage of the range between 0
+ and 1</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -345,14 +342,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>
@@ -392,8 +387,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <h4>normalize</h4>
 <pre>public&nbsp;double&nbsp;normalize(double&nbsp;value)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#normalize-double-">NumericDimensionDefinition</a></code></span></div>
-<div class="block">Used to normalize a value within the bounds of the range to a percentage
- of the range between 0 and 1</div>
+<div class="block">Used to normalize a value within the bounds of the range to a percentage of the range between 0
+ and 1</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#normalize-double-">normalize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
@@ -410,8 +405,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <h4>denormalize</h4>
 <pre>public&nbsp;double&nbsp;denormalize(double&nbsp;value)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#denormalize-double-">NumericDimensionDefinition</a></code></span></div>
-<div class="block">Used to denormalize the numeric data set from a value between 0 and 1
- scaled to fit within its native bounds</div>
+<div class="block">Used to denormalize the numeric data set from a value between 0 and 1 scaled to fit within its
+ native bounds</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#denormalize-double-">denormalize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
@@ -428,8 +423,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <h4>getFieldName</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFieldName()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html#getFieldName--">NumericDimensionField</a></code></span></div>
-<div class="block">Returns an identifier that is unique for a given data type (field IDs
- should be distinct per row)</div>
+<div class="block">Returns an identifier that is unique for a given data type (field IDs should be distinct per
+ row)</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html#getFieldName--">getFieldName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayWrapper.html" title="class in org.locationtech.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
@@ -465,8 +460,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <h4>getDenormalizedRange</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a>&nbsp;getDenormalizedRange(<a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">NumericDimensionDefinition</a></code></span></div>
-<div class="block">Returns a range in the native bounds of the dimension definition,
- denormalized from a bin and separate range</div>
+<div class="block">Returns a range in the native bounds of the dimension definition, denormalized from a bin and
+ separate range</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
@@ -521,8 +516,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <h4>getReader</h4>
 <pre>public abstract&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldReader.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayWrapper.html" title="class in org.locationtech.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a>&gt;&gt;&nbsp;getReader()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html#getReader--">NumericDimensionField</a></code></span></div>
-<div class="block">Get a reader that can handle deserializing binary data into values for
- this field</div>
+<div class="block">Get a reader that can handle deserializing binary data into values for this field</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html#getReader--">getReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayWrapper.html" title="class in org.locationtech.geowave.core.store.dimension">ArrayWrapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html" title="type parameter in ArrayField">T</a> extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&gt;</code></dd>
@@ -556,8 +550,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <h4>getFixedBinIdSize</h4>
 <pre>public&nbsp;int&nbsp;getFixedBinIdSize()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getFixedBinIdSize--">NumericDimensionDefinition</a></code></span></div>
-<div class="block">If this numeric dimension definition uses bins, it is given a fixed
- length for the bin ID</div>
+<div class="block">If this numeric dimension definition uses bins, it is given a fixed length for the bin ID</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getFixedBinIdSize--">getFixedBinIdSize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
@@ -579,8 +572,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/dimens
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getBounds--">getBounds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a range representing the minimum value and the maximum value for
-         this dimension definition</dd>
+<dd>a range representing the minimum value and the maximum value for this dimension
+         definition</dd>
 </dl>
 </li>
 </ul>

@@ -116,14 +116,14 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">DBScanIterationsJobRunner</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceJobRunner.html" title="interface in org.locationtech.geowave.analytic.mapreduce">MapReduceJobRunner</a>, <a href="../../../../../../org/locationtech/geowave/analytic/IndependentJobRunner.html" title="interface in org.locationtech.geowave.analytic">IndependentJobRunner</a></pre>
-<div class="block">DBScan involves multiple iterations. The first iteration conceivably takes a
- set of points and produces small clusters (nearest neighbors). Each
- subsequent iteration merges clusters within a given distance from each other.
- This process can continue no new clusters are created (merges do not occur).
- 
- The first iteration places a constraint on the minimum number of neighbors.
- Subsequent iterations do not have a minimum, since each of the clusters is
- already vetted out by the first iteration.</div>
+<div class="block">DBScan involves multiple iterations. The first iteration conceivably takes a set of points and
+ produces small clusters (nearest neighbors). Each subsequent iteration merges clusters within a
+ given distance from each other. This process can continue no new clusters are created (merges do
+ not occur).
+
+ <p> The first iteration places a constraint on the minimum number of neighbors. Subsequent
+ iterations do not have a minimum, since each of the clusters is already vetted out by the first
+ iteration.</div>
 </li>
 </ul>
 </div>

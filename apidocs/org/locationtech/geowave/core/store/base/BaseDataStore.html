@@ -264,8 +264,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#copyTo-org.locationtech.geowave.core.store.api.DataStore-org.locationtech.geowave.core.store.api.Query-">copyTo</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;other,
       <a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;?&gt;&nbsp;query)</code>
-<div class="block">copy the subset of data matching this query from this store into a
- specified other store</div>
+<div class="block">copy the subset of data matching this query from this store into a specified other store</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -280,8 +279,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#createWriter-java.lang.String-">createWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
-<div class="block">Returns an index writer to perform batched write operations for the given
- typename</div>
+<div class="block">Returns an index writer to perform batched write operations for the given typename</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -329,8 +327,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#getIndices-java.lang.String-">getIndices</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
-<div class="block">Get the indices that have been used within this data store for a
- particular type.</div>
+<div class="block">Get the indices that have been used within this data store for a particular type.</div>
 </td>
 </tr>
 <tr id="i17" class="rowColor">
@@ -638,21 +635,18 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <h4>query</h4>
 <pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;T&gt;&nbsp;query(<a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;T&gt;&nbsp;query)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#query-org.locationtech.geowave.core.store.api.Query-">DataStore</a></code></span></div>
-<div class="block">Returns all data in this data store that matches the query parameter. All
- data that matches the query will be returned as an instance of the native
- data type. The Iterator must be closed when it is no longer needed - this
- wraps the underlying scanner implementation and closes underlying
+<div class="block">Returns all data in this data store that matches the query parameter. All data that matches the
+ query will be returned as an instance of the native data type. The Iterator must be closed when
+ it is no longer needed - this wraps the underlying scanner implementation and closes underlying
  resources.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#query-org.locationtech.geowave.core.store.api.Query-">query</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - data constraints for the query and additional options for
-            processing the query</dd>
+<dd><code>query</code> - data constraints for the query and additional options for processing the query</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>An iterator on all results that match the query. The iterator
-         implements Closeable and it is best practice to close the
-         iterator after it is no longer needed.</dd>
+<dd>An iterator on all results that match the query. The iterator implements Closeable and
+         it is best practice to close the iterator after it is no longer needed.</dd>
 </dl>
 </li>
 </ul>
@@ -709,7 +703,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#delete-org.locationtech.geowave.core.store.api.Query-">DataStore</a></code></span></div>
 <div class="block">Delete all data in this data store that matches the query parameter.
 
- Statistics are updated as required.</div>
+ <p> Statistics are updated as required.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#delete-org.locationtech.geowave.core.store.api.Query-">delete</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
@@ -859,8 +853,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <h4>getIndices</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;getIndices(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#getIndices-java.lang.String-">DataStore</a></code></span></div>
-<div class="block">Get the indices that have been used within this data store for a
- particular type. If data type name is null it will return all indices.</div>
+<div class="block">Get the indices that have been used within this data store for a particular type. If data type
+ name is null it will return all indices.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#getIndices-java.lang.String-">getIndices</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
@@ -878,9 +872,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <pre>public&nbsp;void&nbsp;addIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                      <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;indices)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#addIndex-java.lang.String-org.locationtech.geowave.core.store.api.Index...-">DataStore</a></code></span></div>
-<div class="block">Add new indices for the given type. If there is data in other indices for
- this type, for consistency it will need to copy all of the data into the
- new indices, which could be a long process for lots of data.</div>
+<div class="block">Add new indices for the given type. If there is data in other indices for this type, for
+ consistency it will need to copy all of the data into the new indices, which could be a long
+ process for lots of data.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#addIndex-java.lang.String-org.locationtech.geowave.core.store.api.Index...-">addIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
@@ -899,16 +893,15 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;addType(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;dataTypeAdapter,
                         <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;initialIndices)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#addType-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index...-">DataStore</a></code></span></div>
-<div class="block">Add this type to the data store. This only needs to be called one time
- ever per type.</div>
+<div class="block">Add this type to the data store. This only needs to be called one time ever per type.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#addType-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index...-">addType</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dataTypeAdapter</code> - the data type adapter for this type that is used to read and
-            write GeoWave entries</dd>
-<dd><code>initialIndices</code> - the initial indexing for this type, in the future additional
-            indices can be added</dd>
+<dd><code>dataTypeAdapter</code> - the data type adapter for this type that is used to read and write
+        GeoWave entries</dd>
+<dd><code>initialIndices</code> - the initial indexing for this type, in the future additional indices can
+        be added</dd>
 </dl>
 </li>
 </ul>
@@ -919,16 +912,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <li class="blockList">
 <h4>createWriter</h4>
 <pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;T&gt;&nbsp;createWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
-<div class="block">Returns an index writer to perform batched write operations for the given
- typename</div>
+<div class="block">Returns an index writer to perform batched write operations for the given typename</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#createWriter-java.lang.String-">createWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeName</code> - the type</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a writer which can be used to write entries into this datastore
-         of the given type</dd>
+<dd>a writer which can be used to write entries into this datastore of the given type</dd>
 </dl>
 </li>
 </ul>
@@ -942,11 +933,10 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
                        <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)
                 throws <a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.Index...-">DataStore</a></code></span></div>
-<div class="block">Ingest from URL. If this is a directory, this method will recursively
- search for valid files to ingest in the directory. This will iterate
- through registered IngestFormatPlugins to find one that works for a given
- file. The applicable ingest format plugin will choose the DataTypeAdapter
- and may even use additional indices than the one provided.</div>
+<div class="block">Ingest from URL. If this is a directory, this method will recursively search for valid files to
+ ingest in the directory. This will iterate through registered IngestFormatPlugins to find one
+ that works for a given file. The applicable ingest format plugin will choose the
+ DataTypeAdapter and may even use additional indices than the one provided.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.Index...-">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
@@ -969,10 +959,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
                        <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)
                 throws <a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">DataStore</a></code></span></div>
-<div class="block">Ingest from URL with options. If this is a directory, this method will
- recursively search for valid files to ingest in the directory. The
- applicable ingest format plugin will choose the DataTypeAdapter and may
- even use additional indices than the one provided.</div>
+<div class="block">Ingest from URL with options. If this is a directory, this method will recursively search for
+ valid files to ingest in the directory. The applicable ingest format plugin will choose the
+ DataTypeAdapter and may even use additional indices than the one provided.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
@@ -993,18 +982,16 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <h4>aggregate</h4>
 <pre>public&nbsp;&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R,T&gt;&nbsp;R&nbsp;aggregate(<a href="../../../../../../org/locationtech/geowave/core/store/api/AggregationQuery.html" title="class in org.locationtech.geowave.core.store.api">AggregationQuery</a>&lt;P,R,T&gt;&nbsp;query)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#aggregate-org.locationtech.geowave.core.store.api.AggregationQuery-">DataStore</a></code></span></div>
-<div class="block">Perform an aggregation on the data and just return the aggregated result.
- The query criteria is very similar to querying the individual entries
- except in this case it defines the input to the aggregation function, and
- the aggregation function produces a single result. Examples of this might
- be simply counting matched entries, producing a bounding box or other
- range/extent for matched entries, or producing a histogram.</div>
+<div class="block">Perform an aggregation on the data and just return the aggregated result. The query criteria is
+ very similar to querying the individual entries except in this case it defines the input to the
+ aggregation function, and the aggregation function produces a single result. Examples of this
+ might be simply counting matched entries, producing a bounding box or other range/extent for
+ matched entries, or producing a histogram.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#aggregate-org.locationtech.geowave.core.store.api.AggregationQuery-">aggregate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - the Aggregation Query, use AggregationQueryBuilder or its
-            extensions to create</dd>
+<dd><code>query</code> - the Aggregation Query, use AggregationQueryBuilder or its extensions to create</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the single result of the aggregation</dd>
 </dl>
@@ -1032,9 +1019,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#queryStatistics-org.locationtech.geowave.core.store.api.StatisticsQuery-">queryStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - the query criteria, use StatisticsQueryBuilder or its
-            extensions and if you're interested in a particular common
-            statistics type use StatisticsQueryBuilder.factory()</dd>
+<dd><code>query</code> - the query criteria, use StatisticsQueryBuilder or its extensions and if you're
+        interested in a particular common statistics type use StatisticsQueryBuilder.factory()</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>An array of statistics that result from the query</dd>
 </dl>
@@ -1053,14 +1039,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#aggregateStatistics-org.locationtech.geowave.core.store.api.StatisticsQuery-">aggregateStatistics</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - the query criteria, use StatisticsQueryBuilder or its
-            extensions and if you're interested in a particular common
-            statistics type use StatisticsQueryBuilder.factory()</dd>
+<dd><code>query</code> - the query criteria, use StatisticsQueryBuilder or its extensions and if you're
+        interested in a particular common statistics type use StatisticsQueryBuilder.factory()</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>If the query does not define that statistics type it will return
-         null as aggregation only makes sense within a single type,
-         otherwise aggregates the results of the query into a single
-         result that is returned</dd>
+<dd>If the query does not define that statistics type it will return null as aggregation
+         only makes sense within a single type, otherwise aggregates the results of the query
+         into a single result that is returned</dd>
 </dl>
 </li>
 </ul>
@@ -1090,15 +1074,13 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <pre>public&nbsp;void&nbsp;copyTo(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;other,
                    <a href="../../../../../../org/locationtech/geowave/core/store/api/Query.html" title="class in org.locationtech.geowave.core.store.api">Query</a>&lt;?&gt;&nbsp;query)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#copyTo-org.locationtech.geowave.core.store.api.DataStore-org.locationtech.geowave.core.store.api.Query-">DataStore</a></code></span></div>
-<div class="block">copy the subset of data matching this query from this store into a
- specified other store</div>
+<div class="block">copy the subset of data matching this query from this store into a specified other store</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#copyTo-org.locationtech.geowave.core.store.api.DataStore-org.locationtech.geowave.core.store.api.Query-">copyTo</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>other</code> - the other store to copy data into</dd>
-<dd><code>query</code> - a query to select which data to copy - use QueryBuilder or its
-            extension to create</dd>
+<dd><code>query</code> - a query to select which data to copy - use QueryBuilder or its extension to create</dd>
 </dl>
 </li>
 </ul>
@@ -1110,10 +1092,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <h4>removeIndex</h4>
 <pre>public&nbsp;void&nbsp;removeIndex(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#removeIndex-java.lang.String-">DataStore</a></code></span></div>
-<div class="block">remove an index completely for all types. If this is the last index for
- any type it throws an illegal state exception, expecting the user to
- remove the type before removing the index to protect a user from losing
- any reference to their data unknowingly for a type.</div>
+<div class="block">remove an index completely for all types. If this is the last index for any type it throws an
+ illegal state exception, expecting the user to remove the type before removing the index to
+ protect a user from losing any reference to their data unknowingly for a type.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#removeIndex-java.lang.String-">removeIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
@@ -1132,10 +1113,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)
                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#removeIndex-java.lang.String-java.lang.String-">DataStore</a></code></span></div>
-<div class="block">remove an index for the given type. If this is the last index for that
- type it throws an illegal state exception, expecting the user to remove
- the type before removing the index to protect a user from losing any
- reference to their data unknowingly for a type.</div>
+<div class="block">remove an index for the given type. If this is the last index for that type it throws an
+ illegal state exception, expecting the user to remove the type before removing the index to
+ protect a user from losing any reference to their data unknowingly for a type.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#removeIndex-java.lang.String-java.lang.String-">removeIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
@@ -1170,9 +1150,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <h4>deleteAll</h4>
 <pre>public&nbsp;void&nbsp;deleteAll()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#deleteAll--">DataStore</a></code></span></div>
-<div class="block">Delete ALL data and ALL metadata for this datastore. This is provided for
- convenience as a simple way to wipe a datastore cleanly, but don't be
- surprised if everything is gone.</div>
+<div class="block">Delete ALL data and ALL metadata for this datastore. This is provided for convenience as a
+ simple way to wipe a datastore cleanly, but don't be surprised if everything is gone.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#deleteAll--">deleteAll</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>

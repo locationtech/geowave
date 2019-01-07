@@ -116,15 +116,14 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">ScannerContextRowScanner</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/datastore/hbase/server/RowScanner.html" title="interface in org.locationtech.geowave.datastore.hbase.server">RowScanner</a></pre>
-<div class="block">This uses reflection to access package private methods and variables expected
- to be within ScannerContext. This access mimics how whole row filtering is
- accomplished within HBase internal scanner code, and similarly, rows are
- necessary to be aggregated together for GeoWave ServerSide Operations. Using
- similar packaging to gain access to package private members was insufficient
- due to how HBase Coprocessor classloading special cases the loading of HBase
- packages. Alternatively, it may be sufficient to use
- NoLimitScannerContext.getInstance() at a higher level than the row scanner,
- but no implementation of this potential alternative has been as well tested.</div>
+<div class="block">This uses reflection to access package private methods and variables expected to be within
+ ScannerContext. This access mimics how whole row filtering is accomplished within HBase internal
+ scanner code, and similarly, rows are necessary to be aggregated together for GeoWave ServerSide
+ Operations. Using similar packaging to gain access to package private members was insufficient
+ due to how HBase Coprocessor classloading special cases the loading of HBase packages.
+ Alternatively, it may be sufficient to use NoLimitScannerContext.getInstance() at a higher level
+ than the row scanner, but no implementation of this potential alternative has been as well
+ tested.</div>
 </li>
 </ul>
 </div>

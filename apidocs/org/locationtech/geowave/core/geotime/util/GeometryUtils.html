@@ -111,8 +111,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">GeometryUtils</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">This class contains a set of Geometry utility methods that are generally
- useful throughout the GeoWave core codebase</div>
+<div class="block">This class contains a set of Geometry utility methods that are generally useful throughout the
+ GeoWave core codebase</div>
 </li>
 </ul>
 </div>
@@ -199,38 +199,36 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#adjustCoordinateDimensionToRange-double-org.opengis.referencing.crs.CoordinateReferenceSystem-int-">adjustCoordinateDimensionToRange</a></span>(double&nbsp;val,
                                 org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
                                 int&nbsp;axis)</code>
-<div class="block">This is perhaps a brain dead approach to do this, but it does handle wrap
- around cases.</div>
+<div class="block">This is perhaps a brain dead approach to do this, but it does handle wrap around cases.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static org.locationtech.jts.geom.Coordinate</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#adjustCoordinateToFitInRange-org.opengis.referencing.crs.CoordinateReferenceSystem-org.locationtech.jts.geom.Coordinate-">adjustCoordinateToFitInRange</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
                             org.locationtech.jts.geom.Coordinate&nbsp;coord)</code>
-<div class="block">Make sure the coordinate falls in the range of provided coordinate
- reference systems's coordinate system.</div>
+<div class="block">Make sure the coordinate falls in the range of provided coordinate reference systems's
+ coordinate system.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#adjustGeo-org.opengis.referencing.crs.CoordinateReferenceSystem-org.locationtech.jts.geom.Geometry-">adjustGeo</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
          org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
-<div class="block">Consume a geometry that may be over the ranges of the CRS (e.g date-line
- crossing).</div>
+<div class="block">Consume a geometry that may be over the ranges of the CRS (e.g date-line crossing).</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicConstraintSetFromEnvelope-org.locationtech.jts.geom.Envelope-">basicConstraintSetFromEnvelope</a></span>(org.locationtech.jts.geom.Envelope&nbsp;env)</code>
-<div class="block">This utility method will convert a JTS envelope to contraints that can be
- used in a GeoWave query.</div>
+<div class="block">This utility method will convert a JTS envelope to contraints that can be used in a GeoWave
+ query.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicConstraintsFromEnvelope-org.locationtech.jts.geom.Envelope-">basicConstraintsFromEnvelope</a></span>(org.locationtech.jts.geom.Envelope&nbsp;env)</code>
-<div class="block">This utility method will convert a JTS envelope to contraints that can be
- used in a GeoWave query.</div>
+<div class="block">This utility method will convert a JTS envelope to contraints that can be used in a GeoWave
+ query.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -241,15 +239,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicConstraintsFromPoint-double-double-">basicConstraintsFromPoint</a></span>(double&nbsp;latitudeDegrees,
                          double&nbsp;longitudeDegrees)</code>
-<div class="block">This utility method will convert a JTS envelope to that can be used in a
- GeoWave query.</div>
+<div class="block">This utility method will convert a JTS envelope to that can be used in a GeoWave query.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeoConstraintsWrapper.html" title="class in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeoConstraintsWrapper</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#basicGeoConstraintsWrapperFromGeometry-org.locationtech.jts.geom.Geometry-">basicGeoConstraintsWrapperFromGeometry</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
-<div class="block">This utility method will convert a JTS geometry to contraints that can be
- used in a GeoWave query.</div>
+<div class="block">This utility method will convert a JTS geometry to contraints that can be used in a GeoWave
+ query.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -265,8 +262,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.jts.geom.Polygon&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#constructGeometriesOverMapRegions-org.locationtech.jts.geom.Coordinate-org.locationtech.jts.geom.Geometry-">constructGeometriesOverMapRegions</a></span>(org.locationtech.jts.geom.Coordinate&nbsp;modifier,
                                  org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
-<div class="block">Produce a set of polygons for each region of the map corrected for date
- line and hemisphere crossings.</div>
+<div class="block">Produce a set of polygons for each region of the map corrected for date line and hemisphere
+ crossings.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -327,8 +324,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#infinity--">infinity</a></span>()</code>
-<div class="block">This mehtod returns an envelope between negative infinite and positive
- inifinity in both x and y</div>
+<div class="block">This mehtod returns an envelope between negative infinite and positive inifinity in both x and
+ y</div>
 </td>
 </tr>
 <tr id="i21" class="rowColor">
@@ -343,8 +340,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#world-org.locationtech.jts.geom.GeometryFactory-org.opengis.referencing.crs.CoordinateReferenceSystem-">world</a></span>(org.locationtech.jts.geom.GeometryFactory&nbsp;factory,
      org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>
-<div class="block">Return a multi-polygon representing the bounded map regions split by the
- axis</div>
+<div class="block">Return a multi-polygon representing the bounded map regions split by the axis</div>
 </td>
 </tr>
 <tr id="i24" class="altColor">
@@ -476,12 +472,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>basicGeoConstraintsWrapperFromGeometry</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeoConstraintsWrapper.html" title="class in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeoConstraintsWrapper</a>&nbsp;basicGeoConstraintsWrapperFromGeometry(org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
-<div class="block">This utility method will convert a JTS geometry to contraints that can be
- used in a GeoWave query.</div>
+<div class="block">This utility method will convert a JTS geometry to contraints that can be used in a GeoWave
+ query.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>Constraints as a mapping of NumericData objects representing
-         ranges for a latitude dimension and a longitude dimension</dd>
+<dd>Constraints as a mapping of NumericData objects representing ranges for a latitude
+         dimension and a longitude dimension</dd>
 </dl>
 </li>
 </ul>
@@ -492,12 +488,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>basicConstraintSetFromEnvelope</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a>&nbsp;basicConstraintSetFromEnvelope(org.locationtech.jts.geom.Envelope&nbsp;env)</pre>
-<div class="block">This utility method will convert a JTS envelope to contraints that can be
- used in a GeoWave query.</div>
+<div class="block">This utility method will convert a JTS envelope to contraints that can be used in a GeoWave
+ query.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>Constraints as a mapping of NumericData objects representing
-         ranges for a latitude dimension and a longitude dimension</dd>
+<dd>Constraints as a mapping of NumericData objects representing ranges for a latitude
+         dimension and a longitude dimension</dd>
 </dl>
 </li>
 </ul>
@@ -508,12 +504,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>basicConstraintsFromEnvelope</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;basicConstraintsFromEnvelope(org.locationtech.jts.geom.Envelope&nbsp;env)</pre>
-<div class="block">This utility method will convert a JTS envelope to contraints that can be
- used in a GeoWave query.</div>
+<div class="block">This utility method will convert a JTS envelope to contraints that can be used in a GeoWave
+ query.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>Constraints as a mapping of NumericData objects representing
-         ranges for a latitude dimension and a longitude dimension</dd>
+<dd>Constraints as a mapping of NumericData objects representing ranges for a latitude
+         dimension and a longitude dimension</dd>
 </dl>
 </li>
 </ul>
@@ -525,12 +521,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>basicConstraintsFromPoint</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a>&nbsp;basicConstraintsFromPoint(double&nbsp;latitudeDegrees,
                                                                  double&nbsp;longitudeDegrees)</pre>
-<div class="block">This utility method will convert a JTS envelope to that can be used in a
- GeoWave query.</div>
+<div class="block">This utility method will convert a JTS envelope to that can be used in a GeoWave query.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>Constraints as a mapping of NumericData objects representing
-         ranges for a latitude dimension and a longitude dimension</dd>
+<dd>Constraints as a mapping of NumericData objects representing ranges for a latitude
+         dimension and a longitude dimension</dd>
 </dl>
 </li>
 </ul>
@@ -637,8 +632,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>infinity</h4>
 <pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;infinity()</pre>
-<div class="block">This mehtod returns an envelope between negative infinite and positive
- inifinity in both x and y</div>
+<div class="block">This mehtod returns an envelope between negative infinite and positive inifinity in both x and
+ y</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the infinite bounding box</dd>
@@ -713,10 +708,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>adjustGeo</h4>
 <pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;adjustGeo(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
                                                            org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
-<div class="block">Consume a geometry that may be over the ranges of the CRS (e.g date-line
- crossing). Adjust for crossings with a multi-polygon instance where each
- contained polygon represents a portion of the provided geometry longitude
- value. Clip hemisphere crossings (fix TBD).</div>
+<div class="block">Consume a geometry that may be over the ranges of the CRS (e.g date-line crossing). Adjust for
+ crossings with a multi-polygon instance where each contained polygon represents a portion of
+ the provided geometry longitude value. Clip hemisphere crossings (fix TBD).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>crs</code> - </dd>
@@ -735,9 +729,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                             org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">Adjust geometry so that coordinates fit into long/lat bounds.
 
- Split date-line crossing polygons.
+ <p> Split date-line crossing polygons.
 
- For now, clip hemisphere crossing portions of the polygon.</div>
+ <p> For now, clip hemisphere crossing portions of the polygon.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>geometry</code> - </dd>
@@ -754,14 +748,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>constructGeometriesOverMapRegions</h4>
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.jts.geom.Polygon&gt;&nbsp;constructGeometriesOverMapRegions(org.locationtech.jts.geom.Coordinate&nbsp;modifier,
                                                                                         org.locationtech.jts.geom.Geometry&nbsp;geometry)</pre>
-<div class="block">Produce a set of polygons for each region of the map corrected for date
- line and hemisphere crossings. Due to the complexity of going around the
- hemisphere, clip the range.
+<div class="block">Produce a set of polygons for each region of the map corrected for date line and hemisphere
+ crossings. Due to the complexity of going around the hemisphere, clip the range.
 
- Consider a polygon that cross both the hemisphere in the north and the
- date line in the west (-182 92, -182 88, -178 88, -178 92, -182 92). The
- result is two polygons: (-180 90, -180 88, -178 88, -178 90, -180 90)
- (180 90, 180 88, 178 88, 178 90, 180 90)</div>
+ <p> Consider a polygon that cross both the hemisphere in the north and the date line in the
+ west (-182 92, -182 88, -178 88, -178 92, -182 92). The result is two polygons: (-180 90, -180
+ 88, -178 88, -178 90, -180 90) (180 90, 180 88, 178 88, 178 90, 180 90)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>modifier</code> - </dd>
@@ -778,10 +770,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>adjustCoordinateToFitInRange</h4>
 <pre>public static&nbsp;org.locationtech.jts.geom.Coordinate&nbsp;adjustCoordinateToFitInRange(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
                                                                                 org.locationtech.jts.geom.Coordinate&nbsp;coord)</pre>
-<div class="block">Make sure the coordinate falls in the range of provided coordinate
- reference systems's coordinate system. 'x' coordinate is wrapped around
- date line. 'y' and 'z' coordinate are clipped. At some point, this
- function will be adjusted to project 'y' appropriately.</div>
+<div class="block">Make sure the coordinate falls in the range of provided coordinate reference systems's
+ coordinate system. 'x' coordinate is wrapped around date line. 'y' and 'z' coordinate are
+ clipped. At some point, this function will be adjusted to project 'y' appropriately.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>crs</code> - </dd>
@@ -799,9 +790,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;double&nbsp;adjustCoordinateDimensionToRange(double&nbsp;val,
                                                       org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
                                                       int&nbsp;axis)</pre>
-<div class="block">This is perhaps a brain dead approach to do this, but it does handle wrap
- around cases. Also supports cases where the wrap around occurs many
- times.</div>
+<div class="block">This is perhaps a brain dead approach to do this, but it does handle wrap around cases. Also
+ supports cases where the wrap around occurs many times.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>val</code> - the value</dd>
@@ -819,8 +809,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>world</h4>
 <pre>public static&nbsp;org.locationtech.jts.geom.Geometry&nbsp;world(org.locationtech.jts.geom.GeometryFactory&nbsp;factory,
                                                        org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
-<div class="block">Return a multi-polygon representing the bounded map regions split by the
- axis</div>
+<div class="block">Return a multi-polygon representing the bounded map regions split by the axis</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>factory</code> - </dd>

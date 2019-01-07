@@ -160,15 +160,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="class in org.locationtech.geowave.core.store.api">IngestOptions</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html#build--">build</a></span>()</code>
-<div class="block">Construct the IngestOptions with the provided values from this
- builder</div>
+<div class="block">Construct the IngestOptions with the provided values from this builder</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html#callback-org.locationtech.geowave.core.store.api.IngestOptions.IngestCallback-">callback</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.IngestCallback.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.IngestCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;callback)</code>
-<div class="block">register a callback to get notifications of the data and its
- insertion ID(s) within the indices after it has been ingested.</div>
+<div class="block">register a callback to get notifications of the data and its insertion ID(s) within the
+ indices after it has been ingested.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -186,8 +185,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html#format-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-">format</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;format)</code>
-<div class="block">the ingest format plugin which does the actual parsing of the files
- and converting to GeoWave entries</div>
+<div class="block">the ingest format plugin which does the actual parsing of the files and converting to GeoWave
+ entries</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -268,8 +267,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <h4>format</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;format(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;format)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#format-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-">IngestOptions.Builder</a></code></span></div>
-<div class="block">the ingest format plugin which does the actual parsing of the files
- and converting to GeoWave entries</div>
+<div class="block">the ingest format plugin which does the actual parsing of the files and converting to GeoWave
+ entries</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#format-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-">format</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></dd>
@@ -288,8 +287,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <h4>formatOptions</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;formatOptions(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;formatOptions)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#formatOptions-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">IngestOptions.Builder</a></code></span></div>
-<div class="block">options that will be given to the ingest format plugin. Each plugin
- may use a different type of options.</div>
+<div class="block">options that will be given to the ingest format plugin. Each plugin may use a different type
+ of options.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#formatOptions-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">formatOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></dd>
@@ -346,9 +345,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <h4>extensions</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;extensions(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;fileExtensions)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#extensions-java.lang.String:A-">IngestOptions.Builder</a></code></span></div>
-<div class="block">Set an array of acceptable file extensions. If this is empty, all
- files will be accepted regardless of extension. Additionally each
- format plugin may only accept certain file extensions.</div>
+<div class="block">Set an array of acceptable file extensions. If this is empty, all files will be accepted
+ regardless of extension. Additionally each format plugin may only accept certain file
+ extensions.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#extensions-java.lang.String:A-">extensions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></dd>
@@ -424,8 +423,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <h4>callback</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;callback(<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.IngestCallback.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.IngestCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#callback-org.locationtech.geowave.core.store.api.IngestOptions.IngestCallback-">IngestOptions.Builder</a></code></span></div>
-<div class="block">register a callback to get notifications of the data and its
- insertion ID(s) within the indices after it has been ingested.</div>
+<div class="block">register a callback to get notifications of the data and its insertion ID(s) within the
+ indices after it has been ingested.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#callback-org.locationtech.geowave.core.store.api.IngestOptions.IngestCallback-">callback</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></dd>
@@ -444,8 +443,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <h4>build</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="class in org.locationtech.geowave.core.store.api">IngestOptions</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;build()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#build--">IngestOptions.Builder</a></code></span></div>
-<div class="block">Construct the IngestOptions with the provided values from this
- builder</div>
+<div class="block">Construct the IngestOptions with the provided values from this builder</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#build--">build</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></dd>

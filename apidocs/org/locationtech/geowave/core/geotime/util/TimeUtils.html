@@ -111,8 +111,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">TimeUtils</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">This class contains a set of Temporal utility methods that are generally
- useful throughout the GeoWave core codebase.</div>
+<div class="block">This class contains a set of Temporal utility methods that are generally useful throughout the
+ GeoWave core codebase.</div>
 </li>
 </ul>
 </div>
@@ -151,16 +151,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/TimeUtils.html#calendarToGMTMillis-java.util.Calendar-">calendarToGMTMillis</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html?is-external=true" title="class or interface in java.util">Calendar</a>&nbsp;cal)</code>
-<div class="block">Convert a calendar object to a long in the form of milliseconds since the
- epoch of January 1, 1970.</div>
+<div class="block">Convert a calendar object to a long in the form of milliseconds since the epoch of January 1,
+ 1970.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/TimeUtils.html#composeRangeTemporalConstraints-org.locationtech.geowave.core.geotime.util.TimeDescriptors-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">composeRangeTemporalConstraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/geotime/util/TimeDescriptors.html" title="class in org.locationtech.geowave.core.geotime.util">TimeDescriptors</a>&nbsp;timeDescriptors,
                                <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;constraintsSet)</code>
-<div class="block">Compose temporal constraints given the constraint set and the descriptors
- for the index.</div>
+<div class="block">Compose temporal constraints given the constraint set and the descriptors for the index.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -176,16 +175,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/TimeUtils.html#getTimeMillis-java.lang.Object-">getTimeMillis</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;timeObj)</code>
-<div class="block">Get the time in millis of this temporal object (either numeric
- interpreted as millisecond time in GMT, Date, or Calendar)</div>
+<div class="block">Get the time in millis of this temporal object (either numeric interpreted as millisecond time
+ in GMT, Date, or Calendar)</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/TimeUtils.html#getTimeValue-java.lang.Class-long-">getTimeValue</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;bindingClass,
             long&nbsp;longVal)</code>
-<div class="block">Instantiates the class type as a new object with the temporal value being
- the longVal interpreted as milliseconds since the epoch in GMT</div>
+<div class="block">Instantiates the class type as a new object with the temporal value being the longVal
+ interpreted as milliseconds since the epoch in GMT</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -246,10 +245,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>calendarToGMTMillis</h4>
 <pre>public static&nbsp;long&nbsp;calendarToGMTMillis(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html?is-external=true" title="class or interface in java.util">Calendar</a>&nbsp;cal)</pre>
-<div class="block">Convert a calendar object to a long in the form of milliseconds since the
- epoch of January 1, 1970. The time is converted to GMT if it is not
- already in that timezone so that all times will be in a standard
- timezone.</div>
+<div class="block">Convert a calendar object to a long in the form of milliseconds since the epoch of January 1,
+ 1970. The time is converted to GMT if it is not already in that timezone so that all times will
+ be in a standard timezone.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cal</code> - The calendar object</dd>
@@ -265,8 +263,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getTimeMillis</h4>
 <pre>public static&nbsp;long&nbsp;getTimeMillis(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;timeObj)</pre>
-<div class="block">Get the time in millis of this temporal object (either numeric
- interpreted as millisecond time in GMT, Date, or Calendar)</div>
+<div class="block">Get the time in millis of this temporal object (either numeric interpreted as millisecond time
+ in GMT, Date, or Calendar)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>timeObj</code> - The temporal object</dd>
@@ -282,10 +280,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>isTemporal</h4>
 <pre>public static&nbsp;boolean&nbsp;isTemporal(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;bindingClass)</pre>
-<div class="block">Determine if this class is a supported temporal class. Numeric classes
- are not determined to be temporal in this case even though they can be
- interpreted as milliseconds because we do not want to be over-selective
- and mis-interpret numeric fields</div>
+<div class="block">Determine if this class is a supported temporal class. Numeric classes are not determined to be
+ temporal in this case even though they can be interpreted as milliseconds because we do not
+ want to be over-selective and mis-interpret numeric fields</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>bindingClass</code> - The binding class of the attribute</dd>
@@ -302,18 +299,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>getTimeValue</h4>
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;getTimeValue(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;bindingClass,
                                   long&nbsp;longVal)</pre>
-<div class="block">Instantiates the class type as a new object with the temporal value being
- the longVal interpreted as milliseconds since the epoch in GMT</div>
+<div class="block">Instantiates the class type as a new object with the temporal value being the longVal
+ interpreted as milliseconds since the epoch in GMT</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>bindingClass</code> - The class to try to instantiate for this time value. Currently
-            java.util.Calendar, java.util.Date, and java.lang.Long are
-            supported.</dd>
-<dd><code>longVal</code> - A value to be interpreted as milliseconds since the epoch in
-            GMT</dd>
+        java.util.Calendar, java.util.Date, and java.lang.Long are supported.</dd>
+<dd><code>longVal</code> - A value to be interpreted as milliseconds since the epoch in GMT</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>An instance of the binding class with the value interpreted from
-         longVal</dd>
+<dd>An instance of the binding class with the value interpreted from longVal</dd>
 </dl>
 </li>
 </ul>
@@ -335,15 +329,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>composeRangeTemporalConstraints</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;composeRangeTemporalConstraints(<a href="../../../../../../org/locationtech/geowave/core/geotime/util/TimeDescriptors.html" title="class in org.locationtech.geowave.core.geotime.util">TimeDescriptors</a>&nbsp;timeDescriptors,
                                                                   <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;constraintsSet)</pre>
-<div class="block">Compose temporal constraints given the constraint set and the descriptors
- for the index.</div>
+<div class="block">Compose temporal constraints given the constraint set and the descriptors for the index.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>timeDescriptors</code> - </dd>
 <dd><code>constraintsSet</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>null if the constraints does not have the fields required by the
-         time descriptors</dd>
+<dd>null if the constraints does not have the fields required by the time descriptors</dd>
 </dl>
 </li>
 </ul>
@@ -364,8 +356,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>inferTimeAttributeDescriptor</h4>
 <pre>public static final&nbsp;<a href="../../../../../../org/locationtech/geowave/core/geotime/util/TimeDescriptors.html" title="class in org.locationtech.geowave.core.geotime.util">TimeDescriptors</a>&nbsp;inferTimeAttributeDescriptor(org.opengis.feature.simple.SimpleFeatureType&nbsp;persistType)</pre>
-<div class="block">Determine if a time or range descriptor is set. If so, then use it,
- otherwise infer.</div>
+<div class="block">Determine if a time or range descriptor is set. If so, then use it, otherwise infer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>persistType</code> - - FeatureType that will be scanned for TimeAttributes</dd>

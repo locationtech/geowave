@@ -111,8 +111,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">JCommanderTranslationMap</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
-<div class="block">The translation map allows us to easily copy values from the facade objects
- back to the original objects.</div>
+<div class="block">The translation map allows us to easily copy values from the facade objects back to the original
+ objects.</div>
 </li>
 </ul>
 </div>
@@ -186,16 +186,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
         com.beust.jcommander.Parameterized&nbsp;param,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;prefix,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/AnnotatedElement.html?is-external=true" title="class or interface in java.lang.reflect">AnnotatedElement</a>&nbsp;member)</code>
-<div class="block">This is a mapping between the created facade's field (e.g., field_0) and
- the JCommander parameter (param) which lives in the object it was parsed
- from, 'item'.</div>
+<div class="block">This is a mapping between the created facade's field (e.g., field_0) and the JCommander
+ parameter (param) which lives in the object it was parsed from, 'item'.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/JCommanderTranslationMap.html#createFacadeObjects--">createFacadeObjects</a></span>()</code>
-<div class="block">This will create the facade objects needed in order to parse the fields
- represented in the translation map.</div>
+<div class="block">This will create the facade objects needed in order to parse the fields represented in the
+ translation map.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -213,15 +212,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/JCommanderTranslationMap.html#transformToFacade--">transformToFacade</a></span>()</code>
-<div class="block">Transfer the values from the original objects to the facade objects using
- the translation map.</div>
+<div class="block">Transfer the values from the original objects to the facade objects using the translation map.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/JCommanderTranslationMap.html#transformToOriginal--">transformToOriginal</a></span>()</code>
-<div class="block">Transfer the values from the facade objects to the original objects using
- the translation map.</div>
+<div class="block">Transfer the values from the facade objects to the original objects using the translation map.</div>
 </td>
 </tr>
 </table>
@@ -343,9 +340,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getEntries</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/cli/prefix/TranslationEntry.html" title="class in org.locationtech.geowave.core.cli.prefix">TranslationEntry</a>&gt;&nbsp;getEntries()</pre>
-<div class="block">Return all the translations. They are indexed by 'field name', where
- field name is the field in the facade object. Allow the user to modify
- them up until they create the facade objects</div>
+<div class="block">Return all the translations. They are indexed by 'field name', where field name is the field in
+ the facade object. Allow the user to modify them up until they create the facade objects</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 </dl>
@@ -358,8 +354,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>transformToOriginal</h4>
 <pre>public&nbsp;void&nbsp;transformToOriginal()</pre>
-<div class="block">Transfer the values from the facade objects to the original objects using
- the translation map.</div>
+<div class="block">Transfer the values from the facade objects to the original objects using the translation map.</div>
 </li>
 </ul>
 <a name="transformToFacade--">
@@ -369,8 +364,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>transformToFacade</h4>
 <pre>public&nbsp;void&nbsp;transformToFacade()</pre>
-<div class="block">Transfer the values from the original objects to the facade objects using
- the translation map.</div>
+<div class="block">Transfer the values from the original objects to the facade objects using the translation map.</div>
 </li>
 </ul>
 <a name="addEntry-java.lang.String-java.lang.Object-com.beust.jcommander.Parameterized-java.lang.String-java.lang.reflect.AnnotatedElement-">
@@ -384,9 +378,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                         com.beust.jcommander.Parameterized&nbsp;param,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;prefix,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/AnnotatedElement.html?is-external=true" title="class or interface in java.lang.reflect">AnnotatedElement</a>&nbsp;member)</pre>
-<div class="block">This is a mapping between the created facade's field (e.g., field_0) and
- the JCommander parameter (param) which lives in the object it was parsed
- from, 'item'.</div>
+<div class="block">This is a mapping between the created facade's field (e.g., field_0) and the JCommander
+ parameter (param) which lives in the object it was parsed from, 'item'.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>newFieldName</code> - </dd>
@@ -403,8 +396,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>createFacadeObjects</h4>
 <pre>public&nbsp;void&nbsp;createFacadeObjects()</pre>
-<div class="block">This will create the facade objects needed in order to parse the fields
- represented in the translation map.</div>
+<div class="block">This will create the facade objects needed in order to parse the fields represented in the
+ translation map.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - </dd>

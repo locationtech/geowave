@@ -132,8 +132,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/parser/OperationParser.OperationContext.html" title="class in org.locationtech.geowave.core.cli.parser">OperationParser.OperationContext</a></span></code>
-<div class="block">This class is used to lazily init child commands only when they are
- actually referenced/used by command line options.</div>
+<div class="block">This class is used to lazily init child commands only when they are actually referenced/used by
+ command line options.</div>
 </td>
 </tr>
 </table>
@@ -187,8 +187,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/cli/parser/CommandLineOperationParams.html" title="class in org.locationtech.geowave.core.cli.parser">CommandLineOperationParams</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/parser/OperationParser.html#parse-java.lang.Class-java.lang.String:A-">parse</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/cli/api/Operation.html" title="interface in org.locationtech.geowave.core.cli.api">Operation</a>&gt;&nbsp;topLevel,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>
-<div class="block">Search the arguments for the list of commands/operations to execute based
- on the top level operation entry given.</div>
+<div class="block">Search the arguments for the list of commands/operations to execute based on the top level
+ operation entry given.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -201,8 +201,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/cli/parser/CommandLineOperationParams.html" title="class in org.locationtech.geowave.core.cli.parser">CommandLineOperationParams</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/parser/OperationParser.html#parse-java.lang.String:A-">parse</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>
-<div class="block">Parse the command line arguments into the objects given in the
- 'additionalObjects' array.</div>
+<div class="block">Parse the command line arguments into the objects given in the 'additionalObjects' array.</div>
 </td>
 </tr>
 </table>
@@ -261,9 +260,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>parse</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/cli/parser/CommandLineOperationParams.html" title="class in org.locationtech.geowave.core.cli.parser">CommandLineOperationParams</a>&nbsp;parse(<a href="../../../../../../org/locationtech/geowave/core/cli/api/Operation.html" title="interface in org.locationtech.geowave.core.cli.api">Operation</a>&nbsp;operation,
                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</pre>
-<div class="block">Parse command line arguments into the given operation. The operation will
- be prepared, and then can be directly executed, or modified before being
- executed.</div>
+<div class="block">Parse command line arguments into the given operation. The operation will be prepared, and then
+ can be directly executed, or modified before being executed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>operation</code> - </dd>
@@ -280,8 +278,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>parse</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/cli/parser/CommandLineOperationParams.html" title="class in org.locationtech.geowave.core.cli.parser">CommandLineOperationParams</a>&nbsp;parse(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/cli/api/Operation.html" title="interface in org.locationtech.geowave.core.cli.api">Operation</a>&gt;&nbsp;topLevel,
                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</pre>
-<div class="block">Search the arguments for the list of commands/operations to execute based
- on the top level operation entry given.</div>
+<div class="block">Search the arguments for the list of commands/operations to execute based on the top level
+ operation entry given.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>topLevel</code> - </dd>
@@ -297,9 +295,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>parse</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/cli/parser/CommandLineOperationParams.html" title="class in org.locationtech.geowave.core.cli.parser">CommandLineOperationParams</a>&nbsp;parse(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</pre>
-<div class="block">Parse the command line arguments into the objects given in the
- 'additionalObjects' array. I don't really ever forsee this ever being
- used, but hey, why not.</div>
+<div class="block">Parse the command line arguments into the objects given in the 'additionalObjects' array. I
+ don't really ever forsee this ever being used, but hey, why not.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>args</code> - </dd>

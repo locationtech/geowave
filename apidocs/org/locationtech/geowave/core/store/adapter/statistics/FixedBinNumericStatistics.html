@@ -124,19 +124,17 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">FixedBinNumericStatistics&lt;T&gt;</span>
 extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;T,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/FixedBinNumericHistogram.html" title="class in org.locationtech.geowave.core.store.adapter.statistics.histogram">FixedBinNumericHistogram</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/FixedBinNumericHistogram.html" title="class in org.locationtech.geowave.core.store.adapter.statistics.histogram">FixedBinNumericHistogram</a>&gt;&gt;</pre>
-<div class="block">Fixed number of bins for a histogram. Unless configured, the range will
- expand dynamically, redistributing the data as necessary into the wider bins.
+<div class="block">Fixed number of bins for a histogram. Unless configured, the range will expand dynamically,
+ redistributing the data as necessary into the wider bins.
 
- The advantage of constraining the range of the statistic is to ignore values
- outside the range, such as erroneous values. Erroneous values force extremes
- in the histogram. For example, if the expected range of values falls between
- 0 and 1 and a value of 10000 occurs, then a single bin contains the entire
- population between 0 and 1, a single bin represents the single value of
- 10000. If there are extremes in the data, then use
- <code>FeatureNumericHistogramStatistics</code> instead.
+ <p> The advantage of constraining the range of the statistic is to ignore values outside the
+ range, such as erroneous values. Erroneous values force extremes in the histogram. For example,
+ if the expected range of values falls between 0 and 1 and a value of 10000 occurs, then a single
+ bin contains the entire population between 0 and 1, a single bin represents the single value of
+ 10000. If there are extremes in the data, then use <code>FeatureNumericHistogramStatistics</code>
+ instead.
 
-
- The default number of bins is 32.</div>
+ <p> The default number of bins is 32.</div>
 </li>
 </ul>
 </div>
@@ -277,8 +275,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
@@ -484,12 +481,10 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>

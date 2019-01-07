@@ -116,17 +116,16 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">SPIServiceRegistry</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/javax/imageio/spi/ServiceRegistry.html?is-external=true" title="class or interface in javax.imageio.spi">ServiceRegistry</a></pre>
-<div class="block">Compensate for VFSClassloader's failure to discovery SPI registered classes
- (used by JBOSS and Accumulo).
- 
- To Use:
- 
- (1) Register class loaders:
- 
- 
- (2) Look up SPI providers:
- 
- final Iterator<FieldSerializationProviderSpi> serializationProviders = new
+<div class="block">Compensate for VFSClassloader's failure to discovery SPI registered classes (used by JBOSS and
+ Accumulo).
+
+ <p> To Use:
+
+ <p> (1) Register class loaders:
+
+ <p> (2) Look up SPI providers:
+
+ <p> final Iterator<FieldSerializationProviderSpi> serializationProviders = new
  SPIServiceRegistry(FieldSerializationProviderSpi.class).load(
  FieldSerializationProviderSpi.class);</div>
 </li>
@@ -289,23 +288,21 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/javax/imageio/spi/Serv
 <li class="blockList">
 <h4>getClassLoaders</h4>
 <pre>public final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</a>&gt;&nbsp;getClassLoaders()</pre>
-<div class="block">Returns all class loaders to be used for scanning plugins. The following
- class loaders are always included in the search:
+<div class="block">Returns all class loaders to be used for scanning plugins. The following class loaders are
+ always included in the search:
+
  <p>
- <ul>
- <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true#getClassLoader--" title="class or interface in java.lang">This object class loader</a></li>
- <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html?is-external=true#getContextClassLoader--" title="class or interface in java.lang">The thread context class
- loader</a></li>
- <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html?is-external=true#getSystemClassLoader--" title="class or interface in java.lang">The system class loader</a>
- </li>
- </ul>
- 
- Both locally registered (this instance) and globally registered
- classloaders are included it the search.
- 
- Redundancies and parent classloaders are removed where possible. Possible
- error conditions include security exceptions. Security exceptions are not
- logger UNLESS the set of searchable classloaders is empty.</div>
+
+ <ul> <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true#getClassLoader--" title="class or interface in java.lang">This object class loader</a>
+ <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html?is-external=true#getContextClassLoader--" title="class or interface in java.lang">The thread context class loader</a>
+ <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html?is-external=true#getSystemClassLoader--" title="class or interface in java.lang">The system class loader</a> </ul>
+
+ Both locally registered (this instance) and globally registered classloaders are included it
+ the search.
+
+ <p> Redundancies and parent classloaders are removed where possible. Possible error conditions
+ include security exceptions. Security exceptions are not logger UNLESS the set of searchable
+ classloaders is empty.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Classloaders to be used for scanning plugins.</dd>

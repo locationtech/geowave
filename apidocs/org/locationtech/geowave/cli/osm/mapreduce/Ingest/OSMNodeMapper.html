@@ -103,7 +103,7 @@ var activeTableTab = "activeTableTab";
 <li>org.apache.hadoop.mapreduce.Mapper&lt;org.apache.avro.mapred.AvroKey&lt;T&gt;,org.apache.hadoop.io.NullWritable,org.apache.hadoop.io.Text,org.apache.accumulo.core.data.Mutation&gt;</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html" title="class in org.locationtech.geowave.cli.osm.mapreduce.Ingest">org.locationtech.geowave.cli.osm.mapreduce.Ingest.OSMMapperBase</a>&lt;<a href="../../../../../../../org/locationtech/geowave/cli/osm/types/generated/Node.html" title="class in org.locationtech.geowave.cli.osm.types.generated">Node</a>&gt;</li>
+<li><a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html" title="class in org.locationtech.geowave.cli.osm.mapreduce.Ingest">org.locationtech.geowave.cli.osm.mapreduce.Ingest.OSMMapperBase</a>&lt;<a href="../../../../../../../org/locationtech/geowave/cli/osm/types/avro/AvroNode.html" title="class in org.locationtech.geowave.cli.osm.types.avro">AvroNode</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.cli.osm.mapreduce.Ingest.OSMNodeMapper</li>
@@ -120,7 +120,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">OSMNodeMapper</span>
-extends <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html" title="class in org.locationtech.geowave.cli.osm.mapreduce.Ingest">OSMMapperBase</a>&lt;<a href="../../../../../../../org/locationtech/geowave/cli/osm/types/generated/Node.html" title="class in org.locationtech.geowave.cli.osm.types.generated">Node</a>&gt;</pre>
+extends <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html" title="class in org.locationtech.geowave.cli.osm.mapreduce.Ingest">OSMMapperBase</a>&lt;<a href="../../../../../../../org/locationtech/geowave/cli/osm/types/avro/AvroNode.html" title="class in org.locationtech.geowave.cli.osm.types.avro">AvroNode</a>&gt;</pre>
 </li>
 </ul>
 </div>
@@ -188,7 +188,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMNodeMapper.html#map-org.apache.avro.mapred.AvroKey-org.apache.hadoop.io.NullWritable-org.apache.hadoop.mapreduce.Mapper.Context-">map</a></span>(org.apache.avro.mapred.AvroKey&lt;<a href="../../../../../../../org/locationtech/geowave/cli/osm/types/generated/Node.html" title="class in org.locationtech.geowave.cli.osm.types.generated">Node</a>&gt;&nbsp;key,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMNodeMapper.html#map-org.apache.avro.mapred.AvroKey-org.apache.hadoop.io.NullWritable-org.apache.hadoop.mapreduce.Mapper.Context-">map</a></span>(org.apache.avro.mapred.AvroKey&lt;<a href="../../../../../../../org/locationtech/geowave/cli/osm/types/avro/AvroNode.html" title="class in org.locationtech.geowave.cli.osm.types.avro">AvroNode</a>&gt;&nbsp;key,
    org.apache.hadoop.io.NullWritable&nbsp;value,
    org.apache.hadoop.mapreduce.Mapper.Context&nbsp;context)</code>&nbsp;</td>
 </tr>
@@ -198,7 +198,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.cli.osm.mapreduce.Ingest.<a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html" title="class in org.locationtech.geowave.cli.osm.mapreduce.Ingest">OSMMapperBase</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#getIdHash-long-">getIdHash</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.Boolean-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.util.Calendar-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.CharSequence-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.Double-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.Integer-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.Long-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-org.locationtech.geowave.cli.osm.types.generated.LongArray-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.String-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#setup-org.apache.hadoop.mapreduce.Mapper.Context-">setup</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#getIdHash-long-">getIdHash</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-org.locationtech.geowave.cli.osm.types.avro.AvroLongArray-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.Boolean-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.util.Calendar-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.CharSequence-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.Double-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.Integer-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.Long-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#put-org.apache.accumulo.core.data.Mutation-java.lang.String-java.lang.String-java.lang.String-">put</a>, <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce/Ingest/OSMMapperBase.html#setup-org.apache.hadoop.mapreduce.Mapper.Context-">setup</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.apache.hadoop.mapreduce.Mapper">
@@ -251,14 +251,14 @@ extends <a href="../../../../../../../org/locationtech/geowave/cli/osm/mapreduce
 <ul class="blockListLast">
 <li class="blockList">
 <h4>map</h4>
-<pre>public&nbsp;void&nbsp;map(org.apache.avro.mapred.AvroKey&lt;<a href="../../../../../../../org/locationtech/geowave/cli/osm/types/generated/Node.html" title="class in org.locationtech.geowave.cli.osm.types.generated">Node</a>&gt;&nbsp;key,
+<pre>public&nbsp;void&nbsp;map(org.apache.avro.mapred.AvroKey&lt;<a href="../../../../../../../org/locationtech/geowave/cli/osm/types/avro/AvroNode.html" title="class in org.locationtech.geowave.cli.osm.types.avro">AvroNode</a>&gt;&nbsp;key,
                 org.apache.hadoop.io.NullWritable&nbsp;value,
                 org.apache.hadoop.mapreduce.Mapper.Context&nbsp;context)
          throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>map</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.Mapper&lt;org.apache.avro.mapred.AvroKey&lt;<a href="../../../../../../../org/locationtech/geowave/cli/osm/types/generated/Node.html" title="class in org.locationtech.geowave.cli.osm.types.generated">Node</a>&gt;,org.apache.hadoop.io.NullWritable,org.apache.hadoop.io.Text,org.apache.accumulo.core.data.Mutation&gt;</code></dd>
+<dd><code>map</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.Mapper&lt;org.apache.avro.mapred.AvroKey&lt;<a href="../../../../../../../org/locationtech/geowave/cli/osm/types/avro/AvroNode.html" title="class in org.locationtech.geowave.cli.osm.types.avro">AvroNode</a>&gt;,org.apache.hadoop.io.NullWritable,org.apache.hadoop.io.Text,org.apache.accumulo.core.data.Mutation&gt;</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>

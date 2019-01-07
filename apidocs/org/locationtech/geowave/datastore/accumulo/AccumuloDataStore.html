@@ -125,15 +125,13 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">AccumuloDataStore</span>
 extends <a href="../../../../../org/locationtech/geowave/mapreduce/BaseMapReduceDataStore.html" title="class in org.locationtech.geowave.mapreduce">BaseMapReduceDataStore</a></pre>
-<div class="block">This is the Accumulo implementation of the data store. It requires an
- AccumuloOperations instance that describes how to connect (read/write data)
- to Apache Accumulo. It can create default implementations of the IndexStore
- and AdapterStore based on the operations which will persist configuration
- information to Accumulo tables, or an implementation of each of these stores
- can be passed in A DataStore can both ingest and query data based on
- persisted indices and data adapters. When the data is ingested it is
- explicitly given an index and a data adapter which is then persisted to be
- used in subsequent queries.</div>
+<div class="block">This is the Accumulo implementation of the data store. It requires an AccumuloOperations instance
+ that describes how to connect (read/write data) to Apache Accumulo. It can create default
+ implementations of the IndexStore and AdapterStore based on the operations which will persist
+ configuration information to Accumulo tables, or an implementation of each of these stores can be
+ passed in A DataStore can both ingest and query data based on persisted indices and data
+ adapters. When the data is ingested it is explicitly given an index and a data adapter which is
+ then persisted to be used in subsequent queries.</div>
 </li>
 </ul>
 </div>

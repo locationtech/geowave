@@ -120,8 +120,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">NumericQueryConstraint</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a></pre>
-<div class="block">A class based on FilterableConstraints that uses numeric values and includes
- a lower and upper range</div>
+<div class="block">A class based on FilterableConstraints that uses numeric values and includes a lower and upper
+ range</div>
 </li>
 </ul>
 </div>
@@ -223,8 +223,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumericQueryConstraint.html#intersect-org.locationtech.geowave.core.store.index.FilterableConstraints-">intersect</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a>&nbsp;other)</code>
-<div class="block">Returns an FilterableConstraints object that is the intersection of the
- numeric bounds of this object and object passed in.</div>
+<div class="block">Returns an FilterableConstraints object that is the intersection of the numeric bounds of this
+ object and object passed in.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -236,8 +236,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumericQueryConstraint.html#union-org.locationtech.geowave.core.store.index.FilterableConstraints-">union</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a>&nbsp;other)</code>
-<div class="block">Returns an FilterableConstraints object that is the union of the numeric
- bounds of this object and object passed in.</div>
+<div class="block">Returns an FilterableConstraints object that is the union of the numeric bounds of this object
+ and object passed in.</div>
 </td>
 </tr>
 </table>
@@ -426,17 +426,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <li class="blockList">
 <h4>intersect</h4>
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a>&nbsp;intersect(<a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a>&nbsp;other)</pre>
-<div class="block">Returns an FilterableConstraints object that is the intersection of the
- numeric bounds of this object and object passed in.
- <p>
- This method returns an object with the highest min and lowest max of the
- two objects</div>
+<div class="block">Returns an FilterableConstraints object that is the intersection of the numeric bounds of this
+ object and object passed in.
+
+ <p> This method returns an object with the highest min and lowest max of the two objects</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html#intersect-org.locationtech.geowave.core.store.index.FilterableConstraints-">intersect</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>otherConstraint</code> - object whose constraints are 'intersected' with existing
-            constraints</dd>
+<dd><code>otherConstraint</code> - object whose constraints are 'intersected' with existing constraints</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>new <a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index"><code>FilterableConstraints</code></a></dd>
 </dl>
@@ -449,17 +447,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <li class="blockList">
 <h4>union</h4>
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a>&nbsp;union(<a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a>&nbsp;other)</pre>
-<div class="block">Returns an FilterableConstraints object that is the union of the numeric
- bounds of this object and object passed in.
- <p>
- This method returns an object with the lowest min and highest max of the
- two objects</div>
+<div class="block">Returns an FilterableConstraints object that is the union of the numeric bounds of this object
+ and object passed in.
+
+ <p> This method returns an object with the lowest min and highest max of the two objects</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html#union-org.locationtech.geowave.core.store.index.FilterableConstraints-">union</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>otherConstraint</code> - object whose constraints are 'unioned' with existing
-            constraints</dd>
+<dd><code>otherConstraint</code> - object whose constraints are 'unioned' with existing constraints</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>new <a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index"><code>FilterableConstraints</code></a></dd>
 </dl>

@@ -83,22 +83,22 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;I,O&gt;</td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;I,O&gt;</td>
 <td class="colLast">
-<div class="block">This is the main plugin interface for reading from a local file system, and
- formatting intermediate data (for example, to HDFS or to Kafka for further
- processing or ingest) from any file that is supported to Avro.</div>
+<div class="block">This is the main plugin interface for reading from a local file system, and formatting
+ intermediate data (for example, to HDFS or to Kafka for further processing or ingest) from any
+ file that is supported to Avro.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroPluginBase</a>&lt;T&gt;</td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroPluginBase.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroPluginBase</a>&lt;T&gt;</td>
 <td class="colLast">
-<div class="block">All plugins based off of staged intermediate data (either reading or writing)
- must implement this interface.</div>
+<div class="block">All plugins based off of staged intermediate data (either reading or writing) must implement this
+ interface.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">AvroSchemaProvider</a></td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroSchemaProvider.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroSchemaProvider</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -115,25 +115,25 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in org.locationtech.geowave.core.ingest.avro">AbstractStageWholeFileToAvro</a>&lt;O&gt;</td>
 <td class="colLast">
-<div class="block">This class can be sub-classed as a general-purpose recipe for parallelizing
- ingestion of files by directly staging the binary of the file to Avro.</div>
+<div class="block">This class can be sub-classed as a general-purpose recipe for parallelizing ingestion of files by
+ directly staging the binary of the file to Avro.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.Builder.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile.Builder</a></td>
+<td class="colLast">
+<div class="block">RecordBuilder for AvroWholeFile instances.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GenericAvroSerializer.html" title="class in org.locationtech.geowave.core.ingest.avro">GenericAvroSerializer</a>&lt;T&gt;</td>
 <td class="colLast">
-<div class="block">Generic Avro serializer/deserializer, can convert Avro Java object to a byte
- array and a byte array back to a usable Avro Java object.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.Builder.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile.Builder</a></td>
-<td class="colLast">
-<div class="block">RecordBuilder for WholeFile instances.</div>
+<div class="block">Generic Avro serializer/deserializer, can convert Avro Java object to a byte array and a byte
+ array back to a usable Avro Java object.</div>
 </td>
 </tr>
 </tbody>

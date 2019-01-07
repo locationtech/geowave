@@ -140,11 +140,8 @@ extends org.apache.commons.collections4.iterators.LazyIteratorChain&lt;<a href="
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/util/AsyncPaginatedQuery.html#AsyncPaginatedQuery-com.amazonaws.services.dynamodbv2.model.QueryRequest-com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync-">AsyncPaginatedQuery</a></span>(com.amazonaws.services.dynamodbv2.model.QueryRequest&nbsp;request,
                    com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync&nbsp;dynamoDBClient)</code>
-<div class="block">The async paginated query is a much more complicated but asynchronous
- version of the paginated query
-
- As soon a async paginated query is fired, multiple asynchronous query
- requests are fired in tandem across different async paginated queries.</div>
+<div class="block">The async paginated query is a much more complicated but asynchronous version of the paginated
+ query</div>
 </td>
 </tr>
 </table>
@@ -165,14 +162,8 @@ extends org.apache.commons.collections4.iterators.LazyIteratorChain&lt;<a href="
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;? extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,com.amazonaws.services.dynamodbv2.model.AttributeValue&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/util/AsyncPaginatedQuery.html#nextIterator-int-">nextIterator</a></span>(int&nbsp;arg0)</code>
-<div class="block">Get the next query data If the last request is equal to null then we have
- no more query requests to fire
-
- If asyncQueryResults is not empty, we have already fetched the next query
- data that can be read immediately
-
- If due to max async query limit, we couldn't fire async requests, we fire
- the request now</div>
+<div class="block">Get the next query data If the last request is equal to null then we have no more query
+ requests to fire</div>
 </td>
 </tr>
 </table>
@@ -219,13 +210,13 @@ extends org.apache.commons.collections4.iterators.LazyIteratorChain&lt;<a href="
 <h4>AsyncPaginatedQuery</h4>
 <pre>public&nbsp;AsyncPaginatedQuery(com.amazonaws.services.dynamodbv2.model.QueryRequest&nbsp;request,
                            com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync&nbsp;dynamoDBClient)</pre>
-<div class="block">The async paginated query is a much more complicated but asynchronous
- version of the paginated query
+<div class="block">The async paginated query is a much more complicated but asynchronous version of the paginated
+ query
 
- As soon a async paginated query is fired, multiple asynchronous query
- requests are fired in tandem across different async paginated queries.
+ <p> As soon a async paginated query is fired, multiple asynchronous query requests are fired in
+ tandem across different async paginated queries.
 
- A max of "MAX_ASYNC_QUERY_RESULTS" can be in progress at any time</div>
+ <p> A max of "MAX_ASYNC_QUERY_RESULTS" can be in progress at any time</div>
 </li>
 </ul>
 </li>
@@ -243,14 +234,13 @@ extends org.apache.commons.collections4.iterators.LazyIteratorChain&lt;<a href="
 <li class="blockList">
 <h4>nextIterator</h4>
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;? extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,com.amazonaws.services.dynamodbv2.model.AttributeValue&gt;&gt;&nbsp;nextIterator(int&nbsp;arg0)</pre>
-<div class="block">Get the next query data If the last request is equal to null then we have
- no more query requests to fire
+<div class="block">Get the next query data If the last request is equal to null then we have no more query
+ requests to fire
 
- If asyncQueryResults is not empty, we have already fetched the next query
- data that can be read immediately
+ <p> If asyncQueryResults is not empty, we have already fetched the next query data that can be
+ read immediately
 
- If due to max async query limit, we couldn't fire async requests, we fire
- the request now</div>
+ <p> If due to max async query limit, we couldn't fire async requests, we fire the request now</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>nextIterator</code>&nbsp;in class&nbsp;<code>org.apache.commons.collections4.iterators.LazyIteratorChain&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,com.amazonaws.services.dynamodbv2.model.AttributeValue&gt;&gt;</code></dd>

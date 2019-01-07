@@ -107,11 +107,10 @@
 <br>
 <pre>public interface <span class="typeNameLabel">PersistentIndexFieldHandler&lt;RowType,IndexFieldType extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;RowType,IndexFieldType,NativeFieldType&gt;, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
-<div class="block">This is a persistable version of the IndexFieldHandler so that customized
- field handlers can be automatically persisted with the data adapter. By
- default the field handlers assume that they can be recreated without custom
- serialization necessary but if it is necessary, the field handler should
- implement this interface.</div>
+<div class="block">This is a persistable version of the IndexFieldHandler so that customized field handlers can be
+ automatically persisted with the data adapter. By default the field handlers assume that they can
+ be recreated without custom serialization necessary but if it is necessary, the field handler
+ should implement this interface.</div>
 </li>
 </ul>
 </div>

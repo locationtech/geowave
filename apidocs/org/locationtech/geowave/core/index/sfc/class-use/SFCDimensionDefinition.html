@@ -122,8 +122,7 @@
 <td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in org.locationtech.geowave.core.index.sfc">SpaceFillingCurve</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SFCFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCFactory.html#createSpaceFillingCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType-">createSpaceFillingCurve</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefs,
                        <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCFactory.SFCType.html" title="enum in org.locationtech.geowave.core.index.sfc">SFCFactory.SFCType</a>&nbsp;sfc)</code>
-<div class="block">Generates a SFC instance based on the dimensions definition and the space
- filling curve type</div>
+<div class="block">* Generates a SFC instance based on the dimensions definition and the space filling curve type</div>
 </td>
 </tr>
 </tbody>
@@ -158,8 +157,7 @@
 <td class="colLast"><span class="typeNameLabel">HilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#convertFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">convertFromHilbert</a></span>(byte[]&nbsp;hilbertValue,
                   com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                   <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Convert the single SFC value to the ranges of raw values that it
- represents</div>
+<div class="block">Convert the single SFC value to the ranges of raw values that it represents</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -203,8 +201,7 @@
               int&nbsp;maxFilteredIndexedRanges,
               boolean&nbsp;removeVacuum,
               boolean&nbsp;overInclusiveOnEdge)</code>
-<div class="block">Decompose the raw range per dimension values into an optimal set of
- compact Hilbert SFC ranges</div>
+<div class="block">Decompose the raw range per dimension values into an optimal set of compact Hilbert SFC ranges</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -231,17 +228,16 @@
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><span class="typeNameLabel">HilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#getEstimatedIdCount-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getEstimatedIdCount</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data,
                    <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Get a quick (minimal complexity calculation) estimate of the total row
- IDs a particular data would require to fully cover with SFC values</div>
+<div class="block">Get a quick (minimal complexity calculation) estimate of the total row IDs a particular data
+ would require to fully cover with SFC values</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PrimitiveHilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#getEstimatedIdCount-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getEstimatedIdCount</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data,
                    <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">The estimated ID count is the cross product of normalized range of all
- dimensions per the bits of precision provided by the dimension
- definitions.</div>
+<div class="block">The estimated ID count is the cross product of normalized range of all dimensions per the bits
+ of precision provided by the dimension definitions.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -252,7 +248,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><span class="typeNameLabel">HilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#getInsertionIdRangePerDimension-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getInsertionIdRangePerDimension</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Get the range/size of a single insertion ID for each dimension</div>
+<div class="block">* Get the range/size of a single insertion ID for each dimension</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -274,8 +270,7 @@
 <td class="colLast"><span class="typeNameLabel">HilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#indicesFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">indicesFromHilbert</a></span>(byte[]&nbsp;hilbertValue,
                   com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                   <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Convert the single SFC value to the per dimension SFC coordinates that it
- represents</div>
+<div class="block">Convert the single SFC value to the per dimension SFC coordinates that it represents</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -321,8 +316,8 @@
                   long&nbsp;bins,
                   boolean&nbsp;isMin,
                   boolean&nbsp;overInclusiveOnEdge)</code>
-<div class="block">Used to normalize the value based on the dimension definition, which
- includes the dimensional bounds and the bits of precision.</div>
+<div class="block">* Used to normalize the value based on the dimension definition, which includes the dimensional
+ bounds and the bits of precision.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -331,8 +326,8 @@
               double&nbsp;maxValue,
               int&nbsp;dimension,
               <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)</code>
-<div class="block">Determines the coordinates per dimension of rows given a
- multi-dimensional range will span within this space filling curve</div>
+<div class="block">Determines the coordinates per dimension of rows given a multi-dimensional range will span
+ within this space filling curve</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -365,8 +360,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFC.html#HilbertSFC-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">HilbertSFC</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefs)</code>
-<div class="block">Use the SFCFactory.createSpaceFillingCurve method - don't call this
- constructor directly</div>
+<div class="block">Use the SFCFactory.createSpaceFillingCurve method - don't call this constructor directly</div>
 </td>
 </tr>
 </tbody>
@@ -436,8 +430,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/zorder/ZOrderSFC.html#ZOrderSFC-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">ZOrderSFC</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefs)</code>
-<div class="block">Use the SFCFactory.createSpaceFillingCurve method - don't call this
- constructor directly</div>
+<div class="block">Use the SFCFactory.createSpaceFillingCurve method - don't call this constructor directly</div>
 </td>
 </tr>
 </tbody>

@@ -124,8 +124,8 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">HBaseParallelDecoder&lt;T&gt;</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.html" title="class in org.locationtech.geowave.core.store.operations">ParallelDecoder</a>&lt;T&gt;</pre>
-<div class="block">HBase implementation of <a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.html" title="class in org.locationtech.geowave.core.store.operations"><code>ParallelDecoder</code></a> that creates a scanner for
- every <code>HRegionLocation</code> that overlaps with the query row ranges.</div>
+<div class="block">HBase implementation of <a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.html" title="class in org.locationtech.geowave.core.store.operations"><code>ParallelDecoder</code></a> that creates a scanner for every
+ <code>HRegionLocation</code> that overlaps with the query row ranges.</div>
 </li>
 </ul>
 </div>
@@ -279,8 +279,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.html#getRowProviders--">getRowProviders</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.html" title="class in org.locationtech.geowave.core.store.operations">ParallelDecoder</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseParallelDecoder.html" title="type parameter in HBaseParallelDecoder">T</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a list of <a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.RowProvider.html" title="class in org.locationtech.geowave.core.store.operations"><code>ParallelDecoder.RowProvider</code></a>s that provide <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities"><code>GeoWaveRow</code></a>s
-         to the decoder</dd>
+<dd>a list of <a href="../../../../../../org/locationtech/geowave/core/store/operations/ParallelDecoder.RowProvider.html" title="class in org.locationtech.geowave.core.store.operations"><code>ParallelDecoder.RowProvider</code></a>s that provide <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities"><code>GeoWaveRow</code></a>s to the decoder</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>

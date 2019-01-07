@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.Builder.html" title="class in org.locationtech.geowave.format.gpx"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestFormat.html" title="class in org.locationtech.geowave.format.gpx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -116,18 +116,16 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">GPXConsumer</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</pre>
-<div class="block">Consumes a GPX file. The consumer is an iterator, parsing the input stream
- and returning results as the stream is parsed. Data is emitted for each
- element at the 'end' tag.
+<div class="block">Consumes a GPX file. The consumer is an iterator, parsing the input stream and returning results
+ as the stream is parsed. Data is emitted for each element at the 'end' tag.
 
- Caution: Developers should maintain the cohesiveness of attribute names
- associated with each feature type defined in <a href="../../../../../org/locationtech/geowave/format/gpx/GpxUtils.html" title="class in org.locationtech.geowave.format.gpx"><code>GpxUtils</code></a>.
+ <p> Caution: Developers should maintain the cohesiveness of attribute names associated with each
+ feature type defined in <a href="../../../../../org/locationtech/geowave/format/gpx/GpxUtils.html" title="class in org.locationtech.geowave.format.gpx"><code>GpxUtils</code></a>.
 
- Route way points and way points are treated similarly except way points do
- not include the parent ID information in their ID. The assumption is that the
- name, lat and lon attributes are globally unique. In contrast, Route way
- points include the file name and parent route name as part of their ID.
- Routes are not assumed to be global.</div>
+ <p> Route way points and way points are treated similarly except way points do not include the
+ parent ID information in their ID. The assumption is that the name, lat and lon attributes are
+ globally unique. In contrast, Route way points include the file name and parent route name as
+ part of their ID. Routes are not assumed to be global.</div>
 </li>
 </ul>
 </div>
@@ -322,12 +320,10 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <dd><code>fileStream</code> - </dd>
 <dd><code>primaryIndexId</code> - </dd>
 <dd><code>inputID</code> - prefix to all IDs except waypoints (see uniqueWayPoints)</dd>
-<dd><code>additionalData</code> - additional attributes to add the over-ride attributes in the
-            GPX data file. The attribute are grouped by path. "gpx.trk",
-            "gpx.rte" and "gpx.wpt"</dd>
-<dd><code>globalWayPoints</code> - if true, waypoints are globally unique, otherwise are unique
-            to this file and should have inputID and other components
-            added to the identifier</dd>
+<dd><code>additionalData</code> - additional attributes to add the over-ride attributes in the GPX data
+        file. The attribute are grouped by path. "gpx.trk", "gpx.rte" and "gpx.wpt"</dd>
+<dd><code>globalWayPoints</code> - if true, waypoints are globally unique, otherwise are unique to this
+        file and should have inputID and other components added to the identifier</dd>
 <dd><code>globalVisibility</code> - </dd>
 </dl>
 </li>
@@ -424,7 +420,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../../../org/locationtech/geowave/format/gpx/AvroGpxTrack.Builder.html" title="class in org.locationtech.geowave.format.gpx"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../org/locationtech/geowave/format/gpx/GpxIngestFormat.html" title="class in org.locationtech.geowave.format.gpx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

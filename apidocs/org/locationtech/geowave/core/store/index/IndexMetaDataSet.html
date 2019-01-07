@@ -195,16 +195,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html#entryDeleted-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryDeleted</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html" title="type parameter in IndexMetaDataSet">T</a>&nbsp;entry,
             <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>
-<div class="block">This will be called after an entry is successfully deleted with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully deleted with the row IDs that were used</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html" title="type parameter in IndexMetaDataSet">T</a>&nbsp;entry,
              <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -247,8 +245,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -364,14 +361,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>
@@ -423,8 +418,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <pre>public&nbsp;void&nbsp;entryIngested(<a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html" title="type parameter in IndexMetaDataSet">T</a>&nbsp;entry,
                           <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">IngestCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html" title="type parameter in IndexMetaDataSet">T</a>&gt;</code></dd>
@@ -445,8 +439,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <pre>public&nbsp;void&nbsp;entryDeleted(<a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html" title="type parameter in IndexMetaDataSet">T</a>&nbsp;entry,
                          <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">DeleteCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully deleted with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully deleted with the row IDs that were used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">entryDeleted</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html" title="interface in org.locationtech.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html" title="type parameter in IndexMetaDataSet">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>

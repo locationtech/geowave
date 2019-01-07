@@ -431,8 +431,8 @@
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinateRanges.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinateRanges</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinateRangesPerDimension-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getCoordinateRangesPerDimension</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange,
                                <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>
-<div class="block">Return an integer coordinate range in each dimension for the given data
- range plus a bin ID if that dimension is continuous</div>
+<div class="block">Return an integer coordinate range in each dimension for the given data range plus a bin ID if
+ that dimension is continuous</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -616,7 +616,7 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SpaceFillingCurve.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#getRanges-byte:A-">getRanges</a></span>(byte[]&nbsp;id)</code>
-<div class="block">Gets n-dimensional ranges from a single dimension, i.e.</div>
+<div class="block">* Gets n-dimensional ranges from a single dimension, i.e.</div>
 </td>
 </tr>
 </tbody>
@@ -633,22 +633,22 @@
 <td class="colLast"><span class="typeNameLabel">SpaceFillingCurve.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeRange-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-boolean-int-">decomposeRange</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
               boolean&nbsp;overInclusiveOnEdge,
               int&nbsp;maxRanges)</code>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.</div>
+<div class="block">* Returns a collection of ranges on the 1-d space filling curve that correspond to the
+ n-dimensional range described in the query parameter.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/RangeDecomposition.html" title="class in org.locationtech.geowave.core.index.sfc">RangeDecomposition</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SpaceFillingCurve.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#decomposeRangeFully-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">decomposeRangeFully</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.</div>
+<div class="block">* Returns a collection of ranges on the 1-d space filling curve that correspond to the
+ n-dimensional range described in the query parameter.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SpaceFillingCurve.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html#getEstimatedIdCount-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getEstimatedIdCount</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data)</code>
-<div class="block">Determines the estimated number of rows a multi-dimensional range will
- span within this space filling curve</div>
+<div class="block">* Determines the estimated number of rows a multi-dimensional range will span within this space
+ filling curve</div>
 </td>
 </tr>
 </tbody>
@@ -688,15 +688,14 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/BasicNumericDataset.html" title="class in org.locationtech.geowave.core.index.sfc.data">BasicNumericDataset</a></span></code>
-<div class="block">The Basic Index Result class creates an object associated with a generic
- query.</div>
+<div class="block">The Basic Index Result class creates an object associated with a generic query.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.sfc.data">BinnedNumericDataset</a></span></code>
-<div class="block">The Binned Numeric Dataset class creates an object that associates a
- multi-dimensional index range to a particular bin ID.</div>
+<div class="block">The Binned Numeric Dataset class creates an object that associates a multi-dimensional index
+ range to a particular bin ID.</div>
 </td>
 </tr>
 </tbody>
@@ -712,9 +711,8 @@
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.sfc.data">BinnedNumericDataset</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">BinnedNumericDataset.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/BinnedNumericDataset.html#applyBins-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition:A-">applyBins</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;numericData,
          <a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">This method is responsible for translating a query into appropriate
- normalized and binned (if necessary) queries that can be used by the
- underlying index implementation.</div>
+<div class="block">This method is responsible for translating a query into appropriate normalized and binned (if
+ necessary) queries that can be used by the underlying index implementation.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -753,8 +751,7 @@
 <td class="colLast"><span class="typeNameLabel">HilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#convertFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">convertFromHilbert</a></span>(byte[]&nbsp;hilbertValue,
                   com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                   <a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Convert the single SFC value to the ranges of raw values that it
- represents</div>
+<div class="block">Convert the single SFC value to the ranges of raw values that it represents</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -787,15 +784,15 @@
 <td class="colLast"><span class="typeNameLabel">HilbertSFC.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFC.html#decomposeRange-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-boolean-int-">decomposeRange</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
               boolean&nbsp;overInclusiveOnEdge,
               int&nbsp;maxFilteredIndexedRanges)</code>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.</div>
+<div class="block">* Returns a collection of ranges on the 1-d space filling curve that correspond to the
+ n-dimensional range described in the query parameter.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/RangeDecomposition.html" title="class in org.locationtech.geowave.core.index.sfc">RangeDecomposition</a></code></td>
 <td class="colLast"><span class="typeNameLabel">HilbertSFC.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFC.html#decomposeRangeFully-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">decomposeRangeFully</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.</div>
+<div class="block">* Returns a collection of ranges on the 1-d space filling curve that correspond to the
+ n-dimensional range described in the query parameter.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -806,17 +803,16 @@
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><span class="typeNameLabel">HilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#getEstimatedIdCount-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getEstimatedIdCount</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data,
                    <a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Get a quick (minimal complexity calculation) estimate of the total row
- IDs a particular data would require to fully cover with SFC values</div>
+<div class="block">Get a quick (minimal complexity calculation) estimate of the total row IDs a particular data
+ would require to fully cover with SFC values</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PrimitiveHilbertSFCOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#getEstimatedIdCount-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getEstimatedIdCount</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data,
                    <a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">The estimated ID count is the cross product of normalized range of all
- dimensions per the bits of precision provided by the dimension
- definitions.</div>
+<div class="block">The estimated ID count is the cross product of normalized range of all dimensions per the bits
+ of precision provided by the dimension definitions.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -1041,15 +1037,15 @@
 <td class="colLast"><span class="typeNameLabel">ZOrderSFC.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/zorder/ZOrderSFC.html#decomposeRange-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-boolean-int-">decomposeRange</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query,
               boolean&nbsp;overInclusiveOnEdge,
               int&nbsp;maxFilteredIndexedRanges)</code>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.</div>
+<div class="block">* Returns a collection of ranges on the 1-d space filling curve that correspond to the
+ n-dimensional range described in the query parameter.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/RangeDecomposition.html" title="class in org.locationtech.geowave.core.index.sfc">RangeDecomposition</a></code></td>
 <td class="colLast"><span class="typeNameLabel">ZOrderSFC.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/zorder/ZOrderSFC.html#decomposeRangeFully-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">decomposeRangeFully</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;query)</code>
-<div class="block">Returns a collection of ranges on the 1-d space filling curve that
- correspond to the n-dimensional range described in the query parameter.</div>
+<div class="block">* Returns a collection of ranges on the 1-d space filling curve that correspond to the
+ n-dimensional range described in the query parameter.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -1219,9 +1215,8 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CommonIndexedPersistenceEncoding.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html#getNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-">getNumericData</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>[]&nbsp;dimensions)</code>
-<div class="block">Given an ordered set of dimensions, convert this persistent encoding
- common index data into a MultiDimensionalNumericData object that can then
- be used by the Index</div>
+<div class="block">Given an ordered set of dimensions, convert this persistent encoding common index data into a
+ MultiDimensionalNumericData object that can then be used by the Index</div>
 </td>
 </tr>
 </tbody>
@@ -1331,8 +1326,7 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">QueryConstraints.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html#getIndexConstraints-org.locationtech.geowave.core.store.api.Index-">getIndexConstraints</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
-<div class="block">Return a set of constraints to apply to the primary index based on the
- indexing strategy used.</div>
+<div class="block">Return a set of constraints to apply to the primary index based on the indexing strategy used.</div>
 </td>
 </tr>
 <tr class="rowColor">

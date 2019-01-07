@@ -203,8 +203,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumericFieldIndexStrategy.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -258,14 +257,12 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>
@@ -348,8 +345,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <h4>getInsertionIds</h4>
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;getInsertionIds(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;indexedData)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getInsertionIds-EntryRangeType-">SortedIndexStrategy</a></code></span></div>
-<div class="block">Returns a list of id's for insertion. The index strategy will use a
- reasonable default for the maximum duplication of insertion IDs</div>
+<div class="block">Returns a list of id's for insertion. The index strategy will use a reasonable default for the
+ maximum duplication of insertion IDs</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getInsertionIds-EntryRangeType-">getInsertionIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumericQueryConstraint.html" title="class in org.locationtech.geowave.core.store.index.numeric">NumericQueryConstraint</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&gt;</code></dd>
@@ -416,12 +413,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getRangeForId-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">getRangeForId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumericQueryConstraint.html" title="class in org.locationtech.geowave.core.store.index.numeric">NumericQueryConstraint</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>partitionKey</code> - the partition key part of the insertion ID to determine a
-            range for</dd>
+<dd><code>partitionKey</code> - the partition key part of the insertion ID to determine a range for</dd>
 <dd><code>sortKey</code> - the sort key part of the insertion ID to determine a range for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the range that the given insertion ID represents, inclusive on
-         the start and exclusive on the end for the range</dd>
+<dd>the range that the given insertion ID represents, inclusive on the start and exclusive
+         on the end for the range</dd>
 </dl>
 </li>
 </ul>

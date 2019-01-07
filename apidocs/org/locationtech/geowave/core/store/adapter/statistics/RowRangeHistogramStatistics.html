@@ -120,8 +120,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">RowRangeHistogramStatistics&lt;T&gt;</span>
 extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;T,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">PartitionStatisticsQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>&gt;&gt;</pre>
-<div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a
- numeric attribute.</div>
+<div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a numeric attribute.</div>
 </li>
 </ul>
 </div>
@@ -213,8 +212,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="type parameter in RowRangeHistogramStatistics">T</a>&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -259,8 +257,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
@@ -446,12 +443,10 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>
@@ -477,8 +472,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <pre>public&nbsp;void&nbsp;entryIngested(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="type parameter in RowRangeHistogramStatistics">T</a>&nbsp;entry,
                           <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">IngestCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entry</code> - the entry that was ingested</dd>

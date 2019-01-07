@@ -121,13 +121,12 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">FeatureCountMinSketchStatistics</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">AbstractDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,com.clearspring.analytics.stream.frequency.CountMinSketch,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;com.clearspring.analytics.stream.frequency.CountMinSketch&gt;&gt;
 implements <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/FieldNameStatistic.html" title="interface in org.locationtech.geowave.core.geotime.store.statistics">FieldNameStatistic</a></pre>
-<div class="block">Maintains an estimate of how may of each attribute value occurs in a set of
- data.
+<div class="block">Maintains an estimate of how may of each attribute value occurs in a set of data.
 
- Default values:
+ <p> Default values:
 
- Error factor of 0.001 with probability 0.98 of retrieving a correct estimate.
- The Algorithm does not under-state the estimate.</div>
+ <p> Error factor of 0.001 with probability 0.98 of retrieving a correct estimate. The Algorithm
+ does not under-state the estimate.</div>
 </li>
 </ul>
 </div>
@@ -230,8 +229,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/geotime/stor
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.html#entryIngested-org.opengis.feature.simple.SimpleFeature-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;entry,
              <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -263,8 +261,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/geotime/stor
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -434,14 +431,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/geotime/stor
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>
@@ -469,8 +464,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>public&nbsp;void&nbsp;entryIngested(org.opengis.feature.simple.SimpleFeature&nbsp;entry,
                           <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">IngestCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>

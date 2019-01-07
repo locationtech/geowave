@@ -116,13 +116,11 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">PrimitiveHilbertSFCOperations</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in org.locationtech.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></pre>
-<div class="block">This supports Compact Hilbert SFC operations using a primitive long
- internally to represent intermediate results. This can be significantly
- faster than using unbounded representations such as BigInteger, but can only
- support up to certain levels of precision. For getID() operations it is
- currently used if no single dimension is more than 48 bits of precision, and
- for query decomposition it is currently used if the total precision is <= 62
- bits.</div>
+<div class="block">This supports Compact Hilbert SFC operations using a primitive long internally to represent
+ intermediate results. This can be significantly faster than using unbounded representations such
+ as BigInteger, but can only support up to certain levels of precision. For getID() operations it
+ is currently used if no single dimension is more than 48 bits of precision, and for query
+ decomposition it is currently used if the total precision is <= 62 bits.</div>
 </li>
 </ul>
 </div>
@@ -194,8 +192,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#convertFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">convertFromHilbert</a></span>(byte[]&nbsp;hilbertValue,
                   com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                   <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Convert the single SFC value to the ranges of raw values that it
- represents</div>
+<div class="block">Convert the single SFC value to the ranges of raw values that it represents</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -215,23 +212,21 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
               int&nbsp;maxFilteredIndexedRanges,
               boolean&nbsp;removeVacuum,
               boolean&nbsp;overInclusiveOnEdge)</code>
-<div class="block">Decompose the raw range per dimension values into an optimal set of
- compact Hilbert SFC ranges</div>
+<div class="block">Decompose the raw range per dimension values into an optimal set of compact Hilbert SFC ranges</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#getEstimatedIdCount-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getEstimatedIdCount</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data,
                    <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">The estimated ID count is the cross product of normalized range of all
- dimensions per the bits of precision provided by the dimension
- definitions.</div>
+<div class="block">The estimated ID count is the cross product of normalized range of all dimensions per the bits
+ of precision provided by the dimension definitions.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#getInsertionIdRangePerDimension-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getInsertionIdRangePerDimension</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Get the range/size of a single insertion ID for each dimension</div>
+<div class="block">* Get the range/size of a single insertion ID for each dimension</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -245,8 +240,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/PrimitiveHilbertSFCOperations.html#indicesFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">indicesFromHilbert</a></span>(byte[]&nbsp;hilbertValue,
                   com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                   <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Convert the single SFC value to the per dimension SFC coordinates that it
- represents</div>
+<div class="block">Convert the single SFC value to the per dimension SFC coordinates that it represents</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -268,8 +262,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
                   long&nbsp;bins,
                   boolean&nbsp;isMin,
                   boolean&nbsp;overInclusiveOnEdge)</code>
-<div class="block">Used to normalize the value based on the dimension definition, which
- includes the dimensional bounds and the bits of precision.</div>
+<div class="block">* Used to normalize the value based on the dimension definition, which includes the dimensional
+ bounds and the bits of precision.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -278,8 +272,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
               double&nbsp;maxValue,
               int&nbsp;dimension,
               <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)</code>
-<div class="block">Determines the coordinates per dimension of rows given a
- multi-dimensional range will span within this space filling curve</div>
+<div class="block">Determines the coordinates per dimension of rows given a multi-dimensional range will span
+ within this space filling curve</div>
 </td>
 </tr>
 </table>
@@ -399,8 +393,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>values</code> - a raw value per dimension in order</dd>
 <dd><code>compactHilbertCurve</code> - the compact Hilbert curve to use for the conversion</dd>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw
-            values</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw values</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the Hilbert SFC value</dd>
 </dl>
@@ -416,21 +409,18 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
                                  com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                                  <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#indicesFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">HilbertSFCOperations</a></code></span></div>
-<div class="block">Convert the single SFC value to the per dimension SFC coordinates that it
- represents</div>
+<div class="block">Convert the single SFC value to the per dimension SFC coordinates that it represents</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#indicesFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">indicesFromHilbert</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in org.locationtech.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>hilbertValue</code> - the computed hilbert value to invert back to integer
-            coordinates per dimension</dd>
+<dd><code>hilbertValue</code> - the computed hilbert value to invert back to integer coordinates per
+        dimension</dd>
 <dd><code>compactHilbertCurve</code> - the compact Hilbert curve to use for the conversion</dd>
 <dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to determine the bits of
-            precision per dimension that is expected in the compact
-            hilbert curve</dd>
+        precision per dimension that is expected in the compact hilbert curve</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the integer coordinate value per dimension that the given hilbert
-         value represents</dd>
+<dd>the integer coordinate value per dimension that the given hilbert value represents</dd>
 </dl>
 </li>
 </ul>
@@ -455,20 +445,17 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
                                                       com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                                                       <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#convertFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">HilbertSFCOperations</a></code></span></div>
-<div class="block">Convert the single SFC value to the ranges of raw values that it
- represents</div>
+<div class="block">Convert the single SFC value to the ranges of raw values that it represents</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#convertFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">convertFromHilbert</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in org.locationtech.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>hilbertValue</code> - the computed hilbert value to invert back to native
-            coordinates</dd>
+<dd><code>hilbertValue</code> - the computed hilbert value to invert back to native coordinates</dd>
 <dd><code>compactHilbertCurve</code> - the compact Hilbert curve to use for the conversion</dd>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw
-            values</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw values</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the ranges of values that the hilbert represents, inclusive on
-         start and exclusive on end for each range</dd>
+<dd>the ranges of values that the hilbert represents, inclusive on start and exclusive on
+         end for each range</dd>
 </dl>
 </li>
 </ul>
@@ -495,23 +482,22 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
                                boolean&nbsp;isMin,
                                boolean&nbsp;overInclusiveOnEdge)
                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></pre>
-<div class="block">Used to normalize the value based on the dimension definition, which
- includes the dimensional bounds and the bits of precision. This ensures
- the maximum amount of fidelity for represented values.</div>
+<div class="block">* Used to normalize the value based on the dimension definition, which includes the dimensional
+ bounds and the bits of precision. This ensures the maximum amount of fidelity for represented
+ values.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>boundedDimensionDefinition</code> - describes the min, max, and cardinality of a dimension</dd>
 <dd><code>value</code> - value to be normalized</dd>
-<dd><code>bins</code> - precomputed number of bins in this dimension the number of
-            bins expected based on the cardinality of the definition</dd>
-<dd><code>isMin</code> - flag indicating if this value is a minimum of a range in which
-            case it needs to be inclusive on a boundary, otherwise it is
-            exclusive</dd>
+<dd><code>bins</code> - precomputed number of bins in this dimension the number of bins expected based on
+        the cardinality of the definition</dd>
+<dd><code>isMin</code> - flag indicating if this value is a minimum of a range in which case it needs to be
+        inclusive on a boundary, otherwise it is exclusive</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>value after normalization</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - thrown when the value passed doesn't fit with in the
-             dimension definition provided</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - thrown when the value passed doesn't fit with in the dimension
+         definition provided</dd>
 </dl>
 </li>
 </ul>
@@ -529,21 +515,17 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
                                          boolean&nbsp;removeVacuum,
                                          boolean&nbsp;overInclusiveOnEdge)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#decomposeRange-org.locationtech.geowave.core.index.sfc.data.NumericData:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-int-int-boolean-boolean-">HilbertSFCOperations</a></code></span></div>
-<div class="block">Decompose the raw range per dimension values into an optimal set of
- compact Hilbert SFC ranges</div>
+<div class="block">Decompose the raw range per dimension values into an optimal set of compact Hilbert SFC ranges</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#decomposeRange-org.locationtech.geowave.core.index.sfc.data.NumericData:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-int-int-boolean-boolean-">decomposeRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in org.locationtech.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rangePerDimension</code> - the raw range per dimension</dd>
 <dd><code>compactHilbertCurve</code> - the compact Hilbert curve to use for the conversion</dd>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw
-            values</dd>
-<dd><code>totalPrecision</code> - the total precision of the dimension definitions, for
-            convenience</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw values</dd>
+<dd><code>totalPrecision</code> - the total precision of the dimension definitions, for convenience</dd>
 <dd><code>maxFilteredIndexedRanges</code> - the maximum number of ranges, if < 0 it will be unlimited</dd>
-<dd><code>removeVacuum</code> - a flag to pass to the compact hilbert curve range
-            decomposition</dd>
+<dd><code>removeVacuum</code> - a flag to pass to the compact hilbert curve range decomposition</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the optimal SFC range decomposition for the raw-valued ranges</dd>
 </dl>
@@ -557,19 +539,16 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
 <h4>getEstimatedIdCount</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;getEstimatedIdCount(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data,
                                       <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
-<div class="block">The estimated ID count is the cross product of normalized range of all
- dimensions per the bits of precision provided by the dimension
- definitions.</div>
+<div class="block">The estimated ID count is the cross product of normalized range of all dimensions per the bits
+ of precision provided by the dimension definitions.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#getEstimatedIdCount-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getEstimatedIdCount</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in org.locationtech.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the dataset</dd>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw
-            values</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw values</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the total estimated row IDs the data would require to fully cover
-         with SFC values</dd>
+<dd>the total estimated row IDs the data would require to fully cover with SFC values</dd>
 </dl>
 </li>
 </ul>
@@ -581,13 +560,13 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
 <h4>getInsertionIdRangePerDimension</h4>
 <pre>public&nbsp;double[]&nbsp;getInsertionIdRangePerDimension(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#getInsertionIdRangePerDimension-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">HilbertSFCOperations</a></code></span></div>
-<div class="block">Get the range/size of a single insertion ID for each dimension</div>
+<div class="block">* Get the range/size of a single insertion ID for each dimension</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#getInsertionIdRangePerDimension-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getInsertionIdRangePerDimension</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in org.locationtech.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to calculate the range
-            of each insertion ID</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to calculate the range of
+        each insertion ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the range of a single insertion ID for each dimension</dd>
 </dl>
@@ -605,8 +584,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
                              <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)
                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#normalizeRange-double-double-int-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition-">HilbertSFCOperations</a></code></span></div>
-<div class="block">Determines the coordinates per dimension of rows given a
- multi-dimensional range will span within this space filling curve</div>
+<div class="block">Determines the coordinates per dimension of rows given a multi-dimensional range will span
+ within this space filling curve</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#normalizeRange-double-double-int-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition-">normalizeRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in org.locationtech.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></code></dd>
@@ -615,9 +594,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
 <dd><code>maxValue</code> - the maximum value</dd>
 <dd><code>dimension</code> - the ordinal of the dimension on this space filling curve</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the range of coordinates in each dimension (ie. [0][0] would be
-         the min coordinate of the first dimension and [0][1] would be the
-         max coordinate of the first dimension)</dd>
+<dd>the range of coordinates in each dimension (ie. [0][0] would be the min coordinate of
+         the first dimension and [0][1] would be the max coordinate of the first dimension)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code></dd>
 </dl>

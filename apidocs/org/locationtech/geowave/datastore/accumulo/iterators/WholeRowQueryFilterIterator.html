@@ -129,11 +129,10 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">WholeRowQueryFilterIterator</span>
 extends org.apache.accumulo.core.iterators.user.WholeRowIterator</pre>
-<div class="block">This iterator wraps a DistributableQueryFilter which is deserialized from a
- byte array passed as an option with a "filter" key. Also, the model is needed
- to deserialize the row into a set of fields that can be used by the filter.
- The model is deserialized from a byte array stored as an option with the key
- "model". If either one of these serialized options are not successfully
+<div class="block">This iterator wraps a DistributableQueryFilter which is deserialized from a byte array passed as
+ an option with a "filter" key. Also, the model is needed to deserialize the row into a set of
+ fields that can be used by the filter. The model is deserialized from a byte array stored as an
+ option with the key "model". If either one of these serialized options are not successfully
  found, this iterator will accept everything.</div>
 </li>
 </ul>

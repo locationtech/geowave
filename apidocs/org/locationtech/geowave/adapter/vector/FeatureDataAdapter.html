@@ -118,53 +118,35 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../org/locationtech/geowave/adapter/vector/AvroFeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">AvroFeatureDataAdapter</a></dd>
+<dd><a href="../../../../../org/locationtech/geowave/adapter/vector/GeoWaveAvroFeatureDataAdapter.html" title="class in org.locationtech.geowave.adapter.vector">GeoWaveAvroFeatureDataAdapter</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">FeatureDataAdapter</span>
 extends <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;
 implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/mapreduce/HadoopDataAdapter.html" title="interface in org.locationtech.geowave.mapreduce">HadoopDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureWritable.html" title="class in org.locationtech.geowave.adapter.vector">FeatureWritable</a>&gt;, <a href="../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../org/locationtech/geowave/core/store/adapter/InitializeWithIndicesDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InitializeWithIndicesDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</pre>
-<div class="block">This data adapter will handle all reading/writing concerns for storing and
- retrieving GeoTools SimpleFeature objects to and from a GeoWave persistent
- store in Accumulo. <br>
- <br>
-
- If the implementor needs to write rows with particular visibility, this can
- be done by providing a FieldVisibilityHandler to a constructor or a
- VisibilityManagement to a constructor. When using VisibilityManagement, the
- feature attribute to contain the visibility meta-data is, by default, called
- GEOWAVE_VISIBILITY. This can be overridden by setting the UserData property
- 'visibility' to Boolean.TRUE for the feature attribute that describes the
- attribute that contains the visibility meta-data.
- persistedType.getDescriptor("someAttributeName").getUserData().put(
- "visibility", Boolean.TRUE)<br>
- <br>
- The adapter will use the SimpleFeature's default geometry for spatial
- indexing.<br>
- <br>
- The adaptor will use the first temporal attribute (a Calendar or Date object)
- as the timestamp of a temporal index.<br>
- <br>
- If the feature type contains a UserData property 'time' for a specific time
- attribute with Boolean.TRUE, then the attribute is used as the timestamp of a
- temporal index.<br>
- <br>
- If the feature type contains UserData properties 'start' and 'end' for two
- different time attributes with value Boolean.TRUE, then the attributes are
- used for a range index.<br>
- <br>
- If the feature type contains a UserData property 'time' for *all* time
- attributes with Boolean.FALSE, then a temporal index is not used.<br>
- <br>
- Statistics configurations are maintained in UserData. Each attribute may have
- a UserData property called 'stats'. The associated value is an instance of
- <a href="../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfigurationCollection.html" title="class in org.locationtech.geowave.adapter.vector.stats"><code>StatsConfigurationCollection</code></a>
- . The collection maintains a set of
- <a href="../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html" title="interface in org.locationtech.geowave.adapter.vector.stats"><code>StatsConfig</code></a>, one for
- each type of statistic. The default statistics for geometry and temporal
- constraints cannot be changed, as they are critical components to the
- efficiency of query processing.</div>
+<div class="block">This data adapter will handle all reading/writing concerns for storing and retrieving GeoTools
+ SimpleFeature objects to and from a GeoWave persistent store in Accumulo. <br> <br> If the
+ implementor needs to write rows with particular visibility, this can be done by providing a
+ FieldVisibilityHandler to a constructor or a VisibilityManagement to a constructor. When using
+ VisibilityManagement, the feature attribute to contain the visibility meta-data is, by default,
+ called GEOWAVE_VISIBILITY. This can be overridden by setting the UserData property 'visibility'
+ to Boolean.TRUE for the feature attribute that describes the attribute that contains the
+ visibility meta-data. persistedType.getDescriptor("someAttributeName").getUserData().put(
+ "visibility", Boolean.TRUE)<br> <br> The adapter will use the SimpleFeature's default geometry
+ for spatial indexing.<br> <br> The adaptor will use the first temporal attribute (a Calendar or
+ Date object) as the timestamp of a temporal index.<br> <br> If the feature type contains a
+ UserData property 'time' for a specific time attribute with Boolean.TRUE, then the attribute is
+ used as the timestamp of a temporal index.<br> <br> If the feature type contains UserData
+ properties 'start' and 'end' for two different time attributes with value Boolean.TRUE, then the
+ attributes are used for a range index.<br> <br> If the feature type contains a UserData property
+ 'time' for *all* time attributes with Boolean.FALSE, then a temporal index is not used.<br> <br>
+ Statistics configurations are maintained in UserData. Each attribute may have a UserData property
+ called 'stats'. The associated value is an instance of
+ <a href="../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfigurationCollection.html" title="class in org.locationtech.geowave.adapter.vector.stats"><code>StatsConfigurationCollection</code></a> . The
+ collection maintains a set of <a href="../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html" title="interface in org.locationtech.geowave.adapter.vector.stats"><code>StatsConfig</code></a>,
+ one for each type of statistic. The default statistics for geometry and temporal constraints
+ cannot be changed, as they are critical components to the efficiency of query processing.</div>
 </li>
 </ul>
 </div>
@@ -205,16 +187,14 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#FeatureDataAdapter-org.opengis.feature.simple.SimpleFeatureType-">FeatureDataAdapter</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</code>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType</div>
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#FeatureDataAdapter-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-">FeatureDataAdapter</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                   <a href="../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
  provided fieldVisiblityHandler</div>
 </td>
 </tr>
@@ -222,8 +202,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#FeatureDataAdapter-org.opengis.feature.simple.SimpleFeatureType-java.util.List-">FeatureDataAdapter</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;customIndexHandlers)</code>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
  provided customIndexHandlers</div>
 </td>
 </tr>
@@ -233,18 +212,15 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;customIndexHandlers,
                   <a href="../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler,
                   <a href="../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;defaultVisibilityManagement)</code>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
- provided customIndexHandlers, fieldVisibilityHandler and
- defaultVisibilityManagement</div>
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
+ provided customIndexHandlers, fieldVisibilityHandler and defaultVisibilityManagement</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#FeatureDataAdapter-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.store.data.visibility.VisibilityManagement-">FeatureDataAdapter</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                   <a href="../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;visibilityManagement)</code>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
  provided visibilityManagement</div>
 </td>
 </tr>
@@ -278,15 +254,14 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#defaultTypeDataFromBinary-byte:A-">defaultTypeDataFromBinary</a></span>(byte[]&nbsp;bytes)</code>
-<div class="block">Extract the feature type default data from the binary stream passed in
- and place in the reprojected SFT for this feature data adapter</div>
+<div class="block">Extract the feature type default data from the binary stream passed in and place in the
+ reprojected SFT for this feature data adapter</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#defaultTypeDataToBinary--">defaultTypeDataToBinary</a></span>()</code>
-<div class="block">Get feature type default data contained in the reprojected SFT and
- serialize to a binary stream</div>
+<div class="block">Get feature type default data contained in the reprojected SFT and serialize to a binary stream</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -305,8 +280,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#getDefaultTypeMatchingHandlers-java.lang.Object-">getDefaultTypeMatchingHandlers</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;typeObj)</code>
-<div class="block">Get a List<> of the default index field handlers from the Simple Feature
- Type provided</div>
+<div class="block">Get a List<> of the default index field handlers from the Simple Feature Type provided</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -320,8 +294,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#getFieldHandlersFromFeatureType-org.opengis.feature.simple.SimpleFeatureType-">getFieldHandlersFromFeatureType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</code>
-<div class="block">Create List of NativeFieldHandlers based on the SimpleFeature type passed
- as parameter.</div>
+<div class="block">Create List of NativeFieldHandlers based on the SimpleFeature type passed as parameter.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -359,8 +332,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#getTimeRangeHandler-org.opengis.feature.simple.SimpleFeatureType-">getTimeRangeHandler</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</code>
-<div class="block">Attempts to find a time descriptor (range or timestamp) within provided
- featureType and return index field handler for it.</div>
+<div class="block">Attempts to find a time descriptor (range or timestamp) within provided featureType and return
+ index field handler for it.</div>
 </td>
 </tr>
 <tr id="i18" class="altColor">
@@ -400,8 +373,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#setNamespace-java.lang.String-">setNamespace</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespaceURI)</code>
-<div class="block">Sets the namespace of the reprojected feature type associated with this
- data adapter</div>
+<div class="block">Sets the namespace of the reprojected feature type associated with this data adapter</div>
 </td>
 </tr>
 </table>
@@ -463,8 +435,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <li class="blockList">
 <h4>FeatureDataAdapter</h4>
 <pre>public&nbsp;FeatureDataAdapter(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</pre>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType</div>
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>featureType</code> - - feature type for this object</dd>
@@ -479,8 +450,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <h4>FeatureDataAdapter</h4>
 <pre>public&nbsp;FeatureDataAdapter(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;customIndexHandlers)</pre>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
  provided customIndexHandlers</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -497,8 +467,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <h4>FeatureDataAdapter</h4>
 <pre>public&nbsp;FeatureDataAdapter(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                           <a href="../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;visibilityManagement)</pre>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
  provided visibilityManagement</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -515,8 +484,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <h4>FeatureDataAdapter</h4>
 <pre>public&nbsp;FeatureDataAdapter(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                           <a href="../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</pre>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
  provided fieldVisiblityHandler</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -535,10 +503,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;customIndexHandlers,
                           <a href="../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler,
                           <a href="../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;defaultVisibilityManagement)</pre>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
- provided customIndexHandlers, fieldVisibilityHandler and
- defaultVisibilityManagement</div>
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
+ provided customIndexHandlers, fieldVisibilityHandler and defaultVisibilityManagement</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>featureType</code> - - feature type for this object</dd>
@@ -579,14 +545,12 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <li class="blockList">
 <h4>getFieldHandlersFromFeatureType</h4>
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;getFieldHandlersFromFeatureType(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</pre>
-<div class="block">Create List of NativeFieldHandlers based on the SimpleFeature type passed
- as parameter.</div>
+<div class="block">Create List of NativeFieldHandlers based on the SimpleFeature type passed as parameter.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>featureType</code> - - SFT to be used to determine handlers</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>List of NativeFieldHandlers that correspond to attributes in
-         featureType</dd>
+<dd>List of NativeFieldHandlers that correspond to attributes in featureType</dd>
 </dl>
 </li>
 </ul>
@@ -597,8 +561,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <li class="blockList">
 <h4>getTimeRangeHandler</h4>
 <pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getTimeRangeHandler(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</pre>
-<div class="block">Attempts to find a time descriptor (range or timestamp) within provided
- featureType and return index field handler for it.</div>
+<div class="block">Attempts to find a time descriptor (range or timestamp) within provided featureType and return
+ index field handler for it.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>featureType</code> - - feature type to be scanned.</dd>
@@ -614,8 +578,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <li class="blockList">
 <h4>getDefaultTypeMatchingHandlers</h4>
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;getDefaultTypeMatchingHandlers(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;typeObj)</pre>
-<div class="block">Get a List<> of the default index field handlers from the Simple Feature
- Type provided</div>
+<div class="block">Get a List<> of the default index field handlers from the Simple Feature Type provided</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#getDefaultTypeMatchingHandlers-java.lang.Object-">getDefaultTypeMatchingHandlers</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
@@ -633,8 +596,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <li class="blockList">
 <h4>setNamespace</h4>
 <pre>public&nbsp;void&nbsp;setNamespace(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespaceURI)</pre>
-<div class="block">Sets the namespace of the reprojected feature type associated with this
- data adapter</div>
+<div class="block">Sets the namespace of the reprojected feature type associated with this data adapter</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>namespaceURI</code> - - new namespace URI</dd>
@@ -684,8 +646,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <li class="blockList">
 <h4>defaultTypeDataToBinary</h4>
 <pre>protected&nbsp;byte[]&nbsp;defaultTypeDataToBinary()</pre>
-<div class="block">Get feature type default data contained in the reprojected SFT and
- serialize to a binary stream</div>
+<div class="block">Get feature type default data contained in the reprojected SFT and serialize to a binary stream</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#defaultTypeDataToBinary--">defaultTypeDataToBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
@@ -701,14 +662,13 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <li class="blockList">
 <h4>defaultTypeDataFromBinary</h4>
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;defaultTypeDataFromBinary(byte[]&nbsp;bytes)</pre>
-<div class="block">Extract the feature type default data from the binary stream passed in
- and place in the reprojected SFT for this feature data adapter</div>
+<div class="block">Extract the feature type default data from the binary stream passed in and place in the
+ reprojected SFT for this feature data adapter</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#defaultTypeDataFromBinary-byte:A-">defaultTypeDataFromBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>if successful, the reprojected feature type created from the
-         serialized stream</dd>
+<dd>if successful, the reprojected feature type created from the serialized stream</dd>
 </dl>
 </li>
 </ul>
@@ -720,14 +680,12 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <h4>getTypeName</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getTypeName()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getTypeName--">DataTypeAdapter</a></code></span></div>
-<div class="block">Return the data adapter's type name. This also must be unique within a
- datastore.</div>
+<div class="block">Return the data adapter's type name. This also must be unique within a datastore.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getTypeName--">getTypeName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the type name which serves as a unique identifier for this
-         adapter</dd>
+<dd>the type name which serves as a unique identifier for this adapter</dd>
 </dl>
 </li>
 </ul>
@@ -910,9 +868,9 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <pre>public&nbsp;int&nbsp;getPositionOfOrderedField(<a href="../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">DataTypeAdapter</a></code></span></div>
-<div class="block">for efficiency we assume fields have some pre-defined ordering. If the
- field belongs in the common index model it should be one of the first n
- positions where n is the number of fields in the common index model.</div>
+<div class="block">for efficiency we assume fields have some pre-defined ordering. If the field belongs in the
+ common index model it should be one of the first n positions where n is the number of fields in
+ the common index model.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">getPositionOfOrderedField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
@@ -941,8 +899,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/geotime/store/G
 <dd><code>model</code> - the index model</dd>
 <dd><code>position</code> - the position</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the field name, if its part of the common index model, it should
-         be the common field name</dd>
+<dd>the field name, if its part of the common index model, it should be the common field
+         name</dd>
 </dl>
 </li>
 </ul>

@@ -116,10 +116,9 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">IngestTask</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang">Runnable</a></pre>
-<div class="block">An IngestTask is a thread which listens to items from a blocking queue, and
- writes those items to IndexWriter objects obtained from LocalIngestRunData
- (where they are constructed but also cached from the DataStore object). Read
- items until isTerminated == true.</div>
+<div class="block">An IngestTask is a thread which listens to items from a blocking queue, and writes those items to
+ IndexWriter objects obtained from LocalIngestRunData (where they are constructed but also cached
+ from the DataStore object). Read items until isTerminated == true.</div>
 </li>
 </ul>
 </div>
@@ -174,15 +173,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Runnable.
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/IngestTask.html#run--">run</a></span>()</code>
-<div class="block">This function will continue to read from the BlockingQueue until
- isTerminated is true and the queue is empty.</div>
+<div class="block">This function will continue to read from the BlockingQueue until isTerminated is true and the
+ queue is empty.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/IngestTask.html#terminate--">terminate</a></span>()</code>
-<div class="block">This function is called by the thread placing items on the blocking
- queue.</div>
+<div class="block">This function is called by the thread placing items on the blocking queue.</div>
 </td>
 </tr>
 </table>
@@ -235,8 +233,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Runnable.
 <li class="blockList">
 <h4>terminate</h4>
 <pre>public&nbsp;void&nbsp;terminate()</pre>
-<div class="block">This function is called by the thread placing items on the blocking
- queue.</div>
+<div class="block">This function is called by the thread placing items on the blocking queue.</div>
 </li>
 </ul>
 <a name="getId--">
@@ -272,8 +269,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Runnable.
 <li class="blockList">
 <h4>run</h4>
 <pre>public&nbsp;void&nbsp;run()</pre>
-<div class="block">This function will continue to read from the BlockingQueue until
- isTerminated is true and the queue is empty.</div>
+<div class="block">This function will continue to read from the BlockingQueue until isTerminated is true and the
+ queue is empty.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Runnable.html?is-external=true#run--" title="class or interface in java.lang">run</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang">Runnable</a></code></dd>

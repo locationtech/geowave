@@ -216,15 +216,14 @@ implements <a href="../../../../../../org/locationtech/geowave/datastore/hbase/s
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/server/MergingServerOp.html#preScannerOpen-org.apache.hadoop.hbase.client.Scan-">preScannerOpen</a></span>(org.apache.hadoop.hbase.client.Scan&nbsp;scan)</code>
-<div class="block">this is a callback giving an operation that works on scanner scope the
- opportunity to effect the scan</div>
+<div class="block">this is a callback giving an operation that works on scanner scope the opportunity to effect
+ the scan</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/server/MergingServerOp.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -323,12 +322,11 @@ implements <a href="../../../../../../org/locationtech/geowave/datastore/hbase/s
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/datastore/hbase/server/HBaseServerOp.html#nextRow-org.locationtech.geowave.datastore.hbase.server.RowScanner-">nextRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/hbase/server/HBaseServerOp.html" title="interface in org.locationtech.geowave.datastore.hbase.server">HBaseServerOp</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rowScanner</code> - the cells of the current row, as a scanner so that partial
-            cell results within a whole row can be iterated on when a
-            single row exceeds internal HBase limits</dd>
+<dd><code>rowScanner</code> - the cells of the current row, as a scanner so that partial cell results
+        within a whole row can be iterated on when a single row exceeds internal HBase limits</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true to continue iteration - false will end the scan, resulting
-         in no more subsequent rows (most situations should be true)</dd>
+<dd>true to continue iteration - false will end the scan, resulting in no more subsequent
+         rows (most situations should be true)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - e if an exception occurs during iteration</dd>
 </dl>
@@ -385,8 +383,8 @@ implements <a href="../../../../../../org/locationtech/geowave/datastore/hbase/s
 <h4>preScannerOpen</h4>
 <pre>public&nbsp;void&nbsp;preScannerOpen(org.apache.hadoop.hbase.client.Scan&nbsp;scan)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/hbase/server/HBaseServerOp.html#preScannerOpen-org.apache.hadoop.hbase.client.Scan-">HBaseServerOp</a></code></span></div>
-<div class="block">this is a callback giving an operation that works on scanner scope the
- opportunity to effect the scan</div>
+<div class="block">this is a callback giving an operation that works on scanner scope the opportunity to effect
+ the scan</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/datastore/hbase/server/HBaseServerOp.html#preScannerOpen-org.apache.hadoop.hbase.client.Scan-">preScannerOpen</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/hbase/server/HBaseServerOp.html" title="interface in org.locationtech.geowave.datastore.hbase.server">HBaseServerOp</a></code></dd>
@@ -401,14 +399,12 @@ implements <a href="../../../../../../org/locationtech/geowave/datastore/hbase/s
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>

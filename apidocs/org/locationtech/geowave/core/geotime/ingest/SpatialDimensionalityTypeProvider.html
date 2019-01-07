@@ -210,8 +210,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#createOptions--">createOptions</a></span>()</code>
-<div class="block">These are options specific to the type of index being exposed by this SPI
- plugin.</div>
+<div class="block">These are options specific to the type of index being exposed by this SPI plugin.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -221,30 +220,29 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getDimensionalityTypeDescription--">getDimensionalityTypeDescription</a></span>()</code>
-<div class="block">if the registered dimensionality types are listed by a user, this can
- provide a user-friendly description for each</div>
+<div class="block">if the registered dimensionality types are listed by a user, this can provide a user-friendly
+ description for each</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getDimensionalityTypeName--">getDimensionalityTypeName</a></span>()</code>
-<div class="block">This will represent the name for the dimensionality type that is
- registered with the ingest framework and presented as a dimensionality
- type option via the commandline.</div>
+<div class="block">This will represent the name for the dimensionality type that is registered with the ingest
+ framework and presented as a dimensionality type option via the commandline.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getPriority--">getPriority</a></span>()</code>
-<div class="block">If there are multiple acceptable dimensionality types, the one with the
- highest priority will be used</div>
+<div class="block">If there are multiple acceptable dimensionality types, the one with the highest priority will
+ be used</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getRequiredIndexTypes--">getRequiredIndexTypes</a></span>()</code>
-<div class="block">return a set of classes that can be indexed by this index provider, used
- for compatibility checking with an adapter provider</div>
+<div class="block">return a set of classes that can be indexed by this index provider, used for compatibility
+ checking with an adapter provider</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -386,10 +384,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <h4>getDimensionalityTypeName</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDimensionalityTypeName()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeName--">DimensionalityTypeProviderSpi</a></code></span></div>
-<div class="block">This will represent the name for the dimensionality type that is
- registered with the ingest framework and presented as a dimensionality
- type option via the commandline. For consistency, this name is preferably
- lower-case and without spaces, and should uniquely identify the
+<div class="block">This will represent the name for the dimensionality type that is registered with the ingest
+ framework and presented as a dimensionality type option via the commandline. For consistency,
+ this name is preferably lower-case and without spaces, and should uniquely identify the
  dimensionality type as much as possible.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -407,8 +404,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <h4>getDimensionalityTypeDescription</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDimensionalityTypeDescription()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeDescription--">DimensionalityTypeProviderSpi</a></code></span></div>
-<div class="block">if the registered dimensionality types are listed by a user, this can
- provide a user-friendly description for each</div>
+<div class="block">if the registered dimensionality types are listed by a user, this can provide a user-friendly
+ description for each</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeDescription--">getDimensionalityTypeDescription</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in org.locationtech.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
@@ -425,14 +422,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <h4>getPriority</h4>
 <pre>public&nbsp;int&nbsp;getPriority()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getPriority--">DimensionalityTypeProviderSpi</a></code></span></div>
-<div class="block">If there are multiple acceptable dimensionality types, the one with the
- highest priority will be used</div>
+<div class="block">If there are multiple acceptable dimensionality types, the one with the highest priority will
+ be used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getPriority--">getPriority</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in org.locationtech.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a priority value, any integer will work, it is merely important
-         to consider values relative to each other</dd>
+<dd>a priority value, any integer will work, it is merely important to consider values
+         relative to each other</dd>
 </dl>
 </li>
 </ul>
@@ -444,8 +441,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <h4>createOptions</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&nbsp;createOptions()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createOptions--">DimensionalityTypeProviderSpi</a></code></span></div>
-<div class="block">These are options specific to the type of index being exposed by this SPI
- plugin.</div>
+<div class="block">These are options specific to the type of index being exposed by this SPI plugin.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createOptions--">createOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in org.locationtech.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
@@ -487,8 +483,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 <h4>getRequiredIndexTypes</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;[]&nbsp;getRequiredIndexTypes()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getRequiredIndexTypes--">DimensionalityTypeProviderSpi</a></code></span></div>
-<div class="block">return a set of classes that can be indexed by this index provider, used
- for compatibility checking with an adapter provider</div>
+<div class="block">return a set of classes that can be indexed by this index provider, used for compatibility
+ checking with an adapter provider</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getRequiredIndexTypes--">getRequiredIndexTypes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in org.locationtech.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>

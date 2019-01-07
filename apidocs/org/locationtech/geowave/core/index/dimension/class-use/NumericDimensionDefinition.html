@@ -157,22 +157,22 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/LatitudeDefinition.html" title="class in org.locationtech.geowave.core.geotime.index.dimension">LatitudeDefinition</a></span></code>
-<div class="block">The Latitude Definition class is a convenience class used to define a
- dimension which is associated with the Y axis on a Cartesian plane.</div>
+<div class="block">The Latitude Definition class is a convenience class used to define a dimension which is
+ associated with the Y axis on a Cartesian plane.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/LongitudeDefinition.html" title="class in org.locationtech.geowave.core.geotime.index.dimension">LongitudeDefinition</a></span></code>
-<div class="block">The Longitude Definition class is a convenience class used to define a
- dimension which is associated with the X axis on a Cartesian plane.</div>
+<div class="block">The Longitude Definition class is a convenience class used to define a dimension which is
+ associated with the X axis on a Cartesian plane.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TimeDefinition.html" title="class in org.locationtech.geowave.core.geotime.index.dimension">TimeDefinition</a></span></code>
-<div class="block">The Time Definition class is a convenience class used to define a dimension
- which is associated with a time dimension.</div>
+<div class="block">The Time Definition class is a convenience class used to define a dimension which is associated
+ with a time dimension.</div>
 </td>
 </tr>
 </tbody>
@@ -273,8 +273,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/TimeField.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">TimeField</a></span></code>
-<div class="block">This field definition can be used for temporal data (either as a time range
- or a single instant in time).</div>
+<div class="block">This field definition can be used for temporal data (either as a time range or a single instant
+ in time).</div>
 </td>
 </tr>
 </tbody>
@@ -376,9 +376,9 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getOrderedDimensionDefinitions--">getOrderedDimensionDefinitions</a></span>()</code>
-<div class="block">Returns an array of dimension definitions that defines this index
- strategy, the array is in the order that is expected within
- multidimensional numeric data that is passed to this index strategy</div>
+<div class="block">Returns an array of dimension definitions that defines this index strategy, the array is in the
+ order that is expected within multidimensional numeric data that is passed to this index
+ strategy</div>
 </td>
 </tr>
 </tbody>
@@ -411,17 +411,15 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.dimension">BasicDimensionDefinition</a></span></code>
-<div class="block">The Basic Dimension Definition class defines a Space Filling Curve dimension
- as a minimum and maximum range with values linearly interpolated within the
- range.</div>
+<div class="block">The Basic Dimension Definition class defines a Space Filling Curve dimension as a minimum and
+ maximum range with values linearly interpolated within the range.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/UnboundedDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.dimension">UnboundedDimensionDefinition</a></span></code>
-<div class="block">Because space filling curves require an extent (minimum & maximum), the
- unbounded implementation relies on an external binning strategy to translate
- an unbounded variable into bounded bins</div>
+<div class="block">Because space filling curves require an extent (minimum & maximum), the unbounded implementation
+ relies on an external binning strategy to translate an unbounded variable into bounded bins</div>
 </td>
 </tr>
 </tbody>
@@ -441,8 +439,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a></span></code>
-<div class="block">This class wraps a dimension definition with a cardinality (bits of
- precision) on a space filling curve</div>
+<div class="block">This class wraps a dimension definition with a cardinality (bits of precision) on a space filling
+ curve</div>
 </td>
 </tr>
 </tbody>
@@ -514,9 +512,8 @@
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.sfc.data">BinnedNumericDataset</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">BinnedNumericDataset.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/BinnedNumericDataset.html#applyBins-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition:A-">applyBins</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;numericData,
          <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">This method is responsible for translating a query into appropriate
- normalized and binned (if necessary) queries that can be used by the
- underlying index implementation.</div>
+<div class="block">This method is responsible for translating a query into appropriate normalized and binned (if
+ necessary) queries that can be used by the underlying index implementation.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -713,8 +710,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;T extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</span></code>
-<div class="block">This interface provides in addition to the index dimension definition, a way
- to read and write a field and get a field ID</div>
+<div class="block">This interface provides in addition to the index dimension definition, a way to read and write a
+ field and get a field ID</div>
 </td>
 </tr>
 </tbody>

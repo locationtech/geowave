@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</li>
+<li><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.format.gdelt.GDELTIngestFormat</li>
@@ -114,15 +114,15 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>,org.opengis.feature.simple.SimpleFeature&gt;</dd>
+<dd><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="interface in org.locationtech.geowave.core.ingest.spi">IngestFormatPluginProviderSpi</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>,org.opengis.feature.simple.SimpleFeature&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">GDELTIngestFormat</span>
-extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestFormat</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</pre>
-<div class="block">This represents an ingest format plugin provider for GDELT data. It will
- support ingesting directly from a local file system or staging data from a
- local files system and ingesting into GeoWave using a map-reduce job.</div>
+extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestFormat</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</pre>
+<div class="block">This represents an ingest format plugin provider for GDELT data. It will support ingesting
+ directly from a local file system or staging data from a local files system and ingesting into
+ GeoWave using a map-reduce job.</div>
 </li>
 </ul>
 </div>
@@ -187,16 +187,14 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestFormat.html#getIngestFormatDescription--">getIngestFormatDescription</a></span>()</code>
-<div class="block">This is a user-friendly full description of the data format that this
- plugin provider supports.</div>
+<div class="block">This is a user-friendly full description of the data format that this plugin provider supports.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestFormat.html#getIngestFormatName--">getIngestFormatName</a></span>()</code>
-<div class="block">This will represent the name for the format that is registered with the
- ingest framework and presented as a data format option via the
- commandline.</div>
+<div class="block">This will represent the name for the format that is registered with the ingest framework and
+ presented as a data format option via the commandline.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -204,7 +202,7 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestFormat.html#internalGetIngestFormatOptionProviders--">internalGetIngestFormatOptionProviders</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/gdelt/GDELTIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </table>
@@ -276,10 +274,10 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <ul class="blockList">
 <li class="blockList">
 <h4>newPluginInstance</h4>
-<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;&nbsp;newPluginInstance(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</pre>
+<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;&nbsp;newPluginInstance(<a href="../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;options)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestFormat</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#newPluginInstance-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">newPluginInstance</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestFormat</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -291,10 +289,9 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <h4>getIngestFormatName</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getIngestFormatName()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#getIngestFormatName--">IngestFormatPluginProviderSpi</a></code></span></div>
-<div class="block">This will represent the name for the format that is registered with the
- ingest framework and presented as a data format option via the
- commandline. For consistency, this name is preferably lower-case and
- without spaces, and should uniquely identify the data format as much as
+<div class="block">This will represent the name for the format that is registered with the ingest framework and
+ presented as a data format option via the commandline. For consistency, this name is preferably
+ lower-case and without spaces, and should uniquely identify the data format as much as
  possible.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -310,9 +307,9 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <h4>getIngestFormatDescription</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getIngestFormatDescription()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html#getIngestFormatDescription--">IngestFormatPluginProviderSpi</a></code></span></div>
-<div class="block">This is a user-friendly full description of the data format that this
- plugin provider supports. It will be presented to the command-line user
- as help when the registered data formats are listed.</div>
+<div class="block">This is a user-friendly full description of the data format that this plugin provider supports.
+ It will be presented to the command-line user as help when the registered data formats are
+ listed.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The user-friendly full description for this data format</dd>
@@ -328,7 +325,7 @@ extends <a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/A
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;internalGetIngestFormatOptionProviders()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#internalGetIngestFormatOptionProviders--">internalGetIngestFormatOptionProviders</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestFormat</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/WholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">WholeFile</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html#internalGetIngestFormatOptionProviders--">internalGetIngestFormatOptionProviders</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestFormat</a>&lt;<a href="../../../../../org/locationtech/geowave/core/ingest/avro/AvroWholeFile.html" title="class in org.locationtech.geowave.core.ingest.avro">AvroWholeFile</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

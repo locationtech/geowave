@@ -163,8 +163,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html#entryScanned-T-R-">entryScanned</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">T</a>&nbsp;entry,
             <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">R</a>&nbsp;rows)</code>
-<div class="block">This will be called after an entry is successfully scanned with the row
- IDs that were used.</div>
+<div class="block">This will be called after an entry is successfully scanned with the row IDs that were used.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -239,14 +238,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <pre>public&nbsp;void&nbsp;entryScanned(<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">T</a>&nbsp;entry,
                          <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">R</a>&nbsp;rows)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html#entryScanned-T-R-">ScanCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully scanned with the row
- IDs that were used. Deduplication, if performed, occurs prior to calling
- this method.
+<div class="block">This will be called after an entry is successfully scanned with the row IDs that were used.
+ Deduplication, if performed, occurs prior to calling this method.
 
- Without or without de-duplication, row ids are not consolidate, thus each
- entry only contains one row id. If the entry is not de-dupped, then the
- entry this method is called for each duplicate, each with a different row
- id.</div>
+ <p> Without or without de-duplication, row ids are not consolidate, thus each entry only
+ contains one row id. If the entry is not de-dupped, then the entry this method is called for
+ each duplicate, each with a different row id.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html#entryScanned-T-R-">entryScanned</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">R</a> extends <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>

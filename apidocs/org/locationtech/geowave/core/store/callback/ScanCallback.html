@@ -137,8 +137,7 @@ var activeTableTab = "activeTableTab";
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html#entryScanned-T-R-">entryScanned</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="type parameter in ScanCallback">T</a>&nbsp;entry,
             <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="type parameter in ScanCallback">R</a>&nbsp;row)</code>
-<div class="block">This will be called after an entry is successfully scanned with the row
- IDs that were used.</div>
+<div class="block">This will be called after an entry is successfully scanned with the row IDs that were used.</div>
 </td>
 </tr>
 </table>
@@ -166,14 +165,12 @@ var activeTableTab = "activeTableTab";
 <h4>entryScanned</h4>
 <pre>void&nbsp;entryScanned(<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="type parameter in ScanCallback">T</a>&nbsp;entry,
                   <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="type parameter in ScanCallback">R</a>&nbsp;row)</pre>
-<div class="block">This will be called after an entry is successfully scanned with the row
- IDs that were used. Deduplication, if performed, occurs prior to calling
- this method.
+<div class="block">This will be called after an entry is successfully scanned with the row IDs that were used.
+ Deduplication, if performed, occurs prior to calling this method.
 
- Without or without de-duplication, row ids are not consolidate, thus each
- entry only contains one row id. If the entry is not de-dupped, then the
- entry this method is called for each duplicate, each with a different row
- id.</div>
+ <p> Without or without de-duplication, row ids are not consolidate, thus each entry only
+ contains one row id. If the entry is not de-dupped, then the entry this method is called for
+ each duplicate, each with a different row id.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entry</code> - the entry that was ingested</dd>

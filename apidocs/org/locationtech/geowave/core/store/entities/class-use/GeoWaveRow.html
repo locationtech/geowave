@@ -478,10 +478,8 @@
          <a href="../../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&nbsp;scanCallback,
          byte[]&nbsp;fieldSubsetBitmask,
          boolean&nbsp;decodeRow)</code>
-<div class="block">Basic method that decodes a native row Currently overridden by Accumulo
- and HBase; Unification in progress
-
- Override this method if you can't pass in a GeoWaveRow!</div>
+<div class="block">Basic method that decodes a native row Currently overridden by Accumulo and HBase; Unification
+ in progress</div>
 </td>
 </tr>
 </tbody>
@@ -501,8 +499,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html" title="interface in org.locationtech.geowave.core.store.callback">DeleteCallback</a>&lt;T,R extends <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</span></code>
-<div class="block">This interface provides a callback mechanism when deleting a collection of
- entries.</div>
+<div class="block">This interface provides a callback mechanism when deleting a collection of entries.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -537,8 +534,7 @@
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">DeleteCallback.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">entryDeleted</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html" title="type parameter in DeleteCallback">T</a>&nbsp;entry,
             <a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html" title="type parameter in DeleteCallback">R</a>...&nbsp;rows)</code>
-<div class="block">This will be called after an entry is successfully deleted with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully deleted with the row IDs that were used</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -555,8 +551,7 @@
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestCallback.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="type parameter in IngestCallback">T</a>&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 </td>
 </tr>
 </tbody>

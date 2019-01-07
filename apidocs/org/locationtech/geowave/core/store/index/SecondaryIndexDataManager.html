@@ -172,16 +172,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataManager.html#entryDeleted-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryDeleted</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry,
             <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>
-<div class="block">This will be called after an entry is successfully deleted with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully deleted with the row IDs that were used</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataManager.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry,
              <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 </td>
 </tr>
 </table>
@@ -249,8 +247,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <pre>public&nbsp;void&nbsp;entryIngested(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry,
                           <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">IngestCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully ingested with the row IDs that were used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&gt;</code></dd>
@@ -271,8 +268,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <pre>public&nbsp;void&nbsp;entryDeleted(<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry,
                          <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">DeleteCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully deleted with the row
- IDs that were used</div>
+<div class="block">This will be called after an entry is successfully deleted with the row IDs that were used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">entryDeleted</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html" title="interface in org.locationtech.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>

@@ -121,18 +121,15 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">SimpleFeatureOutputReducer</span>
 extends <a href="../../../../../../org/locationtech/geowave/mapreduce/GeoWaveReducer.html" title="class in org.locationtech.geowave.mapreduce">GeoWaveReducer</a></pre>
-<div class="block">Remove duplicate input objects and write out as a simple feature with
- geometry projected onto CRS EPSG:4326. The output feature contains the ID of
- the originating object. The intent is to create a light weight uniform object
- that reuses GeoWave data formats to feed analytic processes.
- 
- If the input object does not require adjustment after de-duplication, use
- <code>org.locationtech.geowave.accumulo.mapreduce.dedupe.GeoWaveDedupReducer</code>
- 
- OutputFeature Attributes, see
- <a href="../../../../../../org/locationtech/geowave/analytic/AnalyticFeature.ClusterFeatureAttribute.html" title="enum in org.locationtech.geowave.analytic"><code>AnalyticFeature.ClusterFeatureAttribute</code></a>
- 
- Context configuration parameters include:</div>
+<div class="block">Remove duplicate input objects and write out as a simple feature with geometry projected onto CRS
+ EPSG:4326. The output feature contains the ID of the originating object. The intent is to create
+ a light weight uniform object that reuses GeoWave data formats to feed analytic processes.
+
+ <p>If the input object does not require adjustment after de-duplication, use <code>org.locationtech.geowave.accumulo.mapreduce.dedupe.GeoWaveDedupReducer</code>
+
+ <p>OutputFeature Attributes, see <a href="../../../../../../org/locationtech/geowave/analytic/AnalyticFeature.ClusterFeatureAttribute.html" title="enum in org.locationtech.geowave.analytic"><code>AnalyticFeature.ClusterFeatureAttribute</code></a>
+
+ <p>Context configuration parameters include:</div>
 </li>
 </ul>
 </div>

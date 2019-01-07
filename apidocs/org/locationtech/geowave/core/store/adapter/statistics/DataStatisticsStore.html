@@ -106,8 +106,8 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">DataStatisticsStore</span></pre>
-<div class="block">This is responsible for persisting data statistics (either in memory or to
- disk depending on the implementation).</div>
+<div class="block">This is responsible for persisting data statistics (either in memory or to disk depending on the
+ implementation).</div>
 </li>
 </ul>
 </div>
@@ -137,8 +137,7 @@ var activeTableTab = "activeTableTab";
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></span>(short&nbsp;adapterId,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
- unique statistic)</div>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a unique statistic)</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -154,8 +153,7 @@ var activeTableTab = "activeTableTab";
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
- unique statistic)</div>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a unique statistic)</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -170,15 +168,14 @@ var activeTableTab = "activeTableTab";
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#getDataStatistics-java.lang.String-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String...-">getDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Get all data statistics from the store by statistics type and extended ID
- prefix</div>
+<div class="block">Get all data statistics from the store by statistics type and extended ID prefix</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html#incorporateStatistics-org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics-">incorporateStatistics</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;statistics)</code>
-<div class="block">Add the statistics to the store, overwriting existing data statistics
- with the aggregation of these statistics and the existing statistics</div>
+<div class="block">Add the statistics to the store, overwriting existing data statistics with the aggregation of
+ these statistics and the existing statistics</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -237,10 +234,9 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>setStatistics</h4>
 <pre>void&nbsp;setStatistics(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;statistics)</pre>
-<div class="block">This will write the statistics to the underlying store. Note that this
- will overwrite whatever the current persisted statistics are with the
- given statistics ID and data adapter ID. Use incorporateStatistics to
- aggregate the statistics with any existing statistics.</div>
+<div class="block">This will write the statistics to the underlying store. Note that this will overwrite whatever
+ the current persisted statistics are with the given statistics ID and data adapter ID. Use
+ incorporateStatistics to aggregate the statistics with any existing statistics.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>statistics</code> - The statistics to write</dd>
@@ -254,8 +250,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>incorporateStatistics</h4>
 <pre>void&nbsp;incorporateStatistics(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&nbsp;statistics)</pre>
-<div class="block">Add the statistics to the store, overwriting existing data statistics
- with the aggregation of these statistics and the existing statistics</div>
+<div class="block">Add the statistics to the store, overwriting existing data statistics with the aggregation of
+ these statistics and the existing statistics</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>statistics</code> - the data statistics</dd>
@@ -275,8 +271,7 @@ var activeTableTab = "activeTableTab";
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapterId</code> - the data adapter ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the list of statistics for the given adapter, empty if it doesn't
-         exist</dd>
+<dd>the list of statistics for the given adapter, empty if it doesn't exist</dd>
 </dl>
 </li>
 </ul>
@@ -291,8 +286,7 @@ var activeTableTab = "activeTableTab";
 <div class="block">Get all data statistics from the store by statistics type</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the list of statistics for the given adapter, empty if it doesn't
-         exist</dd>
+<dd>the list of statistics for the given adapter, empty if it doesn't exist</dd>
 </dl>
 </li>
 </ul>
@@ -305,12 +299,10 @@ var activeTableTab = "activeTableTab";
 <pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;&nbsp;getDataStatistics(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
                                                                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
-<div class="block">Get all data statistics from the store by statistics type and extended ID
- prefix</div>
+<div class="block">Get all data statistics from the store by statistics type and extended ID prefix</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the list of statistics for the given adapter, empty if it doesn't
-         exist</dd>
+<dd>the list of statistics for the given adapter, empty if it doesn't exist</dd>
 </dl>
 </li>
 </ul>
@@ -337,8 +329,7 @@ var activeTableTab = "activeTableTab";
 <pre><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;?,?,?&gt;&gt;&nbsp;getDataStatistics(short&nbsp;adapterId,
                                                                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
-<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
- unique statistic)</div>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a unique statistic)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapterId</code> - The adapter ID for the requested statistics</dd>
@@ -358,8 +349,7 @@ var activeTableTab = "activeTableTab";
                                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedIdPrefix,
                                                                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;?,?&gt;&nbsp;statisticsType,
                                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
-<div class="block">Get statistics by adapter ID and the statistics ID (which will define a
- unique statistic)</div>
+<div class="block">Get statistics by adapter ID and the statistics ID (which will define a unique statistic)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapterId</code> - The adapter ID for the requested statistics</dd>
@@ -384,8 +374,8 @@ var activeTableTab = "activeTableTab";
 <dd><code>adapterId</code> - </dd>
 <dd><code>statisticsId</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a flag indicating whether a statistic had existed with the given
-         IDs and was successfully deleted.</dd>
+<dd>a flag indicating whether a statistic had existed with the given IDs and was
+         successfully deleted.</dd>
 </dl>
 </li>
 </ul>
@@ -405,8 +395,8 @@ var activeTableTab = "activeTableTab";
 <dd><code>adapterId</code> - </dd>
 <dd><code>statisticsId</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a flag indicating whether a statistic had existed with the given
-         IDs and was successfully deleted.</dd>
+<dd>a flag indicating whether a statistic had existed with the given IDs and was
+         successfully deleted.</dd>
 </dl>
 </li>
 </ul>

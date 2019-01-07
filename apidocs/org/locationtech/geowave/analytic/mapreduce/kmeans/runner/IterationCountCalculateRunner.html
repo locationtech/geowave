@@ -116,14 +116,13 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">IterationCountCalculateRunner&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceJobRunner.html" title="interface in org.locationtech.geowave.analytic.mapreduce">MapReduceJobRunner</a></pre>
-<div class="block">Determine the number of iterations in the KMeans Parallel initialization
- step. Each iteration samples a set of K points from the full population. The
- number of iterations is log(psi) where psi is the initial cost of the system
- with a single centroid. Rounding is in effect. To obtain a reasonable sample,
- the minimum is 2.
- 
- This class has been adapted to determine the maximum number of iterations
- required across multiple groups. Each group is its own set of clusters.</div>
+<div class="block">Determine the number of iterations in the KMeans Parallel initialization step. Each iteration
+ samples a set of K points from the full population. The number of iterations is log(psi) where
+ psi is the initial cost of the system with a single centroid. Rounding is in effect. To obtain a
+ reasonable sample, the minimum is 2.
+
+ <p> This class has been adapted to determine the maximum number of iterations required across
+ multiple groups. Each group is its own set of clusters.</div>
 </li>
 </ul>
 </div>

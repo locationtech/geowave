@@ -111,10 +111,9 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public interface <span class="typeNameLabel">Index</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
-<div class="block">An index represents how to efficiently store and retrieve data. The common
- index model allows for easily searching certain fields across all types
- within an index. The numeric index strategy maps real-world values to
- insertion keys and query ranges for efficient range scans within a key-value
+<div class="block">An index represents how to efficiently store and retrieve data. The common index model allows for
+ easily searching certain fields across all types within an index. The numeric index strategy maps
+ real-world values to insertion keys and query ranges for efficient range scans within a key-value
  store.</div>
 </li>
 </ul>
@@ -137,15 +136,15 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getIndexModel--">getIndexModel</a></span>()</code>
-<div class="block">The common index model allows for easily searching certain fields across
- all types within an index.</div>
+<div class="block">The common index model allows for easily searching certain fields across all types within an
+ index.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>
-<div class="block">get the index strategy which maps real-world values to insertion keys and
- query ranges for efficient range scans within a key-value store.</div>
+<div class="block">get the index strategy which maps real-world values to insertion keys and query ranges for
+ efficient range scans within a key-value store.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -197,8 +196,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getIndexStrategy</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;getIndexStrategy()</pre>
-<div class="block">get the index strategy which maps real-world values to insertion keys and
- query ranges for efficient range scans within a key-value store.</div>
+<div class="block">get the index strategy which maps real-world values to insertion keys and query ranges for
+ efficient range scans within a key-value store.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the numeric index strategy</dd>
@@ -212,10 +211,9 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <li class="blockList">
 <h4>getIndexModel</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;getIndexModel()</pre>
-<div class="block">The common index model allows for easily searching certain fields across
- all types within an index. For example, if geometry is a common index
- field, one could ubiquitously search all types within this index
- spatially. This could apply to any field type desired.</div>
+<div class="block">The common index model allows for easily searching certain fields across all types within an
+ index. For example, if geometry is a common index field, one could ubiquitously search all
+ types within this index spatially. This could apply to any field type desired.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the common index model</dd>

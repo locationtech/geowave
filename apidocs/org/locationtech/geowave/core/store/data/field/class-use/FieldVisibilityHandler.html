@@ -178,7 +178,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/AvroFeatureWriter.html" title="class in org.locationtech.geowave.adapter.vector">AvroFeatureWriter</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/GeoWaveAvroFeatureWriter.html" title="class in org.locationtech.geowave.adapter.vector">GeoWaveAvroFeatureWriter</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -189,40 +189,37 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/AvroFeatureDataAdapter.html#AvroFeatureDataAdapter-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-">AvroFeatureDataAdapter</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
-                      <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#FeatureDataAdapter-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-">FeatureDataAdapter</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                   <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
  provided fieldVisiblityHandler</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#FeatureDataAdapter-org.opengis.feature.simple.SimpleFeatureType-java.util.List-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-org.locationtech.geowave.core.store.data.visibility.VisibilityManagement-">FeatureDataAdapter</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;customIndexHandlers,
                   <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler,
                   <a href="../../../../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;defaultVisibilityManagement)</code>
-<div class="block">Constructor<br>
- Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
- provided customIndexHandlers, fieldVisibilityHandler and
- defaultVisibilityManagement</div>
+<div class="block">Constructor<br> Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
+ provided customIndexHandlers, fieldVisibilityHandler and defaultVisibilityManagement</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/FeatureGeometryHandler.html#FeatureGeometryHandler-org.opengis.feature.type.AttributeDescriptor-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-">FeatureGeometryHandler</a></span>(org.opengis.feature.type.AttributeDescriptor&nbsp;geometryAttrDesc,
                       <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;visibilityHandler)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/FeatureTimeRangeHandler.html#FeatureTimeRangeHandler-org.locationtech.geowave.adapter.vector.FeatureAttributeHandler-org.locationtech.geowave.adapter.vector.FeatureAttributeHandler-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-">FeatureTimeRangeHandler</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/FeatureAttributeHandler.html" title="class in org.locationtech.geowave.adapter.vector">FeatureAttributeHandler</a>&nbsp;nativeStartTimeHandler,
                        <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/FeatureAttributeHandler.html" title="class in org.locationtech.geowave.adapter.vector">FeatureAttributeHandler</a>&nbsp;nativeEndTimeHandler,
                        <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;visibilityHandler)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/FeatureTimestampHandler.html#FeatureTimestampHandler-org.opengis.feature.type.AttributeDescriptor-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-">FeatureTimestampHandler</a></span>(org.opengis.feature.type.AttributeDescriptor&nbsp;timestampAttrDesc,
                        <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;visibilityHandler)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/GeoWaveAvroFeatureDataAdapter.html#GeoWaveAvroFeatureDataAdapter-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-">GeoWaveAvroFeatureDataAdapter</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type,
+                             <a href="../../../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;fieldVisiblityHandler)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -278,8 +275,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/visibility/FieldLevelVisibilityHandler.html" title="class in org.locationtech.geowave.adapter.vector.plugin.visibility">FieldLevelVisibilityHandler</a>&lt;T,CommonIndexValue&gt;</span></code>
-<div class="block">Define visibility for a specific attribute using the
- <a href="../../../../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility"><code>VisibilityManagement</code></a>.</div>
+<div class="block">Define visibility for a specific attribute using the <a href="../../../../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility"><code>VisibilityManagement</code></a>.</div>
 </td>
 </tr>
 </tbody>
@@ -619,9 +615,9 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/data/visibility/GlobalVisibilityHandler.html" title="class in org.locationtech.geowave.core.store.data.visibility">GlobalVisibilityHandler</a>&lt;RowType,FieldType&gt;</span></code>
-<div class="block">Basic implementation of a visibility handler where the decision of visibility
- is not determined on a per field or even per row basis, but rather a single
- visibility is globally assigned for every field written.</div>
+<div class="block">Basic implementation of a visibility handler where the decision of visibility is not determined
+ on a per field or even per row basis, but rather a single visibility is globally assigned for
+ every field written.</div>
 </td>
 </tr>
 <tr class="rowColor">

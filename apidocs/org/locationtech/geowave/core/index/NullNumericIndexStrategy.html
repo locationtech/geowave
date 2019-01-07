@@ -116,10 +116,9 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">NullNumericIndexStrategy</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></pre>
-<div class="block">This is a completely empty numeric index strategy representing no dimensions,
- and always returning empty IDs and ranges. It can be used in cases when the
- data is "indexed" by another means, and not using multi-dimensional numeric
- data.</div>
+<div class="block">This is a completely empty numeric index strategy representing no dimensions, and always
+ returning empty IDs and ranges. It can be used in cases when the data is "indexed" by another
+ means, and not using multi-dimensional numeric data.</div>
 </li>
 </ul>
 </div>
@@ -175,23 +174,23 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinateRanges.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinateRanges</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getCoordinateRangesPerDimension-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getCoordinateRangesPerDimension</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange,
                                <a href="../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>
-<div class="block">Return an integer coordinate range in each dimension for the given data
- range plus a bin ID if that dimension is continuous</div>
+<div class="block">Return an integer coordinate range in each dimension for the given data range plus a bin ID if
+ that dimension is continuous</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinates.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinates</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getCoordinatesPerDimension-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">getCoordinatesPerDimension</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
                           <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey)</code>
-<div class="block">Return an integer coordinate in each dimension for the given insertion ID
- plus a bin ID if that dimension is continuous</div>
+<div class="block">Return an integer coordinate in each dimension for the given insertion ID plus a bin ID if that
+ dimension is continuous</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getHighestPrecisionIdRangePerDimension--">getHighestPrecisionIdRangePerDimension</a></span>()</code>
-<div class="block">Get the range/size of a single insertion ID for each dimension at the
- highest precision supported by this index strategy</div>
+<div class="block">* Get the range/size of a single insertion ID for each dimension at the highest precision
+ supported by this index strategy</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -218,15 +217,15 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getOrderedDimensionDefinitions--">getOrderedDimensionDefinitions</a></span>()</code>
-<div class="block">Returns an array of dimension definitions that defines this index
- strategy, the array is in the order that is expected within
- multidimensional numeric data that is passed to this index strategy</div>
+<div class="block">Returns an array of dimension definitions that defines this index strategy, the array is in the
+ order that is expected within multidimensional numeric data that is passed to this index
+ strategy</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getPartitionKeyLength--">getPartitionKeyLength</a></span>()</code>
-<div class="block">Get the offset in bytes before the dimensional index.</div>
+<div class="block">* Get the offset in bytes before the dimensional index.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -263,8 +262,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
 </table>
@@ -323,14 +321,12 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission
- or storage.</div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of
-         the object.</dd>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
 </li>
 </ul>
@@ -398,8 +394,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <h4>getInsertionIds</h4>
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;getInsertionIds(<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getInsertionIds-EntryRangeType-">SortedIndexStrategy</a></code></span></div>
-<div class="block">Returns a list of id's for insertion. The index strategy will use a
- reasonable default for the maximum duplication of insertion IDs</div>
+<div class="block">Returns a list of id's for insertion. The index strategy will use a reasonable default for the
+ maximum duplication of insertion IDs</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getInsertionIds-EntryRangeType-">getInsertionIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
@@ -418,15 +414,14 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <h4>getOrderedDimensionDefinitions</h4>
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;getOrderedDimensionDefinitions()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getOrderedDimensionDefinitions--">NumericIndexStrategy</a></code></span></div>
-<div class="block">Returns an array of dimension definitions that defines this index
- strategy, the array is in the order that is expected within
- multidimensional numeric data that is passed to this index strategy</div>
+<div class="block">Returns an array of dimension definitions that defines this index strategy, the array is in the
+ order that is expected within multidimensional numeric data that is passed to this index
+ strategy</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getOrderedDimensionDefinitions--">getOrderedDimensionDefinitions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the ordered array of dimension definitions that represents this
-         index strategy</dd>
+<dd>the ordered array of dimension definitions that represents this index strategy</dd>
 </dl>
 </li>
 </ul>
@@ -459,12 +454,11 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getRangeForId-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">getRangeForId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>partitionKey</code> - the partition key part of the insertion ID to determine a
-            range for</dd>
+<dd><code>partitionKey</code> - the partition key part of the insertion ID to determine a range for</dd>
 <dd><code>sortKey</code> - the sort key part of the insertion ID to determine a range for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the range that the given insertion ID represents, inclusive on
-         the start and exclusive on the end for the range</dd>
+<dd>the range that the given insertion ID represents, inclusive on the start and exclusive
+         on the end for the range</dd>
 </dl>
 </li>
 </ul>
@@ -476,8 +470,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <h4>getHighestPrecisionIdRangePerDimension</h4>
 <pre>public&nbsp;double[]&nbsp;getHighestPrecisionIdRangePerDimension()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getHighestPrecisionIdRangePerDimension--">NumericIndexStrategy</a></code></span></div>
-<div class="block">Get the range/size of a single insertion ID for each dimension at the
- highest precision supported by this index strategy</div>
+<div class="block">* Get the range/size of a single insertion ID for each dimension at the highest precision
+ supported by this index strategy</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getHighestPrecisionIdRangePerDimension--">getHighestPrecisionIdRangePerDimension</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></dd>
@@ -495,14 +489,14 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinates.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinates</a>&nbsp;getCoordinatesPerDimension(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
                                                               <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinatesPerDimension-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">NumericIndexStrategy</a></code></span></div>
-<div class="block">Return an integer coordinate in each dimension for the given insertion ID
- plus a bin ID if that dimension is continuous</div>
+<div class="block">Return an integer coordinate in each dimension for the given insertion ID plus a bin ID if that
+ dimension is continuous</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinatesPerDimension-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">getCoordinatesPerDimension</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the integer coordinate that the given insertion ID represents and
-         associated bin ID if that dimension is continuous</dd>
+<dd>the integer coordinate that the given insertion ID represents and associated bin ID if
+         that dimension is continuous</dd>
 </dl>
 </li>
 </ul>
@@ -534,8 +528,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <h4>getPartitionKeyLength</h4>
 <pre>public&nbsp;int&nbsp;getPartitionKeyLength()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getPartitionKeyLength--">NumericIndexStrategy</a></code></span></div>
-<div class="block">Get the offset in bytes before the dimensional index. This can accounts
- for tier IDs and bin IDs</div>
+<div class="block">* Get the offset in bytes before the dimensional index. This can accounts for tier IDs and bin
+ IDs</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getPartitionKeyLength--">getPartitionKeyLength</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></dd>
@@ -568,16 +562,16 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinateRanges.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinateRanges</a>[]&nbsp;getCoordinateRangesPerDimension(<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange,
                                                                           <a href="../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinateRangesPerDimension-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">NumericIndexStrategy</a></code></span></div>
-<div class="block">Return an integer coordinate range in each dimension for the given data
- range plus a bin ID if that dimension is continuous</div>
+<div class="block">Return an integer coordinate range in each dimension for the given data range plus a bin ID if
+ that dimension is continuous</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinateRangesPerDimension-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getCoordinateRangesPerDimension</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dataRange</code> - the range to determine the coordinates for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the integer coordinate ranges that the given data ID represents
-         and associated bin IDs if a dimension is continuous</dd>
+<dd>the integer coordinate ranges that the given data ID represents and associated bin IDs
+         if a dimension is continuous</dd>
 </dl>
 </li>
 </ul>

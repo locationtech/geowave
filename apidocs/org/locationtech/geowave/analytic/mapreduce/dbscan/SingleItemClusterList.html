@@ -126,8 +126,8 @@ var activeTableTab = "activeTableTab";
 extends <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">DBScanClusterList</a>
 implements <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/Cluster.html" title="interface in org.locationtech.geowave.analytic.mapreduce.dbscan">Cluster</a></pre>
 <div class="block">Maintains a single hull around a set of points.
- 
- Intended to run in a single thread. Not Thread Safe.</div>
+
+ <p> Intended to run in a single thread. Not Thread Safe.</div>
 </li>
 </ul>
 </div>
@@ -326,9 +326,8 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/mapreduc
 <h4>clear</h4>
 <pre>public&nbsp;void&nbsp;clear()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/DBScanClusterList.html#clear--">DBScanClusterList</a></code></span></div>
-<div class="block">Clear the contents. Invoked when the contents of a cluster are merged
- with another cluster. This method is supportive for GC, not serving any
- algorithm logic.</div>
+<div class="block">Clear the contents. Invoked when the contents of a cluster are merged with another cluster.
+ This method is supportive for GC, not serving any algorithm logic.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html#clear--">clear</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/analytic/nn/NeighborList.html" title="interface in org.locationtech.geowave.analytic.nn">NeighborList</a>&lt;<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/dbscan/ClusterItem.html" title="class in org.locationtech.geowave.analytic.mapreduce.dbscan">ClusterItem</a>&gt;</code></dd>

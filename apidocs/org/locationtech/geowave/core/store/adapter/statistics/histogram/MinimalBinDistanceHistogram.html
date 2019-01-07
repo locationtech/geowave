@@ -118,15 +118,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 implements <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a></pre>
 <div class="block">Dynamic Histogram:
 
- Derived from work for Hive and based on Yael Ben-Haim and Elad Tom-Tov,
- "A streaming parallel decision tree algorithm", J. Machine Learning Research
- 11 (2010), pp. 849--872.
+ <p> Derived from work for Hive and based on Yael Ben-Haim and Elad Tom-Tov, "A streaming parallel
+ decision tree algorithm", J. Machine Learning Research 11 (2010), pp. 849--872.
 
- Note: the paper refers to a bins as a pair (p,m) where p = lower bound and m
- = count. Some of the interpolation treats the pair as a coordinate.
+ <p> Note: the paper refers to a bins as a pair (p,m) where p = lower bound and m = count. Some of
+ the interpolation treats the pair as a coordinate.
 
- Although there are no approximation guarantees, it appears to work well with
- adequate data and a large number of histogram bins.</div>
+ <p> Although there are no approximation guarantees, it appears to work well with adequate data
+ and a large number of histogram bins.</div>
 </li>
 </ul>
 </div>
@@ -376,10 +375,9 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <li class="blockList">
 <h4>add</h4>
 <pre>public&nbsp;void&nbsp;add(double&nbsp;v)</pre>
-<div class="block">Adds a new data point to the histogram approximation. Make sure you have
- called either allocate() or merge() first. This method implements
- Algorithm #1 from Ben-Haim and Tom-Tov,
- "A Streaming Parallel Decision Tree Algorithm", JMLR 2010.</div>
+<div class="block">Adds a new data point to the histogram approximation. Make sure you have called either
+ allocate() or merge() first. This method implements Algorithm #1 from Ben-Haim and Tom-Tov, "A
+ Streaming Parallel Decision Tree Algorithm", JMLR 2010.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#add-double-">add</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a></code></dd>
@@ -418,14 +416,13 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <li class="blockList">
 <h4>quantile</h4>
 <pre>public&nbsp;double&nbsp;quantile(double&nbsp;q)</pre>
-<div class="block">Gets an approximate quantile value from the current histogram. Some
- popular quantiles are 0.5 (median), 0.95, and 0.98.</div>
+<div class="block">Gets an approximate quantile value from the current histogram. Some popular quantiles are 0.5
+ (median), 0.95, and 0.98.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#quantile-double-">quantile</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>q</code> - The requested quantile, must be strictly within the range
-            (0,1).</dd>
+<dd><code>q</code> - The requested quantile, must be strictly within the range (0,1).</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The quantile value.</dd>
 </dl>

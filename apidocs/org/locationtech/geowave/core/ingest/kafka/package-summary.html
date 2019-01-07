@@ -83,17 +83,15 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/AvroKafkaEncoder.html" title="class in org.locationtech.geowave.core.ingest.kafka">AvroKafkaEncoder</a>&lt;T extends org.apache.avro.specific.SpecificRecordBase&gt;</td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/IngestFromKafkaDriver.html" title="class in org.locationtech.geowave.core.ingest.kafka">IngestFromKafkaDriver</a></td>
 <td class="colLast">
-<div class="block">Default encoder used by Kafka to serialize Avro generated Java object to
- binary.</div>
+<div class="block">This class executes the ingestion of intermediate data from a Kafka topic into GeoWave.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/IngestFromKafkaDriver.html" title="class in org.locationtech.geowave.core.ingest.kafka">IngestFromKafkaDriver</a></td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaAvroEncoder.html" title="class in org.locationtech.geowave.core.ingest.kafka">KafkaAvroEncoder</a>&lt;T extends org.apache.avro.specific.SpecificRecordBase&gt;</td>
 <td class="colLast">
-<div class="block">This class executes the ingestion of intermediate data from a Kafka topic
- into GeoWave.</div>
+<div class="block">Default encoder used by Kafka to serialize Avro generated Java object to binary.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -111,8 +109,7 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.kafka">KafkaIngestRunData</a></td>
 <td class="colLast">
-<div class="block">A class to hold intermediate run data that must be used throughout the life
- of an ingest process.</div>
+<div class="block">A class to hold intermediate run data that must be used throughout the life of an ingest process.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -122,15 +119,15 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageKafkaData.html" title="class in org.locationtech.geowave.core.ingest.kafka">StageKafkaData</a>&lt;T extends org.apache.avro.specific.SpecificRecordBase&gt;</td>
 <td class="colLast">
-<div class="block">A class to hold intermediate stage data that must be used throughout the life
- of the Kafka stage process.</div>
+<div class="block">A class to hold intermediate stage data that must be used throughout the life of the Kafka stage
+ process.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageToKafkaDriver.html" title="class in org.locationtech.geowave.core.ingest.kafka">StageToKafkaDriver</a>&lt;T extends org.apache.avro.specific.SpecificRecordBase&gt;</td>
 <td class="colLast">
-<div class="block">This class actually executes the staging of data to a Kafka topic based on
- the available type plugin providers that are discovered through SPI.</div>
+<div class="block">This class actually executes the staging of data to a Kafka topic based on the available type
+ plugin providers that are discovered through SPI.</div>
 </td>
 </tr>
 </tbody>
@@ -147,8 +144,8 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/PropertyReference.html" title="annotation in org.locationtech.geowave.core.ingest.kafka">PropertyReference</a></td>
 <td class="colLast">
-<div class="block">This is just a hack to get access to the property name that we need to
- overwrite in the kafka config property file.</div>
+<div class="block">This is just a hack to get access to the property name that we need to overwrite in the kafka
+ config property file.</div>
 </td>
 </tr>
 </tbody>

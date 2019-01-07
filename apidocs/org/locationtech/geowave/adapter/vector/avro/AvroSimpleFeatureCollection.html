@@ -161,7 +161,7 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/FeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">FeatureDefinition</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroFeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroFeatureDefinition</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#featureType">featureType</a></span></code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </td>
@@ -171,7 +171,7 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#SCHEMA:D">SCHEMA$</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroAttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroAttributeValues</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#simpleFeatureCollection">simpleFeatureCollection</a></span></code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </td>
@@ -196,8 +196,8 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#AvroSimpleFeatureCollection-org.locationtech.geowave.adapter.vector.avro.FeatureDefinition-java.util.List-">AvroSimpleFeatureCollection</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/FeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">FeatureDefinition</a>&nbsp;featureType,
-                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues</a>&gt;&nbsp;simpleFeatureCollection)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#AvroSimpleFeatureCollection-org.locationtech.geowave.adapter.vector.avro.AvroFeatureDefinition-java.util.List-">AvroSimpleFeatureCollection</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroFeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroFeatureDefinition</a>&nbsp;featureType,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroAttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroAttributeValues</a>&gt;&nbsp;simpleFeatureCollection)</code>
 <div class="block">All-args constructor.</div>
 </td>
 </tr>
@@ -225,7 +225,7 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#getClassSchema--">getClassSchema</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/FeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">FeatureDefinition</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroFeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroFeatureDefinition</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#getFeatureType--">getFeatureType</a></span>()</code>
 <div class="block">Gets the value of the 'featureType' field.</div>
 </td>
@@ -235,7 +235,7 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#getSchema--">getSchema</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroAttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroAttributeValues</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#getSimpleFeatureCollection--">getSimpleFeatureCollection</a></span>()</code>
 <div class="block">Gets the value of the 'simpleFeatureCollection' field.</div>
 </td>
@@ -249,15 +249,13 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#newBuilder-org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection.Builder-">newBuilder</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection.Builder</a>&nbsp;other)</code>
-<div class="block">Creates a new AvroSimpleFeatureCollection RecordBuilder by copying an
- existing Builder</div>
+<div class="block">Creates a new AvroSimpleFeatureCollection RecordBuilder by copying an existing Builder</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#newBuilder-org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection-">newBuilder</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection</a>&nbsp;other)</code>
-<div class="block">Creates a new AvroSimpleFeatureCollection RecordBuilder by copying an
- existing AvroSimpleFeatureCollection instance</div>
+<div class="block">Creates a new AvroSimpleFeatureCollection RecordBuilder by copying an existing AvroSimpleFeatureCollection instance</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -267,13 +265,13 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#setFeatureType-org.locationtech.geowave.adapter.vector.avro.FeatureDefinition-">setFeatureType</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/FeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">FeatureDefinition</a>&nbsp;value)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#setFeatureType-org.locationtech.geowave.adapter.vector.avro.AvroFeatureDefinition-">setFeatureType</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroFeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroFeatureDefinition</a>&nbsp;value)</code>
 <div class="block">Sets the value of the 'featureType' field.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#setSimpleFeatureCollection-java.util.List-">setSimpleFeatureCollection</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues</a>&gt;&nbsp;value)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html#setSimpleFeatureCollection-java.util.List-">setSimpleFeatureCollection</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroAttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroAttributeValues</a>&gt;&nbsp;value)</code>
 <div class="block">Sets the value of the 'simpleFeatureCollection' field.</div>
 </td>
 </tr>
@@ -322,7 +320,7 @@ implements org.apache.avro.specific.SpecificRecord</pre>
 <li class="blockList">
 <h4>featureType</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/FeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">FeatureDefinition</a> featureType</pre>
+public&nbsp;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroFeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroFeatureDefinition</a> featureType</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </li>
 </ul>
@@ -333,7 +331,7 @@ public&nbsp;<a href="../../../../../../org/locationtech/geowave/adapter/vector/a
 <li class="blockList">
 <h4>simpleFeatureCollection</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
-public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues</a>&gt; simpleFeatureCollection</pre>
+public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroAttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroAttributeValues</a>&gt; simpleFeatureCollection</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </li>
 </ul>
@@ -352,19 +350,19 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
 <li class="blockList">
 <h4>AvroSimpleFeatureCollection</h4>
 <pre>public&nbsp;AvroSimpleFeatureCollection()</pre>
-<div class="block">Default constructor. Note that this does not initialize fields to their
- default values from the schema. If that is desired then one should use
- <code>newBuilder()</code>.</div>
+<div class="block">Default constructor.  Note that this does not initialize fields
+ to their default values from the schema.  If that is desired then
+ one should use <code>newBuilder()</code>.</div>
 </li>
 </ul>
-<a name="AvroSimpleFeatureCollection-org.locationtech.geowave.adapter.vector.avro.FeatureDefinition-java.util.List-">
+<a name="AvroSimpleFeatureCollection-org.locationtech.geowave.adapter.vector.avro.AvroFeatureDefinition-java.util.List-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AvroSimpleFeatureCollection</h4>
-<pre>public&nbsp;AvroSimpleFeatureCollection(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/FeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">FeatureDefinition</a>&nbsp;featureType,
-                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues</a>&gt;&nbsp;simpleFeatureCollection)</pre>
+<pre>public&nbsp;AvroSimpleFeatureCollection(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroFeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroFeatureDefinition</a>&nbsp;featureType,
+                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroAttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroAttributeValues</a>&gt;&nbsp;simpleFeatureCollection)</pre>
 <div class="block">All-args constructor.</div>
 </li>
 </ul>
@@ -437,17 +435,17 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>getFeatureType</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/FeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">FeatureDefinition</a>&nbsp;getFeatureType()</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroFeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroFeatureDefinition</a>&nbsp;getFeatureType()</pre>
 <div class="block">Gets the value of the 'featureType' field.</div>
 </li>
 </ul>
-<a name="setFeatureType-org.locationtech.geowave.adapter.vector.avro.FeatureDefinition-">
+<a name="setFeatureType-org.locationtech.geowave.adapter.vector.avro.AvroFeatureDefinition-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setFeatureType</h4>
-<pre>public&nbsp;void&nbsp;setFeatureType(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/FeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">FeatureDefinition</a>&nbsp;value)</pre>
+<pre>public&nbsp;void&nbsp;setFeatureType(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroFeatureDefinition.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroFeatureDefinition</a>&nbsp;value)</pre>
 <div class="block">Sets the value of the 'featureType' field.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -461,7 +459,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>getSimpleFeatureCollection</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues</a>&gt;&nbsp;getSimpleFeatureCollection()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroAttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroAttributeValues</a>&gt;&nbsp;getSimpleFeatureCollection()</pre>
 <div class="block">Gets the value of the 'simpleFeatureCollection' field.</div>
 </li>
 </ul>
@@ -471,7 +469,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
 <ul class="blockList">
 <li class="blockList">
 <h4>setSimpleFeatureCollection</h4>
-<pre>public&nbsp;void&nbsp;setSimpleFeatureCollection(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AttributeValues</a>&gt;&nbsp;value)</pre>
+<pre>public&nbsp;void&nbsp;setSimpleFeatureCollection(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroAttributeValues.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroAttributeValues</a>&gt;&nbsp;value)</pre>
 <div class="block">Sets the value of the 'simpleFeatureCollection' field.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -496,8 +494,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
 <li class="blockList">
 <h4>newBuilder</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection.Builder</a>&nbsp;newBuilder(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection.Builder</a>&nbsp;other)</pre>
-<div class="block">Creates a new AvroSimpleFeatureCollection RecordBuilder by copying an
- existing Builder</div>
+<div class="block">Creates a new AvroSimpleFeatureCollection RecordBuilder by copying an existing Builder</div>
 </li>
 </ul>
 <a name="newBuilder-org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection-">
@@ -507,8 +504,7 @@ public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.htm
 <li class="blockList">
 <h4>newBuilder</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.Builder.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection.Builder</a>&nbsp;newBuilder(<a href="../../../../../../org/locationtech/geowave/adapter/vector/avro/AvroSimpleFeatureCollection.html" title="class in org.locationtech.geowave.adapter.vector.avro">AvroSimpleFeatureCollection</a>&nbsp;other)</pre>
-<div class="block">Creates a new AvroSimpleFeatureCollection RecordBuilder by copying an
- existing AvroSimpleFeatureCollection instance</div>
+<div class="block">Creates a new AvroSimpleFeatureCollection RecordBuilder by copying an existing AvroSimpleFeatureCollection instance</div>
 </li>
 </ul>
 </li>

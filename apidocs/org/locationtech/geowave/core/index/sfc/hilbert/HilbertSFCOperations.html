@@ -106,11 +106,10 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">HilbertSFCOperations</span></pre>
-<div class="block">This interface is used to abstract the details of operations used by the
- hilbert space filling curve, in particular to enable both primitive-based
- operations for performance (in cases where the bits of precision can be
- adequately represented by primitives) and non-primitive based operations for
- unbounded bits of precision.</div>
+<div class="block">This interface is used to abstract the details of operations used by the hilbert space filling
+ curve, in particular to enable both primitive-based operations for performance (in cases where
+ the bits of precision can be adequately represented by primitives) and non-primitive based
+ operations for unbounded bits of precision.</div>
 </li>
 </ul>
 </div>
@@ -134,8 +133,7 @@ var activeTableTab = "activeTableTab";
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#convertFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">convertFromHilbert</a></span>(byte[]&nbsp;hilbertValue,
                   com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                   <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Convert the single SFC value to the ranges of raw values that it
- represents</div>
+<div class="block">Convert the single SFC value to the ranges of raw values that it represents</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -155,22 +153,21 @@ var activeTableTab = "activeTableTab";
               int&nbsp;maxFilteredIndexedRanges,
               boolean&nbsp;removeVacuum,
               boolean&nbsp;overInclusiveOnEdge)</code>
-<div class="block">Decompose the raw range per dimension values into an optimal set of
- compact Hilbert SFC ranges</div>
+<div class="block">Decompose the raw range per dimension values into an optimal set of compact Hilbert SFC ranges</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#getEstimatedIdCount-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getEstimatedIdCount</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data,
                    <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Get a quick (minimal complexity calculation) estimate of the total row
- IDs a particular data would require to fully cover with SFC values</div>
+<div class="block">Get a quick (minimal complexity calculation) estimate of the total row IDs a particular data
+ would require to fully cover with SFC values</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#getInsertionIdRangePerDimension-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">getInsertionIdRangePerDimension</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Get the range/size of a single insertion ID for each dimension</div>
+<div class="block">* Get the range/size of a single insertion ID for each dimension</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -178,8 +175,7 @@ var activeTableTab = "activeTableTab";
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#indicesFromHilbert-byte:A-com.google.uzaygezen.core.CompactHilbertCurve-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition:A-">indicesFromHilbert</a></span>(byte[]&nbsp;hilbertValue,
                   com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                   <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
-<div class="block">Convert the single SFC value to the per dimension SFC coordinates that it
- represents</div>
+<div class="block">Convert the single SFC value to the per dimension SFC coordinates that it represents</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -194,8 +190,8 @@ var activeTableTab = "activeTableTab";
               double&nbsp;maxValue,
               int&nbsp;dimension,
               <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)</code>
-<div class="block">Determines the coordinates per dimension of rows given a
- multi-dimensional range will span within this space filling curve</div>
+<div class="block">Determines the coordinates per dimension of rows given a multi-dimensional range will span
+ within this space filling curve</div>
 </td>
 </tr>
 </table>
@@ -241,8 +237,7 @@ var activeTableTab = "activeTableTab";
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>values</code> - a raw value per dimension in order</dd>
 <dd><code>compactHilbertCurve</code> - the compact Hilbert curve to use for the conversion</dd>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw
-            values</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw values</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the Hilbert SFC value</dd>
 </dl>
@@ -257,18 +252,15 @@ var activeTableTab = "activeTableTab";
 <pre><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;convertFromHilbert(byte[]&nbsp;hilbertValue,
                                                com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                                                <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
-<div class="block">Convert the single SFC value to the ranges of raw values that it
- represents</div>
+<div class="block">Convert the single SFC value to the ranges of raw values that it represents</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>hilbertValue</code> - the computed hilbert value to invert back to native
-            coordinates</dd>
+<dd><code>hilbertValue</code> - the computed hilbert value to invert back to native coordinates</dd>
 <dd><code>compactHilbertCurve</code> - the compact Hilbert curve to use for the conversion</dd>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw
-            values</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw values</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the ranges of values that the hilbert represents, inclusive on
-         start and exclusive on end for each range</dd>
+<dd>the ranges of values that the hilbert represents, inclusive on start and exclusive on
+         end for each range</dd>
 </dl>
 </li>
 </ul>
@@ -281,19 +273,16 @@ var activeTableTab = "activeTableTab";
 <pre>long[]&nbsp;indicesFromHilbert(byte[]&nbsp;hilbertValue,
                           com.google.uzaygezen.core.CompactHilbertCurve&nbsp;compactHilbertCurve,
                           <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
-<div class="block">Convert the single SFC value to the per dimension SFC coordinates that it
- represents</div>
+<div class="block">Convert the single SFC value to the per dimension SFC coordinates that it represents</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>hilbertValue</code> - the computed hilbert value to invert back to integer
-            coordinates per dimension</dd>
+<dd><code>hilbertValue</code> - the computed hilbert value to invert back to integer coordinates per
+        dimension</dd>
 <dd><code>compactHilbertCurve</code> - the compact Hilbert curve to use for the conversion</dd>
 <dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to determine the bits of
-            precision per dimension that is expected in the compact
-            hilbert curve</dd>
+        precision per dimension that is expected in the compact hilbert curve</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the integer coordinate value per dimension that the given hilbert
-         value represents</dd>
+<dd>the integer coordinate value per dimension that the given hilbert value represents</dd>
 </dl>
 </li>
 </ul>
@@ -310,19 +299,15 @@ var activeTableTab = "activeTableTab";
                                   int&nbsp;maxFilteredIndexedRanges,
                                   boolean&nbsp;removeVacuum,
                                   boolean&nbsp;overInclusiveOnEdge)</pre>
-<div class="block">Decompose the raw range per dimension values into an optimal set of
- compact Hilbert SFC ranges</div>
+<div class="block">Decompose the raw range per dimension values into an optimal set of compact Hilbert SFC ranges</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rangePerDimension</code> - the raw range per dimension</dd>
 <dd><code>compactHilbertCurve</code> - the compact Hilbert curve to use for the conversion</dd>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw
-            values</dd>
-<dd><code>totalPrecision</code> - the total precision of the dimension definitions, for
-            convenience</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw values</dd>
+<dd><code>totalPrecision</code> - the total precision of the dimension definitions, for convenience</dd>
 <dd><code>maxFilteredIndexedRanges</code> - the maximum number of ranges, if < 0 it will be unlimited</dd>
-<dd><code>removeVacuum</code> - a flag to pass to the compact hilbert curve range
-            decomposition</dd>
+<dd><code>removeVacuum</code> - a flag to pass to the compact hilbert curve range decomposition</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the optimal SFC range decomposition for the raw-valued ranges</dd>
 </dl>
@@ -336,16 +321,14 @@ var activeTableTab = "activeTableTab";
 <h4>getEstimatedIdCount</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;getEstimatedIdCount(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data,
                                <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
-<div class="block">Get a quick (minimal complexity calculation) estimate of the total row
- IDs a particular data would require to fully cover with SFC values</div>
+<div class="block">Get a quick (minimal complexity calculation) estimate of the total row IDs a particular data
+ would require to fully cover with SFC values</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the dataset</dd>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw
-            values</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw values</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the total estimated row IDs the data would require to fully cover
-         with SFC values</dd>
+<dd>the total estimated row IDs the data would require to fully cover with SFC values</dd>
 </dl>
 </li>
 </ul>
@@ -360,19 +343,17 @@ var activeTableTab = "activeTableTab";
                       int&nbsp;dimension,
                       <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)
                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></pre>
-<div class="block">Determines the coordinates per dimension of rows given a
- multi-dimensional range will span within this space filling curve</div>
+<div class="block">Determines the coordinates per dimension of rows given a multi-dimensional range will span
+ within this space filling curve</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>minValue</code> - the minimum value</dd>
 <dd><code>maxValue</code> - the maximum value</dd>
 <dd><code>dimension</code> - the ordinal of the dimension on this space filling curve</dd>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw
-            values</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to normalize the raw values</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the range of coordinates in each dimension (ie. [0][0] would be
-         the min coordinate of the first dimension and [0][1] would be the
-         max coordinate of the first dimension)</dd>
+<dd>the range of coordinates in each dimension (ie. [0][0] would be the min coordinate of
+         the first dimension and [0][1] would be the max coordinate of the first dimension)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code></dd>
 </dl>
@@ -385,11 +366,11 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>getInsertionIdRangePerDimension</h4>
 <pre>double[]&nbsp;getInsertionIdRangePerDimension(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
-<div class="block">Get the range/size of a single insertion ID for each dimension</div>
+<div class="block">* Get the range/size of a single insertion ID for each dimension</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to calculate the range
-            of each insertion ID</dd>
+<dd><code>dimensionDefinitions</code> - a set of dimension definitions to use to calculate the range of
+        each insertion ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the range of a single insertion ID for each dimension</dd>
 </dl>
