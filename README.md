@@ -4,18 +4,18 @@
 
 ## About  
 
-| Continuous Integration | Code Coverage | Static Analysis | License | Chat |            
+| Continuous Integration | License | Chat |            
 |:------------------:|:-------------:|:---------------:|:-------:|:----:|
-| <a href="https://travis-ci.org/locationtech/geowave/branches"><img alt="Travis-CI test status" src="https://travis-ci.org/locationtech/geowave.svg?branch=master"/></a> | <a href='https://coveralls.io/r/locationtech/?branch=master'><img src='https://coveralls.io/repos/locationtech/geowave/badge.svg?branch=master' alt='Coverage Status' /></a> | <a href="https://scan.coverity.com/projects/3371"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/3371/badge.svg"/></a> | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) | [![Join the chat at https://gitter.im/locationtech/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locationtech/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
+| <a href="https://travis-ci.org/locationtech/geowave/branches"><img alt="Travis-CI test status" src="https://travis-ci.org/locationtech/geowave.svg?branch=master"/></a> | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) | [![Join the chat at https://gitter.im/locationtech/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locationtech/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
 
 GeoWave is an open source set of software that:
 
 * Capabilities
-  * Adds multi-dimensional indexing capability to [Apache Accumulo](https://accumulo.apache.org) and [Apache HBase](https://hbase.apache.org)
-  * Adds support for geographic objects and geospatial operators to [Apache Accumulo](https://accumulo.apache.org) and [Apache HBase](https://hbase.apache.org)
+  * Adds multi-dimensional indexing capability to key-value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](http://cassandra.apache.org/), [AmazonDynamoDB](https://aws.amazon.com/dynamodb/), [Cloud BigTable](https://cloud.google.com/bigtable/), [Redis](https://redis.io/), and [RocksDB](https://rocksdb.org/))
+  * Adds support for geographic objects and geospatial operators to these stores
   * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 * Geospatial software plugins
-  * [GeoServer](http://geoserver.org/) plugin to allow geospatial data in Accumulo to be shared and visualized via OGC standard services
+  * [GeoServer](http://geoserver.org/) plugin to allow geospatial data in various key-value stores to be shared and visualized via OGC standard services
   * [PDAL](http://www.pdal.io/) plugin for working with point cloud data
   * [Mapnik](http://mapnik.org/) plugin for generating map tiles and generally making good looking maps. 
   
@@ -59,7 +59,7 @@ We work to maintain a N and N-1 tested and supported version pace for the follow
 
 | Geoserver | Geotools | Accumulo | HBase | Hadoop | PDAL | Mapnik | Java |
 |:---------:|:--------:|:--------:|:-----:|:------:|:----:|:------:|:----:|
-| 2.12.x,2.13.x | 18.x,19.x | [1.7.x,1.9.x] | [1.1.x,1.4.x] | 2.x | 0.9.9 |  3.x | Java8 |
+| 2.14.x | 20.x | [1.7.x,1.9.x] | [1.1.x,1.4.x] | 2.x | 0.9.9 |  3.x | Java8 |
 
 * [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
 * [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/INSTALL.html) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html) should both be installed on Geoserver for GeoWave versions 0.9.2.1 and below (licensing prohibits us redistributing)
