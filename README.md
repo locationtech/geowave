@@ -5,7 +5,7 @@
 ## About  
 
 | Continuous Integration | License | Chat |            
-|:------------------:|:-------------:|:---------------:|:-------:|:----:|
+|:------------------:|:-------:|:----:| 
 | <a href="https://travis-ci.org/locationtech/geowave/branches"><img alt="Travis-CI test status" src="https://travis-ci.org/locationtech/geowave.svg?branch=master"/></a> | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) | [![Join the chat at https://gitter.im/locationtech/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locationtech/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
 
 GeoWave is an open source set of software that:
