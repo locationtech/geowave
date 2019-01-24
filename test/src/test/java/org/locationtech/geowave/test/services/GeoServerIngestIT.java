@@ -78,7 +78,12 @@ public class GeoServerIngestIT extends BaseServiceIT {
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB},
+      // GeoServer and this thread have different class
+      // loaders so the RocksDB "singleton" instances are not shared in
+      // this JVM and GeoServer, for file-based geoserver data sources, using the REST "importer"
+      // will be more handy than adding a layer by referencing the local file system
+      // GeoWaveStoreType.ROCKSDB
+      },
       namespace = testName)
   protected DataStorePluginOptions dataStorePluginOptions;
 
@@ -257,7 +262,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             360,
             null);
 
-    BufferedImage ref = ImageIO.read(new File(REFERENCE_WMS_IMAGE_PATH));
+    final BufferedImage ref = ImageIO.read(new File(REFERENCE_WMS_IMAGE_PATH));
 
     // being a little lenient because of differences in O/S rendering
     TestUtils.testTileAgainstReference(biDirectRender, ref, 0, 0.07);

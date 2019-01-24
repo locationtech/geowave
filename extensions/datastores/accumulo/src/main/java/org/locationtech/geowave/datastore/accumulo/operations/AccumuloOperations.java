@@ -522,8 +522,12 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       return Collections.emptyIterator();
     }
     final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
-    try (final BatchScanner batchScanner =
-        createBatchScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations)) {
+
+    // to have backwards compatibility before 1.8.0 we can assume BaseScanner is autocloseable
+    BatchScanner batchScanner = null;
+    try {
+      batchScanner =
+          createBatchScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations);
       batchScanner.setRanges(
           Arrays.stream(rows).map(r -> Range.exact(new Text(r))).collect(Collectors.toList()));
       batchScanner.fetchColumnFamily(new Text(family));
@@ -540,6 +544,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
               false)).iterator();
     } catch (final TableNotFoundException e) {
       LOGGER.error("unable to find data index table", e);
+    } finally {
+      if (batchScanner != null) {
+        batchScanner.close();
+      }
     }
     return Collections.emptyIterator();
   }
@@ -1608,7 +1616,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   }
 
   public void deleteRowsFromDataIndex(final byte[][] rows, final short adapterId) {
-    try (final BatchDeleter deleter = createBatchDeleter(DataIndexUtils.DATA_ID_INDEX.getName())) {
+    // to have backwards compatibility before 1.8.0 we can assume BaseScanner is autocloseable
+    BatchDeleter deleter = null;
+    try {
+      deleter = createBatchDeleter(DataIndexUtils.DATA_ID_INDEX.getName());
       deleter.fetchColumnFamily(new Text(ByteArrayUtils.shortToString(adapterId)));
       deleter.setRanges(
           Arrays.stream(rows).map(r -> Range.exact(new Text(r))).collect(Collectors.toList()));
@@ -1616,6 +1627,10 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       deleter.delete();
     } catch (final TableNotFoundException | MutationsRejectedException e) {
       LOGGER.warn("Unable to delete from data index", e);
+    } finally {
+      if (deleter != null) {
+        deleter.close();
+      }
     }
   }
 }

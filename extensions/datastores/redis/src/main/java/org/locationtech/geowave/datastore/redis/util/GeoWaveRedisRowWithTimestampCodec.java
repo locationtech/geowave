@@ -85,9 +85,31 @@ public class GeoWaveRedisRowWithTimestampCodec extends BaseCodec {
     }
   };
   private final boolean visibilityEnabled;
+  private final ClassLoader classLoader;
 
   private GeoWaveRedisRowWithTimestampCodec(final boolean visibilityEnabled) {
+    this(null, visibilityEnabled);
+  }
+
+  public GeoWaveRedisRowWithTimestampCodec(
+      final ClassLoader classLoader,
+      final GeoWaveRedisRowWithTimestampCodec codec) {
+    this(classLoader, codec.visibilityEnabled);
+  }
+
+  private GeoWaveRedisRowWithTimestampCodec(
+      final ClassLoader classLoader,
+      final boolean visibilityEnabled) {
+    this.classLoader = classLoader;
     this.visibilityEnabled = visibilityEnabled;
+  }
+
+  @Override
+  public ClassLoader getClassLoader() {
+    if (classLoader != null) {
+      return classLoader;
+    }
+    return super.getClassLoader();
   }
 
   @Override

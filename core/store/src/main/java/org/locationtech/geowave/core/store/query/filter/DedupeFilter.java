@@ -45,8 +45,13 @@ public class DedupeFilter implements QueryFilter {
       // and this is only intended to support a single index
       return true;
     }
-    final short adapterId = persistenceEncoding.getInternalAdapterId();
-    final ByteArray dataId = new ByteArray(persistenceEncoding.getDataId());
+
+    return applyDedupeFilter(
+        persistenceEncoding.getInternalAdapterId(),
+        new ByteArray(persistenceEncoding.getDataId()));
+  }
+
+  public boolean applyDedupeFilter(final short adapterId, final ByteArray dataId) {
     synchronized (adapterIdToVisitedDataIdMap) {
       Set<ByteArray> visitedDataIds = adapterIdToVisitedDataIdMap.get(adapterId);
       if (visitedDataIds == null) {

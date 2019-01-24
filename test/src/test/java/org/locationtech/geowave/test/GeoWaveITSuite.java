@@ -30,6 +30,7 @@ import org.locationtech.geowave.test.mapreduce.DBScanIT;
 import org.locationtech.geowave.test.mapreduce.GeoWaveNNIT;
 import org.locationtech.geowave.test.query.AttributesSubsetQueryIT;
 import org.locationtech.geowave.test.query.PolygonDataIdQueryIT;
+import org.locationtech.geowave.test.query.SecondaryIndexIT;
 import org.locationtech.geowave.test.query.SpatialTemporalQueryIT;
 import org.locationtech.geowave.test.services.ConfigServicesIT;
 import org.locationtech.geowave.test.services.FileUploadIT;
@@ -54,6 +55,7 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
     GeoWaveVectorSerializationIT.class,
     BasicKafkaIT.class,
     BasicMapReduceIT.class,
+    SecondaryIndexIT.class,
     // // for now tests are taking too long in travis and landsatIT is a long
     // test
     // // LandsatIT.class,

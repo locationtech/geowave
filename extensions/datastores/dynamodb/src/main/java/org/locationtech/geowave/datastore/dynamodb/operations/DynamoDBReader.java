@@ -29,6 +29,7 @@ import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.SimpleParallelDecoder;
 import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
+import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
 import org.locationtech.geowave.datastore.dynamodb.util.AsyncPaginatedQuery;
@@ -186,7 +187,14 @@ public class DynamoDBReader<T> implements RowReader<T> {
             if (rowMerging) {
               return new GeoWaveRowMergingIterator<>(rowIterator);
             } else {
-              return rowIterator;
+              // TODO: understand why there are duplicates coming back when there shouldn't be from
+              // DynamoDB
+              final DedupeFilter dedupe = new DedupeFilter();
+              return Iterators.filter(
+                  rowIterator,
+                  row -> dedupe.applyDedupeFilter(
+                      row.getAdapterId(),
+                      new ByteArray(row.getDataId())));
             }
           }
         };

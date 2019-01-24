@@ -138,7 +138,7 @@ public class CassandraReader<T> implements RowReader<T> {
             recordReaderParams.getIndex().getName(),
             adapterIds,
             Collections.singleton(partitionRange),
-            DataStoreUtils.isMergingIteratorRequired(readerParams, visibilityEnabled),
+            DataStoreUtils.isMergingIteratorRequired(recordReaderParams, visibilityEnabled),
             rowTransformer,
             new ClientVisibilityFilter(authorizations)).results();
   }

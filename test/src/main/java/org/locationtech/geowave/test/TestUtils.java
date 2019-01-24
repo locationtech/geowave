@@ -625,15 +625,15 @@ public class TestUtils {
   }
 
   /** @param testName Name of the test that we are starting. */
-  public static void printStartOfTest(final Logger LOGGER, final String testName) {
+  public static void printStartOfTest(final Logger logger, final String testName) {
     // Format
     final String paddedName = StringUtils.center("STARTING " + testName, 37);
     // Print
-    LOGGER.warn("-----------------------------------------");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("* " + paddedName + " *");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("-----------------------------------------");
+    logger.warn("-----------------------------------------");
+    logger.warn("*                                       *");
+    logger.warn("* " + paddedName + " *");
+    logger.warn("*                                       *");
+    logger.warn("-----------------------------------------");
   }
 
   /**
@@ -641,7 +641,7 @@ public class TestUtils {
    * @param startMillis The time (millis) that the test started.
    */
   public static void printEndOfTest(
-      final Logger LOGGER,
+      final Logger logger,
       final String testName,
       final long startMillis) {
     // Get Elapsed Time
@@ -650,12 +650,12 @@ public class TestUtils {
     final String paddedName = StringUtils.center("FINISHED " + testName, 37);
     final String paddedElapsed = StringUtils.center(elapsedS + "s elapsed.", 37);
     // Print
-    LOGGER.warn("-----------------------------------------");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("* " + paddedName + " *");
-    LOGGER.warn("* " + paddedElapsed + " *");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("-----------------------------------------");
+    logger.warn("-----------------------------------------");
+    logger.warn("*                                       *");
+    logger.warn("* " + paddedName + " *");
+    logger.warn("* " + paddedElapsed + " *");
+    logger.warn("*                                       *");
+    logger.warn("-----------------------------------------");
   }
 
   /**

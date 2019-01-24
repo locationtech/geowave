@@ -58,9 +58,31 @@ public class GeoWaveMetadataWithTimestampCodec extends BaseCodec {
     }
   };
   private final boolean visibilityEnabled;
+  private final ClassLoader classLoader;
 
   private GeoWaveMetadataWithTimestampCodec(final boolean visibilityEnabled) {
+    this(null, visibilityEnabled);
+  }
+
+  public GeoWaveMetadataWithTimestampCodec(
+      final ClassLoader classLoader,
+      final GeoWaveMetadataWithTimestampCodec codec) {
+    this(classLoader, codec.visibilityEnabled);
+  }
+
+  private GeoWaveMetadataWithTimestampCodec(
+      final ClassLoader classLoader,
+      final boolean visibilityEnabled) {
+    this.classLoader = classLoader;
     this.visibilityEnabled = visibilityEnabled;
+  }
+
+  @Override
+  public ClassLoader getClassLoader() {
+    if (classLoader != null) {
+      return classLoader;
+    }
+    return super.getClassLoader();
   }
 
   @Override

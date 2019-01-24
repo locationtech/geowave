@@ -99,9 +99,27 @@ public class GeoWaveRedisRowCodec extends BaseCodec {
   }
 
   private final boolean visibilityEnabled;
+  private final ClassLoader classLoader;
 
   private GeoWaveRedisRowCodec(final boolean visibilityEnabled) {
+    this(null, visibilityEnabled);
+  }
+
+  public GeoWaveRedisRowCodec(final ClassLoader classLoader, final GeoWaveRedisRowCodec codec) {
+    this(classLoader, codec.visibilityEnabled);
+  }
+
+  private GeoWaveRedisRowCodec(final ClassLoader classLoader, final boolean visibilityEnabled) {
+    this.classLoader = classLoader;
     this.visibilityEnabled = visibilityEnabled;
+  }
+
+  @Override
+  public ClassLoader getClassLoader() {
+    if (classLoader != null) {
+      return classLoader;
+    }
+    return super.getClassLoader();
   }
 
   @Override
