@@ -84,7 +84,7 @@ public class BasicNumericDataset implements MultiDimensionalNumericData {
 
   @Override
   public boolean isEmpty() {
-    if  ((dataPerDimension == null) || (dataPerDimension.length == 0)){
+    if ((dataPerDimension == null) || (dataPerDimension.length == 0)) {
       return true;
     }
     return !Arrays.stream(dataPerDimension).noneMatch(d -> d == null);

@@ -132,10 +132,9 @@ public class FixedCardinalitySkippingIterator extends SkippingIterator
       if (!columnFamilies.isEmpty()) {
         ByteSequence cf = columnFamilies.iterator().next();
         Key endKeyWithCf = new Key(range.getEndKey().getRow(), new Text(cf.toArray()));
-        range = new Range(endKeyWithCf, true, endKeyWithCf, range.isEndKeyInclusive()); 
-      }
-      else {
-        range = new Range(range.getEndKey(), true, range.getEndKey(), range.isEndKeyInclusive()); 
+        range = new Range(endKeyWithCf, true, endKeyWithCf, range.isEndKeyInclusive());
+      } else {
+        range = new Range(range.getEndKey(), true, range.getEndKey(), range.isEndKeyInclusive());
       }
       getSource().seek(range, columnFamilies, inclusive);
     } else {
