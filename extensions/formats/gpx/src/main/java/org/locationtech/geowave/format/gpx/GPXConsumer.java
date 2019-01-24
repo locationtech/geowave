@@ -568,19 +568,27 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
 
         setAttribute(builder, "NumberPoints", Long.valueOf(childCoordCount));
 
-        final Long minTime = getStartTime();
+        Long minTime = getStartTime();
         if (minTime != null) {
           builder.set("StartTimeStamp", new Date(minTime));
-        } else if ((backupTimestamp != null) && timeRange) {
+        } else if ((timestamp != null) && timeRange) {
+          minTime = timestamp;
           builder.set("StartTimeStamp", new Date(timestamp));
+        } else if ((backupTimestamp != null) && timeRange) {
+          minTime = backupTimestamp;
+          builder.set("StartTimeStamp", new Date(backupTimestamp));
         } else {
           setDuration = false;
         }
-        final Long maxTime = getEndTime();
+        Long maxTime = getEndTime();
         if (maxTime != null) {
           builder.set("EndTimeStamp", new Date(maxTime));
-        } else if ((backupTimestamp != null) && timeRange) {
+        } else if ((timestamp != null) && timeRange) {
+          maxTime = timestamp;
           builder.set("EndTimeStamp", new Date(timestamp));
+        } else if ((backupTimestamp != null) && timeRange) {
+          maxTime = backupTimestamp;
+          builder.set("EndTimeStamp", new Date(backupTimestamp));
         } else {
           setDuration = false;
         }

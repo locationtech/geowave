@@ -117,11 +117,16 @@ public class HashKeyIndexStrategy
   /** Returns an insertion id selected round-robin from a predefined pool */
   @Override
   public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
-    final long hashCode =
-        Math.abs(
-            hashCode(
-                insertionData.getMaxValuesPerDimension(),
-                hashCode(insertionData.getMinValuesPerDimension(), 1)));
+    final long hashCode;
+    if (insertionData.isEmpty()) {
+      hashCode = insertionData.hashCode();
+    } else {
+      hashCode =
+          Math.abs(
+              hashCode(
+                  insertionData.getMaxValuesPerDimension(),
+                  hashCode(insertionData.getMinValuesPerDimension(), 1)));
+    }
     final int position = (int) (hashCode % keys.length);
 
     return new byte[][] {keys[position]};

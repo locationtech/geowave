@@ -98,13 +98,9 @@ public class SparkUtils {
   public static long getCount(
       final JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd,
       final String dataStoreType) {
-    // TODO this seems like it could only occur if the RecordReaders
-    // resulting from the splits had overlapping ranges, which seems to
-    // occur for HBase
-    if (dataStoreType.equals("hbase") || dataStoreType.equals("bigtable")) {
-      return javaRdd.countByKey().size();
-    } else {
-      return javaRdd.count();
-    }
+    // TODO counting by key shouldn't be necessary
+    // it seems like it could only occur if the RecordReaders resulting from the splits had
+    // overlapping ranges
+    return javaRdd.countByKey().size();
   }
 }

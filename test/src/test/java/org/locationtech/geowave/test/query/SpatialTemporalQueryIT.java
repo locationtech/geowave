@@ -246,7 +246,7 @@ public class SpatialTemporalQueryIT {
       cal.roll(Calendar.MINUTE, 5);
       featureTimeRangeBuilder.add(cal.getTime());
       feature = featureTimeRangeBuilder.buildFeature("outlier1timerange");
-      timeWriters.write(feature);
+      rangeWriters.write(feature);
 
       pt = geomFactory.createPoint(new Coordinate(50, 50));
       featureTimeRangeBuilder.add(pt);
@@ -254,7 +254,7 @@ public class SpatialTemporalQueryIT {
       cal.roll(Calendar.MINUTE, 5);
       featureTimeRangeBuilder.add(cal.getTime());
       feature = featureTimeRangeBuilder.buildFeature("outlier2timerange");
-      timeWriters.write(feature);
+      rangeWriters.write(feature);
 
       // Ingest data for duplicate deletion, should not overlap time
       // ranges from other tests

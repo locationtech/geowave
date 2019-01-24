@@ -45,12 +45,6 @@ public class IndexCompositeWriter<T> implements Writer<T> {
   @Override
   public WriteResults write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter) {
     return internalWrite(entry, (w -> w.write(entry, fieldVisibilityWriter)));
-    // final List<SinglePartitionInsertionIds> ids = new ArrayList<>();
-    // for (final Writer<T> indexWriter : writers) {
-    // final InsertionIds i = indexWriter.write(entry, fieldVisibilityWriter);
-    // ids.addAll(i.getPartitionKeys());
-    // }
-    // return new InsertionIds(ids);
   }
 
   protected WriteResults internalWrite(
