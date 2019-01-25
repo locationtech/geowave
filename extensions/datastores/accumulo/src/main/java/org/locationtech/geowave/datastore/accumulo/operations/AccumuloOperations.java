@@ -99,7 +99,6 @@ import org.locationtech.geowave.core.store.server.ServerOpHelper;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
 import org.locationtech.geowave.core.store.util.DataAdapterAndIndexCache;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.locationtech.geowave.core.store.util.TriFunction;
 import org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import org.locationtech.geowave.datastore.accumulo.IteratorConfig;
 import org.locationtech.geowave.datastore.accumulo.MergingCombiner;
@@ -120,6 +119,7 @@ import org.locationtech.geowave.datastore.accumulo.util.ConnectorPool;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
+import com.aol.cyclops.util.function.TriFunction;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
@@ -437,14 +437,14 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       if (removeSet.isEmpty()) {
         deleter.delete();
       }
-
-      deleter.close();
     } catch (final TableNotFoundException | MutationsRejectedException e) {
       LOGGER.warn("Unable to delete row from table [" + tableName + "].", e);
+      success = false;
+    }
+    finally {
       if (deleter != null) {
         deleter.close();
       }
-      success = false;
     }
 
     return success;

@@ -43,7 +43,10 @@ public class HBaseWriter implements RowWriter {
   @Override
   public void close() {
     try {
-      mutator.close();
+      synchronized (duplicateRowTracker) {
+        mutator.close();
+        duplicateRowTracker.clear();
+      }
     } catch (final IOException e) {
       LOGGER.warn("Unable to close BufferedMutator", e);
     }
@@ -75,29 +78,40 @@ public class HBaseWriter implements RowWriter {
 
   private void writeMutations(final RowMutations rowMutation) {
     try {
-      mutator.mutate(rowMutation.getMutations());
+      synchronized (duplicateRowTracker) {
+        mutator.mutate(rowMutation.getMutations());
+      }
     } catch (final IOException e) {
       LOGGER.error("Unable to write mutation.", e);
     }
   }
+  private long lastFlush = -1;
 
   private RowMutations rowToMutation(final GeoWaveRow row) {
     final byte[] rowBytes = GeoWaveKey.getCompositeId(row);
+
+
+    final ByteArray rowId = new ByteArray(rowBytes);
 
     // we use a hashset of row IDs so that we can retain multiple versions
     // (otherwise timestamps will be applied on the server side in
     // batches and if the same row exists within a batch we will not
     // retain multiple versions)
-    synchronized (duplicateRowTracker) {
-      final ByteArray rowId = new ByteArray(rowBytes);
-      if (!duplicateRowTracker.add(rowId)) {
-        try {
-          mutator.flush();
-          duplicateRowTracker.clear();
-          duplicateRowTracker.add(rowId);
-        } catch (final IOException e) {
-          LOGGER.error("Unable to write mutation.", e);
+    if (!duplicateRowTracker.add(rowId)) {
+      try {
+        while (System.currentTimeMillis() <= lastFlush) {
+          try {
+            Thread.sleep(10);
+          } catch (InterruptedException e) {
+            LOGGER.warn("Unable to wait for new time", e);
+          }
         }
+        mutator.flush();
+        lastFlush = System.currentTimeMillis();
+        duplicateRowTracker.clear();
+        duplicateRowTracker.add(rowId);
+      } catch (final IOException e) {
+        LOGGER.error("Unable to write mutation.", e);
       }
     }
 

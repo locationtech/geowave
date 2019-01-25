@@ -46,7 +46,7 @@
 		<accumulo.api>1.9</accumulo.api>
 		<bigtable.version>1.2.0</bigtable.version>
 		<cassandra.version>3.11.3</cassandra.version>
-		<redisson.version>3.10.1</redisson.version>
+		<redisson.version>3.8.2</redisson.version>
 		<rocksdb.version>5.15.10</rocksdb.version>
 		<grpc.version>1.13.1</grpc.version>
 		<netty.version>4.1.25.Final</netty.version>

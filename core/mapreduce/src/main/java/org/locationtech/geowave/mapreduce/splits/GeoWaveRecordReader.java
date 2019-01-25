@@ -449,7 +449,11 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
     }
     final ProgressPerRange progress = progressPerRange.get(currentGeoWaveRangeIndexPair);
     if (progress == null) {
-      return getProgressForRange(currentGeoWaveRangeIndexPair.getRange(), currentGeoWaveKey);
+      return Math.min(
+          1,
+          Math.max(
+              0,
+              getProgressForRange(currentGeoWaveRangeIndexPair.getRange(), currentGeoWaveKey)));
     }
     return Math.min(
         1,

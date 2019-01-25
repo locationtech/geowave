@@ -8,12 +8,15 @@
  */
 package org.locationtech.geowave.datastore.cassandra.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import java.util.HashMap;
-import java.util.Map;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 public class SessionPool {
+  private static final Logger LOGGER = LoggerFactory.getLogger(SessionPool.class);
 
   private static SessionPool singletonInstance;
 
@@ -26,14 +29,16 @@ public class SessionPool {
 
   protected SessionPool() {}
 
-  private final Map<String, Session> sessionCache = new HashMap<String, Session>();
+  private final LoadingCache<String, Session> sessionCache =
+      Caffeine.newBuilder().build(
+          contactPoints -> Cluster.builder().addContactPoints(
+              contactPoints.split(",")).build().connect());
 
   public synchronized Session getSession(final String contactPoints) {
-    Session session = sessionCache.get(contactPoints);
-    if (session == null) {
-      session = Cluster.builder().addContactPoints(contactPoints.split(",")).build().connect();
-      sessionCache.put(contactPoints, session);
+    if (contactPoints == null) {
+      LOGGER.error("contact points must be set for cassandra");
+      return null;
     }
-    return session;
+    return sessionCache.get(contactPoints);
   }
 }

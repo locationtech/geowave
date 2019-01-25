@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -141,7 +142,9 @@ public class BatchedRangeRead<T> {
             readSemaphore.acquire();
 
             final ResultSetFuture f = operations.getSession().executeAsync(s);
-            futures.add(f);
+            synchronized (futures) {
+              futures.add(f);
+            }
             Futures.addCallback(
                 f,
                 new QueryCallback(
@@ -174,8 +177,10 @@ public class BatchedRangeRead<T> {
     return new CloseableIteratorWrapper<T>(new Closeable() {
       @Override
       public void close() throws IOException {
-        for (final ResultSetFuture f : futures) {
-          f.cancel(true);
+        synchronized (futures) {
+          for (final ResultSetFuture f : futures) {
+            f.cancel(true);
+          }
         }
       }
     }, new RowConsumer(results));

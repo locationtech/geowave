@@ -89,15 +89,13 @@ public class RemoteIT extends BaseServiceIT {
     int ingestedFeatures = 0;
     final int featuresPer5Percent = features.size() / 20;
     ds.addType(fda, idx);
+
     try (Writer writer = ds.createWriter(fda.getTypeName())) {
       for (final SimpleFeature feat : features) {
-        writer.write(feat);
         ingestedFeatures++;
         if ((ingestedFeatures % featuresPer5Percent) == 0) {
-          LOGGER.info(
-              String.format(
-                  "Ingested %d percent of features",
-                  (ingestedFeatures / featuresPer5Percent) * 5));
+          // just write 5 percent of the grid
+          writer.write(feat);
         }
       }
     }

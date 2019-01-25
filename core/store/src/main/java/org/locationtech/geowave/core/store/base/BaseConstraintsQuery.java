@@ -42,7 +42,6 @@ import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
 import org.locationtech.geowave.core.store.query.filter.FilterList;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.locationtech.geowave.core.store.util.TriFunction;
 import com.google.common.collect.Iterators;
 
 /** This class represents basic numeric contraints applied to a datastore query */
