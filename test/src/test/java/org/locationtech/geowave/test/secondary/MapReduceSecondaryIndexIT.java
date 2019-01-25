@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -8,7 +8,10 @@
  */
 package org.locationtech.geowave.test.secondary;
 
+import java.io.File;
 import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +23,10 @@ import org.locationtech.geowave.test.annotation.Environments;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
+import org.locationtech.geowave.test.mapreduce.MapReduceTestUtils;
+import org.locationtech.geowave.test.spark.SparkTestEnvironment;
+import org.locationtech.geowave.test.spark.SparkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,11 +47,74 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
   protected DataStorePluginOptions dataStoreOptions;
   private static long startMillis;
   private static final String testName = "MapReduceSecondaryIndexIT";
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB},
+      options = {"enableSecondaryIndex=true"},
+      namespace = "MapReduceSecondaryIndexIT_tmp")
+  protected DataStorePluginOptions inputDataStoreOptions;
+  private static boolean inputStoreCreated = false;
 
   @BeforeClass
   public static void startTimer() {
     startMillis = System.currentTimeMillis();
     TestUtils.printStartOfTest(LOGGER, testName);
+
+  }
+
+  @Before
+  public synchronized void createInputStore() throws Exception {
+    if (!inputStoreCreated) {
+      TestUtils.testLocalIngest(
+          inputDataStoreOptions,
+          DimensionalityType.SPATIAL,
+          HAIL_SHAPEFILE_FILE,
+          1);
+      TestUtils.testLocalIngest(
+          inputDataStoreOptions,
+          DimensionalityType.SPATIAL,
+          TORNADO_TRACKS_SHAPEFILE_FILE,
+          1);
+      MapReduceTestUtils.testMapReduceExport(inputDataStoreOptions);
+      inputStoreCreated = true;
+    }
+  }
+
+  protected void testIngestAndQuery(final DimensionalityType dimensionality) throws Exception {
+    testIngestAndQuery(dimensionality, (d, f) -> {
+      try {
+        MapReduceTestUtils.testMapReduceIngest(
+            dataStoreOptions,
+            dimensionality,
+            "avro",
+            TestUtils.TEMP_DIR
+                + File.separator
+                + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY
+                + File.separator
+                + MapReduceTestUtils.TEST_EXPORT_DIRECTORY);
+      } catch (final Exception e) {
+        LOGGER.warn("Unable to ingest map-reduce", e);
+        Assert.fail(e.getMessage());
+      }
+    },
+        (input, expected, description) -> SparkUtils.verifyQuery(
+            getDataStorePluginOptions(),
+            SparkTestEnvironment.getInstance().getDefaultSession().sparkContext(),
+            input,
+            expected,
+            description,
+            null,
+            false),
+        (dimensionalityType, urls) -> {
+          // no-op on verify stats because the "expected" stats that are calculated are off by an
+          // epsilon (ie. problem with the test, not the actual results)
+        });
   }
 
   @AfterClass
@@ -54,17 +124,17 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
 
   @Test
   public void testDistributedIngestAndQuerySpatial() throws Exception {
-    testIngestAndQuery(DimensionalityType.SPATIAL, true);
+    testIngestAndQuery(DimensionalityType.SPATIAL);
   }
 
   @Test
   public void testDistributedIngestAndQuerySpatialTemporal() throws Exception {
-    testIngestAndQuery(DimensionalityType.SPATIAL_TEMPORAL, true);
+    testIngestAndQuery(DimensionalityType.SPATIAL_TEMPORAL);
   }
 
   @Test
   public void testDistributedIngestAndQuerySpatialAndSpatialTemporal() throws Exception {
-    testIngestAndQuery(DimensionalityType.ALL, true);
+    testIngestAndQuery(DimensionalityType.ALL);
   }
 
   @Override

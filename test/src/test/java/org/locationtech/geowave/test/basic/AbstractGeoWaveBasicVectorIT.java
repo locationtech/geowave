@@ -127,7 +127,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
   protected static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
   protected static final String TEST_POLYGON_FILTER_FILE =
       TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
-  protected static final String TEST_EXPORT_DIRECTORY = "export";
+  protected static final String TEST_LOCAL_EXPORT_DIRECTORY = "export";
   private static final String TEST_BASE_EXPORT_FILE_NAME = "basicIT-export.avro";
   protected static final String CQL_DELETE_STR = "STATE = 'TX'";
 
@@ -616,7 +616,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     final PersistentAdapterStore adapterStore = dataStoreOptions.createAdapterStore();
     final VectorLocalExportCommand exportCommand = new VectorLocalExportCommand();
     final VectorLocalExportOptions options = exportCommand.getOptions();
-    final File exportDir = new File(TestUtils.TEMP_DIR, TEST_EXPORT_DIRECTORY);
+    final File exportDir = new File(TestUtils.TEMP_DIR, TEST_LOCAL_EXPORT_DIRECTORY);
     exportDir.delete();
     exportDir.mkdirs();
 

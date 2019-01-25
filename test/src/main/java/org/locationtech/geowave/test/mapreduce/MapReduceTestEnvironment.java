@@ -34,7 +34,7 @@ public class MapReduceTestEnvironment implements TestEnvironment {
     return singletonInstance;
   }
 
-  protected static final String HDFS_BASE_DIRECTORY = "test_tmp";
+  public static final String HDFS_BASE_DIRECTORY = "test_tmp";
   private static final String DEFAULT_JOB_TRACKER = "local";
   private String jobtracker;
   private String hdfs;
@@ -86,10 +86,11 @@ public class MapReduceTestEnvironment implements TestEnvironment {
           fs = FileSystem.get(MapReduceTestUtils.getConfiguration());
           fs.delete(tmpDir, true);
         } finally {
-          if (fs != null)
+          if (fs != null) {
             fs.close();
+          }
         }
-        if (configFile != null && configFile.exists() && configFile.delete()) {
+        if ((configFile != null) && configFile.exists() && configFile.delete()) {
           configFile = null;
         }
       } else {
@@ -105,7 +106,7 @@ public class MapReduceTestEnvironment implements TestEnvironment {
     return jobtracker;
   }
 
-  public void setJobtracker(String jobtracker) {
+  public void setJobtracker(final String jobtracker) {
     this.jobtracker = jobtracker;
   }
 
@@ -113,7 +114,7 @@ public class MapReduceTestEnvironment implements TestEnvironment {
     return hdfs;
   }
 
-  public void setHdfs(String hdfs) {
+  public void setHdfs(final String hdfs) {
     this.hdfs = hdfs;
   }
 
@@ -121,7 +122,7 @@ public class MapReduceTestEnvironment implements TestEnvironment {
     return hdfsProtocol;
   }
 
-  public void setHdfsProtocol(boolean hdfsProtocol) {
+  public void setHdfsProtocol(final boolean hdfsProtocol) {
     this.hdfsProtocol = hdfsProtocol;
   }
 
@@ -129,7 +130,7 @@ public class MapReduceTestEnvironment implements TestEnvironment {
     return hdfsBaseDirectory;
   }
 
-  public void setHdfsBaseDirectory(String hdfsBaseDirectory) {
+  public void setHdfsBaseDirectory(final String hdfsBaseDirectory) {
     this.hdfsBaseDirectory = hdfsBaseDirectory;
   }
 

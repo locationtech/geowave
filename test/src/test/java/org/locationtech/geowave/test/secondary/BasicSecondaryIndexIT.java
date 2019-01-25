@@ -9,6 +9,7 @@
 package org.locationtech.geowave.test.secondary;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,17 +53,35 @@ public class BasicSecondaryIndexIT extends AbstractSecondaryIndexIT {
 
   @Test
   public void testLocalIngestAndQuerySpatial() throws Exception {
-    testIngestAndQuery(DimensionalityType.SPATIAL, false);
+    testIngestAndQuery(DimensionalityType.SPATIAL);
   }
 
   @Test
   public void testLocalIngestAndQuerySpatialTemporal() throws Exception {
-    testIngestAndQuery(DimensionalityType.SPATIAL_TEMPORAL, false);
+    testIngestAndQuery(DimensionalityType.SPATIAL_TEMPORAL);
   }
 
   @Test
   public void testLocalIngestAndQuerySpatialAndSpatialTemporal() throws Exception {
-    testIngestAndQuery(DimensionalityType.ALL, false);
+    testIngestAndQuery(DimensionalityType.ALL);
+  }
+
+  protected void testIngestAndQuery(final DimensionalityType dimensionality) throws Exception {
+    testIngestAndQuery(dimensionality, (d, f) -> {
+      try {
+        TestUtils.testLocalIngest(getDataStorePluginOptions(), dimensionality, f, 1);
+      } catch (final Exception e) {
+        LOGGER.warn("Unable to ingest locally", e);
+        Assert.fail(e.getMessage());
+      }
+    }, (input, expected, description) -> {
+      try {
+        testQuery(input, expected, description);
+      } catch (final Exception e) {
+        LOGGER.warn("Unable to query locally", e);
+        Assert.fail(e.getMessage());
+      }
+    }, (dimensionalityType, urls) -> testStats(urls, false, dimensionality.getDefaultIndices()));
   }
 
   @Override
