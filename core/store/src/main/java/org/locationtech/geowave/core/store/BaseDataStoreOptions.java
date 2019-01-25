@@ -18,7 +18,7 @@ public class BaseDataStoreOptions implements DataStoreOptions {
   protected boolean enableBlockCache = true;
 
   @Parameter(names = "--enableServerSideLibrary", arity = 1)
-  protected boolean enableServerSideLibrary = false;
+  protected boolean enableServerSideLibrary = true;
 
   @Parameter(names = "--enableSecondaryIndexing")
   protected boolean enableSecondaryIndex = false;

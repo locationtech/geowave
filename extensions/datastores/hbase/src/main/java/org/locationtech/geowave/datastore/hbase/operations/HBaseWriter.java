@@ -85,6 +85,7 @@ public class HBaseWriter implements RowWriter {
       LOGGER.error("Unable to write mutation.", e);
     }
   }
+
   private long lastFlush = -1;
 
   private RowMutations rowToMutation(final GeoWaveRow row) {

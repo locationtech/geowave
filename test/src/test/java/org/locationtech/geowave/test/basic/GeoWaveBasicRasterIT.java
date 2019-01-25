@@ -210,80 +210,77 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
 
   @Test
   public void testMultipleMergeStrategies() throws IOException {
-    for (int i = 0; i < 100; i++) {
-      System.err.println("iteration " + i);
-      final String noDataCoverageName = "testMultipleMergeStrategies_NoDataMergeStrategy";
-      final String summingCoverageName = "testMultipleMergeStrategies_SummingMergeStrategy";
-      final String sumAndAveragingCoverageName =
-          "testMultipleMergeStrategies_SumAndAveragingMergeStrategy";
-      final int summingNumBands = 8;
-      final int summingNumRasters = 4;
+    final String noDataCoverageName = "testMultipleMergeStrategies_NoDataMergeStrategy";
+    final String summingCoverageName = "testMultipleMergeStrategies_SummingMergeStrategy";
+    final String sumAndAveragingCoverageName =
+        "testMultipleMergeStrategies_SumAndAveragingMergeStrategy";
+    final int summingNumBands = 8;
+    final int summingNumRasters = 4;
 
-      final int sumAndAveragingNumBands = 12;
-      final int sumAndAveragingNumRasters = 15;
-      final int noDataTileSize = 64;
-      final int summingTileSize = 32;
-      final int sumAndAveragingTileSize = 8;
-      final double westLon = 45;
-      final double eastLon = 47.8125;
-      final double southLat = -47.8125;
-      final double northLat = -45;
+    final int sumAndAveragingNumBands = 12;
+    final int sumAndAveragingNumRasters = 15;
+    final int noDataTileSize = 64;
+    final int summingTileSize = 32;
+    final int sumAndAveragingTileSize = 8;
+    final double westLon = 45;
+    final double eastLon = 47.8125;
+    final double southLat = -47.8125;
+    final double northLat = -45;
 
-      ingestGeneralPurpose(
-          summingCoverageName,
-          summingTileSize,
-          westLon,
-          eastLon,
-          southLat,
-          northLat,
-          summingNumBands,
-          summingNumRasters,
-          new SummingMergeStrategy());
+    ingestGeneralPurpose(
+        summingCoverageName,
+        summingTileSize,
+        westLon,
+        eastLon,
+        southLat,
+        northLat,
+        summingNumBands,
+        summingNumRasters,
+        new SummingMergeStrategy());
 
-      ingestGeneralPurpose(
-          sumAndAveragingCoverageName,
-          sumAndAveragingTileSize,
-          westLon,
-          eastLon,
-          southLat,
-          northLat,
-          sumAndAveragingNumBands,
-          sumAndAveragingNumRasters,
-          new SumAndAveragingMergeStrategy());
+    ingestGeneralPurpose(
+        sumAndAveragingCoverageName,
+        sumAndAveragingTileSize,
+        westLon,
+        eastLon,
+        southLat,
+        northLat,
+        sumAndAveragingNumBands,
+        sumAndAveragingNumRasters,
+        new SumAndAveragingMergeStrategy());
 
-      ingestNoDataMergeStrategy(
-          noDataCoverageName,
-          noDataTileSize,
-          westLon,
-          eastLon,
-          southLat,
-          northLat);
+    ingestNoDataMergeStrategy(
+        noDataCoverageName,
+        noDataTileSize,
+        westLon,
+        eastLon,
+        southLat,
+        northLat);
 
-      queryGeneralPurpose(
-          summingCoverageName,
-          summingTileSize,
-          westLon,
-          eastLon,
-          southLat,
-          northLat,
-          summingNumBands,
-          summingNumRasters,
-          new SummingExpectedValue());
+    queryGeneralPurpose(
+        summingCoverageName,
+        summingTileSize,
+        westLon,
+        eastLon,
+        southLat,
+        northLat,
+        summingNumBands,
+        summingNumRasters,
+        new SummingExpectedValue());
 
-      queryNoDataMergeStrategy(noDataCoverageName, noDataTileSize);
-      queryGeneralPurpose(
-          sumAndAveragingCoverageName,
-          sumAndAveragingTileSize,
-          westLon,
-          eastLon,
-          southLat,
-          northLat,
-          sumAndAveragingNumBands,
-          sumAndAveragingNumRasters,
-          new SumAndAveragingExpectedValue());
+    queryNoDataMergeStrategy(noDataCoverageName, noDataTileSize);
+    queryGeneralPurpose(
+        sumAndAveragingCoverageName,
+        sumAndAveragingTileSize,
+        westLon,
+        eastLon,
+        southLat,
+        northLat,
+        sumAndAveragingNumBands,
+        sumAndAveragingNumRasters,
+        new SumAndAveragingExpectedValue());
 
-      TestUtils.deleteAll(dataStoreOptions);
-    }
+    TestUtils.deleteAll(dataStoreOptions);
   }
 
   private void ingestAndQueryNoDataMergeStrategy(

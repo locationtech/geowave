@@ -440,8 +440,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     } catch (final TableNotFoundException | MutationsRejectedException e) {
       LOGGER.warn("Unable to delete row from table [" + tableName + "].", e);
       success = false;
-    }
-    finally {
+    } finally {
       if (deleter != null) {
         deleter.close();
       }
