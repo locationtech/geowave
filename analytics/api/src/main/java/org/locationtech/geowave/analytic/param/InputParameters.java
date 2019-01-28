@@ -12,8 +12,8 @@ import org.apache.hadoop.fs.Path;
 
 public class InputParameters {
   public enum Input implements ParameterEnum<Object> {
-    INPUT_FORMAT(FormatConfiguration.class, "ifc", "Input Format Class", true,
-        true), HDFS_INPUT_PATH(Path.class, "iip", "Input HDFS File Path", false, true);
+    INPUT_FORMAT(FormatConfiguration.class, "ifc", "Input Format Class", true, true),
+    HDFS_INPUT_PATH(Path.class, "iip", "Input HDFS File Path", false, true);
 
     private final ParameterHelper<Object> helper;
 

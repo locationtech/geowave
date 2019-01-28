@@ -23,8 +23,8 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
  *
  * @since 0.9.1
  */
-public class DeferredReadCommonIndexedPersistenceEncoding
-    extends AbstractAdapterPersistenceEncoding {
+public class DeferredReadCommonIndexedPersistenceEncoding extends
+    AbstractAdapterPersistenceEncoding {
 
   private final FlattenedUnreadData unreadData;
 

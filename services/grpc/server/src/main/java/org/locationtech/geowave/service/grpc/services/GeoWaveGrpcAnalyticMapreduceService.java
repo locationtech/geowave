@@ -29,8 +29,9 @@ import org.locationtech.geowave.service.grpc.protobuf.NearestNeighborCommandPara
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GeoWaveGrpcAnalyticMapreduceService
-    extends AnalyticMapreduceGrpc.AnalyticMapreduceImplBase implements GeoWaveGrpcServiceSpi {
+public class GeoWaveGrpcAnalyticMapreduceService extends
+    AnalyticMapreduceGrpc.AnalyticMapreduceImplBase implements
+    GeoWaveGrpcServiceSpi {
   private static final Logger LOGGER =
       LoggerFactory.getLogger(GeoWaveGrpcAnalyticMapreduceService.class.getName());
 

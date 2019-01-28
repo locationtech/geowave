@@ -18,8 +18,8 @@ import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
  * avro schema. It will support ingesting directly from a local file system or staging data from a
  * local files system and ingesting into GeoWave using a map-reduce job.
  */
-public class GeoWaveAvroIngestFormat
-    extends AbstractSimpleFeatureIngestFormat<AvroSimpleFeatureCollection> {
+public class GeoWaveAvroIngestFormat extends
+    AbstractSimpleFeatureIngestFormat<AvroSimpleFeatureCollection> {
   @Override
   protected AbstractSimpleFeatureIngestPlugin<AvroSimpleFeatureCollection> newPluginInstance(
       IngestFormatOptions options) {

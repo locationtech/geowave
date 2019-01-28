@@ -89,8 +89,8 @@ public class DynamoDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
     return objMaps;
   }
 
-  public static class GuavaRowTranslationHelper
-      implements Function<Map<String, AttributeValue>, DynamoDBRow> {
+  public static class GuavaRowTranslationHelper implements
+      Function<Map<String, AttributeValue>, DynamoDBRow> {
     @Override
     public DynamoDBRow apply(final Map<String, AttributeValue> input) {
       return new DynamoDBRow(input);

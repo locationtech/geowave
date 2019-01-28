@@ -270,8 +270,8 @@ public class StripWeakCentroidsRunner<T> implements MapReduceJobRunner {
     }
   }
 
-  public static class TailMaxBreakStrategy<T> extends MaxChangeBreakStrategy<T>
-      implements BreakStrategy<T> {
+  public static class TailMaxBreakStrategy<T> extends MaxChangeBreakStrategy<T> implements
+      BreakStrategy<T> {
     @Override
     protected double getInitialMaximum(final StandardDeviation stats, final double total) {
       return (total / stats.getN()) + stats.getResult();
@@ -279,7 +279,8 @@ public class StripWeakCentroidsRunner<T> implements MapReduceJobRunner {
   }
 
   public static class TailStableChangeBreakStrategy<T> extends StableChangeBreakStrategy<T>
-      implements BreakStrategy<T> {
+      implements
+      BreakStrategy<T> {
     @Override
     protected double getInitialMaximum(final StandardDeviation stats, final double total) {
       return (total / stats.getN()) + stats.getResult();

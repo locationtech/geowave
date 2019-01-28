@@ -238,8 +238,8 @@ public class AccumuloRangeQueryTest {
     return new TestGeometryAdapter();
   }
 
-  public static class TestGeometryAdapter extends AbstractDataAdapter<TestGeometry>
-      implements StatisticsProvider<TestGeometry> {
+  public static class TestGeometryAdapter extends AbstractDataAdapter<TestGeometry> implements
+      StatisticsProvider<TestGeometry> {
     private static final String GEOM = "myGeo";
     private static final String ID = "myId";
     private static final PersistentIndexFieldHandler<TestGeometry, ? extends CommonIndexValue, Object> GEOM_FIELD_HANDLER =

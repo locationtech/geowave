@@ -251,8 +251,9 @@ public class RedisUtils {
   private static final ReverseTimestampComparator TIMESTAMP_COMPARATOR =
       new ReverseTimestampComparator();
 
-  private static class ReverseTimestampComparator
-      implements Comparator<ScoredEntry<GeoWaveRedisPersistedRow>>, Serializable {
+  private static class ReverseTimestampComparator implements
+      Comparator<ScoredEntry<GeoWaveRedisPersistedRow>>,
+      Serializable {
     private static final long serialVersionUID = 2894647323275155231L;
 
     @Override

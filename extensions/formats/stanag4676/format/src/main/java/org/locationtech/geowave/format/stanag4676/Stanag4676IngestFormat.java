@@ -15,8 +15,8 @@ import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 
-public class Stanag4676IngestFormat
-    implements IngestFormatPluginProviderSpi<AvroWholeFile, Object> {
+public class Stanag4676IngestFormat implements
+    IngestFormatPluginProviderSpi<AvroWholeFile, Object> {
   private static Stanag4676IngestPlugin singletonInstance;
 
   private static synchronized Stanag4676IngestPlugin getSingletonInstance() {

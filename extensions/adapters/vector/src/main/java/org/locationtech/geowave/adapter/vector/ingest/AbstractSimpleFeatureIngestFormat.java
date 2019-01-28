@@ -15,8 +15,8 @@ import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.opengis.feature.simple.SimpleFeature;
 
-public abstract class AbstractSimpleFeatureIngestFormat<I>
-    implements IngestFormatPluginProviderSpi<I, SimpleFeature> {
+public abstract class AbstractSimpleFeatureIngestFormat<I> implements
+    IngestFormatPluginProviderSpi<I, SimpleFeature> {
   protected final SimpleFeatureIngestOptions myOptions = new SimpleFeatureIngestOptions();
 
   private AbstractSimpleFeatureIngestPlugin<I> getInstance(IngestFormatOptions options) {

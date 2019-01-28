@@ -62,8 +62,8 @@ import com.google.protobuf.util.Timestamps;
 import io.grpc.BindableService;
 import io.grpc.stub.StreamObserver;
 
-public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase
-    implements GeoWaveGrpcServiceSpi {
+public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implements
+    GeoWaveGrpcServiceSpi {
   private static final Logger LOGGER =
       LoggerFactory.getLogger(GeoWaveGrpcVectorService.class.getName());
 

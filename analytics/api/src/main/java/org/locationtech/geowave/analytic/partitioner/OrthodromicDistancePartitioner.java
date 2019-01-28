@@ -57,8 +57,9 @@ import si.uom.SI;
  * The order of distances provided must match the order or dimensions extracted from the dimension
  * extractor.
  */
-public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T>
-    implements Partitioner<T>, java.io.Serializable {
+public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T> implements
+    Partitioner<T>,
+    java.io.Serializable {
 
   /** */
   private static final long serialVersionUID = 1L;

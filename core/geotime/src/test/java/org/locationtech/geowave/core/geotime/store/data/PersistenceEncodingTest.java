@@ -447,8 +447,8 @@ public class PersistenceEncodingTest {
     }
   }
 
-  public static class TimeFieldHandler
-      implements PersistentIndexFieldHandler<GeoObj, CommonIndexValue, Object>,
+  public static class TimeFieldHandler implements
+      PersistentIndexFieldHandler<GeoObj, CommonIndexValue, Object>,
       DimensionMatchingIndexFieldHandler<GeoObj, CommonIndexValue, Object> {
 
     public TimeFieldHandler() {}
@@ -493,8 +493,8 @@ public class PersistenceEncodingTest {
     }
   }
 
-  public static class TimeRangeFieldHandler
-      implements PersistentIndexFieldHandler<GeoObj, CommonIndexValue, Object>,
+  public static class TimeRangeFieldHandler implements
+      PersistentIndexFieldHandler<GeoObj, CommonIndexValue, Object>,
       DimensionMatchingIndexFieldHandler<GeoObj, CommonIndexValue, Object> {
 
     public TimeRangeFieldHandler() {}

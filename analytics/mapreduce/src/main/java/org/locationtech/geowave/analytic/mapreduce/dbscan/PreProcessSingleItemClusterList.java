@@ -42,8 +42,8 @@ public class PreProcessSingleItemClusterList extends SingleItemClusterList imple
     }
   }
 
-  public static class PreProcessSingleItemClusterListFactory
-      implements NeighborListFactory<ClusterItem> {
+  public static class PreProcessSingleItemClusterListFactory implements
+      NeighborListFactory<ClusterItem> {
     private final Map<ByteArray, Cluster> index;
 
     public PreProcessSingleItemClusterListFactory(final Map<ByteArray, Cluster> index) {

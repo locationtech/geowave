@@ -16,8 +16,8 @@ import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-public abstract class NumericRangeDataStatistics<T>
-    extends AbstractDataStatistics<T, Range<Double>, FieldStatisticsQueryBuilder<Range<Double>>> {
+public abstract class NumericRangeDataStatistics<T> extends
+    AbstractDataStatistics<T, Range<Double>, FieldStatisticsQueryBuilder<Range<Double>>> {
 
   private double min = Double.MAX_VALUE;
   private double max = -Double.MAX_VALUE;

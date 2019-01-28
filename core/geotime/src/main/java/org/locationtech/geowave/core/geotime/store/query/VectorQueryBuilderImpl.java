@@ -13,5 +13,6 @@ import org.locationtech.geowave.core.store.query.QueryBuilderImpl;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class VectorQueryBuilderImpl extends QueryBuilderImpl<SimpleFeature, VectorQueryBuilder>
-    implements VectorQueryBuilder {
+    implements
+    VectorQueryBuilder {
 }

@@ -19,8 +19,8 @@ import org.opengis.coverage.grid.GridCoverage;
  * This represents an ingest format plugin provider for GeoTools grid coverage (raster) formats. It
  * currently only supports ingesting data directly from a local file system into GeoWave.
  */
-public class GeoToolsRasterDataStoreIngestFormat
-    implements IngestFormatPluginProviderSpi<Object, GridCoverage> {
+public class GeoToolsRasterDataStoreIngestFormat implements
+    IngestFormatPluginProviderSpi<Object, GridCoverage> {
   private final RasterOptionProvider optionProvider = new RasterOptionProvider();
 
   @Override

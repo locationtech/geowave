@@ -53,8 +53,8 @@ import com.google.common.collect.Lists;
 public class MockComponents {
   // Mock class instantiating abstract class so we can test logic
   // contained in abstract class.
-  public static class MockAbstractDataAdapter extends AbstractDataAdapter<Integer>
-      implements StatisticsProvider<Integer> {
+  public static class MockAbstractDataAdapter extends AbstractDataAdapter<Integer> implements
+      StatisticsProvider<Integer> {
     private String id = ID;
 
     public MockAbstractDataAdapter() {
@@ -70,8 +70,9 @@ public class MockComponents {
       super.init(handlers, null);
     }
 
-    public static class TestIndexFieldHandler
-        implements IndexFieldHandler<Integer, TestIndexFieldType, Object>, Persistable {
+    public static class TestIndexFieldHandler implements
+        IndexFieldHandler<Integer, TestIndexFieldType, Object>,
+        Persistable {
       @Override
       public String[] getNativeFieldNames() {
         return new String[] {INTEGER};
@@ -295,8 +296,8 @@ public class MockComponents {
   // instantiation of MockAbstractDataAdapter object.
   //
   // *************************************************************************
-  public static class TestPersistentIndexFieldHandler
-      implements PersistentIndexFieldHandler<Integer, TestIndexFieldType, Object> {
+  public static class TestPersistentIndexFieldHandler implements
+      PersistentIndexFieldHandler<Integer, TestIndexFieldType, Object> {
 
     public TestPersistentIndexFieldHandler() {}
 

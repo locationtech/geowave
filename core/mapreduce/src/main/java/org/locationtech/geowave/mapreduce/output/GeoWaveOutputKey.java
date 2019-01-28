@@ -25,8 +25,9 @@ import org.slf4j.LoggerFactory;
  * GeoWave output format. The record writer must have bother the adapter and the index for the data
  * element to ingest.
  */
-public class GeoWaveOutputKey<T>
-    implements WritableComparable<GeoWaveOutputKey>, java.io.Serializable {
+public class GeoWaveOutputKey<T> implements
+    WritableComparable<GeoWaveOutputKey>,
+    java.io.Serializable {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveOutputKey.class);
   /** */
   private static final long serialVersionUID = 1L;

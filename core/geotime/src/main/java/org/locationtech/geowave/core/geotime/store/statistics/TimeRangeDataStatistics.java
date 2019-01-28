@@ -22,8 +22,8 @@ import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsTyp
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.threeten.extra.Interval;
 
-public abstract class TimeRangeDataStatistics<T>
-    extends AbstractDataStatistics<T, Interval, FieldStatisticsQueryBuilder<Interval>> {
+public abstract class TimeRangeDataStatistics<T> extends
+    AbstractDataStatistics<T, Interval, FieldStatisticsQueryBuilder<Interval>> {
 
   public static final FieldStatisticsType<Interval> STATS_TYPE =
       new FieldStatisticsType<>("TIME_RANGE");

@@ -12,8 +12,8 @@ import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 /** Interface which defines a numeric index strategy. */
-public interface NumericIndexStrategy
-    extends SortedIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData>,
+public interface NumericIndexStrategy extends
+    SortedIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData>,
     PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData> {
 
   /**

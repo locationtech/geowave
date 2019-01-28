@@ -12,8 +12,8 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 
-public abstract class RangeReaderParamsBuilder<T, R extends RangeReaderParamsBuilder<T, R>>
-    extends BaseReaderParamsBuilder<T, R> {
+public abstract class RangeReaderParamsBuilder<T, R extends RangeReaderParamsBuilder<T, R>> extends
+    BaseReaderParamsBuilder<T, R> {
   protected final Index index;
   protected short[] adapterIds = null;
   protected double[] maxResolutionSubsamplingPerDimension = null;

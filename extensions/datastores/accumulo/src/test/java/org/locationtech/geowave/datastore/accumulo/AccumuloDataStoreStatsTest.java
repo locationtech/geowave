@@ -459,8 +459,8 @@ public class AccumuloDataStoreStatsTest {
     }
   }
 
-  protected static class TestGeometryAdapter extends AbstractDataAdapter<TestGeometry>
-      implements StatisticsProvider<TestGeometry> {
+  protected static class TestGeometryAdapter extends AbstractDataAdapter<TestGeometry> implements
+      StatisticsProvider<TestGeometry> {
     private static final String GEOM = "myGeo";
     private static final String ID = "myId";
 

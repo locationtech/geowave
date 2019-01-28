@@ -16,8 +16,8 @@ import org.locationtech.geowave.core.store.data.field.FieldSerializationProvider
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
-public class PrimitiveLongArraySerializationProvider
-    implements FieldSerializationProviderSpi<long[]> {
+public class PrimitiveLongArraySerializationProvider implements
+    FieldSerializationProviderSpi<long[]> {
   @Override
   public FieldReader<long[]> getFieldReader() {
     return new PrimitiveLongArrayReader();

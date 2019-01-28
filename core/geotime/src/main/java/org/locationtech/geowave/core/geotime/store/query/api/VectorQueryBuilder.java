@@ -19,7 +19,8 @@ import org.opengis.feature.simple.SimpleFeature;
  * A QueryBuilder for vector (SimpleFeature) data. This should be preferred as the mechanism for
  * constructing a query in all cases when working with SimpleFeature data.
  */
-public interface VectorQueryBuilder extends QueryBuilder<SimpleFeature, VectorQueryBuilder>,
+public interface VectorQueryBuilder extends
+    QueryBuilder<SimpleFeature, VectorQueryBuilder>,
     BaseVectorQueryBuilder<SimpleFeature, Query<SimpleFeature>, VectorQueryBuilder> {
   static VectorQueryBuilder newBuilder() {
     return new VectorQueryBuilderImpl();

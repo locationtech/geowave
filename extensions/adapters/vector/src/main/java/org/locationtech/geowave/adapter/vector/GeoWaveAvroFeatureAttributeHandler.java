@@ -16,8 +16,8 @@ import org.opengis.feature.simple.SimpleFeature;
  * This is used by the FeatureDataAdapter to handle GeoWave 'fields' using SimpleFeature
  * 'attributes.'
  */
-public class GeoWaveAvroFeatureAttributeHandler
-    implements NativeFieldHandler<SimpleFeature, Object> {
+public class GeoWaveAvroFeatureAttributeHandler implements
+    NativeFieldHandler<SimpleFeature, Object> {
   public static final String FIELD_NAME = "field";
 
   public GeoWaveAvroFeatureAttributeHandler() {}

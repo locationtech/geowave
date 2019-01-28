@@ -20,7 +20,8 @@ import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataSt
 import org.opengis.feature.simple.SimpleFeature;
 
 public class FeatureNumericRangeStatistics extends NumericRangeDataStatistics<SimpleFeature>
-    implements FieldNameStatistic {
+    implements
+    FieldNameStatistic {
 
   public static final FieldStatisticsType<Range<Double>> STATS_TYPE =
       new FieldStatisticsType<>("FEATURE_NUMERIC_RANGE");

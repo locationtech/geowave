@@ -22,7 +22,8 @@ import org.locationtech.geowave.core.store.query.aggregate.AggregationQueryBuild
  *        type
  */
 public interface AggregationQueryBuilder<P extends Persistable, R, T, A extends AggregationQueryBuilder<P, R, T, A>>
-    extends BaseQueryBuilder<R, AggregationQuery<P, R, T>, A> {
+    extends
+    BaseQueryBuilder<R, AggregationQuery<P, R, T>, A> {
   /**
    * Provide the Aggregation function and the type name to apply the aggregation on
    *

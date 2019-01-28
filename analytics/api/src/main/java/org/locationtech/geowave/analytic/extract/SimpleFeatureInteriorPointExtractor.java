@@ -17,8 +17,8 @@ import org.opengis.feature.simple.SimpleFeature;
  * Extract a set of points representing critical points for a simple feature that me be
  * representative or compared to centroids.
  */
-public class SimpleFeatureInteriorPointExtractor extends SimpleFeatureCentroidExtractor
-    implements CentroidExtractor<SimpleFeature> {
+public class SimpleFeatureInteriorPointExtractor extends SimpleFeatureCentroidExtractor implements
+    CentroidExtractor<SimpleFeature> {
   @Override
   public Point getCentroid(final SimpleFeature anObject) {
     final FeatureGeometryHandler handler =

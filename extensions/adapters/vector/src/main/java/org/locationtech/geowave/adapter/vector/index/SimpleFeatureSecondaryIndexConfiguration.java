@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Set;
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 
-public interface SimpleFeatureSecondaryIndexConfiguration
-    extends SimpleFeatureUserDataConfiguration {
+public interface SimpleFeatureSecondaryIndexConfiguration extends
+    SimpleFeatureUserDataConfiguration {
   @JsonIgnore
   public String getIndexKey();
 

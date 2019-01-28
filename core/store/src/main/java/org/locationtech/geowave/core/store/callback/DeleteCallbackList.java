@@ -13,8 +13,9 @@ import java.io.IOException;
 import java.util.List;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-public class DeleteCallbackList<T, R extends GeoWaveRow>
-    implements DeleteCallback<T, R>, Closeable {
+public class DeleteCallbackList<T, R extends GeoWaveRow> implements
+    DeleteCallback<T, R>,
+    Closeable {
   private final List<DeleteCallback<T, R>> callbacks;
 
   public DeleteCallbackList(final List<DeleteCallback<T, R>> callbacks) {

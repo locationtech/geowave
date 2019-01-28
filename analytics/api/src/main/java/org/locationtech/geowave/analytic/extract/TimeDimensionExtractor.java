@@ -15,8 +15,8 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 
 /** A default implementation that averages all time attributes. */
-public class TimeDimensionExtractor extends SimpleFeatureGeometryExtractor
-    implements DimensionExtractor<SimpleFeature> {
+public class TimeDimensionExtractor extends SimpleFeatureGeometryExtractor implements
+    DimensionExtractor<SimpleFeature> {
   private static final String[] TIME_NAME = new String[] {"time"};
 
   @Override

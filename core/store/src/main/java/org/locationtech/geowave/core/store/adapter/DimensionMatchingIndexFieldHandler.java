@@ -19,7 +19,8 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
  * @param <NativeFieldType>
  */
 public interface DimensionMatchingIndexFieldHandler<RowType, IndexFieldType extends CommonIndexValue, NativeFieldType>
-    extends IndexFieldHandler<RowType, IndexFieldType, NativeFieldType> {
+    extends
+    IndexFieldHandler<RowType, IndexFieldType, NativeFieldType> {
   /**
    * Returns the set of field IDs that are supported by this field handler
    *

@@ -18,8 +18,8 @@ import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
-public abstract class ArrayField<T extends CommonIndexValue>
-    implements NumericDimensionField<ArrayWrapper<T>> {
+public abstract class ArrayField<T extends CommonIndexValue> implements
+    NumericDimensionField<ArrayWrapper<T>> {
   protected NumericDimensionField<T> elementField;
 
   public ArrayField(final NumericDimensionField<T> elementField) {

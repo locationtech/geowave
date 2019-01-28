@@ -12,6 +12,6 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 
-public interface CommonIndexAggregation<P extends Persistable, R>
-    extends Aggregation<P, R, CommonIndexedPersistenceEncoding> {
+public interface CommonIndexAggregation<P extends Persistable, R> extends
+    Aggregation<P, R, CommonIndexedPersistenceEncoding> {
 }

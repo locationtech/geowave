@@ -23,7 +23,16 @@ public class Length implements Serializable {
   public static final double YDperKM = FTperKM / 3.0;
 
   public enum LengthUnits {
-    Kilometers, Meters, Decimeters, Centimeters, Millimeters, NauticalMiles, StatuteMiles, Yards, Feet, Inches
+    Kilometers,
+    Meters,
+    Decimeters,
+    Centimeters,
+    Millimeters,
+    NauticalMiles,
+    StatuteMiles,
+    Yards,
+    Feet,
+    Inches
   }
 
   private double lengthKM;

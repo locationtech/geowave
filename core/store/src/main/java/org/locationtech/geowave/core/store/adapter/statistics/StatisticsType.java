@@ -20,7 +20,8 @@ import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
  * @param <R> The type of statistic
  */
 public abstract class StatisticsType<R, B extends StatisticsQueryBuilder<R, B>> extends ByteArray
-    implements Persistable {
+    implements
+    Persistable {
   private static final long serialVersionUID = 1L;
 
   public StatisticsType() {

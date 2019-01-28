@@ -41,8 +41,8 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
  * <p> There is a cost to using this approach: queries must span all prefixes. The number of
  * prefixes should initially be at least the number of tablet servers.
  */
-public class RoundRobinKeyIndexStrategy
-    implements PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData> {
+public class RoundRobinKeyIndexStrategy implements
+    PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData> {
 
   private byte[][] keys;
   public int position = 0;

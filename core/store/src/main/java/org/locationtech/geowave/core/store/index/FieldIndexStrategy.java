@@ -11,6 +11,6 @@ package org.locationtech.geowave.core.store.index;
 import org.locationtech.geowave.core.index.SortedIndexStrategy;
 
 /** Interface which defines an index strategy. */
-public interface FieldIndexStrategy<ConstraintType extends FilterableConstraints, FieldType>
-    extends SortedIndexStrategy<ConstraintType, FieldType> {
+public interface FieldIndexStrategy<ConstraintType extends FilterableConstraints, FieldType> extends
+    SortedIndexStrategy<ConstraintType, FieldType> {
 }

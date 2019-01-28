@@ -16,9 +16,9 @@ import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-public class CountDataStatistics<T>
-    extends AbstractDataStatistics<T, Long, BaseStatisticsQueryBuilder<Long>>
-    implements DeleteCallback<T, GeoWaveRow> {
+public class CountDataStatistics<T> extends
+    AbstractDataStatistics<T, Long, BaseStatisticsQueryBuilder<Long>> implements
+    DeleteCallback<T, GeoWaveRow> {
   public static final BaseStatisticsType<Long> STATS_TYPE = new BaseStatisticsType<>("COUNT_DATA");
 
   private long count = Long.MIN_VALUE;

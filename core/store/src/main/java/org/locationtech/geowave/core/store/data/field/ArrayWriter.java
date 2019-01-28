@@ -150,8 +150,8 @@ public abstract class ArrayWriter<RowType, FieldType> implements FieldWriter<Row
     return length;
   }
 
-  public static class FixedSizeObjectArrayWriter<RowType, FieldType>
-      extends ArrayWriter<RowType, FieldType> {
+  public static class FixedSizeObjectArrayWriter<RowType, FieldType> extends
+      ArrayWriter<RowType, FieldType> {
     public FixedSizeObjectArrayWriter(final FieldWriter<RowType, FieldType> writer) {
       super(writer);
     }
@@ -168,8 +168,8 @@ public abstract class ArrayWriter<RowType, FieldType> implements FieldWriter<Row
     }
   }
 
-  public static class VariableSizeObjectArrayWriter<RowType, FieldType>
-      extends ArrayWriter<RowType, FieldType> {
+  public static class VariableSizeObjectArrayWriter<RowType, FieldType> extends
+      ArrayWriter<RowType, FieldType> {
     public VariableSizeObjectArrayWriter(final FieldWriter<RowType, FieldType> writer) {
       super(writer);
     }

@@ -18,8 +18,8 @@ import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
 import org.redisson.client.protocol.ScoredEntry;
 
-public class RedisScoredSetWrapper<V>
-    extends AbstractRedisSetWrapper<RScoredSortedSetAsync<V>, RScoredSortedSet<V>> {
+public class RedisScoredSetWrapper<V> extends
+    AbstractRedisSetWrapper<RScoredSortedSetAsync<V>, RScoredSortedSet<V>> {
 
   public RedisScoredSetWrapper(
       final RedissonClient client,

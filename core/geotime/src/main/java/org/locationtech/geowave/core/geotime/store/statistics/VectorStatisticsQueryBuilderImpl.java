@@ -14,16 +14,17 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsQueryBui
 import org.locationtech.jts.geom.Envelope;
 import org.threeten.extra.Interval;
 
-public class VectorStatisticsQueryBuilderImpl<R>
-    extends StatisticsQueryBuilderImpl<R, VectorStatisticsQueryBuilder<R>>
-    implements VectorStatisticsQueryBuilder<R> {
+public class VectorStatisticsQueryBuilderImpl<R> extends
+    StatisticsQueryBuilderImpl<R, VectorStatisticsQueryBuilder<R>> implements
+    VectorStatisticsQueryBuilder<R> {
   @Override
   public QueryByVectorStatisticsTypeFactory factory() {
     return QueryByVectorStatisticsTypeFactoryImpl.SINGLETON;
   }
 
-  protected static class QueryByVectorStatisticsTypeFactoryImpl
-      extends QueryByStatisticsTypeFactoryImpl implements QueryByVectorStatisticsTypeFactory {
+  protected static class QueryByVectorStatisticsTypeFactoryImpl extends
+      QueryByStatisticsTypeFactoryImpl implements
+      QueryByVectorStatisticsTypeFactory {
     private static QueryByVectorStatisticsTypeFactory SINGLETON =
         new QueryByVectorStatisticsTypeFactoryImpl();
 

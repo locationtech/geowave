@@ -18,8 +18,8 @@ import org.locationtech.geowave.core.store.dimension.ArrayWrapperReader;
 import org.locationtech.geowave.core.store.dimension.ArrayWrapperWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 
-public class SpatialArrayField extends ArrayField<GeometryWrapper>
-    implements NumericDimensionField<ArrayWrapper<GeometryWrapper>> {
+public class SpatialArrayField extends ArrayField<GeometryWrapper> implements
+    NumericDimensionField<ArrayWrapper<GeometryWrapper>> {
   private ArrayWrapperReader<GeometryWrapper> reader;
   private ArrayWrapperWriter<GeometryWrapper> writer;
 

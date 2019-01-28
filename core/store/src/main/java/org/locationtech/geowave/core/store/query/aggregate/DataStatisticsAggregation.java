@@ -12,8 +12,8 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.api.Aggregation;
 
-public class DataStatisticsAggregation<T>
-    implements Aggregation<InternalDataStatistics<T, ?, ?>, InternalDataStatistics<T, ?, ?>, T> {
+public class DataStatisticsAggregation<T> implements
+    Aggregation<InternalDataStatistics<T, ?, ?>, InternalDataStatistics<T, ?, ?>, T> {
   private InternalDataStatistics<T, ?, ?> statisticsParam;
 
   private InternalDataStatistics<T, ?, ?> statisticsResult;

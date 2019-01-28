@@ -10,8 +10,8 @@ package org.locationtech.geowave.core.geotime.store.dimension;
 
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
 
-public class CustomCRSBoundedSpatialDimension extends BasicDimensionDefinition
-    implements CustomCRSSpatialDimension {
+public class CustomCRSBoundedSpatialDimension extends BasicDimensionDefinition implements
+    CustomCRSSpatialDimension {
   private BaseCustomCRSSpatialDimension baseCustomCRS;
 
   public CustomCRSBoundedSpatialDimension() {}

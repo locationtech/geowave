@@ -17,8 +17,8 @@ import org.locationtech.geowave.core.store.data.field.FieldSerializationProvider
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.jts.geom.Geometry;
 
-public class GeometryArraySerializationProvider
-    implements FieldSerializationProviderSpi<Geometry[]> {
+public class GeometryArraySerializationProvider implements
+    FieldSerializationProviderSpi<Geometry[]> {
   @Override
   public FieldReader<Geometry[]> getFieldReader() {
     return new GeometryArrayReader();

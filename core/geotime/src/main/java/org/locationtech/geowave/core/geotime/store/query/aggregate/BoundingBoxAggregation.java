@@ -13,8 +13,8 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.jts.geom.Envelope;
 
-public abstract class BoundingBoxAggregation<P extends Persistable, T>
-    implements Aggregation<P, Envelope, T> {
+public abstract class BoundingBoxAggregation<P extends Persistable, T> implements
+    Aggregation<P, Envelope, T> {
 
   protected double minX = Double.MAX_VALUE;
   protected double minY = Double.MAX_VALUE;

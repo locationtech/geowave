@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
  * practical - it assumes the objects are not updated often or at all. The objects are stored in
  * their own table.
  */
-public class AdapterStoreImpl extends AbstractGeoWavePersistence<InternalDataAdapter<?>>
-    implements PersistentAdapterStore {
+public class AdapterStoreImpl extends AbstractGeoWavePersistence<InternalDataAdapter<?>> implements
+    PersistentAdapterStore {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AdapterStoreImpl.class);
 

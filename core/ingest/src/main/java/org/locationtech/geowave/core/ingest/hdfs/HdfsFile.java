@@ -15,8 +15,8 @@ package org.locationtech.geowave.core.ingest.hdfs;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
-public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase
-    implements org.apache.avro.specific.SpecificRecord {
+public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implements
+    org.apache.avro.specific.SpecificRecord {
   public static final org.apache.avro.Schema SCHEMA$ =
       new org.apache.avro.Schema.Parser().parse(
           "{\"type\":\"record\",\"name\":\"HdfsFile\",\"namespace\":\"org.locationtech.geowave.core.ingest.hdfs\",\"fields\":[{\"name\":\"originalFile\",\"type\":\"bytes\",\"doc\":\"Original file data\"},{\"name\":\"originalFilePath\",\"type\":[\"string\",\"null\"],\"doc\":\"Original file path\"}],\"doc:\":\"Stores the original files from a local file system in HDFS\"}");
@@ -119,7 +119,8 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase
 
   /** RecordBuilder for HdfsFile instances. */
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<HdfsFile>
-      implements org.apache.avro.data.RecordBuilder<HdfsFile> {
+      implements
+      org.apache.avro.data.RecordBuilder<HdfsFile> {
 
     private java.nio.ByteBuffer originalFile;
     private java.lang.CharSequence originalFilePath;

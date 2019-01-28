@@ -13,7 +13,8 @@ import org.locationtech.geowave.core.index.ByteArray;
 
 public interface NeighborList<NNTYPE> extends Iterable<Entry<ByteArray, NNTYPE>> {
   public enum InferType {
-    NONE, SKIP, // distance measure is skipped
+    NONE,
+    SKIP, // distance measure is skipped
     REMOVE // skipped and removed from future selection
   };
 

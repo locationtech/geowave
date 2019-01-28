@@ -244,8 +244,8 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     }
   }
 
-  public static class DuplicateCountAggregation
-      implements CommonIndexAggregation<Persistable, DuplicateCount> {
+  public static class DuplicateCountAggregation implements
+      CommonIndexAggregation<Persistable, DuplicateCount> {
     private final Set<ByteArray> visitedDataIds = new HashSet<>();
     long count = 0;
 

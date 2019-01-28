@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.extra.Interval;
 
-public class VectorTimeRangeAggregation
-    extends TimeRangeAggregation<FieldNameParam, SimpleFeature> {
+public class VectorTimeRangeAggregation extends
+    TimeRangeAggregation<FieldNameParam, SimpleFeature> {
   private static final Logger LOGGER = LoggerFactory.getLogger(VectorTimeRangeAggregation.class);
   private FieldNameParam fieldNameParam;
   private final Map<String, TimeDescriptors> descMap = new HashMap<>();

@@ -14,8 +14,9 @@ import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-public interface GeotoolsFeatureDataAdapter
-    extends DataTypeAdapter<SimpleFeature>, StatisticsProvider<SimpleFeature> {
+public interface GeotoolsFeatureDataAdapter extends
+    DataTypeAdapter<SimpleFeature>,
+    StatisticsProvider<SimpleFeature> {
   public SimpleFeatureType getFeatureType();
 
   public TimeDescriptors getTimeDescriptors();

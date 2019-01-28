@@ -11,8 +11,8 @@ package org.locationtech.geowave.core.geotime.store.dimension;
 import org.locationtech.geowave.core.index.dimension.UnboundedDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BasicBinningStrategy;
 
-public class CustomCRSUnboundedSpatialDimensionY extends UnboundedDimensionDefinition
-    implements CustomCRSSpatialDimension {
+public class CustomCRSUnboundedSpatialDimensionY extends UnboundedDimensionDefinition implements
+    CustomCRSSpatialDimension {
   private BaseCustomCRSSpatialDimension baseCustomCRS;
 
   public CustomCRSUnboundedSpatialDimensionY() {

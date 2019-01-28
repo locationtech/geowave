@@ -10,8 +10,10 @@ package org.locationtech.geowave.format.stanag4676.parser.model;
 
 /** Provides the status of a track (i.e. initiating, maintaining, dropping, terminated). */
 public enum TrackStatus {
-  INITIATING("INITIATING"), MAINTAINING("MAINTAINING"), DROPPING("DROPPING"), TERMINATED(
-      "TERMINATED");
+  INITIATING("INITIATING"),
+  MAINTAINING("MAINTAINING"),
+  DROPPING("DROPPING"),
+  TERMINATED("TERMINATED");
 
   private String value;
 

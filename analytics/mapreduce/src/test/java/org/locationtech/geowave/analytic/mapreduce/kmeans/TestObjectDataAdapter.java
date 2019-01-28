@@ -29,8 +29,8 @@ import org.locationtech.geowave.mapreduce.HadoopDataAdapter;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 import org.locationtech.jts.geom.Geometry;
 
-public class TestObjectDataAdapter extends AbstractDataAdapter<TestObject>
-    implements HadoopDataAdapter<TestObject, TestObjectWritable> {
+public class TestObjectDataAdapter extends AbstractDataAdapter<TestObject> implements
+    HadoopDataAdapter<TestObject, TestObjectWritable> {
   private static final String GEOM = "myGeo";
   private static final String ID = "myId";
   private static final String GROUP_ID = "myGroupId";
@@ -190,8 +190,8 @@ public class TestObjectDataAdapter extends AbstractDataAdapter<TestObject>
     return new TestObjectHadoopSerializer();
   }
 
-  private class TestObjectHadoopSerializer
-      implements HadoopWritableSerializer<TestObject, TestObjectWritable> {
+  private class TestObjectHadoopSerializer implements
+      HadoopWritableSerializer<TestObject, TestObjectWritable> {
 
     @Override
     public TestObjectWritable toWritable(final TestObject entry) {

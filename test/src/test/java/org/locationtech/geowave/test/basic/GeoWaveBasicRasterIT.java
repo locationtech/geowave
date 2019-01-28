@@ -538,8 +538,8 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
   /**
    * this will sum up every even band and place the average of the previous band in each odd band
    */
-  public static class SumAndAveragingMergeStrategy
-      implements RasterTileMergeStrategy<MergeCounter> {
+  public static class SumAndAveragingMergeStrategy implements
+      RasterTileMergeStrategy<MergeCounter> {
 
     public SumAndAveragingMergeStrategy() {
       super();

@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 
 /** This is the map-reduce reducer for ingestion with both the mapper and reducer. */
-public class IngestReducer
-    extends Reducer<WritableComparable<?>, Writable, GeoWaveOutputKey, Object> {
+public class IngestReducer extends
+    Reducer<WritableComparable<?>, Writable, GeoWaveOutputKey, Object> {
   private IngestWithReducer ingestWithReducer;
   private String globalVisibility;
   private String[] indexNames;

@@ -16,8 +16,9 @@ import java.util.function.Function;
  * @param <RowType>
  * @param <FieldType>
  */
-public interface FieldWriter<RowType, FieldType>
-    extends FieldVisibilityHandler<RowType, FieldType>, Function<FieldType, byte[]> {
+public interface FieldWriter<RowType, FieldType> extends
+    FieldVisibilityHandler<RowType, FieldType>,
+    Function<FieldType, byte[]> {
 
   /**
    * Serializes the entry into binary data that will be stored as the value for the row

@@ -17,8 +17,8 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.data.field.base.BigDecimalSerializationProvider.BigDecimalReader;
 import org.locationtech.geowave.core.store.data.field.base.BigDecimalSerializationProvider.BigDecimalWriter;
 
-public class BigDecimalArraySerializationProvider
-    implements FieldSerializationProviderSpi<BigDecimal[]> {
+public class BigDecimalArraySerializationProvider implements
+    FieldSerializationProviderSpi<BigDecimal[]> {
   @Override
   public FieldReader<BigDecimal[]> getFieldReader() {
     return new BigDecimalArrayReader();
@@ -35,8 +35,8 @@ public class BigDecimalArraySerializationProvider
     }
   }
 
-  private static class BigDecimalArrayWriter
-      extends VariableSizeObjectArrayWriter<Object, BigDecimal> {
+  private static class BigDecimalArrayWriter extends
+      VariableSizeObjectArrayWriter<Object, BigDecimal> {
     public BigDecimalArrayWriter() {
       super(new BigDecimalWriter());
     }

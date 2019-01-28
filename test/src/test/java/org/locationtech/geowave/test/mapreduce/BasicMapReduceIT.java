@@ -365,8 +365,8 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     }
   }
 
-  private static class VerifyExpectedResultsMapper
-      extends GeoWaveWritableInputMapper<NullWritable, NullWritable> {
+  private static class VerifyExpectedResultsMapper extends
+      GeoWaveWritableInputMapper<NullWritable, NullWritable> {
     private Set<Long> expectedHashedCentroids = new HashSet<>();
 
     @Override

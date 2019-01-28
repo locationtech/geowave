@@ -38,7 +38,8 @@ import com.google.common.primitives.Bytes;
  * their own table.
  */
 public class DataStatisticsStoreImpl extends
-    AbstractGeoWavePersistence<InternalDataStatistics<?, ?, ?>> implements DataStatisticsStore {
+    AbstractGeoWavePersistence<InternalDataStatistics<?, ?, ?>> implements
+    DataStatisticsStore {
   // this is fairly arbitrary at the moment because it is the only custom
   // server op added
   public static final int STATS_COMBINER_PRIORITY = 10;

@@ -18,8 +18,8 @@ import org.locationtech.geowave.core.store.query.QueryBuilderImpl;
  * @param <T> the data type
  * @param <R> the type of the builder so that extensions of this builder can maintain type
  */
-public interface QueryBuilder<T, R extends QueryBuilder<T, R>>
-    extends BaseQueryBuilder<T, Query<T>, R> {
+public interface QueryBuilder<T, R extends QueryBuilder<T, R>> extends
+    BaseQueryBuilder<T, Query<T>, R> {
   /**
    * retrieve all data types (this is the default behavior)
    *
