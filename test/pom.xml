@@ -676,6 +676,7 @@
 						<sourceDirectory>../extensions/datastores/cassandra/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/datastores/dynamodb/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/datastores/redis/src/main/java</sourceDirectory>
+						<sourceDirectory>../extensions/datastores/rocksdb/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/auth/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/raster/src/main/java</sourceDirectory>
