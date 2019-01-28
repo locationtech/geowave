@@ -129,7 +129,7 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
     TestUtils.printEndOfTest(LOGGER, testName, startMillis);
   }
 
-  // @Test
+  @Test
   public void testDistributedIngestAndQuerySpatial() throws Exception {
     testIngestAndQuery(DimensionalityType.SPATIAL);
   }
@@ -139,7 +139,7 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
     testIngestAndQuery(DimensionalityType.SPATIAL_TEMPORAL);
   }
 
-  // @Test
+  @Test
   public void testDistributedIngestAndQuerySpatialAndSpatialTemporal() throws Exception {
     testIngestAndQuery(DimensionalityType.ALL);
   }

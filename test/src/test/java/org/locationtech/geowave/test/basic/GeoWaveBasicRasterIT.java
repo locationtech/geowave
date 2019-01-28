@@ -99,7 +99,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
     LOGGER.warn("-----------------------------------------");
   }
 
-  // @Test
+  @Test
   public void testMergeData() throws Exception {
     final String coverageName = "testMergeData_SummingMergeStrategy";
 
@@ -194,7 +194,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
     TestUtils.deleteAll(dataStoreOptions);
   }
 
-  // @Test
+  @Test
   public void testNoDataMergeStrategy() throws IOException {
     final String coverageName = "testNoDataMergeStrategy";
     final int tileSize = 64; // 256 fails on bigtable exceeding maximum
