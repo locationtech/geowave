@@ -127,12 +127,18 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#addConstraintsScanIteratorSettings-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-org.apache.accumulo.core.client.ScannerBase-org.locationtech.geowave.core.store.DataStoreOptions-">addConstraintsScanIteratorSettings</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;params,
+                                  org.apache.accumulo.core.client.ScannerBase&nbsp;scanner,
+                                  <a href="../../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;readerParams)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected &lt;T&gt;&nbsp;org.apache.accumulo.core.client.Scanner</code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#getScanner-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">getScanner</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;params)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#getScanner-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">getScanner</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -149,8 +155,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">CassandraOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/CassandraOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;recordReaderParams)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CassandraOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/CassandraOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -161,8 +167,9 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/CassandraReader.html#CassandraReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-org.locationtech.geowave.datastore.cassandra.operations.CassandraOperations-">CassandraReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/CassandraReader.html" title="type parameter in CassandraReader">T</a>&gt;&nbsp;recordReaderParams,
-               <a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/CassandraOperations.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">CassandraOperations</a>&nbsp;operations)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/CassandraReader.html#CassandraReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-org.locationtech.geowave.datastore.cassandra.operations.CassandraOperations-boolean-">CassandraReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
+               <a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/CassandraOperations.html" title="class in org.locationtech.geowave.datastore.cassandra.operations">CassandraOperations</a>&nbsp;operations,
+               boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -179,8 +186,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DynamoDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;recordReaderParams)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DynamoDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -191,8 +198,9 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBReader.html#DynamoDBReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-org.locationtech.geowave.datastore.dynamodb.operations.DynamoDBOperations-">DynamoDBReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBReader.html" title="type parameter in DynamoDBReader">T</a>&gt;&nbsp;recordReaderParams,
-              <a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBOperations.html" title="class in org.locationtech.geowave.datastore.dynamodb.operations">DynamoDBOperations</a>&nbsp;operations)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBReader.html#DynamoDBReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-org.locationtech.geowave.datastore.dynamodb.operations.DynamoDBOperations-boolean-">DynamoDBReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
+              <a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBOperations.html" title="class in org.locationtech.geowave.datastore.dynamodb.operations">DynamoDBOperations</a>&nbsp;operations,
+              boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -209,8 +217,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;recordReaderParams)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -221,7 +229,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#HBaseReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-org.locationtech.geowave.datastore.hbase.operations.HBaseOperations-">HBaseReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="type parameter in HBaseReader">T</a>&gt;&nbsp;recordReaderParams,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#HBaseReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-org.locationtech.geowave.datastore.hbase.operations.HBaseOperations-">HBaseReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
            <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -239,8 +247,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RedisOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RedisOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -251,10 +259,11 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html#RedisReader-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-java.lang.String-">RedisReader</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html#RedisReader-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-java.lang.String-boolean-">RedisReader</a></span>(org.redisson.api.RedissonClient&nbsp;client,
            <a href="../../../../../../org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a>&nbsp;compression,
-           <a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisReader.html" title="type parameter in RedisReader">T</a>&gt;&nbsp;recordReaderParams,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
+           <a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
+           boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -271,8 +280,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RocksDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RocksDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -284,7 +293,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBReader.html#RocksDBReader-org.locationtech.geowave.datastore.rocksdb.util.RocksDBClient-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">RocksDBReader</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBClient</a>&nbsp;client,
-             <a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBReader.html" title="type parameter in RocksDBReader">T</a>&gt;&nbsp;recordReaderParams)</code>&nbsp;</td>
+             <a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -301,8 +310,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">MapReduceDataStoreOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/mapreduce/MapReduceDataStoreOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">MapReduceDataStoreOperations.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/mapreduce/MapReduceDataStoreOperations.html#createReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

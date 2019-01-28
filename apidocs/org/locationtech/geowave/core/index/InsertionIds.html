@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -137,17 +137,17 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/persist/P
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#InsertionIds--">InsertionIds</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#InsertionIds-org.locationtech.geowave.core.index.ByteArray-">InsertionIds</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#InsertionIds-byte:A-">InsertionIds</a></span>(byte[]&nbsp;partitionKey)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#InsertionIds-org.locationtech.geowave.core.index.ByteArray-java.util.List-">InsertionIds</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;sortKeys)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#InsertionIds-byte:A-java.util.List-">InsertionIds</a></span>(byte[]&nbsp;partitionKey,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;byte[]&gt;&nbsp;sortKeys)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#InsertionIds-java.util.Collection-">InsertionIds</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/SinglePartitionInsertionIds.html" title="class in org.locationtech.geowave.core.index">SinglePartitionInsertionIds</a>&gt;&nbsp;partitionKeys)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#InsertionIds-java.util.List-">InsertionIds</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;sortKeys)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#InsertionIds-java.util.List-">InsertionIds</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;byte[]&gt;&nbsp;sortKeys)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#InsertionIds-org.locationtech.geowave.core.index.SinglePartitionInsertionIds-">InsertionIds</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/SinglePartitionInsertionIds.html" title="class in org.locationtech.geowave.core.index">SinglePartitionInsertionIds</a>&nbsp;singePartitionKey)</code>&nbsp;</td>
@@ -172,41 +172,36 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/persist/P
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#asQueryRanges--">asQueryRanges</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#contains-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">contains</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-        <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey)</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
 <div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;byte[]&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#getCompositeInsertionIds--">getCompositeInsertionIds</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;byte[],byte[]&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#getFirstPartitionAndSortKeyPair--">getFirstPartitionAndSortKeyPair</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/SinglePartitionInsertionIds.html" title="class in org.locationtech.geowave.core.index">SinglePartitionInsertionIds</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#getPartitionKeys--">getPartitionKeys</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#getSize--">getSize</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#hasDuplicates--">hasDuplicates</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#isEmpty--">isEmpty</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/InsertionIds.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -249,26 +244,26 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/persist/P
 <ul class="blockList">
 <li class="blockList">
 <h4>InsertionIds</h4>
-<pre>public&nbsp;InsertionIds(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;sortKeys)</pre>
+<pre>public&nbsp;InsertionIds(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;byte[]&gt;&nbsp;sortKeys)</pre>
 </li>
 </ul>
-<a name="InsertionIds-org.locationtech.geowave.core.index.ByteArray-">
+<a name="InsertionIds-byte:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>InsertionIds</h4>
-<pre>public&nbsp;InsertionIds(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey)</pre>
+<pre>public&nbsp;InsertionIds(byte[]&nbsp;partitionKey)</pre>
 </li>
 </ul>
-<a name="InsertionIds-org.locationtech.geowave.core.index.ByteArray-java.util.List-">
+<a name="InsertionIds-byte:A-java.util.List-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>InsertionIds</h4>
-<pre>public&nbsp;InsertionIds(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;sortKeys)</pre>
+<pre>public&nbsp;InsertionIds(byte[]&nbsp;partitionKey,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;byte[]&gt;&nbsp;sortKeys)</pre>
 </li>
 </ul>
 <a name="InsertionIds-org.locationtech.geowave.core.index.SinglePartitionInsertionIds-">
@@ -348,17 +343,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/persist/P
 <ul class="blockList">
 <li class="blockList">
 <h4>getCompositeInsertionIds</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;getCompositeInsertionIds()</pre>
-</li>
-</ul>
-<a name="contains-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;contains(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                        <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;byte[]&gt;&nbsp;getCompositeInsertionIds()</pre>
 </li>
 </ul>
 <a name="getFirstPartitionAndSortKeyPair--">
@@ -367,7 +352,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/persist/P
 <ul class="blockList">
 <li class="blockList">
 <h4>getFirstPartitionAndSortKeyPair</h4>
-<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;getFirstPartitionAndSortKeyPair()</pre>
+<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;byte[],byte[]&gt;&nbsp;getFirstPartitionAndSortKeyPair()</pre>
 </li>
 </ul>
 <a name="toBinary--">

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -113,23 +113,49 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;</dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../org/locationtech/geowave/mapreduce/input/AsyncInputFormatIteratorWrapper.html" title="class in org.locationtech.geowave.mapreduce.input">AsyncInputFormatIteratorWrapper</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">InputFormatIteratorWrapper&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;</pre>
-<div class="block">This is used internally to translate Accumulo rows into native objects (using the appropriate
- data adapter). It also performs any client-side filtering. It will peek at the next entry in the
- accumulo iterator to always maintain a reference to the next value. It maintains the adapter ID,
- data ID, and original accumulo key in the GeoWaveInputKey for use by the GeoWaveInputFormat.</div>
+implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;</pre>
+<div class="block">This is used internally to translate GeoWave rows into native objects (using the appropriate data
+ adapter). It also performs any client-side filtering. It will peek at the next entry in the
+ underlying datastore iterator to always maintain a reference to the next value.</div>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#nextEntry">nextEntry</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#reader">reader</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -142,12 +168,13 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#InputFormatIteratorWrapper-org.locationtech.geowave.core.store.operations.RowReader-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.api.Index-boolean-">InputFormatIteratorWrapper</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
-                          <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;queryFilter,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#InputFormatIteratorWrapper-java.util.Iterator-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.api.Index-boolean-org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval-">InputFormatIteratorWrapper</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
+                          <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;queryFilters,
                           <a href="../../../../../org/locationtech/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore,
                           <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
                           <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
-                          boolean&nbsp;isOutputWritable)</code>&nbsp;</td>
+                          boolean&nbsp;isOutputWritable,
+                          <a href="../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html" title="interface in org.locationtech.geowave.core.store.base.dataidx">DataIndexRetrieval</a>&nbsp;dataIndexRetrieval)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -165,16 +192,39 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>protected org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#decodeRowToEntry-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-">decodeRowToEntry</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
+                <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
+                <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&nbsp;adapter,
+                <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#decodeRowToValue-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-">decodeRowToValue</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
+                <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
+                <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&nbsp;adapter,
+                <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#findNext--">findNext</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#hasNext--">hasNext</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;</code></td>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#next--">next</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#remove--">remove</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>protected org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#valueToEntry-org.locationtech.geowave.core.store.entities.GeoWaveRow-java.lang.Object-">valueToEntry</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -199,24 +249,51 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="reader">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>reader</h4>
+<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt; reader</pre>
+</li>
+</ul>
+<a name="nextEntry">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>nextEntry</h4>
+<pre>protected&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt; nextEntry</pre>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="InputFormatIteratorWrapper-org.locationtech.geowave.core.store.operations.RowReader-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.api.Index-boolean-">
+<a name="InputFormatIteratorWrapper-java.util.Iterator-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.api.Index-boolean-org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>InputFormatIteratorWrapper</h4>
-<pre>public&nbsp;InputFormatIteratorWrapper(<a href="../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
-                                  <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;queryFilter,
+<pre>public&nbsp;InputFormatIteratorWrapper(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
+                                  <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;queryFilters,
                                   <a href="../../../../../org/locationtech/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore,
                                   <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
                                   <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
-                                  boolean&nbsp;isOutputWritable)</pre>
+                                  boolean&nbsp;isOutputWritable,
+                                  <a href="../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html" title="interface in org.locationtech.geowave.core.store.base.dataidx">DataIndexRetrieval</a>&nbsp;dataIndexRetrieval)</pre>
 </li>
 </ul>
 </li>
@@ -227,6 +304,49 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="findNext--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findNext</h4>
+<pre>protected&nbsp;void&nbsp;findNext()</pre>
+</li>
+</ul>
+<a name="decodeRowToValue-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>decodeRowToValue</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;decodeRowToValue(<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
+                                  <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
+                                  <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&nbsp;adapter,
+                                  <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
+</li>
+</ul>
+<a name="decodeRowToEntry-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>decodeRowToEntry</h4>
+<pre>protected&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&nbsp;decodeRowToEntry(<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
+                                                                                  <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
+                                                                                  <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&nbsp;adapter,
+                                                                                  <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
+</li>
+</ul>
+<a name="valueToEntry-org.locationtech.geowave.core.store.entities.GeoWaveRow-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>valueToEntry</h4>
+<pre>protected&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&nbsp;valueToEntry(<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
+                                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
+</li>
+</ul>
 <a name="hasNext--">
 <!--   -->
 </a>
@@ -236,7 +356,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <pre>public&nbsp;boolean&nbsp;hasNext()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -246,11 +366,11 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&nbsp;next()
-                                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util">NoSuchElementException</a></pre>
+<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&nbsp;next()
+                                                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util">NoSuchElementException</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&gt;</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util">NoSuchElementException</a></code></dd>
 </dl>
@@ -265,7 +385,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <pre>public&nbsp;void&nbsp;remove()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#remove--" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#remove--" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -323,13 +443,13 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

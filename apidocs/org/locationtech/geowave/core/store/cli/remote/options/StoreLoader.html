@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -176,32 +176,28 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StoreLoader.html#createInternalAdapterStore--">createInternalAdapterStore</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StoreLoader.html#createSecondaryIndexStore--">createSecondaryIndexStore</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StoreLoader.html#getDataStorePlugin--">getDataStorePlugin</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in org.locationtech.geowave.core.store">StoreFactoryFamilySpi</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StoreLoader.html#getFactoryFamily--">getFactoryFamily</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html" title="class in org.locationtech.geowave.core.store">StoreFactoryOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StoreLoader.html#getFactoryOptions--">getFactoryOptions</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StoreLoader.html#getStoreName--">getStoreName</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StoreLoader.html#loadFromConfig-java.io.File-">loadFromConfig</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile)</code>
 <div class="block">Attempt to load the datastore configuration from the config file.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StoreLoader.html#loadFromConfig-java.util.Properties-java.lang.String-java.io.File-">loadFromConfig</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;props,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
@@ -209,7 +205,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">Attempt to load the datastore configuration from the config file.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StoreLoader.html#setDataStorePlugin-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setDataStorePlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;dataStorePlugin)</code>&nbsp;</td>
 </tr>
@@ -373,15 +369,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>createDataStatisticsStore</h4>
 <pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;createDataStatisticsStore()</pre>
-</li>
-</ul>
-<a name="createSecondaryIndexStore--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createSecondaryIndexStore</h4>
-<pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;createSecondaryIndexStore()</pre>
 </li>
 </ul>
 <a name="createAdapterIndexMappingStore--">

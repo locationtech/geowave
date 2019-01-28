@@ -137,8 +137,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/PrefixIdQuery.html#PrefixIdQuery--">PrefixIdQuery</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/PrefixIdQuery.html#PrefixIdQuery-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">PrefixIdQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-             <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKeyPrefix)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/PrefixIdQuery.html#PrefixIdQuery-byte:A-byte:A-">PrefixIdQuery</a></span>(byte[]&nbsp;partitionKey,
+             byte[]&nbsp;sortKeyPrefix)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -175,11 +175,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/PrefixIdQuery.html#getPartitionKey--">getPartitionKey</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/PrefixIdQuery.html#getSortKeyPrefix--">getSortKeyPrefix</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -219,14 +219,14 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <pre>public&nbsp;PrefixIdQuery()</pre>
 </li>
 </ul>
-<a name="PrefixIdQuery-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">
+<a name="PrefixIdQuery-byte:A-byte:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PrefixIdQuery</h4>
-<pre>public&nbsp;PrefixIdQuery(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                     <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKeyPrefix)</pre>
+<pre>public&nbsp;PrefixIdQuery(byte[]&nbsp;partitionKey,
+                     byte[]&nbsp;sortKeyPrefix)</pre>
 </li>
 </ul>
 </li>
@@ -243,7 +243,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <ul class="blockList">
 <li class="blockList">
 <h4>getPartitionKey</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getPartitionKey()</pre>
+<pre>public&nbsp;byte[]&nbsp;getPartitionKey()</pre>
 </li>
 </ul>
 <a name="getSortKeyPrefix--">
@@ -252,7 +252,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <ul class="blockList">
 <li class="blockList">
 <h4>getSortKeyPrefix</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getSortKeyPrefix()</pre>
+<pre>public&nbsp;byte[]&nbsp;getSortKeyPrefix()</pre>
 </li>
 </ul>
 <a name="createFilters-org.locationtech.geowave.core.store.api.Index-">

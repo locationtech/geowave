@@ -135,10 +135,6 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.index.writer">org.locationtech.geowave.core.store.index.writer</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.util">org.locationtech.geowave.core.store.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -327,7 +323,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TieredSFCIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html#reprojectToTier-org.locationtech.geowave.core.index.ByteArray-java.lang.Byte-java.math.BigInteger-">reprojectToTier</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;insertId,
+<td class="colLast"><span class="typeNameLabel">TieredSFCIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html#reprojectToTier-byte:A-java.lang.Byte-java.math.BigInteger-">reprojectToTier</a></span>(byte[]&nbsp;insertId,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&nbsp;reprojectTierId,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;maxDuplicates)</code>&nbsp;</td>
 </tr>
@@ -449,16 +445,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
-<td class="colLast"><span class="typeNameLabel">Writer.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-">write</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="type parameter in Writer">T</a>&nbsp;entry)</code>
-<div class="block">Write the entry using any basic visibilities set elsewhere</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
-<td class="colLast"><span class="typeNameLabel">Writer.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="type parameter in Writer">T</a>&nbsp;entry,
-     <a href="../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="type parameter in Writer">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>
-<div class="block">write the entry using visibilities determined by the fieldVisibilityyWriter</div>
-</td>
+<td class="colLast"><span class="typeNameLabel">WriteResults.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html#getInsertionIdsWritten-java.lang.String-">getInsertionIdsWritten</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -473,6 +460,29 @@
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestOptions.IngestCallback.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.IngestCallback.html#dataWritten-org.locationtech.geowave.core.index.InsertionIds-T-">dataWritten</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;insertionIds,
            <a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.IngestCallback.html" title="type parameter in IngestOptions.IngestCallback">T</a>&nbsp;data)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> with parameters of type <a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html#WriteResults-java.lang.String-org.locationtech.geowave.core.index.InsertionIds-">WriteResults</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+            <a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;insertionIds)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> with type arguments of type <a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html#WriteResults-java.util.Map-">WriteResults</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&gt;&nbsp;insertionIdsPerIndex)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -582,38 +592,6 @@
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><span class="typeNameLabel">TextIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/text/TextIndexStrategy.html#getInsertionIds-java.lang.String-int-">getInsertionIds</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexedData,
                int&nbsp;maxEstimatedDuplicateIds)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="org.locationtech.geowave.core.store.index.writer">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a> in <a href="../../../../../../org/locationtech/geowave/core/store/index/writer/package-summary.html">org.locationtech.geowave.core.store.index.writer</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../org/locationtech/geowave/core/store/index/writer/package-summary.html">org.locationtech.geowave.core.store.index.writer</a> that return <a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IndexCompositeWriter.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html#write-T-">write</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IndependentAdapterIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html#write-T-">write</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IndexCompositeWriter.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry,
-     <a href="../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IndependentAdapterIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry,
-     <a href="../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;feldVisibilityWriter)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

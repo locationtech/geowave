@@ -130,28 +130,31 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util">RedisScoredSetWrapper</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#getRowSet-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-boolean-">getRowSet</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+<td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#getRowSet-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-boolean-boolean-">getRowSet</a></span>(org.redisson.api.RedissonClient&nbsp;client,
          <a href="../../../../../../../org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a>&nbsp;compression,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setName,
-         boolean&nbsp;requiresTimestamp)</code>&nbsp;</td>
+         boolean&nbsp;requiresTimestamp,
+         boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util">RedisScoredSetWrapper</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#getRowSet-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-byte:A-boolean-">getRowSet</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+<td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#getRowSet-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-byte:A-boolean-boolean-">getRowSet</a></span>(org.redisson.api.RedissonClient&nbsp;client,
          <a href="../../../../../../../org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a>&nbsp;compression,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setNamePrefix,
          byte[]&nbsp;partitionKey,
-         boolean&nbsp;requiresTimestamp)</code>&nbsp;</td>
+         boolean&nbsp;requiresTimestamp,
+         boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util">RedisScoredSetWrapper</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#getRowSet-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-java.lang.String-java.lang.String-byte:A-boolean-">getRowSet</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+<td class="colLast"><span class="typeNameLabel">RedisUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/RedisUtils.html#getRowSet-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-java.lang.String-java.lang.String-byte:A-boolean-boolean-">getRowSet</a></span>(org.redisson.api.RedissonClient&nbsp;client,
          <a href="../../../../../../../org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a>&nbsp;compression,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
          byte[]&nbsp;partitionKey,
-         boolean&nbsp;requiresTimestamp)</code>&nbsp;</td>
+         boolean&nbsp;requiresTimestamp,
+         boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.redisson.client.protocol.ScoredEntry&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a>&gt;&gt;</code></td>
@@ -169,8 +172,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected static void</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRedisRowCodec.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#encodeRow-io.netty.buffer.ByteBufOutputStream-org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow-">encodeRow</a></span>(io.netty.buffer.ByteBufOutputStream&nbsp;out,
-         <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a>&nbsp;row)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRedisRowCodec.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#encodeRow-io.netty.buffer.ByteBufOutputStream-org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow-boolean-">encodeRow</a></span>(io.netty.buffer.ByteBufOutputStream&nbsp;out,
+         <a href="../../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a>&nbsp;row,
+         boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

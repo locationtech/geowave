@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -170,13 +170,18 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html#internalWrite-T-java.util.function.Function-">internalWrite</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a>&gt;&nbsp;internalWriter)</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html#write-T-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry)</code>
 <div class="block">Write the entry using any basic visibilities set elsewhere</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry,
      <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>
 <div class="block">write the entry using visibilities determined by the fieldVisibilityyWriter</div>
@@ -248,7 +253,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;write(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry)</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a>&nbsp;write(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-">Writer</a></code></span></div>
 <div class="block">Write the entry using any basic visibilities set elsewhere</div>
 <dl>
@@ -269,7 +274,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;write(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry,
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a>&nbsp;write(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry,
                           <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">Writer</a></code></span></div>
 <div class="block">write the entry using visibilities determined by the fieldVisibilityyWriter</div>
@@ -282,6 +287,18 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the Insertion IDs representing where this entry was written</dd>
 </dl>
+</li>
+</ul>
+<a name="internalWrite-java.lang.Object-java.util.function.Function-">
+<!--   -->
+</a><a name="internalWrite-T-java.util.function.Function-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>internalWrite</h4>
+<pre>protected&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a>&nbsp;internalWrite(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry,
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a>&gt;&nbsp;internalWriter)</pre>
 </li>
 </ul>
 <a name="getIndices--">

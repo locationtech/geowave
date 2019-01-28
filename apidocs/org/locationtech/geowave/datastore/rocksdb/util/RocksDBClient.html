@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBIterator.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -161,7 +161,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html#RocksDBClient-java.lang.String-">RocksDBClient</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;subDirectory)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html#RocksDBClient-java.lang.String-boolean-">RocksDBClient</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;subDirectory,
+             boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -188,25 +189,34 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBDataIndexTable</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html#getDataIndexTable-java.lang.String-short-">getDataIndexTable</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+                 short&nbsp;adapterId)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBIndexTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBIndexTable</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html#getIndexTable-java.lang.String-short-byte:A-boolean-">getIndexTable</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
              short&nbsp;adapterId,
              byte[]&nbsp;partition,
              boolean&nbsp;requiresTimestamp)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBMetadataTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBMetadataTable</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html#getMetadataTable-org.locationtech.geowave.core.store.operations.MetadataType-">getMetadataTable</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;type)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html#getSubDirectory--">getSubDirectory</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html#indexTableExists-java.lang.String-">indexTableExists</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html#isVisibilityEnabled--">isVisibilityEnabled</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html#metadataTableExists-org.locationtech.geowave.core.store.operations.MetadataType-">metadataTableExists</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;type)</code>&nbsp;</td>
 </tr>
@@ -267,13 +277,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="RocksDBClient-java.lang.String-">
+<a name="RocksDBClient-java.lang.String-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>RocksDBClient</h4>
-<pre>public&nbsp;RocksDBClient(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;subDirectory)</pre>
+<pre>public&nbsp;RocksDBClient(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;subDirectory,
+                     boolean&nbsp;visibilityEnabled)</pre>
 </li>
 </ul>
 </li>
@@ -303,6 +314,16 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
                                        short&nbsp;adapterId,
                                        byte[]&nbsp;partition,
                                        boolean&nbsp;requiresTimestamp)</pre>
+</li>
+</ul>
+<a name="getDataIndexTable-java.lang.String-short-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataIndexTable</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBDataIndexTable</a>&nbsp;getDataIndexTable(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+                                               short&nbsp;adapterId)</pre>
 </li>
 </ul>
 <a name="getMetadataTable-org.locationtech.geowave.core.store.operations.MetadataType-">
@@ -340,6 +361,15 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <h4>close</h4>
 <pre>public&nbsp;void&nbsp;close(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
+</li>
+</ul>
+<a name="isVisibilityEnabled--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isVisibilityEnabled</h4>
+<pre>public&nbsp;boolean&nbsp;isVisibilityEnabled()</pre>
 </li>
 </ul>
 <a name="close--">
@@ -385,7 +415,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBIterator.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

@@ -173,9 +173,11 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoClose
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/BatchedWrite.html#BatchedWrite-com.datastax.driver.core.Session-com.datastax.driver.core.PreparedStatement-int-">BatchedWrite</a></span>(com.datastax.driver.core.Session&nbsp;session,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/BatchedWrite.html#BatchedWrite-com.datastax.driver.core.Session-com.datastax.driver.core.PreparedStatement-int-boolean-boolean-">BatchedWrite</a></span>(com.datastax.driver.core.Session&nbsp;session,
             com.datastax.driver.core.PreparedStatement&nbsp;preparedInsert,
-            int&nbsp;batchSize)</code>&nbsp;</td>
+            int&nbsp;batchSize,
+            boolean&nbsp;isDataIndex,
+            boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -229,7 +231,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoClose
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="BatchedWrite-com.datastax.driver.core.Session-com.datastax.driver.core.PreparedStatement-int-">
+<a name="BatchedWrite-com.datastax.driver.core.Session-com.datastax.driver.core.PreparedStatement-int-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -237,7 +239,9 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoClose
 <h4>BatchedWrite</h4>
 <pre>public&nbsp;BatchedWrite(com.datastax.driver.core.Session&nbsp;session,
                     com.datastax.driver.core.PreparedStatement&nbsp;preparedInsert,
-                    int&nbsp;batchSize)</pre>
+                    int&nbsp;batchSize,
+                    boolean&nbsp;isDataIndex,
+                    boolean&nbsp;visibilityEnabled)</pre>
 </li>
 </ul>
 </li>

@@ -196,7 +196,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#dataIds-org.locationtech.geowave.core.index.ByteArray:A-">dataIds</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]&nbsp;dataIds)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#dataIds-byte:A...-">dataIds</a></span>(byte[]...&nbsp;dataIds)</code>
 <div class="block">constrain a query by data IDs</div>
 </td>
 </tr>
@@ -208,8 +208,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#prefix-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">prefix</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-      <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKeyPrefix)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#prefix-byte:A-byte:A-">prefix</a></span>(byte[]&nbsp;partitionKey,
+      byte[]&nbsp;sortKeyPrefix)</code>
 <div class="block">constrain a query by prefix</div>
 </td>
 </tr>
@@ -269,18 +269,18 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="dataIds-org.locationtech.geowave.core.index.ByteArray:A-">
+<a name="dataIds-byte:A...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>dataIds</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;dataIds(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]&nbsp;dataIds)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#dataIds-org.locationtech.geowave.core.index.ByteArray...-">QueryConstraintsFactory</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;dataIds(byte[]...&nbsp;dataIds)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#dataIds-byte:A...-">QueryConstraintsFactory</a></code></span></div>
 <div class="block">constrain a query by data IDs</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#dataIds-org.locationtech.geowave.core.index.ByteArray...-">dataIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html" title="interface in org.locationtech.geowave.core.store.api">QueryConstraintsFactory</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#dataIds-byte:A...-">dataIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html" title="interface in org.locationtech.geowave.core.store.api">QueryConstraintsFactory</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dataIds</code> - the data IDs to constrain to</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -288,19 +288,19 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </dl>
 </li>
 </ul>
-<a name="prefix-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">
+<a name="prefix-byte:A-byte:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>prefix</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;prefix(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                               <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKeyPrefix)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#prefix-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">QueryConstraintsFactory</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;prefix(byte[]&nbsp;partitionKey,
+                               byte[]&nbsp;sortKeyPrefix)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#prefix-byte:A-byte:A-">QueryConstraintsFactory</a></code></span></div>
 <div class="block">constrain a query by prefix</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#prefix-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">prefix</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html" title="interface in org.locationtech.geowave.core.store.api">QueryConstraintsFactory</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#prefix-byte:A-byte:A-">prefix</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html" title="interface in org.locationtech.geowave.core.store.api">QueryConstraintsFactory</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>partitionKey</code> - the prefix</dd>
 <dd><code>sortKeyPrefix</code> - the sort prefix</dd>

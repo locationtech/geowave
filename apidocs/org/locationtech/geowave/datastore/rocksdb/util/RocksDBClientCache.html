@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBGeoWaveMetadata.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html" target="_top">Frames</a></li>
@@ -150,7 +150,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html#close-java.lang.String-">close</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html#close-java.lang.String-boolean-">close</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory,
+     boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -158,7 +159,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBClient</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html#getClient-java.lang.String-">getClient</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html#getClient-java.lang.String-boolean-">getClient</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory,
+         boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBClientCache</a></code></td>
@@ -212,22 +214,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBClientCache</a>&nbsp;getInstance()</pre>
 </li>
 </ul>
-<a name="getClient-java.lang.String-">
+<a name="getClient-java.lang.String-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getClient</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBClient</a>&nbsp;getClient(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBClient</a>&nbsp;getClient(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory,
+                               boolean&nbsp;visibilityEnabled)</pre>
 </li>
 </ul>
-<a name="close-java.lang.String-">
+<a name="close-java.lang.String-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>close</h4>
-<pre>public&nbsp;void&nbsp;close(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory)</pre>
+<pre>public&nbsp;void&nbsp;close(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory,
+                  boolean&nbsp;visibilityEnabled)</pre>
 </li>
 </ul>
 <a name="closeAll--">
@@ -268,7 +272,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBGeoWaveMetadata.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html" target="_top">Frames</a></li>

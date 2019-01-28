@@ -172,15 +172,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html#write-T-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry)</code>
 <div class="block">Write the entry using any basic visibilities set elsewhere</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry,
-     <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;feldVisibilityWriter)</code>
+     <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>
 <div class="block">write the entry using visibilities determined by the fieldVisibilityyWriter</div>
 </td>
 </tr>
@@ -233,8 +233,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;write(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry,
-                          <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;feldVisibilityWriter)</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a>&nbsp;write(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry,
+                          <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">Writer</a></code></span></div>
 <div class="block">write the entry using visibilities determined by the fieldVisibilityyWriter</div>
 <dl>
@@ -242,7 +242,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entry</code> - the entry</dd>
-<dd><code>feldVisibilityWriter</code> - method for determining visibility per field</dd>
+<dd><code>fieldVisibilityWriter</code> - method for determining visibility per field</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the Insertion IDs representing where this entry was written</dd>
 </dl>
@@ -275,7 +275,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a>&nbsp;write(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry)</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a>&nbsp;write(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-">Writer</a></code></span></div>
 <div class="block">Write the entry using any basic visibilities set elsewhere</div>
 <dl>

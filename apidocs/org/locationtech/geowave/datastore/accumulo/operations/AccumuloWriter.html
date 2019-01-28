@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var methods = {"i0":10,"i1":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -100,7 +100,12 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">org.locationtech.geowave.datastore.accumulo.operations.AbstractAccumuloWriter</a></li>
+<li>
+<ul class="inheritance">
 <li>org.locationtech.geowave.datastore.accumulo.operations.AccumuloWriter</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -114,8 +119,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">AccumuloWriter</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../org/locationtech/geowave/core/store/operations/RowWriter.html" title="interface in org.locationtech.geowave.core.store.operations">RowWriter</a></pre>
+extends <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AbstractAccumuloWriter</a></pre>
 <div class="block">This is a basic wrapper around the Accumulo batch writer so that write operations will use an
  interface that can be implemented differently for different purposes. For example, a bulk ingest
  can be performed by replacing this implementation within a custom implementation of
@@ -158,42 +162,21 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloWriter.html#close--">close</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>protected org.apache.accumulo.core.data.Mutation</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloWriter.html#internalRowToMutation-org.locationtech.geowave.core.store.entities.GeoWaveRow-">internalRowToMutation</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloWriter.html#flush--">flush</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>org.apache.accumulo.core.client.BatchWriter</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloWriter.html#getBatchWriter--">getBatchWriter</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static org.apache.accumulo.core.data.Mutation</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloWriter.html#rowToMutation-org.locationtech.geowave.core.store.entities.GeoWaveRow-">rowToMutation</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloWriter.html#setBatchWriter-org.apache.accumulo.core.client.BatchWriter-">setBatchWriter</a></span>(org.apache.accumulo.core.client.BatchWriter&nbsp;batchWriter)</code>&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloWriter.html#write-org.locationtech.geowave.core.store.entities.GeoWaveRow-">write</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</code>&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloWriter.html#write-org.locationtech.geowave.core.store.entities.GeoWaveRow:A-">write</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>[]&nbsp;rows)</code>&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloWriter.html#write-java.lang.Iterable-">write</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;org.apache.accumulo.core.data.Mutation&gt;&nbsp;mutations)</code>&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloWriter.html#write-org.apache.accumulo.core.data.Mutation-">write</a></span>(org.apache.accumulo.core.data.Mutation&nbsp;mutation)</code>&nbsp;</td>
-</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.datastore.accumulo.operations.AbstractAccumuloWriter">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.datastore.accumulo.operations.<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AbstractAccumuloWriter</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html#close--">close</a>, <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html#flush--">flush</a>, <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html#getBatchWriter--">getBatchWriter</a>, <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html#setBatchWriter-org.apache.accumulo.core.client.BatchWriter-">setBatchWriter</a>, <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html#write-org.locationtech.geowave.core.store.entities.GeoWaveRow-">write</a>, <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html#write-org.locationtech.geowave.core.store.entities.GeoWaveRow:A-">write</a>, <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html#write-java.lang.Iterable-">write</a>, <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html#write-org.apache.accumulo.core.data.Mutation-">write</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -234,101 +217,26 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getBatchWriter--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getBatchWriter</h4>
-<pre>public&nbsp;org.apache.accumulo.core.client.BatchWriter&nbsp;getBatchWriter()</pre>
-</li>
-</ul>
-<a name="setBatchWriter-org.apache.accumulo.core.client.BatchWriter-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setBatchWriter</h4>
-<pre>public&nbsp;void&nbsp;setBatchWriter(org.apache.accumulo.core.client.BatchWriter&nbsp;batchWriter)</pre>
-</li>
-</ul>
-<a name="write-java.lang.Iterable-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>write</h4>
-<pre>public&nbsp;void&nbsp;write(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;org.apache.accumulo.core.data.Mutation&gt;&nbsp;mutations)</pre>
-</li>
-</ul>
-<a name="write-org.apache.accumulo.core.data.Mutation-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>write</h4>
-<pre>public&nbsp;void&nbsp;write(org.apache.accumulo.core.data.Mutation&nbsp;mutation)</pre>
-</li>
-</ul>
-<a name="close--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>close</h4>
-<pre>public&nbsp;void&nbsp;close()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close--" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="flush--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>flush</h4>
-<pre>public&nbsp;void&nbsp;flush()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowWriter.html#flush--">flush</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowWriter.html" title="interface in org.locationtech.geowave.core.store.operations">RowWriter</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="write-org.locationtech.geowave.core.store.entities.GeoWaveRow:A-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>write</h4>
-<pre>public&nbsp;void&nbsp;write(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>[]&nbsp;rows)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowWriter.html#write-org.locationtech.geowave.core.store.entities.GeoWaveRow:A-">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowWriter.html" title="interface in org.locationtech.geowave.core.store.operations">RowWriter</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="write-org.locationtech.geowave.core.store.entities.GeoWaveRow-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>write</h4>
-<pre>public&nbsp;void&nbsp;write(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowWriter.html#write-org.locationtech.geowave.core.store.entities.GeoWaveRow-">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowWriter.html" title="interface in org.locationtech.geowave.core.store.operations">RowWriter</a></code></dd>
-</dl>
-</li>
-</ul>
 <a name="rowToMutation-org.locationtech.geowave.core.store.entities.GeoWaveRow-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rowToMutation</h4>
+<pre>public static&nbsp;org.apache.accumulo.core.data.Mutation&nbsp;rowToMutation(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</pre>
+</li>
+</ul>
+<a name="internalRowToMutation-org.locationtech.geowave.core.store.entities.GeoWaveRow-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>rowToMutation</h4>
-<pre>public static&nbsp;org.apache.accumulo.core.data.Mutation&nbsp;rowToMutation(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</pre>
+<h4>internalRowToMutation</h4>
+<pre>protected&nbsp;org.apache.accumulo.core.data.Mutation&nbsp;internalRowToMutation(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html#internalRowToMutation-org.locationtech.geowave.core.store.entities.GeoWaveRow-">internalRowToMutation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AbstractAccumuloWriter</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>

@@ -195,8 +195,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumericFieldIndexStrategy.html#getRangeForId-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">getRangeForId</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-             <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumericFieldIndexStrategy.html#getRangeForId-byte:A-byte:A-">getRangeForId</a></span>(byte[]&nbsp;partitionKey,
+             byte[]&nbsp;sortKey)</code>
 <div class="block">Returns the range that the given ID represents</div>
 </td>
 </tr>
@@ -399,19 +399,19 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/ind
 </dl>
 </li>
 </ul>
-<a name="getRangeForId-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">
+<a name="getRangeForId-byte:A-byte:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getRangeForId</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;getRangeForId(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                            <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getRangeForId-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">SortedIndexStrategy</a></code></span></div>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;getRangeForId(byte[]&nbsp;partitionKey,
+                            byte[]&nbsp;sortKey)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getRangeForId-byte:A-byte:A-">SortedIndexStrategy</a></code></span></div>
 <div class="block">Returns the range that the given ID represents</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getRangeForId-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">getRangeForId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumericQueryConstraint.html" title="class in org.locationtech.geowave.core.store.index.numeric">NumericQueryConstraint</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getRangeForId-byte:A-byte:A-">getRangeForId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/numeric/NumericQueryConstraint.html" title="class in org.locationtech.geowave.core.store.index.numeric">NumericQueryConstraint</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>partitionKey</code> - the partition key part of the insertion ID to determine a range for</dd>
 <dd><code>sortKey</code> - the sort key part of the insertion ID to determine a range for</dd>

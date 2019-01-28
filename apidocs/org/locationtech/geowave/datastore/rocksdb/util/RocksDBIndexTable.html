@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -75,7 +75,7 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.datastore.rocksdb.util.AbstractRocksDBTable">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -100,7 +100,12 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">org.locationtech.geowave.datastore.rocksdb.util.AbstractRocksDBTable</a></li>
+<li>
+<ul class="inheritance">
 <li>org.locationtech.geowave.datastore.rocksdb.util.RocksDBIndexTable</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -110,13 +115,28 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">RocksDBIndexTable</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">AbstractRocksDBTable</a></pre>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.datastore.rocksdb.util.AbstractRocksDBTable">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.locationtech.geowave.datastore.rocksdb.util.<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">AbstractRocksDBTable</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#adapterId">adapterId</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#visibilityEnabled">visibilityEnabled</a></code></li>
+</ul>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -129,12 +149,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBIndexTable.html#RocksDBIndexTable-org.rocksdb.Options-org.rocksdb.Options-java.lang.String-short-byte:A-boolean-">RocksDBIndexTable</a></span>(org.rocksdb.Options&nbsp;writeOptions,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBIndexTable.html#RocksDBIndexTable-org.rocksdb.Options-org.rocksdb.Options-java.lang.String-short-byte:A-boolean-boolean-">RocksDBIndexTable</a></span>(org.rocksdb.Options&nbsp;writeOptions,
                  org.rocksdb.Options&nbsp;readOptions,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;subDirectory,
                  short&nbsp;adapterId,
                  byte[]&nbsp;partition,
-                 boolean&nbsp;requiresTimestamp)</code>&nbsp;</td>
+                 boolean&nbsp;requiresTimestamp,
+                 boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -159,26 +180,21 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
    <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBIndexTable.html#close--">close</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBIndexTable.html#delete-byte:A-">delete</a></span>(byte[]&nbsp;key)</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBIndexTable.html#flush--">flush</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBIndexTable.html#iterator--">iterator</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBIndexTable.html#iterator-org.locationtech.geowave.core.index.ByteArrayRange-">iterator</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&nbsp;range)</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.datastore.rocksdb.util.AbstractRocksDBTable">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.datastore.rocksdb.util.<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">AbstractRocksDBTable</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#close--">close</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#delete-byte:A-">delete</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#flush--">flush</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#getReadDb--">getReadDb</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#getWriteDb--">getWriteDb</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#put-byte:A-byte:A-">put</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -200,7 +216,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="RocksDBIndexTable-org.rocksdb.Options-org.rocksdb.Options-java.lang.String-short-byte:A-boolean-">
+<a name="RocksDBIndexTable-org.rocksdb.Options-org.rocksdb.Options-java.lang.String-short-byte:A-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -211,7 +227,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;subDirectory,
                          short&nbsp;adapterId,
                          byte[]&nbsp;partition,
-                         boolean&nbsp;requiresTimestamp)</pre>
+                         boolean&nbsp;requiresTimestamp,
+                         boolean&nbsp;visibilityEnabled)</pre>
 </li>
 </ul>
 </li>
@@ -234,15 +251,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                 <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value)</pre>
 </li>
 </ul>
-<a name="delete-byte:A-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>delete</h4>
-<pre>public&nbsp;void&nbsp;delete(byte[]&nbsp;key)</pre>
-</li>
-</ul>
 <a name="iterator--">
 <!--   -->
 </a>
@@ -255,28 +263,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="iterator-org.locationtech.geowave.core.index.ByteArrayRange-">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>iterator</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;iterator(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&nbsp;range)</pre>
-</li>
-</ul>
-<a name="flush--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>flush</h4>
-<pre>public&nbsp;void&nbsp;flush()</pre>
-</li>
-</ul>
-<a name="close--">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>close</h4>
-<pre>public&nbsp;void&nbsp;close()</pre>
 </li>
 </ul>
 </li>
@@ -333,7 +323,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.datastore.rocksdb.util.AbstractRocksDBTable">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

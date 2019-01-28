@@ -175,7 +175,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getFullBounds-org.locationtech.geowave.core.index.NumericIndexStrategy-">getFullBounds</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
+<td class="colFirst"><code>static byte[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getInsertionPartitionKeys-org.locationtech.geowave.core.index.NumericIndexStrategy-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionPartitionKeys</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;strategy,
                          <a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;insertionData)</code>&nbsp;</td>
 </tr>
@@ -185,7 +185,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                  int&nbsp;bitPosition)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
+<td class="colFirst"><code>static byte[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getQueryPartitionKeys-org.locationtech.geowave.core.index.NumericIndexStrategy-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryPartitionKeys</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;strategy,
                      <a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryData,
                      <a href="../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
@@ -341,9 +341,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getQueryPartitionKeys</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;getQueryPartitionKeys(<a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;strategy,
-                                                   <a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryData,
-                                                   <a href="../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</pre>
+<pre>public static&nbsp;byte[][]&nbsp;getQueryPartitionKeys(<a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;strategy,
+                                             <a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryData,
+                                             <a href="../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</pre>
 </li>
 </ul>
 <a name="getInsertionPartitionKeys-org.locationtech.geowave.core.index.NumericIndexStrategy-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">
@@ -352,8 +352,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getInsertionPartitionKeys</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;getInsertionPartitionKeys(<a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;strategy,
-                                                       <a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;insertionData)</pre>
+<pre>public static&nbsp;byte[][]&nbsp;getInsertionPartitionKeys(<a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;strategy,
+                                                 <a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;insertionData)</pre>
 </li>
 </ul>
 </li>

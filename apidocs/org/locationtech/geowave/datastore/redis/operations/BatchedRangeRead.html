@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisMetadataDeleter.html" title="class in org.locationtech.geowave.datastore.redis.operations"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/DataIndexRead.html" title="class in org.locationtech.geowave.datastore.redis.operations"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" target="_top">Frames</a></li>
@@ -131,16 +131,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html#BatchedRangeRead-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-short-java.util.Collection-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-com.google.common.base.Predicate-boolean-org.apache.commons.lang3.tuple.Pair-boolean-">BatchedRangeRead</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html#BatchedRangeRead-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-short-java.util.Collection-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-com.google.common.base.Predicate-boolean-boolean-org.apache.commons.lang3.tuple.Pair-boolean-boolean-">BatchedRangeRead</a></span>(org.redisson.api.RedissonClient&nbsp;client,
                 <a href="../../../../../../org/locationtech/geowave/datastore/redis/config/RedisOptions.Compression.html" title="enum in org.locationtech.geowave.datastore.redis.config">RedisOptions.Compression</a>&nbsp;compression,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setNamePrefix,
                 short&nbsp;adapterId,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
                 <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" title="type parameter in BatchedRangeRead">T</a>&gt;&nbsp;rowTransformer,
                 com.google.common.base.Predicate&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
+                boolean&nbsp;rowMerging,
                 boolean&nbsp;async,
                 org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;&nbsp;groupByRowAndSortByTimePair,
-                boolean&nbsp;isSortFinalResultsBySortKey)</code>&nbsp;</td>
+                boolean&nbsp;isSortFinalResultsBySortKey,
+                boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -158,14 +160,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" title="type parameter in BatchedRangeRead">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html#executeQuery-java.util.List-">executeQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.geowave.datastore.redis.operations.BatchedRangeRead.RangeReadInfo&gt;&nbsp;reads)</code>&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" title="type parameter in BatchedRangeRead">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html#executeQueryAsync-java.util.List-">executeQueryAsync</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.geowave.datastore.redis.operations.BatchedRangeRead.RangeReadInfo&gt;&nbsp;reads)</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" title="type parameter in BatchedRangeRead">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html#results--">results</a></span>()</code>&nbsp;</td>
 </tr>
@@ -191,7 +185,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="BatchedRangeRead-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-short-java.util.Collection-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-com.google.common.base.Predicate-boolean-org.apache.commons.lang3.tuple.Pair-boolean-">
+<a name="BatchedRangeRead-org.redisson.api.RedissonClient-org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression-java.lang.String-short-java.util.Collection-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-com.google.common.base.Predicate-boolean-boolean-org.apache.commons.lang3.tuple.Pair-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -204,9 +198,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
                            <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" title="type parameter in BatchedRangeRead">T</a>&gt;&nbsp;rowTransformer,
                            com.google.common.base.Predicate&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
+                           boolean&nbsp;rowMerging,
                            boolean&nbsp;async,
                            org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;&nbsp;groupByRowAndSortByTimePair,
-                           boolean&nbsp;isSortFinalResultsBySortKey)</pre>
+                           boolean&nbsp;isSortFinalResultsBySortKey,
+                           boolean&nbsp;visibilityEnabled)</pre>
 </li>
 </ul>
 </li>
@@ -220,28 +216,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="results--">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>results</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" title="type parameter in BatchedRangeRead">T</a>&gt;&nbsp;results()</pre>
-</li>
-</ul>
-<a name="executeQuery-java.util.List-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>executeQuery</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" title="type parameter in BatchedRangeRead">T</a>&gt;&nbsp;executeQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.geowave.datastore.redis.operations.BatchedRangeRead.RangeReadInfo&gt;&nbsp;reads)</pre>
-</li>
-</ul>
-<a name="executeQueryAsync-java.util.List-">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>executeQueryAsync</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" title="type parameter in BatchedRangeRead">T</a>&gt;&nbsp;executeQueryAsync(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.geowave.datastore.redis.operations.BatchedRangeRead.RangeReadInfo&gt;&nbsp;reads)</pre>
 </li>
 </ul>
 </li>
@@ -273,7 +251,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/RedisMetadataDeleter.html" title="class in org.locationtech.geowave.datastore.redis.operations"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/redis/operations/DataIndexRead.html" title="class in org.locationtech.geowave.datastore.redis.operations"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/datastore/redis/operations/BatchedRangeRead.html" target="_top">Frames</a></li>

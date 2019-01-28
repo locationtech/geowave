@@ -194,11 +194,11 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html#composeId-java.lang.String-org.locationtech.geowave.core.index.ByteArray-">composeId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
-         <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html#composeId-java.lang.String-byte:A-">composeId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+         byte[]&nbsp;partitionKey)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected static org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
+<td class="colFirst"><code>protected static org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,byte[]&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html#decomposeIndexAndPartitionFromId-java.lang.String-">decomposeIndexAndPartitionFromId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;idString)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -211,7 +211,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">PartitionStatisticsQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="type parameter in PartitionStatisticsQueryBuilder">R</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html#partition-org.locationtech.geowave.core.index.ByteArray-">partition</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html#partition-byte:A-">partition</a></span>(byte[]&nbsp;partitionKey)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -275,13 +275,13 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">PartitionStatisticsQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="type parameter in PartitionStatisticsQueryBuilder">R</a>&gt;&nbsp;indexName(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 </li>
 </ul>
-<a name="partition-org.locationtech.geowave.core.index.ByteArray-">
+<a name="partition-byte:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>partition</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">PartitionStatisticsQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="type parameter in PartitionStatisticsQueryBuilder">R</a>&gt;&nbsp;partition(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey)</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">PartitionStatisticsQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="type parameter in PartitionStatisticsQueryBuilder">R</a>&gt;&nbsp;partition(byte[]&nbsp;partitionKey)</pre>
 </li>
 </ul>
 <a name="extendedId--">
@@ -303,17 +303,17 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/adapte
 <ul class="blockList">
 <li class="blockList">
 <h4>decomposeIndexAndPartitionFromId</h4>
-<pre>protected static&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&nbsp;decomposeIndexAndPartitionFromId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;idString)</pre>
+<pre>protected static&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,byte[]&gt;&nbsp;decomposeIndexAndPartitionFromId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;idString)</pre>
 </li>
 </ul>
-<a name="composeId-java.lang.String-org.locationtech.geowave.core.index.ByteArray-">
+<a name="composeId-java.lang.String-byte:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>composeId</h4>
 <pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;composeId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
-                                  <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey)</pre>
+                                  byte[]&nbsp;partitionKey)</pre>
 </li>
 </ul>
 </li>

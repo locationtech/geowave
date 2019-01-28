@@ -137,9 +137,9 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/InsertionIdQuery.html#InsertionIdQuery--">InsertionIdQuery</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/InsertionIdQuery.html#InsertionIdQuery-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">InsertionIdQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey,
-                <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/InsertionIdQuery.html#InsertionIdQuery-byte:A-byte:A-byte:A-">InsertionIdQuery</a></span>(byte[]&nbsp;partitionKey,
+                byte[]&nbsp;sortKey,
+                byte[]&nbsp;dataId)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -170,7 +170,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/InsertionIdQuery.html#getDataId--">getDataId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -180,11 +180,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/InsertionIdQuery.html#getPartitionKey--">getPartitionKey</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/InsertionIdQuery.html#getSortKey--">getSortKey</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
@@ -224,15 +224,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <pre>public&nbsp;InsertionIdQuery()</pre>
 </li>
 </ul>
-<a name="InsertionIdQuery-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">
+<a name="InsertionIdQuery-byte:A-byte:A-byte:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>InsertionIdQuery</h4>
-<pre>public&nbsp;InsertionIdQuery(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                        <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey,
-                        <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</pre>
+<pre>public&nbsp;InsertionIdQuery(byte[]&nbsp;partitionKey,
+                        byte[]&nbsp;sortKey,
+                        byte[]&nbsp;dataId)</pre>
 </li>
 </ul>
 </li>
@@ -249,7 +249,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <ul class="blockList">
 <li class="blockList">
 <h4>getPartitionKey</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getPartitionKey()</pre>
+<pre>public&nbsp;byte[]&nbsp;getPartitionKey()</pre>
 </li>
 </ul>
 <a name="getSortKey--">
@@ -258,7 +258,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <ul class="blockList">
 <li class="blockList">
 <h4>getSortKey</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getSortKey()</pre>
+<pre>public&nbsp;byte[]&nbsp;getSortKey()</pre>
 </li>
 </ul>
 <a name="getDataId--">
@@ -267,7 +267,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataId</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getDataId()</pre>
+<pre>public&nbsp;byte[]&nbsp;getDataId()</pre>
 </li>
 </ul>
 <a name="createFilters-org.locationtech.geowave.core.store.api.Index-">

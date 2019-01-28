@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":6,"i9":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":6,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -252,19 +252,25 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 </td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#getFieldHandler-org.locationtech.geowave.core.store.dimension.NumericDimensionField-">getFieldHandler</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;dimension)</code>
+<div class="block">Get index field handler for the provided dimension.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#getFieldVisiblityHandler--">getFieldVisiblityHandler</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#init-java.util.List-java.lang.Object-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;indexFieldHandlers,
     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;defaultIndexHandlerData)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#newBuilder--">newBuilder</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -484,6 +490,22 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <li class="blockList">
 <h4>newBuilder</h4>
 <pre>protected abstract&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;newBuilder()</pre>
+</li>
+</ul>
+<a name="getFieldHandler-org.locationtech.geowave.core.store.dimension.NumericDimensionField-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldHandler</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataAdapter.html" title="type parameter in AbstractDataAdapter">T</a>,? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getFieldHandler(<a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;dimension)</pre>
+<div class="block">Get index field handler for the provided dimension.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>dimension</code> - </dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>field handler</dd>
+</dl>
 </li>
 </ul>
 <a name="toBinary--">

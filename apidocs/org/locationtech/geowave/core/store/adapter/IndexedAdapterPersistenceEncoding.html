@@ -127,6 +127,10 @@ var activeTableTab = "activeTableTab";
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AsyncPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">AsyncPersistenceEncoding</a>, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/LazyReadPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">LazyReadPersistenceEncoding</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">IndexedAdapterPersistenceEncoding</span>
@@ -159,7 +163,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/A
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.data.<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">PersistenceEncoding</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#commonData">commonData</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#DOUBLE_TOLERANCE">DOUBLE_TOLERANCE</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#LOGGER">LOGGER</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#commonData">commonData</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#DOUBLE_TOLERANCE">DOUBLE_TOLERANCE</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#LOGGER">LOGGER</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#unknownData">unknownData</a></code></li>
 </ul>
 </li>
 </ul>
@@ -175,10 +179,10 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/A
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html#IndexedAdapterPersistenceEncoding-short-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">IndexedAdapterPersistenceEncoding</a></span>(short&nbsp;adapterId,
-                                 <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
-                                 <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                                 <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html#IndexedAdapterPersistenceEncoding-short-byte:A-byte:A-byte:A-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">IndexedAdapterPersistenceEncoding</a></span>(short&nbsp;adapterId,
+                                 byte[]&nbsp;dataId,
+                                 byte[]&nbsp;partitionKey,
+                                 byte[]&nbsp;sortKey,
                                  int&nbsp;duplicateCount,
                                  <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
                                  <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;unknownData,
@@ -226,7 +230,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/A
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.data.<a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#getDuplicateCount--">getDuplicateCount</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#getInsertionPartitionKey--">getInsertionPartitionKey</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#getInsertionSortKey--">getInsertionSortKey</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#isDeduplicationEnabled--">isDeduplicationEnabled</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#isDuplicated--">isDuplicated</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#getDuplicateCount--">getDuplicateCount</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#getInsertionPartitionKey--">getInsertionPartitionKey</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#getInsertionSortKey--">getInsertionSortKey</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#isAsync--">isAsync</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#isDeduplicationEnabled--">isDeduplicationEnabled</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#isDuplicated--">isDuplicated</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.data.PersistenceEncoding">
@@ -256,16 +260,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/A
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="IndexedAdapterPersistenceEncoding-short-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">
+<a name="IndexedAdapterPersistenceEncoding-short-byte:A-byte:A-byte:A-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>IndexedAdapterPersistenceEncoding</h4>
 <pre>public&nbsp;IndexedAdapterPersistenceEncoding(short&nbsp;adapterId,
-                                         <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
-                                         <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                                         <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey,
+                                         byte[]&nbsp;dataId,
+                                         byte[]&nbsp;partitionKey,
+                                         byte[]&nbsp;sortKey,
                                          int&nbsp;duplicateCount,
                                          <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
                                          <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;unknownData,

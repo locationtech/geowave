@@ -138,6 +138,7 @@ org.locationtech.geowave.core.store.adapter.statistics
 org.locationtech.geowave.core.store.adapter.statistics.histogram
 org.locationtech.geowave.core.store.api
 org.locationtech.geowave.core.store.base
+org.locationtech.geowave.core.store.base.dataidx
 org.locationtech.geowave.core.store.callback
 org.locationtech.geowave.core.store.cli.config
 org.locationtech.geowave.core.store.cli.remote
@@ -173,7 +174,6 @@ org.locationtech.geowave.core.store.util
 org.locationtech.geowave.datastore.accumulo
 org.locationtech.geowave.datastore.accumulo.cli
 org.locationtech.geowave.datastore.accumulo.cli.config
-org.locationtech.geowave.datastore.accumulo.index.secondary
 org.locationtech.geowave.datastore.accumulo.iterators
 org.locationtech.geowave.datastore.accumulo.mapreduce
 org.locationtech.geowave.datastore.accumulo.minicluster

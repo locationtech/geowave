@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDataIndexWriter.html" title="class in org.locationtech.geowave.datastore.accumulo.operations"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloMetadataDeleter.html" title="class in org.locationtech.geowave.datastore.accumulo.operations"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;T,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html" title="interface in org.locationtech.geowave.core.store.operations">Deleter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;T,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html" title="interface in org.locationtech.geowave.core.store.operations">Deleter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</dd>
 </dl>
 <hr>
 <br>
@@ -127,6 +127,21 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested.classes.inherited.from.class.org.locationtech.geowave.core.store.CloseableIterator">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from interface&nbsp;org.locationtech.geowave.core.store.<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.Empty.html" title="class in org.locationtech.geowave.core.store">CloseableIterator.Empty</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.Empty.html" title="type parameter in CloseableIterator.Empty">E</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.Wrapper.html" title="class in org.locationtech.geowave.core.store">CloseableIterator.Wrapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.Wrapper.html" title="type parameter in CloseableIterator.Wrapper">E</a>&gt;</code></li>
+</ul>
+</li>
+</ul>
 <!-- =========== FIELD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="field.summary">
@@ -251,15 +266,16 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <ul class="blockList">
 <li class="blockList">
 <h4>close</h4>
-<pre>public&nbsp;void&nbsp;close()
-           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<pre>public&nbsp;void&nbsp;close()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true#close--" title="class or interface in java.io">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close--" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html#close--">close</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html" title="type parameter in AccumuloDeleter">T</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html#close--">close</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html" title="type parameter in AccumuloDeleter">T</a>&gt;</code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -317,7 +333,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDataIndexWriter.html" title="class in org.locationtech.geowave.datastore.accumulo.operations"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloMetadataDeleter.html" title="class in org.locationtech.geowave.datastore.accumulo.operations"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

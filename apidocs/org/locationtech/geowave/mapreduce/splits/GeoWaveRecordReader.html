@@ -18,8 +18,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -191,46 +191,50 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#currentValue">currentValue</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#dataIndexBatchSize">dataIndexBatchSize</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#dataStore">dataStore</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#indexStore">indexStore</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#internalAdapterStore">internalAdapterStore</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#isOutputWritable">isOutputWritable</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#iterator">iterator</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected static org.slf4j.Logger</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#LOGGER">LOGGER</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#numKeysRead">numKeysRead</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in org.locationtech.geowave.mapreduce">MapReduceDataStoreOperations</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#operations">operations</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/RangeLocationPair.html" title="class in org.locationtech.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.ProgressPerRange.html" title="class in org.locationtech.geowave.mapreduce.splits">GeoWaveRecordReader.ProgressPerRange</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#progressPerRange">progressPerRange</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html" title="class in org.locationtech.geowave.core.store.base">BaseQueryOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#sanitizedQueryOptions">sanitizedQueryOptions</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveInputSplit.html" title="class in org.locationtech.geowave.mapreduce.splits">GeoWaveInputSplit</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#split">split</a></span></code>&nbsp;</td>
 </tr>
@@ -249,7 +253,7 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#GeoWaveRecordReader-org.locationtech.geowave.core.store.query.options.CommonQueryOptions-org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions-org.locationtech.geowave.core.store.query.options.IndexQueryOptions-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-boolean-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-org.locationtech.geowave.core.store.index.IndexStore-org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations-">GeoWaveRecordReader</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a>&nbsp;commonOptions,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#GeoWaveRecordReader-org.locationtech.geowave.core.store.query.options.CommonQueryOptions-org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions-org.locationtech.geowave.core.store.query.options.IndexQueryOptions-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-boolean-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-org.locationtech.geowave.core.store.index.IndexStore-org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations-int-">GeoWaveRecordReader</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a>&nbsp;commonOptions,
                    <a href="../../../../../org/locationtech/geowave/core/store/query/options/DataTypeQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">DataTypeQueryOptions</a>&lt;?&gt;&nbsp;typeOptions,
                    <a href="../../../../../org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">IndexQueryOptions</a>&nbsp;indexOptions,
                    <a href="../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;constraints,
@@ -258,7 +262,8 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
                    <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
                    <a href="../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;aimStore,
                    <a href="../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
-                   <a href="../../../../../org/locationtech/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in org.locationtech.geowave.mapreduce">MapReduceDataStoreOperations</a>&nbsp;operations)</code>&nbsp;</td>
+                   <a href="../../../../../org/locationtech/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in org.locationtech.geowave.mapreduce">MapReduceDataStoreOperations</a>&nbsp;operations,
+                   int&nbsp;dataIndexBatchSize)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -270,7 +275,7 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -280,9 +285,12 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#close--">close</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#concatenateWithCallback-java.util.Iterator-org.locationtech.geowave.mapreduce.splits.GeoWaveRecordReader.NextRangeCallback-">concatenateWithCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/RangeLocationPair.html" title="class in org.locationtech.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;&gt;&gt;&nbsp;inputs,
-                       <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in org.locationtech.geowave.mapreduce.splits">GeoWaveRecordReader.NextRangeCallback</a>&nbsp;nextRangeCallback)</code>
+<td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#concatenateWithCallback-java.util.List-org.locationtech.geowave.mapreduce.splits.GeoWaveRecordReader.NextRangeCallback-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval-">concatenateWithCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/RangeLocationPair.html" title="class in org.locationtech.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&gt;&gt;&nbsp;inputs,
+                       <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in org.locationtech.geowave.mapreduce.splits">GeoWaveRecordReader.NextRangeCallback</a>&nbsp;nextRangeCallback,
+                       <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                       <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;filters,
+                       <a href="../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html" title="interface in org.locationtech.geowave.core.store.base.dataidx">DataIndexRetrieval</a>&nbsp;dataIndexRetrieval)</code>
 <div class="block">Mostly guava's concatenate method, but there is a need for a callback between iterators</div>
 </td>
 </tr>
@@ -310,12 +318,11 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#nextKeyValue--">nextKeyValue</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#queryRange-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-boolean-boolean-">queryRange</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
-          <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in org.locationtech.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
-          boolean&nbsp;mixedVisibility,
-          boolean&nbsp;authorizationsLimiting)</code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html#rowReaderToKeyValues-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval-java.util.Iterator-">rowReaderToKeyValues</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                    <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;filters,
+                    <a href="../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html" title="interface in org.locationtech.geowave.core.store.base.dataidx">DataIndexRetrieval</a>&nbsp;dataIndexRetrieval,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -486,10 +493,19 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 <a name="operations">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>operations</h4>
 <pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in org.locationtech.geowave.mapreduce">MapReduceDataStoreOperations</a> operations</pre>
+</li>
+</ul>
+<a name="dataIndexBatchSize">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>dataIndexBatchSize</h4>
+<pre>protected&nbsp;int dataIndexBatchSize</pre>
 </li>
 </ul>
 </li>
@@ -500,7 +516,7 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GeoWaveRecordReader-org.locationtech.geowave.core.store.query.options.CommonQueryOptions-org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions-org.locationtech.geowave.core.store.query.options.IndexQueryOptions-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-boolean-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-org.locationtech.geowave.core.store.index.IndexStore-org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations-">
+<a name="GeoWaveRecordReader-org.locationtech.geowave.core.store.query.options.CommonQueryOptions-org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions-org.locationtech.geowave.core.store.query.options.IndexQueryOptions-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-boolean-org.locationtech.geowave.core.store.adapter.TransientAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore-org.locationtech.geowave.core.store.index.IndexStore-org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -515,7 +531,8 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
                            <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
                            <a href="../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;aimStore,
                            <a href="../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
-                           <a href="../../../../../org/locationtech/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in org.locationtech.geowave.mapreduce">MapReduceDataStoreOperations</a>&nbsp;operations)</pre>
+                           <a href="../../../../../org/locationtech/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in org.locationtech.geowave.mapreduce">MapReduceDataStoreOperations</a>&nbsp;operations,
+                           int&nbsp;dataIndexBatchSize)</pre>
 </li>
 </ul>
 </li>
@@ -544,17 +561,16 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 </dl>
 </li>
 </ul>
-<a name="queryRange-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-boolean-boolean-">
+<a name="rowReaderToKeyValues-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval-java.util.Iterator-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>queryRange</h4>
-<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;&nbsp;queryRange(<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
-                                                                     <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in org.locationtech.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
-                                                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
-                                                                     boolean&nbsp;mixedVisibility,
-                                                                     boolean&nbsp;authorizationsLimiting)</pre>
+<h4>rowReaderToKeyValues</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;&nbsp;rowReaderToKeyValues(<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                                                                                                <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;filters,
+                                                                                                <a href="../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html" title="interface in org.locationtech.geowave.core.store.base.dataidx">DataIndexRetrieval</a>&nbsp;dataIndexRetrieval,
+                                                                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader)</pre>
 </li>
 </ul>
 <a name="close--">
@@ -628,14 +644,17 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../org/
 </dl>
 </li>
 </ul>
-<a name="concatenateWithCallback-java.util.Iterator-org.locationtech.geowave.mapreduce.splits.GeoWaveRecordReader.NextRangeCallback-">
+<a name="concatenateWithCallback-java.util.List-org.locationtech.geowave.mapreduce.splits.GeoWaveRecordReader.NextRangeCallback-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>concatenateWithCallback</h4>
-<pre>protected static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;&nbsp;concatenateWithCallback(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/RangeLocationPair.html" title="class in org.locationtech.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;&gt;&gt;&nbsp;inputs,
-                                                                                    <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in org.locationtech.geowave.mapreduce.splits">GeoWaveRecordReader.NextRangeCallback</a>&nbsp;nextRangeCallback)</pre>
+<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;&nbsp;concatenateWithCallback(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/RangeLocationPair.html" title="class in org.locationtech.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&gt;&gt;&nbsp;inputs,
+                                                                                                            <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in org.locationtech.geowave.mapreduce.splits">GeoWaveRecordReader.NextRangeCallback</a>&nbsp;nextRangeCallback,
+                                                                                                            <a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                                                                                                            <a href="../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;filters,
+                                                                                                            <a href="../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html" title="interface in org.locationtech.geowave.core.store.base.dataidx">DataIndexRetrieval</a>&nbsp;dataIndexRetrieval)</pre>
 <div class="block">Mostly guava's concatenate method, but there is a need for a callback between iterators</div>
 </li>
 </ul>

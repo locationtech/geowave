@@ -123,7 +123,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Writer.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="type parameter in Writer">T</a>&nbsp;entry,
      <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="type parameter in Writer">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>
 <div class="block">write the entry using visibilities determined by the fieldVisibilityyWriter</div>
@@ -152,10 +152,13 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static &lt;T&gt;&nbsp;org.locationtech.geowave.core.store.base.IntermediaryWriteEntryInfo</code></td>
-<td class="colLast"><span class="typeNameLabel">BaseDataStoreUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStoreUtils.html#getWriteInfo-T-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.data.VisibilityWriter-">getWriteInfo</a></span>(T&nbsp;entry,
+<td class="colLast"><span class="typeNameLabel">BaseDataStoreUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStoreUtils.html#getWriteInfo-T-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.data.VisibilityWriter-boolean-boolean-boolean-">getWriteInfo</a></span>(T&nbsp;entry,
             <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;T&gt;&nbsp;adapter,
             <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
-            <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
+            <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter,
+            boolean&nbsp;secondaryIndex,
+            boolean&nbsp;dataIdIndex,
+            boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -192,14 +195,14 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a></code></td>
 <td class="colLast"><span class="typeNameLabel">IndexCompositeWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry,
      <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a></code></td>
 <td class="colLast"><span class="typeNameLabel">IndependentAdapterIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html#write-T-org.locationtech.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&nbsp;entry,
-     <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;feldVisibilityWriter)</code>&nbsp;</td>
+     <a href="../../../../../../../org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="type parameter in IndependentAdapterIndexWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

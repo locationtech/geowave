@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -144,6 +144,14 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#configuredDataIndexBatchSize">configuredDataIndexBatchSize</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#configuredEnableVisibility">configuredEnableVisibility</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#configuredMaxRangeDecomposition">configuredMaxRangeDecomposition</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -152,9 +160,13 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#enableServerSideLibrary">enableServerSideLibrary</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#enableSecondaryIndex">enableSecondaryIndex</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#enableServerSideLibrary">enableServerSideLibrary</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#persistDataStatistics">persistDataStatistics</a></span></code>&nbsp;</td>
 </tr>
@@ -196,45 +208,73 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultMaxRangeDecomposition--">defaultMaxRangeDecomposition</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultDataIndexBatchSize--">defaultDataIndexBatchSize</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultEnableVisibility--">defaultEnableVisibility</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultMaxRangeDecomposition--">defaultMaxRangeDecomposition</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#getAggregationMaxRangeDecomposition--">getAggregationMaxRangeDecomposition</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#getDataIndexBatchSize--">getDataIndexBatchSize</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#getMaxRangeDecomposition--">getMaxRangeDecomposition</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isEnableBlockCache--">isEnableBlockCache</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isPersistDataStatistics--">isPersistDataStatistics</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isSecondaryIndexing--">isSecondaryIndexing</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isVisibilityEnabled--">isVisibilityEnabled</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setAggregationMaxRangeDecomposition-int-">setAggregationMaxRangeDecomposition</a></span>(int&nbsp;aggregationMaxRangeDecomposition)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setEnableBlockCache-boolean-">setEnableBlockCache</a></span>(boolean&nbsp;enableBlockCache)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setEnableVisibility-boolean-">setEnableVisibility</a></span>(boolean&nbsp;configuredEnableVisibility)</code>&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setMaxRangeDecomposition-int-">setMaxRangeDecomposition</a></span>(int&nbsp;maxRangeDecomposition)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setPersistDataStatistics-boolean-">setPersistDataStatistics</a></span>(boolean&nbsp;persistDataStatistics)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setSecondaryIndexing-boolean-">setSecondaryIndexing</a></span>(boolean&nbsp;enableSecondaryIndex)</code>&nbsp;</td>
+</tr>
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setServerSideLibraryEnabled-boolean-">setServerSideLibraryEnabled</a></span>(boolean&nbsp;enableServerSideLibrary)</code>&nbsp;</td>
 </tr>
@@ -285,6 +325,33 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 <li class="blockList">
 <h4>enableServerSideLibrary</h4>
 <pre>protected&nbsp;boolean enableServerSideLibrary</pre>
+</li>
+</ul>
+<a name="enableSecondaryIndex">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>enableSecondaryIndex</h4>
+<pre>protected&nbsp;boolean enableSecondaryIndex</pre>
+</li>
+</ul>
+<a name="configuredEnableVisibility">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>configuredEnableVisibility</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a> configuredEnableVisibility</pre>
+</li>
+</ul>
+<a name="configuredDataIndexBatchSize">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>configuredDataIndexBatchSize</h4>
+<pre>protected&nbsp;int configuredDataIndexBatchSize</pre>
 </li>
 </ul>
 <a name="configuredMaxRangeDecomposition">
@@ -350,6 +417,32 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 <li class="blockList">
 <h4>setPersistDataStatistics</h4>
 <pre>public&nbsp;void&nbsp;setPersistDataStatistics(boolean&nbsp;persistDataStatistics)</pre>
+</li>
+</ul>
+<a name="isSecondaryIndexing--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isSecondaryIndexing</h4>
+<pre>public&nbsp;boolean&nbsp;isSecondaryIndexing()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html#isSecondaryIndexing--">isSecondaryIndexing</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="setSecondaryIndexing-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSecondaryIndexing</h4>
+<pre>public&nbsp;void&nbsp;setSecondaryIndexing(boolean&nbsp;enableSecondaryIndex)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html#setSecondaryIndexing-boolean-">setSecondaryIndexing</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></dd>
+</dl>
 </li>
 </ul>
 <a name="isEnableBlockCache--">
@@ -418,6 +511,15 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 <pre>protected&nbsp;int&nbsp;defaultMaxRangeDecomposition()</pre>
 </li>
 </ul>
+<a name="defaultEnableVisibility--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>defaultEnableVisibility</h4>
+<pre>protected&nbsp;boolean&nbsp;defaultEnableVisibility()</pre>
+</li>
+</ul>
 <a name="setMaxRangeDecomposition-int-">
 <!--   -->
 </a>
@@ -440,6 +542,28 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 </dl>
 </li>
 </ul>
+<a name="getDataIndexBatchSize--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataIndexBatchSize</h4>
+<pre>public&nbsp;int&nbsp;getDataIndexBatchSize()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html#getDataIndexBatchSize--">getDataIndexBatchSize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="defaultDataIndexBatchSize--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>defaultDataIndexBatchSize</h4>
+<pre>protected&nbsp;int&nbsp;defaultDataIndexBatchSize()</pre>
+</li>
+</ul>
 <a name="defaultAggregationMaxRangeDecomposition--">
 <!--   -->
 </a>
@@ -452,10 +576,32 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/DataStore
 <a name="setAggregationMaxRangeDecomposition-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setAggregationMaxRangeDecomposition</h4>
 <pre>public&nbsp;void&nbsp;setAggregationMaxRangeDecomposition(int&nbsp;aggregationMaxRangeDecomposition)</pre>
+</li>
+</ul>
+<a name="isVisibilityEnabled--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isVisibilityEnabled</h4>
+<pre>public&nbsp;boolean&nbsp;isVisibilityEnabled()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html#isVisibilityEnabled--">isVisibilityEnabled</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="setEnableVisibility-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setEnableVisibility</h4>
+<pre>public&nbsp;void&nbsp;setEnableVisibility(boolean&nbsp;configuredEnableVisibility)</pre>
 </li>
 </ul>
 </li>

@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li>Next&nbsp;Class</li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/index/NullIndex.html" target="_top">Frames</a></li>
@@ -75,7 +75,7 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.index.PrimaryIndex">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.index.IndexImpl">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">org.locationtech.geowave.core.store.index.PrimaryIndex</a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html" title="class in org.locationtech.geowave.core.store.index">org.locationtech.geowave.core.store.index.IndexImpl</a></li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.core.store.index.NullIndex</li>
@@ -119,7 +119,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">NullIndex</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></pre>
+extends <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html" title="class in org.locationtech.geowave.core.store.index">IndexImpl</a></pre>
 <div class="block">This can be used as a pass-through for an index. In other words, it represents an index with no
  dimensions. It will create a GeoWave-compliant table named with the provided ID and primarily
  useful to access the data by row ID. Because it has no dimensions, range scans will result in
@@ -137,11 +137,11 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/index/Pri
 </a>
 <h3>Field Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.index.PrimaryIndex">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.index.IndexImpl">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.index.<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#indexModel">indexModel</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#indexStrategy">indexStrategy</a></code></li>
+<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.index.<a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html" title="class in org.locationtech.geowave.core.store.index">IndexImpl</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#indexModel">indexModel</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#indexStrategy">indexStrategy</a></code></li>
 </ul>
 </li>
 </ul>
@@ -197,11 +197,11 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/index/Pri
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.index.PrimaryIndex">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.index.IndexImpl">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.index.<a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#equals-java.lang.Object-">equals</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getIndexModel--">getIndexModel</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getIndexStrategy--">getIndexStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#hashCode--">hashCode</a></code></li>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.index.<a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html" title="class in org.locationtech.geowave.core.store.index">IndexImpl</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#equals-java.lang.Object-">equals</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#getIndexModel--">getIndexModel</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#getIndexStrategy--">getIndexStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#hashCode--">hashCode</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -263,7 +263,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/index/Pri
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html#getName--">getName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getName--">getName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#getName--">getName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html" title="class in org.locationtech.geowave.core.store.index">IndexImpl</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the name of the index (should be unique per data store)</dd>
 </dl>
@@ -282,7 +282,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/index/Pri
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#toBinary--">toBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#toBinary--">toBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html" title="class in org.locationtech.geowave.core.store.index">IndexImpl</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
@@ -301,7 +301,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/index/Pri
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index">PrimaryIndex</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html" title="class in org.locationtech.geowave.core.store.index">IndexImpl</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -334,7 +334,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/index/Pri
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html" title="class in org.locationtech.geowave.core.store.index"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li>Next&nbsp;Class</li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/index/NullIndex.html" target="_top">Frames</a></li>
@@ -359,7 +359,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/index/Pri
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.index.PrimaryIndex">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.index.IndexImpl">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

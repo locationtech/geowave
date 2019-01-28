@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitCQLQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitTemporalQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/OptimalCQLQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -103,7 +103,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">org.locationtech.geowave.core.store.query.constraints.BasicQuery</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">org.locationtech.geowave.core.geotime.store.query.SpatialQuery</a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery</a></li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery</li>
@@ -124,7 +124,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">IndexOnlySpatialQuery</span>
-extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">SpatialQuery</a></pre>
+extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">ExplicitSpatialQuery</a></pre>
 </li>
 </ul>
 </div>
@@ -210,18 +210,18 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.geotime.store.query.SpatialQuery">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">SpatialQuery</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#getIndexConstraints-org.locationtech.geowave.core.store.api.Index-">getIndexConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#getQueryGeometry--">getQueryGeometry</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#toBinary--">toBinary</a></code></li>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.geotime.store.query.<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">ExplicitSpatialQuery</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#getIndexConstraints-org.locationtech.geowave.core.store.api.Index-">getIndexConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#getQueryGeometry--">getQueryGeometry</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#toBinary--">toBinary</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#createFilters-org.locationtech.geowave.core.store.api.Index-">createFilters</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#getSecondaryIndexConstraints-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">getSecondaryIndexConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#getSecondaryIndexQueryConstraints-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">getSecondaryIndexQueryConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#getSecondaryQueryFilter-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">getSecondaryQueryFilter</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#isExact--">isExact</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#secondaryIndexSupports-org.locationtech.geowave.core.store.index.SecondaryIndexImpl-">secondaryIndexSupports</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#setExact-boolean-">setExact</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#createFilters-org.locationtech.geowave.core.store.api.Index-">createFilters</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#isExact--">isExact</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#setExact-boolean-">setExact</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -302,7 +302,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
                                         <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.api.Index-">createQueryFilter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/SpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">SpatialQuery</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#createQueryFilter-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.dimension.NumericDimensionField:A-org.locationtech.geowave.core.store.api.Index-">createQueryFilter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">ExplicitSpatialQuery</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -334,7 +334,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitCQLQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitTemporalQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/OptimalCQLQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

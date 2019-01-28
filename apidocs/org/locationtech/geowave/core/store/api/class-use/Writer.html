@@ -239,6 +239,14 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected &lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#createDataIndexWriter-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.operations.DataStoreOperations-org.locationtech.geowave.core.store.DataStoreOptions-org.locationtech.geowave.core.store.callback.IngestCallback-java.io.Closeable-">createDataIndexWriter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;T&gt;&nbsp;adapter,
+                     <a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a>&nbsp;baseOperations,
+                     <a href="../../../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a>&nbsp;baseOptions,
+                     <a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;&nbsp;callback,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;T&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">BaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#createIndexWriter-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.operations.DataStoreOperations-org.locationtech.geowave.core.store.DataStoreOptions-org.locationtech.geowave.core.store.callback.IngestCallback-java.io.Closeable-">createIndexWriter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;T&gt;&nbsp;adapter,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                  <a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a>&nbsp;baseOperations,
@@ -246,7 +254,7 @@
                  <a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;&nbsp;callback,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;T&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">BaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#createWriter-java.lang.String-">createWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
 <div class="block">Returns an index writer to perform batched write operations for the given typename</div>
@@ -273,6 +281,20 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="class in org.locationtech.geowave.core.store.index.writer">IndexCompositeWriter</a>&lt;T&gt;</span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/package-summary.html">org.locationtech.geowave.core.store.index.writer</a> with type arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a></code></td>
+<td class="colLast"><span class="typeNameLabel">IndexCompositeWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html#internalWrite-T-java.util.function.Function-">internalWrite</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&nbsp;entry,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a>&gt;&nbsp;internalWriter)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

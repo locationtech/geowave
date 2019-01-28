@@ -93,7 +93,7 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">org.locationtech.geowave.mapreduce.splits</div>
-<h2 title="Class RecordReaderParams" class="title">Class RecordReaderParams&lt;T&gt;</h2>
+<h2 title="Class RecordReaderParams" class="title">Class RecordReaderParams</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
@@ -103,7 +103,12 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">org.locationtech.geowave.core.store.operations.BaseReaderParams</a>&lt;T&gt;</li>
 <li>
 <ul class="inheritance">
-<li>org.locationtech.geowave.mapreduce.splits.RecordReaderParams&lt;T&gt;</li>
+<li><a href="../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">org.locationtech.geowave.core.store.operations.RangeReaderParams</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</li>
+<li>
+<ul class="inheritance">
+<li>org.locationtech.geowave.mapreduce.splits.RecordReaderParams</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -114,8 +119,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">RecordReaderParams&lt;T&gt;</span>
-extends <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">BaseReaderParams</a>&lt;T&gt;</pre>
+<pre>public class <span class="typeNameLabel">RecordReaderParams</span>
+extends <a href="../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">RangeReaderParams</a>&lt;<a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</pre>
 </li>
 </ul>
 </div>
@@ -134,7 +139,7 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/operations/B
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html#RecordReaderParams-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-short:A-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-boolean-org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange-java.lang.Integer-java.lang.Integer-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.lang.String...-">RecordReaderParams</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html#RecordReaderParams-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-short:A-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-boolean-boolean-org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange-java.lang.Integer-java.lang.Integer-java.lang.String...-">RecordReaderParams</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                   <a href="../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                   <a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
                   short[]&nbsp;adapterIds,
@@ -143,10 +148,10 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/operations/B
                   org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[],<a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldSubsets,
                   boolean&nbsp;isMixedVisibility,
                   boolean&nbsp;isAuthorizationsLimiting,
+                  boolean&nbsp;isClientsideRowMerging,
                   <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in org.locationtech.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;rowRange,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxRangeDecomposition,
-                  <a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="type parameter in RecordReaderParams">T</a>&gt;&nbsp;rowTransformer,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
 </table>
@@ -170,11 +175,18 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/operations/B
 </tr>
 </table>
 <ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.operations.RangeReaderParams">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.operations.<a href="../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">RangeReaderParams</a></h3>
+<code><a href="../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParams.html#getAdapterIds--">getAdapterIds</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParams.html#getIndex--">getIndex</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParams.html#getLimit--">getLimit</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParams.html#getMaxRangeDecomposition--">getMaxRangeDecomposition</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParams.html#getMaxResolutionSubsamplingPerDimension--">getMaxResolutionSubsamplingPerDimension</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParams.html#isClientsideRowMerging--">isClientsideRowMerging</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParams.html#isMixedVisibility--">isMixedVisibility</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.operations.BaseReaderParams">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.operations.<a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">BaseReaderParams</a></h3>
-<code><a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getAdapterIds--">getAdapterIds</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getAdapterStore--">getAdapterStore</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getAdditionalAuthorizations--">getAdditionalAuthorizations</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getAggregation--">getAggregation</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getConstraints--">getConstraints</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getCoordinateRanges--">getCoordinateRanges</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getFieldSubsets--">getFieldSubsets</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getFilter--">getFilter</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getIndex--">getIndex</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getInternalAdapterStore--">getInternalAdapterStore</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getLimit--">getLimit</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getMaxRangeDecomposition--">getMaxRangeDecomposition</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getMaxResolutionSubsamplingPerDimension--">getMaxResolutionSubsamplingPerDimension</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getRowTransformer--">getRowTransformer</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#isAggregation--">isAggregation</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#isAuthorizationsLimiting--">isAuthorizationsLimiting</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#isMixedVisibility--">isMixedVisibility</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#isServersideAggregation--">isServersideAggregation</a></code></li>
+<code><a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getAdapterStore--">getAdapterStore</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getAdditionalAuthorizations--">getAdditionalAuthorizations</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getAggregation--">getAggregation</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getFieldSubsets--">getFieldSubsets</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#getInternalAdapterStore--">getInternalAdapterStore</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#isAggregation--">isAggregation</a>, <a href="../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParams.html#isAuthorizationsLimiting--">isAuthorizationsLimiting</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -197,7 +209,7 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/operations/B
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="RecordReaderParams-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-short:A-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-boolean-org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange-java.lang.Integer-java.lang.Integer-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.lang.String...-">
+<a name="RecordReaderParams-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-short:A-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-boolean-boolean-org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange-java.lang.Integer-java.lang.Integer-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -212,10 +224,10 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/operations/B
                           org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[],<a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldSubsets,
                           boolean&nbsp;isMixedVisibility,
                           boolean&nbsp;isAuthorizationsLimiting,
+                          boolean&nbsp;isClientsideRowMerging,
                           <a href="../../../../../org/locationtech/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in org.locationtech.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;rowRange,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxRangeDecomposition,
-                          <a href="../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="type parameter in RecordReaderParams">T</a>&gt;&nbsp;rowTransformer,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</pre>
 </li>
 </ul>

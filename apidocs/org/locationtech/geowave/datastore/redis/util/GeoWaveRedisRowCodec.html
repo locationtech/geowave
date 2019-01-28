@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -76,13 +76,13 @@ var activeTableTab = "activeTableTab";
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -140,7 +140,29 @@ extends org.redisson.client.codec.BaseCodec</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected static <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisRowCodec</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#SINGLETON">SINGLETON</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#SINGLETON_WITH_VISIBILITY">SINGLETON_WITH_VISIBILITY</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected static <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisRowCodec</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#SINGLETON_WITHOUT_VISIBILITY">SINGLETON_WITHOUT_VISIBILITY</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#GeoWaveRedisRowCodec-java.lang.ClassLoader-org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRowCodec-">GeoWaveRedisRowCodec</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</a>&nbsp;classLoader,
+                    <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisRowCodec</a>&nbsp;codec)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -159,14 +181,19 @@ extends org.redisson.client.codec.BaseCodec</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#encodeRow-io.netty.buffer.ByteBufOutputStream-org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow-">encodeRow</a></span>(io.netty.buffer.ByteBufOutputStream&nbsp;out,
-         <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a>&nbsp;row)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#encodeRow-io.netty.buffer.ByteBufOutputStream-org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow-boolean-">encodeRow</a></span>(io.netty.buffer.ByteBufOutputStream&nbsp;out,
+         <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a>&nbsp;row,
+         boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#getClassLoader--">getClassLoader</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>org.redisson.client.protocol.Decoder&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#getValueDecoder--">getValueDecoder</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>org.redisson.client.protocol.Encoder</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html#getValueEncoder--">getValueEncoder</a></span>()</code>&nbsp;</td>
 </tr>
@@ -176,7 +203,7 @@ extends org.redisson.client.codec.BaseCodec</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.redisson.client.codec.BaseCodec</h3>
-<code>getClassLoader, getMapKeyDecoder, getMapKeyEncoder, getMapValueDecoder, getMapValueEncoder</code></li>
+<code>getMapKeyDecoder, getMapKeyEncoder, getMapValueDecoder, getMapValueEncoder</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -199,13 +226,40 @@ extends org.redisson.client.codec.BaseCodec</pre>
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="SINGLETON">
+<a name="SINGLETON_WITH_VISIBILITY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SINGLETON_WITH_VISIBILITY</h4>
+<pre>protected static&nbsp;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisRowCodec</a> SINGLETON_WITH_VISIBILITY</pre>
+</li>
+</ul>
+<a name="SINGLETON_WITHOUT_VISIBILITY">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>SINGLETON</h4>
-<pre>protected static&nbsp;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisRowCodec</a> SINGLETON</pre>
+<h4>SINGLETON_WITHOUT_VISIBILITY</h4>
+<pre>protected static&nbsp;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisRowCodec</a> SINGLETON_WITHOUT_VISIBILITY</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="GeoWaveRedisRowCodec-java.lang.ClassLoader-org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRowCodec-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>GeoWaveRedisRowCodec</h4>
+<pre>public&nbsp;GeoWaveRedisRowCodec(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</a>&nbsp;classLoader,
+                            <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisRowCodec.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisRowCodec</a>&nbsp;codec)</pre>
 </li>
 </ul>
 </li>
@@ -216,18 +270,34 @@ extends org.redisson.client.codec.BaseCodec</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="encodeRow-io.netty.buffer.ByteBufOutputStream-org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow-">
+<a name="encodeRow-io.netty.buffer.ByteBufOutputStream-org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>encodeRow</h4>
 <pre>protected static&nbsp;void&nbsp;encodeRow(io.netty.buffer.ByteBufOutputStream&nbsp;out,
-                                <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a>&nbsp;row)
+                                <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/GeoWaveRedisPersistedRow.html" title="class in org.locationtech.geowave.datastore.redis.util">GeoWaveRedisPersistedRow</a>&nbsp;row,
+                                boolean&nbsp;visibilityEnabled)
                          throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getClassLoader--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClassLoader</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</a>&nbsp;getClassLoader()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>getClassLoader</code>&nbsp;in interface&nbsp;<code>org.redisson.client.codec.Codec</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>getClassLoader</code>&nbsp;in class&nbsp;<code>org.redisson.client.codec.BaseCodec</code></dd>
 </dl>
 </li>
 </ul>
@@ -304,13 +374,13 @@ extends org.redisson.client.codec.BaseCodec</pre>
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>

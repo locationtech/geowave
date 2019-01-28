@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/LazyPaginatedEntryRange.html" title="class in org.locationtech.geowave.datastore.redis.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisMapWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedissonClientCache.html" title="class in org.locationtech.geowave.datastore.redis.util"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -100,7 +100,12 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util">org.locationtech.geowave.datastore.redis.util.AbstractRedisSetWrapper</a>&lt;org.redisson.api.RScoredSortedSetAsync&lt;V&gt;,org.redisson.api.RScoredSortedSet&lt;V&gt;&gt;</li>
+<li>
+<ul class="inheritance">
 <li>org.locationtech.geowave.datastore.redis.util.RedisScoredSetWrapper&lt;V&gt;</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -114,8 +119,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">RedisScoredSetWrapper&lt;V&gt;</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></pre>
+extends <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util">AbstractRedisSetWrapper</a>&lt;org.redisson.api.RScoredSortedSetAsync&lt;V&gt;,org.redisson.api.RScoredSortedSet&lt;V&gt;&gt;</pre>
 </li>
 </ul>
 </div>
@@ -159,32 +163,43 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoClose
    <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&nbsp;object)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html#close--">close</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.redisson.client.protocol.ScoredEntry&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html#entryRange-double-boolean-double-boolean-">entryRange</a></span>(double&nbsp;startScore,
           boolean&nbsp;startScoreInclusive,
           double&nbsp;endScore,
           boolean&nbsp;endScoreInclusive)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>org.redisson.api.RFuture&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;org.redisson.client.protocol.ScoredEntry&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html#entryRangeAsync-double-boolean-double-boolean-">entryRangeAsync</a></span>(double&nbsp;startScore,
                boolean&nbsp;startScoreInclusive,
                double&nbsp;endScore,
                boolean&nbsp;endScoreInclusive)</code>&nbsp;</td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected org.redisson.api.RScoredSortedSetAsync&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html#initAsyncCollection-org.redisson.api.RBatch-java.lang.String-org.redisson.client.codec.Codec-">initAsyncCollection</a></span>(org.redisson.api.RBatch&nbsp;batch,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setName,
+                   org.redisson.client.codec.Codec&nbsp;codec)</code>&nbsp;</td>
+</tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html#flush--">flush</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>protected org.redisson.api.RScoredSortedSet&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html#initSyncCollection-org.redisson.api.RedissonClient-java.lang.String-org.redisson.client.codec.Codec-">initSyncCollection</a></span>(org.redisson.api.RedissonClient&nbsp;client,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setName,
+                  org.redisson.client.codec.Codec&nbsp;codec)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html#remove-java.lang.Object-">remove</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.datastore.redis.util.AbstractRedisSetWrapper">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.datastore.redis.util.<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util">AbstractRedisSetWrapper</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html#close--">close</a>, <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html#flush--">flush</a>, <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html#getCurrentAsyncCollection--">getCurrentAsyncCollection</a>, <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html#getCurrentSyncCollection--">getCurrentSyncCollection</a>, <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html#preAdd--">preAdd</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -258,41 +273,46 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoClose
                 <a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&nbsp;object)</pre>
 </li>
 </ul>
-<a name="flush--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>flush</h4>
-<pre>public&nbsp;void&nbsp;flush()</pre>
-</li>
-</ul>
-<a name="close--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>close</h4>
-<pre>public&nbsp;void&nbsp;close()
-           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close--" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
-</dl>
-</li>
-</ul>
 <a name="entryRangeAsync-double-boolean-double-boolean-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>entryRangeAsync</h4>
 <pre>public&nbsp;org.redisson.api.RFuture&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;org.redisson.client.protocol.ScoredEntry&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;&gt;&gt;&nbsp;entryRangeAsync(double&nbsp;startScore,
                                                                                                          boolean&nbsp;startScoreInclusive,
                                                                                                          double&nbsp;endScore,
                                                                                                          boolean&nbsp;endScoreInclusive)</pre>
+</li>
+</ul>
+<a name="initAsyncCollection-org.redisson.api.RBatch-java.lang.String-org.redisson.client.codec.Codec-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>initAsyncCollection</h4>
+<pre>protected&nbsp;org.redisson.api.RScoredSortedSetAsync&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;&nbsp;initAsyncCollection(org.redisson.api.RBatch&nbsp;batch,
+                                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setName,
+                                                                        org.redisson.client.codec.Codec&nbsp;codec)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html#initAsyncCollection-org.redisson.api.RBatch-java.lang.String-org.redisson.client.codec.Codec-">initAsyncCollection</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util">AbstractRedisSetWrapper</a>&lt;org.redisson.api.RScoredSortedSetAsync&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;,org.redisson.api.RScoredSortedSet&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="initSyncCollection-org.redisson.api.RedissonClient-java.lang.String-org.redisson.client.codec.Codec-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>initSyncCollection</h4>
+<pre>protected&nbsp;org.redisson.api.RScoredSortedSet&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;&nbsp;initSyncCollection(org.redisson.api.RedissonClient&nbsp;client,
+                                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setName,
+                                                                  org.redisson.client.codec.Codec&nbsp;codec)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html#initSyncCollection-org.redisson.api.RedissonClient-java.lang.String-org.redisson.client.codec.Codec-">initSyncCollection</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util">AbstractRedisSetWrapper</a>&lt;org.redisson.api.RScoredSortedSetAsync&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;,org.redisson.api.RScoredSortedSet&lt;<a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisScoredSetWrapper.html" title="type parameter in RedisScoredSetWrapper">V</a>&gt;&gt;</code></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -323,7 +343,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoClose
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/LazyPaginatedEntryRange.html" title="class in org.locationtech.geowave.datastore.redis.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisMapWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedissonClientCache.html" title="class in org.locationtech.geowave.datastore.redis.util"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

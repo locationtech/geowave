@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":10,"i14":10,"i15":10,"i16":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":9,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -229,46 +229,42 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/cli/ap
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#createInternalAdapterStore--">createInternalAdapterStore</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#createSecondaryIndexStore--">createSecondaryIndexStore</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in org.locationtech.geowave.core.store">StoreFactoryFamilySpi</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#getFactoryFamily--">getFactoryFamily</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html" title="class in org.locationtech.geowave.core.store">StoreFactoryOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#getFactoryOptions--">getFactoryOptions</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#getGeoWaveNamespace--">getGeoWaveNamespace</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#getOptionsAsMap--">getOptionsAsMap</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#getStoreNamespace-java.lang.String-">getStoreNamespace</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#getType--">getType</a></span>()</code>
 <div class="block">This is implemented by the PluginOptions interface by child classes</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#selectPlugin-java.lang.String-">selectPlugin</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;qualifier)</code>
 <div class="block">This method will allow the user to specify the desired factory, such as 'accumulo' or 'hbase'.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#setFactoryFamily-org.locationtech.geowave.core.store.StoreFactoryFamilySpi-">setFactoryFamily</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in org.locationtech.geowave.core.store">StoreFactoryFamilySpi</a>&nbsp;factoryPlugin)</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#setFactoryOptions-org.locationtech.geowave.core.store.StoreFactoryOptions-">setFactoryOptions</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html" title="class in org.locationtech.geowave.core.store">StoreFactoryOptions</a>&nbsp;factoryOptions)</code>&nbsp;</td>
 </tr>
@@ -481,15 +477,6 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/cli/ap
 <li class="blockList">
 <h4>createDataStatisticsStore</h4>
 <pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;createDataStatisticsStore()</pre>
-</li>
-</ul>
-<a name="createSecondaryIndexStore--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createSecondaryIndexStore</h4>
-<pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in org.locationtech.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;createSecondaryIndexStore()</pre>
 </li>
 </ul>
 <a name="createAdapterIndexMappingStore--">

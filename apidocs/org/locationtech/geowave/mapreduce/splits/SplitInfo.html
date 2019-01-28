@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -171,21 +171,29 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#isMixedVisibility--">isMixedVisibility</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#isClientsideRowMerging--">isClientsideRowMerging</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#readFields-java.io.DataInput-">readFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a>&nbsp;in)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#isMixedVisibility--">isMixedVisibility</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#setAuthorizationsLimiting-boolean-">setAuthorizationsLimiting</a></span>(boolean&nbsp;authorizationsLimiting)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#readFields-java.io.DataInput-">readFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a>&nbsp;in)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#setMixedVisibility-boolean-">setMixedVisibility</a></span>(boolean&nbsp;mixedVisibility)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#setAuthorizationsLimiting-boolean-">setAuthorizationsLimiting</a></span>(boolean&nbsp;authorizationsLimiting)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#setClientsideRowMerging-boolean-">setClientsideRowMerging</a></span>(boolean&nbsp;clientsideRowMerging)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#setMixedVisibility-boolean-">setMixedVisibility</a></span>(boolean&nbsp;mixedVisibility)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/splits/SplitInfo.html#write-java.io.DataOutput-">write</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataOutput.html?is-external=true" title="class or interface in java.io">DataOutput</a>&nbsp;out)</code>&nbsp;</td>
 </tr>
@@ -281,6 +289,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>setAuthorizationsLimiting</h4>
 <pre>public&nbsp;void&nbsp;setAuthorizationsLimiting(boolean&nbsp;authorizationsLimiting)</pre>
+</li>
+</ul>
+<a name="isClientsideRowMerging--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isClientsideRowMerging</h4>
+<pre>public&nbsp;boolean&nbsp;isClientsideRowMerging()</pre>
+</li>
+</ul>
+<a name="setClientsideRowMerging-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setClientsideRowMerging</h4>
+<pre>public&nbsp;void&nbsp;setClientsideRowMerging(boolean&nbsp;clientsideRowMerging)</pre>
 </li>
 </ul>
 <a name="getIndex--">

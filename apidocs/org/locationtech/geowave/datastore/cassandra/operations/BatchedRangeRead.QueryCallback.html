@@ -138,10 +138,11 @@ implements com.google.common.util.concurrent.FutureCallback&lt;com.datastax.driv
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/BatchedRangeRead.QueryCallback.html#QueryCallback-java.util.concurrent.atomic.AtomicInteger-java.util.concurrent.BlockingQueue-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-com.google.common.base.Predicate-java.util.concurrent.Semaphore-">QueryCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicInteger.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicInteger</a>&nbsp;queryCount,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/BatchedRangeRead.QueryCallback.html#QueryCallback-java.util.concurrent.atomic.AtomicInteger-java.util.concurrent.BlockingQueue-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-com.google.common.base.Predicate-boolean-java.util.concurrent.Semaphore-">QueryCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicInteger.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicInteger</a>&nbsp;queryCount,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent">BlockingQueue</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;resultQueue,
              <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/BatchedRangeRead.QueryCallback.html" title="type parameter in BatchedRangeRead.QueryCallback">T</a>&gt;&nbsp;rowTransform,
              com.google.common.base.Predicate&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
+             boolean&nbsp;rowMerging,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Semaphore.html?is-external=true" title="class or interface in java.util.concurrent">Semaphore</a>&nbsp;semaphore)</code>&nbsp;</td>
 </tr>
 </table>
@@ -189,7 +190,7 @@ implements com.google.common.util.concurrent.FutureCallback&lt;com.datastax.driv
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="QueryCallback-java.util.concurrent.atomic.AtomicInteger-java.util.concurrent.BlockingQueue-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-com.google.common.base.Predicate-java.util.concurrent.Semaphore-">
+<a name="QueryCallback-java.util.concurrent.atomic.AtomicInteger-java.util.concurrent.BlockingQueue-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-com.google.common.base.Predicate-boolean-java.util.concurrent.Semaphore-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -199,6 +200,7 @@ implements com.google.common.util.concurrent.FutureCallback&lt;com.datastax.driv
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent">BlockingQueue</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;resultQueue,
                      <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/cassandra/operations/BatchedRangeRead.QueryCallback.html" title="type parameter in BatchedRangeRead.QueryCallback">T</a>&gt;&nbsp;rowTransform,
                      com.google.common.base.Predicate&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
+                     boolean&nbsp;rowMerging,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Semaphore.html?is-external=true" title="class or interface in java.util.concurrent">Semaphore</a>&nbsp;semaphore)</pre>
 </li>
 </ul>

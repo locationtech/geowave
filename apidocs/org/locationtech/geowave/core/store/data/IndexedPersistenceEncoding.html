@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -143,7 +143,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Pers
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.data.<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">PersistenceEncoding</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#commonData">commonData</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#DOUBLE_TOLERANCE">DOUBLE_TOLERANCE</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#LOGGER">LOGGER</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#commonData">commonData</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#DOUBLE_TOLERANCE">DOUBLE_TOLERANCE</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#LOGGER">LOGGER</a>, <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#unknownData">unknownData</a></code></li>
 </ul>
 </li>
 </ul>
@@ -159,10 +159,10 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Pers
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#IndexedPersistenceEncoding-java.lang.Short-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">IndexedPersistenceEncoding</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId,
-                          <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
-                          <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;insertionPartitionKey,
-                          <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;insertionSortKey,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#IndexedPersistenceEncoding-java.lang.Short-byte:A-byte:A-byte:A-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">IndexedPersistenceEncoding</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId,
+                          byte[]&nbsp;dataId,
+                          byte[]&nbsp;insertionPartitionKey,
+                          byte[]&nbsp;insertionSortKey,
                           int&nbsp;duplicateCount,
                           <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="type parameter in IndexedPersistenceEncoding">T</a>&gt;&nbsp;commonData,
                           <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;unknownData)</code>&nbsp;</td>
@@ -189,22 +189,26 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Pers
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#getInsertionPartitionKey--">getInsertionPartitionKey</a></span>()</code>
 <div class="block">Return the partition key portion of the insertion ID</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#getInsertionSortKey--">getInsertionSortKey</a></span>()</code>
 <div class="block">Return the sort key portion of the insertion ID</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#isDeduplicationEnabled--">isDeduplicationEnabled</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#isAsync--">isAsync</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#isDeduplicationEnabled--">isDeduplicationEnabled</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html#isDuplicated--">isDuplicated</a></span>()</code>
 <div class="block">Return a flag indicating if the entry has any duplicates</div>
@@ -239,16 +243,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Pers
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="IndexedPersistenceEncoding-java.lang.Short-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">
+<a name="IndexedPersistenceEncoding-java.lang.Short-byte:A-byte:A-byte:A-int-org.locationtech.geowave.core.store.data.PersistentDataset-org.locationtech.geowave.core.store.data.PersistentDataset-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>IndexedPersistenceEncoding</h4>
 <pre>public&nbsp;IndexedPersistenceEncoding(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId,
-                                  <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId,
-                                  <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;insertionPartitionKey,
-                                  <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;insertionSortKey,
+                                  byte[]&nbsp;dataId,
+                                  byte[]&nbsp;insertionPartitionKey,
+                                  byte[]&nbsp;insertionSortKey,
                                   int&nbsp;duplicateCount,
                                   <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="type parameter in IndexedPersistenceEncoding">T</a>&gt;&nbsp;commonData,
                                   <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;unknownData)</pre>
@@ -262,13 +266,22 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Pers
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="isAsync--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isAsync</h4>
+<pre>public&nbsp;boolean&nbsp;isAsync()</pre>
+</li>
+</ul>
 <a name="getInsertionPartitionKey--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getInsertionPartitionKey</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getInsertionPartitionKey()</pre>
+<pre>public&nbsp;byte[]&nbsp;getInsertionPartitionKey()</pre>
 <div class="block">Return the partition key portion of the insertion ID</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -282,7 +295,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Pers
 <ul class="blockList">
 <li class="blockList">
 <h4>getInsertionSortKey</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getInsertionSortKey()</pre>
+<pre>public&nbsp;byte[]&nbsp;getInsertionSortKey()</pre>
 <div class="block">Return the sort key portion of the insertion ID</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

@@ -100,10 +100,15 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">org.locationtech.geowave.core.store.operations.BaseReaderParamsBuilder</a>&lt;T,<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;T&gt;&gt;</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">org.locationtech.geowave.core.store.operations.BaseReaderParamsBuilder</a>&lt;T,R&gt;</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">org.locationtech.geowave.core.store.operations.RangeReaderParamsBuilder</a>&lt;T,<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;T&gt;&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.core.store.operations.ReaderParamsBuilder&lt;T&gt;</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -115,7 +120,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">ReaderParamsBuilder&lt;T&gt;</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">BaseReaderParamsBuilder</a>&lt;T,<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;T&gt;&gt;</pre>
+extends <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">RangeReaderParamsBuilder</a>&lt;T,<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;T&gt;&gt;</pre>
 </li>
 </ul>
 </div>
@@ -148,23 +153,30 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html#isClientsideRowMerging">isClientsideRowMerging</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html#isServersideAggregation">isServersideAggregation</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html#queryRanges">queryRanges</a></span></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html#rowTransformer">rowTransformer</a></span></code>&nbsp;</td>
+</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.operations.RangeReaderParamsBuilder">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.operations.<a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">RangeReaderParamsBuilder</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#adapterIds">adapterIds</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#index">index</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#isClientsideRowMerging">isClientsideRowMerging</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#isMixedVisibility">isMixedVisibility</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#limit">limit</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#maxRangeDecomposition">maxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#maxResolutionSubsamplingPerDimension">maxResolutionSubsamplingPerDimension</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.operations.BaseReaderParamsBuilder">
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.operations.<a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">BaseReaderParamsBuilder</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#adapterIds">adapterIds</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#adapterStore">adapterStore</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#additionalAuthorizations">additionalAuthorizations</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#aggregation">aggregation</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#fieldSubsets">fieldSubsets</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#index">index</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#internalAdapterStore">internalAdapterStore</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#isAuthorizationsLimiting">isAuthorizationsLimiting</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#isMixedVisibility">isMixedVisibility</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#limit">limit</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#maxRangeDecomposition">maxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#maxResolutionSubsamplingPerDimension">maxResolutionSubsamplingPerDimension</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#rowTransformer">rowTransformer</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#adapterStore">adapterStore</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#additionalAuthorizations">additionalAuthorizations</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#aggregation">aggregation</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#fieldSubsets">fieldSubsets</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#internalAdapterStore">internalAdapterStore</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#isAuthorizationsLimiting">isAuthorizationsLimiting</a></code></li>
 </ul>
 </li>
 </ul>
@@ -221,8 +233,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html#filter-org.locationtech.geowave.core.store.query.filter.QueryFilter-">filter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;filter)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html#isClientsideRowMerging-boolean-">isClientsideRowMerging</a></span>(boolean&nbsp;isClientsideRowMerging)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html#getRowTransformer--">getRowTransformer</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;</code></td>
@@ -234,11 +246,18 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 </tr>
 </table>
 <ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.operations.RangeReaderParamsBuilder">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.operations.<a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">RangeReaderParamsBuilder</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#adapterIds-short...-">adapterIds</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#additionalAuthorizations-java.lang.String...-">additionalAuthorizations</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#isClientsideRowMerging-boolean-">isClientsideRowMerging</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#isMixedVisibility-boolean-">isMixedVisibility</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#limit-java.lang.Integer-">limit</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#maxRangeDecomposition-java.lang.Integer-">maxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#maxResolutionSubsamplingPerDimension-double:A-">maxResolutionSubsamplingPerDimension</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.operations.BaseReaderParamsBuilder">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.operations.<a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">BaseReaderParamsBuilder</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#adapterIds-short:A-">adapterIds</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#additionalAuthorizations-java.lang.String...-">additionalAuthorizations</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#aggregation-org.apache.commons.lang3.tuple.Pair-">aggregation</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#fieldSubsets-org.apache.commons.lang3.tuple.Pair-">fieldSubsets</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#isAuthorizationsLimiting-boolean-">isAuthorizationsLimiting</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#isMixedVisibility-boolean-">isMixedVisibility</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#limit-java.lang.Integer-">limit</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#maxRangeDecomposition-java.lang.Integer-">maxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#maxResolutionSubsamplingPerDimension-double:A-">maxResolutionSubsamplingPerDimension</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#aggregation-org.apache.commons.lang3.tuple.Pair-">aggregation</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#fieldSubsets-org.apache.commons.lang3.tuple.Pair-">fieldSubsets</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#isAuthorizationsLimiting-boolean-">isAuthorizationsLimiting</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -268,15 +287,6 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <li class="blockList">
 <h4>isServersideAggregation</h4>
 <pre>protected&nbsp;boolean isServersideAggregation</pre>
-</li>
-</ul>
-<a name="isClientsideRowMerging">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isClientsideRowMerging</h4>
-<pre>protected&nbsp;boolean isClientsideRowMerging</pre>
 </li>
 </ul>
 <a name="queryRanges">
@@ -309,10 +319,19 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <a name="constraints">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>constraints</h4>
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt; constraints</pre>
+</li>
+</ul>
+<a name="rowTransformer">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>rowTransformer</h4>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt; rowTransformer</pre>
 </li>
 </ul>
 </li>
@@ -352,7 +371,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;&nbsp;builder()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html#builder--">builder</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/BaseReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">BaseReaderParamsBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html#builder--">builder</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RangeReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">RangeReaderParamsBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -363,15 +382,6 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <li class="blockList">
 <h4>isServersideAggregation</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;&nbsp;isServersideAggregation(boolean&nbsp;isServersideAggregation)</pre>
-</li>
-</ul>
-<a name="isClientsideRowMerging-boolean-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isClientsideRowMerging</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;&nbsp;isClientsideRowMerging(boolean&nbsp;isClientsideRowMerging)</pre>
 </li>
 </ul>
 <a name="queryRanges-org.locationtech.geowave.core.index.QueryRanges-">
@@ -408,6 +418,15 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <li class="blockList">
 <h4>constraints</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;&nbsp;constraints(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints)</pre>
+</li>
+</ul>
+<a name="getRowTransformer--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRowTransformer</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="type parameter in ReaderParamsBuilder">T</a>&gt;&nbsp;getRowTransformer()</pre>
 </li>
 </ul>
 <a name="build--">

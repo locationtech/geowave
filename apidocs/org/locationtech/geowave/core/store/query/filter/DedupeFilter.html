@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -159,20 +159,25 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
       <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/DedupeFilter.html#applyDedupeFilter-short-org.locationtech.geowave.core.index.ByteArray-">applyDedupeFilter</a></span>(short&nbsp;adapterId,
+                 <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/DedupeFilter.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
 <div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/DedupeFilter.html#isDedupAcrossIndices--">isDedupAcrossIndices</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/DedupeFilter.html#setDedupAcrossIndices-boolean-">setDedupAcrossIndices</a></span>(boolean&nbsp;dedupAcrossIndices)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/DedupeFilter.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -229,6 +234,16 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a></code></dd>
 </dl>
+</li>
+</ul>
+<a name="applyDedupeFilter-short-org.locationtech.geowave.core.index.ByteArray-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>applyDedupeFilter</h4>
+<pre>public&nbsp;boolean&nbsp;applyDedupeFilter(short&nbsp;adapterId,
+                                 <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;dataId)</pre>
 </li>
 </ul>
 <a name="setDedupAcrossIndices-boolean-">

@@ -298,6 +298,10 @@
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">SpatialTemporalDimensionalityTypeProvider.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.html#isSpatialTemporal-org.locationtech.geowave.core.index.NumericIndexStrategy-">isSpatialTemporal</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalDimensionalityTypeProvider.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/ingest/TemporalDimensionalityTypeProvider.html#isTemporal-org.locationtech.geowave.core.index.NumericIndexStrategy-">isTemporal</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -395,12 +399,12 @@
 <td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getFullBounds-org.locationtech.geowave.core.index.NumericIndexStrategy-">getFullBounds</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
+<td class="colFirst"><code>static byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getInsertionPartitionKeys-org.locationtech.geowave.core.index.NumericIndexStrategy-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionPartitionKeys</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;strategy,
                          <a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;insertionData)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;</code></td>
+<td class="colFirst"><code>static byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getQueryPartitionKeys-org.locationtech.geowave.core.index.NumericIndexStrategy-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryPartitionKeys</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;strategy,
                      <a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryData,
                      <a href="../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
@@ -563,7 +567,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></td>
-<td class="colLast"><span class="typeNameLabel">PrimaryIndex.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#indexStrategy">indexStrategy</a></span></code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IndexImpl.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#indexStrategy">indexStrategy</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -576,7 +580,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></td>
-<td class="colLast"><span class="typeNameLabel">PrimaryIndex.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IndexImpl.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -592,8 +596,8 @@
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/PrimaryIndex.html#PrimaryIndex-org.locationtech.geowave.core.index.NumericIndexStrategy-org.locationtech.geowave.core.store.index.CommonIndexModel-">PrimaryIndex</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy,
-            <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#IndexImpl-org.locationtech.geowave.core.index.NumericIndexStrategy-org.locationtech.geowave.core.store.index.CommonIndexModel-">IndexImpl</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy,
+         <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

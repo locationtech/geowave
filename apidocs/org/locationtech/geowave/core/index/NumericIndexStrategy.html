@@ -144,8 +144,8 @@ extends <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexS
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinates.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinates</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinatesPerDimension-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">getCoordinatesPerDimension</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                          <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinatesPerDimension-byte:A-byte:A-">getCoordinatesPerDimension</a></span>(byte[]&nbsp;partitionKey,
+                          byte[]&nbsp;sortKey)</code>
 <div class="block">Return an integer coordinate in each dimension for the given insertion ID plus a bin ID if that
  dimension is continuous</div>
 </td>
@@ -177,7 +177,7 @@ extends <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexS
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.index.<a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a></h3>
-<code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getInsertionIds-EntryRangeType-">getInsertionIds</a>, <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getInsertionIds-EntryRangeType-int-">getInsertionIds</a>, <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getQueryRanges-QueryRangeType-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a>, <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getQueryRanges-QueryRangeType-int-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a>, <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getRangeForId-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">getRangeForId</a></code></li>
+<code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getInsertionIds-EntryRangeType-">getInsertionIds</a>, <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getInsertionIds-EntryRangeType-int-">getInsertionIds</a>, <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getQueryRanges-QueryRangeType-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a>, <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getQueryRanges-QueryRangeType-int-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a>, <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getRangeForId-byte:A-byte:A-">getRangeForId</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.index.PartitionIndexStrategy">
@@ -214,14 +214,14 @@ extends <a href="../../../../../org/locationtech/geowave/core/index/SortedIndexS
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getCoordinatesPerDimension-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">
+<a name="getCoordinatesPerDimension-byte:A-byte:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getCoordinatesPerDimension</h4>
-<pre><a href="../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinates.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinates</a>&nbsp;getCoordinatesPerDimension(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;partitionKey,
-                                                       <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;sortKey)</pre>
+<pre><a href="../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinates.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinates</a>&nbsp;getCoordinatesPerDimension(byte[]&nbsp;partitionKey,
+                                                       byte[]&nbsp;sortKey)</pre>
 <div class="block">Return an integer coordinate in each dimension for the given insertion ID plus a bin ID if that
  dimension is continuous</div>
 <dl>

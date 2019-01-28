@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.util.EntryIteratorWrapper">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -100,12 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html" title="class in org.locationtech.geowave.core.store.util">org.locationtech.geowave.core.store.util.EntryIteratorWrapper</a>&lt;T&gt;</li>
-<li>
-<ul class="inheritance">
 <li>org.locationtech.geowave.core.store.util.NativeEntryIteratorWrapper&lt;T&gt;</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -118,12 +113,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/store/util/MergingEntryIterator.html" title="class in org.locationtech.geowave.core.store.util">MergingEntryIterator</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/store/util/AsyncNativeEntryIteratorWrapper.html" title="class in org.locationtech.geowave.core.store.util">AsyncNativeEntryIteratorWrapper</a>, <a href="../../../../../../org/locationtech/geowave/core/store/util/MergingEntryIterator.html" title="class in org.locationtech.geowave.core.store.util">MergingEntryIterator</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">NativeEntryIteratorWrapper&lt;T&gt;</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html" title="class in org.locationtech.geowave.core.store.util">EntryIteratorWrapper</a>&lt;T&gt;</pre>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;</pre>
 </li>
 </ul>
 </div>
@@ -136,13 +132,41 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Entr
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.util.EntryIteratorWrapper">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.util.<a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html" title="class in org.locationtech.geowave.core.store.util">EntryIteratorWrapper</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#adapterStore">adapterStore</a>, <a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#clientFilter">clientFilter</a>, <a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#index">index</a>, <a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#nextValue">nextValue</a>, <a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#scanCallback">scanCallback</a>, <a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#scannerIt">scannerIt</a></code></li>
-</ul>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#adapterStore">adapterStore</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#clientFilters">clientFilters</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html" title="interface in org.locationtech.geowave.core.store.base.dataidx">DataIndexRetrieval</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#dataIndexRetrieval">dataIndexRetrieval</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#index">index</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#nextValue">nextValue</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>,? extends <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#scanCallback">scanCallback</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#scannerIt">scannerIt</a></span></code>&nbsp;</td>
+</tr>
+</table>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -157,14 +181,15 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Entr
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#NativeEntryIteratorWrapper-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.api.Index-java.util.Iterator-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-">NativeEntryIteratorWrapper</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#NativeEntryIteratorWrapper-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.api.Index-java.util.Iterator-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval-">NativeEntryIteratorWrapper</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                           <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scannerIt,
-                          <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;clientFilter,
+                          <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
                           <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>,? extends <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scanCallback,
                           byte[]&nbsp;fieldSubsetBitmask,
                           double[]&nbsp;maxResolutionSubsamplingPerDimension,
-                          boolean&nbsp;decodePersistenceEncoding)</code>&nbsp;</td>
+                          boolean&nbsp;decodePersistenceEncoding,
+                          <a href="../../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html" title="interface in org.locationtech.geowave.core.store.base.dataidx">DataIndexRetrieval</a>&nbsp;dataIndexRetrieval)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -183,18 +208,35 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Entr
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#decodeRow-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.api.Index-">decodeRow</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
-         <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;clientFilter,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#decodeRow-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.api.Index-">decodeRow</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
+         <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
          <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#findNext--">findNext</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#getNextEncodedResult--">getNextEncodedResult</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#hasNext--">hasNext</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#hasNextScannedResult--">hasNextScannedResult</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#next--">next</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html#remove--">remove</a></span>()</code>&nbsp;</td>
+</tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.util.EntryIteratorWrapper">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.util.<a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html" title="class in org.locationtech.geowave.core.store.util">EntryIteratorWrapper</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#getNextEncodedResult--">getNextEncodedResult</a>, <a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#hasNext--">hasNext</a>, <a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#hasNextScannedResult--">hasNextScannedResult</a>, <a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#next--">next</a>, <a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#remove--">remove</a></code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -217,13 +259,84 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Entr
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="dataIndexRetrieval">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dataIndexRetrieval</h4>
+<pre>protected final&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html" title="interface in org.locationtech.geowave.core.store.base.dataidx">DataIndexRetrieval</a> dataIndexRetrieval</pre>
+</li>
+</ul>
+<a name="adapterStore">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>adapterStore</h4>
+<pre>protected final&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a> adapterStore</pre>
+</li>
+</ul>
+<a name="index">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>index</h4>
+<pre>protected final&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a> index</pre>
+</li>
+</ul>
+<a name="scannerIt">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>scannerIt</h4>
+<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt; scannerIt</pre>
+</li>
+</ul>
+<a name="clientFilters">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clientFilters</h4>
+<pre>protected final&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[] clientFilters</pre>
+</li>
+</ul>
+<a name="scanCallback">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>scanCallback</h4>
+<pre>protected final&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>,? extends <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt; scanCallback</pre>
+</li>
+</ul>
+<a name="nextValue">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>nextValue</h4>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a> nextValue</pre>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="NativeEntryIteratorWrapper-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.api.Index-java.util.Iterator-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-">
+<a name="NativeEntryIteratorWrapper-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.api.Index-java.util.Iterator-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -232,11 +345,12 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Entr
 <pre>public&nbsp;NativeEntryIteratorWrapper(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                                   <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scannerIt,
-                                  <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;clientFilter,
+                                  <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
                                   <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>,? extends <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scanCallback,
                                   byte[]&nbsp;fieldSubsetBitmask,
                                   double[]&nbsp;maxResolutionSubsamplingPerDimension,
-                                  boolean&nbsp;decodePersistenceEncoding)</pre>
+                                  boolean&nbsp;decodePersistenceEncoding,
+                                  <a href="../../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html" title="interface in org.locationtech.geowave.core.store.base.dataidx">DataIndexRetrieval</a>&nbsp;dataIndexRetrieval)</pre>
 </li>
 </ul>
 </li>
@@ -247,19 +361,84 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Entr
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="decodeRow-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.api.Index-">
+<a name="findNext--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findNext</h4>
+<pre>protected&nbsp;void&nbsp;findNext()</pre>
+</li>
+</ul>
+<a name="hasNextScannedResult--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasNextScannedResult</h4>
+<pre>protected&nbsp;boolean&nbsp;hasNextScannedResult()</pre>
+</li>
+</ul>
+<a name="getNextEncodedResult--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNextEncodedResult</h4>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;getNextEncodedResult()</pre>
+</li>
+</ul>
+<a name="hasNext--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasNext</h4>
+<pre>public&nbsp;boolean&nbsp;hasNext()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="next--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>next</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>&nbsp;next()
+       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util">NoSuchElementException</a></pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util">NoSuchElementException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="remove--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>remove</h4>
+<pre>public&nbsp;void&nbsp;remove()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#remove--" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="decodeRow-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>decodeRow</h4>
 <pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>&nbsp;decodeRow(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
-                      <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>&nbsp;clientFilter,
+                      <a href="../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
                       <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html#decodeRow-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter-org.locationtech.geowave.core.store.api.Index-">decodeRow</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/util/EntryIteratorWrapper.html" title="class in org.locationtech.geowave.core.store.util">EntryIteratorWrapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>&gt;</code></dd>
-</dl>
 </li>
 </ul>
 </li>
@@ -316,13 +495,13 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/util/Entr
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.util.EntryIteratorWrapper">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

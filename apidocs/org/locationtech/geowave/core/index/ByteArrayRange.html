@@ -155,7 +155,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>protected byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#end">end</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -163,7 +163,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#singleValue">singleValue</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>protected byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#start">start</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -181,14 +181,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#ByteArrayRange-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">ByteArrayRange</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;start,
-              <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;end)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#ByteArrayRange-byte:A-byte:A-">ByteArrayRange</a></span>(byte[]&nbsp;start,
+              byte[]&nbsp;end)</code>
 <div class="block">*</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#ByteArrayRange-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-boolean-">ByteArrayRange</a></span>(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;start,
-              <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;end,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#ByteArrayRange-byte:A-byte:A-boolean-">ByteArrayRange</a></span>(byte[]&nbsp;start,
+              byte[]&nbsp;end,
               boolean&nbsp;singleValue)</code>
 <div class="block">*</div>
 </td>
@@ -217,15 +217,15 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#getEnd--">getEnd</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#getEndAsNextPrefix--">getEndAsNextPrefix</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a></code></td>
+<td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html#getStart--">getStart</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -281,7 +281,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <ul class="blockList">
 <li class="blockList">
 <h4>start</h4>
-<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a> start</pre>
+<pre>protected&nbsp;byte[] start</pre>
 </li>
 </ul>
 <a name="end">
@@ -290,7 +290,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <ul class="blockList">
 <li class="blockList">
 <h4>end</h4>
-<pre>protected&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a> end</pre>
+<pre>protected&nbsp;byte[] end</pre>
 </li>
 </ul>
 <a name="singleValue">
@@ -310,14 +310,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="ByteArrayRange-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-">
+<a name="ByteArrayRange-byte:A-byte:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>ByteArrayRange</h4>
-<pre>public&nbsp;ByteArrayRange(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;start,
-                      <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;end)</pre>
+<pre>public&nbsp;ByteArrayRange(byte[]&nbsp;start,
+                      byte[]&nbsp;end)</pre>
 <div class="block">*</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -326,14 +326,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 </dl>
 </li>
 </ul>
-<a name="ByteArrayRange-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-boolean-">
+<a name="ByteArrayRange-byte:A-byte:A-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ByteArrayRange</h4>
-<pre>public&nbsp;ByteArrayRange(<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;start,
-                      <a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;end,
+<pre>public&nbsp;ByteArrayRange(byte[]&nbsp;start,
+                      byte[]&nbsp;end,
                       boolean&nbsp;singleValue)</pre>
 <div class="block">*</div>
 <dl>
@@ -357,7 +357,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getStart</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getStart()</pre>
+<pre>public&nbsp;byte[]&nbsp;getStart()</pre>
 </li>
 </ul>
 <a name="getEnd--">
@@ -366,7 +366,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getEnd</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getEnd()</pre>
+<pre>public&nbsp;byte[]&nbsp;getEnd()</pre>
 </li>
 </ul>
 <a name="getEndAsNextPrefix--">
@@ -375,7 +375,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getEndAsNextPrefix</h4>
-<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;getEndAsNextPrefix()</pre>
+<pre>public&nbsp;byte[]&nbsp;getEndAsNextPrefix()</pre>
 </li>
 </ul>
 <a name="isSingleValue--">

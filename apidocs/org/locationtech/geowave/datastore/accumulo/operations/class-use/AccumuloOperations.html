@@ -87,10 +87,6 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.datastore.accumulo.index.secondary">org.locationtech.geowave.datastore.accumulo.index.secondary</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.accumulo.operations">org.locationtech.geowave.datastore.accumulo.operations</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -116,26 +112,6 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="org.locationtech.geowave.datastore.accumulo.index.secondary">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/index/secondary/package-summary.html">org.locationtech.geowave.datastore.accumulo.index.secondary</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/index/secondary/package-summary.html">org.locationtech.geowave.datastore.accumulo.index.secondary</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#AccumuloSecondaryIndexDataStore-org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations-">AccumuloSecondaryIndexDataStore</a></span>(<a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;accumuloOperations)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#AccumuloSecondaryIndexDataStore-org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">AccumuloSecondaryIndexDataStore</a></span>(<a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;accumuloOperations,
-                               <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;accumuloOptions)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="org.locationtech.geowave.datastore.accumulo.operations">
 <!--   -->
 </a>
@@ -153,12 +129,37 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/package-summary.html">org.locationtech.geowave.datastore.accumulo.operations</a> with type arguments of type <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowWriter.html" title="interface in org.locationtech.geowave.core.store.operations">RowWriter</a></code></td>
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#internalCreateWriter-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-com.aol.cyclops.util.function.TriFunction-">internalCreateWriter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
+                    com.aol.cyclops.util.function.TriFunction&lt;org.apache.accumulo.core.client.BatchWriter,<a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowWriter.html" title="interface in org.locationtech.geowave.core.store.operations">RowWriter</a>&gt;&nbsp;rowWriterSupplier)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
 <caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/package-summary.html">org.locationtech.geowave.datastore.accumulo.operations</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AbstractAccumuloWriter.html#AbstractAccumuloWriter-org.apache.accumulo.core.client.BatchWriter-org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations-java.lang.String-">AbstractAccumuloWriter</a></span>(org.apache.accumulo.core.client.BatchWriter&nbsp;batchWriter,
+                      <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;operations,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDataIndexWriter.html#AccumuloDataIndexWriter-org.apache.accumulo.core.client.BatchWriter-org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations-java.lang.String-">AccumuloDataIndexWriter</a></span>(org.apache.accumulo.core.client.BatchWriter&nbsp;batchWriter,
+                       <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;operations,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloMetadataDeleter.html#AccumuloMetadataDeleter-org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations-org.locationtech.geowave.core.store.operations.MetadataType-">AccumuloMetadataDeleter</a></span>(<a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;operations,
                        <a href="../../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>

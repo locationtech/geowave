@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;T&gt;</dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -126,6 +126,21 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested.classes.inherited.from.class.org.locationtech.geowave.core.store.CloseableIterator">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from interface&nbsp;org.locationtech.geowave.core.store.<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.Empty.html" title="class in org.locationtech.geowave.core.store">CloseableIterator.Empty</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.Empty.html" title="type parameter in CloseableIterator.Empty">E</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.Wrapper.html" title="class in org.locationtech.geowave.core.store">CloseableIterator.Wrapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.Wrapper.html" title="type parameter in CloseableIterator.Wrapper">E</a>&gt;</code></li>
+</ul>
+</li>
+</ul>
 <!-- =========== FIELD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="field.summary">
@@ -169,7 +184,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
            <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#HBaseReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-org.locationtech.geowave.datastore.hbase.operations.HBaseOperations-">HBaseReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="type parameter in HBaseReader">T</a>&gt;&nbsp;recordReaderParams,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#HBaseReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-org.locationtech.geowave.datastore.hbase.operations.HBaseOperations-">HBaseReader</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
            <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>
 </table>
@@ -291,7 +306,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <ul class="blockListLast">
 <li class="blockList">
 <h4>HBaseReader</h4>
-<pre>public&nbsp;HBaseReader(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="type parameter in HBaseReader">T</a>&gt;&nbsp;recordReaderParams,
+<pre>public&nbsp;HBaseReader(<a href="../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
                    <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseOperations</a>&nbsp;operations)</pre>
 </li>
 </ul>
@@ -309,13 +324,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <ul class="blockList">
 <li class="blockList">
 <h4>close</h4>
-<pre>public&nbsp;void&nbsp;close()
-           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<pre>public&nbsp;void&nbsp;close()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true#close--" title="class or interface in java.io">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close--" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html#close--">close</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="type parameter in HBaseReader">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

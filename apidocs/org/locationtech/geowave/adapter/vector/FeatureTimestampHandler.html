@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -164,9 +164,13 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/adapter/I
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureTimestampHandler.html#toIndexValue-org.opengis.feature.simple.SimpleFeature-">toIndexValue</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;row)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureTimestampHandler.html#toIndexValue-org.locationtech.geowave.core.store.data.PersistentDataset-">toIndexValue</a></span>(<a href="../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;adapterPersistenceEncoding)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureTimestampHandler.html#toIndexValue-org.opengis.feature.simple.SimpleFeature-">toIndexValue</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;row)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/data/PersistentValue.html" title="class in org.locationtech.geowave.core.store.data">PersistentValue</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureTimestampHandler.html#toNativeValues-org.locationtech.geowave.core.geotime.store.dimension.Time-">toNativeValues</a></span>(<a href="../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>&nbsp;indexValue)</code>&nbsp;</td>
 </tr>
@@ -248,13 +252,26 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/adapter/I
 <a name="toNativeValues-org.locationtech.geowave.core.geotime.store.dimension.Time-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>toNativeValues</h4>
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/data/PersistentValue.html" title="class in org.locationtech.geowave.core.store.data">PersistentValue</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;[]&nbsp;toNativeValues(<a href="../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>&nbsp;indexValue)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html#toNativeValues-IndexFieldType-">toNativeValues</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="toIndexValue-org.locationtech.geowave.core.store.data.PersistentDataset-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toIndexValue</h4>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>&nbsp;toIndexValue(<a href="../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;adapterPersistenceEncoding)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html#toIndexValue-org.locationtech.geowave.core.store.data.PersistentDataset-">toIndexValue</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
