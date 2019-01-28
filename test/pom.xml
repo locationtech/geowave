@@ -701,6 +701,7 @@
 						<sourceDirectory>../services/client/src/main/java</sourceDirectory>
 						<sourceDirectory>../services/rest/src/main/java</sourceDirectory>
 						<sourceDirectory>../services/grpc/server/src/main/java</sourceDirectory>
+						<sourceDirectory>../services/grpc/protobuf-generator/src/main/java</sourceDirectory>
 						<sourceDirectory>../services/grpc/protobuf/src/main/java</sourceDirectory>
 						<sourceDirectory>../deploy/src/main/java</sourceDirectory>
 						<sourceDirectory>../examples/java-api/src/main/java</sourceDirectory>

@@ -1,5 +1,5 @@
 ﻿<p align="center">
-	<img float="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/images/geowave-full-logo-300px.png" alt="GeoWave"><br/><br/>
+	<img float="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/geowave-index/images/geowave-logo-transluscent.png" alt="GeoWave"><br/><br/>
 </p>
 
 ## About  
@@ -19,7 +19,7 @@ GeoWave is an open source set of software that:
   * [PDAL](http://www.pdal.io/) plugin for working with point cloud data
   * [Mapnik](http://mapnik.org/) plugin for generating map tiles and generally making good looking maps. 
   
-Basically, GeoWave is working to bridge geospatial software with distributed compute systems.
+Basically, GeoWave is working to bridge geospatial software with modern key-value stores and distributed compute systems.
 
 ## The Docs
 * Check out our [GeoWave io page](http://locationtech.github.io/geowave/) page for detailed documentation.
@@ -33,14 +33,78 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
 * We have [Maven artifact repositories](http://locationtech.github.io/geowave/devguide.html#maven-pom-fragments) (indexes not enabled, but it works in a maven repo fragment)
   * Releases: http://geowave-maven.s3-website-us-east-1.amazonaws.com/release
   * Snapshots: http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot (nightly)
-* We have a [vagrant dev environment](https://github.com/locationtech/geowave-vagrant)
-* We have a development all in one RPM package: "geowave-cdh5-single-host"
 * And you can always [build from source](http://locationtech.github.io/geowave/devguide.html#development-setup)
-  
- 
+
 ## Community
 
 * Community support is available on [chat](https://gitter.im/locationtech/geowave) and on [our mailing list](mailto:geowave-dev@locationtech.org).
+
+## Getting Started
+### Programmatic Access
+You can use maven to reference pre-built GeoWave artifacts with the following pom.xml snippet (replacing `${keyvalue-datastore}` with your datastore of choice and `${geowave.version}` with the geowave version you'd like to use):
+```
+	<dependencies>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-datastore-${keyvalue-datastore}</artifactId>
+			<version>${geowave.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-adapter-vector</artifactId>
+			<version>${geowave.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-adapter-raster</artifactId>
+			<version>${geowave.version}</version>
+		</dependency>
+	</dependencies>
+    <repositories>
+		<repository>
+			<id>geowave-maven-snapshots</id>
+			<name>GeoWave AWS Snapshots Repository</name>
+			<url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>geowave-maven-releases</id>
+			<name>GeoWave AWS Release Repository</name>
+			<url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/release</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+```
+
+Use the libraries available in the `api` package to leverage GeoWave's capabilities (where <data store options> might be `AccumuloRequiredOptions` or `HBaseRequiredOptions` and simple examples of creating the data type and index can be found in `SimpleIngest` within the `examples` directory):
+```java
+DataStore store = DataStoreFactory.createDataStore(<data store options>);
+store.addType(<my data type>, <my index>);
+try(Writer writer = store.createWriter()){
+  //write data
+  writer.writer(<data);
+}
+ 
+//this just queries everything
+try(CloseableIterator it = store.query(QueryBuilder.newBuilder().build())){
+  while(it.hasNext()){
+    //retrieve results matching query criteria and do something
+    it.next();
+  }
+}
+```
+### Commandline Access
+Alternatively, you can always use the GeoWave commandline to access the same capabilities. Install the `geowave-$VERSION-apache-tools` RPM as instructed [here](http://locationtech.github.io/geowave/packages.html).  Then `geowave config addstore ...` and `geowave config addindex ...` are used to create named configurations for connecting to a key-value store (addstore) and describing how you want the data indexed (addindex).  You can use `--help` at any time such as `geowave config addstore --help` or furthermore get additional help after specifying the type with `-t` such as `geowave config addstore -t accumulo --help` to understand accumulo specific parameters. Once you have the indexing and store specified you can use `geowave ingest localtogw <file or directory> <store name> <index name(s)>` to ingest data into the key-value store. For the most basic walkthrough with minimal setup, run through the [quickstart guide](http://locationtech.github.io/geowave/quickstart.html) locally using RocksDB.
 
 ## Some GeoWave rendered eye candy
 
