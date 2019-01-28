@@ -25,18 +25,8 @@ import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
  */
 public class GeoWaveInputConfigurator extends GeoWaveConfiguratorBase {
   protected static enum InputConfig {
-    QUERY_CONSTRAINTS, INDEX_QUERY_OPTIONS, DATA_TYPE_QUERY_OPTIONS, COMMON_QUERY_OPTIONS, MIN_SPLITS, MAX_SPLITS, OUTPUT_WRITABLE, // used
-    // to
-    // inform
-    // the
-    // input
-    // format
-    // to
-    // output
-    // a
-    // Writable
-    // from the HadoopDataAdapter
-    AUTHORIZATION
+    QUERY_CONSTRAINTS, INDEX_QUERY_OPTIONS, DATA_TYPE_QUERY_OPTIONS, COMMON_QUERY_OPTIONS, MIN_SPLITS, MAX_SPLITS, AUTHORIZATION, OUTPUT_WRITABLE
+    // used to inform the input format to output a Writable from the HadoopDataAdapter
   }
 
   private static QueryConstraints getQueryConstraintsInternal(

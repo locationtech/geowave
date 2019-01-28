@@ -9,7 +9,6 @@
 package org.locationtech.geowave.core.store.adapter.statistics;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,7 @@ public class PartitionStatisticsQueryBuilder<R>
       LoggerFactory.getLogger(PartitionStatisticsQueryBuilder.class);
   private static final String STATS_ID_SEPARATOR = "#";
   private String indexName;
-  private ByteArray partitionKey;
+  private byte[] partitionKey;
 
   public PartitionStatisticsQueryBuilder(
       final StatisticsType<R, PartitionStatisticsQueryBuilder<R>> statsType) {
@@ -32,7 +31,7 @@ public class PartitionStatisticsQueryBuilder<R>
     return this;
   }
 
-  public PartitionStatisticsQueryBuilder<R> partition(final ByteArray partitionKey) {
+  public PartitionStatisticsQueryBuilder<R> partition(final byte[] partitionKey) {
     this.partitionKey = partitionKey;
     return this;
   }
@@ -42,33 +41,27 @@ public class PartitionStatisticsQueryBuilder<R>
     return composeId(indexName, partitionKey);
   }
 
-  protected static Pair<String, ByteArray> decomposeIndexAndPartitionFromId(final String idString) {
+  protected static Pair<String, byte[]> decomposeIndexAndPartitionFromId(final String idString) {
     final int pos = idString.lastIndexOf(STATS_ID_SEPARATOR);
     if (pos < 0) {
       return Pair.of(idString, null);
     }
     return Pair.of(
         idString.substring(0, pos),
-        new ByteArray(ByteArrayUtils.byteArrayFromString(idString.substring(pos + 1))));
+        ByteArrayUtils.byteArrayFromString(idString.substring(pos + 1)));
   }
 
-  protected static String composeId(final String indexName, final ByteArray partitionKey) {
+  protected static String composeId(final String indexName, final byte[] partitionKey) {
     if (indexName == null) {
-      if ((partitionKey != null)
-          && (partitionKey.getBytes() != null)
-          && (partitionKey.getBytes().length > 0)) {
+      if ((partitionKey != null) && (partitionKey.length > 0)) {
         LOGGER.warn(
             "Cannot set partitionKey without index. Ignoring Partition Key in statistics query.");
       }
       return null;
     }
-    if ((partitionKey == null)
-        || (partitionKey.getBytes() == null)
-        || (partitionKey.getBytes().length == 0)) {
+    if ((partitionKey == null) || (partitionKey.length == 0)) {
       return indexName;
     }
-    return indexName
-        + STATS_ID_SEPARATOR
-        + ByteArrayUtils.byteArrayToString(partitionKey.getBytes());
+    return indexName + STATS_ID_SEPARATOR + ByteArrayUtils.byteArrayToString(partitionKey);
   }
 }

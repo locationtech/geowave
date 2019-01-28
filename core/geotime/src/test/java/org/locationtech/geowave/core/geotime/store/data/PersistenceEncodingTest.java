@@ -28,7 +28,6 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
@@ -39,6 +38,7 @@ import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -46,7 +46,7 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -73,7 +73,7 @@ public class PersistenceEncodingTest {
           new int[] {16, 16, 16},
           SFCType.HILBERT);
 
-  private static final Index index = new PrimaryIndex(strategy, model);
+  private static final Index index = new IndexImpl(strategy, model);
 
   Date start = null, end = null;
 
@@ -93,7 +93,7 @@ public class PersistenceEncodingTest {
 
     final GeoObj entry =
         new GeoObj(factory.createPoint(new Coordinate(43.454, 28.232)), start, end, "g1");
-    final List<ByteArray> ids =
+    final List<byte[]> ids =
         adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
 
     assertEquals(1, ids.size());
@@ -111,7 +111,7 @@ public class PersistenceEncodingTest {
             start,
             end,
             "g1");
-    final List<ByteArray> ids =
+    final List<byte[]> ids =
         adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
     assertEquals(7, ids.size());
   }
@@ -125,7 +125,7 @@ public class PersistenceEncodingTest {
             new int[] {14, 14, 14},
             SFCType.HILBERT);
 
-    final Index index = new PrimaryIndex(strategy, model);
+    final Index index = new IndexImpl(strategy, model);
 
     final GeoObjDataAdapter adapter =
         new GeoObjDataAdapter(NATIVE_FIELD_HANDLER_LIST, COMMON_FIELD_HANDLER_LIST);
@@ -144,7 +144,7 @@ public class PersistenceEncodingTest {
             new Date(352771200000l),
             new Date(352771200000l),
             "g1");
-    final List<ByteArray> ids =
+    final List<byte[]> ids =
         adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
     assertEquals(4, ids.size());
   }
@@ -164,7 +164,7 @@ public class PersistenceEncodingTest {
             start,
             end,
             "g1");
-    final List<ByteArray> ids =
+    final List<byte[]> ids =
         adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
     assertEquals(18, ids.size());
   }
@@ -177,7 +177,7 @@ public class PersistenceEncodingTest {
 
     final GeoObj entry =
         new GeoObj(factory.createPoint(new Coordinate(43.454, 28.232)), start, end, "g1");
-    final List<ByteArray> ids =
+    final List<byte[]> ids =
         adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
 
     assertEquals(8, ids.size());
@@ -195,7 +195,7 @@ public class PersistenceEncodingTest {
             start,
             end,
             "g1");
-    final List<ByteArray> ids =
+    final List<byte[]> ids =
         adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
     assertTrue(ids.size() < 100);
   }
@@ -268,6 +268,14 @@ public class PersistenceEncodingTest {
 
         @Override
         public void fromBinary(final byte[] bytes) {}
+
+        @Override
+        public CommonIndexValue toIndexValue(
+            final PersistentDataset<Object> adapterPersistenceEncoding) {
+          return new GeometryWrapper(
+              (Geometry) adapterPersistenceEncoding.getValue(GEOM),
+              new byte[0]);
+        }
       };
 
   static {
@@ -297,8 +305,8 @@ public class PersistenceEncodingTest {
     }
 
     @Override
-    public ByteArray getDataId(final GeoObj entry) {
-      return new ByteArray(entry.id.getBytes());
+    public byte[] getDataId(final GeoObj entry) {
+      return entry.id.getBytes();
     }
 
     @Override
@@ -367,7 +375,7 @@ public class PersistenceEncodingTest {
         }
 
         @Override
-        public GeoObj buildRow(final ByteArray dataId) {
+        public GeoObj buildRow(final byte[] dataId) {
           return new GeoObj(geom, stime, etime, id);
         }
       };
@@ -460,9 +468,6 @@ public class PersistenceEncodingTest {
       return new PersistentValue[] {
           new PersistentValue<Object>(
               START_TIME,
-              new Date((long) ((Time.TimeRange) indexValue).toNumericData().getMin())),
-          new PersistentValue<Object>(
-              END_TIME,
               new Date((long) ((Time.TimeRange) indexValue).toNumericData().getMin()))};
     }
 
@@ -478,6 +483,14 @@ public class PersistenceEncodingTest {
 
     @Override
     public void fromBinary(final byte[] bytes) {}
+
+    @Override
+    public CommonIndexValue toIndexValue(
+        final PersistentDataset<Object> adapterPersistenceEncoding) {
+      return new Time.Timestamp(
+          ((Date) adapterPersistenceEncoding.getValue(START_TIME)).getTime(),
+          new byte[0]);
+    }
   }
 
   public static class TimeRangeFieldHandler
@@ -519,5 +532,14 @@ public class PersistenceEncodingTest {
 
     @Override
     public void fromBinary(final byte[] bytes) {}
+
+    @Override
+    public CommonIndexValue toIndexValue(
+        final PersistentDataset<Object> adapterPersistenceEncoding) {
+      return new Time.TimeRange(
+          ((Date) adapterPersistenceEncoding.getValue(START_TIME)).getTime(),
+          ((Date) adapterPersistenceEncoding.getValue(END_TIME)).getTime(),
+          new byte[0]);
+    }
   }
 }

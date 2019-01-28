@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -147,7 +147,7 @@ public class BasicKafkaIT extends AbstractGeoWaveIT {
                     bboxStat.getMinY(),
                     bboxStat.getMaxY());
             final Geometry spatialFilter = factory.toGeometry(env);
-            final QueryConstraints query = new SpatialQuery(spatialFilter);
+            final QueryConstraints query = new ExplicitSpatialQuery(spatialFilter);
             final int resultCount = testQuery(adapter, query);
             assertTrue(
                 "'"

@@ -22,7 +22,6 @@ import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
@@ -32,6 +31,7 @@ import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToA
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.WriteResults;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
@@ -113,12 +113,6 @@ public class GeoWaveOutputFormat extends OutputFormat<GeoWaveOutputKey<Object>, 
     } else {
       GeoWaveConfiguratorBase.setStoreOptionsMap(CLASS, config, null);
     }
-  }
-
-  public static void setStoreOptionsMap(
-      final Configuration config,
-      final Map<String, String> storeConfigOptions) {
-    GeoWaveConfiguratorBase.setStoreOptionsMap(CLASS, config, storeConfigOptions);
   }
 
   public static void addIndex(final Configuration config, final Index index) {
@@ -227,7 +221,7 @@ public class GeoWaveOutputFormat extends OutputFormat<GeoWaveOutputKey<Object>, 
       if (adapter != null) {
         final Writer indexWriter = getIndexWriter(adapter, ingestKey.getIndexNames());
         if (indexWriter != null) {
-          final InsertionIds writeList = indexWriter.write(data);
+          final WriteResults writeList = indexWriter.write(data);
 
           if (!writeList.isEmpty()) {
             success = true;

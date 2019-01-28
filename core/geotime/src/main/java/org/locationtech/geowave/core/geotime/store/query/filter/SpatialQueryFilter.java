@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.store.query.filter;
 
-import com.google.common.collect.Interner;
-import com.google.common.collect.Interners;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +29,8 @@ import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
+import com.google.common.collect.Interner;
+import com.google.common.collect.Interners;
 
 /**
  * This filter can perform fine-grained acceptance testing (intersection test with a query geometry)
@@ -265,6 +265,9 @@ public class SpatialQueryFilter extends BasicQueryFilter {
     boolean geometryPasses = false;
     for (final String fieldName : geometryFieldNames) {
       final Object geomObj = persistenceEncoding.getCommonData().getValue(fieldName);
+      if (persistenceEncoding.isAsync()) {
+        return false;
+      }
       if ((geomObj != null) && (geomObj instanceof GeometryWrapper)) {
         final GeometryWrapper geom = (GeometryWrapper) geomObj;
         if (geometryPasses(geom.getGeometry())) {

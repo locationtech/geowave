@@ -10,7 +10,6 @@ package org.locationtech.geowave.core.store.query.filter;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -23,12 +22,12 @@ public class InsertionIdQueryFilter implements QueryFilter {
   public InsertionIdQueryFilter() {}
 
   public InsertionIdQueryFilter(
-      final ByteArray partitionKey,
-      final ByteArray sortKey,
-      final ByteArray dataId) {
-    this.partitionKey = partitionKey != null ? partitionKey.getBytes() : new byte[] {};
-    this.sortKey = sortKey != null ? sortKey.getBytes() : new byte[] {};
-    this.dataId = dataId != null ? dataId.getBytes() : new byte[] {};
+      final byte[] partitionKey,
+      final byte[] sortKey,
+      final byte[] dataId) {
+    this.partitionKey = partitionKey;
+    this.sortKey = sortKey;
+    this.dataId = dataId;
   }
 
   @Override
@@ -38,16 +37,16 @@ public class InsertionIdQueryFilter implements QueryFilter {
     return Objects.deepEquals(
         partitionKey,
         persistenceEncoding.getInsertionPartitionKey() != null
-            ? persistenceEncoding.getInsertionPartitionKey().getBytes()
+            ? persistenceEncoding.getInsertionPartitionKey()
             : new byte[] {})
         && Objects.deepEquals(
             sortKey,
             persistenceEncoding.getInsertionSortKey() != null
-                ? persistenceEncoding.getInsertionSortKey().getBytes()
+                ? persistenceEncoding.getInsertionSortKey()
                 : new byte[] {})
         && Objects.deepEquals(
             dataId,
-            persistenceEncoding.getDataId() != null ? persistenceEncoding.getDataId().getBytes()
+            persistenceEncoding.getDataId() != null ? persistenceEncoding.getDataId()
                 : new byte[] {});
   }
 

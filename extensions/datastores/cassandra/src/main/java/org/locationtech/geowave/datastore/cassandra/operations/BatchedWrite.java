@@ -8,6 +8,11 @@
  */
 package org.locationtech.geowave.datastore.cassandra.operations;
 
+import java.util.concurrent.Semaphore;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.datastore.cassandra.util.CassandraUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -17,11 +22,6 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
-import java.util.concurrent.Semaphore;
-import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.datastore.cassandra.util.CassandraUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class BatchedWrite extends BatchHandler implements AutoCloseable {
   private static final Logger LOGGER = LoggerFactory.getLogger(BatchedWrite.class);
@@ -38,18 +38,25 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
   // only allow so many outstanding async reads or writes, use this semaphore
   // to control it
   private final Semaphore writeSemaphore = new Semaphore(MAX_CONCURRENT_WRITE);
+  private final boolean isDataIndex;
+  private final boolean visibilityEnabled;
 
   public BatchedWrite(
       final Session session,
       final PreparedStatement preparedInsert,
-      final int batchSize) {
+      final int batchSize,
+      final boolean isDataIndex,
+      final boolean visibilityEnabled) {
     super(session);
     this.preparedInsert = preparedInsert;
     this.batchSize = batchSize;
+    this.isDataIndex = isDataIndex;
+    this.visibilityEnabled = visibilityEnabled;
   }
 
   public void insert(final GeoWaveRow row) {
-    final BoundStatement[] statements = CassandraUtils.bindInsertion(preparedInsert, row);
+    final BoundStatement[] statements =
+        CassandraUtils.bindInsertion(preparedInsert, row, isDataIndex, visibilityEnabled);
     for (final BoundStatement statement : statements) {
       insertStatement(row, statement);
     }
@@ -67,7 +74,7 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
       } else {
         try {
           executeAsync(statement);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           LOGGER.warn("async write semaphore interrupted", e);
           writeSemaphore.release();
         }
@@ -82,13 +89,13 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
       executeAsync(batch);
 
       batch.clear();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       LOGGER.warn("async batch write semaphore interrupted", e);
       writeSemaphore.release();
     }
   }
 
-  private void executeAsync(Statement statement) throws InterruptedException {
+  private void executeAsync(final Statement statement) throws InterruptedException {
     writeSemaphore.acquire();
     final ResultSetFuture future = session.executeAsync(statement);
     Futures.addCallback(
@@ -116,7 +123,7 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
 
     private final Semaphore semaphore;
 
-    public IngestCallback(Semaphore semaphore) {
+    public IngestCallback(final Semaphore semaphore) {
       this.semaphore = semaphore;
     }
 

@@ -13,7 +13,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -115,9 +114,7 @@ public class ZOrderSFC implements SpaceFillingCurve {
         ZOrderUtils.encode(normalizedMins, cardinalityPerDimension, query.getDimensionCount());
     final byte[] maxZorder =
         ZOrderUtils.encode(normalizedMaxes, cardinalityPerDimension, query.getDimensionCount());
-    return new RangeDecomposition(
-        new ByteArrayRange[] {
-            new ByteArrayRange(new ByteArray(minZorder), new ByteArray(maxZorder))});
+    return new RangeDecomposition(new ByteArrayRange[] {new ByteArrayRange(minZorder, maxZorder)});
   }
 
   /** * {@inheritDoc} */
@@ -128,7 +125,7 @@ public class ZOrderSFC implements SpaceFillingCurve {
 
   @Override
   public byte[] toBinary() {
-    final List<byte[]> dimensionDefBinaries = new ArrayList<byte[]>(dimensionDefs.length);
+    final List<byte[]> dimensionDefBinaries = new ArrayList<>(dimensionDefs.length);
     int bufferLength = VarintUtils.unsignedIntByteLength(dimensionDefs.length);
     for (final SFCDimensionDefinition sfcDimension : dimensionDefs) {
       final byte[] sfcDimensionBinary = PersistenceUtils.toBinary(sfcDimension);

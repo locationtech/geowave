@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.Coordinate;
@@ -87,9 +86,9 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
       final int maxEstimatedRangeDecomposition,
       final IndexMetaData... hints) {
     final T min = cast(indexedRange.getMinValuesPerDimension()[0]);
-    final ByteArray start = new ByteArray(lexicoder.toByteArray(min));
+    final byte[] start = lexicoder.toByteArray(min);
     final T max = cast(Math.ceil(indexedRange.getMaxValuesPerDimension()[0]));
-    final ByteArray end = new ByteArray(lexicoder.toByteArray(max));
+    final byte[] end = lexicoder.toByteArray(max);
     final ByteArrayRange range = new ByteArrayRange(start, end);
     final SinglePartitionQueryRanges partitionRange =
         new SinglePartitionQueryRanges(Collections.singletonList(range));
@@ -121,9 +120,9 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
       final int maxEstimatedDuplicateIds) {
     final long min = (long) indexedData.getMinValuesPerDimension()[0];
     final long max = (long) Math.ceil(indexedData.getMaxValuesPerDimension()[0]);
-    final List<ByteArray> insertionIds = new ArrayList<>((int) (max - min) + 1);
+    final List<byte[]> insertionIds = new ArrayList<>((int) (max - min) + 1);
     for (long i = min; i <= max; i++) {
-      insertionIds.add(new ByteArray(lexicoder.toByteArray(cast(i))));
+      insertionIds.add(lexicoder.toByteArray(cast(i)));
     }
     return new InsertionIds(insertionIds);
   }
@@ -135,21 +134,20 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
 
   @Override
   public MultiDimensionalNumericData getRangeForId(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
-    final long value = Long.class.cast(lexicoder.fromByteArray(sortKey.getBytes()));
+      final byte[] partitionKey,
+      final byte[] sortKey) {
+    final long value = Long.class.cast(lexicoder.fromByteArray(sortKey));
     final NumericData[] dataPerDimension = new NumericData[] {new NumericValue(value)};
     return new BasicNumericDataset(dataPerDimension);
   }
 
   @Override
   public MultiDimensionalCoordinates getCoordinatesPerDimension(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
+      final byte[] partitionKey,
+      final byte[] sortKey) {
     return new MultiDimensionalCoordinates(
         null,
-        new Coordinate[] {
-            new Coordinate(Long.class.cast(lexicoder.fromByteArray(sortKey.getBytes())), null)});
+        new Coordinate[] {new Coordinate(Long.class.cast(lexicoder.fromByteArray(sortKey)), null)});
   }
 
   @Override
@@ -215,20 +213,15 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
   }
 
   @Override
-  public Set<ByteArray> getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
+  public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
     return null;
   }
 
   @Override
-  public Set<ByteArray> getQueryPartitionKeys(
+  public byte[][] getQueryPartitionKeys(
       final MultiDimensionalNumericData queryData,
       final IndexMetaData... hints) {
     return null;
-  }
-
-  @Override
-  public Set<ByteArray> getPredefinedSplits() {
-    return Collections.EMPTY_SET;
   }
 
   @Override

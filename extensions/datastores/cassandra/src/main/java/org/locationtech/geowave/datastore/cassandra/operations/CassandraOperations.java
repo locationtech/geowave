@@ -8,6 +8,55 @@
  */
 package org.locationtech.geowave.datastore.cassandra.operations;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
+import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.store.BaseDataStoreOptions;
+import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
+import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
+import org.locationtech.geowave.core.store.operations.MetadataDeleter;
+import org.locationtech.geowave.core.store.operations.MetadataReader;
+import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.core.store.operations.MetadataWriter;
+import org.locationtech.geowave.core.store.operations.ReaderParams;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.operations.RowReaderWrapper;
+import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.datastore.cassandra.CassandraRow;
+import org.locationtech.geowave.datastore.cassandra.CassandraRow.CassandraField;
+import org.locationtech.geowave.datastore.cassandra.config.CassandraOptions;
+import org.locationtech.geowave.datastore.cassandra.config.CassandraRequiredOptions;
+import org.locationtech.geowave.datastore.cassandra.util.KeyspaceStatePool;
+import org.locationtech.geowave.datastore.cassandra.util.KeyspaceStatePool.KeyspaceState;
+import org.locationtech.geowave.datastore.cassandra.util.SessionPool;
+import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
+import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.PreparedStatement;
@@ -15,6 +64,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
+import com.datastax.driver.core.TypeCodec;
 import com.datastax.driver.core.querybuilder.Delete;
 import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
@@ -27,53 +77,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.BaseDataStoreOptions;
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
-import org.locationtech.geowave.core.store.operations.Deleter;
-import org.locationtech.geowave.core.store.operations.MetadataDeleter;
-import org.locationtech.geowave.core.store.operations.MetadataReader;
-import org.locationtech.geowave.core.store.operations.MetadataType;
-import org.locationtech.geowave.core.store.operations.MetadataWriter;
-import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
-import org.locationtech.geowave.core.store.operations.ReaderParams;
-import org.locationtech.geowave.core.store.operations.RowDeleter;
-import org.locationtech.geowave.core.store.operations.RowReader;
-import org.locationtech.geowave.core.store.operations.RowWriter;
-import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.locationtech.geowave.datastore.cassandra.CassandraRow;
-import org.locationtech.geowave.datastore.cassandra.CassandraRow.CassandraField;
-import org.locationtech.geowave.datastore.cassandra.config.CassandraOptions;
-import org.locationtech.geowave.datastore.cassandra.config.CassandraRequiredOptions;
-import org.locationtech.geowave.datastore.cassandra.util.KeyspaceStatePool;
-import org.locationtech.geowave.datastore.cassandra.util.KeyspaceStatePool.KeyspaceState;
-import org.locationtech.geowave.datastore.cassandra.util.SessionPool;
-import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
-import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CassandraOperations implements MapReduceDataStoreOperations {
   private static final Logger LOGGER = LoggerFactory.getLogger(CassandraOperations.class);
@@ -159,24 +162,42 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   public BatchedWrite getBatchedWrite(final String tableName) {
     PreparedStatement preparedWrite;
     final String safeTableName = getCassandraSafeName(tableName);
+    final boolean isDataIndex = DataIndexUtils.isDataIndex(tableName);
     synchronized (state.preparedWritesPerTable) {
       preparedWrite = state.preparedWritesPerTable.get(safeTableName);
       if (preparedWrite == null) {
         final Insert insert = getInsert(safeTableName);
-        for (final CassandraField f : CassandraField.values()) {
+        CassandraField[] fields = CassandraField.values();
+        if (isDataIndex) {
+          fields =
+              Arrays.stream(fields).filter(f -> f.isDataIndexColumn()).toArray(
+                  i -> new CassandraField[i]);
+        }
+        for (final CassandraField f : fields) {
           insert.value(f.getFieldName(), QueryBuilder.bindMarker(f.getBindMarkerName()));
         }
         preparedWrite = session.prepare(insert);
         state.preparedWritesPerTable.put(safeTableName, preparedWrite);
       }
     }
-    return new BatchedWrite(session, preparedWrite, options.getBatchWriteSize());
+    return new BatchedWrite(
+        session,
+        preparedWrite,
+        isDataIndex ? 1 : options.getBatchWriteSize(),
+        isDataIndex,
+        options.isVisibilityEnabled());
+  }
+
+  @Override
+  public RowWriter createDataIndexWriter(final InternalDataAdapter<?> adapter) {
+    return createWriter(DataIndexUtils.DATA_ID_INDEX, adapter);
   }
 
   public BatchedRangeRead getBatchedRangeRead(
       final String tableName,
       final short[] adapterIds,
       final Collection<SinglePartitionQueryRanges> ranges,
+      final boolean rowMerging,
       final GeoWaveRowIteratorTransformer<?> rowTransformer,
       final Predicate<GeoWaveRow> rowFilter) {
     PreparedStatement preparedRead;
@@ -207,7 +228,14 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
       }
     }
 
-    return new BatchedRangeRead(preparedRead, this, adapterIds, ranges, rowTransformer, rowFilter);
+    return new BatchedRangeRead(
+        preparedRead,
+        this,
+        adapterIds,
+        ranges,
+        rowMerging,
+        rowTransformer,
+        rowFilter);
   }
 
   public RowRead getRowRead(
@@ -399,7 +427,7 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   }
 
   @Override
-  public RowWriter createWriter(final Index index, InternalDataAdapter<?> adapter) {
+  public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
     createTable(index.getName());
     return new CassandraWriter(index.getName(), this);
   }
@@ -410,7 +438,13 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
         if (!indexExists(indexName)) {
           final String tableName = getCassandraSafeName(indexName);
           final Create create = getCreateTable(tableName);
-          for (final CassandraField f : CassandraField.values()) {
+          CassandraField[] fields = CassandraField.values();
+          if (DataIndexUtils.isDataIndex(tableName)) {
+            fields =
+                Arrays.stream(fields).filter(f -> f.isDataIndexColumn()).toArray(
+                    i -> new CassandraField[i]);
+          }
+          for (final CassandraField f : fields) {
             f.addColumn(create);
           }
           executeCreateTable(create, tableName);
@@ -465,7 +499,56 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
 
   @Override
   public <T> RowReader<T> createReader(final ReaderParams<T> readerParams) {
-    return new CassandraReader<>(readerParams, this);
+    return new CassandraReader<>(readerParams, this, options.isVisibilityEnabled());
+  }
+
+  @Override
+  public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
+    return new RowReaderWrapper<>(
+        new CloseableIterator.Wrapper(
+            getRows(readerParams.getDataIds(), readerParams.getAdapterId())));
+  }
+
+  public Iterator<GeoWaveRow> getRows(final byte[][] dataIds, final short adapterId) {
+    PreparedStatement preparedRead;
+    final String tableName = DataIndexUtils.DATA_ID_INDEX.getName();
+    final String safeTableName = getCassandraSafeName(tableName);
+    synchronized (state.preparedRangeReadsPerTable) {
+      preparedRead = state.preparedRangeReadsPerTable.get(safeTableName);
+      if (preparedRead == null) {
+        final Select select = getSelect(safeTableName);
+        select.where(
+            QueryBuilder.in(
+                CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+                QueryBuilder.bindMarker(
+                    CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName()))).and(
+                        QueryBuilder.eq(
+                            CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+                            QueryBuilder.bindMarker(
+                                CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName())));
+        preparedRead = session.prepare(select);
+        state.preparedRangeReadsPerTable.put(safeTableName, preparedRead);
+      }
+    }
+    final BoundStatement statement = new BoundStatement(preparedRead);
+    statement.set(
+        CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
+        adapterId,
+        TypeCodec.smallInt());
+    statement.set(
+        CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
+        Arrays.stream(dataIds).map(d -> ByteBuffer.wrap(d)).collect(Collectors.toList()),
+        TypeCodec.list(TypeCodec.blob()));
+    final ResultSet results = getSession().execute(statement);
+    final Map<ByteArray, GeoWaveRow> resultsMap = new HashMap<>();
+    results.forEach(r -> {
+      final byte[] d = r.getBytes(CassandraField.GW_PARTITION_ID_KEY.getFieldName()).array();
+      final byte[] v = r.getBytes(CassandraField.GW_VALUE_KEY.getFieldName()).array();
+      resultsMap.put(
+          new ByteArray(d),
+          DataIndexUtils.deserializeDataIndexRow(d, adapterId, v, options.isVisibilityEnabled()));
+    });
+    return Arrays.stream(dataIds).map(d -> resultsMap.get(new ByteArray(d))).iterator();
   }
 
   @Override
@@ -478,23 +561,8 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   }
 
   @Override
-  public boolean mergeData(
-      final Index index,
-      final PersistentAdapterStore adapterStore,
-      final InternalAdapterStore internalAdapterStore,
-      final AdapterIndexMappingStore adapterIndexMappingStore) {
-    return DataStoreUtils.mergeData(
-        this,
-        options,
-        index,
-        adapterStore,
-        internalAdapterStore,
-        adapterIndexMappingStore);
-  }
-
-  @Override
-  public <T> RowReader<T> createReader(final RecordReaderParams<T> recordReaderParams) {
-    return new CassandraReader<>(recordReaderParams, this);
+  public RowReader<GeoWaveRow> createReader(final RecordReaderParams recordReaderParams) {
+    return new CassandraReader<>(recordReaderParams, this, options.isVisibilityEnabled());
   }
 
   @Override
@@ -512,20 +580,21 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   }
 
   @Override
-  public boolean mergeStats(
-      final DataStatisticsStore statsStore,
-      final InternalAdapterStore internalAdapterStore) {
-    return DataStoreUtils.mergeStats(statsStore, internalAdapterStore);
+  public void delete(final DataIndexReaderParams readerParams) {
+    deleteRowsFromDataIndex(readerParams.getDataIds(), readerParams.getAdapterId());
   }
 
-  @Override
-  public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
-    return new QueryAndDeleteByRow<>(
-        createRowDeleter(
-            readerParams.getIndex().getName(),
-            readerParams.getAdapterStore(),
-            readerParams.getInternalAdapterStore(),
-            readerParams.getAdditionalAuthorizations()),
-        createReader(readerParams));
+  public void deleteRowsFromDataIndex(final byte[][] dataIds, final short adapterId) {
+    session.execute(
+        QueryBuilder.delete().from(
+            gwNamespace,
+            getCassandraSafeName(DataIndexUtils.DATA_ID_INDEX.getName())).where(
+                QueryBuilder.in(
+                    CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+                    Arrays.stream(dataIds).map(d -> ByteBuffer.wrap(d)).collect(
+                        Collectors.toList()))).and(
+                            QueryBuilder.eq(
+                                CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+                                adapterId)));
   }
 }

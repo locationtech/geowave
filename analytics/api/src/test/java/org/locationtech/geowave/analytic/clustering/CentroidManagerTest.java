@@ -85,7 +85,7 @@ public class CentroidManagerTest {
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
     final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
     final StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();
-    opts.setGeowaveNamespace(namespace);
+    opts.setGeoWaveNamespace(namespace);
     final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(opts);
     final IndexStore indexStore = storeFamily.getIndexStoreFactory().createStore(opts);
     final PersistentAdapterStore adapterStore =

@@ -15,7 +15,6 @@ import org.apache.hadoop.mapreduce.MapContext;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
@@ -50,14 +49,14 @@ public class RasterTileResizeMapper
           // it should be a FitToIndexGridCoverage because it was just
           // converted above
           if (c instanceof FitToIndexGridCoverage) {
-            final ByteArray partitionKey = ((FitToIndexGridCoverage) c).getPartitionKey();
-            final ByteArray sortKey = ((FitToIndexGridCoverage) c).getSortKey();
+            final byte[] partitionKey = ((FitToIndexGridCoverage) c).getPartitionKey();
+            final byte[] sortKey = ((FitToIndexGridCoverage) c).getSortKey();
             final GeoWaveKey geowaveKey =
                 new GeoWaveKeyImpl(
-                    helper.getNewDataId(c).getBytes(),
+                    helper.getNewDataId(c),
                     key.getInternalAdapterId(),
-                    partitionKey == null ? null : partitionKey.getBytes(),
-                    sortKey == null ? null : sortKey.getBytes(),
+                    partitionKey,
+                    sortKey,
                     0);
             final GeoWaveInputKey inputKey =
                 new GeoWaveInputKey(helper.getNewAdapterId(), geowaveKey, helper.getIndexName());

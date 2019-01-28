@@ -8,16 +8,17 @@
  */
 package org.locationtech.geowave.core.store.base;
 
-import com.google.common.collect.Lists;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.query.constraints.InsertionIdQuery;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
+import com.google.common.collect.Lists;
 
 /** Represents a query operation for a specific set of row IDs. */
 class BaseInsertionIdQuery<T> extends BaseConstraintsQuery {
@@ -31,6 +32,7 @@ class BaseInsertionIdQuery<T> extends BaseConstraintsQuery {
       final DedupeFilter dedupeFilter,
       final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
       final FieldVisibilityCount visibilityCounts,
+      final DataIndexRetrieval dataIndexRetrieval,
       final String[] authorizations) {
     super(
         new short[] {adapter.getAdapterId()},
@@ -44,6 +46,7 @@ class BaseInsertionIdQuery<T> extends BaseConstraintsQuery {
         null,
         differingVisibilityCounts,
         visibilityCounts,
+        dataIndexRetrieval,
         authorizations);
     this.ranges =
         new InsertionIds(

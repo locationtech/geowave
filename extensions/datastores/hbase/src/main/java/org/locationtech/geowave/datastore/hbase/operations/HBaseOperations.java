@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.operations;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -24,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -46,6 +44,8 @@ import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.BufferedMutatorParams;
 import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.RegionLocator;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
@@ -56,6 +56,7 @@ import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
 import org.apache.hadoop.hbase.protobuf.generated.AdminProtos.GetRegionInfoResponse.CompactionState;
+import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.apache.hadoop.hbase.shaded.com.google.protobuf.ByteString;
 import org.locationtech.geowave.core.cli.VersionUtils;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -65,6 +66,7 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
@@ -72,6 +74,7 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
@@ -79,6 +82,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
+import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
 import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
@@ -89,6 +93,7 @@ import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.operations.RowReaderWrapper;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.filter.InsertionIdQueryFilter;
@@ -123,6 +128,9 @@ import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 public class HBaseOperations implements MapReduceDataStoreOperations, ServerSideOperations {
   private static final Logger LOGGER = LoggerFactory.getLogger(HBaseOperations.class);
@@ -232,7 +240,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
   }
 
   protected void createTable(
-      final Set<ByteArray> preSplits,
+      final byte[][] preSplits,
       final Pair<GeoWaveColumnFamily, Boolean>[] columnFamiliesAndVersioningPairs,
       final GeoWaveColumnFamilyFactory columnFamilyFactory,
       final TableName tableName) throws IOException {
@@ -257,10 +265,8 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
           cfCache.put(tableName, cfSet);
 
           try {
-            if (!preSplits.isEmpty()) {
-              admin.createTable(
-                  desc,
-                  preSplits.stream().map(id -> id.getBytes()).toArray(i -> new byte[i][]));
+            if (preSplits.length > 0) {
+              admin.createTable(desc, preSplits);
             } else {
               admin.createTable(desc);
             }
@@ -276,7 +282,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
   }
 
   protected void createTable(
-      final Set<ByteArray> preSplits,
+      final byte[][] preSplits,
       final GeoWaveColumnFamily[] columnFamilies,
       final GeoWaveColumnFamilyFactory columnFamilyFactory,
       final boolean enableVersioning,
@@ -516,13 +522,62 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
     return false;
   }
 
+  @Override
+  public void delete(final DataIndexReaderParams readerParams) {
+    deleteRowsFromDataIndex(readerParams.getDataIds(), readerParams.getAdapterId());
+  }
+
+  public void deleteRowsFromDataIndex(final byte[][] rows, final short adapterId) {
+    try {
+      final BufferedMutator mutator =
+          getBufferedMutator(getTableName(DataIndexUtils.DATA_ID_INDEX.getName()));
+
+      final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
+      mutator.mutate(Arrays.stream(rows).map(r -> {
+        final Delete delete = new Delete(r);
+        delete.addFamily(family);
+        return delete;
+      }).collect(Collectors.toList()));
+    } catch (final IOException e) {
+      LOGGER.warn("Unable to delete from data index", e);
+    }
+  }
+
+  public Iterator<GeoWaveRow> getDataIndexResults(
+      final byte[][] rows,
+      final short adapterId,
+      final String... additionalAuthorizations) {
+    Result[] results = null;
+    final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
+    try (final Table table = conn.getTable(getTableName(DataIndexUtils.DATA_ID_INDEX.getName()))) {
+      results = table.get(Arrays.stream(rows).map(r -> {
+        final Get g = new Get(r);
+        g.addFamily(family);
+        if ((additionalAuthorizations != null) && (additionalAuthorizations.length > 0)) {
+          g.setAuthorizations(new Authorizations(additionalAuthorizations));
+        }
+        return g;
+      }).collect(Collectors.toList()));
+    } catch (final IOException e) {
+      LOGGER.error("Unable to close HBase table", e);
+    }
+    if (results != null) {
+      return Arrays.stream(results).map(
+          r -> DataIndexUtils.deserializeDataIndexRow(
+              r.getRow(),
+              adapterId,
+              r.getValue(family, new byte[0]),
+              false)).iterator();
+    }
+    return Collections.emptyIterator();
+  }
+
   public Iterable<Result> getScannedResults(final Scan scanner, final String tableName)
       throws IOException {
-    final Table table = conn.getTable(getTableName(tableName));
-
-    final ResultScanner results = table.getScanner(scanner);
-
-    table.close();
+    final ResultScanner results;
+    try (final Table table = conn.getTable(getTableName(tableName))) {
+      results = table.getScanner(scanner);
+    }
 
     return results;
   }
@@ -691,7 +746,8 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
       final Index index,
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
-      final AdapterIndexMappingStore adapterIndexMappingStore) {
+      final AdapterIndexMappingStore adapterIndexMappingStore,
+      final Integer maxRangeDecomposition) {
     if (options.isServerSideLibraryEnabled()) {
       final TableName tableName = getTableName(index.getName());
       try (Admin admin = conn.getAdmin()) {
@@ -707,7 +763,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
     } else {
       return DataStoreUtils.mergeData(
           this,
-          options,
+          maxRangeDecomposition,
           index,
           adapterStore,
           internalAdapterStore,
@@ -747,7 +803,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
   }
 
   public void createTable(
-      final Set<ByteArray> preSplits,
+      final byte[][] preSplits,
       final String indexName,
       final boolean enableVersioning,
       final short internalAdapterId) {
@@ -773,6 +829,21 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
 
   @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
+    return internalCreateWriter(index, adapter, (m -> new HBaseWriter(m)));
+  }
+
+  @Override
+  public RowWriter createDataIndexWriter(final InternalDataAdapter<?> adapter) {
+    return internalCreateWriter(
+        DataIndexUtils.DATA_ID_INDEX,
+        adapter,
+        (m -> new HBaseDataIndexWriter(m)));
+  }
+
+  private RowWriter internalCreateWriter(
+      final Index index,
+      final InternalDataAdapter<?> adapter,
+      final Function<BufferedMutator, RowWriter> writerSupplier) {
     final TableName tableName = getTableName(index.getName());
     try {
       final GeoWaveColumnFamily[] columnFamilies = new GeoWaveColumnFamily[1];
@@ -793,7 +864,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
           tableName,
           true);
 
-      return new HBaseWriter(getBufferedMutator(tableName));
+      return writerSupplier.apply(getBufferedMutator(tableName));
     } catch (final TableNotFoundException e) {
       LOGGER.error("Table does not exist", e);
     } catch (final IOException e) {
@@ -808,7 +879,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
     final TableName tableName = getTableName(getMetadataTableName(metadataType));
     try {
       createTable(
-          Collections.EMPTY_SET,
+          new byte[0][],
           METADATA_CFS_VERSIONING,
           StringColumnFamilyFactory.getSingletonInstance(),
           tableName);
@@ -856,7 +927,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
   }
 
   @Override
-  public <T> RowReader<T> createReader(final RecordReaderParams<T> recordReaderParams) {
+  public RowReader<GeoWaveRow> createReader(final RecordReaderParams recordReaderParams) {
     return new HBaseReader<>(recordReaderParams, this);
   }
 
@@ -890,12 +961,12 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
     } else {
       for (final ByteArrayRange range : ranges) {
         if (range.getStart() != null) {
-          final byte[] startRow = range.getStart().getBytes();
+          final byte[] startRow = range.getStart();
           byte[] stopRow;
           if (!range.isSingleValue()) {
-            stopRow = range.getEndAsNextPrefix().getBytes();
+            stopRow = range.getEndAsNextPrefix();
           } else {
-            stopRow = range.getStart().getNextPrefix();
+            stopRow = ByteArrayUtils.getNextPrefix(range.getStart());
           }
 
           final RowRange rowRange = new RowRange(startRow, true, stopRow, false);
@@ -1014,9 +1085,9 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
 
       final List<ByteArrayRange> ranges = readerParams.getQueryRanges().getCompositeQueryRanges();
       if ((ranges != null) && !ranges.isEmpty()) {
-        final ByteArrayRange aggRange = getSingleRange(ranges);
-        startRow = aggRange.getStart().getBytes();
-        endRow = aggRange.getEnd().getBytes();
+        final ByteArrayRange aggRange = ByteArrayUtils.getSingleRange(ranges);
+        startRow = aggRange.getStart();
+        endRow = aggRange.getEnd();
       }
 
       Map<byte[], ByteString> results = null;
@@ -1146,9 +1217,9 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
 
       final List<ByteArrayRange> ranges = readerParams.getQueryRanges().getCompositeQueryRanges();
       if ((ranges != null) && !ranges.isEmpty()) {
-        final ByteArrayRange aggRange = getSingleRange(ranges);
-        startRow = aggRange.getStart().getBytes();
-        endRow = aggRange.getEnd().getBytes();
+        final ByteArrayRange aggRange = ByteArrayUtils.getSingleRange(ranges);
+        startRow = aggRange.getStart();
+        endRow = aggRange.getEnd();
       }
       final Map<byte[], Long> results =
           table.coprocessorService(
@@ -1184,21 +1255,6 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
     } catch (final Throwable e) {
       LOGGER.error("Error during bulkdelete.", e);
     }
-  }
-
-  private ByteArrayRange getSingleRange(final List<ByteArrayRange> ranges) {
-    ByteArray start = null;
-    ByteArray end = null;
-
-    for (final ByteArrayRange range : ranges) {
-      if ((start == null) || (range.getStart().compareTo(start) < 0)) {
-        start = range.getStart();
-      }
-      if ((end == null) || (range.getEnd().compareTo(end) > 0)) {
-        end = range.getEnd();
-      }
-    }
-    return new ByteArrayRange(start, end);
   }
 
   public List<ByteArray> getTableRegions(final String tableNameStr) {
@@ -1429,7 +1485,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
       final String tableName = getMetadataTableName(type);
       if (!indexExists(tableName)) {
         createTable(
-            Collections.EMPTY_SET,
+            new byte[0][],
             HBaseOperations.METADATA_CFS_VERSIONING,
             StringColumnFamilyFactory.getSingletonInstance(),
             getTableName(getQualifiedTableName(tableName)));
@@ -1520,5 +1576,15 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
       }
       return new QueryAndDeleteByRow<>();
     }
+  }
+
+  @Override
+  public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
+    return new RowReaderWrapper<>(
+        new Wrapper<>(
+            getDataIndexResults(
+                readerParams.getDataIds(),
+                readerParams.getAdapterId(),
+                readerParams.getAdditionalAuthorizations())));
   }
 }

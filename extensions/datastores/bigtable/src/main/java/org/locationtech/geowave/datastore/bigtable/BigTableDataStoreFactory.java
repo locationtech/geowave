@@ -16,7 +16,6 @@ import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreImpl
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
-import org.locationtech.geowave.core.store.metadata.SecondaryIndexStoreImpl;
 import org.locationtech.geowave.datastore.bigtable.operations.BigTableOperations;
 import org.locationtech.geowave.datastore.bigtable.operations.config.BigTableOptions;
 import org.locationtech.geowave.datastore.hbase.HBaseDataStore;
@@ -39,7 +38,7 @@ public class BigTableDataStoreFactory extends BaseDataStoreFactory {
     final BigTableOperations bigtableOperations =
         (BigTableOperations) helper.createOperations(options);
 
-    HBaseOptions hbaseOptions = ((BigTableOptions) options).getHBaseOptions();
+    final HBaseOptions hbaseOptions = ((BigTableOptions) options).getHBaseOptions();
     // make sure to explicitly use the constructor with
     // BigTableDataStatisticsStore
     return new HBaseDataStore(
@@ -47,7 +46,6 @@ public class BigTableDataStoreFactory extends BaseDataStoreFactory {
         new AdapterStoreImpl(bigtableOperations, hbaseOptions),
         new BigTableDataStatisticsStore(bigtableOperations, hbaseOptions),
         new AdapterIndexMappingStoreImpl(bigtableOperations, hbaseOptions),
-        new SecondaryIndexStoreImpl(),
         bigtableOperations,
         hbaseOptions,
         new InternalAdapterStoreImpl(bigtableOperations));

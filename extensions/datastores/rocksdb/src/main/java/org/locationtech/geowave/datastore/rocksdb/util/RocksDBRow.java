@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.util;
 
-import com.google.common.collect.Lists;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +17,7 @@ import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.entities.MergeableGeoWaveRow;
+import com.google.common.collect.Lists;
 
 public class RocksDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
   List<byte[]> mergedKeys;
@@ -33,20 +33,29 @@ public class RocksDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
       final byte[] partition,
       final byte[] key,
       final byte[] value,
-      final boolean containsTimestamp) {
+      final boolean containsTimestamp,
+      final boolean visibilityEnabled) {
     super();
+    int otherBytes = 4;
     this.adapterId = adapterId;
     this.partition = partition;
     this.key = key;
     final ByteBuffer buf = ByteBuffer.wrap(key);
-    sortKey = new byte[key[key.length - 3]];
+    sortKey = new byte[key[key.length - 2]];
     buf.get(sortKey);
-    final byte[] fieldMask = new byte[key[key.length - 2]];
-    final byte[] visibility = new byte[key[key.length - 1]];
+    final byte[] fieldMask = new byte[key[key.length - 1]];
+    final byte[] visibility;
+    if (visibilityEnabled) {
+      visibility = new byte[key[key.length - 3]];
+      otherBytes++;
+    } else {
+      visibility = new byte[0];
+    }
+    if (containsTimestamp) {
+      otherBytes += 8;
+    }
     dataId =
-        new byte[containsTimestamp
-            ? key.length - 13 - sortKey.length - fieldMask.length - visibility.length
-            : key.length - 5 - sortKey.length - fieldMask.length - visibility.length];
+        new byte[key.length - otherBytes - sortKey.length - fieldMask.length - visibility.length];
     buf.get(dataId);
     if (containsTimestamp) {
       // just skip 8 bytes - we don't care to parse out the timestamp but
@@ -54,7 +63,9 @@ public class RocksDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
       buf.position(buf.position() + 8);
     }
     buf.get(fieldMask);
-    buf.get(visibility);
+    if (visibilityEnabled) {
+      buf.get(visibility);
+    }
     final byte[] duplicatesBytes = new byte[2];
     buf.get(duplicatesBytes);
     duplicates = ByteArrayUtils.byteArrayToShort(duplicatesBytes);

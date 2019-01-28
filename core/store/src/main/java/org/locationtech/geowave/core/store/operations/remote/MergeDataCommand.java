@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.core.store.operations.remote;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,12 +25,16 @@ import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "mergedata", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Merge all rows for a given adapter and index")
 public class MergeDataCommand extends DefaultOperation implements Command {
   @Parameter(description = "<storename> <indexname>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private DataStorePluginOptions inputStoreOptions = null;
 
@@ -78,7 +78,8 @@ public class MergeDataCommand extends DefaultOperation implements Command {
           index,
           adapterStore,
           internalAdapterStore,
-          adapterIndexMappingStore)) {
+          adapterIndexMappingStore,
+          inputStoreOptions.getFactoryOptions().getStoreOptions().getMaxRangeDecomposition())) {
         JCommander.getConsole().println(
             "Unable to merge data within index '" + index.getName() + "'");
       } else {

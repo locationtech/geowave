@@ -9,7 +9,7 @@
 package org.locationtech.geowave.adapter.vector.util;
 
 import java.util.Map;
-import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
@@ -154,13 +154,13 @@ public class QueryIndexHelper {
               : null;
 
       if ((endRange != null) && (startRange != null)) {
-        return SpatialTemporalQuery.createConstraints(
+        return ExplicitSpatialTemporalQuery.createConstraints(
             startRange.asTemporalRange().union(endRange.asTemporalRange()),
             true);
       } else if (endRange != null) {
-        return SpatialTemporalQuery.createConstraints(endRange.asTemporalRange(), true);
+        return ExplicitSpatialTemporalQuery.createConstraints(endRange.asTemporalRange(), true);
       } else if (startRange != null) {
-        return SpatialTemporalQuery.createConstraints(startRange.asTemporalRange(), true);
+        return ExplicitSpatialTemporalQuery.createConstraints(startRange.asTemporalRange(), true);
       }
     } else if (timeDescriptors.getTime() != null) {
       final FeatureTimeRangeStatistics timeStat =
@@ -168,7 +168,7 @@ public class QueryIndexHelper {
               VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
                   timeDescriptors.getTime().getLocalName()).build().getId()));
       if (timeStat != null) {
-        return SpatialTemporalQuery.createConstraints(timeStat.asTemporalRange(), true);
+        return ExplicitSpatialTemporalQuery.createConstraints(timeStat.asTemporalRange(), true);
       }
     }
     return new ConstraintSet();
@@ -205,7 +205,7 @@ public class QueryIndexHelper {
     final TemporalConstraints timeBounds =
         TimeUtils.getTemporalConstraintsForDescriptors(timeDescriptors, timeBoundsSet);
     return (timeBounds != null) && !timeBounds.isEmpty()
-        ? SpatialTemporalQuery.createConstraints(timeBounds, false)
+        ? ExplicitSpatialTemporalQuery.createConstraints(timeBounds, false)
         : new Constraints(getTimeConstraintsFromIndex(timeDescriptors, statsMap));
   }
 
@@ -240,7 +240,7 @@ public class QueryIndexHelper {
         new Constraints(QueryIndexHelper.getTimeConstraintsFromIndex(timeDescriptors, statsMap));
 
     final Constraints boundsTimeConstraints =
-        SpatialTemporalQuery.createConstraints(boundsTemporalConstraints, false);
+        ExplicitSpatialTemporalQuery.createConstraints(boundsTemporalConstraints, false);
     return (boundsTimeConstraints.matches(indexTimeConstraints)) ? new Constraints()
         : boundsTimeConstraints;
   }

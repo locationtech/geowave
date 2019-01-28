@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.base;
 
-import com.google.common.collect.Iterators;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,18 +25,18 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.ReaderClosableWrapper;
 import org.locationtech.geowave.core.store.operations.RowReader;
-import org.locationtech.geowave.core.store.query.filter.FilterList;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
+import org.locationtech.geowave.core.store.util.GeoWaveRowIteratorFactory;
 import org.locationtech.geowave.core.store.util.MergingEntryIterator;
-import org.locationtech.geowave.core.store.util.NativeEntryIteratorWrapper;
+import com.google.common.collect.Iterators;
 
 abstract class BaseFilteredIndexQuery extends BaseQuery {
   protected List<QueryFilter> clientFilters;
@@ -50,6 +49,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       final Pair<String[], InternalDataAdapter<?>> fieldIdsAdapterPair,
       final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
       final FieldVisibilityCount visibilityCounts,
+      final DataIndexRetrieval dataIndexRetrieval,
       final String... authorizations) {
     super(
         adapterIds,
@@ -58,6 +58,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
         scanCallback,
         differingVisibilityCounts,
         visibilityCounts,
+        dataIndexRetrieval,
         authorizations);
   }
 
@@ -99,7 +100,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
     if ((limit != null) && (limit > 0)) {
       it = Iterators.limit(it, limit);
     }
-    return new CloseableIteratorWrapper(new ReaderClosableWrapper(reader), it);
+    return new CloseableIteratorWrapper(reader, it);
   }
 
   @Override
@@ -157,7 +158,8 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       final PersistentAdapterStore adapterStore,
       final double[] maxResolutionSubsamplingPerDimension,
       final boolean decodePersistenceEncoding) {
-    final @Nullable QueryFilter clientFilter = getClientFilter(options);
+    final @Nullable QueryFilter[] clientFilters = getClientFilters(options);
+    final DataIndexRetrieval dataIndexRetrieval = getDataIndexRetrieval();
     if ((options == null) || !options.isServerSideLibraryEnabled()) {
       final Map<Short, RowMergingDataAdapter> mergingAdapters = getMergingAdapters(adapterStore);
 
@@ -171,10 +173,11 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
                 adapterStore,
                 index,
                 input,
-                clientFilter,
+                clientFilters,
                 scanCallback,
                 mergingAdapters,
-                maxResolutionSubsamplingPerDimension);
+                maxResolutionSubsamplingPerDimension,
+                dataIndexRetrieval);
           }
         };
       }
@@ -185,28 +188,28 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       @SuppressWarnings({"rawtypes", "unchecked"})
       @Override
       public Iterator<T> apply(final Iterator<GeoWaveRow> input) {
-        return new NativeEntryIteratorWrapper(
+        return (Iterator<T>) GeoWaveRowIteratorFactory.iterator(
             adapterStore,
             index,
             input,
-            clientFilter,
+            clientFilters,
             scanCallback,
             getFieldBitmask(),
             // Don't do client side subsampling if server side is
             // enabled.
             ((options != null) && options.isServerSideLibraryEnabled()) ? null
                 : maxResolutionSubsamplingPerDimension,
-            decodePersistenceEncoding);
+            decodePersistenceEncoding,
+            dataIndexRetrieval);
       }
     };
   }
 
   @Override
-  protected QueryFilter getClientFilter(final DataStoreOptions options) {
+  protected QueryFilter[] getClientFilters(final DataStoreOptions options) {
     final List<QueryFilter> internalClientFilters = getClientFiltersList(options);
     return internalClientFilters.isEmpty() ? null
-        : internalClientFilters.size() == 1 ? internalClientFilters.get(0)
-            : new FilterList(internalClientFilters);
+        : internalClientFilters.toArray(new QueryFilter[0]);
   }
 
   protected List<QueryFilter> getClientFiltersList(final DataStoreOptions options) {

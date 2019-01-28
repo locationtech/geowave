@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.store.base;
 
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -27,31 +24,40 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
+import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.AsyncPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.adapter.LazyReadPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
+import org.locationtech.geowave.core.store.base.dataidx.BatchDataIndexRetrieval;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.DataWriter;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
-import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -59,7 +65,6 @@ import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.flatten.BitmaskedPairComparator;
-import org.locationtech.geowave.core.store.flatten.FlattenedFieldInfo;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexStore;
@@ -67,6 +72,10 @@ import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Suppliers;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 public class BaseDataStoreUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseDataStoreUtils.class);
@@ -76,67 +85,14 @@ public class BaseDataStoreUtils {
       final InternalDataAdapter<T> adapter,
       final Index index,
       final VisibilityWriter<T> customFieldVisibilityWriter) {
-    return getWriteInfo(entry, adapter, index, customFieldVisibilityWriter).getRows();
-  }
-
-  /**
-   * Basic method that decodes a native row Currently overridden by Accumulo and HBase; Unification
-   * in progress
-   *
-   * <p> Override this method if you can't pass in a GeoWaveRow!
-   *
-   * @throws AdapterException
-   */
-  public static <T> Object decodeRow(
-      final GeoWaveRow geowaveRow,
-      final QueryFilter clientFilter,
-      final InternalDataAdapter<T> adapter,
-      final PersistentAdapterStore adapterStore,
-      final Index index,
-      final ScanCallback scanCallback,
-      final byte[] fieldSubsetBitmask,
-      final boolean decodeRow) throws AdapterException {
-    final short internalAdapterId = geowaveRow.getAdapterId();
-
-    if ((adapter == null) && (adapterStore == null)) {
-      final String msg =
-          "Could not decode row from iterator. Either adapter or adapter store must be non-null.";
-      LOGGER.error(msg);
-      throw new AdapterException(msg);
-    }
-    final IntermediaryReadEntryInfo decodePackage = new IntermediaryReadEntryInfo(index, decodeRow);
-
-    if (!decodePackage.setOrRetrieveAdapter(adapter, internalAdapterId, adapterStore)) {
-      final String msg = "Could not retrieve adapter " + internalAdapterId + " from adapter store.";
-      LOGGER.error(msg);
-      throw new AdapterException(msg);
-    }
-
-    // Verify the adapter matches the data
-    if (!decodePackage.isAdapterVerified()) {
-      if (!decodePackage.verifyAdapter(internalAdapterId)) {
-        final String msg = "Adapter verify failed: adapter does not match data.";
-        LOGGER.error(msg);
-        throw new AdapterException(msg);
-      }
-    }
-
-    for (final GeoWaveValue value : geowaveRow.getFieldValues()) {
-      byte[] byteValue = value.getValue();
-      byte[] fieldMask = value.getFieldMask();
-      if (fieldSubsetBitmask != null) {
-        final byte[] newBitmask = BitmaskUtils.generateANDBitmask(fieldMask, fieldSubsetBitmask);
-        byteValue = BitmaskUtils.constructNewValue(byteValue, fieldMask, newBitmask);
-        if ((byteValue == null) || (byteValue.length == 0)) {
-          continue;
-        }
-        fieldMask = newBitmask;
-      }
-
-      readValue(decodePackage, new GeoWaveValueImpl(fieldMask, value.getVisibility(), byteValue));
-    }
-
-    return getDecodedRow(geowaveRow, decodePackage, clientFilter, scanCallback);
+    return getWriteInfo(
+        entry,
+        adapter,
+        index,
+        customFieldVisibilityWriter,
+        false,
+        false,
+        true).getRows();
   }
 
   public static CloseableIterator<Object> aggregate(
@@ -162,132 +118,275 @@ public class BaseDataStoreUtils {
   }
 
   /**
+   * Basic method that decodes a native row Currently overridden by Accumulo and HBase; Unification
+   * in progress
+   *
+   * <p> Override this method if you can't pass in a GeoWaveRow!
+   *
+   * @throws AdapterException
+   */
+  public static <T> Object decodeRow(
+      final GeoWaveRow geowaveRow,
+      final QueryFilter[] clientFilters,
+      final InternalDataAdapter<T> adapter,
+      final PersistentAdapterStore adapterStore,
+      final Index index,
+      final ScanCallback scanCallback,
+      final byte[] fieldSubsetBitmask,
+      final boolean decodeRow,
+      final DataIndexRetrieval dataIndexRetrieval) throws AdapterException {
+    final short internalAdapterId = geowaveRow.getAdapterId();
+
+    if ((adapter == null) && (adapterStore == null)) {
+      final String msg =
+          "Could not decode row from iterator. Either adapter or adapter store must be non-null.";
+      LOGGER.error(msg);
+      throw new AdapterException(msg);
+    }
+    final IntermediaryReadEntryInfo decodePackage = new IntermediaryReadEntryInfo(index, decodeRow);
+
+    if (!decodePackage.setOrRetrieveAdapter(adapter, internalAdapterId, adapterStore)) {
+      final String msg = "Could not retrieve adapter " + internalAdapterId + " from adapter store.";
+      LOGGER.error(msg);
+      throw new AdapterException(msg);
+    }
+
+    // Verify the adapter matches the data
+    if (!decodePackage.isAdapterVerified()) {
+      if (!decodePackage.verifyAdapter(internalAdapterId)) {
+        final String msg = "Adapter verify failed: adapter does not match data.";
+        LOGGER.error(msg);
+        throw new AdapterException(msg);
+      }
+    }
+
+    return getDecodedRow(
+        geowaveRow,
+        decodePackage,
+        fieldSubsetBitmask,
+        clientFilters,
+        scanCallback,
+        decodePackage.adapterSupportsDataIndex() ? dataIndexRetrieval : null);
+  }
+
+  /**
    * build a persistence encoding object first, pass it through the client filters and if its
    * accepted, use the data adapter to decode the persistence model into the native data type
    */
   private static <T> Object getDecodedRow(
       final GeoWaveRow row,
       final IntermediaryReadEntryInfo<T> decodePackage,
-      final QueryFilter clientFilter,
-      final ScanCallback<T, GeoWaveRow> scanCallback) {
-    final IndexedAdapterPersistenceEncoding encodedRow =
-        new IndexedAdapterPersistenceEncoding(
-            decodePackage.getDataAdapter().getAdapterId(),
-            new ByteArray(row.getDataId()),
-            new ByteArray(row.getPartitionKey()),
-            new ByteArray(row.getSortKey()),
-            row.getNumberOfDuplicates(),
-            decodePackage.getIndexData(),
-            decodePackage.getUnknownData(),
-            decodePackage.getExtendedData());
-
-    if ((clientFilter == null)
-        || clientFilter.accept(decodePackage.getIndex().getIndexModel(), encodedRow)) {
-      if (!decodePackage.isDecodeRow()) {
-        return encodedRow;
+      final byte[] fieldSubsetBitmask,
+      final QueryFilter[] clientFilters,
+      final ScanCallback<T, GeoWaveRow> scanCallback,
+      final DataIndexRetrieval dataIndexRetrieval) {
+    final boolean isSecondaryIndex = dataIndexRetrieval != null;
+    final IndexedAdapterPersistenceEncoding encodedRow;
+    if (isSecondaryIndex) {
+      // this implies its a Secondary Index and the actual values must be looked up
+      if (dataIndexRetrieval instanceof BatchDataIndexRetrieval) {
+        encodedRow =
+            new AsyncPersistenceEncoding(
+                decodePackage.getDataAdapter().getAdapterId(),
+                row.getDataId(),
+                row.getPartitionKey(),
+                row.getSortKey(),
+                row.getNumberOfDuplicates(),
+                (BatchDataIndexRetrieval) dataIndexRetrieval);
+      } else {
+        encodedRow =
+            new LazyReadPersistenceEncoding(
+                decodePackage.getDataAdapter().getAdapterId(),
+                row.getDataId(),
+                row.getPartitionKey(),
+                row.getSortKey(),
+                row.getNumberOfDuplicates(),
+                decodePackage.getDataAdapter(),
+                decodePackage.getIndex().getIndexModel(),
+                fieldSubsetBitmask,
+                Suppliers.memoize(
+                    () -> dataIndexRetrieval.getData(
+                        decodePackage.getDataAdapter().getAdapterId(),
+                        row.getDataId())));
       }
-
-      final T decodedRow =
-          decodePackage.getDataAdapter().decode(encodedRow, decodePackage.getIndex());
-
-      if (scanCallback != null) {
-        scanCallback.entryScanned(decodedRow, row);
-      }
-
-      return decodedRow;
+    } else {
+      encodedRow =
+          new LazyReadPersistenceEncoding(
+              decodePackage.getDataAdapter().getAdapterId(),
+              row.getDataId(),
+              row.getPartitionKey(),
+              row.getSortKey(),
+              row.getNumberOfDuplicates(),
+              decodePackage.getDataAdapter(),
+              decodePackage.getIndex().getIndexModel(),
+              fieldSubsetBitmask,
+              row.getFieldValues(),
+              false);
     }
+    final BiFunction<IndexedAdapterPersistenceEncoding, Integer, Object> function =
+        ((r, initialFilter) -> {
+          final int i =
+              clientFilterProgress(
+                  clientFilters,
+                  decodePackage.getIndex().getIndexModel(),
+                  r,
+                  initialFilter);
+          if (i < 0) {
+            if (!decodePackage.isDecodeRow()) {
+              return r;
+            }
+            final T decodedRow =
+                decodePackage.getDataAdapter().decode(
+                    r,
+                    isSecondaryIndex ? DataIndexUtils.DATA_ID_INDEX : decodePackage.getIndex());
+            if (r.isAsync()) {
+              return i;
+            }
+            if ((scanCallback != null)) {
+              scanCallback.entryScanned(decodedRow, row);
+            }
 
-    return null;
+            return decodedRow;
+          }
+          if (r.isAsync()) {
+            return i;
+          }
+          return null;
+        });
+    final Object obj = function.apply(encodedRow, 0);
+    if ((obj instanceof Integer) && encodedRow.isAsync()) {
+      // by re-applying the function, client filters should not be called multiple times for the
+      // same instance (beware of stateful filters such as dedupe filter). this method attempts to
+      // maintain progress of the filter chain so that any successful filters prior to retrieving
+      // the data will not need to be repeated
+      return (((AsyncPersistenceEncoding) encodedRow).getFieldValuesFuture().thenApply(
+          fv -> new LazyReadPersistenceEncoding(
+              decodePackage.getDataAdapter().getAdapterId(),
+              row.getDataId(),
+              row.getPartitionKey(),
+              row.getSortKey(),
+              row.getNumberOfDuplicates(),
+              decodePackage.getDataAdapter(),
+              decodePackage.getIndex().getIndexModel(),
+              fieldSubsetBitmask,
+              fv,
+              true))).thenApply((r) -> function.apply(r, (Integer) obj));
+    }
+    return obj;
   }
 
-  /** Generic field reader - updates fieldInfoList from field input data */
-  private static void readValue(
-      final IntermediaryReadEntryInfo decodePackage,
-      final GeoWaveValue value) {
-    final List<FlattenedFieldInfo> fieldInfos =
-        DataStoreUtils.decomposeFlattenedFields(
-            value.getFieldMask(),
-            value.getValue(),
-            value.getVisibility(),
-            -1).getFieldsRead();
-    for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
-      final String fieldName =
-          decodePackage.getDataAdapter().getFieldNameForPosition(
-              decodePackage.getIndex().getIndexModel(),
-              fieldInfo.getFieldPosition());
-      final FieldReader<? extends CommonIndexValue> indexFieldReader =
-          decodePackage.getIndex().getIndexModel().getReader(fieldName);
-      if (indexFieldReader != null) {
-        final CommonIndexValue indexValue = indexFieldReader.readField(fieldInfo.getValue());
-        indexValue.setVisibility(value.getVisibility());
-        decodePackage.getIndexData().addValue(fieldName, indexValue);
-      } else {
-        final FieldReader<?> extFieldReader = decodePackage.getDataAdapter().getReader(fieldName);
-        if (extFieldReader != null) {
-          final Object objValue = extFieldReader.readField(fieldInfo.getValue());
-          // TODO GEOWAVE-1018, do we care about visibility
-          decodePackage.getExtendedData().addValue(fieldName, objValue);
-        } else {
-          LOGGER.error("field reader not found for data entry, the value may be ignored");
-          decodePackage.getUnknownData().addValue(fieldName, fieldInfo.getValue());
-        }
+  /**
+   *
+   * @return returns -1 if all client filters have accepted the row, otherwise returns how many
+   *         client filters have accepted
+   */
+  private static int clientFilterProgress(
+      final QueryFilter[] clientFilters,
+      final CommonIndexModel indexModel,
+      final IndexedAdapterPersistenceEncoding encodedRow,
+      final int initialFilter) {
+    if ((clientFilters == null) || (initialFilter < 0)) {
+      return -1;
+    }
+    for (int i = initialFilter; i < clientFilters.length; i++) {
+      if (!clientFilters[i].accept(indexModel, encodedRow)) {
+        return i;
       }
     }
+    return -1;
   }
 
   protected static <T> IntermediaryWriteEntryInfo getWriteInfo(
       final T entry,
       final InternalDataAdapter<T> adapter,
       final Index index,
-      final VisibilityWriter<T> customFieldVisibilityWriter) {
+      final VisibilityWriter<T> customFieldVisibilityWriter,
+      final boolean secondaryIndex,
+      final boolean dataIdIndex,
+      final boolean visibilityEnabled) {
     final CommonIndexModel indexModel = index.getIndexModel();
-
     final AdapterPersistenceEncoding encodedData = adapter.encode(entry, indexModel);
-    final InsertionIds insertionIds = encodedData.getInsertionIds(index);
+    final InsertionIds insertionIds = dataIdIndex ? null : encodedData.getInsertionIds(index);
 
-    final List<FieldInfo<?>> fieldInfoList = new ArrayList<>();
-
-    final byte[] dataId = adapter.getDataId(entry).getBytes();
     final short internalAdapterId = adapter.getAdapterId();
-    if (!insertionIds.isEmpty()) {
-      for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
-        final FieldInfo<?> fieldInfo =
-            getFieldInfo(
-                indexModel,
-                fieldValue.getKey(),
-                fieldValue.getValue(),
-                entry,
-                customFieldVisibilityWriter);
-        if (fieldInfo != null) {
-          fieldInfoList.add(fieldInfo);
+
+    final byte[] dataId = adapter.getDataId(entry);
+    if (dataIdIndex || !insertionIds.isEmpty()) {
+      if (secondaryIndex && DataIndexUtils.adapterSupportsDataIndex(adapter) && !dataIdIndex) {
+        byte[] indexModelVisibility = new byte[0];
+        if (visibilityEnabled) {
+          for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
+            indexModelVisibility =
+                DataStoreUtils.mergeVisibilities(
+                    indexModelVisibility,
+                    customFieldVisibilityWriter.getFieldVisibilityHandler(
+                        fieldValue.getKey()).getVisibility(
+                            entry,
+                            fieldValue.getKey(),
+                            fieldValue.getValue()));
+          }
         }
-      }
-      for (final Entry<String, Object> fieldValue : encodedData.getAdapterExtendedData().getValues().entrySet()) {
-        if (fieldValue.getValue() != null) {
+        return new IntermediaryWriteEntryInfo(
+            dataId,
+            internalAdapterId,
+            insertionIds,
+            new GeoWaveValue[] {
+                new GeoWaveValueImpl(new byte[0], indexModelVisibility, new byte[0])});
+      } else {
+        final List<FieldInfo<?>> fieldInfoList = new ArrayList<>();
+        for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
           final FieldInfo<?> fieldInfo =
               getFieldInfo(
-                  adapter,
+                  indexModel,
                   fieldValue.getKey(),
                   fieldValue.getValue(),
                   entry,
-                  customFieldVisibilityWriter);
+                  customFieldVisibilityWriter,
+                  visibilityEnabled);
           if (fieldInfo != null) {
             fieldInfoList.add(fieldInfo);
           }
         }
+        for (final Entry<String, Object> fieldValue : encodedData.getAdapterExtendedData().getValues().entrySet()) {
+          if (fieldValue.getValue() != null) {
+            final FieldInfo<?> fieldInfo =
+                getFieldInfo(
+                    adapter,
+                    fieldValue.getKey(),
+                    fieldValue.getValue(),
+                    entry,
+                    customFieldVisibilityWriter,
+                    visibilityEnabled);
+            if (fieldInfo != null) {
+              fieldInfoList.add(fieldInfo);
+            }
+          }
+        }
+
+        return new IntermediaryWriteEntryInfo(
+            dataId,
+            internalAdapterId,
+            insertionIds,
+            BaseDataStoreUtils.composeFlattenedFields(
+                fieldInfoList,
+                indexModel,
+                adapter,
+                dataIdIndex));
       }
     } else {
       LOGGER.warn(
           "Indexing failed to produce insertion ids; entry ["
-              + adapter.getDataId(entry).getString()
-              + "] not saved.");
-    }
+              + StringUtils.stringFromBinary(adapter.getDataId(entry))
+              + "] not saved for index '"
+              + index.getName()
+              + "'.");
 
-    return new IntermediaryWriteEntryInfo(
-        dataId,
-        internalAdapterId,
-        insertionIds,
-        BaseDataStoreUtils.composeFlattenedFields(fieldInfoList, index.getIndexModel(), adapter));
+      return new IntermediaryWriteEntryInfo(
+          dataId,
+          internalAdapterId,
+          insertionIds,
+          new GeoWaveValueImpl[0]);
+    }
   }
 
   /**
@@ -299,68 +398,104 @@ public class BaseDataStoreUtils {
   private static <T> GeoWaveValue[] composeFlattenedFields(
       final List<FieldInfo<?>> originalList,
       final CommonIndexModel model,
-      final DataTypeAdapter<?> writableAdapter) {
-    final List<GeoWaveValue> retVal = new ArrayList<>();
+      final DataTypeAdapter<?> writableAdapter,
+      final boolean dataIdIndex) {
+    if (originalList.isEmpty()) {
+      return new GeoWaveValue[0];
+    }
     final Map<ByteArray, List<Pair<Integer, FieldInfo<?>>>> vizToFieldMap = new LinkedHashMap<>();
-    boolean sharedVisibility = false;
     // organize FieldInfos by unique visibility
-    for (final FieldInfo<?> fieldInfo : originalList) {
-      int fieldPosition = writableAdapter.getPositionOfOrderedField(model, fieldInfo.getFieldId());
-      if (fieldPosition == -1) {
-        // this is just a fallback for unexpected failures
-        fieldPosition = writableAdapter.getPositionOfOrderedField(model, fieldInfo.getFieldId());
+    if (dataIdIndex) {
+      final List<Pair<Integer, FieldInfo<?>>> fieldsWithPositions =
+          (List) originalList.stream().map(fieldInfo -> {
+            final int fieldPosition =
+                writableAdapter.getPositionOfOrderedField(model, fieldInfo.getFieldId());
+            return (Pair) Pair.of(fieldPosition, fieldInfo);
+          }).collect(Collectors.toList());
+      byte[] mergedVisibility = new byte[0];
+      for (final FieldInfo<?> fieldValue : originalList) {
+        mergedVisibility =
+            DataStoreUtils.mergeVisibilities(mergedVisibility, fieldValue.getVisibility());
       }
-      final ByteArray currViz = new ByteArray(fieldInfo.getVisibility());
-      if (vizToFieldMap.containsKey(currViz)) {
-        sharedVisibility = true;
-        final List<Pair<Integer, FieldInfo<?>>> listForViz = vizToFieldMap.get(currViz);
-        listForViz.add(new ImmutablePair<Integer, FieldInfo<?>>(fieldPosition, fieldInfo));
-      } else {
-        final List<Pair<Integer, FieldInfo<?>>> listForViz = new LinkedList<>();
-        listForViz.add(new ImmutablePair<Integer, FieldInfo<?>>(fieldPosition, fieldInfo));
-        vizToFieldMap.put(currViz, listForViz);
+      vizToFieldMap.put(new ByteArray(mergedVisibility), fieldsWithPositions);
+    } else {
+      boolean sharedVisibility = false;
+      for (final FieldInfo<?> fieldInfo : originalList) {
+        int fieldPosition =
+            writableAdapter.getPositionOfOrderedField(model, fieldInfo.getFieldId());
+        if (fieldPosition == -1) {
+          // this is just a fallback for unexpected failures
+          fieldPosition = writableAdapter.getPositionOfOrderedField(model, fieldInfo.getFieldId());
+        }
+        final ByteArray currViz = new ByteArray(fieldInfo.getVisibility());
+        if (vizToFieldMap.containsKey(currViz)) {
+          sharedVisibility = true;
+          final List<Pair<Integer, FieldInfo<?>>> listForViz = vizToFieldMap.get(currViz);
+          listForViz.add(new ImmutablePair<Integer, FieldInfo<?>>(fieldPosition, fieldInfo));
+        } else {
+          final List<Pair<Integer, FieldInfo<?>>> listForViz = new LinkedList<>();
+          listForViz.add(new ImmutablePair<Integer, FieldInfo<?>>(fieldPosition, fieldInfo));
+          vizToFieldMap.put(currViz, listForViz);
+        }
+      }
+
+      if (!sharedVisibility) {
+        // at a minimum, must return transformed (bitmasked) fieldInfos
+        final GeoWaveValue[] bitmaskedValues = new GeoWaveValue[vizToFieldMap.size()];
+        int i = 0;
+        for (final List<Pair<Integer, FieldInfo<?>>> list : vizToFieldMap.values()) {
+          // every list must have exactly one element
+          final Pair<Integer, FieldInfo<?>> fieldInfo = list.get(0);
+          bitmaskedValues[i++] =
+              new GeoWaveValueImpl(
+                  BitmaskUtils.generateCompositeBitmask(fieldInfo.getLeft()),
+                  fieldInfo.getRight().getVisibility(),
+                  fieldInfo.getRight().getWrittenValue());
+        }
+        return bitmaskedValues;
       }
     }
-    if (!sharedVisibility) {
-      // at a minimum, must return transformed (bitmasked) fieldInfos
-      final GeoWaveValue[] bitmaskedValues = new GeoWaveValue[vizToFieldMap.size()];
-      int i = 0;
-      for (final List<Pair<Integer, FieldInfo<?>>> list : vizToFieldMap.values()) {
-        // every list must have exactly one element
-        final Pair<Integer, FieldInfo<?>> fieldInfo = list.get(0);
-        bitmaskedValues[i++] =
-            new GeoWaveValueImpl(
-                BitmaskUtils.generateCompositeBitmask(fieldInfo.getLeft()),
-                fieldInfo.getRight().getVisibility(),
-                fieldInfo.getRight().getWrittenValue());
+    if (vizToFieldMap.size() == 1) {
+      return new GeoWaveValue[] {entryToValue(vizToFieldMap.entrySet().iterator().next())};
+    } else {
+      final List<GeoWaveValue> retVal = new ArrayList<>(vizToFieldMap.size());
+      for (final Entry<ByteArray, List<Pair<Integer, FieldInfo<?>>>> entry : vizToFieldMap.entrySet()) {
+        retVal.add(entryToValue(entry));
       }
-      return bitmaskedValues;
+      return retVal.toArray(new GeoWaveValue[0]);
     }
-    for (final Entry<ByteArray, List<Pair<Integer, FieldInfo<?>>>> entry : vizToFieldMap.entrySet()) {
-      int totalLength = 0;
-      final SortedSet<Integer> fieldPositions = new TreeSet<>();
-      final List<Pair<Integer, FieldInfo<?>>> fieldInfoList = entry.getValue();
-      Collections.sort(fieldInfoList, new BitmaskedPairComparator());
-      final List<byte[]> fieldInfoBytesList = new ArrayList<>(fieldInfoList.size());
-      for (final Pair<Integer, FieldInfo<?>> fieldInfoPair : fieldInfoList) {
-        final FieldInfo<?> fieldInfo = fieldInfoPair.getRight();
-        final ByteBuffer fieldInfoBytes =
-            ByteBuffer.allocate(4 + fieldInfo.getWrittenValue().length);
-        fieldPositions.add(fieldInfoPair.getLeft());
-        fieldInfoBytes.putInt(fieldInfo.getWrittenValue().length);
-        fieldInfoBytes.put(fieldInfo.getWrittenValue());
-        fieldInfoBytesList.add(fieldInfoBytes.array());
-        totalLength += fieldInfoBytes.array().length;
-      }
-      final ByteBuffer allFields = ByteBuffer.allocate(totalLength);
-      for (final byte[] bytes : fieldInfoBytesList) {
-        allFields.put(bytes);
-      }
-      final byte[] compositeBitmask = BitmaskUtils.generateCompositeBitmask(fieldPositions);
-      retVal.add(
-          new GeoWaveValueImpl(compositeBitmask, entry.getKey().getBytes(), allFields.array()));
+  }
+
+  private static GeoWaveValue entryToValue(
+      final Entry<ByteArray, List<Pair<Integer, FieldInfo<?>>>> entry) {
+    final SortedSet<Integer> fieldPositions = new TreeSet<>();
+    final List<Pair<Integer, FieldInfo<?>>> fieldInfoList = entry.getValue();
+    final byte[] combinedValue = combineValues(fieldInfoList);
+    fieldInfoList.stream().forEach(p -> fieldPositions.add(p.getLeft()));
+    final byte[] compositeBitmask = BitmaskUtils.generateCompositeBitmask(fieldPositions);
+    return new GeoWaveValueImpl(compositeBitmask, entry.getKey().getBytes(), combinedValue);
+  }
+
+  private static byte[] combineValues(final List<Pair<Integer, FieldInfo<?>>> fieldInfoList) {
+    int totalLength = 0;
+    Collections.sort(fieldInfoList, new BitmaskedPairComparator());
+    final List<byte[]> fieldInfoBytesList = new ArrayList<>(fieldInfoList.size());
+    for (final Pair<Integer, FieldInfo<?>> fieldInfoPair : fieldInfoList) {
+      final FieldInfo<?> fieldInfo = fieldInfoPair.getRight();
+      final ByteBuffer fieldInfoBytes =
+          ByteBuffer.allocate(
+              VarintUtils.unsignedIntByteLength(fieldInfo.getWrittenValue().length)
+                  + fieldInfo.getWrittenValue().length);
+      VarintUtils.writeUnsignedInt(fieldInfo.getWrittenValue().length, fieldInfoBytes);
+      fieldInfoBytes.put(fieldInfo.getWrittenValue());
+      fieldInfoBytesList.add(fieldInfoBytes.array());
+      totalLength += fieldInfoBytes.array().length;
     }
-    return retVal.toArray(new GeoWaveValue[0]);
+    final ByteBuffer allFields = ByteBuffer.allocate(totalLength);
+    for (final byte[] bytes : fieldInfoBytesList) {
+      allFields.put(bytes);
+    }
+    return allFields.array();
   }
 
   private static <T> FieldInfo<?> getFieldInfo(
@@ -368,7 +503,8 @@ public class BaseDataStoreUtils {
       final String fieldName,
       final Object fieldValue,
       final T entry,
-      final VisibilityWriter<T> customFieldVisibilityWriter) {
+      final VisibilityWriter<T> customFieldVisibilityWriter,
+      final boolean visibilityEnabled) {
     final FieldWriter fieldWriter = dataWriter.getWriter(fieldName);
     final FieldVisibilityHandler<T, Object> customVisibilityHandler =
         customFieldVisibilityWriter.getFieldVisibilityHandler(fieldName);
@@ -376,9 +512,11 @@ public class BaseDataStoreUtils {
       return new FieldInfo(
           fieldName,
           fieldWriter.writeField(fieldValue),
-          DataStoreUtils.mergeVisibilities(
-              customVisibilityHandler.getVisibility(entry, fieldName, fieldValue),
-              fieldWriter.getVisibility(entry, fieldName, fieldValue)));
+          visibilityEnabled
+              ? DataStoreUtils.mergeVisibilities(
+                  customVisibilityHandler.getVisibility(entry, fieldName, fieldValue),
+                  fieldWriter.getVisibility(entry, fieldName, fieldValue))
+              : new byte[0]);
     } else if (fieldValue != null) {
       LOGGER.warn(
           "Data writer of class "
@@ -485,5 +623,33 @@ public class BaseDataStoreUtils {
       }
     }
     return combineByIndex(result);
+  }
+
+  public static boolean isRowMerging(final DataTypeAdapter<?> adapter) {
+    if (adapter instanceof InternalDataAdapter) {
+      return isRowMerging(((InternalDataAdapter) adapter).getAdapter());
+    }
+    return adapter instanceof RowMergingDataAdapter;
+  }
+
+  public static boolean isRowMerging(
+      final PersistentAdapterStore adapterStore,
+      final short[] adapterIds) {
+    if (adapterIds != null) {
+      for (final short adapterId : adapterIds) {
+        if (isRowMerging(adapterStore.getAdapter(adapterId).getAdapter())) {
+          return true;
+        }
+      }
+    } else {
+      try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
+        while (it.hasNext()) {
+          if (isRowMerging(it.next().getAdapter())) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 }

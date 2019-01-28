@@ -12,11 +12,19 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import org.geotools.factory.CommonFactoryFinder;
+import org.geotools.temporal.object.DefaultInstant;
+import org.geotools.temporal.object.DefaultPeriod;
+import org.geotools.temporal.object.DefaultPosition;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.Filter;
+import org.opengis.filter.FilterFactory2;
+import org.opengis.temporal.Period;
+import org.opengis.temporal.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.extra.Interval;
@@ -27,6 +35,10 @@ import org.threeten.extra.Interval;
  */
 public class TimeUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(TimeUtils.class);
+
+  // because we use varint encoding we want it to be small enough to only take up a byte, but random
+  // enough that its as unlikely as possible to be found as a "real" value
+  public static long RESERVED_MILLIS_FOR_NULL = -113;
 
   /**
    * Convert a calendar object to a long in the form of milliseconds since the epoch of January 1,
@@ -44,6 +56,32 @@ public class TimeUtils {
     // GMT represented by this Date object.
     final long time = date.getTime();
     return time;
+  }
+
+  public static Filter toDuringFilter(
+      final long startTimeMillis,
+      final long endTimeMillis,
+      final String singleTimeField) {
+    final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
+    final Position ip1 = new DefaultPosition(new Date(startTimeMillis));
+    final Position ip2 = new DefaultPosition(new Date(endTimeMillis));
+    final Period period = new DefaultPeriod(new DefaultInstant(ip1), new DefaultInstant(ip2));
+    return factory.during(factory.property(singleTimeField), factory.literal(period));
+  }
+
+  public static Filter toFilter(
+      final long startTimeMillis,
+      final long endTimeMillis,
+      final String startTimeField,
+      final String endTimeField) {
+    final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
+    return factory.and(
+        factory.greaterOrEqual(
+            factory.property(startTimeField),
+            factory.literal(new Date(startTimeMillis))),
+        factory.lessOrEqual(
+            factory.property(endTimeField),
+            factory.literal(new Date(endTimeMillis))));
   }
 
   /**
@@ -71,7 +109,7 @@ public class TimeUtils {
                 + "' is not of expected temporal type");
       }
     }
-    return -1;
+    return RESERVED_MILLIS_FOR_NULL;
   }
 
   /**
@@ -99,7 +137,7 @@ public class TimeUtils {
    * @return An instance of the binding class with the value interpreted from longVal
    */
   public static Object getTimeValue(final Class<?> bindingClass, final long longVal) {
-    if (longVal < 0) {
+    if (longVal == RESERVED_MILLIS_FOR_NULL) {
       // indicator that the time value is null;
       return null;
     }

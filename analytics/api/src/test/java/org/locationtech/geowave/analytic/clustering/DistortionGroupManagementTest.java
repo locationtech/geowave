@@ -70,7 +70,7 @@ public class DistortionGroupManagementTest {
 
     final StoreFactoryOptions opts =
         new MemoryStoreFactoryFamily().getDataStoreFactory().createOptionsInstance();
-    opts.setGeowaveNamespace(namespace);
+    opts.setGeoWaveNamespace(namespace);
     storePluginOptions = new DataStorePluginOptions(opts);
     final DataStore store = storePluginOptions.createDataStore();
     store.addType(adapter, index);

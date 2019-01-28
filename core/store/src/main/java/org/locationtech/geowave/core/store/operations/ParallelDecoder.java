@@ -19,6 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 
@@ -31,7 +32,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransforme
  *
  * @param <T> the type of the decoded rows
  */
-public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
+public abstract class ParallelDecoder<T> implements CloseableIterator<T> {
   private BlockingQueue<Object> results;
   private ExecutorService threadPool;
   private final GeoWaveRowIteratorTransformer<T> rowTransformer;
@@ -47,7 +48,7 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
    *
    * @param rowTransformer the thread-safe row transformer to use for decoding rows
    */
-  public ParallelDecoder(GeoWaveRowIteratorTransformer<T> rowTransformer) {
+  public ParallelDecoder(final GeoWaveRowIteratorTransformer<T> rowTransformer) {
     this(rowTransformer, 8);
   }
 
@@ -57,7 +58,9 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
    * @param rowTransformer the thread-safe row transformer to use for decoding rows
    * @param numThreads the number of threads to allow in the thread pool
    */
-  public ParallelDecoder(GeoWaveRowIteratorTransformer<T> rowTransformer, int numThreads) {
+  public ParallelDecoder(
+      final GeoWaveRowIteratorTransformer<T> rowTransformer,
+      final int numThreads) {
     this.numThreads = numThreads;
     this.rowTransformer = rowTransformer;
     this.threadPool =
@@ -69,7 +72,7 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
             new LinkedBlockingQueue<Runnable>(),
             Executors.defaultThreadFactory());
     ((ThreadPoolExecutor) this.threadPool).allowCoreThreadTimeOut(true);
-    results = new ArrayBlockingQueue<Object>(RESULT_BUFFER_SIZE);
+    results = new ArrayBlockingQueue<>(RESULT_BUFFER_SIZE);
   }
 
   /** @return the number of threads allowed in the thread pool */
@@ -83,7 +86,7 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
    */
   protected abstract List<RowProvider> getRowProviders() throws Exception;
 
-  private synchronized void setDecodeException(Exception e) {
+  private synchronized void setDecodeException(final Exception e) {
     if (exception == null) {
       this.exception = e;
       this.threadPool.shutdownNow();
@@ -104,10 +107,10 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
    * @throws Exception
    */
   public void startDecode() throws Exception {
-    List<RowProvider> rowProviders = getRowProviders();
+    final List<RowProvider> rowProviders = getRowProviders();
     remainingTasks = rowProviders.size();
-    for (RowProvider rowProvider : rowProviders) {
-      threadPool.submit(new DecodeTask<T>(rowProvider, this));
+    for (final RowProvider rowProvider : rowProviders) {
+      threadPool.submit(new DecodeTask<>(rowProvider, this));
     }
   }
 
@@ -121,7 +124,7 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
     private final RowProvider rowProvider;
     private final ParallelDecoder<T> parent;
 
-    public DecodeTask(RowProvider rowProvider, ParallelDecoder<T> parent) {
+    public DecodeTask(final RowProvider rowProvider, final ParallelDecoder<T> parent) {
       this.rowProvider = rowProvider;
       this.parent = parent;
     }
@@ -130,7 +133,7 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
       return Thread.currentThread().isInterrupted();
     }
 
-    private void offerResult(Object result) throws InterruptedException {
+    private void offerResult(final Object result) throws InterruptedException {
       while (!shouldTerminate() && !parent.results.offer(result)) {
         // Results buffer is full, wait until there is some space
         Thread.sleep(1);
@@ -141,13 +144,13 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
     public void run() {
       try {
         rowProvider.init();
-        Iterator<T> transformed = parent.rowTransformer.apply(rowProvider);
+        final Iterator<T> transformed = parent.rowTransformer.apply(rowProvider);
         while (transformed.hasNext() && !shouldTerminate()) {
           offerResult(transformed.next());
         }
         // No more rows, signal the end of this task.
         offerResult(TASK_END_MARKER);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         // Don't overwrite the original exception if there is one
         if (!parent.hasException()) {
           parent.setDecodeException(e);
@@ -155,7 +158,7 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
       } finally {
         try {
           rowProvider.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
           // Ignore
         }
       }
@@ -163,7 +166,7 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
   }
 
   @Override
-  public void close() throws IOException {
+  public void close() {
     threadPool.shutdownNow();
   }
 
@@ -173,7 +176,7 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
     try {
       nextResult = null;
       while (remainingTasks > 0) {
-        while (!hasException() && (nextResult = results.poll()) == null) {
+        while (!hasException() && ((nextResult = results.poll()) == null)) {
           // No results available, but there are still tasks running,
           // wait for more results.
           Thread.sleep(1);
@@ -186,7 +189,7 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
         }
         break;
       }
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       setDecodeException(e);
     }
     if (hasException()) {
@@ -208,7 +211,7 @@ public abstract class ParallelDecoder<T> implements Iterator<T>, Closeable {
     if (nextResult == null) {
       computeNext();
     }
-    Object next = nextResult;
+    final Object next = nextResult;
     nextResult = null;
     return (T) next;
   }

@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.IndexUtils;
@@ -78,26 +77,26 @@ public class SingleTierSubStrategy implements NumericIndexStrategy {
 
   @Override
   public MultiDimensionalNumericData getRangeForId(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
-    final List<ByteArray> insertionIds =
+      final byte[] partitionKey,
+      final byte[] sortKey) {
+    final List<byte[]> insertionIds =
         new SinglePartitionInsertionIds(partitionKey, sortKey).getCompositeInsertionIds();
     if (insertionIds.isEmpty()) {
       LOGGER.warn("Unexpected empty insertion ID in getRangeForId()");
       return null;
     }
-    final byte[] rowId = insertionIds.get(0).getBytes();
+    final byte[] rowId = insertionIds.get(0);
     return BinnedSFCUtils.getRangeForId(rowId, baseDefinitions, sfc);
   }
 
   @Override
   public MultiDimensionalCoordinates getCoordinatesPerDimension(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
+      final byte[] partitionKey,
+      final byte[] sortKey) {
     final byte[] rowId =
         ByteArrayUtils.combineArrays(
-            partitionKey == null ? null : partitionKey.getBytes(),
-            sortKey == null ? null : sortKey.getBytes());
+            partitionKey == null ? null : partitionKey,
+            sortKey == null ? null : sortKey);
     return new MultiDimensionalCoordinates(
         new byte[] {tier},
         BinnedSFCUtils.getCoordinatesForId(rowId, baseDefinitions, sfc));
@@ -116,8 +115,7 @@ public class SingleTierSubStrategy implements NumericIndexStrategy {
     // anyways
     final List<BinnedNumericDataset> ranges =
         BinnedNumericDataset.applyBins(indexedData, baseDefinitions);
-    final Set<SinglePartitionInsertionIds> retVal =
-        new HashSet<SinglePartitionInsertionIds>(ranges.size());
+    final Set<SinglePartitionInsertionIds> retVal = new HashSet<>(ranges.size());
     for (final BinnedNumericDataset range : ranges) {
       final SinglePartitionInsertionIds binRowIds =
           TieredSFCIndexStrategy.getRowIdsAtTier(range, tier, sfc, null, tier);
@@ -179,7 +177,7 @@ public class SingleTierSubStrategy implements NumericIndexStrategy {
   @Override
   public byte[] toBinary() {
     int byteBufferLength = 1 + VarintUtils.unsignedIntByteLength(baseDefinitions.length);
-    final List<byte[]> dimensionBinaries = new ArrayList<byte[]>(baseDefinitions.length);
+    final List<byte[]> dimensionBinaries = new ArrayList<>(baseDefinitions.length);
     final byte[] sfcBinary = PersistenceUtils.toBinary(sfc);
     byteBufferLength += (VarintUtils.unsignedIntByteLength(sfcBinary.length) + sfcBinary.length);
     for (final NumericDimensionDefinition dimension : baseDefinitions) {
@@ -253,19 +251,14 @@ public class SingleTierSubStrategy implements NumericIndexStrategy {
   }
 
   @Override
-  public Set<ByteArray> getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
+  public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
     return IndexUtils.getInsertionPartitionKeys(this, insertionData);
   }
 
   @Override
-  public Set<ByteArray> getQueryPartitionKeys(
+  public byte[][] getQueryPartitionKeys(
       final MultiDimensionalNumericData queryData,
       final IndexMetaData... hints) {
     return IndexUtils.getQueryPartitionKeys(this, queryData, hints);
-  }
-
-  @Override
-  public Set<ByteArray> getPredefinedSplits() {
-    return Collections.EMPTY_SET;
   }
 }

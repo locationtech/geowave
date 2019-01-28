@@ -10,7 +10,6 @@ package org.locationtech.geowave.format.stanag4676.image;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -44,7 +43,7 @@ public class ImageChipDataAdapter implements DataTypeAdapter<ImageChip> {
   }
 
   @Override
-  public ByteArray getDataId(final ImageChip entry) {
+  public byte[] getDataId(final ImageChip entry) {
     return entry.getDataId();
   }
 

@@ -8,10 +8,8 @@
  */
 package org.locationtech.geowave.datastore.redis.operations;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import java.util.Arrays;
-import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
@@ -20,6 +18,8 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.util.StatisticsRowIterator;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.api.RScoredSortedSet;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 public class RedisMetadataReader implements MetadataReader {
   private final RScoredSortedSet<GeoWaveMetadata> set;
@@ -49,7 +49,7 @@ public class RedisMetadataReader implements MetadataReader {
             set.valueRange(
                 RedisUtils.getScore(query.getPrimaryId()),
                 true,
-                RedisUtils.getScore(ByteArray.getNextPrefix(query.getPrimaryId())),
+                RedisUtils.getScore(ByteArrayUtils.getNextPrefix(query.getPrimaryId())),
                 false);
       }
     } else {

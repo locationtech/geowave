@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.store.flatten;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,10 +17,14 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 /**
  * Utility methods when dealing with bitmasks in Accumulo
@@ -78,14 +79,14 @@ public class BitmaskUtils {
    * @return a composite bitmask
    */
   public static byte[] generateCompositeBitmask(final Integer fieldPosition) {
-    return generateCompositeBitmask(new TreeSet<Integer>(Collections.singleton(fieldPosition)));
+    return generateCompositeBitmask(new TreeSet<>(Collections.singleton(fieldPosition)));
   }
 
   private static LoadingCache<ByteArray, List<Integer>> fieldPositionCache =
       CacheBuilder.newBuilder().maximumSize(100).build(new CacheLoader<ByteArray, List<Integer>>() {
 
         @Override
-        public List<Integer> load(ByteArray key) throws Exception {
+        public List<Integer> load(final ByteArray key) throws Exception {
           final List<Integer> fieldPositions = new ArrayList<>();
           int currentByte = 0;
           for (final byte singleByteBitMask : key.getBytes()) {
@@ -143,7 +144,7 @@ public class BitmaskUtils {
       final CommonIndexModel indexModel,
       final String[] fieldNames,
       final DataTypeAdapter<?> adapterAssociatedWithFieldIds) {
-    final SortedSet<Integer> fieldPositions = new TreeSet<Integer>();
+    final SortedSet<Integer> fieldPositions = new TreeSet<>();
 
     // dimension fields must also be included
     for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
@@ -178,15 +179,16 @@ public class BitmaskUtils {
     int totalSize = 0;
     final List<Integer> originalPositions = getFieldPositions(originalBitmask);
     // convert list to set for quick contains()
-    final Set<Integer> newPositions = new HashSet<Integer>(getFieldPositions(newBitmask));
+    final Set<Integer> newPositions = new HashSet<>(getFieldPositions(newBitmask));
     if (originalPositions.size() > 1) {
       for (final Integer originalPosition : originalPositions) {
-        final int len = originalBytes.getInt();
+        final int startPosition = originalBytes.position();
+        final int len = VarintUtils.readUnsignedInt(originalBytes);
         final byte[] val = new byte[len];
         originalBytes.get(val);
         if (newPositions.contains(originalPosition)) {
           valsToKeep.add(val);
-          totalSize += len;
+          totalSize += (originalBytes.position() - startPosition);
         }
       }
     } else if (!newPositions.isEmpty()) {
@@ -199,13 +201,13 @@ public class BitmaskUtils {
       return null;
     }
     if (valsToKeep.size() == 1) {
-      final ByteBuffer retVal = ByteBuffer.allocate(totalSize);
+      final ByteBuffer retVal = ByteBuffer.allocate(valsToKeep.get(0).length);
       retVal.put(valsToKeep.get(0));
       return retVal.array();
     }
-    final ByteBuffer retVal = ByteBuffer.allocate((valsToKeep.size() * 4) + totalSize);
+    final ByteBuffer retVal = ByteBuffer.allocate(totalSize);
     for (final byte[] val : valsToKeep) {
-      retVal.putInt(val.length);
+      VarintUtils.writeUnsignedInt(val.length, retVal);
       retVal.put(val);
     }
     return retVal.array();

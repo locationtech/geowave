@@ -13,7 +13,6 @@ import java.nio.ByteBuffer;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
@@ -89,15 +88,15 @@ public class HBaseNumericIndexStrategyFilter extends FilterBase {
   }
 
   private boolean inBounds(final Cell cell) {
-    GeoWaveKeyImpl cellKey =
+    final GeoWaveKeyImpl cellKey =
         new GeoWaveKeyImpl(
             cell.getRowArray(),
             indexStrategy.getPartitionKeyLength(),
             cell.getRowOffset(),
             cell.getRowLength());
 
-    ByteArray sortKey = new ByteArray(cellKey.getSortKey());
-    ByteArray partitionKey = new ByteArray(cellKey.getPartitionKey());
+    final byte[] sortKey = cellKey.getSortKey();
+    final byte[] partitionKey = cellKey.getPartitionKey();
 
     final MultiDimensionalCoordinates coordinates =
         indexStrategy.getCoordinatesPerDimension(partitionKey, sortKey);

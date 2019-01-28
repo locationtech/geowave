@@ -10,6 +10,7 @@ package org.locationtech.geowave.adapter.vector;
 
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.jts.geom.Geometry;
@@ -46,6 +47,9 @@ public class FeatureGeometryHandler
   @Override
   public GeometryWrapper toIndexValue(final SimpleFeature row) {
     final Geometry geometry = (Geometry) nativeGeometryHandler.getFieldValue(row);
+    if (geometry == null) {
+      return null;
+    }
     byte[] visibility;
     if (visibilityHandler != null) {
       visibility =
@@ -61,5 +65,14 @@ public class FeatureGeometryHandler
   public PersistentValue<Object>[] toNativeValues(final GeometryWrapper indexValue) {
     return new PersistentValue[] {
         new PersistentValue<>(nativeGeometryHandler.getFieldName(), indexValue.getGeometry())};
+  }
+
+  @Override
+  public GeometryWrapper toIndexValue(final PersistentDataset<Object> adapterPersistenceEncoding) {
+    final Geometry geometry =
+        (Geometry) adapterPersistenceEncoding.getValue(nativeGeometryHandler.getFieldName());
+    // visibility is unnecessary because this only happens after the geometry is read (its only used
+    // in reconstructing common index values when using a secondary index)
+    return new GeometryWrapper(geometry, null);
   }
 }

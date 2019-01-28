@@ -51,7 +51,7 @@ public class ImageChip {
     return imageBinary;
   }
 
-  public ByteArray getDataId() {
+  public byte[] getDataId() {
     return ImageChipUtils.getDataId(mission, trackId, timeMillis);
   }
 

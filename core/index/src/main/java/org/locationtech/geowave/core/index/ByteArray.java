@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.core.index;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This class is a wrapper around a byte array to ensure equals and hashcode operations use the
@@ -35,7 +35,7 @@ public class ByteArray implements java.io.Serializable, Comparable<ByteArray> {
   }
 
   public ByteArray(final String string) {
-    this.bytes = StringUtils.stringToBinary(string);
+    bytes = StringUtils.stringToBinary(string);
     this.string = string;
   }
 
@@ -44,7 +44,7 @@ public class ByteArray implements java.io.Serializable, Comparable<ByteArray> {
   }
 
   public byte[] getNextPrefix() {
-    return getNextPrefix(bytes);
+    return ByteArrayUtils.getNextPrefix(bytes);
   }
 
   public String getString() {
@@ -55,12 +55,7 @@ public class ByteArray implements java.io.Serializable, Comparable<ByteArray> {
   }
 
   public String getHexString() {
-
-    final StringBuffer str = new StringBuffer();
-    for (final byte b : bytes) {
-      str.append(String.format("%02X ", b));
-    }
-    return str.toString();
+    return ByteArrayUtils.getHexString(bytes);
   }
 
   @Override
@@ -120,50 +115,6 @@ public class ByteArray implements java.io.Serializable, Comparable<ByteArray> {
 
   @Override
   public int compareTo(final ByteArray o) {
-    if (o == null) {
-      return -1;
-    }
-    for (int i = 0, j = 0; (i < bytes.length) && (j < o.bytes.length); i++, j++) {
-      final int a = (bytes[i] & 0xff);
-      final int b = (o.bytes[j] & 0xff);
-      if (a != b) {
-        return a - b;
-      }
-    }
-    return bytes.length - o.bytes.length;
-  }
-
-  public static byte[] getNextPrefix(final byte[] rowKeyPrefix) {
-    int offset = rowKeyPrefix.length;
-    while (offset > 0) {
-      if (rowKeyPrefix[offset - 1] != (byte) 0xFF) {
-        break;
-      }
-      offset--;
-    }
-
-    if (offset == 0) {
-      // TODO: is this correct? an empty byte array sorts before a single
-      // byte {0xFF}
-      // return new byte[0];
-
-      // it doesn't seem right, so instead, let's append several 0xFF
-      // bytes
-      return ByteArrayUtils.combineArrays(
-          rowKeyPrefix,
-          new byte[] {
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF});
-    }
-
-    final byte[] newStopRow = Arrays.copyOfRange(rowKeyPrefix, 0, offset);
-    // And increment the last one
-    newStopRow[newStopRow.length - 1]++;
-    return newStopRow;
+    return ByteArrayUtils.compare(bytes, o.bytes);
   }
 }

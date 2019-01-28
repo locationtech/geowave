@@ -160,12 +160,12 @@ public class RDDUtils {
       Geometry geom,
       NumericIndexStrategy index) {
     for (final SinglePartitionInsertionIds insertionId : rawIds.getPartitionKeys()) {
-      final ByteArray partitionKey = insertionId.getPartitionKey();
+      final byte[] partitionKey = insertionId.getPartitionKey();
       final int size = insertionId.getSortKeys().size();
       if (size > 3) {
-        final Iterator<ByteArray> it = insertionId.getSortKeys().iterator();
+        final Iterator<byte[]> it = insertionId.getSortKeys().iterator();
         while (it.hasNext()) {
-          final ByteArray sortKey = it.next();
+          final byte[] sortKey = it.next();
           MultiDimensionalNumericData keyTile = index.getRangeForId(partitionKey, sortKey);
           Envelope other = new Envelope();
           other.init(

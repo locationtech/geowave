@@ -19,7 +19,6 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.text.cql2.CQLException;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
@@ -124,12 +123,7 @@ public class CQLQueryExample {
     sftBuilder.add(atBuilder.binding(String.class).nillable(false).buildDescriptor("locationName"));
     sftBuilder.add(atBuilder.binding(Geometry.class).nillable(false).buildDescriptor("geometry"));
 
-    // TURN ON SECONDARY INDEXING
-    final SimpleFeatureType type = sftBuilder.buildFeatureType();
-    type.getDescriptor("locationName").getUserData().put(
-        TextSecondaryIndexConfiguration.INDEX_KEY,
-        "FULL");
-    return type;
+    return sftBuilder.buildFeatureType();
   }
 
   private static SimpleFeature buildSimpleFeature(

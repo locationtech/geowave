@@ -139,8 +139,8 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
     final InternalAdapterStore internalAdapterStore = dataStoreOptions.createInternalAdapterStore();
     final short[] adapterIds = new short[1];
     adapterIds[0] = internalAdapterStore.getAdapterId(coverageName);
-    ReaderParams<GeoWaveRow> params =
-        new ReaderParamsBuilder<GeoWaveRow>(
+    final ReaderParams<GeoWaveRow> params =
+        new ReaderParamsBuilder<>(
             TestUtils.DEFAULT_SPATIAL_INDEX,
             adapterStore,
             internalAdapterStore,
@@ -149,7 +149,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
     try (RowReader<GeoWaveRow> reader = operations.createReader(params)) {
       assertTrue(reader.hasNext());
 
-      GeoWaveRow row = reader.next();
+      final GeoWaveRow row = reader.next();
 
       // Assert that the values for the row are not merged.
       // If server side libraries are enabled, the merging will be done
@@ -165,13 +165,14 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
         TestUtils.DEFAULT_SPATIAL_INDEX,
         adapterStore,
         internalAdapterStore,
-        dataStoreOptions.createAdapterIndexMappingStore());
+        dataStoreOptions.createAdapterIndexMappingStore(),
+        dataStoreOptions.getFactoryOptions().getStoreOptions().getMaxRangeDecomposition());
 
     // Make sure the row was merged
     try (RowReader<GeoWaveRow> reader = operations.createReader(params)) {
       assertTrue(reader.hasNext());
 
-      GeoWaveRow row = reader.next();
+      final GeoWaveRow row = reader.next();
 
       // Assert that the values for the row are merged.
       assertEquals(1, row.getFieldValues().length);

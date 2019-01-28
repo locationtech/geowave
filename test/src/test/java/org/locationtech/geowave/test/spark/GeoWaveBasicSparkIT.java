@@ -9,12 +9,11 @@
 package org.locationtech.geowave.test.spark;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.referencing.CRS;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -23,18 +22,15 @@ import org.junit.runner.RunWith;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDD;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
-import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
-import org.locationtech.geowave.test.TestUtils.ExpectedResults;
 import org.locationtech.geowave.test.annotation.Environments;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -50,10 +46,12 @@ import org.slf4j.LoggerFactory;
 @Environments({Environment.SPARK})
 public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicSparkIT.class);
-  private static final int HAIL_COUNT = 13742;
-  private static final int TORNADO_COUNT = 1196;
+  public static final int HAIL_COUNT = 13742;
+  public static final int TORNADO_COUNT = 1196;
   private static final String HAIL_GEOM_FIELD = "the_geom";
   private static final String HAIL_TIME_FIELD = "DATE";
+  public static final Pair<String, String> OPTIMAL_CQL_GEOMETRY_AND_TIME_FIELDS =
+      Pair.of(HAIL_GEOM_FIELD, HAIL_TIME_FIELD);
 
   @GeoWaveTestStore(
       value = {
@@ -210,18 +208,18 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
         TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE,
         "polygon tornado tracks spatial query",
         true);
-    // TODO understand why the spatial-temporal queries on tornado tracks
-    // are running into memory issues
-    // verifyQuery(
-    // context,
-    // TEST_BOX_TEMPORAL_FILTER_FILE,
-    // TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE,
-    // "bounding box tornado tracks spatial-temporal query");
-    // verifyQuery(
-    // context,
-    // TEST_POLYGON_TEMPORAL_FILTER_FILE,
-    // TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE,
-    // "polygon tornado tracks spatial-temporal query");
+    verifyQuery(
+        context,
+        TEST_BOX_TEMPORAL_FILTER_FILE,
+        TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE,
+        "bounding box tornado tracks spatial-temporal query",
+        true);
+    verifyQuery(
+        context,
+        TEST_POLYGON_TEMPORAL_FILTER_FILE,
+        TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE,
+        "polygon tornado tracks spatial-temporal query",
+        true);
 
     // test configurable CRS for tornado tracks
     verifyQuery(
@@ -238,20 +236,20 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
         "polygon tornado tracks spatial query with other CRS",
         TestUtils.CUSTOM_CRS,
         true);
-    // TODO understand why the spatial-temporal queries on tornado tracks
-    // are running into memory issues
-    // verifyQuery(
-    // context,
-    // TEST_BOX_TEMPORAL_FILTER_FILE,
-    // TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE,
-    // "bounding box tornado tracks spatial-temporal query with other CRS",
-    // TestUtils.CUSTOM_CRS);
-    // verifyQuery(
-    // context,
-    // TEST_POLYGON_TEMPORAL_FILTER_FILE,
-    // TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE,
-    // "polygon tornado tracks spatial-temporal query with other CRS",
-    // TestUtils.CUSTOM_CRS);
+    verifyQuery(
+        context,
+        TEST_BOX_TEMPORAL_FILTER_FILE,
+        TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE,
+        "bounding box tornado tracks spatial-temporal query with other CRS",
+        TestUtils.CUSTOM_CRS,
+        false);
+    verifyQuery(
+        context,
+        TEST_POLYGON_TEMPORAL_FILTER_FILE,
+        TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE,
+        "polygon tornado tracks spatial-temporal query with other CRS",
+        TestUtils.CUSTOM_CRS,
+        true);
 
     // now test with both ingested
     TestUtils.testLocalIngest(dataStore, DimensionalityType.ALL, HAIL_SHAPEFILE_FILE, 1);
@@ -283,7 +281,7 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
       final GeoWaveRDD newRDD = GeoWaveRDDLoader.loadRDD(context, dataStore, queryOpts);
       final JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
 
-      final long count = getCount(javaRdd, dataStore.getType());
+      final long count = SparkUtils.getCount(javaRdd, dataStore.getType());
 
       Assert.assertEquals(HAIL_COUNT, count);
 
@@ -307,7 +305,7 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
       final GeoWaveRDD newRDD = GeoWaveRDDLoader.loadRDD(context, dataStore, queryOpts);
       final JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
 
-      final long count = getCount(javaRdd, dataStore.getType());
+      final long count = SparkUtils.getCount(javaRdd, dataStore.getType());
       LOGGER.warn(
           "DataStore loaded into RDD with "
               + count
@@ -331,7 +329,7 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
       final String filterFile,
       final String expectedResultsFile,
       final String name,
-      final boolean useDuring) {
+      final boolean useDuring) throws MalformedURLException {
     verifyQuery(context, filterFile, expectedResultsFile, name, null, useDuring);
   }
 
@@ -341,62 +339,16 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
       final String expectedResultsFile,
       final String name,
       final CoordinateReferenceSystem crsTransform,
-      final boolean useDuring) {
-    try {
-      // get expected results
-      final ExpectedResults expectedResults =
-          TestUtils.getExpectedResults(new URL[] {new File(expectedResultsFile).toURI().toURL()});
-
-      QueryConstraints query;
-      if (crsTransform != null) {
-        final SimpleFeature feature =
-            TestUtils.resourceToFeature(new File(filterFile).toURI().toURL());
-        query =
-            TestUtils.featureToQuery(
-                GeometryUtils.crsTransform(
-                    feature,
-                    SimpleFeatureTypeBuilder.retype(feature.getFeatureType(), crsTransform),
-                    CRS.findMathTransform(GeometryUtils.getDefaultCRS(), crsTransform, true)),
-                null,
-                GeometryUtils.getCrsCode(crsTransform),
-                useDuring);
-
-      } else {
-        query =
-            TestUtils.resourceToQuery(
-                new File(filterFile).toURI().toURL(),
-                Pair.of(HAIL_GEOM_FIELD, HAIL_TIME_FIELD),
-                useDuring);
-      }
-      // Load RDD using spatial query (bbox)
-      final RDDOptions queryOpts = new RDDOptions();
-      queryOpts.setQuery(QueryBuilder.newBuilder().constraints(query).build());
-      final GeoWaveRDD newRDD = GeoWaveRDDLoader.loadRDD(context, dataStore, queryOpts);
-      final JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
-      final long count = getCount(javaRdd, dataStore.getType());
-
-      LOGGER.warn("DataStore loaded into RDD with " + count + " features.");
-
-      // Verify RDD count matches expected count
-      Assert.assertEquals(expectedResults.count, count);
-    } catch (final Exception e) {
-      e.printStackTrace();
-      TestUtils.deleteAll(dataStore);
-      Assert.fail("Error occurred while testing '" + name + "'");
-    }
-  }
-
-  private static long getCount(
-      JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd,
-      String dataStoreType) {
-    // TODO this seems like it could only occur if the RecordReaders
-    // resulting from the splits had overlapping ranges, which seems to
-    // occur for HBase
-    if (dataStoreType.equals("hbase") || dataStoreType.equals("bigtable")) {
-      return javaRdd.countByKey().size();
-    } else {
-      return javaRdd.count();
-    }
+      final boolean useDuring) throws MalformedURLException {
+    SparkUtils.verifyQuery(
+        dataStore,
+        context,
+        new File(filterFile).toURI().toURL(),
+        new URL[] {new File(expectedResultsFile).toURI().toURL()},
+        name,
+        crsTransform,
+        OPTIMAL_CQL_GEOMETRY_AND_TIME_FIELDS,
+        useDuring);
   }
 
   @Override

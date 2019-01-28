@@ -21,13 +21,13 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
-public class ReaderParams<T> extends BaseReaderParams<T> {
+public class ReaderParams<T> extends RangeReaderParams<T> {
   private final boolean isServersideAggregation;
-  private final boolean isClientsideRowMerging;
   private final QueryRanges queryRanges;
   private final QueryFilter filter;
   private final List<MultiDimensionalCoordinateRangesArray> coordinateRanges;
   private final List<MultiDimensionalNumericData> constraints;
+  private final GeoWaveRowIteratorTransformer<T> rowTransformer;
 
   public ReaderParams(
       final Index index,
@@ -59,33 +59,26 @@ public class ReaderParams<T> extends BaseReaderParams<T> {
         fieldSubsets,
         isMixedVisibility,
         isAuthorizationsLimiting,
+        isClientsideRowMerging,
         limit,
         maxRangeDecomposition,
-        rowTransformer,
         additionalAuthorizations);
     this.isServersideAggregation = isServersideAggregation;
-    this.isClientsideRowMerging = isClientsideRowMerging;
     this.queryRanges = queryRanges;
     this.filter = filter;
     this.coordinateRanges = coordinateRanges;
     this.constraints = constraints;
+    this.rowTransformer = rowTransformer;
   }
 
-  @Override
   public List<MultiDimensionalCoordinateRangesArray> getCoordinateRanges() {
     return coordinateRanges;
   }
 
-  @Override
   public List<MultiDimensionalNumericData> getConstraints() {
     return constraints;
   }
 
-  public boolean isClientsideRowMerging() {
-    return isClientsideRowMerging;
-  }
-
-  @Override
   public boolean isServersideAggregation() {
     return isServersideAggregation;
   }
@@ -94,8 +87,11 @@ public class ReaderParams<T> extends BaseReaderParams<T> {
     return queryRanges;
   }
 
-  @Override
   public QueryFilter getFilter() {
     return filter;
+  }
+
+  public GeoWaveRowIteratorTransformer<T> getRowTransformer() {
+    return rowTransformer;
   }
 }

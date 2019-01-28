@@ -16,6 +16,8 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.memory.MemoryDataStoreOperations;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowReader;
@@ -28,24 +30,21 @@ public class MapReduceMemoryOperations extends MemoryDataStoreOperations
       Collections.synchronizedMap(new HashMap<ByteArray, SortedSet<MemoryStoreEntry>>());
 
   @Override
-  public <T> RowReader<T> createReader(RecordReaderParams<T> readerParams) {
+  public RowReader<GeoWaveRow> createReader(final RecordReaderParams readerParams) {
 
-    ByteArray partitionKey =
-        new ByteArray(
-            readerParams.getRowRange().getPartitionKey() == null ? new byte[0]
-                : readerParams.getRowRange().getPartitionKey());
+    final byte[] partitionKey =
+        readerParams.getRowRange().getPartitionKey() == null ? new byte[0]
+            : readerParams.getRowRange().getPartitionKey();
 
-    ByteArrayRange sortRange =
+    final ByteArrayRange sortRange =
         new ByteArrayRange(
-            new ByteArray(
-                readerParams.getRowRange().getStartSortKey() == null ? new byte[0]
-                    : readerParams.getRowRange().getStartSortKey()),
-            new ByteArray(
-                readerParams.getRowRange().getEndSortKey() == null ? new byte[0]
-                    : readerParams.getRowRange().getEndSortKey()));
+            readerParams.getRowRange().getStartSortKey() == null ? new byte[0]
+                : readerParams.getRowRange().getStartSortKey(),
+            readerParams.getRowRange().getEndSortKey() == null ? new byte[0]
+                : readerParams.getRowRange().getEndSortKey());
 
     return createReader(
-        (ReaderParams) new ReaderParams(
+        new ReaderParams(
             readerParams.getIndex(),
             readerParams.getAdapterStore(),
             readerParams.getInternalAdapterStore(),
@@ -54,7 +53,7 @@ public class MapReduceMemoryOperations extends MemoryDataStoreOperations
             readerParams.getAggregation(),
             readerParams.getFieldSubsets(),
             readerParams.isMixedVisibility(),
-            readerParams.isServersideAggregation(),
+            false,
             false,
             false,
             new QueryRanges(
@@ -62,12 +61,12 @@ public class MapReduceMemoryOperations extends MemoryDataStoreOperations
                     new SinglePartitionQueryRanges(
                         partitionKey,
                         Collections.singleton(sortRange)))),
-            readerParams.getFilter(),
+            null,
             readerParams.getLimit(),
             readerParams.getMaxRangeDecomposition(),
-            readerParams.getCoordinateRanges(),
-            readerParams.getConstraints(),
-            readerParams.getRowTransformer(),
+            null,
+            null,
+            GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
             readerParams.getAdditionalAuthorizations()));
   }
 }

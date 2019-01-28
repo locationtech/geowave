@@ -11,19 +11,16 @@ package org.locationtech.geowave.datastore.hbase.operations;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
-import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.HBaseBulkDeleteProtosClient;
 
 public class HBaseDeleter<T> extends HBaseReader<T> implements Deleter<T> {
   private boolean closed = false;
-  private static final HBaseBulkDeleteProtosClient.BulkDeleteRequest.BulkDeleteType DELETE_TYPE =
-      HBaseBulkDeleteProtosClient.BulkDeleteRequest.BulkDeleteType.ROW;
 
   public HBaseDeleter(final ReaderParams<T> readerParams, final HBaseOperations operations) {
     super(readerParams, operations);
   }
 
   @Override
-  public void close() throws Exception {
+  public void close() {
     if (!closed) {
       // make sure delete is only called once
       operations.bulkDelete(readerParams);
@@ -34,5 +31,5 @@ public class HBaseDeleter<T> extends HBaseReader<T> implements Deleter<T> {
   }
 
   @Override
-  public void entryScanned(T entry, GeoWaveRow row) {}
+  public void entryScanned(final T entry, final GeoWaveRow row) {}
 }

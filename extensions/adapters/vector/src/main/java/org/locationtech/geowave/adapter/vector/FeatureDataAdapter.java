@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -21,7 +19,6 @@ import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
-import org.locationtech.geowave.adapter.vector.index.SecondaryIndexManager;
 import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
 import org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
 import org.locationtech.geowave.adapter.vector.stats.StatsManager;
@@ -34,10 +31,8 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
@@ -59,8 +54,6 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.SecondaryIndexDataAdapter;
-import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.mapreduce.HadoopDataAdapter;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
@@ -72,6 +65,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 /**
  * This data adapter will handle all reading/writing concerns for storing and retrieving GeoTools
@@ -99,7 +94,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
     implements GeotoolsFeatureDataAdapter, StatisticsProvider<SimpleFeature>,
-    HadoopDataAdapter<SimpleFeature, FeatureWritable>, SecondaryIndexDataAdapter<SimpleFeature>,
+    HadoopDataAdapter<SimpleFeature, FeatureWritable>,
     InitializeWithIndicesDataAdapter<SimpleFeature> {
   private static final Logger LOGGER = LoggerFactory.getLogger(FeatureDataAdapter.class);
   // the original coordinate system will always be represented internally by
@@ -112,11 +107,7 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
   private SimpleFeatureType reprojectedFeatureType;
   private MathTransform transform;
   private StatsManager statsManager;
-  private SecondaryIndexManager secondaryIndexManager;
   private TimeDescriptors timeDescriptors = null;
-  // should change this anytime the serialized image changes. Stay negative.
-  // so 0xa0, 0xa1, 0xa2 etc.
-  static final byte VERSION = (byte) 0xa3;
 
   // -----------------------------------------------------------------------------------
   // -----------------------------------------------------------------------------------
@@ -283,7 +274,6 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
     }
 
     statsManager = new StatsManager(this, persistedFeatureType, reprojectedFeatureType, transform);
-    secondaryIndexManager = new SecondaryIndexManager(persistedFeatureType, statsManager);
   }
 
   /** Helper method for establishing a visibility manager in the constructor */
@@ -581,7 +571,6 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
     } else {
       indexCrsBytes = new byte[0];
     }
-    final byte[] secondaryIndexBytes = PersistenceUtils.toBinary(secondaryIndexManager);
     // 21 bytes is the 7 four byte length fields and one byte for the
     // version
     final ByteBuffer buf =
@@ -592,19 +581,12 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
                 + namespaceBytes.length
                 + attrBytes.length
                 + axisBytes.length
-                + secondaryIndexBytes.length
                 + VarintUtils.unsignedIntByteLength(typeNameBytes.length)
                 + VarintUtils.unsignedIntByteLength(indexCrsBytes.length)
                 + VarintUtils.unsignedIntByteLength(namespaceBytes.length)
                 + VarintUtils.unsignedIntByteLength(attrBytes.length)
                 + VarintUtils.unsignedIntByteLength(axisBytes.length)
-                + VarintUtils.unsignedIntByteLength(encodedTypeBytes.length)
-                + 1);
-
-    // TODO we will mess with serialization but "version" is definitely
-    // better done by simply registering a different persistable constructor
-    // and this should go away
-    buf.put(VERSION);
+                + VarintUtils.unsignedIntByteLength(encodedTypeBytes.length));
     VarintUtils.writeUnsignedInt(typeNameBytes.length, buf);
     VarintUtils.writeUnsignedInt(indexCrsBytes.length, buf);
     VarintUtils.writeUnsignedInt(namespaceBytes.length, buf);
@@ -617,7 +599,6 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
     buf.put(attrBytes);
     buf.put(axisBytes);
     buf.put(encodedTypeBytes);
-    buf.put(secondaryIndexBytes);
     return buf.array();
   }
 
@@ -636,10 +617,6 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
     }
     // deserialize the feature type
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    // TODO we will mess with serialization but "version" is definitely
-    // better done by simply registering a different persistable constructor
-    // and this should go away
-    buf.get();
     final byte[] typeNameBytes = new byte[VarintUtils.readUnsignedInt(buf)];
 
     final byte[] indexCrsBytes = new byte[VarintUtils.readUnsignedInt(buf)];
@@ -691,10 +668,6 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
     } catch (final SchemaException e) {
       LOGGER.error("Unable to deserialized feature type", e);
     }
-
-    secondaryIndexManager =
-        (SecondaryIndexManager) PersistenceUtils.fromBinary(secondaryIndexBytes);
-
     return null;
   }
 
@@ -704,8 +677,8 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
   }
 
   @Override
-  public ByteArray getDataId(final SimpleFeature entry) {
-    return new ByteArray(StringUtils.stringToBinary(entry.getID()));
+  public byte[] getDataId(final SimpleFeature entry) {
+    return StringUtils.stringToBinary(entry.getID());
   }
 
   private ThreadLocal<FeatureRowBuilder> builder = null;
@@ -806,11 +779,6 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
     }
   }
 
-  @Override
-  public List<SecondaryIndexImpl<SimpleFeature>> getSupportedSecondaryIndices() {
-    return secondaryIndexManager.getSupportedSecondaryIndices();
-  }
-
   private final transient BiMap<String, Integer> fieldToPositionMap = HashBiMap.create();
   private transient BiMap<Integer, String> positionToFieldMap = null;
   private final transient Map<String, List<String>> modelToDimensionsMap =
@@ -819,10 +787,16 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
 
   @Override
   public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldName) {
-    final List<String> dimensionFieldNames = getDimensionFieldNames(model);
-    // first check CommonIndexModel dimensions
-    if (dimensionFieldNames.contains(fieldName)) {
-      return dimensionFieldNames.indexOf(fieldName);
+    int numDimensions;
+    if (model != null) {
+      final List<String> dimensionFieldNames = getDimensionFieldNames(model);
+      // first check CommonIndexModel dimensions
+      if (dimensionFieldNames.contains(fieldName)) {
+        return dimensionFieldNames.indexOf(fieldName);
+      }
+      numDimensions = dimensionFieldNames.size();
+    } else {
+      numDimensions = 0;
     }
     if (!positionMapsInitialized) {
       synchronized (this) {
@@ -835,7 +809,7 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
     if (position == null) {
       return -1;
     }
-    return position.intValue() + dimensionFieldNames.size();
+    return position.intValue() + numDimensions;
   }
 
   @Override

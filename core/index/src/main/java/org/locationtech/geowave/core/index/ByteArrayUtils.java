@@ -8,12 +8,14 @@
  */
 package org.locationtech.geowave.core.index;
 
-import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Base64.Encoder;
+import java.util.List;
 import java.util.UUID;
 import org.apache.commons.lang3.tuple.Pair;
+import com.google.common.base.Preconditions;
 
 /**
  * Convenience methods for converting binary data to and from strings. The encoding and decoding is
@@ -221,5 +223,84 @@ public class ByteArrayUtils {
       }
     }
     return n;
+  }
+
+  public static byte[] getNextPrefix(final byte[] rowKeyPrefix) {
+    int offset = rowKeyPrefix.length;
+    while (offset > 0) {
+      if (rowKeyPrefix[offset - 1] != (byte) 0xFF) {
+        break;
+      }
+      offset--;
+    }
+
+    if (offset == 0) {
+      // TODO: is this correct? an empty byte array sorts before a single
+      // byte {0xFF}
+      // return new byte[0];
+
+      // it doesn't seem right, so instead, let's append several 0xFF
+      // bytes
+      return ByteArrayUtils.combineArrays(
+          rowKeyPrefix,
+          new byte[] {
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF});
+    }
+
+    final byte[] newStopRow = Arrays.copyOfRange(rowKeyPrefix, 0, offset);
+    // And increment the last one
+    newStopRow[newStopRow.length - 1]++;
+    return newStopRow;
+  }
+
+  public static int compare(final byte[] array1, final byte[] array2) {
+    if (array2 == null) {
+      if (array1 == null) {
+        return 0;
+      }
+      return -1;
+    }
+    if (array1 == null) {
+      return 1;
+    }
+    for (int i = 0, j = 0; (i < array1.length) && (j < array2.length); i++, j++) {
+      final int a = (array1[i] & 0xff);
+      final int b = (array2[j] & 0xff);
+      if (a != b) {
+        return a - b;
+      }
+    }
+    return array1.length - array2.length;
+  }
+
+  public static String getHexString(final byte[] bytes) {
+    final StringBuffer str = new StringBuffer();
+    for (final byte b : bytes) {
+      str.append(String.format("%02X ", b));
+    }
+    return str.toString();
+  }
+
+  public static ByteArrayRange getSingleRange(final List<ByteArrayRange> ranges) {
+    byte[] start = null;
+    byte[] end = null;
+    if (ranges == null) {
+      return null;
+    }
+    for (final ByteArrayRange range : ranges) {
+      if ((start == null) || (ByteArrayUtils.compare(range.getStart(), start) < 0)) {
+        start = range.getStart();
+      }
+      if ((end == null) || (ByteArrayUtils.compare(range.getEnd(), end) > 0)) {
+        end = range.getEnd();
+      }
+    }
+    return new ByteArrayRange(start, end);
   }
 }

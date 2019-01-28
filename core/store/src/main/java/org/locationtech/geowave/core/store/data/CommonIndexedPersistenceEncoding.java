@@ -37,9 +37,9 @@ public class CommonIndexedPersistenceEncoding extends IndexedPersistenceEncoding
 
   public CommonIndexedPersistenceEncoding(
       final short internalAdapterId,
-      final ByteArray dataId,
-      final ByteArray insertionPartitionKey,
-      final ByteArray insertionSortKey,
+      final byte[] dataId,
+      final byte[] insertionPartitionKey,
+      final byte[] insertionSortKey,
       final int duplicateCount,
       final PersistentDataset<CommonIndexValue> commonData,
       final PersistentDataset<byte[]> unknownData) {
@@ -64,15 +64,15 @@ public class CommonIndexedPersistenceEncoding extends IndexedPersistenceEncoding
         getNumericData(index.getIndexModel().getDimensions());
     final InsertionIds untrimmedResult = index.getIndexStrategy().getInsertionIds(boxRangeData);
     for (final SinglePartitionInsertionIds insertionId : untrimmedResult.getPartitionKeys()) {
-      final ByteArray partitionKey = insertionId.getPartitionKey();
+      final byte[] partitionKey = insertionId.getPartitionKey();
       final int size = insertionId.getSortKeys().size();
       if (size > 3) {
         // need at least 4 quadrants in a quadtree to create a
         // concave shape where the mbr overlaps an area that the
         // underlying polygon doesn't
-        final Iterator<ByteArray> it = insertionId.getSortKeys().iterator();
+        final Iterator<byte[]> it = insertionId.getSortKeys().iterator();
         while (it.hasNext()) {
-          final ByteArray sortKey = it.next();
+          final byte[] sortKey = it.next();
           // final MultiDimensionalNumericData md =
           // correctForNormalizationError(index.getIndexStrategy().getRangeForId(insertionId));
           // used to check the result of the index strategy

@@ -64,7 +64,7 @@ public class TemporalIndexStrategy implements FieldIndexStrategy<TemporalQueryCo
 
   @Override
   public InsertionIds getInsertionIds(final Date indexedData) {
-    return new InsertionIds(Collections.singletonList(new ByteArray(toIndexByte(indexedData))));
+    return new InsertionIds(Collections.singletonList(toIndexByte(indexedData)));
   }
 
   @Override
@@ -73,7 +73,7 @@ public class TemporalIndexStrategy implements FieldIndexStrategy<TemporalQueryCo
   }
 
   @Override
-  public Date getRangeForId(final ByteArray partitionKey, final ByteArray sortKey) {
-    return new Date(Lexicoders.LONG.fromByteArray(sortKey.getBytes()));
+  public Date getRangeForId(final byte[] partitionKey, final byte[] sortKey) {
+    return new Date(Lexicoders.LONG.fromByteArray(sortKey));
   }
 }

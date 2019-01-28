@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.operations;
 
-import com.beust.jcommander.internal.Lists;
-import com.google.common.collect.Iterators;
-import com.google.inject.Provider;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Iterator;
@@ -30,7 +27,7 @@ import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.operations.BaseReaderParams;
+import org.locationtech.geowave.core.store.operations.RangeReaderParams;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
@@ -43,12 +40,15 @@ import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.locationtech.geowave.mapreduce.splits.SplitsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Iterators;
+import com.google.inject.Provider;
 
 public class HBaseReader<T> implements RowReader<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(HBaseReader.class);
 
   protected final ReaderParams<T> readerParams;
-  private final RecordReaderParams<T> recordReaderParams;
+  private final RecordReaderParams recordReaderParams;
   protected final HBaseOperations operations;
   private final boolean clientSideRowMerging;
   private final GeoWaveRowIteratorTransformer<T> rowTransformer;
@@ -81,7 +81,7 @@ public class HBaseReader<T> implements RowReader<T> {
   }
 
   public HBaseReader(
-      final RecordReaderParams<T> recordReaderParams,
+      final RecordReaderParams recordReaderParams,
       final HBaseOperations operations) {
     this.readerParams = null;
     this.recordReaderParams = recordReaderParams;
@@ -89,20 +89,27 @@ public class HBaseReader<T> implements RowReader<T> {
 
     this.partitionKeyLength =
         recordReaderParams.getIndex().getIndexStrategy().getPartitionKeyLength();
-    this.wholeRowEncoding =
-        recordReaderParams.isMixedVisibility() && !recordReaderParams.isServersideAggregation();
-    this.clientSideRowMerging = false;
-    this.rowTransformer = recordReaderParams.getRowTransformer();
+    this.wholeRowEncoding = recordReaderParams.isMixedVisibility();
+    this.clientSideRowMerging = recordReaderParams.isClientsideRowMerging();
+    this.rowTransformer =
+        (GeoWaveRowIteratorTransformer<T>) GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER;
     this.scanProvider =
-        createScanProvider(recordReaderParams, operations, this.clientSideRowMerging);
+        createScanProvider(
+            (RangeReaderParams<T>) recordReaderParams,
+            operations,
+            this.clientSideRowMerging);
 
     initRecordScanner();
   }
 
   @Override
-  public void close() throws Exception {
+  public void close() {
     if (scanner != null) {
-      scanner.close();
+      try {
+        scanner.close();
+      } catch (final IOException e) {
+        LOGGER.error("unable to close scanner", e);
+      }
     }
   }
 
@@ -134,20 +141,10 @@ public class HBaseReader<T> implements RowReader<T> {
     // to be overly inclusive, but doesn't seem to produce extra results for
     // the other datastores within GeoWaveBasicSparkIT, however it does for
     // HBase
-    rscanner.setStartRow(range.getStart().getBytes()).setStopRow(
-        range.getEndAsNextPrefix().getBytes());
+    rscanner.setStartRow(range.getStart()).setStopRow(range.getEndAsNextPrefix());
 
     if (operations.isServerSideLibraryEnabled()) {
-      // Add distributable filters if requested, this has to be last
-      // in the filter list for the dedupe filter to work correctly
-
-      if (recordReaderParams.getFilter() != null) {
-        addDistFilter(recordReaderParams, filterList);
-      } else {
-        addIndexFilter(recordReaderParams, filterList);
-      }
-
-      addSkipFilter(recordReaderParams, filterList);
+      addSkipFilter((RangeReaderParams<T>) recordReaderParams, filterList);
     }
 
     setLimit(recordReaderParams, filterList);
@@ -245,7 +242,7 @@ public class HBaseReader<T> implements RowReader<T> {
   }
 
   private static <T> void setLimit(
-      final BaseReaderParams<T> readerParams,
+      final RangeReaderParams<T> readerParams,
       final FilterList filterList) {
     if ((readerParams.getLimit() != null) && (readerParams.getLimit() > 0)) {
       // @formatter:off
@@ -265,7 +262,7 @@ public class HBaseReader<T> implements RowReader<T> {
     }
   }
 
-  private void addSkipFilter(final BaseReaderParams<T> params, final FilterList filterList) {
+  private void addSkipFilter(final RangeReaderParams<T> params, final FilterList filterList) {
     // Add skipping filter if requested
     if (params.getMaxResolutionSubsamplingPerDimension() != null) {
       if (params.getMaxResolutionSubsamplingPerDimension().length != params.getIndex().getIndexStrategy().getOrderedDimensionDefinitions().length) {
@@ -289,7 +286,7 @@ public class HBaseReader<T> implements RowReader<T> {
     }
   }
 
-  private void addDistFilter(final BaseReaderParams<T> params, final FilterList filterList) {
+  private void addDistFilter(final ReaderParams<T> params, final FilterList filterList) {
     final HBaseDistributableFilter hbdFilter = new HBaseDistributableFilter();
 
     if (wholeRowEncoding) {
@@ -308,7 +305,7 @@ public class HBaseReader<T> implements RowReader<T> {
     filterList.addFilter(hbdFilter);
   }
 
-  private void addIndexFilter(final BaseReaderParams<T> params, final FilterList filterList) {
+  private void addIndexFilter(final ReaderParams<T> params, final FilterList filterList) {
     final List<MultiDimensionalCoordinateRangesArray> coords = params.getCoordinateRanges();
     if ((coords != null) && !coords.isEmpty()) {
       final HBaseNumericIndexStrategyFilter numericIndexFilter =
@@ -346,7 +343,7 @@ public class HBaseReader<T> implements RowReader<T> {
   }
 
   private Provider<Scan> createScanProvider(
-      final BaseReaderParams<T> readerParams,
+      final RangeReaderParams<T> readerParams,
       final HBaseOperations operations,
       final boolean clientSideRowMerging) {
     final Authorizations authorizations;

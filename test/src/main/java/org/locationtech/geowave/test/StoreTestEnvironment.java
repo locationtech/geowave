@@ -32,7 +32,7 @@ public abstract class StoreTestEnvironment implements TestEnvironment {
     final GenericStoreFactory<DataStore> factory = getDataStoreFactory();
     StoreFactoryOptions opts = factory.createOptionsInstance();
     initOptions(opts);
-    opts.setGeowaveNamespace(store.namespace());
+    opts.setGeoWaveNamespace(store.namespace());
     final Map<String, String> optionOverrides = new HashMap<>();
 
     // now allow for overrides to take precedence

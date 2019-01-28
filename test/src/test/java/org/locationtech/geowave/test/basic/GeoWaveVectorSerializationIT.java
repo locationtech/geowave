@@ -25,7 +25,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
@@ -145,7 +145,8 @@ public class GeoWaveVectorSerializationIT extends AbstractGeoWaveIT {
     try (Writer writer = geowaveStore.createWriter(serAdapter.getTypeName())) {
       writer.write(sf);
     }
-    final QueryConstraints q = new SpatialQuery(((Geometry) args.get(Geometry.class)).buffer(0.5d));
+    final QueryConstraints q =
+        new ExplicitSpatialQuery(((Geometry) args.get(Geometry.class)).buffer(0.5d));
     try (final CloseableIterator<?> iter =
         geowaveStore.query(QueryBuilder.newBuilder().constraints(q).build())) {
       boolean foundFeat = false;

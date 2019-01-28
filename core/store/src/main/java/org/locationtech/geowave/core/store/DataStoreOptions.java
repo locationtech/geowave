@@ -15,7 +15,15 @@ public interface DataStoreOptions {
 
   public boolean isServerSideLibraryEnabled();
 
+  public boolean isVisibilityEnabled();
+
+  public int getDataIndexBatchSize();
+
   public int getMaxRangeDecomposition();
 
   public int getAggregationMaxRangeDecomposition();
+
+  public boolean isSecondaryIndexing();
+
+  public void setSecondaryIndexing(boolean se);
 }

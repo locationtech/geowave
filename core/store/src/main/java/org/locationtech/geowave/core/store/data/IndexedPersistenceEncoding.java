@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.store.data;
 
-import org.locationtech.geowave.core.index.ByteArray;
-
 /**
  * This class models all of the necessary information for persisting data in the data store
  * (following the common index model) and is used internally within GeoWave as an intermediary
@@ -19,15 +17,15 @@ import org.locationtech.geowave.core.index.ByteArray;
  * index.
  */
 public class IndexedPersistenceEncoding<T> extends PersistenceEncoding<T> {
-  private final ByteArray insertionPartitionKey;
-  private final ByteArray insertionSortKey;
+  private final byte[] insertionPartitionKey;
+  private final byte[] insertionSortKey;
   private final int duplicateCount;
 
   public IndexedPersistenceEncoding(
       final Short internalAdapterId,
-      final ByteArray dataId,
-      final ByteArray insertionPartitionKey,
-      final ByteArray insertionSortKey,
+      final byte[] dataId,
+      final byte[] insertionPartitionKey,
+      final byte[] insertionSortKey,
       final int duplicateCount,
       final PersistentDataset<T> commonData,
       final PersistentDataset<byte[]> unknownData) {
@@ -37,12 +35,16 @@ public class IndexedPersistenceEncoding<T> extends PersistenceEncoding<T> {
     this.duplicateCount = duplicateCount;
   }
 
+  public boolean isAsync() {
+    return false;
+  }
+
   /**
    * Return the partition key portion of the insertion ID
    *
    * @return the insertion partition key
    */
-  public ByteArray getInsertionPartitionKey() {
+  public byte[] getInsertionPartitionKey() {
     return insertionPartitionKey;
   }
 
@@ -51,7 +53,7 @@ public class IndexedPersistenceEncoding<T> extends PersistenceEncoding<T> {
    *
    * @return the insertion sort key
    */
-  public ByteArray getInsertionSortKey() {
+  public byte[] getInsertionSortKey() {
     return insertionSortKey;
   }
 

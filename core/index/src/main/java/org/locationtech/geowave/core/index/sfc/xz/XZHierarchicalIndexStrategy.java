@@ -11,12 +11,7 @@ package org.locationtech.geowave.core.index.sfc.xz;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
@@ -44,6 +39,8 @@ import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy.TierIndexMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStrategy {
   private static final Logger LOGGER = LoggerFactory.getLogger(XZHierarchicalIndexStrategy.class);
@@ -210,11 +207,10 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
 
         partitionIds.add(
             new SinglePartitionInsertionIds(
-                new ByteArray(
-                    ByteArrayUtils.combineArrays(
-                        new byte[] {xzCurveMultiDimensionalId},
-                        range.getBinId())),
-                new ByteArray(xzId)));
+                ByteArrayUtils.combineArrays(
+                    new byte[] {xzCurveMultiDimensionalId},
+                    range.getBinId()),
+                xzId));
       }
     }
 
@@ -230,14 +226,14 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
 
   @Override
   public MultiDimensionalNumericData getRangeForId(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
+      final byte[] partitionKey,
+      final byte[] sortKey) {
     // select curve based on first byte
-    final byte first = partitionKey.getBytes()[0];
+    final byte first = partitionKey[0];
     if (first == pointCurveMultiDimensionalId) {
-      return pointCurve.getRanges(sortKey.getBytes());
+      return pointCurve.getRanges(sortKey);
     } else if (first == xzCurveMultiDimensionalId) {
-      return xzCurve.getRanges(sortKey.getBytes());
+      return xzCurve.getRanges(sortKey);
     } else {
       return rasterStrategy.getRangeForId(partitionKey, sortKey);
     }
@@ -275,7 +271,7 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
   @Override
   public byte[] toBinary() {
 
-    final List<byte[]> dimensionDefBinaries = new ArrayList<byte[]>(baseDefinitions.length);
+    final List<byte[]> dimensionDefBinaries = new ArrayList<>(baseDefinitions.length);
     int bufferLength = VarintUtils.unsignedIntByteLength(baseDefinitions.length);
     for (final NumericDimensionDefinition dimension : baseDefinitions) {
       final byte[] sfcDimensionBinary = PersistenceUtils.toBinary(dimension);
@@ -342,33 +338,31 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
 
   @Override
   public MultiDimensionalCoordinates getCoordinatesPerDimension(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
+      final byte[] partitionKey,
+      final byte[] sortKey) {
 
     // select curve based on first byte
-    final byte first = partitionKey.getBytes()[0];
+    final byte first = partitionKey[0];
     Coordinate[] coordinates = null;
 
     if (first == pointCurveMultiDimensionalId) {
       coordinates =
           BinnedSFCUtils.getCoordinatesForId(
-              ByteArrayUtils.combineArrays(
-                  partitionKey.getBytes(),
-                  sortKey == null ? null : sortKey.getBytes()),
+              ByteArrayUtils.combineArrays(partitionKey, sortKey == null ? null : sortKey),
               baseDefinitions,
               pointCurve);
     } else if (first == xzCurveMultiDimensionalId) {
       coordinates =
           BinnedSFCUtils.getCoordinatesForId(
-              ByteArrayUtils.combineArrays(
-                  partitionKey.getBytes(),
-                  sortKey == null ? null : sortKey.getBytes()),
+              ByteArrayUtils.combineArrays(partitionKey, sortKey == null ? null : sortKey),
               baseDefinitions,
               xzCurve);
     } else {
       return rasterStrategy.getCoordinatesPerDimension(partitionKey, sortKey);
     }
-
+    if (coordinates == null) {
+      return null;
+    }
     return new MultiDimensionalCoordinates(new byte[] {first}, coordinates);
   }
 
@@ -406,7 +400,7 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
 
   @Override
   public List<IndexMetaData> createMetaData() {
-    final List<IndexMetaData> metaData = new ArrayList<IndexMetaData>();
+    final List<IndexMetaData> metaData = new ArrayList<>();
     metaData.addAll(rasterStrategy.createMetaData());
     metaData.add(
         new XZHierarchicalIndexMetaData(pointCurveMultiDimensionalId, xzCurveMultiDimensionalId));
@@ -466,7 +460,7 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
     @Override
     public void insertionIdsAdded(final InsertionIds insertionIds) {
       for (final SinglePartitionInsertionIds partitionId : insertionIds.getPartitionKeys()) {
-        final byte first = partitionId.getPartitionKey().getBytes()[0];
+        final byte first = partitionId.getPartitionKey()[0];
         if (first == pointCurveMultiDimensionalId) {
           pointCurveCount += partitionId.getSortKeys().size();
         } else if (first == xzCurveMultiDimensionalId) {
@@ -478,7 +472,7 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
     @Override
     public void insertionIdsRemoved(final InsertionIds insertionIds) {
       for (final SinglePartitionInsertionIds partitionId : insertionIds.getPartitionKeys()) {
-        final byte first = partitionId.getPartitionKey().getBytes()[0];
+        final byte first = partitionId.getPartitionKey()[0];
         if (first == pointCurveMultiDimensionalId) {
           pointCurveCount -= partitionId.getSortKeys().size();
         } else if (first == xzCurveMultiDimensionalId) {
@@ -503,19 +497,14 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
   }
 
   @Override
-  public Set<ByteArray> getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
+  public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
     return IndexUtils.getInsertionPartitionKeys(this, insertionData);
   }
 
   @Override
-  public Set<ByteArray> getQueryPartitionKeys(
+  public byte[][] getQueryPartitionKeys(
       final MultiDimensionalNumericData queryData,
       final IndexMetaData... hints) {
     return IndexUtils.getQueryPartitionKeys(this, queryData, hints);
-  }
-
-  @Override
-  public Set<ByteArray> getPredefinedSplits() {
-    return Collections.EMPTY_SET;
   }
 }

@@ -8,14 +8,10 @@
  */
 package org.locationtech.geowave.core.index.simple;
 
-import com.google.common.collect.Sets;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.PartitionIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -48,7 +44,7 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 public class HashKeyIndexStrategy
     implements PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData> {
 
-  private final List<ByteArray> keys = new ArrayList<ByteArray>();
+  private byte[][] keys;
 
   public HashKeyIndexStrategy() {
     this(3);
@@ -59,19 +55,17 @@ public class HashKeyIndexStrategy
   }
 
   private void init(final int size) {
-    keys.clear();
+    keys = new byte[size][];
     if (size > 256) {
       final ByteBuffer buf = ByteBuffer.allocate(4);
       for (int i = 0; i < size; i++) {
         buf.putInt(i);
-        final ByteArray id = new ByteArray(Arrays.copyOf(buf.array(), 4));
-        keys.add(id);
+        keys[i] = Arrays.copyOf(buf.array(), 4);
         buf.rewind();
       }
     } else {
       for (int i = 0; i < size; i++) {
-        final ByteArray id = new ByteArray(new byte[] {(byte) i});
-        keys.add(id);
+        keys[i] = new byte[] {(byte) i};
       }
     }
   }
@@ -83,8 +77,8 @@ public class HashKeyIndexStrategy
 
   @Override
   public byte[] toBinary() {
-    final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(keys.size()));
-    VarintUtils.writeUnsignedInt(keys.size(), buf);
+    final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(keys.length));
+    VarintUtils.writeUnsignedInt(keys.length, buf);
     return buf.array();
   }
 
@@ -94,8 +88,8 @@ public class HashKeyIndexStrategy
     init(VarintUtils.readUnsignedInt(buf));
   }
 
-  public Set<ByteArray> getPartitionKeys() {
-    return Sets.newHashSet(keys);
+  public byte[][] getPartitionKeys() {
+    return keys;
   }
 
   private static long hashCode(final double a1[], final long start) {
@@ -109,8 +103,8 @@ public class HashKeyIndexStrategy
 
   @Override
   public int getPartitionKeyLength() {
-    if ((keys != null) && !keys.isEmpty()) {
-      return keys.get(0).getBytes().length;
+    if ((keys != null) && (keys.length > 0)) {
+      return keys[0].length;
     }
     return 0;
   }
@@ -122,27 +116,32 @@ public class HashKeyIndexStrategy
 
   /** Returns an insertion id selected round-robin from a predefined pool */
   @Override
-  public Set<ByteArray> getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
-    final long hashCode =
-        Math.abs(
-            hashCode(
-                insertionData.getMaxValuesPerDimension(),
-                hashCode(insertionData.getMinValuesPerDimension(), 1)));
-    final int position = (int) (hashCode % keys.size());
+  public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
+    final long hashCode;
+    if (insertionData.isEmpty()) {
+      hashCode = insertionData.hashCode();
+    } else {
+      hashCode =
+          Math.abs(
+              hashCode(
+                  insertionData.getMaxValuesPerDimension(),
+                  hashCode(insertionData.getMinValuesPerDimension(), 1)));
+    }
+    final int position = (int) (hashCode % keys.length);
 
-    return Collections.singleton(keys.get(position));
+    return new byte[][] {keys[position]};
   }
 
   /** always return all keys */
   @Override
-  public Set<ByteArray> getQueryPartitionKeys(
+  public byte[][] getQueryPartitionKeys(
       final MultiDimensionalNumericData queryData,
       final IndexMetaData... hints) {
     return getPartitionKeys();
   }
 
   @Override
-  public Set<ByteArray> getPredefinedSplits() {
+  public byte[][] getPredefinedSplits() {
     return getPartitionKeys();
   }
 }

@@ -10,12 +10,17 @@ package org.locationtech.geowave.core.store.index.writer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.WriteResults;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
+import com.google.common.collect.Maps;
 
 public class IndexCompositeWriter<T> implements Writer<T> {
   final Writer<T>[] writers;
@@ -33,24 +38,32 @@ public class IndexCompositeWriter<T> implements Writer<T> {
   }
 
   @Override
-  public InsertionIds write(final T entry) {
-    final List<SinglePartitionInsertionIds> ids = new ArrayList<>();
-
-    for (final Writer<T> indexWriter : writers) {
-      final InsertionIds i = indexWriter.write(entry);
-      ids.addAll(i.getPartitionKeys());
-    }
-    return new InsertionIds(ids);
+  public WriteResults write(final T entry) {
+    return internalWrite(entry, (w -> w.write(entry)));
   }
 
   @Override
-  public InsertionIds write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter) {
-    final List<SinglePartitionInsertionIds> ids = new ArrayList<>();
+  public WriteResults write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter) {
+    return internalWrite(entry, (w -> w.write(entry, fieldVisibilityWriter)));
+  }
+
+  protected WriteResults internalWrite(
+      final T entry,
+      final Function<Writer<T>, WriteResults> internalWriter) {
+    final Map<String, List<SinglePartitionInsertionIds>> insertionIdsPerIndex = new HashMap<>();
     for (final Writer<T> indexWriter : writers) {
-      final InsertionIds i = indexWriter.write(entry, fieldVisibilityWriter);
-      ids.addAll(i.getPartitionKeys());
+      final WriteResults ids = internalWriter.apply(indexWriter);
+      for (final String indexName : ids.getWrittenIndexNames()) {
+        List<SinglePartitionInsertionIds> partitionInsertionIds =
+            insertionIdsPerIndex.get(indexName);
+        if (partitionInsertionIds == null) {
+          partitionInsertionIds = new ArrayList<>();
+          insertionIdsPerIndex.put(indexName, partitionInsertionIds);
+        }
+        partitionInsertionIds.addAll(ids.getInsertionIdsWritten(indexName).getPartitionKeys());
+      }
     }
-    return new InsertionIds(ids);
+    return new WriteResults(Maps.transformValues(insertionIdsPerIndex, v -> new InsertionIds(v)));
   }
 
   @Override

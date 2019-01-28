@@ -10,10 +10,10 @@ package org.locationtech.geowave.core.store.index.text;
 
 import java.util.Collections;
 import java.util.List;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.index.FieldIndexStrategy;
 
 public class TextIndexStrategy implements FieldIndexStrategy<TextQueryConstraint, String> {
@@ -58,7 +58,7 @@ public class TextIndexStrategy implements FieldIndexStrategy<TextQueryConstraint
 
   @Override
   public InsertionIds getInsertionIds(final String indexedData) {
-    return new InsertionIds(Collections.singletonList(new ByteArray(indexedData)));
+    return new InsertionIds(Collections.singletonList(StringUtils.stringToBinary(indexedData)));
   }
 
   @Override
@@ -69,7 +69,7 @@ public class TextIndexStrategy implements FieldIndexStrategy<TextQueryConstraint
   }
 
   @Override
-  public String getRangeForId(final ByteArray partitionKey, final ByteArray sortKey) {
-    return sortKey.getString();
+  public String getRangeForId(final byte[] partitionKey, final byte[] sortKey) {
+    return StringUtils.stringFromBinary(sortKey);
   }
 }

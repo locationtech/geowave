@@ -8,6 +8,18 @@
  */
 package org.locationtech.geowave.core.index.sfc.hilbert;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
+import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
+import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
+import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.uzaygezen.core.BacktrackingQueryBuilder;
@@ -23,19 +35,6 @@ import com.google.uzaygezen.core.SimpleRegionInspector;
 import com.google.uzaygezen.core.ZoomingSpaceVisitorAdapter;
 import com.google.uzaygezen.core.ranges.LongRange;
 import com.google.uzaygezen.core.ranges.LongRangeHome;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.ByteArrayRange;
-import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
-import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 /**
  * This supports Compact Hilbert SFC operations using a primitive long internally to represent
@@ -352,8 +351,7 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
     if (expectedByteCount <= 0) {
       // special case for no precision
       return new RangeDecomposition(
-          new ByteArrayRange[] {
-              new ByteArrayRange(new ByteArray(new byte[] {}), new ByteArray(new byte[] {}))});
+          new ByteArrayRange[] {new ByteArrayRange(new byte[0], new byte[0])});
     }
     for (int i = 0; i < hilbertRanges.size(); i++) {
       final FilteredIndexRange<LongRange, LongRange> range = hilbertRanges.get(i);
@@ -375,7 +373,7 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
           HilbertSFC.fitExpectedByteCount(
               expectedByteCount,
               ByteBuffer.allocate(8).putLong(endValue).array());
-      sfcRanges[i] = new ByteArrayRange(new ByteArray(start), new ByteArray(end));
+      sfcRanges[i] = new ByteArrayRange(start, end);
     }
 
     final RangeDecomposition rangeDecomposition = new RangeDecomposition(sfcRanges);

@@ -22,7 +22,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -32,7 +32,6 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
 import org.locationtech.geowave.core.store.operations.RowReader;
@@ -128,7 +127,8 @@ public class SplitsProviderIT extends AbstractGeoWaveIT {
   public void testUniform() {
     ingestWithDistribution(Distribution.UNIFORM);
     final QueryConstraints query =
-        new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-180, 180, -90, 90)));
+        new ExplicitSpatialQuery(
+            new GeometryFactory().toGeometry(new Envelope(-180, 180, -90, 90)));
     assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
   }
 
@@ -136,13 +136,17 @@ public class SplitsProviderIT extends AbstractGeoWaveIT {
   public void testBimodal() {
     ingestWithDistribution(Distribution.BIMODAL);
     QueryConstraints query =
-        new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-180, 180, -90, 90)));
+        new ExplicitSpatialQuery(
+            new GeometryFactory().toGeometry(new Envelope(-180, 180, -90, 90)));
     assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
 
-    query = new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-120, -60, -90, 90)));
+    query =
+        new ExplicitSpatialQuery(
+            new GeometryFactory().toGeometry(new Envelope(-120, -60, -90, 90)));
     assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
 
-    query = new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-20, 20, -90, 90)));
+    query =
+        new ExplicitSpatialQuery(new GeometryFactory().toGeometry(new Envelope(-20, 20, -90, 90)));
     assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
   }
 
@@ -150,13 +154,17 @@ public class SplitsProviderIT extends AbstractGeoWaveIT {
   public void testSkewed() {
     ingestWithDistribution(Distribution.SKEWED);
     QueryConstraints query =
-        new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-180, 180, -90, 90)));
+        new ExplicitSpatialQuery(
+            new GeometryFactory().toGeometry(new Envelope(-180, 180, -90, 90)));
     assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
 
-    query = new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-180, -140, -90, 90)));
+    query =
+        new ExplicitSpatialQuery(
+            new GeometryFactory().toGeometry(new Envelope(-180, -140, -90, 90)));
     assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
 
-    query = new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(0, 180, -90, 90)));
+    query =
+        new ExplicitSpatialQuery(new GeometryFactory().toGeometry(new Envelope(0, 180, -90, 90)));
     assertTrue(getSplitsMSE(query, 12, 12) < 0.1);
   }
 
@@ -214,8 +222,8 @@ public class SplitsProviderIT extends AbstractGeoWaveIT {
         for (final String indexName : gwSplit.getIndexNames()) {
           final SplitInfo splitInfo = gwSplit.getInfo(indexName);
           for (final RangeLocationPair p : splitInfo.getRangeLocationPairs()) {
-            final RecordReaderParams<?> readerParams =
-                new RecordReaderParams<>(
+            final RecordReaderParams readerParams =
+                new RecordReaderParams(
                     splitInfo.getIndex(),
                     as,
                     ias,
@@ -225,10 +233,10 @@ public class SplitsProviderIT extends AbstractGeoWaveIT {
                     null,
                     splitInfo.isMixedVisibility(),
                     splitInfo.isAuthorizationsLimiting(),
+                    splitInfo.isClientsideRowMerging(),
                     p.getRange(),
                     null,
-                    null,
-                    GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
+                    null);
             try (RowReader<?> reader = ops.createReader(readerParams)) {
               while (reader.hasNext()) {
                 reader.next();

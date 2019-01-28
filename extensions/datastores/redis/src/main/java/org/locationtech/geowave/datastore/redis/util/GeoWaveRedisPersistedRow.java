@@ -16,6 +16,8 @@ public class GeoWaveRedisPersistedRow {
   private final byte[] dataId;
   private final GeoWaveValue value;
 
+  private transient byte[] partitionKey;
+
   public GeoWaveRedisPersistedRow(
       final short numDuplicates,
       final byte[] dataId,
@@ -23,6 +25,14 @@ public class GeoWaveRedisPersistedRow {
     this.numDuplicates = numDuplicates;
     this.dataId = dataId;
     this.value = value;
+  }
+
+  public byte[] getPartitionKey() {
+    return partitionKey;
+  }
+
+  public void setPartitionKey(byte[] partitionKey) {
+    this.partitionKey = partitionKey;
   }
 
   public short getNumDuplicates() {

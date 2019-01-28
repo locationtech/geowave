@@ -13,24 +13,34 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.math.util.MathUtils;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
+import org.locationtech.geowave.adapter.vector.export.VectorLocalExportCommand;
+import org.locationtech.geowave.adapter.vector.export.VectorLocalExportOptions;
 import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
+import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -55,6 +65,8 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.StatisticsQuery;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
+import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
+import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
@@ -68,6 +80,7 @@ import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
 import org.locationtech.geowave.test.TestUtils;
+import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.TestUtils.ExpectedResults;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
@@ -115,6 +128,12 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
   protected static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
   protected static final String TEST_POLYGON_FILTER_FILE =
       TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
+  protected static final String TEST_LOCAL_EXPORT_DIRECTORY = "export";
+  private static final String TEST_BASE_EXPORT_FILE_NAME = "basicIT-export.avro";
+  protected static final String CQL_DELETE_STR = "STATE = 'TX'";
+
+  private static final SimpleDateFormat CQL_DATE_FORMAT =
+      new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
 
   @BeforeClass
   public static void extractTestFiles() throws URISyntaxException {
@@ -235,11 +254,11 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       if (!entry.isDuplicated()) {
         return;
       }
-      if (visitedDataIds.contains(entry.getDataId())) {
+      if (visitedDataIds.contains(new ByteArray(entry.getDataId()))) {
         // only aggregate when you find a duplicate entry
         count++;
       }
-      visitedDataIds.add(entry.getDataId());
+      visitedDataIds.add(new ByteArray(entry.getDataId()));
     }
 
     @Override
@@ -365,22 +384,23 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       if (geowaveStore.delete(
           QueryBuilder.newBuilder().addTypeName(
               testFeature.getFeatureType().getTypeName()).indexName(index.getName()).constraints(
-                  new DataIdQuery(dataId)).build())) {
+                  new DataIdQuery(dataId.getBytes())).build())) {
 
         success =
             !hasAtLeastOne(
                 geowaveStore.query(
                     QueryBuilder.newBuilder().addTypeName(
                         testFeature.getFeatureType().getTypeName()).indexName(
-                            index.getName()).constraints(new DataIdQuery(dataId)).build()));
+                            index.getName()).constraints(
+                                new DataIdQuery(dataId.getBytes())).build()));
       }
     }
     Assert.assertTrue("Unable to delete entry by data ID and adapter ID", success);
   }
 
-  protected void testDeleteSpatial(final URL savedFilterResource, final Index index)
+  protected void testDeleteByBasicQuery(final URL savedFilterResource, final Index index)
       throws Exception {
-    LOGGER.warn("bulk deleting via spatial query from " + index.getName() + " index");
+    LOGGER.info("bulk deleting via spatial query");
 
     final org.locationtech.geowave.core.store.api.DataStore geowaveStore =
         getDataStorePluginOptions().createDataStore();
@@ -392,7 +412,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
   }
 
   protected void testDeleteCQL(final String cqlStr, final Index index) throws Exception {
-    LOGGER.warn("bulk deleting from " + index.getName() + " index using CQL: '" + cqlStr + "'");
+    LOGGER.info("bulk deleting using CQL: '" + cqlStr + "'");
 
     final org.locationtech.geowave.core.store.api.DataStore geowaveStore =
         getDataStorePluginOptions().createDataStore();
@@ -419,8 +439,11 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       final Index index,
       final QueryConstraints query) throws IOException {
     // Query everything
-    CloseableIterator<?> queryResults =
-        geowaveStore.query(QueryBuilder.newBuilder().indexName(index.getName()).build());
+    QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder();
+    if (index != null) {
+      bldr.indexName(index.getName());
+    }
+    CloseableIterator<?> queryResults = geowaveStore.query(bldr.build());
 
     int allFeatures = 0;
     while (queryResults.hasNext()) {
@@ -434,9 +457,11 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     LOGGER.warn("Total count in table before delete: " + allFeatures);
 
     // Run the query for this delete to get the expected count
-    queryResults =
-        geowaveStore.query(
-            QueryBuilder.newBuilder().indexName(index.getName()).constraints(query).build());
+    bldr = QueryBuilder.newBuilder().constraints(query);
+    if (index != null) {
+      bldr.indexName(index.getName());
+    }
+    queryResults = geowaveStore.query(bldr.build());
     int expectedFeaturesToDelete = 0;
     while (queryResults.hasNext()) {
       final Object obj = queryResults.next();
@@ -447,18 +472,20 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     queryResults.close();
 
     LOGGER.warn(expectedFeaturesToDelete + " features to delete...");
-
     // Do the delete
-    final boolean deleteResults =
-        geowaveStore.delete(
-            QueryBuilder.newBuilder().indexName(index.getName()).constraints(query).build());
-
+    bldr = QueryBuilder.newBuilder().constraints(query);
+    if (index != null) {
+      bldr.indexName(index.getName());
+    }
+    final boolean deleteResults = geowaveStore.delete(bldr.build());
     LOGGER.warn("Bulk delete results: " + (deleteResults ? "Success" : "Failure"));
 
     // Query again - should be zero remaining
-    queryResults =
-        geowaveStore.query(
-            QueryBuilder.newBuilder().indexName(index.getName()).constraints(query).build());
+    bldr = QueryBuilder.newBuilder().constraints(query);
+    if (index != null) {
+      bldr.indexName(index.getName());
+    }
+    queryResults = geowaveStore.query(bldr.build());
 
     final int initialQueryFeatures = expectedFeaturesToDelete;
     int remainingFeatures = 0;
@@ -481,7 +508,11 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
             + " not deleted",
         remainingFeatures == 0);
     // Now for the final check, query everything again
-    queryResults = geowaveStore.query(QueryBuilder.newBuilder().indexName(index.getName()).build());
+    bldr = QueryBuilder.newBuilder();
+    if (index != null) {
+      bldr.indexName(index.getName());
+    }
+    queryResults = geowaveStore.query(bldr.build());
 
     int finalFeatures = 0;
     while (queryResults.hasNext()) {
@@ -508,21 +539,168 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     }
   }
 
-  protected void testStats(final URL[] inputFiles, final Index index, final boolean multithreaded) {
-    testStats(inputFiles, index, multithreaded, null);
+  protected void testStats(
+      final URL[] inputFiles,
+      final boolean multithreaded,
+      final Index... indices) {
+    testStats(inputFiles, multithreaded, null, indices);
+  }
+
+  protected void testSpatialTemporalLocalExportAndReingestWithCQL(
+      final URL filterUrl,
+      final int numThreads,
+      final boolean pointsOnly,
+      final DimensionalityType dimensionalityType) throws Exception {
+    final File exportDir =
+        exportWithCQL(getDataStorePluginOptions(), filterUrl, dimensionalityType);
+    TestUtils.testLocalIngest(
+        getDataStorePluginOptions(),
+        dimensionalityType,
+        exportDir.getAbsolutePath(),
+        "avro",
+        numThreads);
+    try {
+      URL[] expectedResultsUrls;
+      if (pointsOnly) {
+        expectedResultsUrls =
+            new URL[] {new File(HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()};
+      } else {
+        expectedResultsUrls =
+            new URL[] {
+                new File(HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL(),
+                new File(TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE).toURI().toURL()};
+      }
+
+      testQuery(
+          new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
+          expectedResultsUrls,
+          "reingested bounding box and time range");
+    } catch (final Exception e) {
+      e.printStackTrace();
+      TestUtils.deleteAll(getDataStorePluginOptions());
+      Assert.fail(
+          "Error occurred on reingested dataset while testing a bounding box and time range query of spatial temporal index: '"
+              + e.getLocalizedMessage()
+              + "'");
+    }
+  }
+
+  protected static File exportWithCQL(
+      final DataStorePluginOptions dataStoreOptions,
+      final URL filterUrl,
+      final DimensionalityType dimensionalityType) throws Exception {
+    Geometry filterGeometry = null;
+    Date startDate = null, endDate = null;
+    if (filterUrl != null) {
+      final SimpleFeature savedFilter = TestUtils.resourceToFeature(filterUrl);
+
+      filterGeometry = (Geometry) savedFilter.getDefaultGeometry();
+      final Object startObj =
+          savedFilter.getAttribute(TestUtils.TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
+      final Object endObj = savedFilter.getAttribute(TestUtils.TEST_FILTER_END_TIME_ATTRIBUTE_NAME);
+      if ((startObj != null) && (endObj != null)) {
+        // if we can resolve start and end times, make it a spatial temporal
+        // query
+        if (startObj instanceof Calendar) {
+          startDate = ((Calendar) startObj).getTime();
+        } else if (startObj instanceof Date) {
+          startDate = (Date) startObj;
+        }
+        if (endObj instanceof Calendar) {
+          endDate = ((Calendar) endObj).getTime();
+        } else if (endObj instanceof Date) {
+          endDate = (Date) endObj;
+        }
+      }
+    }
+    final PersistentAdapterStore adapterStore = dataStoreOptions.createAdapterStore();
+    final VectorLocalExportCommand exportCommand = new VectorLocalExportCommand();
+    final VectorLocalExportOptions options = exportCommand.getOptions();
+    final File exportDir = new File(TestUtils.TEMP_DIR, TEST_LOCAL_EXPORT_DIRECTORY);
+    FileUtils.deleteDirectory(exportDir);
+    if (!exportDir.mkdirs()) {
+      LOGGER.warn("Unable to create directory: " + exportDir.getAbsolutePath());
+    }
+
+    exportCommand.setParameters("test");
+
+    final File configFile = File.createTempFile("test_export", null);
+    final ManualOperationParams params = new ManualOperationParams();
+
+    params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
+    final AddStoreCommand addStore = new AddStoreCommand();
+    addStore.setParameters("test");
+    addStore.setPluginOptions(dataStoreOptions);
+    addStore.execute(params);
+    options.setBatchSize(10000);
+    try (CloseableIterator<InternalDataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
+      while (adapterIt.hasNext()) {
+        final InternalDataAdapter<?> adapter = adapterIt.next();
+        options.setTypeNames(new String[] {adapter.getTypeName()});
+        if ((adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)
+            && (filterGeometry != null)
+            && (startDate != null)
+            && (endDate != null)) {
+          final GeotoolsFeatureDataAdapter gtAdapter =
+              (GeotoolsFeatureDataAdapter) adapter.getAdapter();
+          final TimeDescriptors timeDesc = gtAdapter.getTimeDescriptors();
+
+          String startTimeAttribute;
+          if (timeDesc.getStartRange() != null) {
+            startTimeAttribute = timeDesc.getStartRange().getLocalName();
+          } else {
+            startTimeAttribute = timeDesc.getTime().getLocalName();
+          }
+          final String endTimeAttribute;
+          if (timeDesc.getEndRange() != null) {
+            endTimeAttribute = timeDesc.getEndRange().getLocalName();
+          } else {
+            endTimeAttribute = timeDesc.getTime().getLocalName();
+          }
+          final String geometryAttribute =
+              gtAdapter.getFeatureType().getGeometryDescriptor().getLocalName();
+
+          final Envelope env = filterGeometry.getEnvelopeInternal();
+          final double east = env.getMaxX();
+          final double west = env.getMinX();
+          final double south = env.getMinY();
+          final double north = env.getMaxY();
+          final String cqlPredicate =
+              String.format(
+                  "BBOX(\"%s\",%f,%f,%f,%f) AND \"%s\" <= '%s' AND \"%s\" >= '%s'",
+                  geometryAttribute,
+                  west,
+                  south,
+                  east,
+                  north,
+                  startTimeAttribute,
+                  CQL_DATE_FORMAT.format(endDate),
+                  endTimeAttribute,
+                  CQL_DATE_FORMAT.format(startDate));
+          options.setCqlFilter(cqlPredicate);
+        }
+
+        options.setOutputFile(
+            new File(exportDir, adapter.getTypeName() + TEST_BASE_EXPORT_FILE_NAME));
+        exportCommand.execute(params);
+      }
+    }
+    TestUtils.deleteAll(dataStoreOptions);
+    return exportDir;
   }
 
   protected void testStats(
       final URL[] inputFiles,
-      final Index index,
       final boolean multithreaded,
-      final CoordinateReferenceSystem crs) {
+      final CoordinateReferenceSystem crs,
+      final Index... indices) {
     // In the multithreaded case, only test min/max and count. Stats will be
     // ingested/ in a different order and will not match.
     final LocalFileIngestPlugin<SimpleFeature> localFileIngest =
         new GeoToolsVectorDataStoreIngestPlugin(Filter.INCLUDE);
     final Map<String, StatisticsCache> statsCache = new HashMap<>();
-    final String[] indexNames = new String[] {index.getName()};
+    final String[] indexNames =
+        Arrays.stream(indices).map(i -> i.getName()).toArray(i -> new String[i]);
     final InternalAdapterStore internalAdapterStore =
         getDataStorePluginOptions().createInternalAdapterStore();
     final MathTransform mathTransform = TestUtils.transformFromCrs(crs);
@@ -540,7 +718,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
           final boolean needsInit = adapterCache.adapterExists(data.getTypeName());
           final DataTypeAdapter<SimpleFeature> adapter = data.getAdapter(adapterCache);
           if (!needsInit && (adapter instanceof InitializeWithIndicesDataAdapter)) {
-            ((InitializeWithIndicesDataAdapter) adapter).init(index);
+            ((InitializeWithIndicesDataAdapter) adapter).init(indices);
             adapterCache.addAdapter(adapter);
           }
           // it should be a statistical data adapter

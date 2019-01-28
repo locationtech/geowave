@@ -128,7 +128,7 @@ public class GeoWaveRowRange implements Writable {
     }
 
     return (endKey == null)
-        ? ByteArrayUtils.combineArrays(ByteArray.getNextPrefix(partitionKey), endKey)
+        ? ByteArrayUtils.combineArrays(ByteArrayUtils.getNextPrefix(partitionKey), endKey)
         : ByteArrayUtils.combineArrays(partitionKey, endKey);
   }
 

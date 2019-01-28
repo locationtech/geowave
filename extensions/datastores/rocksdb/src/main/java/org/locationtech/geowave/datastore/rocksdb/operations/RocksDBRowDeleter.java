@@ -8,19 +8,25 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.operations;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import java.util.Arrays;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBClient;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBIndexTable;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBRow;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 public class RocksDBRowDeleter implements RowDeleter {
+  private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBRowDeleter.class);
+
   private static class CacheKey {
     private final String tableName;
     private final short adapterId;
@@ -82,7 +88,7 @@ public class RocksDBRowDeleter implements RowDeleter {
   }
 
   @Override
-  public void close() throws Exception {
+  public void close() {
     tableCache.asMap().forEach((k, v) -> v.flush());
     tableCache.invalidateAll();
   }
@@ -104,12 +110,28 @@ public class RocksDBRowDeleter implements RowDeleter {
                 RocksDBUtils.getTableName(
                     internalAdapterStore.getTypeName(row.getAdapterId()),
                     indexName,
-                    row.getAdapterId(),
                     row.getPartitionKey()),
                 row.getAdapterId(),
                 row.getPartitionKey()));
+    if (row instanceof GeoWaveRowImpl) {
+      final GeoWaveKey key = ((GeoWaveRowImpl) row).getKey();
+      if (key instanceof RocksDBRow) {
+        deleteRow(table, (RocksDBRow) key);
+      } else {
+        LOGGER.warn(
+            "Unable to convert scanned row into RocksDBRow for deletion.  Row is of type GeoWaveRowImpl.");
+      }
+    } else if (row instanceof RocksDBRow) {
+      deleteRow(table, (RocksDBRow) row);
+    } else {
+      LOGGER.warn(
+          "Unable to convert scanned row into RocksDBRow for deletion. Row is of type "
+              + row.getClass());
+    }
+  }
 
-    Arrays.stream(((RocksDBRow) row).getKeys()).forEach(k -> table.delete(k));
+  private static void deleteRow(final RocksDBIndexTable table, final RocksDBRow row) {
+    Arrays.stream(row.getKeys()).forEach(k -> table.delete(k));
   }
 
   @Override

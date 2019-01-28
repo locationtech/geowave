@@ -32,6 +32,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.operations.ParallelDecoder;
@@ -115,12 +116,12 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
       List<Pair<byte[], byte[]>> unprocessedRanges = Lists.newLinkedList();
       for (ByteArrayRange byteArrayRange : ranges) {
         if (byteArrayRange.getStart() != null) {
-          byte[] startRow = byteArrayRange.getStart().getBytes();
+          byte[] startRow = byteArrayRange.getStart();
           byte[] stopRow;
           if (!byteArrayRange.isSingleValue()) {
-            stopRow = byteArrayRange.getEnd().getNextPrefix();
+            stopRow = ByteArrayUtils.getNextPrefix(byteArrayRange.getEnd());
           } else {
-            stopRow = byteArrayRange.getStart().getNextPrefix();
+            stopRow = ByteArrayUtils.getNextPrefix(byteArrayRange.getStart());
           }
           unprocessedRanges.add(new Pair<byte[], byte[]>(startRow, stopRow));
         }

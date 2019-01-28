@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.adapter;
 
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -57,7 +56,7 @@ public class InternalDataAdapterWrapper<T> implements InternalDataAdapter<T> {
   }
 
   @Override
-  public ByteArray getDataId(final T entry) {
+  public byte[] getDataId(final T entry) {
     return adapter.getDataId(entry);
   }
 

@@ -753,6 +753,13 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>secondary-index-it</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreOptions>enableSecondaryIndex=true</testStoreOptions>
+			</properties>
+		</profile>
+		<profile>
 			<id>hbase-it-all</id>
 			<properties>
 				<skipITs>false</skipITs>

@@ -26,7 +26,6 @@ import org.locationtech.geowave.core.geotime.util.IndexOptimizationUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
@@ -151,7 +150,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
                   timeConstraintSet);
           // convert to constraints
           final Constraints timeConstraints =
-              SpatialTemporalQuery.createConstraints(temporalConstraints, false);
+              ExplicitSpatialTemporalQuery.createConstraints(temporalConstraints, false);
           constraints = geoConstraints.getConstraints().merge(timeConstraints);
         }
         // TODO: this actually doesn't boost performance much, if at
@@ -174,10 +173,10 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
         // specified, so specify a CRS if necessary
         if (GeometryUtils.getDefaultCRS().equals(
             adapter.getFeatureType().getCoordinateReferenceSystem())) {
-          baseQuery = new SpatialQuery(constraints, geometry, extractedCompareOp);
+          baseQuery = new ExplicitSpatialQuery(constraints, geometry, extractedCompareOp);
         } else {
           baseQuery =
-              new SpatialQuery(
+              new ExplicitSpatialQuery(
                   constraints,
                   geometry,
                   GeometryUtils.getCrsCode(adapter.getFeatureType().getCoordinateReferenceSystem()),
@@ -206,7 +205,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
             TimeUtils.getTemporalConstraintsForDescriptors(
                 adapter.getTimeDescriptors(),
                 timeConstraintSet);
-        baseQuery = new TemporalQuery(temporalConstraints);
+        baseQuery = new ExplicitTemporalQuery(temporalConstraints);
       }
     }
     // if baseQuery completely represents CQLQuery expression then use that
@@ -231,15 +230,10 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
   public QueryConstraints createQueryConstraints(
       final DataTypeAdapter<?> adapter,
       final Index index) {
-    if (adapter instanceof GeotoolsFeatureDataAdapter) {
-      return createOptimalQuery(filter, (GeotoolsFeatureDataAdapter) adapter, index);
-    }
-    if ((adapter instanceof InternalDataAdapter)
-        && (((InternalDataAdapter) adapter).getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
-      return createOptimalQuery(
-          filter,
-          (GeotoolsFeatureDataAdapter) ((InternalDataAdapter) adapter).getAdapter(),
-          index);
+    final GeotoolsFeatureDataAdapter gtAdapter =
+        IndexOptimizationUtils.unwrapGeotoolsFeatureDataAdapter(adapter);
+    if (gtAdapter != null) {
+      return createOptimalQuery(filter, gtAdapter, index);
     }
     LOGGER.error("Adapter is not a geotools feature adapter.  Cannot apply CQL filter.");
     return null;

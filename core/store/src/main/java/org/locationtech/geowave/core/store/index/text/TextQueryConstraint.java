@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.core.store.index.text;
 
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
@@ -53,7 +53,9 @@ public class TextQueryConstraint implements FilterableConstraints {
   public QueryRanges getQueryRanges() {
     // TODO case sensitivity
     return new QueryRanges(
-        new ByteArrayRange(new ByteArray(matchValue), new ByteArray(matchValue)));
+        new ByteArrayRange(
+            StringUtils.stringToBinary(matchValue),
+            StringUtils.stringToBinary(matchValue)));
   }
 
   @Override

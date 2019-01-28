@@ -8,13 +8,8 @@
  */
 package org.locationtech.geowave.core.index;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Sets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import javax.annotation.Nonnull;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -232,34 +227,20 @@ public class IndexUtils {
     return Math.log(v) / Math.log(2);
   }
 
-  public static Set<ByteArray> getQueryPartitionKeys(
+  public static byte[][] getQueryPartitionKeys(
       final NumericIndexStrategy strategy,
       final MultiDimensionalNumericData queryData,
       final IndexMetaData... hints) {
     final QueryRanges queryRanges = strategy.getQueryRanges(queryData, hints);
-    return Sets.newHashSet(
-        Collections2.transform(
-            queryRanges.getPartitionQueryRanges(),
-            new Function<SinglePartitionQueryRanges, ByteArray>() {
-              @Override
-              public ByteArray apply(@Nonnull final SinglePartitionQueryRanges input) {
-                return input.getPartitionKey();
-              }
-            }));
+    return queryRanges.getPartitionQueryRanges().stream().map(
+        input -> input.getPartitionKey()).toArray(i -> new byte[i][]);
   }
 
-  public static Set<ByteArray> getInsertionPartitionKeys(
+  public static byte[][] getInsertionPartitionKeys(
       final NumericIndexStrategy strategy,
       final MultiDimensionalNumericData insertionData) {
     final InsertionIds insertionIds = strategy.getInsertionIds(insertionData);
-    return Sets.newHashSet(
-        Collections2.transform(
-            insertionIds.getPartitionKeys(),
-            new Function<SinglePartitionInsertionIds, ByteArray>() {
-              @Override
-              public ByteArray apply(@Nonnull final SinglePartitionInsertionIds input) {
-                return input.getPartitionKey();
-              }
-            }));
+    return insertionIds.getPartitionKeys().stream().map(input -> input.getPartitionKey()).toArray(
+        i -> new byte[i][]);
   }
 }

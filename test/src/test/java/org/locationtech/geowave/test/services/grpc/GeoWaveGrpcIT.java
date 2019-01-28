@@ -135,10 +135,10 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
 
-    Assert.assertTrue(client.LocalToGeowaveCommand());
+    Assert.assertTrue(client.LocalToGeoWaveCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED LocalToGeowaveCommand  *");
+    LOGGER.warn("* FINISHED LocalToGeoWaveCommand  *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -157,10 +157,10 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
 
-    Assert.assertTrue(client.KafkaToGeowaveCommand());
+    Assert.assertTrue(client.KafkaToGeoWaveCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED KafkaToGeowaveCommand  *");
+    LOGGER.warn("* FINISHED KafkaToGeoWaveCommand  *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -168,10 +168,10 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
 
-    Assert.assertTrue(client.MapReduceToGeowaveCommand());
+    Assert.assertTrue(client.MapReduceToGeoWaveCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED MapReduceToGeowaveCommand  *");
+    LOGGER.warn("* FINISHED MapReduceToGeoWaveCommand  *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -191,10 +191,10 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("-----------------------------------------");
 
     Assert.assertTrue("several plugins expected", countLines(plugins) > 10);
-    Assert.assertTrue(client.LocalToMapReduceToGeowaveCommand());
+    Assert.assertTrue(client.LocalToMapReduceToGeoWaveCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED LocalToMapReduceToGeowaveCommand  *");
+    LOGGER.warn("* FINISHED LocalToMapReduceToGeoWaveCommand  *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -202,10 +202,10 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
 
-    Assert.assertTrue(client.SparkToGeowaveCommand());
+    Assert.assertTrue(client.SparkToGeoWaveCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED SparkToGeowaveCommand  *");
+    LOGGER.warn("* FINISHED SparkToGeoWaveCommand  *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)

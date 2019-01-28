@@ -53,7 +53,7 @@ public class CoordinateRangeQueryFilter implements QueryFilter {
         persistenceEncoding.getInsertionSortKey());
   }
 
-  private boolean inBounds(final ByteArray partitionKey, final ByteArray sortKey) {
+  private boolean inBounds(final byte[] partitionKey, final byte[] sortKey) {
     final MultiDimensionalCoordinates coordinates =
         indexStrategy.getCoordinatesPerDimension(partitionKey, sortKey);
     return rangeCache.inBounds(coordinates);

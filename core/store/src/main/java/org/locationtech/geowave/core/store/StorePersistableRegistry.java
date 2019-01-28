@@ -25,10 +25,9 @@ import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibil
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
+import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.NullIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.index.numeric.NumberRangeFilter;
 import org.locationtech.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
 import org.locationtech.geowave.core.store.index.temporal.DateRangeFilter;
@@ -78,10 +77,10 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 213, PrefixIdQueryFilter::new),
         new PersistableIdAndConstructor((short) 215, BasicIndexModel::new),
         new PersistableIdAndConstructor((short) 216, IndexMetaDataSet::new),
-        new PersistableIdAndConstructor((short) 217, PrimaryIndex::new),
+        new PersistableIdAndConstructor((short) 217, IndexImpl::new),
         new PersistableIdAndConstructor((short) 218, CustomNameIndex::new),
         new PersistableIdAndConstructor((short) 219, NullIndex::new),
-        new PersistableIdAndConstructor((short) 220, SecondaryIndexImpl::new),
+        // 220 is available
         new PersistableIdAndConstructor((short) 221, NumberRangeFilter::new),
         new PersistableIdAndConstructor((short) 222, NumericFieldIndexStrategy::new),
         new PersistableIdAndConstructor((short) 224, DateRangeFilter::new),

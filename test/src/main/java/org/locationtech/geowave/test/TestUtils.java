@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.test;
 
-import com.beust.jcommander.ParameterException;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
@@ -39,11 +37,7 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.geometry.jts.JTS;
-import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
-import org.geotools.temporal.object.DefaultInstant;
-import org.geotools.temporal.object.DefaultPeriod;
-import org.geotools.temporal.object.DefaultPosition;
 import org.junit.Assert;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
@@ -53,12 +47,15 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TWKBReader;
 import org.locationtech.geowave.core.geotime.util.TWKBWriter;
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.ingest.operations.LocalToGeowaveCommand;
@@ -82,30 +79,41 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.And;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
-import org.opengis.filter.spatial.SpatialOperator;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
-import org.opengis.temporal.Period;
-import org.opengis.temporal.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class TestUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
 
   public static enum DimensionalityType {
-    SPATIAL("spatial"), SPATIAL_TEMPORAL("spatial_temporal"), ALL("spatial,spatial_temporal");
+    SPATIAL("spatial", DEFAULT_SPATIAL_INDEX), SPATIAL_TEMPORAL("spatial_temporal",
+        DEFAULT_SPATIAL_TEMPORAL_INDEX), ALL("spatial,spatial_temporal",
+            new Index[] {DEFAULT_SPATIAL_INDEX, DEFAULT_SPATIAL_TEMPORAL_INDEX});
     private final String dimensionalityArg;
+    private final Index[] indices;
 
-    private DimensionalityType(final String dimensionalityArg) {
+    private DimensionalityType(final String dimensionalityArg, final Index index) {
+      this(dimensionalityArg, new Index[] {index});
+    }
+
+    private DimensionalityType(final String dimensionalityArg, final Index[] indices) {
       this.dimensionalityArg = dimensionalityArg;
+      this.indices = indices;
     }
 
     public String getDimensionalityArg() {
       return dimensionalityArg;
+    }
+
+    public Index[] getDefaultIndices() {
+      return indices;
     }
   }
 
@@ -452,8 +460,8 @@ public class TestUtils {
     final Set<Long> hashedCentroids = new HashSet<>();
     int expectedResultCount = 0;
     final MathTransform mathTransform = transformFromCrs(crs);
-    TWKBWriter writer = new TWKBWriter();
-    TWKBReader reader = new TWKBReader();
+    final TWKBWriter writer = new TWKBWriter();
+    final TWKBReader reader = new TWKBReader();
     for (final URL expectedResultsResource : expectedResultsResources) {
       map.put("url", expectedResultsResource);
       SimpleFeatureIterator featureIterator = null;
@@ -568,57 +576,40 @@ public class TestUtils {
           final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
           Filter timeConstraint;
           if (useDuring) {
-            final Position ip1 = new DefaultPosition(startDate);
-            final Position ip2 = new DefaultPosition(endDate);
-            final Period period =
-                new DefaultPeriod(new DefaultInstant(ip1), new DefaultInstant(ip2));
             timeConstraint =
-                factory.during(
-                    factory.property(optimalCqlQueryGeometryAndTimeField.getRight()),
-                    factory.literal(period));
+                TimeUtils.toDuringFilter(
+                    startDate.getTime(),
+                    endDate.getTime(),
+                    optimalCqlQueryGeometryAndTimeField.getRight());
           } else {
             timeConstraint =
-                factory.and(
-                    factory.greaterOrEqual(
-                        factory.property(optimalCqlQueryGeometryAndTimeField.getRight()),
-                        factory.literal(startDate)),
-                    factory.lessOrEqual(
-                        factory.property(optimalCqlQueryGeometryAndTimeField.getRight()),
-                        factory.literal(endDate)));
+                TimeUtils.toFilter(
+                    startDate.getTime(),
+                    endDate.getTime(),
+                    optimalCqlQueryGeometryAndTimeField.getRight(),
+                    optimalCqlQueryGeometryAndTimeField.getRight());
           }
 
           final And expression =
               factory.and(
-                  geometryToSpatialOperator(filterGeometry, optimalCqlQueryGeometryAndTimeField),
+                  GeometryUtils.geometryToSpatialOperator(
+                      filterGeometry,
+                      optimalCqlQueryGeometryAndTimeField.getLeft()),
                   timeConstraint);
           return new OptimalCQLQuery(expression);
         }
-        return new SpatialTemporalQuery(startDate, endDate, filterGeometry, crsCode);
+        return new SpatialTemporalQuery(
+            new ExplicitSpatialTemporalQuery(startDate, endDate, filterGeometry, crsCode));
       }
     }
     if (optimalCqlQueryGeometryAndTimeField != null) {
       return new OptimalCQLQuery(
-          geometryToSpatialOperator(filterGeometry, optimalCqlQueryGeometryAndTimeField));
+          GeometryUtils.geometryToSpatialOperator(
+              filterGeometry,
+              optimalCqlQueryGeometryAndTimeField.getLeft()));
     }
     // otherwise just return a spatial query
-    return new SpatialQuery(filterGeometry, crsCode);
-  }
-
-  private static SpatialOperator geometryToSpatialOperator(
-      final Geometry jtsGeom,
-      final Pair<String, String> optimalCqlQueryGeometryAndTimeField) {
-    final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
-    if (jtsGeom.equalsTopo(jtsGeom.getEnvelope())) {
-      return factory.bbox(
-          factory.property(optimalCqlQueryGeometryAndTimeField.getLeft()),
-          new ReferencedEnvelope(jtsGeom.getEnvelopeInternal(), GeometryUtils.getDefaultCRS()));
-    }
-    // there apparently is no way to associate a CRS with a poly
-    // intersection operation so it will have to assume the same CRS as the
-    // feature type
-    return factory.intersects(
-        factory.property(optimalCqlQueryGeometryAndTimeField.getLeft()),
-        factory.literal(jtsGeom));
+    return new SpatialQuery(new ExplicitSpatialQuery(filterGeometry, crsCode));
   }
 
   protected static void replaceParameters(final Map<String, String> values, final File file)
@@ -634,15 +625,15 @@ public class TestUtils {
   }
 
   /** @param testName Name of the test that we are starting. */
-  public static void printStartOfTest(final Logger LOGGER, final String testName) {
+  public static void printStartOfTest(final Logger logger, final String testName) {
     // Format
     final String paddedName = StringUtils.center("STARTING " + testName, 37);
     // Print
-    LOGGER.warn("-----------------------------------------");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("* " + paddedName + " *");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("-----------------------------------------");
+    logger.warn("-----------------------------------------");
+    logger.warn("*                                       *");
+    logger.warn("* " + paddedName + " *");
+    logger.warn("*                                       *");
+    logger.warn("-----------------------------------------");
   }
 
   /**
@@ -650,7 +641,7 @@ public class TestUtils {
    * @param startMillis The time (millis) that the test started.
    */
   public static void printEndOfTest(
-      final Logger LOGGER,
+      final Logger logger,
       final String testName,
       final long startMillis) {
     // Get Elapsed Time
@@ -659,12 +650,12 @@ public class TestUtils {
     final String paddedName = StringUtils.center("FINISHED " + testName, 37);
     final String paddedElapsed = StringUtils.center(elapsedS + "s elapsed.", 37);
     // Print
-    LOGGER.warn("-----------------------------------------");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("* " + paddedName + " *");
-    LOGGER.warn("* " + paddedElapsed + " *");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("-----------------------------------------");
+    logger.warn("-----------------------------------------");
+    logger.warn("*                                       *");
+    logger.warn("* " + paddedName + " *");
+    logger.warn("* " + paddedElapsed + " *");
+    logger.warn("*                                       *");
+    logger.warn("-----------------------------------------");
   }
 
   /**

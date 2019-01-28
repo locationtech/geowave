@@ -40,7 +40,6 @@ public class MapReduceMemoryDataStore extends BaseMapReduceDataStore {
         new AdapterStoreImpl(operations, new MemoryRequiredOptions().getStoreOptions()),
         new DataStatisticsStoreImpl(operations, new MemoryRequiredOptions().getStoreOptions()),
         new AdapterIndexMappingStoreImpl(operations, new MemoryRequiredOptions().getStoreOptions()),
-        null,
         operations,
         new MemoryRequiredOptions().getStoreOptions(),
         new InternalAdapterStoreImpl(operations));

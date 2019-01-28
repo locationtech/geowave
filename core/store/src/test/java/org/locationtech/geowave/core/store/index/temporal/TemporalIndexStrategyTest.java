@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.index.temporal;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -27,8 +28,9 @@ public class TemporalIndexStrategyTest {
     final InsertionIds insertionIds = strategy.getInsertionIds(date);
     Assert.assertTrue(insertionIds.getSize() == 1);
     Assert.assertTrue(
-        insertionIds.getCompositeInsertionIds().contains(
-            new ByteArray(Lexicoders.LONG.toByteArray(date.getTime()))));
+        insertionIds.getCompositeInsertionIds().stream().map(i -> new ByteArray(i)).collect(
+            Collectors.toSet()).contains(
+                new ByteArray(Lexicoders.LONG.toByteArray(date.getTime()))));
   }
 
   @Test
@@ -39,7 +41,7 @@ public class TemporalIndexStrategyTest {
     Assert.assertTrue(
         ranges.getCompositeQueryRanges().get(0).equals(
             new ByteArrayRange(
-                new ByteArray(Lexicoders.LONG.toByteArray(date.getTime())),
-                new ByteArray(Lexicoders.LONG.toByteArray(date.getTime())))));
+                Lexicoders.LONG.toByteArray(date.getTime()),
+                Lexicoders.LONG.toByteArray(date.getTime()))));
   }
 }

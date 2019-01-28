@@ -38,7 +38,7 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
-import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
@@ -71,7 +71,12 @@ import org.slf4j.LoggerFactory;
     value = {
         GeoWaveStoreType.ACCUMULO,
         GeoWaveStoreType.CASSANDRA,
-        GeoWaveStoreType.HBASE,
+        // Because of DynamoDB API limitations, this particular test "works" but takes too long for
+        // DynamoDB
+        // GeoWaveStoreType.DYNAMODB,
+        // HBase also seems to be up near the time limit, for now ignore HBase, but in the future we
+        // should trim HBase timing elsewhere
+        // GeoWaveStoreType.HBASE,
         GeoWaveStoreType.REDIS,
         GeoWaveStoreType.ROCKSDB})
 public class SpatialTemporalQueryIT {
@@ -243,7 +248,7 @@ public class SpatialTemporalQueryIT {
       cal.roll(Calendar.MINUTE, 5);
       featureTimeRangeBuilder.add(cal.getTime());
       feature = featureTimeRangeBuilder.buildFeature("outlier1timerange");
-      timeWriters.write(feature);
+      rangeWriters.write(feature);
 
       pt = geomFactory.createPoint(new Coordinate(50, 50));
       featureTimeRangeBuilder.add(pt);
@@ -251,7 +256,7 @@ public class SpatialTemporalQueryIT {
       cal.roll(Calendar.MINUTE, 5);
       featureTimeRangeBuilder.add(cal.getTime());
       feature = featureTimeRangeBuilder.buildFeature("outlier2timerange");
-      timeWriters.write(feature);
+      rangeWriters.write(feature);
 
       // Ingest data for duplicate deletion, should not overlap time
       // ranges from other tests
@@ -374,7 +379,7 @@ public class SpatialTemporalQueryIT {
     featureTimeRangeBuilder.add(cal.getTime());
     cal.set(field, max);
     featureTimeRangeBuilder.add(cal.getTime());
-    SimpleFeature feature = featureTimeRangeBuilder.buildFeature(name + ":fullrange");
+    final SimpleFeature feature = featureTimeRangeBuilder.buildFeature(name + ":fullrange");
     writer.write(feature);
   }
 
@@ -445,9 +450,9 @@ public class SpatialTemporalQueryIT {
             + "'";
     final Set<String> fidResults = new HashSet<>();
     try (CloseableIterator<SimpleFeature> it =
-        (CloseableIterator) dataStore.query(
+        dataStore.query(
             bldr.constraints(
-                new SpatialTemporalQuery(
+                new ExplicitSpatialTemporalQuery(
                     startOfQuery,
                     endOfQuery,
                     new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)))).build())) {
@@ -488,7 +493,7 @@ public class SpatialTemporalQueryIT {
 
   @Test
   public void testQueryMultipleBinsDay() throws IOException, CQLException {
-    VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+    final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     bldr.indexName(DAY_INDEX.getName());
     currentGeotoolsIndex = DAY_INDEX;
     final Calendar cal = getInitialDayCalendar();
@@ -503,7 +508,7 @@ public class SpatialTemporalQueryIT {
 
   @Test
   public void testQueryMultipleBinsMonth() throws IOException, CQLException {
-    VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+    final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     bldr.indexName(MONTH_INDEX.getName());
     currentGeotoolsIndex = MONTH_INDEX;
     final Calendar cal = getInitialMonthCalendar();
@@ -518,7 +523,7 @@ public class SpatialTemporalQueryIT {
 
   @Test
   public void testQueryMultipleBinsYear() throws IOException, CQLException {
-    VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+    final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     bldr.indexName(YEAR_INDEX.getName());
     currentGeotoolsIndex = YEAR_INDEX;
     final Calendar cal = getInitialYearCalendar();
@@ -591,7 +596,7 @@ public class SpatialTemporalQueryIT {
 
   @Test
   public void testTimeRangeAcrossBinsMonth() throws IOException, CQLException {
-    VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+    final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     bldr.indexName(MONTH_INDEX.getName());
     currentGeotoolsIndex = MONTH_INDEX;
     bldr.setTypeNames(new String[] {timeRangeAdapter.getTypeName()});
@@ -607,7 +612,7 @@ public class SpatialTemporalQueryIT {
 
   @Test
   public void testTimeRangeAcrossBinsYear() throws IOException, CQLException {
-    VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+    final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     bldr.indexName(YEAR_INDEX.getName());
     currentGeotoolsIndex = YEAR_INDEX;
     bldr.setTypeNames(new String[] {timeRangeAdapter.getTypeName()});
@@ -636,8 +641,8 @@ public class SpatialTemporalQueryIT {
     cal.set(Calendar.YEAR, DUPLICATE_DELETION_YEAR_MAX);
     Date endOfQuery = cal.getTime();
 
-    SpatialTemporalQuery fullRangeQuery =
-        new SpatialTemporalQuery(
+    final ExplicitSpatialTemporalQuery fullRangeQuery =
+        new ExplicitSpatialTemporalQuery(
             startOfQuery,
             endOfQuery,
             new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)));
@@ -651,8 +656,8 @@ public class SpatialTemporalQueryIT {
     cal.set(Calendar.YEAR, MULTI_YEAR_MAX);
     endOfQuery = cal.getTime();
 
-    SpatialTemporalQuery sanityQuery =
-        new SpatialTemporalQuery(
+    final ExplicitSpatialTemporalQuery sanityQuery =
+        new ExplicitSpatialTemporalQuery(
             startOfQuery,
             endOfQuery,
             new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)));
@@ -666,8 +671,8 @@ public class SpatialTemporalQueryIT {
     cal.set(Calendar.YEAR, DUPLICATE_DELETION_YEAR_MIN + 1);
     endOfQuery = cal.getTime();
 
-    SpatialTemporalQuery deletionQuery =
-        new SpatialTemporalQuery(
+    final ExplicitSpatialTemporalQuery deletionQuery =
+        new ExplicitSpatialTemporalQuery(
             startOfQuery,
             endOfQuery,
             new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)));
@@ -679,7 +684,7 @@ public class SpatialTemporalQueryIT {
     long sanity_count = 0;
     long sanity_duplicates = 0;
 
-    DuplicateCountCallback<SimpleFeature> dupeCounter = new DuplicateCountCallback<SimpleFeature>();
+    DuplicateCountCallback<SimpleFeature> dupeCounter = new DuplicateCountCallback<>();
     try (CloseableIterator<?> dataIt =
         ((BaseDataStore) dataStore).query(bldr.constraints(sanityQuery).build(), dupeCounter)) {
       while (dataIt.hasNext()) {
@@ -692,10 +697,10 @@ public class SpatialTemporalQueryIT {
 
     // there should be four entries with duplicates 1980-1987, 1987-1995,
     // 1980-1995, 1970-1974
-    long numExpectedEntries = 4;
+    final long numExpectedEntries = 4;
     // there should be four duplicates for the range 1970-1974 (one for each
     // year after 1970)
-    long numExpectedDuplicates = (DUPLICATE_DELETION_YEAR_MAX - DUPLICATE_DELETION_YEAR_MIN);
+    final long numExpectedDuplicates = (DUPLICATE_DELETION_YEAR_MAX - DUPLICATE_DELETION_YEAR_MIN);
 
     // check and count the number of entries with duplicates
     DuplicateEntryCount dupeEntryCount =
@@ -707,7 +712,7 @@ public class SpatialTemporalQueryIT {
     Assert.assertEquals(numExpectedEntries, dupeEntryCount.getEntriesWithDuplicatesCount());
 
     // check and count the duplicates for 1970-1974
-    dupeCounter = new DuplicateCountCallback<SimpleFeature>();
+    dupeCounter = new DuplicateCountCallback<>();
     try (CloseableIterator<?> dataIt =
         ((BaseDataStore) dataStore).query(bldr.constraints(fullRangeQuery).build(), dupeCounter)) {
       while (dataIt.hasNext()) {
@@ -723,7 +728,7 @@ public class SpatialTemporalQueryIT {
 
     // if the delete works there should be no more duplicates for this
     // entry...
-    dupeCounter = new DuplicateCountCallback<SimpleFeature>();
+    dupeCounter = new DuplicateCountCallback<>();
     try (CloseableIterator<?> dataIt =
         ((BaseDataStore) dataStore).query(bldr.constraints(fullRangeQuery).build(), dupeCounter)) {
       while (dataIt.hasNext()) {
@@ -749,7 +754,7 @@ public class SpatialTemporalQueryIT {
 
     // finally check we didn't accidentally delete any duplicates of the
     // sanity query range
-    dupeCounter = new DuplicateCountCallback<SimpleFeature>();
+    dupeCounter = new DuplicateCountCallback<>();
     try (CloseableIterator<?> dataIt =
         ((BaseDataStore) dataStore).query(bldr.constraints(sanityQuery).build(), dupeCounter)) {
       while (dataIt.hasNext()) {
@@ -779,7 +784,7 @@ public class SpatialTemporalQueryIT {
     public void close() throws IOException {}
 
     @Override
-    public void entryScanned(final T entry, GeoWaveRow row) {
+    public void entryScanned(final T entry, final GeoWaveRow row) {
       numDuplicates += row.getNumberOfDuplicates();
     }
   }

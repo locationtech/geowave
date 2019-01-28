@@ -25,6 +25,9 @@ import org.locationtech.geowave.core.geotime.store.dimension.Time.TimeRange;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.Timestamp;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeArrayField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporalQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
@@ -58,13 +61,13 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 309, TimeArrayField::new),
         new PersistableIdAndConstructor((short) 310, TimeField::new),
         new PersistableIdAndConstructor((short) 311, SpatialQueryFilter::new),
-        new PersistableIdAndConstructor((short) 312, SpatialQuery::new),
+        new PersistableIdAndConstructor((short) 312, ExplicitSpatialQuery::new),
         new PersistableIdAndConstructor((short) 313, CustomCRSSpatialField::new),
         new PersistableIdAndConstructor((short) 314, CustomCRSBoundedSpatialDimension::new),
         new PersistableIdAndConstructor((short) 315, CustomCrsIndexModel::new),
         new PersistableIdAndConstructor((short) 316, IndexOnlySpatialQuery::new),
-        new PersistableIdAndConstructor((short) 317, SpatialTemporalQuery::new),
-        new PersistableIdAndConstructor((short) 318, TemporalQuery::new),
+        new PersistableIdAndConstructor((short) 317, ExplicitSpatialTemporalQuery::new),
+        new PersistableIdAndConstructor((short) 318, ExplicitTemporalQuery::new),
         new PersistableIdAndConstructor((short) 319, CustomCRSUnboundedSpatialDimension::new),
         new PersistableIdAndConstructor((short) 320, BasicBinningStrategy::new),
         new PersistableIdAndConstructor((short) 321, CustomCRSUnboundedSpatialDimensionX::new),
@@ -76,6 +79,10 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 327, VectorBoundingBoxAggregation::new),
         new PersistableIdAndConstructor((short) 328, CommonIndexBoundingBoxAggregation::new),
         new PersistableIdAndConstructor((short) 329, OptimalVectorBoundingBoxAggregation::new),
-        new PersistableIdAndConstructor((short) 330, OptimalCQLQuery::new),};
+        new PersistableIdAndConstructor((short) 330, OptimalCQLQuery::new),
+        new PersistableIdAndConstructor((short) 331, SpatialQuery::new),
+        new PersistableIdAndConstructor((short) 332, SpatialTemporalQuery::new),
+        new PersistableIdAndConstructor((short) 333, TemporalQuery::new),};
+
   }
 }

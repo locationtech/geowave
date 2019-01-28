@@ -12,6 +12,7 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.function.Consumer;
 import org.apache.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -26,7 +27,7 @@ import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -53,6 +54,7 @@ import org.locationtech.jts.geom.Point;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import com.aol.cyclops.util.function.QuadConsumer;
 
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
@@ -63,7 +65,8 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB},
+      options = {"enableVisibility=true", "enableSecondaryIndexing=false"})
   protected DataStorePluginOptions dataStoreOptions;
 
   private static final Logger LOGGER = Logger.getLogger(AbstractGeoWaveIT.class);
@@ -489,17 +492,41 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
   @Test
   public void testIngestAndQueryMixedVisibilityFields()
       throws MismatchedIndexToAdapterMapping, IOException {
+    testIngestAndQueryVisibilityFields(
+        dataStoreOptions,
+        getFeatureVisWriter(),
+        (differingVisibilities) -> Assert.assertEquals(
+            "Exactly half the entries should have differing visibility",
+            TOTAL_FEATURES / 2,
+            differingVisibilities.getEntriesWithDifferingFieldVisibilities()),
+        (store, statsStore, internalAdapterId, spatial) -> {
+          try {
+            testQueryMixed(store, statsStore, internalAdapterId, spatial);
+          } catch (final IOException e) {
+            LOGGER.warn("Unable to test visibility query", e);
+            Assert.fail(e.getMessage());
+          }
+        },
+        TOTAL_FEATURES);
+  }
+
+  public static void testIngestAndQueryVisibilityFields(
+      final DataStorePluginOptions dataStoreOptions,
+      final VisibilityWriter<SimpleFeature> visibilityWriter,
+      final Consumer<DifferingFieldVisibilityEntryCount> verifyDifferingVisibilities,
+      final QuadConsumer<DataStore, DataStatisticsStore, Short, Boolean> verifyQuery,
+      int totalFeatures) {
     final SimpleFeatureBuilder bldr = new SimpleFeatureBuilder(getType());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(getType());
     final DataStore store = dataStoreOptions.createDataStore();
     store.addType(adapter, TestUtils.DEFAULT_SPATIAL_INDEX);
     try (Writer writer = store.createWriter(adapter.getTypeName())) {
-      for (int i = 0; i < TOTAL_FEATURES; i++) {
+      for (int i = 0; i < totalFeatures; i++) {
         bldr.set("a", Integer.toString(i));
         bldr.set("b", Integer.toString(i));
         bldr.set("c", Integer.toString(i));
         bldr.set("geometry", new GeometryFactory().createPoint(new Coordinate(0, 0)));
-        writer.write(bldr.buildFeature(Integer.toString(i)), getFeatureVisWriter());
+        writer.write(bldr.buildFeature(Integer.toString(i)), visibilityWriter);
       }
     }
     final DataStatisticsStore statsStore = dataStoreOptions.createDataStatisticsStore();
@@ -516,14 +543,11 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
             statsId.getType())) {
       final DifferingFieldVisibilityEntryCount differingVisibilities =
           differingVisibilitiesIt.next();
-      Assert.assertEquals(
-          "Exactly half the entries should have differing visibility",
-          TOTAL_FEATURES / 2,
-          differingVisibilities.getEntriesWithDifferingFieldVisibilities());
-      testQueryMixed(store, statsStore, internalAdapterId, false);
-      testQueryMixed(store, statsStore, internalAdapterId, true);
-      TestUtils.deleteAll(dataStoreOptions);
+      verifyDifferingVisibilities.accept(differingVisibilities);
     }
+    verifyQuery.accept(store, statsStore, internalAdapterId, false);
+    verifyQuery.accept(store, statsStore, internalAdapterId, true);
+    TestUtils.deleteAll(dataStoreOptions);
   }
 
   private VisibilityWriter<SimpleFeature> getFeatureVisWriter() {
@@ -654,7 +678,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
         TOTAL_FEATURES * 4);
   }
 
-  private static void testQuery(
+  public static void testQuery(
       final DataStore store,
       final DataStatisticsStore statsStore,
       final short internalAdapterId,
@@ -666,7 +690,8 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
         (CloseableIterator) store.query(
             QueryBuilder.newBuilder().setAuthorizations(auths).constraints(
                 spatial
-                    ? new SpatialQuery(new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)))
+                    ? new ExplicitSpatialQuery(
+                        new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)))
                     : null).build())) {
       int resultCount = 0;
       int nonNullFieldsCount = 0;
@@ -701,7 +726,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
             AggregationQueryBuilder.newBuilder().count(getType().getTypeName()).setAuthorizations(
                 auths).constraints(
                     spatial
-                        ? new SpatialQuery(
+                        ? new ExplicitSpatialQuery(
                             new GeometryFactory().toGeometry(new Envelope(-1, 1, -1, 1)))
                         : null).build());
     Assert.assertEquals(

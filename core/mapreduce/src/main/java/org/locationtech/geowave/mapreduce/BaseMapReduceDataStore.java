@@ -24,7 +24,6 @@ import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
@@ -43,7 +42,6 @@ public class BaseMapReduceDataStore extends BaseDataStore implements MapReduceDa
       final PersistentAdapterStore adapterStore,
       final DataStatisticsStore statisticsStore,
       final AdapterIndexMappingStore indexMappingStore,
-      final SecondaryIndexDataStore secondaryIndexDataStore,
       final MapReduceDataStoreOperations operations,
       final DataStoreOptions options,
       final InternalAdapterStore adapterMappingStore) {
@@ -52,7 +50,6 @@ public class BaseMapReduceDataStore extends BaseDataStore implements MapReduceDa
         adapterStore,
         statisticsStore,
         indexMappingStore,
-        secondaryIndexDataStore,
         operations,
         options,
         adapterMappingStore);
@@ -96,7 +93,8 @@ public class BaseMapReduceDataStore extends BaseDataStore implements MapReduceDa
         internalAdapterStore,
         aimStore,
         indexStore,
-        (MapReduceDataStoreOperations) baseOperations);
+        (MapReduceDataStoreOperations) baseOperations,
+        baseOptions.getDataIndexBatchSize());
   }
 
   protected SplitsProvider createSplitsProvider() {

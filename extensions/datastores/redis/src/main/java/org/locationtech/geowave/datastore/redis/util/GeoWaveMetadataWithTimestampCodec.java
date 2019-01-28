@@ -8,22 +8,29 @@
  */
 package org.locationtech.geowave.datastore.redis.util;
 
-import io.netty.buffer.ByteBuf;
 import java.io.IOException;
 import org.redisson.client.codec.BaseCodec;
 import org.redisson.client.handler.State;
 import org.redisson.client.protocol.Decoder;
 import org.redisson.client.protocol.Encoder;
+import io.netty.buffer.ByteBuf;
 
 public class GeoWaveMetadataWithTimestampCodec extends BaseCodec {
-  protected static GeoWaveMetadataWithTimestampCodec SINGLETON =
-      new GeoWaveMetadataWithTimestampCodec();
+  protected static GeoWaveMetadataWithTimestampCodec SINGLETON_WITH_VISIBILITY =
+      new GeoWaveMetadataWithTimestampCodec(true);
+  protected static GeoWaveMetadataWithTimestampCodec SINGLETON_WITHOUT_VISIBILITY =
+      new GeoWaveMetadataWithTimestampCodec(false);
   private final Decoder<Object> decoder = new Decoder<Object>() {
     @Override
     public Object decode(final ByteBuf buf, final State state) throws IOException {
       final byte[] primaryId = new byte[buf.readUnsignedByte()];
       final byte[] secondaryId = new byte[buf.readUnsignedByte()];
-      final byte[] visibility = new byte[buf.readUnsignedByte()];
+      final byte[] visibility;
+      if (visibilityEnabled) {
+        visibility = new byte[buf.readUnsignedByte()];
+      } else {
+        visibility = new byte[0];
+      }
       final byte[] value = new byte[buf.readUnsignedShort()];
       buf.readBytes(primaryId);
       buf.readBytes(secondaryId);
@@ -42,7 +49,7 @@ public class GeoWaveMetadataWithTimestampCodec extends BaseCodec {
     public ByteBuf encode(final Object in) throws IOException {
       if (in instanceof GeoWaveTimestampMetadata) {
         final GeoWaveTimestampMetadata md = (GeoWaveTimestampMetadata) in;
-        final ByteBuf out = GeoWaveMetadataCodec.encodeMetadata(md);
+        final ByteBuf out = GeoWaveMetadataCodec.encodeMetadata(md, visibilityEnabled);
         out.writeLong(md.getMillisFromEpoch());
         return out;
       } else {
@@ -50,8 +57,33 @@ public class GeoWaveMetadataWithTimestampCodec extends BaseCodec {
       }
     }
   };
+  private final boolean visibilityEnabled;
+  private final ClassLoader classLoader;
 
-  private GeoWaveMetadataWithTimestampCodec() {}
+  private GeoWaveMetadataWithTimestampCodec(final boolean visibilityEnabled) {
+    this(null, visibilityEnabled);
+  }
+
+  public GeoWaveMetadataWithTimestampCodec(
+      final ClassLoader classLoader,
+      final GeoWaveMetadataWithTimestampCodec codec) {
+    this(classLoader, codec.visibilityEnabled);
+  }
+
+  private GeoWaveMetadataWithTimestampCodec(
+      final ClassLoader classLoader,
+      final boolean visibilityEnabled) {
+    this.classLoader = classLoader;
+    this.visibilityEnabled = visibilityEnabled;
+  }
+
+  @Override
+  public ClassLoader getClassLoader() {
+    if (classLoader != null) {
+      return classLoader;
+    }
+    return super.getClassLoader();
+  }
 
   @Override
   public Decoder<Object> getValueDecoder() {

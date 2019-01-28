@@ -44,7 +44,7 @@ import org.locationtech.geowave.analytic.partitioner.OrthodromicDistancePartitio
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -141,7 +141,7 @@ public class DBScanIT extends AbstractGeoWaveIT {
     }
 
     try {
-      runScan(new SpatialQuery(dataGenerator.getBoundingRegion()));
+      runScan(new ExplicitSpatialQuery(dataGenerator.getBoundingRegion()));
     } catch (final Exception e) {
       e.printStackTrace();
       TestUtils.deleteAll(dataStorePluginOptions);

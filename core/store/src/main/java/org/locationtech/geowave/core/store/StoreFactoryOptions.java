@@ -46,7 +46,7 @@ public abstract class StoreFactoryOptions {
     return geowaveNamespace;
   }
 
-  public void setGeowaveNamespace(final String geowaveNamespace) {
+  public void setGeoWaveNamespace(final String geowaveNamespace) {
     this.geowaveNamespace = geowaveNamespace;
   }
 

@@ -67,8 +67,8 @@ public class TemporalQueryConstraint implements FilterableConstraints {
   public QueryRanges getQueryRanges() {
     return new QueryRanges(
         new ByteArrayRange(
-            new ByteArray(TemporalIndexStrategy.toIndexByte(start)),
-            new ByteArray(TemporalIndexStrategy.toIndexByte(end))));
+            TemporalIndexStrategy.toIndexByte(start),
+            TemporalIndexStrategy.toIndexByte(end)));
   }
 
   /**

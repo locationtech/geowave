@@ -807,7 +807,7 @@ public class GeoWaveGrpcTestClient {
     return true;
   }
 
-  public boolean LocalToGeowaveCommand() {
+  public boolean LocalToGeoWaveCommand() {
     final ArrayList<String> params = new ArrayList<>();
     params.add(TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/");
     params.add(GeoWaveGrpcTestUtils.storeName);
@@ -822,7 +822,7 @@ public class GeoWaveGrpcTestClient {
     return true;
   }
 
-  public boolean MapReduceToGeowaveCommand() {
+  public boolean MapReduceToGeoWaveCommand() {
     final ArrayList<String> params = new ArrayList<>();
     params.add(GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory());
     params.add(GeoWaveGrpcTestUtils.storeName);
@@ -837,7 +837,7 @@ public class GeoWaveGrpcTestClient {
     return true;
   }
 
-  public boolean SparkToGeowaveCommand() {
+  public boolean SparkToGeoWaveCommand() {
     final ArrayList<String> params = new ArrayList<>();
 
     final File tempDataDir = new File("./" + TestUtils.TEST_CASE_BASE);
@@ -865,7 +865,7 @@ public class GeoWaveGrpcTestClient {
     return true;
   }
 
-  public boolean LocalToMapReduceToGeowaveCommand() {
+  public boolean LocalToMapReduceToGeoWaveCommand() {
     final ArrayList<String> params = new ArrayList<>();
     params.add(TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/");
     params.add(GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory());
@@ -882,7 +882,7 @@ public class GeoWaveGrpcTestClient {
     return true;
   }
 
-  public boolean KafkaToGeowaveCommand() {
+  public boolean KafkaToGeoWaveCommand() {
     final ArrayList<String> params = new ArrayList<>();
     params.add(GeoWaveGrpcTestUtils.storeName);
     params.add(GeoWaveGrpcTestUtils.indexName);

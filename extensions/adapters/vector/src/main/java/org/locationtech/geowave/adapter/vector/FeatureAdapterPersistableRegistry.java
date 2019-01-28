@@ -8,11 +8,7 @@
  */
 package org.locationtech.geowave.adapter.vector;
 
-import org.locationtech.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration;
-import org.locationtech.geowave.adapter.vector.index.SecondaryIndexManager;
 import org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration;
-import org.locationtech.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration;
-import org.locationtech.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
 import org.locationtech.geowave.adapter.vector.ingest.CQLFilterOptionProvider;
 import org.locationtech.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
 import org.locationtech.geowave.adapter.vector.ingest.FeatureSerializationOptionProvider;
@@ -52,7 +48,7 @@ public class FeatureAdapterPersistableRegistry implements PersistableRegistrySpi
     return new PersistableIdAndConstructor[] {
         new PersistableIdAndConstructor((short) 500, GeoWaveAvroFeatureDataAdapter::new),
         new PersistableIdAndConstructor((short) 501, FeatureDataAdapter::new),
-        new PersistableIdAndConstructor((short) 502, SecondaryIndexManager::new),
+        // 502 is available
         new PersistableIdAndConstructor((short) 503, CQLFilterOptionProvider::new),
         new PersistableIdAndConstructor((short) 504, DataSchemaOptionProvider::new),
         new PersistableIdAndConstructor((short) 505, FeatureSerializationOptionProvider::new),
@@ -84,10 +80,9 @@ public class FeatureAdapterPersistableRegistry implements PersistableRegistrySpi
         new PersistableIdAndConstructor((short) 529, FeatureHyperLogLogConfig::new),
         new PersistableIdAndConstructor((short) 530, FeatureNumericHistogramConfig::new),
         new PersistableIdAndConstructor((short) 531, FeatureNumericRangeConfig::new),
-        new PersistableIdAndConstructor((short) 532, NumericSecondaryIndexConfiguration::new),
+        // 532 is available
         new PersistableIdAndConstructor((short) 533, SimpleFeaturePrimaryIndexConfiguration::new),
-        new PersistableIdAndConstructor((short) 534, TemporalSecondaryIndexConfiguration::new),
-        new PersistableIdAndConstructor((short) 535, TextSecondaryIndexConfiguration::new),
+        // 534 and 535 is available
         new PersistableIdAndConstructor((short) 536, GeometrySimpOptionProvider::new)};
   }
 }

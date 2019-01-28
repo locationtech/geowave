@@ -22,7 +22,7 @@ import org.locationtech.geowave.analytic.param.StoreParameters;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
@@ -111,7 +111,7 @@ public class ClusteringUtils {
     final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
     final QueryRanges ranges =
         DataStoreUtils.constraintsToQueryRanges(
-            new SpatialQuery(polygon).getIndexConstraints(index),
+            new ExplicitSpatialQuery(polygon).getIndexConstraints(index),
             index.getIndexStrategy(),
             null,
             -1);

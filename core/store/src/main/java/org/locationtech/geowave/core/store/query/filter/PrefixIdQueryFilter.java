@@ -10,7 +10,6 @@ package org.locationtech.geowave.core.store.query.filter;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -21,24 +20,20 @@ public class PrefixIdQueryFilter implements QueryFilter {
 
   public PrefixIdQueryFilter() {}
 
-  public PrefixIdQueryFilter(final ByteArray partitionKey, final ByteArray sortKeyPrefix) {
-    this.partitionKey =
-        ((partitionKey != null) && (partitionKey.getBytes() != null)) ? partitionKey.getBytes()
-            : new byte[0];
-    this.sortKeyPrefix = sortKeyPrefix.getBytes();
+  public PrefixIdQueryFilter(final byte[] partitionKey, final byte[] sortKeyPrefix) {
+    this.partitionKey = (partitionKey != null) ? partitionKey : new byte[0];
+    this.sortKeyPrefix = sortKeyPrefix;
   }
 
   @Override
   public boolean accept(
       final CommonIndexModel indexModel,
       final IndexedPersistenceEncoding persistenceEncoding) {
-    final ByteArray otherPartitionKey = persistenceEncoding.getInsertionPartitionKey();
+    final byte[] otherPartitionKey = persistenceEncoding.getInsertionPartitionKey();
     final byte[] otherPartitionKeyBytes =
-        ((otherPartitionKey != null) && (otherPartitionKey.getBytes() != null))
-            ? otherPartitionKey.getBytes()
-            : new byte[0];
-    final ByteArray sortKey = persistenceEncoding.getInsertionSortKey();
-    return (Arrays.equals(sortKeyPrefix, Arrays.copyOf(sortKey.getBytes(), sortKeyPrefix.length))
+        (otherPartitionKey != null) ? otherPartitionKey : new byte[0];
+    final byte[] sortKey = persistenceEncoding.getInsertionSortKey();
+    return (Arrays.equals(sortKeyPrefix, Arrays.copyOf(sortKey, sortKeyPrefix.length))
         && Arrays.equals(partitionKey, otherPartitionKeyBytes));
   }
 

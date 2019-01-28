@@ -10,8 +10,6 @@ package org.locationtech.geowave.core.store.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
 import org.locationtech.geowave.core.index.IndexMetaData;
@@ -144,8 +142,8 @@ public class CompoundHierarchicalIndexStrategyWrapper implements HierarchicalNum
 
   @Override
   public MultiDimensionalNumericData getRangeForId(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
+      final byte[] partitionKey,
+      final byte[] sortKey) {
     return parentStrategies.get(0).getRangeForId(partitionKey, sortKey);
   }
 
@@ -205,8 +203,8 @@ public class CompoundHierarchicalIndexStrategyWrapper implements HierarchicalNum
 
   @Override
   public MultiDimensionalCoordinates getCoordinatesPerDimension(
-      final ByteArray partitionKey,
-      final ByteArray sortKey) {
+      final byte[] partitionKey,
+      final byte[] sortKey) {
     return parentStrategies.get(0).getCoordinatesPerDimension(partitionKey, sortKey);
   }
 
@@ -218,19 +216,19 @@ public class CompoundHierarchicalIndexStrategyWrapper implements HierarchicalNum
   }
 
   @Override
-  public Set<ByteArray> getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
+  public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
     return parentStrategies.get(0).getInsertionPartitionKeys(insertionData);
   }
 
   @Override
-  public Set<ByteArray> getQueryPartitionKeys(
+  public byte[][] getQueryPartitionKeys(
       final MultiDimensionalNumericData queryData,
       final IndexMetaData... hints) {
     return parentStrategies.get(0).getQueryPartitionKeys(queryData, hints);
   }
 
   @Override
-  public Set<ByteArray> getPredefinedSplits() {
+  public byte[][] getPredefinedSplits() {
     return parentStrategies.get(0).getPredefinedSplits();
   }
 }

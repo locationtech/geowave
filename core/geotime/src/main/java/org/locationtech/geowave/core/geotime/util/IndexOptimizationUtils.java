@@ -14,10 +14,22 @@ import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialFie
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 
 public class IndexOptimizationUtils {
+
+  public static GeotoolsFeatureDataAdapter unwrapGeotoolsFeatureDataAdapter(
+      final DataTypeAdapter<?> adapter) {
+    if (adapter instanceof InternalDataAdapter) {
+      return unwrapGeotoolsFeatureDataAdapter(((InternalDataAdapter) adapter).getAdapter());
+    } else if (adapter instanceof GeotoolsFeatureDataAdapter) {
+      return (GeotoolsFeatureDataAdapter) adapter;
+    }
+    return null;
+  }
 
   public static boolean hasAtLeastSpatial(final Index index) {
     if ((index == null)

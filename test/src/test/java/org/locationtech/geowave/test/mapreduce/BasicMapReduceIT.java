@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.test.mapreduce;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
@@ -23,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
@@ -43,8 +41,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
-import org.locationtech.geowave.adapter.vector.export.VectorMRExportCommand;
-import org.locationtech.geowave.adapter.vector.export.VectorMRExportOptions;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -71,13 +67,12 @@ import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.MAP_REDUCE})
 public class BasicMapReduceIT extends AbstractGeoWaveIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(BasicMapReduceIT.class);
-  private static final String TEST_EXPORT_DIRECTORY = "basicMapReduceIT-export";
-
   protected static final String TEST_DATA_ZIP_RESOURCE_PATH =
       TestUtils.TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
   protected static final String TEST_CASE_GENERAL_GPX_BASE =
@@ -269,50 +264,10 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
 
   private void testMapReduceExportAndReingest(final DimensionalityType dimensionalityType)
       throws Exception {
-    final VectorMRExportCommand exportCommand = new VectorMRExportCommand();
-    final VectorMRExportOptions options = exportCommand.getMrOptions();
-
-    exportCommand.setStoreOptions(dataStorePluginOptions);
-
-    final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
-    final String exportPath = env.getHdfsBaseDirectory() + "/" + TEST_EXPORT_DIRECTORY;
-
-    final File exportDir = new File(exportPath.replace("file:", ""));
-    if (exportDir.exists()) {
-      boolean deleted = false;
-      int attempts = 5;
-      while (!deleted && (attempts-- > 0)) {
-        try {
-          FileUtils.deleteDirectory(exportDir);
-          deleted = true;
-        } catch (final Exception e) {
-          LOGGER.error("Export directory not deleted, trying again in 10s: " + e);
-          Thread.sleep(10000);
-        }
-      }
-    }
-
-    exportCommand.setParameters(exportPath, null);
-    options.setBatchSize(10000);
-    options.setMinSplits(MapReduceTestUtils.MIN_INPUT_SPLITS);
-    options.setMaxSplits(MapReduceTestUtils.MAX_INPUT_SPLITS);
-    options.setResourceManagerHostPort(env.getJobtracker());
-
-    final Configuration conf = MapReduceTestUtils.getConfiguration();
-    MapReduceTestUtils.filterConfiguration(conf);
-    final int res =
-        ToolRunner.run(conf, exportCommand.createRunner(env.getOperationParams()), new String[] {});
-    Assert.assertTrue("Export Vector Data map reduce job failed", res == 0);
-    TestUtils.deleteAll(dataStorePluginOptions);
-    MapReduceTestUtils.testMapReduceIngest(
+    MapReduceTestUtils.testMapReduceExportAndReingest(
         dataStorePluginOptions,
-        DimensionalityType.ALL,
-        "avro",
-        TestUtils.TEMP_DIR
-            + File.separator
-            + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY
-            + File.separator
-            + TEST_EXPORT_DIRECTORY);
+        dataStorePluginOptions,
+        dimensionalityType);
   }
 
   @SuppressFBWarnings(value = "DM_GC", justification = "Memory usage kept low for travis-ci")

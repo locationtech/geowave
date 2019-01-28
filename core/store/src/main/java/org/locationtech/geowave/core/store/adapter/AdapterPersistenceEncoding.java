@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.adapter;
 
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -22,7 +21,7 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
  */
 public class AdapterPersistenceEncoding extends AbstractAdapterPersistenceEncoding {
   public AdapterPersistenceEncoding(
-      final ByteArray dataId,
+      final byte[] dataId,
       final PersistentDataset<CommonIndexValue> commonData,
       final PersistentDataset<Object> adapterExtendedData) {
     this((short) -1, dataId, commonData, adapterExtendedData);
@@ -30,7 +29,7 @@ public class AdapterPersistenceEncoding extends AbstractAdapterPersistenceEncodi
 
   public AdapterPersistenceEncoding(
       final short internalAdapterId,
-      final ByteArray dataId,
+      final byte[] dataId,
       final PersistentDataset<CommonIndexValue> commonData,
       final PersistentDataset<Object> adapterExtendedData) {
     super(

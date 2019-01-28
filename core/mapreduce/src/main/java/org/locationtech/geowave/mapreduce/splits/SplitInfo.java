@@ -21,12 +21,13 @@ public class SplitInfo {
   private List<RangeLocationPair> rangeLocationPairs;
   private boolean mixedVisibility = true;
   private boolean authorizationsLimiting = true;
+  private boolean clientsideRowMerging = false;
 
   protected SplitInfo() {}
 
   public SplitInfo(final Index index) {
     this.index = index;
-    rangeLocationPairs = new ArrayList<RangeLocationPair>();
+    rangeLocationPairs = new ArrayList<>();
   }
 
   public SplitInfo(final Index index, final List<RangeLocationPair> rangeLocationPairs) {
@@ -47,8 +48,16 @@ public class SplitInfo {
     return authorizationsLimiting;
   }
 
-  public void setAuthorizationsLimiting(boolean authorizationsLimiting) {
+  public void setAuthorizationsLimiting(final boolean authorizationsLimiting) {
     this.authorizationsLimiting = authorizationsLimiting;
+  }
+
+  public boolean isClientsideRowMerging() {
+    return clientsideRowMerging;
+  }
+
+  public void setClientsideRowMerging(final boolean clientsideRowMerging) {
+    this.clientsideRowMerging = clientsideRowMerging;
   }
 
   public Index getIndex() {
@@ -65,7 +74,7 @@ public class SplitInfo {
     in.readFully(indexBytes);
     final Index index = (Index) PersistenceUtils.fromBinary(indexBytes);
     final int numRanges = in.readInt();
-    final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>(numRanges);
+    final List<RangeLocationPair> rangeList = new ArrayList<>(numRanges);
 
     for (int j = 0; j < numRanges; j++) {
       try {
@@ -80,6 +89,7 @@ public class SplitInfo {
     rangeLocationPairs = rangeList;
     mixedVisibility = in.readBoolean();
     authorizationsLimiting = in.readBoolean();
+    clientsideRowMerging = in.readBoolean();
   }
 
   public void write(final DataOutput out) throws IOException {
@@ -92,5 +102,6 @@ public class SplitInfo {
     }
     out.writeBoolean(mixedVisibility);
     out.writeBoolean(authorizationsLimiting);
+    out.writeBoolean(clientsideRowMerging);
   }
 }

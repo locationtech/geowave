@@ -15,29 +15,46 @@ import org.rocksdb.RocksIterator;
 
 public class RocksDBMetadataIterator extends AbstractRocksDBIterator<GeoWaveMetadata> {
   private final boolean containsTimestamp;
+  private final boolean visibilityEnabled;
 
-  public RocksDBMetadataIterator(final RocksIterator it, final boolean containsTimestamp) {
-    this(null, it, containsTimestamp);
+  public RocksDBMetadataIterator(
+      final RocksIterator it,
+      final boolean containsTimestamp,
+      final boolean visibilityEnabled) {
+    this(null, it, containsTimestamp, visibilityEnabled);
   }
 
   public RocksDBMetadataIterator(
       final ReadOptions options,
       final RocksIterator it,
-      final boolean containsTimestamp) {
+      final boolean containsTimestamp,
+      final boolean visibilityEnabled) {
     super(options, it);
     this.options = options;
     this.it = it;
     this.containsTimestamp = containsTimestamp;
+    this.visibilityEnabled = visibilityEnabled;
   }
 
   @Override
   protected GeoWaveMetadata readRow(final byte[] key, final byte[] value) {
     final ByteBuffer buf = ByteBuffer.wrap(key);
-    final byte[] primaryId = new byte[Byte.toUnsignedInt(key[key.length - 2])];
-    final byte[] visibility = new byte[Byte.toUnsignedInt(key[key.length - 1])];
-    final byte[] secondaryId =
-        new byte[containsTimestamp ? key.length - primaryId.length - visibility.length - 10
-            : key.length - primaryId.length - visibility.length - 2];
+    final byte[] primaryId = new byte[Byte.toUnsignedInt(key[key.length - 1])];
+    final byte[] visibility;
+
+    if (visibilityEnabled) {
+      visibility = new byte[Byte.toUnsignedInt(key[key.length - 2])];
+    } else {
+      visibility = new byte[0];
+    }
+    int secondaryIdLength = key.length - primaryId.length - visibility.length - 1;
+    if (containsTimestamp) {
+      secondaryIdLength -= 8;
+    }
+    if (visibilityEnabled) {
+      secondaryIdLength--;
+    }
+    final byte[] secondaryId = new byte[secondaryIdLength];
     buf.get(primaryId);
     buf.get(secondaryId);
     if (containsTimestamp) {
@@ -45,7 +62,9 @@ public class RocksDBMetadataIterator extends AbstractRocksDBIterator<GeoWaveMeta
       // its there for key uniqueness and to maintain expected sort order
       buf.position(buf.position() + 8);
     }
-    buf.get(visibility);
+    if (visibilityEnabled) {
+      buf.get(visibility);
+    }
 
     return new RocksDBGeoWaveMetadata(primaryId, secondaryId, visibility, value, key);
   }

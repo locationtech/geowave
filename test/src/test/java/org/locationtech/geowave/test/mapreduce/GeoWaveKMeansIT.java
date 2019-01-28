@@ -40,7 +40,7 @@ import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.SampleParameters;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -149,7 +149,7 @@ public class GeoWaveKMeansIT {
     TestUtils.deleteAll(dataStorePluginOptions);
     testIngest(dataStorePluginOptions.createDataStore());
 
-    runKPlusPlus(new SpatialQuery(dataGenerator.getBoundingRegion()));
+    runKPlusPlus(new ExplicitSpatialQuery(dataGenerator.getBoundingRegion()));
   }
 
   private void runKPlusPlus(final QueryConstraints query) throws Exception {

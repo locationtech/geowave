@@ -133,7 +133,7 @@ public class IngestOSMToGeoWaveCommand extends DefaultOperation implements Comma
     ingestOptions.setNameNode(hdfsHostPort);
 
     if (inputStoreOptions.getGeoWaveNamespace() == null) {
-      inputStoreOptions.getFactoryOptions().setGeowaveNamespace("osmnamespace");
+      inputStoreOptions.getFactoryOptions().setGeoWaveNamespace("osmnamespace");
     }
 
     if (ingestOptions.getVisibilityOptions().getVisibility() == null) {

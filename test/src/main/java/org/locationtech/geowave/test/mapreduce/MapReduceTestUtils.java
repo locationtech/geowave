@@ -11,7 +11,12 @@ package org.locationtech.geowave.test.mapreduce;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.util.ToolRunner;
+import org.junit.Assert;
+import org.locationtech.geowave.adapter.vector.export.VectorMRExportCommand;
+import org.locationtech.geowave.adapter.vector.export.VectorMRExportOptions;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
@@ -21,6 +26,7 @@ import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
+import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,19 +34,81 @@ import org.slf4j.LoggerFactory;
 public class MapReduceTestUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MapReduceTestUtils.class);
+  public static final String TEST_EXPORT_DIRECTORY = "basicMapReduceIT-export";
 
   public static final String EXPECTED_RESULTS_KEY = "EXPECTED_RESULTS";
   public static final int MIN_INPUT_SPLITS = 3;
   public static final int MAX_INPUT_SPLITS = 5;
 
-  protected static void testMapReduceIngest(
+  public static void testMapReduceIngest(
       final DataStorePluginOptions dataStore,
       final DimensionalityType dimensionalityType,
       final String ingestFilePath) throws Exception {
     testMapReduceIngest(dataStore, dimensionalityType, "gpx", ingestFilePath);
   }
 
-  protected static void testMapReduceIngest(
+  public static void testMapReduceExport(final DataStorePluginOptions inputStorePluginOptions)
+      throws Exception {
+    testMapReduceExport(inputStorePluginOptions, TEST_EXPORT_DIRECTORY);
+  }
+
+  public static void testMapReduceExport(
+      final DataStorePluginOptions inputStorePluginOptions,
+      final String directory) throws Exception {
+    final VectorMRExportCommand exportCommand = new VectorMRExportCommand();
+    final VectorMRExportOptions options = exportCommand.getMrOptions();
+
+    exportCommand.setStoreOptions(inputStorePluginOptions);
+
+    final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
+    final String exportPath = env.getHdfsBaseDirectory() + "/" + directory;
+
+    final File exportDir = new File(exportPath.replace("file:", ""));
+    if (exportDir.exists()) {
+      boolean deleted = false;
+      int attempts = 5;
+      while (!deleted && (attempts-- > 0)) {
+        try {
+          FileUtils.deleteDirectory(exportDir);
+          deleted = true;
+        } catch (final Exception e) {
+          LOGGER.error("Export directory not deleted, trying again in 10s: " + e);
+          Thread.sleep(10000);
+        }
+      }
+    }
+    exportCommand.setParameters(exportPath, null);
+    options.setBatchSize(10000);
+    options.setMinSplits(MapReduceTestUtils.MIN_INPUT_SPLITS);
+    options.setMaxSplits(MapReduceTestUtils.MAX_INPUT_SPLITS);
+    options.setResourceManagerHostPort(env.getJobtracker());
+
+    final Configuration conf = MapReduceTestUtils.getConfiguration();
+    MapReduceTestUtils.filterConfiguration(conf);
+    final int res =
+        ToolRunner.run(conf, exportCommand.createRunner(env.getOperationParams()), new String[] {});
+    Assert.assertTrue("Export Vector Data map reduce job failed", res == 0);
+
+    TestUtils.deleteAll(inputStorePluginOptions);
+  }
+
+  public static void testMapReduceExportAndReingest(
+      final DataStorePluginOptions inputStorePluginOptions,
+      final DataStorePluginOptions outputStorePluginOptions,
+      final DimensionalityType dimensionalityType) throws Exception {
+    testMapReduceExport(inputStorePluginOptions);
+    MapReduceTestUtils.testMapReduceIngest(
+        outputStorePluginOptions,
+        dimensionalityType,
+        "avro",
+        TestUtils.TEMP_DIR
+            + File.separator
+            + MapReduceTestEnvironment.HDFS_BASE_DIRECTORY
+            + File.separator
+            + TEST_EXPORT_DIRECTORY);
+  }
+
+  public static void testMapReduceIngest(
       final DataStorePluginOptions dataStore,
       final DimensionalityType dimensionalityType,
       final String format,
@@ -53,8 +121,7 @@ public class MapReduceTestUtils {
 
     // Indexes
     final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(",");
-    final List<IndexPluginOptions> indexOptions =
-        new ArrayList<IndexPluginOptions>(indexTypes.length);
+    final List<IndexPluginOptions> indexOptions = new ArrayList<>(indexTypes.length);
     for (final String indexType : indexTypes) {
       final IndexPluginOptions indexOption = new IndexPluginOptions();
       indexOption.selectPlugin(indexType);
@@ -67,8 +134,8 @@ public class MapReduceTestUtils {
 
     // create temporary config file and use it for hdfs FS URL config
 
-    File configFile = File.createTempFile("test_mr", null);
-    ManualOperationParams operationParams = new ManualOperationParams();
+    final File configFile = File.createTempFile("test_mr", null);
+    final ManualOperationParams operationParams = new ManualOperationParams();
     operationParams.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
 
     final ConfigHDFSCommand configHdfs = new ConfigHDFSCommand();
@@ -77,14 +144,14 @@ public class MapReduceTestUtils {
 
     final LocalToMapReduceToGeowaveCommand mrGw = new LocalToMapReduceToGeowaveCommand();
 
-    AddStoreCommand addStore = new AddStoreCommand();
+    final AddStoreCommand addStore = new AddStoreCommand();
     addStore.setParameters("test-store");
     addStore.setPluginOptions(dataStore);
     addStore.execute(operationParams);
 
-    StringBuilder indexParam = new StringBuilder();
+    final StringBuilder indexParam = new StringBuilder();
     for (int i = 0; i < indexOptions.size(); i++) {
-      AddIndexCommand addIndex = new AddIndexCommand();
+      final AddIndexCommand addIndex = new AddIndexCommand();
       addIndex.setParameters("test-index" + i);
       addIndex.setPluginOptions(indexOptions.get(i));
       addIndex.execute(operationParams);

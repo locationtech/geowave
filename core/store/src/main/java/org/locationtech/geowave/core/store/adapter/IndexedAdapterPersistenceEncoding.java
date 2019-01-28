@@ -10,7 +10,6 @@ package org.locationtech.geowave.core.store.adapter;
 
 import java.util.Map.Entry;
 import java.util.Set;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -26,9 +25,9 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
 public class IndexedAdapterPersistenceEncoding extends AbstractAdapterPersistenceEncoding {
   public IndexedAdapterPersistenceEncoding(
       final short adapterId,
-      final ByteArray dataId,
-      final ByteArray partitionKey,
-      final ByteArray sortKey,
+      final byte[] dataId,
+      final byte[] partitionKey,
+      final byte[] sortKey,
       final int duplicateCount,
       final PersistentDataset<CommonIndexValue> commonData,
       final PersistentDataset<byte[]> unknownData,

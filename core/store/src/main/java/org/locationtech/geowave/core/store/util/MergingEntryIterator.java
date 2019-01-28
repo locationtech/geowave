@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.BiFunction;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -20,6 +21,7 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -38,23 +40,26 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
       final PersistentAdapterStore adapterStore,
       final Index index,
       final Iterator<GeoWaveRow> scannerIt,
-      final QueryFilter clientFilter,
+      final QueryFilter[] clientFilters,
       final ScanCallback<T, GeoWaveRow> scanCallback,
       final Map<Short, RowMergingDataAdapter> mergingAdapters,
-      final double[] maxResolutionSubsamplingPerDimension) {
+      final double[] maxResolutionSubsamplingPerDimension,
+      final DataIndexRetrieval dataIndexRetrieval) {
     super(
         adapterStore,
         index,
         scannerIt,
-        clientFilter,
+        clientFilters,
         scanCallback,
         null,
         maxResolutionSubsamplingPerDimension,
-        true);
+        true,
+        dataIndexRetrieval);
     this.mergingAdapters = mergingAdapters;
-    transforms = new HashMap<Short, RowTransform>();
+    transforms = new HashMap<>();
   }
 
+  @Override
   protected GeoWaveRow getNextEncodedResult() {
     GeoWaveRow nextResult = scannerIt.next();
 
@@ -74,8 +79,8 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
   }
 
   private RowTransform getRowTransform(
-      short internalAdapterId,
-      RowMergingDataAdapter mergingAdapter) {
+      final short internalAdapterId,
+      final RowMergingDataAdapter mergingAdapter) {
     RowTransform transform = transforms.get(internalAdapterId);
     if (transform == null) {
       transform = mergingAdapter.getTransform();
@@ -103,7 +108,7 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
     // merge all values into a single value
     Mergeable merged = null;
 
-    for (GeoWaveValue fieldValue : singleRow.getFieldValues()) {
+    for (final GeoWaveValue fieldValue : singleRow.getFieldValues()) {
       final Mergeable mergeable =
           rowTransform.getRowAsMergeableObject(
               singleRow.getAdapterId(),
@@ -117,7 +122,7 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
       }
     }
 
-    GeoWaveValue[] mergedFieldValues =
+    final GeoWaveValue[] mergedFieldValues =
         new GeoWaveValue[] {
             new GeoWaveValueImpl(
                 singleRow.getFieldValues()[0].getFieldMask(),

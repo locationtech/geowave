@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -53,6 +53,7 @@ import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -169,29 +170,35 @@ public class AccumuloDataStoreStatsTest {
     mockDataStore.addType(adapter, index);
     try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(adapter.getTypeName())) {
       partitionKey =
-          indexWriter.write(
-              new TestGeometry(factory.createPoint(new Coordinate(25, 32)), "test_pt"),
-              visWriterAAA).getPartitionKeys().iterator().next().getPartitionKey();
+          new ByteArray(
+              indexWriter.write(
+                  new TestGeometry(factory.createPoint(new Coordinate(25, 32)), "test_pt"),
+                  visWriterAAA).getInsertionIdsWritten(
+                      index.getName()).getPartitionKeys().iterator().next().getPartitionKey());
       ByteArray testPartitionKey =
-          indexWriter.write(
-              new TestGeometry(factory.createPoint(new Coordinate(26, 32)), "test_pt_1"),
-              visWriterAAA).getPartitionKeys().iterator().next().getPartitionKey();
+          new ByteArray(
+              indexWriter.write(
+                  new TestGeometry(factory.createPoint(new Coordinate(26, 32)), "test_pt_1"),
+                  visWriterAAA).getInsertionIdsWritten(
+                      index.getName()).getPartitionKeys().iterator().next().getPartitionKey());
       // they should all be the same partition key, let's just make sure
       Assert.assertEquals(
           "test_pt_1 should have the same partition key as test_pt",
           partitionKey,
           testPartitionKey);
       testPartitionKey =
-          indexWriter.write(
-              new TestGeometry(factory.createPoint(new Coordinate(27, 32)), "test_pt_2"),
-              visWriterBBB).getPartitionKeys().iterator().next().getPartitionKey();
+          new ByteArray(
+              indexWriter.write(
+                  new TestGeometry(factory.createPoint(new Coordinate(27, 32)), "test_pt_2"),
+                  visWriterBBB).getInsertionIdsWritten(
+                      index.getName()).getPartitionKeys().iterator().next().getPartitionKey());
       Assert.assertEquals(
           "test_pt_2 should have the same partition key as test_pt",
           partitionKey,
           testPartitionKey);
     }
 
-    final SpatialQuery query = new SpatialQuery(testGeoFilter);
+    final ExplicitSpatialQuery query = new ExplicitSpatialQuery(testGeoFilter);
 
     try (CloseableIterator<?> it1 =
         mockDataStore.query(
@@ -262,8 +269,7 @@ public class AccumuloDataStoreStatsTest {
     ((BaseDataStore) mockDataStore).delete(
         (Query) QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
             index.getName()).setAuthorizations(new String[] {"aaa"}).constraints(
-                new DataIdQuery(
-                    new ByteArray("test_pt_2".getBytes(StringUtils.getGeoWaveCharset())))).build(),
+                new DataIdQuery("test_pt_2".getBytes(StringUtils.getGeoWaveCharset()))).build(),
         new ScanCallback<TestGeometry, GeoWaveRow>() {
 
           @Override
@@ -293,8 +299,7 @@ public class AccumuloDataStoreStatsTest {
     mockDataStore.delete(
         QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
             index.getName()).setAuthorizations(new String[] {"aaa"}).constraints(
-                new DataIdQuery(
-                    new ByteArray("test_pt".getBytes(StringUtils.getGeoWaveCharset())))).build());
+                new DataIdQuery("test_pt".getBytes(StringUtils.getGeoWaveCharset()))).build());
 
     try (CloseableIterator<?> it1 =
         mockDataStore.query(
@@ -414,7 +419,7 @@ public class AccumuloDataStoreStatsTest {
 
     final StatisticsId id =
         StatisticsQueryBuilder.newBuilder().factory().rowHistogram().indexName(
-            index.getName()).partition(partitionKey).build().getId();
+            index.getName()).partition(partitionKey.getBytes()).build().getId();
     RowRangeHistogramStatistics<?> histogramStats;
     try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it =
         statsStore.getDataStatistics(
@@ -486,6 +491,14 @@ public class AccumuloDataStoreStatsTest {
 
           @Override
           public void fromBinary(final byte[] bytes) {}
+
+          @Override
+          public CommonIndexValue toIndexValue(
+              final PersistentDataset<Object> adapterPersistenceEncoding) {
+            return new GeometryWrapper(
+                (Geometry) adapterPersistenceEncoding.getValue(GEOM),
+                new byte[0]);
+          }
         };
 
     private static final EntryVisibilityHandler<TestGeometry> GEOMETRY_VISIBILITY_HANDLER =
@@ -524,8 +537,8 @@ public class AccumuloDataStoreStatsTest {
     }
 
     @Override
-    public ByteArray getDataId(final TestGeometry entry) {
-      return new ByteArray(entry.id);
+    public byte[] getDataId(final TestGeometry entry) {
+      return StringUtils.stringToBinary(entry.id);
     }
 
     @SuppressWarnings("unchecked")
@@ -571,7 +584,7 @@ public class AccumuloDataStoreStatsTest {
         private Geometry geom;
 
         @Override
-        public TestGeometry buildRow(final ByteArray dataId) {
+        public TestGeometry buildRow(final byte[] dataId) {
           return new TestGeometry(geom, id);
         }
 

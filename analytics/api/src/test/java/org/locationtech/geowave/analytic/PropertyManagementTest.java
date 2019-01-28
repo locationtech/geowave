@@ -26,7 +26,7 @@ import org.locationtech.geowave.analytic.param.ExtractParameters;
 import org.locationtech.geowave.analytic.param.InputParameters.Input;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.ParameterHelper;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
@@ -99,27 +99,27 @@ public class PropertyManagementTest {
                 new Coordinate(28, 31),
                 new Coordinate(24, 31),
                 new Coordinate(24, 33)});
-    final SpatialQuery sq = new SpatialQuery(testGeoFilter);
+    final ExplicitSpatialQuery sq = new ExplicitSpatialQuery(testGeoFilter);
     final PropertyManagement pm = new PropertyManagement();
     pm.store(ExtractParameters.Extract.QUERY, QueryBuilder.newBuilder().constraints(sq).build());
     final Query q = pm.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
     assertNotNull(q);
     final QueryConstraints c = q.getQueryConstraints();
     assertNotNull(c);
-    assertNotNull(((SpatialQuery) c).getQueryGeometry());
+    assertNotNull(((ExplicitSpatialQuery) c).getQueryGeometry());
     assertEquals(
         "POLYGON ((24 33, 28 33, 28 31, 24 31, 24 33))",
-        ((SpatialQuery) c).getQueryGeometry().toText());
+        ((ExplicitSpatialQuery) c).getQueryGeometry().toText());
 
     pm.store(ExtractParameters.Extract.QUERY, q);
     final Query q1 = (Query) pm.getPropertyAsPersistable(ExtractParameters.Extract.QUERY);
     assertNotNull(q1);
     final QueryConstraints c1 = q1.getQueryConstraints();
     assertNotNull(c1);
-    assertNotNull(((SpatialQuery) c1).getQueryGeometry());
+    assertNotNull(((ExplicitSpatialQuery) c1).getQueryGeometry());
     assertEquals(
         "POLYGON ((24 33, 28 33, 28 31, 24 31, 24 33))",
-        ((SpatialQuery) c1).getQueryGeometry().toText());
+        ((ExplicitSpatialQuery) c1).getQueryGeometry().toText());
   }
 
   @Test

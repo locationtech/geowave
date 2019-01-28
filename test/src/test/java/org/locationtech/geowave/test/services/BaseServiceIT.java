@@ -26,22 +26,20 @@ public abstract class BaseServiceIT extends AbstractGeoWaveIT {
    *
    * Note: Slf4j does not expose the setLevel API, so this is using Log4j directly.
    */
-  void muteLogging() {
+  protected synchronized void muteLogging() {
+    if (loggerMap.isEmpty()) {
+      @SuppressWarnings("unchecked")
+      final List<Logger> currentLoggers = Collections.<Logger>list(LogManager.getCurrentLoggers());
+      currentLoggers.add(LogManager.getRootLogger());
 
-    loggerMap.clear();
-
-    @SuppressWarnings("unchecked")
-    final List<Logger> currentLoggers = Collections.<Logger>list(LogManager.getCurrentLoggers());
-    currentLoggers.add(LogManager.getRootLogger());
-
-    currentLoggers.forEach(logger -> {
-      loggerMap.put(logger.getName(), logger.getEffectiveLevel());
-      logger.setLevel(Level.OFF);
-    });
+      currentLoggers.forEach(logger -> {
+        loggerMap.put(logger.getName(), logger.getEffectiveLevel());
+        logger.setLevel(Level.OFF);
+      });
+    }
   }
 
-  void unmuteLogging() {
-
+  protected synchronized void unmuteLogging() {
     loggerMap.entrySet().forEach(entry -> {
       LogManager.getLogger(entry.getKey()).setLevel(entry.getValue());
     });

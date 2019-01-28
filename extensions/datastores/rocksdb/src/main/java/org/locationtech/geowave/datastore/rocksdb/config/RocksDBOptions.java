@@ -8,14 +8,14 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.rocksdb.RocksDBStoreFactoryFamily;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBUtils;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class RocksDBOptions extends StoreFactoryOptions {
   @Parameter(
@@ -38,6 +38,11 @@ public class RocksDBOptions extends StoreFactoryOptions {
     @Override
     protected int defaultAggregationMaxRangeDecomposition() {
       return RocksDBUtils.ROCKSDB_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION;
+    }
+
+    @Override
+    protected boolean defaultEnableVisibility() {
+      return false;
     }
   };
 

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.api;
 
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -38,7 +37,7 @@ public interface DataTypeAdapter<T> extends DataReader<Object>, DataWriter<T, Ob
    * @param entry the entry
    * @return the data ID
    */
-  public ByteArray getDataId(T entry);
+  public byte[] getDataId(T entry);
 
   /**
    * Decode GeoWave persistence payload into the entry

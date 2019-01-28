@@ -299,7 +299,7 @@ public class TemporalBinningStrategy implements BinningStrategy {
 
   @Override
   public BinRange[] getNormalizedRanges(final NumericData range) {
-    if (range.getMax() < range.getMin()) {
+    if (range == null || range.getMax() < range.getMin()) {
       return new BinRange[] {};
     }
     final Calendar startEpoch = Calendar.getInstance(TimeZone.getTimeZone(timezone));

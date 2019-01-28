@@ -8,11 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.export;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +37,11 @@ import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "localexport", parentOperation = VectorSection.class)
 @Parameters(commandDescription = "Export data directly")
@@ -86,7 +86,7 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
       dfw.create(AvroSimpleFeatureCollection.SCHEMA$, options.getOutputFile());
       // get appropriate feature adapters
       final List<GeotoolsFeatureDataAdapter> featureAdapters = new ArrayList<>();
-      if ((options.getTypeNames() != null) && options.getTypeNames().length > 0) {
+      if ((options.getTypeNames() != null) && (options.getTypeNames().length > 0)) {
         for (final String typeName : options.getTypeNames()) {
           final short adapterId = internalAdapterStore.getAdapterId(typeName);
           final InternalDataAdapter<?> internalDataAdapter = adapterStore.getAdapter(adapterId);
@@ -138,35 +138,36 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
         }
         bldr.addTypeName(adapter.getTypeName());
 
-        final CloseableIterator<SimpleFeature> it = dataStore.query(bldr.build());
-        int iteration = 0;
-        while (it.hasNext()) {
-          final AvroSimpleFeatureCollection simpleFeatureCollection =
-              new AvroSimpleFeatureCollection();
+        try (final CloseableIterator<SimpleFeature> it = dataStore.query(bldr.build())) {
+          int iteration = 0;
+          while (it.hasNext()) {
+            final AvroSimpleFeatureCollection simpleFeatureCollection =
+                new AvroSimpleFeatureCollection();
 
-          simpleFeatureCollection.setFeatureType(
-              GeoWaveAvroFeatureUtils.buildFeatureDefinition(null, sft, null, ""));
-          final List<AvroAttributeValues> avList = new ArrayList<>(options.getBatchSize());
-          while (it.hasNext() && (avList.size() < options.getBatchSize())) {
-            final Object obj = it.next();
-            if (obj instanceof SimpleFeature) {
-              final AvroAttributeValues av =
-                  GeoWaveAvroFeatureUtils.buildAttributeValue((SimpleFeature) obj, sft);
-              avList.add(av);
+            simpleFeatureCollection.setFeatureType(
+                GeoWaveAvroFeatureUtils.buildFeatureDefinition(null, sft, null, ""));
+            final List<AvroAttributeValues> avList = new ArrayList<>(options.getBatchSize());
+            while (it.hasNext() && (avList.size() < options.getBatchSize())) {
+              final Object obj = it.next();
+              if (obj instanceof SimpleFeature) {
+                final AvroAttributeValues av =
+                    GeoWaveAvroFeatureUtils.buildAttributeValue((SimpleFeature) obj, sft);
+                avList.add(av);
+              }
             }
+            JCommander.getConsole().println(
+                "Exported "
+                    + (avList.size() + (iteration * options.getBatchSize()))
+                    + " features from '"
+                    + sft.getTypeName()
+                    + "'");
+            iteration++;
+            simpleFeatureCollection.setSimpleFeatureCollection(avList);
+            dfw.append(simpleFeatureCollection);
+            dfw.flush();
           }
-          JCommander.getConsole().println(
-              "Exported "
-                  + (avList.size() + (iteration * options.getBatchSize()))
-                  + " features from '"
-                  + sft.getTypeName()
-                  + "'");
-          iteration++;
-          simpleFeatureCollection.setSimpleFeatureCollection(avList);
-          dfw.append(simpleFeatureCollection);
-          dfw.flush();
+          JCommander.getConsole().println("Finished exporting '" + sft.getTypeName() + "'");
         }
-        JCommander.getConsole().println("Finished exporting '" + sft.getTypeName() + "'");
       }
     }
   }

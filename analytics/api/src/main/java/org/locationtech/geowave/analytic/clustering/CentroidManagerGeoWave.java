@@ -51,6 +51,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -238,7 +239,8 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
         final QueryBuilder<?, ?> bldr =
             QueryBuilder.newBuilder().addTypeName(centroidDataTypeId).indexName(index.getName());
         dataStore.delete(
-            bldr.constraints(bldr.constraintsFactory().dataIds(new ByteArray(dataId))).build());
+            bldr.constraints(
+                bldr.constraintsFactory().dataIds(StringUtils.stringToBinary(dataId))).build());
       }
     }
   }
@@ -331,7 +333,8 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
             index.getName());
     try (CloseableIterator<T> it =
         dataStore.query(
-            bldr.constraints(bldr.constraintsFactory().dataIds(new ByteArray(dataId))).build())) {
+            bldr.constraints(
+                bldr.constraintsFactory().dataIds(StringUtils.stringToBinary(dataId))).build())) {
       if (it.hasNext()) {
         return centroidFactory.create(it.next());
       }

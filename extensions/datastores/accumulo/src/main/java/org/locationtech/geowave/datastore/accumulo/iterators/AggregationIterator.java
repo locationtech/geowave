@@ -32,7 +32,7 @@ import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,8 +99,7 @@ public class AggregationIterator extends Filter {
   @Override
   public boolean accept(final Key key, final Value value) {
     if (queryFilterIterator != null) {
-      final PersistentDataset<CommonIndexValue> commonData =
-          new PersistentDataset<CommonIndexValue>();
+      final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<>();
       key.getRow(currentRow);
       final FlattenedUnreadData unreadData =
           queryFilterIterator.aggregateFieldData(key, value, commonData);
@@ -137,8 +136,8 @@ public class AggregationIterator extends Filter {
         startRowOfAggregation = currentRow;
       }
     } else if (((Short) (persistenceEncoding.getInternalAdapterId())).equals(
-        (Short) (adapter.getAdapterId()))) {
-      final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
+        (adapter.getAdapterId()))) {
+      final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<>();
       if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
         ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
             adapter,
@@ -165,7 +164,7 @@ public class AggregationIterator extends Filter {
       // data, we pass along a null strategy to eliminate the necessity to
       // send a serialization of the strategy in the options of this
       // iterator
-      final Object row = adapter.decode(encoding, new PrimaryIndex(null, model));
+      final Object row = adapter.decode(encoding, new IndexImpl(null, model));
 
       if (row != null) {
         // for now ignore field info

@@ -103,7 +103,7 @@ public class AdapterBasedPartitionerTest {
     pluginOptions.selectPlugin("memory");
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
     final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
-    opts.setGeowaveNamespace(namespace);
+    opts.setGeoWaveNamespace(namespace);
     final PersistableStore store = new PersistableStore(pluginOptions);
     final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(ftype);
     dataAdapter.init();

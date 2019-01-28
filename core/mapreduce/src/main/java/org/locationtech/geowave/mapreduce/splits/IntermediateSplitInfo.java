@@ -19,12 +19,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.store.adapter.AdapterStoreWrapper;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.slf4j.Logger;
@@ -192,7 +197,7 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
     // are in the same location and the same index
 
     final TreeSet<IndexRangeLocation> orderedSplits =
-        new TreeSet<IndexRangeLocation>(new Comparator<IndexRangeLocation>() {
+        new TreeSet<>(new Comparator<IndexRangeLocation>() {
 
           @Override
           public int compare(final IndexRangeLocation o1, final IndexRangeLocation o2) {
@@ -286,9 +291,11 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
 
   public synchronized GeoWaveInputSplit toFinalSplit(
       final DataStatisticsStore statisticsStore,
+      final TransientAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
       final Map<String, List<Short>> indexIdToAdaptersMap,
       final String... authorizations) {
-    final Set<String> locations = new HashSet<String>();
+    final Set<String> locations = new HashSet<>();
     for (final Entry<String, SplitInfo> entry : splitInfo.entrySet()) {
       for (final RangeLocationPair pair : entry.getValue().getRangeLocationPairs()) {
         if ((pair.getLocation() != null) && !pair.getLocation().isEmpty()) {
@@ -297,19 +304,24 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
       }
     }
     for (final SplitInfo si : splitInfo.values()) {
+      final List<Short> adapterIds = indexIdToAdaptersMap.get(si.getIndex().getName());
       final DifferingFieldVisibilityEntryCount differingVisibilityCounts =
           DifferingFieldVisibilityEntryCount.getVisibilityCounts(
               si.getIndex(),
-              indexIdToAdaptersMap.get(si.getIndex().getName()),
+              adapterIds,
               statisticsStore,
               authorizations);
       final FieldVisibilityCount visibilityCounts =
           FieldVisibilityCount.getVisibilityCounts(
               si.getIndex(),
-              indexIdToAdaptersMap.get(si.getIndex().getName()),
+              adapterIds,
               statisticsStore,
               authorizations);
 
+      si.setClientsideRowMerging(
+          BaseDataStoreUtils.isRowMerging(
+              new AdapterStoreWrapper(adapterStore, internalAdapterStore),
+              ArrayUtils.toPrimitive(adapterIds.toArray(new Short[0]))));
       si.setMixedVisibility(
           (differingVisibilityCounts == null)
               || differingVisibilityCounts.isAnyEntryDifferingFieldVisiblity());

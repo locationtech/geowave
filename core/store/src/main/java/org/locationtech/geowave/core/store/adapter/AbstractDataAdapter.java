@@ -236,7 +236,7 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
    * @param dimension
    * @return field handler
    */
-  private IndexFieldHandler<T, ? extends CommonIndexValue, Object> getFieldHandler(
+  public IndexFieldHandler<T, ? extends CommonIndexValue, Object> getFieldHandler(
       final NumericDimensionField<? extends CommonIndexValue> dimension) {
     // first try explicit dimension matching
     IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler =

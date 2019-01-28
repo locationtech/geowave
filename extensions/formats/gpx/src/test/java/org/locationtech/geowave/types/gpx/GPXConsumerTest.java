@@ -142,6 +142,7 @@ public class GPXConsumerTest {
               new String[] {"123"},
               "123",
               new HashMap<String, Map<String, String>>(),
+              null,
               true,
               "",
               Double.MAX_VALUE);
@@ -204,6 +205,7 @@ public class GPXConsumerTest {
                 new String[] {"123"},
                 "",
                 new HashMap<String, Map<String, String>>(),
+                null,
                 false,
                 "",
                 Double.MAX_VALUE)) {

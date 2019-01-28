@@ -8,61 +8,68 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
-import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
-import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.DeleteTableRequest;
-import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
-import com.amazonaws.services.dynamodbv2.model.KeyType;
-import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
-import com.amazonaws.services.dynamodbv2.model.TableStatus;
-import com.amazonaws.services.dynamodbv2.util.TableUtils;
-import com.amazonaws.services.dynamodbv2.util.TableUtils.TableNeverTransitionedToStateException;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Supplier;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.ByteArrayUtils;
-import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
+import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
-import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
-import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.operations.RowReaderWrapper;
 import org.locationtech.geowave.core.store.operations.RowWriter;
-import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBClientPool;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBOptions;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
-import org.locationtech.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
+import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
+import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.BatchGetItemRequest;
+import com.amazonaws.services.dynamodbv2.model.BatchGetItemResult;
+import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
+import com.amazonaws.services.dynamodbv2.model.DeleteRequest;
+import com.amazonaws.services.dynamodbv2.model.DeleteTableRequest;
+import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
+import com.amazonaws.services.dynamodbv2.model.KeyType;
+import com.amazonaws.services.dynamodbv2.model.KeysAndAttributes;
+import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
+import com.amazonaws.services.dynamodbv2.model.TableStatus;
+import com.amazonaws.services.dynamodbv2.model.WriteRequest;
+import com.amazonaws.services.dynamodbv2.util.TableUtils;
+import com.amazonaws.services.dynamodbv2.util.TableUtils.TableNeverTransitionedToStateException;
 
 public class DynamoDBOperations implements MapReduceDataStoreOperations {
   private final Logger LOGGER = LoggerFactory.getLogger(DynamoDBOperations.class);
+  public static final int MAX_ROWS_FOR_BATCHGETITEM = 100;
+
+  public static final int MAX_ROWS_FOR_BATCHWRITER = 25;
 
   public static final String METADATA_PRIMARY_ID_KEY = "I";
   public static final String METADATA_SECONDARY_ID_KEY = "S";
@@ -101,34 +108,6 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
   public String getMetadataTableName(final MetadataType metadataType) {
     final String tableName = metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
     return getQualifiedTableName(tableName);
-  }
-
-  protected Iterator<DynamoDBRow> getRows(
-      final String tableName,
-      final byte[][] dataIds,
-      final byte[] adapterId,
-      final String... additionalAuthorizations) {
-    final String qName = getQualifiedTableName(tableName);
-    final Short adapterIdObj = ByteArrayUtils.byteArrayToShort(adapterId);
-    final Set<ByteArray> dataIdsSet = new HashSet<>(dataIds.length);
-    for (int i = 0; i < dataIds.length; i++) {
-      dataIdsSet.add(new ByteArray(dataIds[i]));
-    }
-    final ScanRequest request = new ScanRequest(qName);
-    final ScanResult scanResult = client.scan(request);
-    final Iterator<DynamoDBRow> everything =
-        new GeoWaveRowMergingIterator<>(
-            Iterators.transform(
-                new LazyPaginatedScan(scanResult, request, client),
-                new DynamoDBRow.GuavaRowTranslationHelper()));
-    return Iterators.filter(everything, new Predicate<DynamoDBRow>() {
-
-      @Override
-      public boolean apply(final DynamoDBRow input) {
-        return dataIdsSet.contains(new ByteArray(input.getDataId()))
-            && Short.valueOf(input.getAdapterId()).equals(adapterIdObj);
-      }
-    });
   }
 
   @Override
@@ -170,33 +149,129 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
 
   @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
+    final boolean isDataIndex = DataIndexUtils.isDataIndex(index.getName());
     final String qName = getQualifiedTableName(index.getName());
 
-    final DynamoDBWriter writer = new DynamoDBWriter(client, qName);
+    final DynamoDBWriter writer = new DynamoDBWriter(client, qName, isDataIndex);
 
-    createTable(qName);
+    createTable(qName, isDataIndex);
     return writer;
   }
 
-  private boolean createTable(final String qName) {
+  @Override
+  public RowWriter createDataIndexWriter(final InternalDataAdapter<?> adapter) {
+    return createWriter(DataIndexUtils.DATA_ID_INDEX, adapter);
+  }
+
+  @Override
+  public void delete(final DataIndexReaderParams readerParams) {
+    deleteRowsFromDataIndex(readerParams.getDataIds(), readerParams.getAdapterId());
+  }
+
+  public void deleteRowsFromDataIndex(final byte[][] dataIds, final short adapterId) {
+    final String tableName = getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName());
+    final Iterator<byte[]> dataIdIterator = Arrays.stream(dataIds).iterator();
+    while (dataIdIterator.hasNext()) {
+      final List<WriteRequest> deleteRequests = new ArrayList<>();
+      int i = 0;
+      while (dataIdIterator.hasNext() && (i < MAX_ROWS_FOR_BATCHWRITER)) {
+        deleteRequests.add(
+            new WriteRequest(
+                new DeleteRequest(
+                    Collections.singletonMap(
+                        DynamoDBRow.GW_PARTITION_ID_KEY,
+                        new AttributeValue().withB(ByteBuffer.wrap(dataIdIterator.next()))))));
+        i++;
+      }
+
+      client.batchWriteItem(Collections.singletonMap(tableName, deleteRequests));
+    }
+  }
+
+  @Override
+  public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
+    // TODO use authorizations if provided
+    return new RowReaderWrapper<>(
+        new CloseableIterator.Wrapper<>(
+            getRowsFromDataIndex(readerParams.getDataIds(), readerParams.getAdapterId())));
+  }
+
+  public Iterator<GeoWaveRow> getRowsFromDataIndex(final byte[][] dataIds, final short adapterId) {
+    final Map<ByteArray, GeoWaveRow> resultMap = new HashMap<>();
+    final Iterator<byte[]> dataIdIterator = Arrays.stream(dataIds).iterator();
+    while (dataIdIterator.hasNext()) {
+      // fill result map
+      final Collection<Map<String, AttributeValue>> dataIdsForRequest = new ArrayList<>();
+      int i = 0;
+      while (dataIdIterator.hasNext() && (i < MAX_ROWS_FOR_BATCHGETITEM)) {
+        dataIdsForRequest.add(
+            Collections.singletonMap(
+                DynamoDBRow.GW_PARTITION_ID_KEY,
+                new AttributeValue().withB(ByteBuffer.wrap(dataIdIterator.next()))));
+        i++;
+      }
+      BatchGetItemResult result =
+          getResults(
+              Collections.singletonMap(
+                  getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName()),
+                  new KeysAndAttributes().withKeys(dataIdsForRequest)),
+              adapterId,
+              resultMap);
+      while (!result.getUnprocessedKeys().isEmpty()) {
+        result = getResults(result.getUnprocessedKeys(), adapterId, resultMap);
+      }
+    }
+    return Arrays.stream(dataIds).map(d -> resultMap.get(new ByteArray(d))).iterator();
+  }
+
+  private BatchGetItemResult getResults(
+      final Map<String, KeysAndAttributes> requestItems,
+      final short adapterId,
+      final Map<ByteArray, GeoWaveRow> resultMap) {
+    final BatchGetItemRequest request = new BatchGetItemRequest(requestItems);
+
+    final BatchGetItemResult result = client.batchGetItem(request);
+    result.getResponses().values().forEach(results -> results.stream().forEach(objMap -> {
+      final byte[] dataId = objMap.get(DynamoDBRow.GW_PARTITION_ID_KEY).getB().array();
+      final AttributeValue valueAttr = objMap.get(DynamoDBRow.GW_VALUE_KEY);
+      final byte[] value = valueAttr == null ? null : valueAttr.getB().array();
+
+      resultMap.put(
+          new ByteArray(dataId),
+          DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, false));
+    }));
+    return result;
+  }
+
+  private boolean createTable(final String qName, final boolean dataIndexTable) {
+    return createTable(
+        qName,
+        dataIndexTable
+            ? () -> new CreateTableRequest().withTableName(qName).withAttributeDefinitions(
+                new AttributeDefinition(
+                    DynamoDBRow.GW_PARTITION_ID_KEY,
+                    ScalarAttributeType.B)).withKeySchema(
+                        new KeySchemaElement(DynamoDBRow.GW_PARTITION_ID_KEY, KeyType.HASH))
+            : () -> new CreateTableRequest().withTableName(qName).withAttributeDefinitions(
+                new AttributeDefinition(DynamoDBRow.GW_PARTITION_ID_KEY, ScalarAttributeType.B),
+                new AttributeDefinition(
+                    DynamoDBRow.GW_RANGE_KEY,
+                    ScalarAttributeType.B)).withKeySchema(
+                        new KeySchemaElement(DynamoDBRow.GW_PARTITION_ID_KEY, KeyType.HASH),
+                        new KeySchemaElement(DynamoDBRow.GW_RANGE_KEY, KeyType.RANGE)));
+  }
+
+  private boolean createTable(final String qName, final Supplier<CreateTableRequest> tableRequest) {
     synchronized (tableExistsCache) {
       final Boolean tableExists = tableExistsCache.get(qName);
       if ((tableExists == null) || !tableExists) {
         final boolean tableCreated =
             TableUtils.createTableIfNotExists(
                 client,
-                new CreateTableRequest().withTableName(qName).withAttributeDefinitions(
-                    new AttributeDefinition(DynamoDBRow.GW_PARTITION_ID_KEY, ScalarAttributeType.B),
-                    new AttributeDefinition(
-                        DynamoDBRow.GW_RANGE_KEY,
-                        ScalarAttributeType.B)).withKeySchema(
-                            new KeySchemaElement(DynamoDBRow.GW_PARTITION_ID_KEY, KeyType.HASH),
-                            new KeySchemaElement(
-                                DynamoDBRow.GW_RANGE_KEY,
-                                KeyType.RANGE)).withProvisionedThroughput(
-                                    new ProvisionedThroughput(
-                                        Long.valueOf(options.getReadCapacity()),
-                                        Long.valueOf(options.getWriteCapacity()))));
+                tableRequest.get().withProvisionedThroughput(
+                    new ProvisionedThroughput(
+                        Long.valueOf(options.getReadCapacity()),
+                        Long.valueOf(options.getWriteCapacity()))));
         if (tableCreated) {
           try {
             TableUtils.waitUntilActive(client, qName);
@@ -263,12 +338,15 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
 
   @Override
   public <T> RowReader<T> createReader(final ReaderParams<T> readerParams) {
-    return new DynamoDBReader<>(readerParams, this);
+    return new DynamoDBReader<>(readerParams, this, options.getBaseOptions().isVisibilityEnabled());
   }
 
   @Override
-  public <T> RowReader<T> createReader(final RecordReaderParams<T> recordReaderParams) {
-    return new DynamoDBReader<>(recordReaderParams, this);
+  public RowReader<GeoWaveRow> createReader(final RecordReaderParams recordReaderParams) {
+    return new DynamoDBReader<>(
+        recordReaderParams,
+        this,
+        options.getBaseOptions().isVisibilityEnabled());
   }
 
   @Override
@@ -278,28 +356,6 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
       final InternalAdapterStore internalAdapterStore,
       final String... authorizations) {
     return new DynamoDBDeleter(this, getQualifiedTableName(indexName));
-  }
-
-  @Override
-  public boolean mergeData(
-      final Index index,
-      PersistentAdapterStore adapterStore,
-      InternalAdapterStore internalAdapterStore,
-      final AdapterIndexMappingStore adapterIndexMappingStore) {
-    return DataStoreUtils.mergeData(
-        this,
-        options.getStoreOptions(),
-        index,
-        adapterStore,
-        internalAdapterStore,
-        adapterIndexMappingStore);
-  }
-
-  @Override
-  public boolean mergeStats(
-      final DataStatisticsStore statsStore,
-      final InternalAdapterStore internalAdapterStore) {
-    return DataStoreUtils.mergeStats(statsStore, internalAdapterStore);
   }
 
   @Override
@@ -314,17 +370,7 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
   }
 
   public boolean createIndex(final Index index) throws IOException {
-    return createTable(getQualifiedTableName(index.getName()));
-  }
-
-  @Override
-  public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
-    return new QueryAndDeleteByRow<>(
-        createRowDeleter(
-            readerParams.getIndex().getName(),
-            readerParams.getAdapterStore(),
-            readerParams.getInternalAdapterStore(),
-            readerParams.getAdditionalAuthorizations()),
-        createReader(readerParams));
+    final String indexName = index.getName();
+    return createTable(getQualifiedTableName(indexName), DataIndexUtils.isDataIndex(indexName));
   }
 }

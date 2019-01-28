@@ -13,7 +13,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
@@ -24,26 +23,19 @@ import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.text.cql2.CQLException;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration;
-import org.locationtech.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration;
-import org.locationtech.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
 import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
-import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.SecondaryIndexType;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -352,7 +344,6 @@ public class FeatureDataAdapterTest {
 
   @Test
   public void testCRSProjecttioin() {
-
     final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
     typeBuilder.setName("test");
     typeBuilder.setCRS(GeometryUtils.getDefaultCRS()); // <- Coordinate
@@ -380,34 +371,5 @@ public class FeatureDataAdapterTest {
     assertEquals(
         dataAdapterCopy.getFeatureType().getCoordinateReferenceSystem().getCoordinateSystem(),
         GeometryUtils.getDefaultCRS().getCoordinateSystem());
-  }
-
-  @Test
-  public void testSecondaryIndicies() throws SchemaException {
-    final SimpleFeatureType sfType =
-        DataUtilities.createType(
-            "stateCapitalData",
-            "location:Geometry,"
-                + "city:String,"
-                + "state:String,"
-                + "since:Date,"
-                + "landArea:Double,"
-                + "munincipalPop:Integer,"
-                + "notes:String");
-    final List<SimpleFeatureUserDataConfiguration> secondaryIndexConfigs = new ArrayList<>();
-    secondaryIndexConfigs.add(
-        new NumericSecondaryIndexConfiguration("landArea", SecondaryIndexType.JOIN));
-    secondaryIndexConfigs.add(
-        new TextSecondaryIndexConfiguration("notes", SecondaryIndexType.JOIN));
-    secondaryIndexConfigs.add(
-        new TemporalSecondaryIndexConfiguration("since", SecondaryIndexType.JOIN));
-    final SimpleFeatureUserDataConfigurationSet config =
-        new SimpleFeatureUserDataConfigurationSet(sfType, secondaryIndexConfigs);
-    config.updateType(sfType);
-    final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(sfType);
-    final Index spatialIndex =
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
-    dataAdapter.init(spatialIndex);
-    Assert.assertTrue(dataAdapter.getSupportedSecondaryIndices().size() == 3);
   }
 }

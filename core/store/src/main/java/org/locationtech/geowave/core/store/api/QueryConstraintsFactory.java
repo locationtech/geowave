@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.api;
 
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
@@ -23,7 +22,7 @@ public interface QueryConstraintsFactory {
    * @param dataIds the data IDs to constrain to
    * @return the constraints
    */
-  QueryConstraints dataIds(final ByteArray... dataIds);
+  QueryConstraints dataIds(final byte[]... dataIds);
 
   /**
    * constrain a query by prefix
@@ -32,7 +31,7 @@ public interface QueryConstraintsFactory {
    * @param sortKeyPrefix the sort prefix
    * @return the constraints
    */
-  QueryConstraints prefix(final ByteArray partitionKey, final ByteArray sortKeyPrefix);
+  QueryConstraints prefix(final byte[] partitionKey, final byte[] sortKeyPrefix);
 
   /**
    * constrain by coordinate ranges

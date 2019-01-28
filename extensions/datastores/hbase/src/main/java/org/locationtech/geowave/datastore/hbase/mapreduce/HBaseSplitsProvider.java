@@ -111,17 +111,17 @@ public class HBaseSplitsProvider extends SplitsProvider {
       if (statistics != null) {
         ranges = new ArrayList();
 
-        ByteArray prevKey = new ByteArray(HConstants.EMPTY_BYTE_ARRAY);
+        byte[] prevKey = HConstants.EMPTY_BYTE_ARRAY;
         final TreeSet<ByteArray> sortedPartitions = new TreeSet<>(statistics.getPartitionKeys());
         for (final ByteArray partitionKey : sortedPartitions) {
-          final ByteArrayRange range = new ByteArrayRange(prevKey, partitionKey);
+          final ByteArrayRange range = new ByteArrayRange(prevKey, partitionKey.getBytes());
 
           ranges.add(range);
 
-          prevKey = partitionKey;
+          prevKey = partitionKey.getBytes();
         }
 
-        ranges.add(new ByteArrayRange(prevKey, new ByteArray(HConstants.EMPTY_BYTE_ARRAY)));
+        ranges.add(new ByteArrayRange(prevKey, HConstants.EMPTY_BYTE_ARRAY));
 
         binRanges(ranges, binnedRanges, regionLocator);
       } else {
@@ -189,9 +189,7 @@ public class HBaseSplitsProvider extends SplitsProvider {
       }
 
       final ByteArrayRange regionRange =
-          new ByteArrayRange(
-              new ByteArray(regionInfo.getStartKey()),
-              new ByteArray(regionInfo.getEndKey()));
+          new ByteArrayRange(regionInfo.getStartKey(), regionInfo.getEndKey());
       rangeList.add(regionRange);
     }
   }
@@ -207,9 +205,8 @@ public class HBaseSplitsProvider extends SplitsProvider {
     final ListIterator<ByteArrayRange> i = inputRanges.listIterator();
     while (i.hasNext()) {
       final ByteArrayRange range = i.next();
-      final byte[] startKey =
-          range == null ? HConstants.EMPTY_BYTE_ARRAY : range.getStart().getBytes();
-      final byte[] endKey = range == null ? HConstants.EMPTY_BYTE_ARRAY : range.getEnd().getBytes();
+      final byte[] startKey = range == null ? HConstants.EMPTY_BYTE_ARRAY : range.getStart();
+      final byte[] endKey = range == null ? HConstants.EMPTY_BYTE_ARRAY : range.getEnd();
 
       final HRegionLocation location = regionLocator.getRegionLocation(startKey);
 
@@ -231,19 +228,16 @@ public class HBaseSplitsProvider extends SplitsProvider {
         rangeList.add(range);
         i.remove();
       } else {
-        final ByteArrayRange thisRange =
-            new ByteArrayRange(new ByteArray(startKey), new ByteArray(endKey));
+        final ByteArrayRange thisRange = new ByteArrayRange(startKey, endKey);
         final ByteArrayRange regionRange =
-            new ByteArrayRange(
-                new ByteArray(regionInfo.getStartKey()),
-                new ByteArray(regionInfo.getEndKey()));
+            new ByteArrayRange(regionInfo.getStartKey(), regionInfo.getEndKey());
 
         final ByteArrayRange overlappingRange = thisRange.intersection(regionRange);
 
         rangeList.add(new ByteArrayRange(overlappingRange.getStart(), overlappingRange.getEnd()));
         i.remove();
 
-        i.add(new ByteArrayRange(new ByteArray(regionInfo.getEndKey()), new ByteArray(endKey)));
+        i.add(new ByteArrayRange(regionInfo.getEndKey(), endKey));
       }
     }
     // the underlying assumption is that by the end of this any input range
@@ -257,20 +251,16 @@ public class HBaseSplitsProvider extends SplitsProvider {
       final GeoWaveRowRange thisRange,
       final GeoWaveRowRange otherRange) {
     final ByteArrayRange thisByteArrayRange =
-        new ByteArrayRange(
-            new ByteArray(thisRange.getStartSortKey()),
-            new ByteArray(thisRange.getEndSortKey()));
+        new ByteArrayRange(thisRange.getStartSortKey(), thisRange.getEndSortKey());
     final ByteArrayRange otherByteArrayRange =
-        new ByteArrayRange(
-            new ByteArray(otherRange.getStartSortKey()),
-            new ByteArray(otherRange.getEndSortKey()));
+        new ByteArrayRange(otherRange.getStartSortKey(), otherRange.getEndSortKey());
 
     final ByteArrayRange overlappingRange = thisByteArrayRange.intersection(otherByteArrayRange);
 
     return new GeoWaveRowRange(
         null,
-        overlappingRange.getStart().getBytes(),
-        overlappingRange.getEnd().getBytes(),
+        overlappingRange.getStart(),
+        overlappingRange.getEnd(),
         true,
         false);
   }

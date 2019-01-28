@@ -8,12 +8,9 @@
  */
 package org.locationtech.geowave.core.store.util;
 
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Maps;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -34,9 +31,9 @@ import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -68,6 +65,7 @@ import org.locationtech.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.operations.RangeReaderParams;
 import org.locationtech.geowave.core.store.operations.ReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
@@ -75,6 +73,8 @@ import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions.HintKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Maps;
 
 /*
  */
@@ -171,7 +171,7 @@ public class DataStoreUtils {
         return Long.MAX_VALUE - 1;
       }
       for (final ByteArrayRange range : partitionRange.getSortKeyRanges()) {
-        count += rangeStats.cardinality(range.getStart().getBytes(), range.getEnd().getBytes());
+        count += rangeStats.cardinality(range.getStart(), range.getEnd());
       }
     }
     return count;
@@ -179,27 +179,27 @@ public class DataStoreUtils {
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   public static <T> InsertionIds getInsertionIdsForEntry(
-      T entry,
+      final T entry,
       final InternalDataAdapter adapter,
       final Index index) {
-    AdapterPersistenceEncoding encoding = adapter.encode(entry, index.getIndexModel());
+    final AdapterPersistenceEncoding encoding = adapter.encode(entry, index.getIndexModel());
     return encoding.getInsertionIds(index);
   }
 
   public static InsertionIds keysToInsertionIds(final GeoWaveKey... geoWaveKeys) {
-    final Map<ByteArray, List<ByteArray>> sortKeysPerPartition = new HashMap<>();
+    final Map<ByteArray, List<byte[]>> sortKeysPerPartition = new HashMap<>();
     for (final GeoWaveKey key : geoWaveKeys) {
       final ByteArray partitionKey = new ByteArray(key.getPartitionKey());
-      List<ByteArray> sortKeys = sortKeysPerPartition.get(partitionKey);
+      List<byte[]> sortKeys = sortKeysPerPartition.get(partitionKey);
       if (sortKeys == null) {
         sortKeys = new ArrayList<>();
         sortKeysPerPartition.put(partitionKey, sortKeys);
       }
-      sortKeys.add(new ByteArray(key.getSortKey()));
+      sortKeys.add(key.getSortKey());
     }
     final Set<SinglePartitionInsertionIds> insertionIds = new HashSet<>();
-    for (final Entry<ByteArray, List<ByteArray>> e : sortKeysPerPartition.entrySet()) {
-      insertionIds.add(new SinglePartitionInsertionIds(e.getKey(), e.getValue()));
+    for (final Entry<ByteArray, List<byte[]>> e : sortKeysPerPartition.entrySet()) {
+      insertionIds.add(new SinglePartitionInsertionIds(e.getKey().getBytes(), e.getValue()));
     }
     return new InsertionIds(insertionIds);
   }
@@ -251,25 +251,38 @@ public class DataStoreUtils {
       final byte[] commonVisibility,
       final int maxFieldPosition) {
     final List<FlattenedFieldInfo> fieldInfoList = new LinkedList<>();
-    final List<Integer> fieldPositions = BitmaskUtils.getFieldPositions(bitmask);
-
-    final boolean sharedVisibility = fieldPositions.size() > 1;
-    if (sharedVisibility) {
-      final ByteBuffer input = ByteBuffer.wrap(flattenedValue);
-      for (int i = 0; i < fieldPositions.size(); i++) {
-        final Integer fieldPosition = fieldPositions.get(i);
-        if ((maxFieldPosition > -1) && (fieldPosition > maxFieldPosition)) {
-          return new FlattenedDataSet(
-              fieldInfoList,
-              new FlattenedUnreadDataSingleRow(input, i, fieldPositions));
+    if ((flattenedValue != null) && (flattenedValue.length > 0)) {
+      if ((bitmask != null) && (bitmask.length > 0)) {
+        final List<Integer> fieldPositions = BitmaskUtils.getFieldPositions(bitmask);
+        final boolean sharedVisibility = fieldPositions.size() > 1;
+        if (sharedVisibility) {
+          final ByteBuffer input = ByteBuffer.wrap(flattenedValue);
+          for (int i = 0; i < fieldPositions.size(); i++) {
+            final Integer fieldPosition = fieldPositions.get(i);
+            if ((maxFieldPosition > -1) && (fieldPosition > maxFieldPosition)) {
+              return new FlattenedDataSet(
+                  fieldInfoList,
+                  new FlattenedUnreadDataSingleRow(input, i, fieldPositions));
+            }
+            final int fieldLength = VarintUtils.readUnsignedInt(input);
+            final byte[] fieldValueBytes = new byte[fieldLength];
+            input.get(fieldValueBytes);
+            fieldInfoList.add(new FlattenedFieldInfo(fieldPosition, fieldValueBytes));
+          }
+        } else {
+          fieldInfoList.add(new FlattenedFieldInfo(fieldPositions.get(0), flattenedValue));
         }
-        final int fieldLength = input.getInt();
-        final byte[] fieldValueBytes = new byte[fieldLength];
-        input.get(fieldValueBytes);
-        fieldInfoList.add(new FlattenedFieldInfo(fieldPosition, fieldValueBytes));
+      } else {
+        // assume fields are in positional order
+        final ByteBuffer input = ByteBuffer.wrap(flattenedValue);
+        for (int i = 0; input.hasRemaining(); i++) {
+          final Integer fieldPosition = i;
+          final int fieldLength = VarintUtils.readUnsignedInt(input);
+          final byte[] fieldValueBytes = new byte[fieldLength];
+          input.get(fieldValueBytes);
+          fieldInfoList.add(new FlattenedFieldInfo(fieldPosition, fieldValueBytes));
+        }
       }
-    } else {
-      fieldInfoList.add(new FlattenedFieldInfo(fieldPositions.get(0), flattenedValue));
     }
     return new FlattenedDataSet(fieldInfoList, null);
   }
@@ -327,8 +340,7 @@ public class DataStoreUtils {
     if ((constraints == null) || constraints.isEmpty()) {
       if (targetIndexStrategy != null) {
         // at least use the prefix of a substrategy if chosen
-        return new QueryRanges(
-            Collections.singleton(new ByteArray(targetIndexStrategy.getPrefix())));
+        return new QueryRanges(new byte[][] {targetIndexStrategy.getPrefix()});
       }
       return new QueryRanges(); // implies in negative and
       // positive infinity
@@ -349,7 +361,6 @@ public class DataStoreUtils {
   }
 
   public static ByteArray ensureUniqueId(final byte[] id, final boolean hasMetadata) {
-
     final ByteBuffer buf = ByteBuffer.allocate(id.length + UNIQUE_ADDED_BYTES);
 
     byte[] metadata = null;
@@ -398,6 +409,8 @@ public class DataStoreUtils {
       return vis2;
     } else if ((vis2 == null) || (vis2.length == 0)) {
       return vis1;
+    } else if (Arrays.equals(vis1, vis2)) {
+      return vis1;
     }
 
     final ByteBuffer buffer = ByteBuffer.allocate(vis1.length + 3 + vis2.length);
@@ -432,7 +445,7 @@ public class DataStoreUtils {
   @SuppressWarnings({"rawtypes", "unchecked"})
   public static boolean mergeData(
       final DataStoreOperations operations,
-      final DataStoreOptions options,
+      final Integer maxRangeDecomposition,
       final Index index,
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
@@ -458,7 +471,7 @@ public class DataStoreUtils {
               adapterStore,
               internalAdapterStore,
               GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER).isClientsideRowMerging(
-                  true).maxRangeDecomposition(options.getMaxRangeDecomposition());
+                  true).maxRangeDecomposition(maxRangeDecomposition);
 
       final short[] adapterIds = new short[1];
 
@@ -492,5 +505,12 @@ public class DataStoreUtils {
       }
     }
     return true;
+  }
+
+  public static boolean isMergingIteratorRequired(
+      final RangeReaderParams<?> readerParams,
+      final boolean visibilityEnabled) {
+    return readerParams.isClientsideRowMerging()
+        || (readerParams.isMixedVisibility() && visibilityEnabled);
   }
 }

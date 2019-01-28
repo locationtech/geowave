@@ -8,14 +8,10 @@
  */
 package org.locationtech.geowave.core.index.simple;
 
-import com.google.common.collect.Sets;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.PartitionIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -48,7 +44,7 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 public class RoundRobinKeyIndexStrategy
     implements PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData> {
 
-  private final List<ByteArray> keys = new ArrayList<ByteArray>();
+  private byte[][] keys;
   public int position = 0;
 
   /** Default initial key set size is 3. */
@@ -61,19 +57,17 @@ public class RoundRobinKeyIndexStrategy
   }
 
   private void init(final int size) {
-    keys.clear();
+    keys = new byte[size][];
     if (size > 256) {
       final ByteBuffer buf = ByteBuffer.allocate(4);
       for (int i = 0; i < size; i++) {
         buf.putInt(i);
-        final ByteArray id = new ByteArray(Arrays.copyOf(buf.array(), 4));
-        keys.add(id);
+        keys[i] = Arrays.copyOf(buf.array(), 4);
         buf.rewind();
       }
     } else {
       for (int i = 0; i < size; i++) {
-        final ByteArray id = new ByteArray(new byte[] {(byte) i});
-        keys.add(id);
+        keys[i] = new byte[] {(byte) i};
       }
     }
   }
@@ -85,8 +79,8 @@ public class RoundRobinKeyIndexStrategy
 
   @Override
   public byte[] toBinary() {
-    final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(keys.size()));
-    VarintUtils.writeUnsignedInt(keys.size(), buf);
+    final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(keys.length));
+    VarintUtils.writeUnsignedInt(keys.length, buf);
     return buf.array();
   }
 
@@ -96,14 +90,14 @@ public class RoundRobinKeyIndexStrategy
     init(VarintUtils.readUnsignedInt(buf));
   }
 
-  public Set<ByteArray> getPartitionKeys() {
-    return Sets.newHashSet(keys);
+  public byte[][] getPartitionKeys() {
+    return keys;
   }
 
   @Override
   public int getPartitionKeyLength() {
-    if ((keys != null) && !keys.isEmpty()) {
-      return keys.get(0).getBytes().length;
+    if ((keys != null) && (keys.length > 0)) {
+      return keys[0].length;
     }
     return 0;
   }
@@ -114,20 +108,20 @@ public class RoundRobinKeyIndexStrategy
   }
 
   @Override
-  public Set<ByteArray> getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
-    position = (position + 1) % keys.size();
-    return Collections.singleton(keys.get(position));
+  public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
+    position = (position + 1) % keys.length;
+    return new byte[][] {keys[position]};
   }
 
   @Override
-  public Set<ByteArray> getQueryPartitionKeys(
+  public byte[][] getQueryPartitionKeys(
       final MultiDimensionalNumericData queryData,
       final IndexMetaData... hints) {
     return getPartitionKeys();
   }
 
   @Override
-  public Set<ByteArray> getPredefinedSplits() {
+  public byte[][] getPredefinedSplits() {
     return getPartitionKeys();
   }
 }

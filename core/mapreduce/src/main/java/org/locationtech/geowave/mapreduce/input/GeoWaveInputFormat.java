@@ -118,7 +118,7 @@ public class GeoWaveInputFormat<T> extends InputFormat<GeoWaveInputKey, T> {
         adapterStore,
         internalAdapterStore);
     setIndexQueryOptions(config, query.getIndexQueryOptions(), indexStore);
-    setQueryConstraints(config, (QueryConstraints) query.getQueryConstraints());
+    setQueryConstraints(config, query.getQueryConstraints());
   }
 
   public static void setQueryConstraints(final Configuration config, final QueryConstraints query) {
