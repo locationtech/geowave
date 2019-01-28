@@ -1,5 +1,7 @@
 ﻿<p align="center">
-	<img float="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/geowave-index/images/geowave-logo-transluscent.png" alt="GeoWave"><br/><br/>
+	<a href="http://locationtech.github.io/geowave/">
+	<img float="center" width="65%" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/geowave-index/images/geowave-logo-transluscent.png" alt="GeoWave"><br/><br/>
+	</a>
 </p>
 
 ## About  
@@ -86,7 +88,7 @@ You can use maven to reference pre-built GeoWave artifacts with the following po
 	</repositories>
 ```
 
-Use the libraries available in the `api` package to leverage GeoWave's capabilities (where <data store options> might be `AccumuloRequiredOptions` or `HBaseRequiredOptions` and simple examples of creating the data type and index can be found in `SimpleIngest` within the `examples` directory):
+Use the libraries available in the `api` package to leverage GeoWave's capabilities (where `<data store options>` might be `AccumuloRequiredOptions` or `HBaseRequiredOptions` and simple examples of creating the data type and index can be found in `SimpleIngest` within the `examples` directory):
 ```java
 DataStore store = DataStoreFactory.createDataStore(<data store options>);
 store.addType(<my data type>, <my index>);
