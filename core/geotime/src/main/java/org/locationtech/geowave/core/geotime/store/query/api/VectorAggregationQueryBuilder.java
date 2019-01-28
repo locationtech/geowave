@@ -23,8 +23,8 @@ import org.opengis.feature.simple.SimpleFeature;
  * @param <P> the type for input parameters
  * @param <R> the result type
  */
-public interface VectorAggregationQueryBuilder<P extends Persistable, R>
-    extends AggregationQueryBuilder<P, R, SimpleFeature, VectorAggregationQueryBuilder<P, R>>,
+public interface VectorAggregationQueryBuilder<P extends Persistable, R> extends
+    AggregationQueryBuilder<P, R, SimpleFeature, VectorAggregationQueryBuilder<P, R>>,
     BaseVectorQueryBuilder<R, AggregationQuery<P, R, SimpleFeature>, VectorAggregationQueryBuilder<P, R>> {
   @Override
   default VectorQueryConstraintsFactory constraintsFactory() {

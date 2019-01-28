@@ -30,7 +30,10 @@ import org.slf4j.LoggerFactory;
  * the map phase of a map-reduce job.
  */
 public abstract class AbstractLocalIngestWithMapper<T> extends AbstractStageWholeFileToAvro
-    implements LocalFileIngestPlugin<T>, IngestFromHdfsPlugin<AvroWholeFile, T>, Persistable {
+    implements
+    LocalFileIngestPlugin<T>,
+    IngestFromHdfsPlugin<AvroWholeFile, T>,
+    Persistable {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLocalIngestWithMapper.class);
 
   @Override

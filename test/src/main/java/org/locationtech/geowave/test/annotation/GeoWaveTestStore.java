@@ -42,13 +42,13 @@ public @interface GeoWaveTestStore {
   public String[] options() default "";
 
   public static enum GeoWaveStoreType {
-    DYNAMODB(DynamoDBStoreTestEnvironment.getInstance()), ACCUMULO(
-        AccumuloStoreTestEnvironment.getInstance()), BIGTABLE(
-            BigtableStoreTestEnvironment.getInstance()), CASSANDRA(
-                CassandraStoreTestEnvironment.getInstance()), HBASE(
-                    HBaseStoreTestEnvironment.getInstance()), REDIS(
-                        RedisStoreTestEnvironment.getInstance()), ROCKSDB(
-                            RocksDBStoreTestEnvironment.getInstance());
+    DYNAMODB(DynamoDBStoreTestEnvironment.getInstance()),
+    ACCUMULO(AccumuloStoreTestEnvironment.getInstance()),
+    BIGTABLE(BigtableStoreTestEnvironment.getInstance()),
+    CASSANDRA(CassandraStoreTestEnvironment.getInstance()),
+    HBASE(HBaseStoreTestEnvironment.getInstance()),
+    REDIS(RedisStoreTestEnvironment.getInstance()),
+    ROCKSDB(RocksDBStoreTestEnvironment.getInstance());
     private final StoreTestEnvironment testEnvironment;
 
     private GeoWaveStoreType(final StoreTestEnvironment testEnvironment) {

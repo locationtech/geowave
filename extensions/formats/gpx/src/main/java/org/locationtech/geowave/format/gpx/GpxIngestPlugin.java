@@ -226,8 +226,8 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroGpxTr
     return pathDataSet;
   }
 
-  public static class IngestGpxTrackFromHdfs
-      extends AbstractIngestSimpleFeatureWithMapper<AvroGpxTrack> {
+  public static class IngestGpxTrackFromHdfs extends
+      AbstractIngestSimpleFeatureWithMapper<AvroGpxTrack> {
     public IngestGpxTrackFromHdfs() {
       this(new GpxIngestPlugin());
       // this constructor will be used when deserialized

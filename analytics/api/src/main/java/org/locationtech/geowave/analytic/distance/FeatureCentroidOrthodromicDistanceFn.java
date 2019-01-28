@@ -10,8 +10,8 @@ package org.locationtech.geowave.analytic.distance;
 
 import org.opengis.feature.simple.SimpleFeature;
 
-public class FeatureCentroidOrthodromicDistanceFn extends FeatureCentroidDistanceFn
-    implements DistanceFn<SimpleFeature> {
+public class FeatureCentroidOrthodromicDistanceFn extends FeatureCentroidDistanceFn implements
+    DistanceFn<SimpleFeature> {
 
   private static final long serialVersionUID = -9077135292765517738L;
 

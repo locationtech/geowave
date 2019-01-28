@@ -18,8 +18,8 @@ import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
  * A basic implementation of deduplication as a combiner (using a combiner is a performance
  * optimization over doing all deduplication in a reducer)
  */
-public class GeoWaveDedupeCombiner
-    extends Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable> {
+public class GeoWaveDedupeCombiner extends
+    Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable> {
 
   @Override
   protected void reduce(

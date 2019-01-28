@@ -35,8 +35,13 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
  */
 public class TemporalBinningStrategy implements BinningStrategy {
   public static enum Unit {
-    MINUTE(Calendar.MINUTE), HOUR(Calendar.HOUR_OF_DAY), DAY(Calendar.DAY_OF_MONTH), WEEK(
-        Calendar.WEEK_OF_YEAR), MONTH(Calendar.MONTH), YEAR(Calendar.YEAR), DECADE(-1);
+    MINUTE(Calendar.MINUTE),
+    HOUR(Calendar.HOUR_OF_DAY),
+    DAY(Calendar.DAY_OF_MONTH),
+    WEEK(Calendar.WEEK_OF_YEAR),
+    MONTH(Calendar.MONTH),
+    YEAR(Calendar.YEAR),
+    DECADE(-1);
     // java.util.Calendar does not define a field number for decade
     // use -1 since that value is unused
 

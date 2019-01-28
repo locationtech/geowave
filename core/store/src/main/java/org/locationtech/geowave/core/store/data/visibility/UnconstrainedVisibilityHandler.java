@@ -16,8 +16,8 @@ import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
  * @param <RowType>
  * @param <FieldType>
  */
-public class UnconstrainedVisibilityHandler<RowType, FieldType>
-    implements FieldVisibilityHandler<RowType, FieldType> {
+public class UnconstrainedVisibilityHandler<RowType, FieldType> implements
+    FieldVisibilityHandler<RowType, FieldType> {
 
   @Override
   public byte[] getVisibility(

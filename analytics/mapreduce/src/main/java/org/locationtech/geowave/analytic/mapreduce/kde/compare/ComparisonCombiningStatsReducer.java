@@ -14,8 +14,8 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.locationtech.geowave.analytic.mapreduce.kde.KDEJobRunner;
 
-public class ComparisonCombiningStatsReducer
-    extends Reducer<LongWritable, DoubleWritable, ComparisonCellData, LongWritable> {
+public class ComparisonCombiningStatsReducer extends
+    Reducer<LongWritable, DoubleWritable, ComparisonCellData, LongWritable> {
 
   protected int minLevel;
   protected int maxLevel;

@@ -22,8 +22,8 @@ import org.locationtech.geowave.mapreduce.GeoWaveWritableOutputMapper;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.opengis.coverage.grid.GridCoverage;
 
-public class RasterTileResizeMapper
-    extends GeoWaveWritableOutputMapper<GeoWaveInputKey, GridCoverage> {
+public class RasterTileResizeMapper extends
+    GeoWaveWritableOutputMapper<GeoWaveInputKey, GridCoverage> {
   private RasterTileResizeHelper helper;
 
   @Override

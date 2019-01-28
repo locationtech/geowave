@@ -16,8 +16,8 @@ import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.index.FieldIndexStrategy;
 
-public class NumericFieldIndexStrategy
-    implements FieldIndexStrategy<NumericQueryConstraint, Number> {
+public class NumericFieldIndexStrategy implements
+    FieldIndexStrategy<NumericQueryConstraint, Number> {
   private static final String ID = "NUMERIC";
 
   public NumericFieldIndexStrategy() {

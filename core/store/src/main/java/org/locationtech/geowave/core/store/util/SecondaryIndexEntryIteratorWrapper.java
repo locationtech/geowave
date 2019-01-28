@@ -13,8 +13,9 @@ import java.util.NoSuchElementException;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 
-public abstract class SecondaryIndexEntryIteratorWrapper<T, RowType>
-    implements Iterator<RowType>, CloseableIterator<RowType> {
+public abstract class SecondaryIndexEntryIteratorWrapper<T, RowType> implements
+    Iterator<RowType>,
+    CloseableIterator<RowType> {
 
   private final Iterator<?> scanIterator;
   protected final InternalDataAdapter<T> adapter;

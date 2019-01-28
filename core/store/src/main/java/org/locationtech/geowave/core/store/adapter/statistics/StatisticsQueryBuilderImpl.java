@@ -15,8 +15,8 @@ import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericH
 import org.locationtech.geowave.core.store.api.StatisticsQuery;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 
-public class StatisticsQueryBuilderImpl<R, B extends StatisticsQueryBuilder<R, B>>
-    implements StatisticsQueryBuilder<R, B> {
+public class StatisticsQueryBuilderImpl<R, B extends StatisticsQueryBuilder<R, B>> implements
+    StatisticsQueryBuilder<R, B> {
   private String dataTypeName;
   protected String[] authorizations = new String[0];
   protected StatisticsType<R, B> statsType = null;

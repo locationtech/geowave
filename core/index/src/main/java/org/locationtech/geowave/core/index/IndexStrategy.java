@@ -12,8 +12,8 @@ import java.util.List;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
 /** Interface which defines an index strategy. */
-public interface IndexStrategy<QueryRangeType extends IndexConstraints, EntryRangeType>
-    extends Persistable {
+public interface IndexStrategy<QueryRangeType extends IndexConstraints, EntryRangeType> extends
+    Persistable {
   public List<IndexMetaData> createMetaData();
 
   /** @return a unique ID associated with the index strategy */

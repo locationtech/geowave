@@ -21,8 +21,8 @@ import org.redisson.api.RMapAsync;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
 
-public class RedisMapWrapper
-    extends AbstractRedisSetWrapper<RMapAsync<byte[], byte[]>, RMap<byte[], byte[]>> {
+public class RedisMapWrapper extends
+    AbstractRedisSetWrapper<RMapAsync<byte[], byte[]>, RMap<byte[], byte[]>> {
   private final boolean visibilityEnabled;
 
   public RedisMapWrapper(

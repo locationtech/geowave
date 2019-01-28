@@ -11,8 +11,9 @@ package org.locationtech.geowave.format.stanag4676;
 import java.io.Serializable;
 import java.util.Comparator;
 
-public class ComparatorStanag4676EventWritable
-    implements Comparator<Stanag4676EventWritable>, Serializable {
+public class ComparatorStanag4676EventWritable implements
+    Comparator<Stanag4676EventWritable>,
+    Serializable {
 
   /** */
   private static final long serialVersionUID = 1L;

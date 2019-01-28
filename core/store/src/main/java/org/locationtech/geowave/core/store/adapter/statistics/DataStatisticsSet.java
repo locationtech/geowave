@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 
 public interface DataStatisticsSet<T, R, S, SB extends StatisticsQueryBuilder<S, SB>, RB extends StatisticsQueryBuilder<R, RB>>
-    extends InternalDataStatistics<T, R, RB> {
+    extends
+    InternalDataStatistics<T, R, RB> {
   public InternalDataStatistics<T, S, SB>[] getStatisticsSet();
 }

@@ -31,7 +31,8 @@ import org.slf4j.LoggerFactory;
  */
 public class FeatureHyperLogLogStatistics extends
     AbstractDataStatistics<SimpleFeature, HyperLogLogPlus, FieldStatisticsQueryBuilder<HyperLogLogPlus>>
-    implements FieldNameStatistic {
+    implements
+    FieldNameStatistic {
   private static final Logger LOGGER = LoggerFactory.getLogger(FeatureHyperLogLogStatistics.class);
   public static final FieldStatisticsType<HyperLogLogPlus> STATS_TYPE =
       new FieldStatisticsType<>("ATT_HYPERLLP");

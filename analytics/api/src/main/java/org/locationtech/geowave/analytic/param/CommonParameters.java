@@ -16,11 +16,13 @@ public class CommonParameters {
   public enum Common implements ParameterEnum {
     DIMENSION_EXTRACT_CLASS(DimensionExtractor.class, "dde",
         "Dimension Extractor Class implements org.locationtech.geowave.analytics.extract.DimensionExtractor",
-        true, true), DISTANCE_FUNCTION_CLASS(DistanceFn.class, "cdf",
-            "Distance Function Class implements org.locationtech.geowave.analytics.distance.DistanceFn",
-            true, true), INDEX_MODEL_BUILDER_CLASS(IndexModelBuilder.class, "cim",
-                "Class implements org.locationtech.geowave.analytics.tools.model.IndexModelBuilder",
-                true, true);
+        true, true),
+    DISTANCE_FUNCTION_CLASS(DistanceFn.class, "cdf",
+        "Distance Function Class implements org.locationtech.geowave.analytics.distance.DistanceFn",
+        true, true),
+    INDEX_MODEL_BUILDER_CLASS(IndexModelBuilder.class, "cim",
+        "Class implements org.locationtech.geowave.analytics.tools.model.IndexModelBuilder", true,
+        true);
 
     private final ParameterHelper<?> helper;
 

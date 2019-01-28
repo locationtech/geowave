@@ -13,8 +13,8 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class CellSummationCombiner
-    extends Reducer<LongWritable, DoubleWritable, LongWritable, DoubleWritable> {
+public class CellSummationCombiner extends
+    Reducer<LongWritable, DoubleWritable, LongWritable, DoubleWritable> {
 
   @Override
   public void reduce(

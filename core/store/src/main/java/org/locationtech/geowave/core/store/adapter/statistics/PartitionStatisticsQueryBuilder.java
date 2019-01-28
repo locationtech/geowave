@@ -13,8 +13,8 @@ import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PartitionStatisticsQueryBuilder<R>
-    extends StatisticsQueryBuilderImpl<R, PartitionStatisticsQueryBuilder<R>> {
+public class PartitionStatisticsQueryBuilder<R> extends
+    StatisticsQueryBuilderImpl<R, PartitionStatisticsQueryBuilder<R>> {
   private static final Logger LOGGER =
       LoggerFactory.getLogger(PartitionStatisticsQueryBuilder.class);
   private static final String STATS_ID_SEPARATOR = "#";

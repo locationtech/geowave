@@ -10,7 +10,8 @@ package org.locationtech.geowave.core.index;
 
 /** Interface which defines an index strategy. */
 public interface SortedIndexStrategy<QueryRangeType extends IndexConstraints, EntryRangeType>
-    extends IndexStrategy {
+    extends
+    IndexStrategy {
   /**
    * Returns a list of query ranges for an specified numeric range.
    *

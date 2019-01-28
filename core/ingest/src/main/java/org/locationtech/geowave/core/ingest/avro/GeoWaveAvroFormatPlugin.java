@@ -20,8 +20,10 @@ import org.locationtech.geowave.core.store.ingest.LocalPluginBase;
  * @param <I> The type for the input data
  * @param <O> The type that represents each data entry being ingested
  */
-public interface GeoWaveAvroFormatPlugin<I, O>
-    extends GeoWaveAvroPluginBase<I>, LocalPluginBase, IndexProvider {
+public interface GeoWaveAvroFormatPlugin<I, O> extends
+    GeoWaveAvroPluginBase<I>,
+    LocalPluginBase,
+    IndexProvider {
 
   /**
    * An implementation of ingestion that ingests Avro Java objects into GeoWave

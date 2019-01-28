@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.core.store.adapter.statistics;
 
-public class IndexStatisticsQueryBuilder<R>
-    extends StatisticsQueryBuilderImpl<R, IndexStatisticsQueryBuilder<R>> {
+public class IndexStatisticsQueryBuilder<R> extends
+    StatisticsQueryBuilderImpl<R, IndexStatisticsQueryBuilder<R>> {
   private String indexName;
 
   public IndexStatisticsQueryBuilder(

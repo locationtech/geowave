@@ -24,8 +24,8 @@ import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
  * @param <R> result type for the aggregation
  * @param <T> data type of the entries for the aggregation
  */
-public class AggregationQuery<P extends Persistable, R, T>
-    extends BaseQuery<R, AggregateTypeQueryOptions<P, R, T>> {
+public class AggregationQuery<P extends Persistable, R, T> extends
+    BaseQuery<R, AggregateTypeQueryOptions<P, R, T>> {
 
   /** default constructor useful only for serialization and deserialization */
   public AggregationQuery() {

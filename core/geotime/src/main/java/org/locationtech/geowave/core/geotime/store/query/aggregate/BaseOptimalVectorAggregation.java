@@ -18,8 +18,8 @@ import org.locationtech.geowave.core.store.query.aggregate.AdapterAndIndexBasedA
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class BaseOptimalVectorAggregation<P extends Persistable, R, T>
-    implements AdapterAndIndexBasedAggregation<P, R, T> {
+public abstract class BaseOptimalVectorAggregation<P extends Persistable, R, T> implements
+    AdapterAndIndexBasedAggregation<P, R, T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseOptimalVectorAggregation.class);
 
   protected FieldNameParam fieldNameParam;

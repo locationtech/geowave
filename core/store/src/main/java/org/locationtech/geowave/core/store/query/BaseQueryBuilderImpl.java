@@ -19,7 +19,8 @@ import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
 import org.locationtech.geowave.core.store.query.options.QuerySingleIndex;
 
 public abstract class BaseQueryBuilderImpl<T, Q extends BaseQuery<T, ?>, R extends BaseQueryBuilder<T, Q, R>>
-    implements BaseQueryBuilder<T, Q, R> {
+    implements
+    BaseQueryBuilder<T, Q, R> {
   protected String indexName = null;
   protected String[] authorizations = new String[0];
   protected Integer limit = null;

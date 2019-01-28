@@ -13,17 +13,18 @@ import org.locationtech.geowave.analytic.extract.CentroidExtractor;
 
 public class CentroidParameters {
   public enum Centroid implements ParameterEnum {
-    INDEX_NAME(String.class, "cid", "Index Identifier for Centroids", false, true), DATA_TYPE_ID(
-        String.class, "cdt", "Data Type ID for a centroid item", false,
-        true), DATA_NAMESPACE_URI(String.class, "cns", "Data Type Namespace for centroid item",
-            false, true), CONXVERGANCE_TOLERANCE(Double.class, "cct",
-                "The alpha parameter measure the minimum covergence to reach before ", false,
-                true), EXTRACTOR_CLASS(CentroidExtractor.class, "cce",
-                    "Centroid Exractor Class implements org.locationtech.geowave.analytics.extract.CentroidExtractor",
-                    true, true), WRAPPER_FACTORY_CLASS(AnalyticItemWrapperFactory.class, "cfc",
-                        "A factory class that implements org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory",
-                        true,
-                        true), ZOOM_LEVEL(Integer.class, "czl", "Zoom Level Number", true, true);
+    INDEX_NAME(String.class, "cid", "Index Identifier for Centroids", false, true),
+    DATA_TYPE_ID(String.class, "cdt", "Data Type ID for a centroid item", false, true),
+    DATA_NAMESPACE_URI(String.class, "cns", "Data Type Namespace for centroid item", false, true),
+    CONXVERGANCE_TOLERANCE(Double.class, "cct",
+        "The alpha parameter measure the minimum covergence to reach before ", false, true),
+    EXTRACTOR_CLASS(CentroidExtractor.class, "cce",
+        "Centroid Exractor Class implements org.locationtech.geowave.analytics.extract.CentroidExtractor",
+        true, true),
+    WRAPPER_FACTORY_CLASS(AnalyticItemWrapperFactory.class, "cfc",
+        "A factory class that implements org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory",
+        true, true),
+    ZOOM_LEVEL(Integer.class, "czl", "Zoom Level Number", true, true);
     private final ParameterHelper helper;
 
     private Centroid(

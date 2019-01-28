@@ -142,8 +142,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
-    IndexDependentDataAdapter<GridCoverage>, HadoopDataAdapter<GridCoverage, GridCoverageWritable>,
+public class RasterDataAdapter implements
+    StatisticsProvider<GridCoverage>,
+    IndexDependentDataAdapter<GridCoverage>,
+    HadoopDataAdapter<GridCoverage, GridCoverageWritable>,
     RowMergingDataAdapter<GridCoverage, RasterTile<?>> {
   // Moved static initialization to constructor (staticInit)
 
@@ -581,8 +583,8 @@ public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
     return Collections.<GridCoverage>emptyIterator();
   }
 
-  private static class MosaicPerPyramidLevelBuilder
-      implements Converter<SubStrategy, GridCoverage> {
+  private static class MosaicPerPyramidLevelBuilder implements
+      Converter<SubStrategy, GridCoverage> {
     private final MultiDimensionalNumericData originalBounds;
     private final GridCoverage originalData;
     private final int tileSize;
@@ -1544,8 +1546,8 @@ public class RasterDataAdapter implements StatisticsProvider<GridCoverage>,
     return tileSize;
   }
 
-  private static final class SimplifiedGridSampleDimension extends GridSampleDimension
-      implements SampleDimension {
+  private static final class SimplifiedGridSampleDimension extends GridSampleDimension implements
+      SampleDimension {
 
     /** */
     private static final long serialVersionUID = 2227219522016820587L;

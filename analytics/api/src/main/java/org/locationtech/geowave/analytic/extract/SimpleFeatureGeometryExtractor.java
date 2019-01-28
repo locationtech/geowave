@@ -17,7 +17,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /** Extract a Geometry from a Simple Feature. */
 public class SimpleFeatureGeometryExtractor extends EmptyDimensionExtractor<SimpleFeature>
-    implements DimensionExtractor<SimpleFeature> {
+    implements
+    DimensionExtractor<SimpleFeature> {
   @Override
   public Geometry getGeometry(final SimpleFeature anObject) {
     final FeatureGeometryHandler handler =

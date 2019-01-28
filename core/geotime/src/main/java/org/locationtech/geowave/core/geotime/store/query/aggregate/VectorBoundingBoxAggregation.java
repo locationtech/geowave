@@ -12,8 +12,8 @@ import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 
-public class VectorBoundingBoxAggregation
-    extends BoundingBoxAggregation<FieldNameParam, SimpleFeature> {
+public class VectorBoundingBoxAggregation extends
+    BoundingBoxAggregation<FieldNameParam, SimpleFeature> {
   private FieldNameParam fieldNameParam;
 
   public VectorBoundingBoxAggregation() {

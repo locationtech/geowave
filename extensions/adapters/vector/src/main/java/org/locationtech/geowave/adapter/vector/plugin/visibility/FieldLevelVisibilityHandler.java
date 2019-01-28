@@ -20,8 +20,8 @@ import org.opengis.feature.simple.SimpleFeature;
  * @param <T>
  * @param <CommonIndexValue>
  */
-public abstract class FieldLevelVisibilityHandler<T, CommonIndexValue>
-    implements FieldVisibilityHandler<T, CommonIndexValue> {
+public abstract class FieldLevelVisibilityHandler<T, CommonIndexValue> implements
+    FieldVisibilityHandler<T, CommonIndexValue> {
 
   private final String visibilityAttribute;
   private final String fieldName;

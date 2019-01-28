@@ -18,8 +18,8 @@ import java.util.Iterator;
  *
  * @param <T> the type to transform each {@link GeoWaveRow} into
  */
-public interface GeoWaveRowIteratorTransformer<T>
-    extends Function<Iterator<GeoWaveRow>, Iterator<T>> {
+public interface GeoWaveRowIteratorTransformer<T> extends
+    Function<Iterator<GeoWaveRow>, Iterator<T>> {
   public static GeoWaveRowIteratorTransformer<GeoWaveRow> NO_OP_TRANSFORMER =
       new GeoWaveRowIteratorTransformer<GeoWaveRow>() {
 

@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
  * @param <RowType>
  * @param <FieldType>
  */
-public class GlobalVisibilityHandler<RowType, FieldType>
-    implements FieldVisibilityHandler<RowType, FieldType> {
+public class GlobalVisibilityHandler<RowType, FieldType> implements
+    FieldVisibilityHandler<RowType, FieldType> {
   private final String globalVisibility;
 
   public GlobalVisibilityHandler(final String globalVisibility) {

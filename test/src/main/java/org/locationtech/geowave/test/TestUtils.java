@@ -93,9 +93,10 @@ public class TestUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
 
   public static enum DimensionalityType {
-    SPATIAL("spatial", DEFAULT_SPATIAL_INDEX), SPATIAL_TEMPORAL("spatial_temporal",
-        DEFAULT_SPATIAL_TEMPORAL_INDEX), ALL("spatial,spatial_temporal",
-            new Index[] {DEFAULT_SPATIAL_INDEX, DEFAULT_SPATIAL_TEMPORAL_INDEX});
+    SPATIAL("spatial", DEFAULT_SPATIAL_INDEX),
+    SPATIAL_TEMPORAL("spatial_temporal", DEFAULT_SPATIAL_TEMPORAL_INDEX),
+    ALL("spatial,spatial_temporal",
+        new Index[] {DEFAULT_SPATIAL_INDEX, DEFAULT_SPATIAL_TEMPORAL_INDEX});
     private final String dimensionalityArg;
     private final Index[] indices;
 

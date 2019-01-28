@@ -13,17 +13,16 @@ import org.locationtech.geowave.core.store.api.Query;
 
 public class ExtractParameters {
   public enum Extract implements ParameterEnum {
-    OUTPUT_DATA_TYPE_ID(String.class, "eot", "Output Data Type ID", false,
-        true), DATA_NAMESPACE_URI(String.class, "ens", "Output Data Namespace URI", false,
-            true), REDUCER_COUNT(Integer.class, "erc",
-                "Number of Reducers For initial data extraction and de-duplication", false,
-                true), DIMENSION_EXTRACT_CLASS(DimensionExtractor.class, "ede",
-                    "Class to extract dimensions into a simple feature output", true,
-                    true), QUERY(Query.class, "eq", "Query", false, true), MAX_INPUT_SPLIT(
-                        Integer.class, "emx", "Maximum input split size", false,
-                        true), MIN_INPUT_SPLIT(Integer.class, "emn", "Minimum input split size",
-                            false, true), GROUP_ID(String.class, "eg",
-                                "Group ID assigned to extracted data", false, true);
+    OUTPUT_DATA_TYPE_ID(String.class, "eot", "Output Data Type ID", false, true),
+    DATA_NAMESPACE_URI(String.class, "ens", "Output Data Namespace URI", false, true),
+    REDUCER_COUNT(Integer.class, "erc",
+        "Number of Reducers For initial data extraction and de-duplication", false, true),
+    DIMENSION_EXTRACT_CLASS(DimensionExtractor.class, "ede",
+        "Class to extract dimensions into a simple feature output", true, true),
+    QUERY(Query.class, "eq", "Query", false, true),
+    MAX_INPUT_SPLIT(Integer.class, "emx", "Maximum input split size", false, true),
+    MIN_INPUT_SPLIT(Integer.class, "emn", "Minimum input split size", false, true),
+    GROUP_ID(String.class, "eg", "Group ID assigned to extracted data", false, true);
 
     private final transient ParameterHelper<?> helper;
 

@@ -13,8 +13,8 @@ import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
-public class PrimitiveByteArraySerializationProvider
-    implements FieldSerializationProviderSpi<byte[]> {
+public class PrimitiveByteArraySerializationProvider implements
+    FieldSerializationProviderSpi<byte[]> {
   @Override
   public FieldReader<byte[]> getFieldReader() {
     return new PrimitiveByteArrayReader();

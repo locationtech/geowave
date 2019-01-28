@@ -56,8 +56,9 @@ import org.slf4j.LoggerFactory;
  * dependency is transient requiring initialization after serialization
  * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)}
  */
-public class AdapterBasedPartitioner extends AbstractPartitioner<AdapterDataEntry>
-    implements Partitioner<AdapterDataEntry>, Serializable {
+public class AdapterBasedPartitioner extends AbstractPartitioner<AdapterDataEntry> implements
+    Partitioner<AdapterDataEntry>,
+    Serializable {
 
   static final Logger LOGGER = LoggerFactory.getLogger(AdapterBasedPartitioner.class);
 

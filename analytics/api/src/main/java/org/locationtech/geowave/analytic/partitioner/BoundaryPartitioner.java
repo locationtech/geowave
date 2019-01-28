@@ -44,8 +44,8 @@ public class BoundaryPartitioner extends OrthodromicDistancePartitioner<Object> 
     super(crs, indexModel, new EchoExtractor(), distancePerDimension, geometricDistanceUnit);
   }
 
-  private static class EchoExtractor extends EmptyDimensionExtractor<Object>
-      implements DimensionExtractor<Object> {
+  private static class EchoExtractor extends EmptyDimensionExtractor<Object> implements
+      DimensionExtractor<Object> {
 
     /** */
     private static final long serialVersionUID = 1L;

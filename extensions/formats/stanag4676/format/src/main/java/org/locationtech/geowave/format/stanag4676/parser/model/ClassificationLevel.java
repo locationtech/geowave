@@ -11,8 +11,11 @@ package org.locationtech.geowave.format.stanag4676.parser.model;
 // STANAG 4676
 /** Enumeration for Classification Level */
 public enum ClassificationLevel {
-  TOP_SECRET("TOP_SECRET"), SECRET("SECRET"), CONFIDENTIAL("CONFIDENTIAL"), RESTRICTED(
-      "RESTRICTED"), UNCLASSIFIED("UNCLASSIFIED");
+  TOP_SECRET("TOP_SECRET"),
+  SECRET("SECRET"),
+  CONFIDENTIAL("CONFIDENTIAL"),
+  RESTRICTED("RESTRICTED"),
+  UNCLASSIFIED("UNCLASSIFIED");
 
   private String value;
 

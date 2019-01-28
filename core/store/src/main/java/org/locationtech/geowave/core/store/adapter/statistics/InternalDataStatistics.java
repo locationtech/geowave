@@ -15,8 +15,9 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 
-public interface InternalDataStatistics<T, R, B extends StatisticsQueryBuilder<R, B>>
-    extends Mergeable, IngestCallback<T> {
+public interface InternalDataStatistics<T, R, B extends StatisticsQueryBuilder<R, B>> extends
+    Mergeable,
+    IngestCallback<T> {
   Short getAdapterId();
 
   R getResult();

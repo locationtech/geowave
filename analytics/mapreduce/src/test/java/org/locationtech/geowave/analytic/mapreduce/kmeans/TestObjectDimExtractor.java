@@ -12,8 +12,8 @@ import org.locationtech.geowave.analytic.extract.DimensionExtractor;
 import org.locationtech.geowave.analytic.extract.EmptyDimensionExtractor;
 import org.locationtech.jts.geom.Geometry;
 
-public class TestObjectDimExtractor extends EmptyDimensionExtractor<TestObject>
-    implements DimensionExtractor<TestObject> {
+public class TestObjectDimExtractor extends EmptyDimensionExtractor<TestObject> implements
+    DimensionExtractor<TestObject> {
   @Override
   public String getGroupID(TestObject anObject) {
     return anObject.getGroupID();

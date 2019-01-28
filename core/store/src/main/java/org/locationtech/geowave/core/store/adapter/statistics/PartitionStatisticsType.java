@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.core.store.adapter.statistics;
 
-public class PartitionStatisticsType<R>
-    extends StatisticsType<R, PartitionStatisticsQueryBuilder<R>> {
+public class PartitionStatisticsType<R> extends
+    StatisticsType<R, PartitionStatisticsQueryBuilder<R>> {
   private static final long serialVersionUID = 1L;
 
   public PartitionStatisticsType() {

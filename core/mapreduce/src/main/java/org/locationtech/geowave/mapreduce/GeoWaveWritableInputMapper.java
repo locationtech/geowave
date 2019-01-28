@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
  * GeoWave objects into objects that are writable. It is a mapper that converts to writable objects
  * for the input. This conversion will only work if the data adapter implements HadoopDataAdapter.
  */
-public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT>
-    extends Mapper<GeoWaveInputKey, ObjectWritable, KEYOUT, VALUEOUT> {
+public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT> extends
+    Mapper<GeoWaveInputKey, ObjectWritable, KEYOUT, VALUEOUT> {
   protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveWritableInputMapper.class);
   protected HadoopWritableSerializationTool serializationTool;
 

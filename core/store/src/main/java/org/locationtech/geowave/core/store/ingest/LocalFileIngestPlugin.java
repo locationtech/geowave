@@ -16,6 +16,8 @@ import java.net.URL;
  *
  * @param <O> The type of data to write to GeoWave
  */
-public interface LocalFileIngestPlugin<O>
-    extends LocalPluginBase, IngestPluginBase<URL, O>, IndexProvider {
+public interface LocalFileIngestPlugin<O> extends
+    LocalPluginBase,
+    IngestPluginBase<URL, O>,
+    IndexProvider {
 }

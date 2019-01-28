@@ -27,8 +27,8 @@ import org.locationtech.geowave.core.index.IndexUtils;
  * This class is an Accumulo Iterator that can support skipping by a fixed cardinality on a Space
  * Filling Curve (skipping by incrementing a fixed bit position of the row ID).
  */
-public class FixedCardinalitySkippingIterator extends SkippingIterator
-    implements InterruptibleIterator {
+public class FixedCardinalitySkippingIterator extends SkippingIterator implements
+    InterruptibleIterator {
   public static final String CARDINALITY_SKIPPING_ITERATOR_NAME = "CARDINALITY_SKIPPING_ITERATOR";
   public static final int CARDINALITY_SKIPPING_ITERATOR_PRIORITY = 35;
   public static final String CARDINALITY_SKIP_INTERVAL = "cardinality";

@@ -10,8 +10,9 @@ package org.locationtech.geowave.analytic.param;
 
 public class GlobalParameters {
   public enum Global implements ParameterEnum<Object> {
-    PARENT_BATCH_ID(String.class, "pb", "Batch ID", true), CRS_ID(String.class, "crs", "CRS ID",
-        true), BATCH_ID(String.class, "b", "Batch ID", true);
+    PARENT_BATCH_ID(String.class, "pb", "Batch ID", true),
+    CRS_ID(String.class, "crs", "CRS ID", true),
+    BATCH_ID(String.class, "b", "Batch ID", true);
     private final ParameterHelper<Object> helper;
 
     private Global(

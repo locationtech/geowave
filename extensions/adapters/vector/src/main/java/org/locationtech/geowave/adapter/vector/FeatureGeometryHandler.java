@@ -21,8 +21,8 @@ import org.opengis.feature.type.AttributeDescriptor;
  * This class handles the internal responsibility of persisting JTS geometry to and from a GeoWave
  * common index field for SimpleFeature data.
  */
-public class FeatureGeometryHandler
-    implements IndexFieldHandler<SimpleFeature, GeometryWrapper, Object> {
+public class FeatureGeometryHandler implements
+    IndexFieldHandler<SimpleFeature, GeometryWrapper, Object> {
   private final FeatureAttributeHandler nativeGeometryHandler;
   private final FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler;
   private final String[] nativeFieldNames;

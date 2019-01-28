@@ -24,8 +24,8 @@ import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.V
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GeoWaveGrpcCoreMapreduceService extends CoreMapreduceImplBase
-    implements GeoWaveGrpcServiceSpi {
+public class GeoWaveGrpcCoreMapreduceService extends CoreMapreduceImplBase implements
+    GeoWaveGrpcServiceSpi {
 
   private static final Logger LOGGER =
       LoggerFactory.getLogger(GeoWaveGrpcCoreMapreduceService.class.getName());

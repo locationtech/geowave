@@ -20,8 +20,8 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
  *
  * @param <T>
  */
-public interface NumericDimensionField<T extends CommonIndexValue>
-    extends NumericDimensionDefinition {
+public interface NumericDimensionField<T extends CommonIndexValue> extends
+    NumericDimensionDefinition {
   /**
    * Decode a numeric value or range from the raw field value
    *

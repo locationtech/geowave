@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
  * for both inputs and outputs. This conversion will only work if the data adapter implements
  * HadoopDataAdapter.
  */
-public abstract class GeoWaveReducer
-    extends Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable> {
+public abstract class GeoWaveReducer extends
+    Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable> {
   protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveReducer.class);
   protected HadoopWritableSerializationTool serializationTool;
 

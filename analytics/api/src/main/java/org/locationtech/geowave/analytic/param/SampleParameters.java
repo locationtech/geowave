@@ -13,17 +13,17 @@ import org.locationtech.geowave.analytic.sample.function.SamplingRankFunction;
 
 public class SampleParameters {
   public enum Sample implements ParameterEnum {
-    SAMPLE_SIZE(Integer.class, "sss", "Sample Size", false, true), MIN_SAMPLE_SIZE(Integer.class,
-        "sms", "Minimum Sample Size", false, true), MAX_SAMPLE_SIZE(Integer.class, "sxs",
-            "Max Sample Size", false, true), DATA_TYPE_NAME(String.class, "sdt",
-                "Sample Data Type Id", false, true), INDEX_NAME(String.class, "sdt",
-                    "Sample Index Type Id", false, true), SAMPLE_ITERATIONS(Integer.class, "ssi",
-                        "Minimum number of sample iterations", false,
-                        true), PROBABILITY_FUNCTION(SampleProbabilityFn.class, "spf",
-                            "The PDF determines the probability for samping an item. Used by specific sample rank functions, such as CentroidDistanceBasedSamplingRankFunction.",
-                            true, true), SAMPLE_RANK_FUNCTION(SamplingRankFunction.class, "srf",
-                                "The rank function used when sampling the first N highest rank items.",
-                                true, true);
+    SAMPLE_SIZE(Integer.class, "sss", "Sample Size", false, true),
+    MIN_SAMPLE_SIZE(Integer.class, "sms", "Minimum Sample Size", false, true),
+    MAX_SAMPLE_SIZE(Integer.class, "sxs", "Max Sample Size", false, true),
+    DATA_TYPE_NAME(String.class, "sdt", "Sample Data Type Id", false, true),
+    INDEX_NAME(String.class, "sdt", "Sample Index Type Id", false, true),
+    SAMPLE_ITERATIONS(Integer.class, "ssi", "Minimum number of sample iterations", false, true),
+    PROBABILITY_FUNCTION(SampleProbabilityFn.class, "spf",
+        "The PDF determines the probability for samping an item. Used by specific sample rank functions, such as CentroidDistanceBasedSamplingRankFunction.",
+        true, true),
+    SAMPLE_RANK_FUNCTION(SamplingRankFunction.class, "srf",
+        "The rank function used when sampling the first N highest rank items.", true, true);
 
     private final transient ParameterHelper<?> helper;
 

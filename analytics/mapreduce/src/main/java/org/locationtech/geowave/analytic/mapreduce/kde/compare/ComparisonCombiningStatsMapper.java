@@ -13,8 +13,8 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class ComparisonCombiningStatsMapper
-    extends Mapper<LongWritable, DoubleWritable, LongWritable, DoubleWritable> {
+public class ComparisonCombiningStatsMapper extends
+    Mapper<LongWritable, DoubleWritable, LongWritable, DoubleWritable> {
 
   @Override
   protected void map(

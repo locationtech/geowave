@@ -22,5 +22,7 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
  * @param <NativeFieldType>
  */
 public interface PersistentIndexFieldHandler<RowType, IndexFieldType extends CommonIndexValue, NativeFieldType>
-    extends IndexFieldHandler<RowType, IndexFieldType, NativeFieldType>, Persistable {
+    extends
+    IndexFieldHandler<RowType, IndexFieldType, NativeFieldType>,
+    Persistable {
 }

@@ -17,8 +17,8 @@ import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatis
 import org.opengis.feature.simple.SimpleFeature;
 import org.threeten.extra.Interval;
 
-public class FeatureTimeRangeStatistics extends TimeRangeDataStatistics<SimpleFeature>
-    implements FieldNameStatistic {
+public class FeatureTimeRangeStatistics extends TimeRangeDataStatistics<SimpleFeature> implements
+    FieldNameStatistic {
 
   public FeatureTimeRangeStatistics() {
     super();

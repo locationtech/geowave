@@ -23,8 +23,8 @@ import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 
-public class MapReduceMemoryOperations extends MemoryDataStoreOperations
-    implements MapReduceDataStoreOperations {
+public class MapReduceMemoryOperations extends MemoryDataStoreOperations implements
+    MapReduceDataStoreOperations {
 
   private final Map<ByteArray, SortedSet<MemoryStoreEntry>> storeData =
       Collections.synchronizedMap(new HashMap<ByteArray, SortedSet<MemoryStoreEntry>>());

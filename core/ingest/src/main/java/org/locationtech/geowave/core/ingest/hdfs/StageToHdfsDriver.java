@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
  * This class actually executes the staging of data to HDFS based on the available type plugin
  * providers that are discovered through SPI.
  */
-public class StageToHdfsDriver
-    extends AbstractLocalFileDriver<GeoWaveAvroFormatPlugin<?, ?>, StageRunData> {
+public class StageToHdfsDriver extends
+    AbstractLocalFileDriver<GeoWaveAvroFormatPlugin<?, ?>, StageRunData> {
   private static final Logger LOGGER = LoggerFactory.getLogger(StageToHdfsDriver.class);
   private final Map<String, GeoWaveAvroFormatPlugin<?, ?>> ingestPlugins;
   private final String hdfsHostPort;

@@ -12,8 +12,8 @@ import java.io.IOException;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class ComparisonIdentityMapper
-    extends Mapper<ComparisonCellData, LongWritable, ComparisonCellData, LongWritable> {
+public class ComparisonIdentityMapper extends
+    Mapper<ComparisonCellData, LongWritable, ComparisonCellData, LongWritable> {
 
   @Override
   protected void map(

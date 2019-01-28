@@ -17,8 +17,8 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.data.field.base.BigIntegerSerializationProvider.BigIntegerReader;
 import org.locationtech.geowave.core.store.data.field.base.BigIntegerSerializationProvider.BigIntegerWriter;
 
-public class BigIntegerArraySerializationProvider
-    implements FieldSerializationProviderSpi<BigInteger[]> {
+public class BigIntegerArraySerializationProvider implements
+    FieldSerializationProviderSpi<BigInteger[]> {
   @Override
   public FieldReader<BigInteger[]> getFieldReader() {
     return new BigIntegerArrayReader();
@@ -35,8 +35,8 @@ public class BigIntegerArraySerializationProvider
     }
   }
 
-  private static class BigIntegerArrayWriter
-      extends VariableSizeObjectArrayWriter<Object, BigInteger> {
+  private static class BigIntegerArrayWriter extends
+      VariableSizeObjectArrayWriter<Object, BigInteger> {
     public BigIntegerArrayWriter() {
       super(new BigIntegerWriter());
     }

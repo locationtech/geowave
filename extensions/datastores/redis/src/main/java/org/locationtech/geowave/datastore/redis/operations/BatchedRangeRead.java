@@ -193,8 +193,8 @@ public class BatchedRangeRead<T> {
     return new CloseableIterator.Wrapper<>(transformAndFilter(result));
   }
 
-  private static class PartitionIteratorWrapper
-      implements Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> {
+  private static class PartitionIteratorWrapper implements
+      Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> {
     private final byte[] partitionKey;
     private final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> iteratorDelegate;
 

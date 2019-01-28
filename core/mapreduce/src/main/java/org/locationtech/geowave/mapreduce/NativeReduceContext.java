@@ -35,8 +35,8 @@ import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
  * @param <KEYIN> The reduce context's input type
  * @param <VALUEIN> The reduce context's output type
  */
-public class NativeReduceContext<KEYIN, VALUEIN>
-    implements ReduceContext<KEYIN, VALUEIN, GeoWaveInputKey, Object> {
+public class NativeReduceContext<KEYIN, VALUEIN> implements
+    ReduceContext<KEYIN, VALUEIN, GeoWaveInputKey, Object> {
   private final ReduceContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> writableContext;
   private final HadoopWritableSerializationTool serializationTool;
 

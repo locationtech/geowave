@@ -17,8 +17,8 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.regionserver.RegionScanner;
 import org.apache.hadoop.hbase.regionserver.ScannerContext;
 
-public class ServerOpRegionScannerWrapper extends ServerOpInternalScannerWrapper
-    implements RegionScanner {
+public class ServerOpRegionScannerWrapper extends ServerOpInternalScannerWrapper implements
+    RegionScanner {
   public ServerOpRegionScannerWrapper(
       final Collection<HBaseServerOp> orderedServerOps,
       final RegionScanner delegate,

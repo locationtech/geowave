@@ -15,8 +15,8 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.threeten.extra.Interval;
 
-public abstract class TimeRangeAggregation<P extends Persistable, T>
-    implements Aggregation<P, Interval, T> {
+public abstract class TimeRangeAggregation<P extends Persistable, T> implements
+    Aggregation<P, Interval, T> {
 
   protected long min = Long.MAX_VALUE;
   protected long max = Long.MIN_VALUE;

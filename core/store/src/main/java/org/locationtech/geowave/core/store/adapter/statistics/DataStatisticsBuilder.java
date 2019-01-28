@@ -22,8 +22,10 @@ import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-public class DataStatisticsBuilder<T, R, B extends StatisticsQueryBuilder<R, B>>
-    implements IngestCallback<T>, DeleteCallback<T, GeoWaveRow>, ScanCallback<T, GeoWaveRow> {
+public class DataStatisticsBuilder<T, R, B extends StatisticsQueryBuilder<R, B>> implements
+    IngestCallback<T>,
+    DeleteCallback<T, GeoWaveRow>,
+    ScanCallback<T, GeoWaveRow> {
   private final DataStoreStatisticsProvider<T> statisticsProvider;
   private final Map<ByteArray, InternalDataStatistics<T, R, B>> statisticsMap = new HashMap<>();
   private final StatisticsId statisticsId;

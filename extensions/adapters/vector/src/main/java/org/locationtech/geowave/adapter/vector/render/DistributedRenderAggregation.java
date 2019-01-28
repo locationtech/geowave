@@ -28,8 +28,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DistributedRenderAggregation
-    implements Aggregation<DistributedRenderOptions, DistributedRenderResult, SimpleFeature> {
+public class DistributedRenderAggregation implements
+    Aggregation<DistributedRenderOptions, DistributedRenderResult, SimpleFeature> {
   private static final Logger LOGGER = LoggerFactory.getLogger(DistributedRenderAggregation.class);
   private DistributedRenderMapOutputFormat currentRenderer;
   private DistributedRenderResult currentResult;

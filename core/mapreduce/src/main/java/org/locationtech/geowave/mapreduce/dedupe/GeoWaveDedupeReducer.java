@@ -15,8 +15,8 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 
 /** A basic implementation of deduplication as a reducer */
-public class GeoWaveDedupeReducer
-    extends Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable> {
+public class GeoWaveDedupeReducer extends
+    Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable> {
 
   @Override
   protected void reduce(

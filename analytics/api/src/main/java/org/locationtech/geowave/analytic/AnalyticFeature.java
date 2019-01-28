@@ -121,10 +121,14 @@ public class AnalyticFeature {
   }
 
   public static enum ClusterFeatureAttribute {
-    NAME("name", String.class), GROUP_ID("groupID", String.class), ITERATION("iteration",
-        Integer.class), GEOMETRY("geometry", Geometry.class), WEIGHT("weight", Double.class), COUNT(
-            "count",
-            Long.class), ZOOM_LEVEL("level", Integer.class), BATCH_ID("batchID", String.class);
+    NAME("name", String.class),
+    GROUP_ID("groupID", String.class),
+    ITERATION("iteration", Integer.class),
+    GEOMETRY("geometry", Geometry.class),
+    WEIGHT("weight", Double.class),
+    COUNT("count", Long.class),
+    ZOOM_LEVEL("level", Integer.class),
+    BATCH_ID("batchID", String.class);
 
     private final String name;
     private final Class<?> type;

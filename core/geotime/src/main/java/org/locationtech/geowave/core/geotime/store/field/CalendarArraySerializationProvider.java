@@ -17,8 +17,8 @@ import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
-public class CalendarArraySerializationProvider
-    implements FieldSerializationProviderSpi<Calendar[]> {
+public class CalendarArraySerializationProvider implements
+    FieldSerializationProviderSpi<Calendar[]> {
   @Override
   public FieldReader<Calendar[]> getFieldReader() {
     return new CalendarArrayReader();

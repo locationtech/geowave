@@ -22,8 +22,8 @@ import org.locationtech.geowave.core.store.CloseableIterator;
  * This class is the mapper used when aggregating key value pairs from intermediate data to be
  * ingested into GeoWave using a reducer.
  */
-public class IntermediateKeyValueMapper
-    extends Mapper<AvroKey, NullWritable, WritableComparable<?>, Writable> {
+public class IntermediateKeyValueMapper extends
+    Mapper<AvroKey, NullWritable, WritableComparable<?>, Writable> {
   private IngestWithReducer ingestWithReducer;
 
   @Override

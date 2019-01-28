@@ -16,8 +16,8 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
 
-public class AggregateTypeQueryOptions<P extends Persistable, R, T>
-    implements DataTypeQueryOptions<R> {
+public class AggregateTypeQueryOptions<P extends Persistable, R, T> implements
+    DataTypeQueryOptions<R> {
   private String[] typeNames;
   private Aggregation<P, R, T> aggregation;
 

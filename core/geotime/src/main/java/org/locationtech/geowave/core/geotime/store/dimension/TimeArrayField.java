@@ -18,8 +18,8 @@ import org.locationtech.geowave.core.store.dimension.ArrayWrapperReader;
 import org.locationtech.geowave.core.store.dimension.ArrayWrapperWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 
-public class TimeArrayField extends ArrayField<Time>
-    implements NumericDimensionField<ArrayWrapper<Time>> {
+public class TimeArrayField extends ArrayField<Time> implements
+    NumericDimensionField<ArrayWrapper<Time>> {
   private ArrayWrapperReader<Time> reader;
   private ArrayWrapperWriter<Time> writer;
 

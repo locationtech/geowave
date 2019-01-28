@@ -20,8 +20,8 @@ import org.threeten.extra.Interval;
  *
  * @param <R>
  */
-public interface VectorStatisticsQueryBuilder<R>
-    extends StatisticsQueryBuilder<R, VectorStatisticsQueryBuilder<R>> {
+public interface VectorStatisticsQueryBuilder<R> extends
+    StatisticsQueryBuilder<R, VectorStatisticsQueryBuilder<R>> {
   /**
    * create a new builder of this type
    *

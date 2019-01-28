@@ -52,8 +52,8 @@ import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.S
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase
-    implements GeoWaveGrpcServiceSpi {
+public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase implements
+    GeoWaveGrpcServiceSpi {
   private static final Logger LOGGER =
       LoggerFactory.getLogger(GeoWaveGrpcCliGeoserverService.class.getName());
 

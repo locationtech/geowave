@@ -28,8 +28,8 @@ public class SimpleFeatureItemWrapperFactory implements AnalyticItemWrapperFacto
   public void initialize(final JobContext context, final Class<?> scope, final Logger logger)
       throws IOException {}
 
-  public static class SimpleFeatureAnalyticItemWrapper
-      implements AnalyticItemWrapper<SimpleFeature> {
+  public static class SimpleFeatureAnalyticItemWrapper implements
+      AnalyticItemWrapper<SimpleFeature> {
 
     final SimpleFeature item;
 

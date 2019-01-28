@@ -15,9 +15,9 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.jts.geom.Envelope;
 
-public class CommonIndexBoundingBoxAggregation<P extends Persistable>
-    extends BoundingBoxAggregation<P, CommonIndexedPersistenceEncoding>
-    implements CommonIndexAggregation<P, Envelope> {
+public class CommonIndexBoundingBoxAggregation<P extends Persistable> extends
+    BoundingBoxAggregation<P, CommonIndexedPersistenceEncoding> implements
+    CommonIndexAggregation<P, Envelope> {
 
   @Override
   protected Envelope getEnvelope(final CommonIndexedPersistenceEncoding entry) {

@@ -31,7 +31,9 @@ import org.locationtech.geowave.core.store.ingest.GeoWaveData;
  * @param <O> data type that will be ingested into GeoWave
  */
 public interface IngestWithReducer<I, K extends WritableComparable<?>, V extends Writable, O>
-    extends DataAdapterProvider<O>, Persistable {
+    extends
+    DataAdapterProvider<O>,
+    Persistable {
   public CloseableIterator<KeyValueData<K, V>> toIntermediateMapReduceData(I input);
 
   public CloseableIterator<GeoWaveData<O>> toGeoWaveData(

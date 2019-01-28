@@ -15,8 +15,9 @@ import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfigura
 import org.locationtech.geowave.core.index.StringUtils;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-public class SimpleFeaturePrimaryIndexConfiguration
-    implements SimpleFeatureUserDataConfiguration, java.io.Serializable {
+public class SimpleFeaturePrimaryIndexConfiguration implements
+    SimpleFeatureUserDataConfiguration,
+    java.io.Serializable {
   private static final long serialVersionUID = -7425830022998223202L;
   public static final String INDEX_NAME = "PrimaryIndexName";
   private List<String> indexNames = null;

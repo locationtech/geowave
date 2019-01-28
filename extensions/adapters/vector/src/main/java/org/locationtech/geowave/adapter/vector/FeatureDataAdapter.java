@@ -92,8 +92,9 @@ import com.google.common.collect.HashBiMap;
  * one for each type of statistic. The default statistics for geometry and temporal constraints
  * cannot be changed, as they are critical components to the efficiency of query processing.
  */
-public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
-    implements GeotoolsFeatureDataAdapter, StatisticsProvider<SimpleFeature>,
+public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> implements
+    GeotoolsFeatureDataAdapter,
+    StatisticsProvider<SimpleFeature>,
     HadoopDataAdapter<SimpleFeature, FeatureWritable>,
     InitializeWithIndicesDataAdapter<SimpleFeature> {
   private static final Logger LOGGER = LoggerFactory.getLogger(FeatureDataAdapter.class);
@@ -759,8 +760,8 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
     return new FeatureWritableSerializer(reprojectedFeatureType);
   }
 
-  private static class FeatureWritableSerializer
-      implements HadoopWritableSerializer<SimpleFeature, FeatureWritable> {
+  private static class FeatureWritableSerializer implements
+      HadoopWritableSerializer<SimpleFeature, FeatureWritable> {
     private final FeatureWritable writable;
 
     FeatureWritableSerializer(final SimpleFeatureType type) {
