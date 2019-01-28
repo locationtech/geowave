@@ -37,8 +37,8 @@ public class MapReduceTestUtils {
   public static final String TEST_EXPORT_DIRECTORY = "basicMapReduceIT-export";
 
   public static final String EXPECTED_RESULTS_KEY = "EXPECTED_RESULTS";
-  public static final int MIN_INPUT_SPLITS = 15;
-  public static final int MAX_INPUT_SPLITS = 20;
+  public static final int MIN_INPUT_SPLITS = 3;
+  public static final int MAX_INPUT_SPLITS = 5;
 
   public static void testMapReduceIngest(
       final DataStorePluginOptions dataStore,
