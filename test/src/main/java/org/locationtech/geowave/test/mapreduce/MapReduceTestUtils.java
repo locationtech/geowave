@@ -49,13 +49,19 @@ public class MapReduceTestUtils {
 
   public static void testMapReduceExport(final DataStorePluginOptions inputStorePluginOptions)
       throws Exception {
+    testMapReduceExport(inputStorePluginOptions, TEST_EXPORT_DIRECTORY);
+  }
+
+  public static void testMapReduceExport(
+      final DataStorePluginOptions inputStorePluginOptions,
+      final String directory) throws Exception {
     final VectorMRExportCommand exportCommand = new VectorMRExportCommand();
     final VectorMRExportOptions options = exportCommand.getMrOptions();
 
     exportCommand.setStoreOptions(inputStorePluginOptions);
 
     final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
-    final String exportPath = env.getHdfsBaseDirectory() + "/" + TEST_EXPORT_DIRECTORY;
+    final String exportPath = env.getHdfsBaseDirectory() + "/" + directory;
 
     final File exportDir = new File(exportPath.replace("file:", ""));
     if (exportDir.exists()) {
@@ -71,7 +77,6 @@ public class MapReduceTestUtils {
         }
       }
     }
-
     exportCommand.setParameters(exportPath, null);
     options.setBatchSize(10000);
     options.setMinSplits(MapReduceTestUtils.MIN_INPUT_SPLITS);
@@ -116,8 +121,7 @@ public class MapReduceTestUtils {
 
     // Indexes
     final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(",");
-    final List<IndexPluginOptions> indexOptions =
-        new ArrayList<>(indexTypes.length);
+    final List<IndexPluginOptions> indexOptions = new ArrayList<>(indexTypes.length);
     for (final String indexType : indexTypes) {
       final IndexPluginOptions indexOption = new IndexPluginOptions();
       indexOption.selectPlugin(indexType);

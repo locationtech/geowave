@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.math.util.MathUtils;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.junit.Assert;
@@ -552,7 +553,6 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       final DimensionalityType dimensionalityType) throws Exception {
     final File exportDir =
         exportWithCQL(getDataStorePluginOptions(), filterUrl, dimensionalityType);
-
     TestUtils.testLocalIngest(
         getDataStorePluginOptions(),
         dimensionalityType,
@@ -617,8 +617,10 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     final VectorLocalExportCommand exportCommand = new VectorLocalExportCommand();
     final VectorLocalExportOptions options = exportCommand.getOptions();
     final File exportDir = new File(TestUtils.TEMP_DIR, TEST_LOCAL_EXPORT_DIRECTORY);
-    exportDir.delete();
-    exportDir.mkdirs();
+    FileUtils.deleteDirectory(exportDir);
+    if (!exportDir.mkdirs()) {
+      LOGGER.warn("Unable to create directory: " + exportDir.getAbsolutePath());
+    }
 
     exportCommand.setParameters("test");
 
