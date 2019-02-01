@@ -69,8 +69,8 @@ public class ServerSideOperationsObserver extends BaseRegionObserver {
     }
   }
 
-  private static class InternalScannerWrapperFactory
-      implements ScannerWrapperFactory<InternalScanner> {
+  private static class InternalScannerWrapperFactory implements
+      ScannerWrapperFactory<InternalScanner> {
 
     @Override
     public InternalScanner createScannerWrapper(

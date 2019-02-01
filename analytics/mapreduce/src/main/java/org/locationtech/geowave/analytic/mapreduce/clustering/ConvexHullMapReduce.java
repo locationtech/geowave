@@ -64,8 +64,8 @@ import org.slf4j.LoggerFactory;
 public class ConvexHullMapReduce {
   protected static final Logger LOGGER = LoggerFactory.getLogger(ConvexHullMapReduce.class);
 
-  public static class ConvexHullMap<T>
-      extends GeoWaveWritableInputMapper<GeoWaveInputKey, ObjectWritable> {
+  public static class ConvexHullMap<T> extends
+      GeoWaveWritableInputMapper<GeoWaveInputKey, ObjectWritable> {
 
     protected GeoWaveInputKey outputKey = new GeoWaveInputKey();
     private ObjectWritable currentValue;
@@ -145,8 +145,8 @@ public class ConvexHullMapReduce {
     }
   }
 
-  public static class ConvexHullReducer<T>
-      extends GeoWaveWritableInputReducer<GeoWaveOutputKey, SimpleFeature> {
+  public static class ConvexHullReducer<T> extends
+      GeoWaveWritableInputReducer<GeoWaveOutputKey, SimpleFeature> {
 
     private CentroidManager<T> centroidManager;
     private String[] indexNames;

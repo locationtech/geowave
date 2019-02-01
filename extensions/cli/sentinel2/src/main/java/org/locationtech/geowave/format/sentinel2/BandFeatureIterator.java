@@ -139,8 +139,8 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
     return null;
   }
 
-  private static class SceneToBandFeatureTransform
-      implements Function<SimpleFeature, Iterator<SimpleFeature>> {
+  private static class SceneToBandFeatureTransform implements
+      Function<SimpleFeature, Iterator<SimpleFeature>> {
     private final SimpleFeatureBuilder featureBuilder;
 
     public SceneToBandFeatureTransform(final SimpleFeatureType type) {

@@ -326,8 +326,8 @@ public class GDELTIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroWho
     return new IngestGDELTFromHdfs(this);
   }
 
-  public static class IngestGDELTFromHdfs
-      extends AbstractIngestSimpleFeatureWithMapper<AvroWholeFile> {
+  public static class IngestGDELTFromHdfs extends
+      AbstractIngestSimpleFeatureWithMapper<AvroWholeFile> {
     public IngestGDELTFromHdfs() {
       this(new GDELTIngestPlugin());
     }

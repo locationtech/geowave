@@ -44,8 +44,8 @@ import org.slf4j.LoggerFactory;
  * using a map-reduce job. It supports OSM metadata.xml files if the file is directly in the root
  * base directory that is passed in command-line to the ingest framework.
  */
-public class GeoWaveAvroIngestPlugin
-    extends AbstractSimpleFeatureIngestPlugin<AvroSimpleFeatureCollection> {
+public class GeoWaveAvroIngestPlugin extends
+    AbstractSimpleFeatureIngestPlugin<AvroSimpleFeatureCollection> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveAvroIngestPlugin.class);
 
@@ -185,8 +185,8 @@ public class GeoWaveAvroIngestPlugin
     return new Index[] {};
   }
 
-  public static class IngestAvroFeaturesFromHdfs
-      extends AbstractIngestSimpleFeatureWithMapper<AvroSimpleFeatureCollection> {
+  public static class IngestAvroFeaturesFromHdfs extends
+      AbstractIngestSimpleFeatureWithMapper<AvroSimpleFeatureCollection> {
     public IngestAvroFeaturesFromHdfs() {
       this(new GeoWaveAvroIngestPlugin());
       // this constructor will be used when deserialized

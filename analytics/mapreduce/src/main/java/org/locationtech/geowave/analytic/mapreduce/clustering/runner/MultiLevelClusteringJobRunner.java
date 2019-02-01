@@ -46,8 +46,8 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
  *             lower level.
  * @formatter: on
  */
-public abstract class MultiLevelClusteringJobRunner extends MapReduceJobController
-    implements MapReduceJobRunner {
+public abstract class MultiLevelClusteringJobRunner extends MapReduceJobController implements
+    MapReduceJobRunner {
 
   final GroupAssigmentJobRunner groupAssignmentRunner = new GroupAssigmentJobRunner();
   final GeoWaveAnalyticExtractJobRunner jobExtractRunner = new GeoWaveAnalyticExtractJobRunner();

@@ -393,8 +393,8 @@ public class GeoWavePluginConfig {
     return new SPIServiceRegistry(GeoWavePluginConfig.class).load(IndexQueryStrategySPI.class);
   }
 
-  private static class GeoWaveConfigOptionToGeoToolsConfigOption
-      implements Function<ConfigOption, Param> {
+  private static class GeoWaveConfigOptionToGeoToolsConfigOption implements
+      Function<ConfigOption, Param> {
 
     @Override
     public Param apply(final ConfigOption input) {

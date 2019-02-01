@@ -25,8 +25,8 @@ import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RasterFootprintStatistics
-    extends AbstractDataStatistics<GridCoverage, Geometry, BaseStatisticsQueryBuilder<Geometry>> {
+public class RasterFootprintStatistics extends
+    AbstractDataStatistics<GridCoverage, Geometry, BaseStatisticsQueryBuilder<Geometry>> {
   private static final Logger LOGGER = LoggerFactory.getLogger(RasterFootprintStatistics.class);
   public static final BaseStatisticsType<Geometry> STATS_TYPE =
       new BaseStatisticsType<>("FOOTPRINT");

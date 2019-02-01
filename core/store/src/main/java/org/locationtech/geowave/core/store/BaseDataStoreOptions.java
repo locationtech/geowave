@@ -21,7 +21,7 @@ public class BaseDataStoreOptions implements DataStoreOptions {
   protected boolean enableServerSideLibrary = true;
 
   @Parameter(names = "--enableSecondaryIndexing")
-  protected boolean enableSecondaryIndex = false;
+  protected boolean enableSecondaryIndexing = false;
 
   @Parameter(names = "--enableVisibility", arity = 1)
   protected Boolean configuredEnableVisibility = null;
@@ -46,12 +46,12 @@ public class BaseDataStoreOptions implements DataStoreOptions {
 
   @Override
   public boolean isSecondaryIndexing() {
-    return enableSecondaryIndex;
+    return enableSecondaryIndexing;
   }
 
   @Override
-  public void setSecondaryIndexing(final boolean enableSecondaryIndex) {
-    this.enableSecondaryIndex = enableSecondaryIndex;
+  public void setSecondaryIndexing(final boolean enableSecondaryIndexing) {
+    this.enableSecondaryIndexing = enableSecondaryIndexing;
   }
 
   @Override
@@ -65,7 +65,7 @@ public class BaseDataStoreOptions implements DataStoreOptions {
 
   @Override
   public boolean isServerSideLibraryEnabled() {
-    return enableServerSideLibrary && !enableSecondaryIndex;
+    return enableServerSideLibrary && !enableSecondaryIndexing;
   }
 
   public void setServerSideLibraryEnabled(final boolean enableServerSideLibrary) {

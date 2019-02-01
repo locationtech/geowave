@@ -41,8 +41,8 @@ import org.slf4j.LoggerFactory;
  * This extends the local file driver to directly ingest data into GeoWave utilizing the
  * LocalFileIngestPlugin's that are discovered by the system.
  */
-public class LocalFileIngestDriver
-    extends AbstractLocalFileDriver<LocalFileIngestPlugin<?>, LocalIngestRunData> {
+public class LocalFileIngestDriver extends
+    AbstractLocalFileDriver<LocalFileIngestPlugin<?>, LocalIngestRunData> {
   public static final int INGEST_BATCH_SIZE = 50000;
   private static final Logger LOGGER = LoggerFactory.getLogger(LocalFileIngestDriver.class);
   protected DataStorePluginOptions storeOptions;

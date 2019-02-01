@@ -35,7 +35,7 @@ public class BasicSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
-      options = {"enableSecondaryIndex=true"})
+      options = {"enableSecondaryIndexing=true"})
   protected DataStorePluginOptions dataStoreOptions;
   private static long startMillis;
   private static final String testName = "BasicSecondaryIndexIT";

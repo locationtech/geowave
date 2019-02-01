@@ -32,7 +32,8 @@ import org.locationtech.geowave.core.store.util.VisibilityExpression;
 
 public class FieldVisibilityCount<T> extends
     AbstractDataStatistics<T, Map<ByteArray, Long>, IndexStatisticsQueryBuilder<Map<ByteArray, Long>>>
-    implements DeleteCallback<T, GeoWaveRow> {
+    implements
+    DeleteCallback<T, GeoWaveRow> {
   public static final IndexStatisticsType<Map<ByteArray, Long>> STATS_TYPE =
       new IndexStatisticsType<>("FIELD_VISIBILITY_COUNT");
   private final Map<ByteArray, Long> countsPerVisibility;

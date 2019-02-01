@@ -51,8 +51,8 @@ public class UpdateCentroidCostMapReduce {
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(UpdateCentroidCostMapReduce.class);
 
-  public static class UpdateCentroidCostMap
-      extends GeoWaveWritableInputMapper<GroupIDText, CountofDoubleWritable> {
+  public static class UpdateCentroidCostMap extends
+      GeoWaveWritableInputMapper<GroupIDText, CountofDoubleWritable> {
     private NestedGroupCentroidAssignment<Object> nestedGroupCentroidAssigner;
     private final CountofDoubleWritable dw = new CountofDoubleWritable();
     protected final GroupIDText outputWritable = new GroupIDText();
@@ -120,8 +120,8 @@ public class UpdateCentroidCostMapReduce {
     }
   }
 
-  public static class UpdateCentroidCostCombiner
-      extends Reducer<GroupIDText, CountofDoubleWritable, GroupIDText, CountofDoubleWritable> {
+  public static class UpdateCentroidCostCombiner extends
+      Reducer<GroupIDText, CountofDoubleWritable, GroupIDText, CountofDoubleWritable> {
     final CountofDoubleWritable outputValue = new CountofDoubleWritable();
 
     @Override
@@ -142,8 +142,8 @@ public class UpdateCentroidCostMapReduce {
     }
   }
 
-  public static class UpdateCentroidCostReducer
-      extends Reducer<GroupIDText, CountofDoubleWritable, GeoWaveOutputKey, Object> {
+  public static class UpdateCentroidCostReducer extends
+      Reducer<GroupIDText, CountofDoubleWritable, GeoWaveOutputKey, Object> {
 
     private CentroidManager<Object> centroidManager;
     private String[] indexNames;

@@ -33,9 +33,11 @@ import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-public abstract class AbstractSimpleFeatureIngestPlugin<I>
-    implements LocalFileIngestPlugin<SimpleFeature>, IngestFromHdfsPlugin<I, SimpleFeature>,
-    GeoWaveAvroFormatPlugin<I, SimpleFeature>, Persistable {
+public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
+    LocalFileIngestPlugin<SimpleFeature>,
+    IngestFromHdfsPlugin<I, SimpleFeature>,
+    GeoWaveAvroFormatPlugin<I, SimpleFeature>,
+    Persistable {
   protected CQLFilterOptionProvider filterOptionProvider = new CQLFilterOptionProvider();
   protected FeatureSerializationOptionProvider serializationFormatOptionProvider =
       new FeatureSerializationOptionProvider();
@@ -253,8 +255,8 @@ public abstract class AbstractSimpleFeatureIngestPlugin<I>
       final String[] indexNames,
       final String globalVisibility);
 
-  public abstract static class AbstractIngestSimpleFeatureWithMapper<I>
-      implements IngestWithMapper<I, SimpleFeature> {
+  public abstract static class AbstractIngestSimpleFeatureWithMapper<I> implements
+      IngestWithMapper<I, SimpleFeature> {
     protected AbstractSimpleFeatureIngestPlugin<I> parentPlugin;
 
     public AbstractIngestSimpleFeatureWithMapper(

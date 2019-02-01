@@ -45,8 +45,8 @@ import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SpatialTemporalDimensionalityTypeProvider
-    implements DimensionalityTypeProviderSpi<SpatialTemporalOptions> {
+public class SpatialTemporalDimensionalityTypeProvider implements
+    DimensionalityTypeProviderSpi<SpatialTemporalOptions> {
   private static final Logger LOGGER =
       LoggerFactory.getLogger(SpatialTemporalDimensionalityTypeProvider.class);
   private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "ST_IDX";
@@ -266,8 +266,8 @@ public class SpatialTemporalDimensionalityTypeProvider
     }
   }
 
-  public static class SpatialTemporalIndexBuilder
-      extends BaseIndexBuilder<SpatialTemporalIndexBuilder> {
+  public static class SpatialTemporalIndexBuilder extends
+      BaseIndexBuilder<SpatialTemporalIndexBuilder> {
     private final SpatialTemporalOptions options;
 
     public SpatialTemporalIndexBuilder() {

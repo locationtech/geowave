@@ -35,8 +35,8 @@ import org.locationtech.geowave.analytic.param.SampleParameters;
 import org.locationtech.geowave.analytic.param.StoreParameters;
 
 /** */
-public class KMeansSingleSampleJobRunner<T> extends MapReduceJobController
-    implements ClusteringRunner {
+public class KMeansSingleSampleJobRunner<T> extends MapReduceJobController implements
+    ClusteringRunner {
   final KSamplerJobRunner sampleSetsRunner = new KSamplerJobRunner();
   final KMeansIterationsJobRunner<T> kmeansJobRunner = new KMeansIterationsJobRunner<T>();
 

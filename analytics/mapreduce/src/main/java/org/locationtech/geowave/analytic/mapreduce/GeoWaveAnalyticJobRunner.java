@@ -54,8 +54,10 @@ import org.slf4j.LoggerFactory;
  * submission, isolating some of the job management responsibilities. One key benefit is support of
  * unit testing for job runner instances.
  */
-public abstract class GeoWaveAnalyticJobRunner extends Configured
-    implements Tool, MapReduceJobRunner, IndependentJobRunner {
+public abstract class GeoWaveAnalyticJobRunner extends Configured implements
+    Tool,
+    MapReduceJobRunner,
+    IndependentJobRunner {
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveAnalyticJobRunner.class);
 

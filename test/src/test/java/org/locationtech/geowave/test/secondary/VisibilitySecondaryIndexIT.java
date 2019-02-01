@@ -41,7 +41,7 @@ public class VisibilitySecondaryIndexIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
-      options = {"enableSecondaryIndex=true", "enableVisibility=true"})
+      options = {"enableSecondaryIndexing=true", "enableVisibility=true"})
   protected DataStorePluginOptions dataStoreOptions;
   private static final String testName = "VisibilitySecondaryIndexIT";
   private static long startMillis;

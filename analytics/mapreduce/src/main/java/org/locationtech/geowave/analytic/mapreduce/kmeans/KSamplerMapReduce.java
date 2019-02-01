@@ -85,8 +85,8 @@ import org.slf4j.LoggerFactory;
 public class KSamplerMapReduce {
   protected static final Logger LOGGER = LoggerFactory.getLogger(KSamplerMapReduce.class);
 
-  public static class SampleMap<T>
-      extends GeoWaveWritableInputMapper<GeoWaveInputKey, ObjectWritable> {
+  public static class SampleMap<T> extends
+      GeoWaveWritableInputMapper<GeoWaveInputKey, ObjectWritable> {
 
     protected GeoWaveInputKey outputKey = new GeoWaveInputKey();
     private final KeyManager keyManager = new KeyManager();

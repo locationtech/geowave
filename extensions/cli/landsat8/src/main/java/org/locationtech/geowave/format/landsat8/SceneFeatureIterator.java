@@ -54,8 +54,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SceneFeatureIterator implements SimpleFeatureIterator {
-  protected static class BestCloudCoverComparator
-      implements Comparator<SimpleFeature>, Serializable {
+  protected static class BestCloudCoverComparator implements
+      Comparator<SimpleFeature>,
+      Serializable {
     private static final long serialVersionUID = -5294130929073387335L;
 
     @Override

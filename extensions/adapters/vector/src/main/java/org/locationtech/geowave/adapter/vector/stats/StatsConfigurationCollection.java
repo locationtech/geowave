@@ -63,8 +63,8 @@ public class StatsConfigurationCollection implements java.io.Serializable, Persi
     configurationsForAttribute = (List) PersistenceUtils.fromBinaryAsList(bytes);
   }
 
-  public static class SimpleFeatureStatsConfigurationCollection
-      implements SimpleFeatureUserDataConfiguration {
+  public static class SimpleFeatureStatsConfigurationCollection implements
+      SimpleFeatureUserDataConfiguration {
 
     private static final long serialVersionUID = -9149753182284018327L;
     private Map<String, StatsConfigurationCollection> attConfig = new HashMap<>();

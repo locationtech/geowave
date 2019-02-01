@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.metadata;
 
-import com.google.common.collect.Streams;
 import java.util.Arrays;
 import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -20,10 +19,11 @@ import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Streams;
 
 /**
- * This class will persist Adapter Index Mappings within an Accumulo table for GeoWave metadata. The
- * mappings will be persisted in an "AIM" column family.
+ * This class will persist Adapter Index Mappings within a table for GeoWave metadata. The mappings
+ * will be persisted in an "AIM" column family.
  *
  * <p> There is an LRU cache associated with it so staying in sync with external updates is not
  * practical - it assumes the objects are not updated often or at all. The objects are stored in
@@ -33,7 +33,8 @@ import org.slf4j.LoggerFactory;
  * adapter and indexing is consistent across all visibility constraints.
  */
 public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<AdapterToIndexMapping>
-    implements AdapterIndexMappingStore {
+    implements
+    AdapterIndexMappingStore {
   private static final Logger LOGGER = LoggerFactory.getLogger(AdapterIndexMappingStoreImpl.class);
 
   public AdapterIndexMappingStoreImpl(
@@ -106,7 +107,7 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
     final AdapterToIndexMapping oldMapping = super.getObject(adapterId, null, null);
 
     boolean found = false;
-    String[] indexNames = oldMapping.getIndexNames();
+    final String[] indexNames = oldMapping.getIndexNames();
     for (int i = 0; i < indexNames.length; i++) {
       if (indexNames[i].compareTo(indexName) == 0) {
         found = true;
@@ -120,7 +121,7 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
 
     if (indexNames.length > 1) {
       // update the mapping and reset it
-      String[] newIndices = new String[indexNames.length - 1];
+      final String[] newIndices = new String[indexNames.length - 1];
       int count = 0;
       for (int i = 0; i < indexNames.length; i++) {
         if (indexNames[i].compareTo(indexName) == 0) {

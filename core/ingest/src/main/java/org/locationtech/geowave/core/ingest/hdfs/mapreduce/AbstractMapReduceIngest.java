@@ -44,7 +44,9 @@ import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
  *        configuration and used by the mapper and/or reducer to ingest data
  */
 public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapterProvider<?>>
-    extends Configured implements Tool {
+    extends
+    Configured implements
+    Tool {
   public static final String INGEST_PLUGIN_KEY = "INGEST_PLUGIN";
   public static final String GLOBAL_VISIBILITY_KEY = "GLOBAL_VISIBILITY";
   public static final String INDEX_NAMES_KEY = "INDEX_NAMES";

@@ -33,7 +33,8 @@ import org.opengis.feature.simple.SimpleFeature;
  * <p> The default number of bins is 32.
  */
 public class FeatureFixedBinNumericStatistics extends FixedBinNumericStatistics<SimpleFeature>
-    implements FieldNameStatistic {
+    implements
+    FieldNameStatistic {
 
   public static final FieldStatisticsType<FixedBinNumericHistogram> STATS_TYPE =
       new FieldStatisticsType<>("FEATURE_FIXED_BIN_NUMERIC_HISTOGRAM");

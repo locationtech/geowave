@@ -101,8 +101,8 @@ public class KMeansIterationsJobRunnerTest {
     }
   }
 
-  public static class KMeansIterationsJobRunnerForTest
-      extends KMeansIterationsJobRunner<SimpleFeature> {
+  public static class KMeansIterationsJobRunnerForTest extends
+      KMeansIterationsJobRunner<SimpleFeature> {
     private int iteration = 1;
     protected static Map<String, List<AnalyticItemWrapper<SimpleFeature>>> groups = new HashMap<>();
     protected static Map<String, List<AnalyticItemWrapper<SimpleFeature>>> deletedSet =
