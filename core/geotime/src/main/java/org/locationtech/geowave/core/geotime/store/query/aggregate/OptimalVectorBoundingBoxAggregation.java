@@ -15,8 +15,8 @@ import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.jts.geom.Envelope;
 
-public class OptimalVectorBoundingBoxAggregation<P extends Persistable, T>
-    extends BaseOptimalVectorAggregation<P, Envelope, T> {
+public class OptimalVectorBoundingBoxAggregation<P extends Persistable, T> extends
+    BaseOptimalVectorAggregation<P, Envelope, T> {
   public OptimalVectorBoundingBoxAggregation() {}
 
   public OptimalVectorBoundingBoxAggregation(final FieldNameParam fieldNameParam) {

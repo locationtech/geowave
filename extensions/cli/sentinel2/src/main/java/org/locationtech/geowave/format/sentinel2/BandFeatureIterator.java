@@ -8,12 +8,11 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterators;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +29,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 
 public class BandFeatureIterator implements SimpleFeatureIterator {
   // List of predefined attributes
@@ -45,12 +46,12 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
    * @throws NoSuchAuthorityCodeException
    * @throws FactoryException
    */
-  public static SimpleFeatureTypeBuilder defaultBandFeatureTypeBuilder(String typeName)
+  public static SimpleFeatureTypeBuilder defaultBandFeatureTypeBuilder(final String typeName)
       throws NoSuchAuthorityCodeException, FactoryException {
-    SimpleFeatureTypeBuilder sceneBuilder =
+    final SimpleFeatureTypeBuilder sceneBuilder =
         SceneFeatureIterator.defaultSceneFeatureTypeBuilder(typeName);
 
-    SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+    final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
     typeBuilder.init(sceneBuilder.buildFeatureType());
     typeBuilder.setName(typeName);
     typeBuilder.setDefaultGeometry(SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME);
@@ -97,13 +98,12 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
         sceneIterator.getProvider().bandFeatureTypeBuilder();
     final SimpleFeatureType bandType = typeBuilder.buildFeatureType();
 
-    Iterator<SimpleFeature> featureIterator =
-        new FeatureIteratorIterator<SimpleFeature>(sceneIterator);
+    Iterator<SimpleFeature> featureIterator = new FeatureIteratorIterator<>(sceneIterator);
     featureIterator =
         Iterators.concat(
             Iterators.transform(featureIterator, new SceneToBandFeatureTransform(bandType)));
 
-    if (cqlFilter != null && !cqlFilter.equals(Filter.INCLUDE)) {
+    if ((cqlFilter != null) && !cqlFilter.equals(Filter.INCLUDE)) {
       final String[] attributes = DataUtilities.attributeNames(cqlFilter, bandType);
 
       // we can rely on the scene filtering if we don't have to check any
@@ -139,8 +139,8 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
     return null;
   }
 
-  private static class SceneToBandFeatureTransform
-      implements Function<SimpleFeature, Iterator<SimpleFeature>> {
+  private static class SceneToBandFeatureTransform implements
+      Function<SimpleFeature, Iterator<SimpleFeature>> {
     private final SimpleFeatureBuilder featureBuilder;
 
     public SceneToBandFeatureTransform(final SimpleFeatureType type) {
@@ -148,15 +148,18 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
     }
 
     @Override
-    public Iterator<SimpleFeature> apply(SimpleFeature scene) {
+    public Iterator<SimpleFeature> apply(final SimpleFeature scene) {
+      if (scene == null) {
+        return Collections.emptyIterator();
+      }
       final String entityId = scene.getID();
-      final List<SimpleFeature> bands = new ArrayList<SimpleFeature>();
+      final List<SimpleFeature> bands = new ArrayList<>();
 
-      for (String bandId : scene.getAttribute(
+      for (final String bandId : scene.getAttribute(
           SceneFeatureIterator.BANDS_ATTRIBUTE_NAME).toString().split(";")) {
-        SimpleFeature band = featureBuilder.buildFeature(entityId + "_" + bandId);
+        final SimpleFeature band = featureBuilder.buildFeature(entityId + "_" + bandId);
 
-        for (Property property : scene.getProperties()) {
+        for (final Property property : scene.getProperties()) {
           band.setAttribute(property.getName(), property.getValue());
         }
         band.setAttribute(BAND_ATTRIBUTE_NAME, bandId);

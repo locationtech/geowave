@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.accumulo.operations;
 
-import com.google.common.collect.Iterators;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,6 +34,7 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterators;
 
 public class AccumuloMetadataReader implements MetadataReader {
   private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloMetadataReader.class);
@@ -122,17 +122,11 @@ public class AccumuloMetadataReader implements MetadataReader {
           new ScannerClosableWrapper(scanner),
           Iterators.transform(
               scanner.iterator(),
-              new com.google.common.base.Function<Entry<Key, Value>, GeoWaveMetadata>() {
-
-                @Override
-                public GeoWaveMetadata apply(final Entry<Key, Value> row) {
-                  return new GeoWaveMetadata(
-                      row.getKey().getRow().getBytes(),
-                      row.getKey().getColumnQualifier().getBytes(),
-                      row.getKey().getColumnVisibility().getBytes(),
-                      row.getValue().get());
-                }
-              }));
+              row -> new GeoWaveMetadata(
+                  row.getKey().getRow().getBytes(),
+                  row.getKey().getColumnQualifier().getBytes(),
+                  row.getKey().getColumnVisibility().getBytes(),
+                  row.getValue().get())));
     } catch (final TableNotFoundException e) {
       LOGGER.warn("GeoWave metadata table not found", e);
     }

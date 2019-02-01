@@ -24,9 +24,9 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-public class DifferingFieldVisibilityEntryCount<T>
-    extends AbstractDataStatistics<T, Long, IndexStatisticsQueryBuilder<Long>>
-    implements DeleteCallback<T, GeoWaveRow> {
+public class DifferingFieldVisibilityEntryCount<T> extends
+    AbstractDataStatistics<T, Long, IndexStatisticsQueryBuilder<Long>> implements
+    DeleteCallback<T, GeoWaveRow> {
   public static final IndexStatisticsType<Long> STATS_TYPE =
       new IndexStatisticsType<>("DIFFERING_VISIBILITY_COUNT");
 

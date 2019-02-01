@@ -25,8 +25,8 @@ import org.locationtech.geowave.mapreduce.JobContextIndexStore;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.coverage.grid.GridCoverage;
 
-public class KDEReducer
-    extends Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage> {
+public class KDEReducer extends
+    Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage> {
   private static final class TileInfo {
     private final double tileWestLon;
     private final double tileEastLon;

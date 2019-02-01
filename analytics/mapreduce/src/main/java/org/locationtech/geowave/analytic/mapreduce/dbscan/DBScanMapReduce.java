@@ -83,8 +83,8 @@ import org.slf4j.LoggerFactory;
 public class DBScanMapReduce {
   protected static final Logger LOGGER = LoggerFactory.getLogger(DBScanMapReduce.class);
 
-  public abstract static class DBScanMapReducer<KEYOUT, VALUEOUT>
-      extends NNReducer<ClusterItem, KEYOUT, VALUEOUT, Map<ByteArray, Cluster>> {
+  public abstract static class DBScanMapReducer<KEYOUT, VALUEOUT> extends
+      NNReducer<ClusterItem, KEYOUT, VALUEOUT, Map<ByteArray, Cluster>> {
     protected int minOwners = 0;
 
     @Override
@@ -156,8 +156,8 @@ public class DBScanMapReduce {
     }
   }
 
-  public static class DBScanMapHullReducer
-      extends DBScanMapReducer<GeoWaveInputKey, ObjectWritable> {
+  public static class DBScanMapHullReducer extends
+      DBScanMapReducer<GeoWaveInputKey, ObjectWritable> {
     private String batchID;
     private int zoomLevel = 1;
     private int iteration = 1;

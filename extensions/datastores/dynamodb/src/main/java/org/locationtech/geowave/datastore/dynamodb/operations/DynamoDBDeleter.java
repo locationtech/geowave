@@ -39,8 +39,9 @@ public class DynamoDBDeleter implements RowDeleter {
           Maps.filterEntries(attributeMappings, new Predicate<Entry<String, AttributeValue>>() {
             @Override
             public boolean apply(final Entry<String, AttributeValue> input) {
-              return DynamoDBRow.GW_PARTITION_ID_KEY.equals(input.getKey())
-                  || DynamoDBRow.GW_RANGE_KEY.equals(input.getKey());
+              return (input != null)
+                  && (DynamoDBRow.GW_PARTITION_ID_KEY.equals(input.getKey())
+                      || DynamoDBRow.GW_RANGE_KEY.equals(input.getKey()));
             }
           }));
     }

@@ -49,8 +49,8 @@ import org.slf4j.LoggerFactory;
  * the top sampleSize/iterations.
  *
  */
-public class SampleMultipleSetsJobRunner<T> extends MapReduceJobController
-    implements MapReduceJobRunner {
+public class SampleMultipleSetsJobRunner<T> extends MapReduceJobController implements
+    MapReduceJobRunner {
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(SampleMultipleSetsJobRunner.class);
 

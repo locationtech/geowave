@@ -15,8 +15,8 @@ import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.Index;
 import org.threeten.extra.Interval;
 
-public class OptimalVectorTimeRangeAggregation<P extends Persistable, T>
-    extends BaseOptimalVectorAggregation<P, Interval, T> {
+public class OptimalVectorTimeRangeAggregation<P extends Persistable, T> extends
+    BaseOptimalVectorAggregation<P, Interval, T> {
   public OptimalVectorTimeRangeAggregation() {}
 
   public OptimalVectorTimeRangeAggregation(final FieldNameParam fieldNameParam) {

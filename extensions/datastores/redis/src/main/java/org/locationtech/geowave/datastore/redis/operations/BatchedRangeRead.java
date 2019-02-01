@@ -20,6 +20,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
@@ -42,9 +43,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Streams;
 import com.google.common.primitives.UnsignedBytes;
 
 public class BatchedRangeRead<T> {
@@ -314,17 +315,15 @@ public class BatchedRangeRead<T> {
   private Iterator<T> transformAndFilter(
       final Iterator<ScoredEntry<GeoWaveRedisPersistedRow>> result) {
     final Iterator<GeoWaveRow> iterator =
-        Iterators.filter(
-            Iterators.transform(
-                groupByRowAndSortByTimePair.getLeft()
-                    ? RedisUtils.groupByRow(result, groupByRowAndSortByTimePair.getRight())
-                    : result,
-                entry -> new GeoWaveRedisRow(
-                    entry.getValue(),
-                    adapterId,
-                    entry.getValue().getPartitionKey(),
-                    RedisUtils.getSortKey(entry.getScore()))),
-            filter);
+        (Iterator) Streams.stream(
+            groupByRowAndSortByTimePair.getLeft()
+                ? RedisUtils.groupByRow(result, groupByRowAndSortByTimePair.getRight())
+                : result).map(
+                    entry -> new GeoWaveRedisRow(
+                        entry.getValue(),
+                        adapterId,
+                        entry.getValue().getPartitionKey(),
+                        RedisUtils.getSortKey(entry.getScore()))).filter(filter).iterator();
     return rowTransformer.apply(
         sortByKeyIfRequired(
             isSortFinalResultsBySortKey,

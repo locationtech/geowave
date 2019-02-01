@@ -44,6 +44,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.client.protocol.ScoredEntry;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 
 public class RedisReader<T> implements RowReader<T> {
   private final CloseableIterator<T> iterator;
@@ -267,7 +268,8 @@ public class RedisReader<T> implements RowReader<T> {
       final Set<String> authorizations,
       final boolean visibilityEnabled) {
     final Iterator<GeoWaveRow> iterator =
-        (Iterator) Iterators.filter(results, new ClientVisibilityFilter(authorizations));
+        (Iterator) Streams.stream(results).filter(
+            new ClientVisibilityFilter(authorizations)).iterator();
     return new CloseableIterator.Wrapper<>(
         rowTransformer.apply(
             sortBySortKeyIfRequired(

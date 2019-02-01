@@ -43,22 +43,22 @@ public class SpatialJoinRunner implements Serializable {
 
   // Options provided by user to run join
   private SparkSession session = null;
-  private SparkContext sc = null;
+  private transient SparkContext sc = null;
   private String appName = "SpatialJoinRunner";
   private String master = "yarn";
   private String host = "localhost";
   private Integer partCount = -1;
-  private DataStorePluginOptions leftStore = null;
+  private transient DataStorePluginOptions leftStore = null;
   private String leftAdapterTypeName = null;
   private String outLeftAdapterTypeName = null;
-  private DataStorePluginOptions rightStore = null;
+  private transient DataStorePluginOptions rightStore = null;
   private String rightAdapterTypeName = null;
   private String outRightAdapterTypeName = null;
   private boolean negativeTest = false;
 
-  private DataStorePluginOptions outputStore = null;
+  private transient DataStorePluginOptions outputStore = null;
   private GeomFunction predicate = null;
-  private NumericIndexStrategy indexStrategy = null;
+  private transient NumericIndexStrategy indexStrategy = null;
   // Variables loaded during runner. This can be updated to something cleaner
   // like GeoWaveRDD in future
   // to support different situations (indexed vs non indexed etc..) but keep
@@ -66,11 +66,11 @@ public class SpatialJoinRunner implements Serializable {
   private GeoWaveIndexedRDD leftRDD = null;
   private GeoWaveIndexedRDD rightRDD = null;
 
-  private InternalAdapterStore leftInternalAdapterStore;
-  private InternalAdapterStore rightInternalAdapterStore;
+  private transient InternalAdapterStore leftInternalAdapterStore;
+  private transient InternalAdapterStore rightInternalAdapterStore;
 
-  private IndexStore leftIndexStore;
-  private IndexStore rightIndexStore;
+  private transient IndexStore leftIndexStore;
+  private transient IndexStore rightIndexStore;
 
   // TODO: Join strategy could be supplied as variable or determined
   // automatically from index store (would require associating index and join
@@ -168,21 +168,21 @@ public class SpatialJoinRunner implements Serializable {
   private String createDefaultAdapterTypeName(
       final String typeName,
       final DataStorePluginOptions storeOptions) {
-    String defaultAdapterName = typeName + "_joined";
+    final StringBuffer defaultAdapterName = new StringBuffer(typeName + "_joined");
     final InternalAdapterStore adapterStore = storeOptions.createInternalAdapterStore();
-    if (adapterStore.getAdapterId(defaultAdapterName) == null) {
-      return defaultAdapterName;
+    if (adapterStore.getAdapterId(defaultAdapterName.toString()) == null) {
+      return defaultAdapterName.toString();
     }
     Integer iSuffix = 0;
-    String uniNum = "_" + String.format("%02d", iSuffix);
-    defaultAdapterName = defaultAdapterName + uniNum;
-    while (adapterStore.getAdapterId(defaultAdapterName) != null) {
+    final StringBuffer uniNum = new StringBuffer("_" + String.format("%02d", iSuffix));
+    defaultAdapterName.append(uniNum);
+    while (adapterStore.getAdapterId(defaultAdapterName.toString()) != null) {
       // Should be _00 _01 etc
       iSuffix += 1;
-      uniNum = "_" + String.format("%02d", iSuffix);
-      defaultAdapterName = defaultAdapterName + uniNum;
+      uniNum.append("_").append(String.format("%02d", iSuffix));
+      defaultAdapterName.append(uniNum);
     }
-    return defaultAdapterName;
+    return defaultAdapterName.toString();
   }
 
   private void initContext() {

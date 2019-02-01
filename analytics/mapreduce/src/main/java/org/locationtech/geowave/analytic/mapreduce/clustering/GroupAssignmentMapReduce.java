@@ -55,8 +55,8 @@ public class GroupAssignmentMapReduce {
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(GroupAssignmentMapReduce.class);
 
-  public static class GroupAssignmentMapper
-      extends GeoWaveWritableInputMapper<GeoWaveInputKey, ObjectWritable> {
+  public static class GroupAssignmentMapper extends
+      GeoWaveWritableInputMapper<GeoWaveInputKey, ObjectWritable> {
 
     private NestedGroupCentroidAssignment<Object> nestedGroupCentroidAssigner;
     protected GroupIDText outputKeyWritable = new GroupIDText();

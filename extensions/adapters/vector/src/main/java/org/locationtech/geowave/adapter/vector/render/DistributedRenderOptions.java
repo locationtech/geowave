@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.render;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import java.awt.Color;
 import java.awt.image.IndexColorModel;
 import java.io.ByteArrayInputStream;
@@ -46,6 +44,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 public class DistributedRenderOptions implements Persistable {
   private static final Logger LOGGER = LoggerFactory.getLogger(DistributedRenderOptions.class);
@@ -194,13 +194,7 @@ public class DistributedRenderOptions implements Persistable {
 
   public List<Interpolation> getInterpolations() {
     if ((interpolationOrdinals != null) && !interpolationOrdinals.isEmpty()) {
-      return Lists.transform(interpolationOrdinals, new Function<Integer, Interpolation>() {
-
-        @Override
-        public Interpolation apply(final Integer input) {
-          return Interpolation.getInstance(input);
-        }
-      });
+      return Lists.transform(interpolationOrdinals, input -> Interpolation.getInstance(input));
     }
     return Collections.emptyList();
   }
@@ -404,7 +398,7 @@ public class DistributedRenderOptions implements Persistable {
       wktBinary = null;
     }
     if (storeInterpolationOrdinals) {
-      for (Integer ordinal : interpolationOrdinals) {
+      for (final Integer ordinal : interpolationOrdinals) {
         bufferSize += VarintUtils.unsignedIntByteLength(ordinal);
       }
       bufferSize += VarintUtils.unsignedIntByteLength(interpolationOrdinals.size());

@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
@@ -147,22 +146,15 @@ public class CompoundIndexStrategy implements NumericIndexStrategy {
       final List<SinglePartitionInsertionIds> permutations =
           new ArrayList<>(insertionIds.getPartitionKeys().size() * partitionKeys.length);
       for (final byte[] partitionKey : partitionKeys) {
-        permutations.addAll(
-            Collections2.transform(
-                insertionIds.getPartitionKeys(),
-                new Function<SinglePartitionInsertionIds, SinglePartitionInsertionIds>() {
-                  @Override
-                  public SinglePartitionInsertionIds apply(
-                      final SinglePartitionInsertionIds input) {
-                    if (input.getPartitionKey() != null) {
-                      return new SinglePartitionInsertionIds(
-                          ByteArrayUtils.combineArrays(partitionKey, input.getPartitionKey()),
-                          input.getSortKeys());
-                    } else {
-                      return new SinglePartitionInsertionIds(partitionKey, input.getSortKeys());
-                    }
-                  }
-                }));
+        permutations.addAll(Collections2.transform(insertionIds.getPartitionKeys(), input -> {
+          if (input.getPartitionKey() != null) {
+            return new SinglePartitionInsertionIds(
+                ByteArrayUtils.combineArrays(partitionKey, input.getPartitionKey()),
+                input.getSortKeys());
+          } else {
+            return new SinglePartitionInsertionIds(partitionKey, input.getSortKeys());
+          }
+        }));
       }
       return new InsertionIds(permutations);
     }

@@ -33,7 +33,8 @@ import org.slf4j.LoggerFactory;
  * adapter and indexing is consistent across all visibility constraints.
  */
 public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<AdapterToIndexMapping>
-    implements AdapterIndexMappingStore {
+    implements
+    AdapterIndexMappingStore {
   private static final Logger LOGGER = LoggerFactory.getLogger(AdapterIndexMappingStoreImpl.class);
 
   public AdapterIndexMappingStoreImpl(

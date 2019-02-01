@@ -195,8 +195,8 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroTd
     return new Index[] {};
   }
 
-  public static class IngestTdrivePointFromHdfs
-      extends AbstractIngestSimpleFeatureWithMapper<AvroTdrivePoint> {
+  public static class IngestTdrivePointFromHdfs extends
+      AbstractIngestSimpleFeatureWithMapper<AvroTdrivePoint> {
     public IngestTdrivePointFromHdfs() {
       this(new TdriveIngestPlugin());
       // this constructor will be used when deserialized

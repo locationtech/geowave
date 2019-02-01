@@ -8,12 +8,6 @@
  */
 package org.locationtech.geowave.datastore.cassandra.operations;
 
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.datastax.driver.core.querybuilder.Select;
-import com.datastax.driver.core.querybuilder.Select.Where;
-import com.google.common.collect.Iterators;
 import java.nio.ByteBuffer;
 import org.bouncycastle.util.Arrays;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -22,6 +16,12 @@ import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.util.StatisticsRowIterator;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.driver.core.querybuilder.Select;
+import com.datastax.driver.core.querybuilder.Select.Where;
+import com.google.common.collect.Iterators;
 
 public class CassandraMetadataReader implements MetadataReader {
   private final CassandraOperations operations;
@@ -65,30 +65,25 @@ public class CassandraMetadataReader implements MetadataReader {
         new CloseableIterator.Wrapper<>(
             Iterators.transform(
                 rs.iterator(),
-                new com.google.common.base.Function<Row, GeoWaveMetadata>() {
-                  @Override
-                  public GeoWaveMetadata apply(final Row result) {
-                    return new GeoWaveMetadata(
-                        query.hasPrimaryId() ? query.getPrimaryId()
-                            : result.get(
-                                CassandraMetadataWriter.PRIMARY_ID_KEY,
-                                ByteBuffer.class).array(),
-                        useSecondaryId(query) ? query.getSecondaryId()
-                            : result.get(
-                                CassandraMetadataWriter.SECONDARY_ID_KEY,
-                                ByteBuffer.class).array(),
-                        getVisibility(result),
-                        result.get(CassandraMetadataWriter.VALUE_KEY, ByteBuffer.class).array());
-                  }
-                }));
+                result -> new GeoWaveMetadata(
+                    query.hasPrimaryId() ? query.getPrimaryId()
+                        : result.get(
+                            CassandraMetadataWriter.PRIMARY_ID_KEY,
+                            ByteBuffer.class).array(),
+                    useSecondaryId(query) ? query.getSecondaryId()
+                        : result.get(
+                            CassandraMetadataWriter.SECONDARY_ID_KEY,
+                            ByteBuffer.class).array(),
+                    getVisibility(result),
+                    result.get(CassandraMetadataWriter.VALUE_KEY, ByteBuffer.class).array())));
     return MetadataType.STATS.equals(metadataType)
         ? new StatisticsRowIterator(retVal, query.getAuthorizations())
         : retVal;
   }
 
-  private byte[] getVisibility(Row result) {
+  private byte[] getVisibility(final Row result) {
     if (MetadataType.STATS.equals(metadataType)) {
-      ByteBuffer buf = result.get(CassandraMetadataWriter.VISIBILITY_KEY, ByteBuffer.class);
+      final ByteBuffer buf = result.get(CassandraMetadataWriter.VISIBILITY_KEY, ByteBuffer.class);
       if (buf != null) {
         return buf.array();
       }

@@ -16,8 +16,9 @@ import org.locationtech.geowave.core.store.query.BaseQueryBuilderImpl;
 import org.locationtech.geowave.core.store.query.options.AggregateTypeQueryOptions;
 
 public class AggregationQueryBuilderImpl<P extends Persistable, R, T, A extends AggregationQueryBuilder<P, R, T, A>>
-    extends BaseQueryBuilderImpl<R, AggregationQuery<P, R, T>, A>
-    implements AggregationQueryBuilder<P, R, T, A> {
+    extends
+    BaseQueryBuilderImpl<R, AggregationQuery<P, R, T>, A> implements
+    AggregationQueryBuilder<P, R, T, A> {
   protected AggregateTypeQueryOptions<P, R, T> options;
 
   @Override

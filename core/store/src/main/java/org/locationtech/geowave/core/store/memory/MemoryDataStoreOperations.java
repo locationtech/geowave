@@ -34,11 +34,9 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
@@ -54,19 +52,16 @@ import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
-import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Ordering;
@@ -484,22 +479,15 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
                       (byte) 0xFF}));
       Iterator<MemoryMetadataEntry> it = set.iterator();
       if ((query.getAuthorizations() != null) && (query.getAuthorizations().length > 0)) {
-        it = Iterators.filter(it, new Predicate<MemoryMetadataEntry>() {
-          @Override
-          public boolean apply(final MemoryMetadataEntry input) {
-            return MemoryStoreUtils.isAuthorized(
-                input.getMetadata().getVisibility(),
-                query.getAuthorizations());
-          }
-        });
+        it =
+            Iterators.filter(
+                it,
+                input -> MemoryStoreUtils.isAuthorized(
+                    input.getMetadata().getVisibility(),
+                    query.getAuthorizations()));
       }
       final Iterator<GeoWaveMetadata> itTransformed =
-          Iterators.transform(it, new Function<MemoryMetadataEntry, GeoWaveMetadata>() {
-            @Override
-            public GeoWaveMetadata apply(final MemoryMetadataEntry input) {
-              return input.metadata;
-            }
-          });
+          Iterators.transform(it, input -> input.metadata);
       if (MetadataType.STATS.equals(type)) {
         return new CloseableIterator.Wrapper(new Iterator<GeoWaveMetadata>() {
           final PeekingIterator<GeoWaveMetadata> peekingIt =

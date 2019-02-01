@@ -30,7 +30,8 @@ import org.locationtech.geowave.core.store.util.DataStoreUtils;
 
 public class IndexMetaDataSet<T> extends
     AbstractDataStatistics<T, List<IndexMetaData>, IndexStatisticsQueryBuilder<List<IndexMetaData>>>
-    implements DeleteCallback<T, GeoWaveRow> {
+    implements
+    DeleteCallback<T, GeoWaveRow> {
   private List<IndexMetaData> metaData;
   public static final IndexStatisticsType<List<IndexMetaData>> STATS_TYPE =
       new IndexStatisticsType<>("INDEX_METADATA");

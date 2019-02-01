@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.mapreduce;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import java.io.IOException;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Writable;
@@ -18,6 +16,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterables;
 
 /**
  * This abstract class can be extended by GeoWave analytics. It handles the conversion of native
@@ -46,15 +45,11 @@ public abstract class GeoWaveReducer extends
       throws IOException, InterruptedException {
     final HadoopWritableSerializer<?, Writable> serializer =
         serializationTool.getHadoopWritableSerializerForAdapter(key.getInternalAdapterId());
-    final Iterable<Object> transformedValues =
-        Iterables.transform(values, new Function<ObjectWritable, Object>() {
-          @Override
-          public Object apply(final ObjectWritable writable) {
-            final Object innerObj = writable.get();
-            return innerObj instanceof Writable ? serializer.fromWritable((Writable) innerObj)
-                : innerObj;
-          }
-        });
+    final Iterable<Object> transformedValues = Iterables.transform(values, writable -> {
+      final Object innerObj = writable.get();
+      return innerObj instanceof Writable ? serializer.fromWritable((Writable) innerObj) : innerObj;
+    });
+
     reduceNativeValues(key, transformedValues, new NativeReduceContext(context, serializationTool));
   }
 

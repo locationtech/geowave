@@ -27,8 +27,9 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MultiAdapterServerMergeStrategy<T extends Persistable>
-    implements ServerMergeStrategy, Mergeable {
+public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
+    ServerMergeStrategy,
+    Mergeable {
   private static final Logger LOGGER =
       LoggerFactory.getLogger(MultiAdapterServerMergeStrategy.class);
   // the purpose for these maps instead of a list of samplemodel and adapter

@@ -14,7 +14,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -22,6 +21,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
@@ -40,13 +40,10 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
-import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TypeCodec;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 
@@ -215,27 +212,20 @@ public class BatchedRangeRead<T> {
     @Override
     public void onSuccess(final ResultSet result) {
       try {
-
-        final Iterator<GeoWaveRow> iterator =
-            Iterators.filter(
-                Iterators.transform(result.iterator(), new Function<Row, CassandraRow>() {
-
-                  @Override
-                  public CassandraRow apply(final Row row) {
-                    return new CassandraRow(row);
-                  }
-                }),
-                filter);
-        rowTransform.apply(
-            rowMerging ? new GeoWaveRowMergingIterator(iterator) : iterator).forEachRemaining(
-                row -> {
-                  try {
-                    resultQueue.put(row);
-                  } catch (final InterruptedException e) {
-                    LOGGER.warn("interrupted while waiting to enqueue a cassandra result", e);
-                  }
-                });
-
+        if (result != null) {
+          final Iterator<GeoWaveRow> iterator =
+              (Iterator) Streams.stream(result.iterator()).map(row -> new CassandraRow(row)).filter(
+                  filter).iterator();
+          rowTransform.apply(
+              rowMerging ? new GeoWaveRowMergingIterator(iterator) : iterator).forEachRemaining(
+                  row -> {
+                    try {
+                      resultQueue.put(row);
+                    } catch (final InterruptedException e) {
+                      LOGGER.warn("interrupted while waiting to enqueue a cassandra result", e);
+                    }
+                  });
+        }
       } finally {
         checkFinalize();
       }

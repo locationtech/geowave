@@ -42,6 +42,7 @@ import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 
 public class RocksDBReader<T> implements RowReader<T> {
   private final CloseableIterator<T> iterator;
@@ -201,7 +202,7 @@ public class RocksDBReader<T> implements RowReader<T> {
       final Set<String> authorizations,
       final boolean visibilityEnabled) {
     final Iterator<GeoWaveRow> iterator =
-        Iterators.filter(results, new ClientVisibilityFilter(authorizations));
+        Streams.stream(results).filter(new ClientVisibilityFilter(authorizations)).iterator();
     return new CloseableIteratorWrapper<>(
         closeable,
         rowTransformer.apply(

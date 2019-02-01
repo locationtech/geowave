@@ -49,8 +49,9 @@ import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
  * and output a SimpleFeature with the ID and the extracted geometry from each of the GeoWave data
  * item.
  */
-public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner
-    implements MapReduceJobRunner, IndependentJobRunner {
+public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner implements
+    MapReduceJobRunner,
+    IndependentJobRunner {
 
   private String outputBaseDir = "/tmp";
   private int reducerCount = 1;

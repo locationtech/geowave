@@ -98,13 +98,13 @@
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g -Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
-		<findbugs.version>3.0.1</findbugs.version>
-		<findbugs.omitVisitors>MutableStaticFields,FindReturnRef</findbugs.omitVisitors>
-		<findbugs.effort>Max</findbugs.effort>
-		<findbugs.threshold>Medium</findbugs.threshold>
-		<findbugs.failOnError>true</findbugs.failOnError>
-		<findbugs.maxHeap>1024</findbugs.maxHeap>
-		<findbugs.filterFile>findbugs/findbugs-exclude.xml</findbugs.filterFile>
+		<spotbugs.version>3.1.10</spotbugs.version>
+		<spotbugs.omitVisitors>MutableStaticFields,FindReturnRef</spotbugs.omitVisitors>
+		<spotbugs.effort>Max</spotbugs.effort>
+		<spotbugs.threshold>Medium</spotbugs.threshold>
+		<spotbugs.failOnError>true</spotbugs.failOnError>
+		<spotbugs.maxHeap>1024</spotbugs.maxHeap>
+		<spotbugs.filterFile>findbugs/findbugs-exclude.xml</spotbugs.filterFile>
 		<fmt.action>format</fmt.action>
 		<fmt.skip>false</fmt.skip>
 	</properties>
@@ -640,10 +640,14 @@
 				<version>${httpcore.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.google.code.findbugs</groupId>
-				<artifactId>annotations</artifactId>
-				<version>${findbugs.version}</version>
-				<scope>compile</scope>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs</artifactId>
+				<version>${spotbugs.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-annotations</artifactId>
+				<version>${spotbugs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.glassfish.jersey.media</groupId>
@@ -929,17 +933,17 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>findbugs-maven-plugin</artifactId>
-					<version>${findbugs.version}</version>
+					<groupId>com.github.spotbugs</groupId>
+					<artifactId>spotbugs-maven-plugin</artifactId>
+					<version>${spotbugs.version}</version>
 					<configuration>
-						<failOnError>${findbugs.failOnError}</failOnError>
-						<threshold>${findbugs.threshold}</threshold>
-						<effort>${findbugs.effort}</effort>
-						<excludeFilterFile>${findbugs.filterFile}</excludeFilterFile>
-						<maxHeap>${findbugs.maxHeap}</maxHeap>
-						<jvmArgs>${test.args}</jvmArgs>
-						<omitVisitors>${findbugs.omitVisitors}</omitVisitors>
+						<failOnError>${spotbugs.failOnError}</failOnError>
+						<threshold>${spotbugs.threshold}</threshold>
+						<effort>${spotbugs.effort}</effort>
+						<excludeFilterFile>${spotbugs.filterFile}</excludeFilterFile>
+						<maxHeap>${spotbugs.maxHeap}</maxHeap>
+						<jvmArgs>${spotbugs.args}</jvmArgs>
+						<omitVisitors>${spotbugs.omitVisitors}</omitVisitors>
 					</configuration>
 					<dependencies>
 						<dependency>
@@ -1190,8 +1194,8 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
 				<executions>
 					<execution>
 						<phase>verify</phase>
@@ -1343,7 +1347,7 @@
 				<skipITs>true</skipITs>
 				<skipTests>true</skipTests>
 				<fmt.skip>true</fmt.skip>
-				<findbugs.skip>true</findbugs.skip>
+				<spotbugs.skip>true</spotbugs.skip>
 			</properties>
 		</profile>
 		<profile>

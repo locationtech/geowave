@@ -13,8 +13,8 @@ import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-public class MaxDuplicatesStatistics<T>
-    extends AbstractDataStatistics<T, Integer, IndexStatisticsQueryBuilder<Integer>> {
+public class MaxDuplicatesStatistics<T> extends
+    AbstractDataStatistics<T, Integer, IndexStatisticsQueryBuilder<Integer>> {
   public static final IndexStatisticsType<Integer> STATS_TYPE =
       new IndexStatisticsType<>("MAX_DUPLICATES");
   private int maxDuplicates = 0;

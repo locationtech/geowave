@@ -31,7 +31,8 @@ import org.opengis.feature.simple.SimpleFeature;
  */
 public class FeatureCountMinSketchStatistics extends
     AbstractDataStatistics<SimpleFeature, CountMinSketch, FieldStatisticsQueryBuilder<CountMinSketch>>
-    implements FieldNameStatistic {
+    implements
+    FieldNameStatistic {
   public static final FieldStatisticsType<CountMinSketch> STATS_TYPE =
       new FieldStatisticsType<>("ATT_SKETCH");
   private CountMinSketch sketch = null;

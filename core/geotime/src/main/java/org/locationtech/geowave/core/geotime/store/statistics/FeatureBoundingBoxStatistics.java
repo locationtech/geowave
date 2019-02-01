@@ -20,7 +20,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
 public class FeatureBoundingBoxStatistics extends BoundingBoxDataStatistics<SimpleFeature>
-    implements FieldNameStatistic {
+    implements
+    FieldNameStatistic {
 
   private SimpleFeatureType reprojectedType;
   private MathTransform transform;

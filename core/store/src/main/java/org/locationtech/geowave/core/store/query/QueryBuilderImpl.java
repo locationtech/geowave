@@ -13,8 +13,9 @@ import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.query.options.FilterByTypeQueryOptions;
 
-public class QueryBuilderImpl<T, R extends QueryBuilder<T, R>>
-    extends BaseQueryBuilderImpl<T, Query<T>, R> implements QueryBuilder<T, R> {
+public class QueryBuilderImpl<T, R extends QueryBuilder<T, R>> extends
+    BaseQueryBuilderImpl<T, Query<T>, R> implements
+    QueryBuilder<T, R> {
   protected String[] typeNames = new String[0];
   protected String[] fieldNames = null;
 

@@ -11,8 +11,8 @@ package org.locationtech.geowave.core.store.operations;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 
-public class DataIndexReaderParamsBuilder<T>
-    extends BaseReaderParamsBuilder<T, DataIndexReaderParamsBuilder<T>> {
+public class DataIndexReaderParamsBuilder<T> extends
+    BaseReaderParamsBuilder<T, DataIndexReaderParamsBuilder<T>> {
 
   protected byte[][] dataIds = null;
   protected short adapterId;

@@ -20,8 +20,8 @@ import org.locationtech.geowave.core.store.util.GenericTypeResolver;
  * This class will run the ingestion process by using a mapper to aggregate key value pairs and a
  * reducer to ingest data into GeoWave.
  */
-public class IngestWithReducerJobRunner
-    extends AbstractMapReduceIngest<IngestWithReducer<?, ?, ?, ?>> {
+public class IngestWithReducerJobRunner extends
+    AbstractMapReduceIngest<IngestWithReducer<?, ?, ?, ?>> {
   public IngestWithReducerJobRunner(
       final DataStorePluginOptions storeOptions,
       final List<IndexPluginOptions> indexOptions,

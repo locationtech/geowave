@@ -22,8 +22,8 @@ import org.opengis.filter.Filter;
  *
  * @source $URL$
  */
-public class GeoWaveEmptyTransaction extends AbstractTransactionManagement
-    implements GeoWaveTransaction {
+public class GeoWaveEmptyTransaction extends AbstractTransactionManagement implements
+    GeoWaveTransaction {
 
   /** Create an empty Diff */
   public GeoWaveEmptyTransaction(GeoWaveDataStoreComponents components) {

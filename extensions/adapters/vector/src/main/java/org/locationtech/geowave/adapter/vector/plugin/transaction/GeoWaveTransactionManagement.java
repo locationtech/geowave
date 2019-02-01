@@ -41,8 +41,8 @@ import org.slf4j.LoggerFactory;
  *
  * @source $URL$
  */
-public class GeoWaveTransactionManagement extends AbstractTransactionManagement
-    implements GeoWaveTransaction {
+public class GeoWaveTransactionManagement extends AbstractTransactionManagement implements
+    GeoWaveTransaction {
 
   protected static final Logger LOGGER =
       LoggerFactory.getLogger(GeoWaveTransactionManagement.class);

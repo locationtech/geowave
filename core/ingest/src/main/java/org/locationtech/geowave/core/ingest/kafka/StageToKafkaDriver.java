@@ -26,8 +26,8 @@ import org.slf4j.LoggerFactory;
  * This class actually executes the staging of data to a Kafka topic based on the available type
  * plugin providers that are discovered through SPI.
  */
-public class StageToKafkaDriver<T extends SpecificRecordBase>
-    extends AbstractLocalFileDriver<GeoWaveAvroFormatPlugin<?, ?>, StageKafkaData<?>> {
+public class StageToKafkaDriver<T extends SpecificRecordBase> extends
+    AbstractLocalFileDriver<GeoWaveAvroFormatPlugin<?, ?>, StageKafkaData<?>> {
   private static final Logger LOGGER = LoggerFactory.getLogger(StageToKafkaDriver.class);
 
   private final Map<String, GeoWaveAvroFormatPlugin<?, ?>> ingestPlugins;

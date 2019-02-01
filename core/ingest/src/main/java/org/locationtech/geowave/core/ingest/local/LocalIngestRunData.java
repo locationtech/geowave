@@ -123,8 +123,8 @@ public class LocalIngestRunData implements Closeable {
    * A factory implementing the default Apache Commons Pool interface to return new instances of an
    * index writer for a given primary index.
    */
-  public class IndexWriterFactory
-      extends BaseKeyedPooledObjectFactory<TypeNameKeyWithIndices, Writer> {
+  public class IndexWriterFactory extends
+      BaseKeyedPooledObjectFactory<TypeNameKeyWithIndices, Writer> {
 
     @Override
     public synchronized Writer<?> create(final TypeNameKeyWithIndices adapterWithIndices)

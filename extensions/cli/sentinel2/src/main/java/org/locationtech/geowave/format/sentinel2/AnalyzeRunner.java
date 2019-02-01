@@ -29,7 +29,7 @@ public class AnalyzeRunner {
       new Sentinel2BasicCommandLineOptions();
 
   public AnalyzeRunner(final Sentinel2BasicCommandLineOptions options) {
-    this.sentinel2Options = options;
+    sentinel2Options = options;
   }
 
   protected void runInternal(final OperationParams params) throws Exception {
@@ -80,8 +80,7 @@ public class AnalyzeRunner {
   }
 
   protected static class AnalysisInfo {
-    private final TreeMap<String, SimpleFeature> entityBandIdToSimpleFeatureMap =
-        new TreeMap<String, SimpleFeature>();
+    private final TreeMap<String, SimpleFeature> entityBandIdToSimpleFeatureMap = new TreeMap<>();
     private int sceneCount = 0;
     private double minLat = Double.MAX_VALUE;
     private double minLon = Double.MAX_VALUE;
@@ -92,7 +91,7 @@ public class AnalyzeRunner {
     private float totalCloudCover = 0f;
     private int minCloudCover = Integer.MAX_VALUE;
     private int maxCloudCover = -Integer.MAX_VALUE;
-    private final Map<String, Integer> processingLevelCounts = new HashMap<String, Integer>();
+    private final Map<String, Integer> processingLevelCounts = new HashMap<>();
 
     private void nextScene(final SimpleFeature currentBand) {
       printSceneInfo();
@@ -119,8 +118,7 @@ public class AnalyzeRunner {
       if (count == null) {
         count = 0;
       }
-      count++;
-      processingLevelCounts.put(processingLevel, count);
+      processingLevelCounts.put(processingLevel, ++count);
 
       minCloudCover = Math.min(minCloudCover, cloudCover);
       maxCloudCover = Math.max(maxCloudCover, cloudCover);
@@ -128,7 +126,7 @@ public class AnalyzeRunner {
     }
 
     private void addBandInfo(final SimpleFeature band) {
-      String bandName = (String) band.getAttribute(BandFeatureIterator.BAND_ATTRIBUTE_NAME);
+      final String bandName = (String) band.getAttribute(BandFeatureIterator.BAND_ATTRIBUTE_NAME);
       entityBandIdToSimpleFeatureMap.put(bandName, band);
     }
 

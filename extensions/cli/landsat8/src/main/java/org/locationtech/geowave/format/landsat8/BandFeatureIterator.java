@@ -8,14 +8,12 @@
  */
 package org.locationtech.geowave.format.landsat8;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -31,6 +29,9 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 
 public class BandFeatureIterator implements SimpleFeatureIterator {
   private static final int DOWNLOAD_RETRY = 5;
@@ -102,7 +103,7 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
     iterator =
         Iterators.concat(
             Iterators.transform(
-                new FeatureIteratorIterator<SimpleFeature>(sceneIterator),
+                new FeatureIteratorIterator<>(sceneIterator),
                 new SceneToBandFeatureTransform(bandType)));
     if (cqlFilter != null) {
       final String[] attributes = DataUtilities.attributeNames(cqlFilter, bandType);
@@ -141,8 +142,8 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
     return null;
   }
 
-  private static class SceneToBandFeatureTransform
-      implements Function<SimpleFeature, Iterator<SimpleFeature>> {
+  private static class SceneToBandFeatureTransform implements
+      Function<SimpleFeature, Iterator<SimpleFeature>> {
     private final SimpleFeatureBuilder featureBuilder;
 
     public SceneToBandFeatureTransform(final SimpleFeatureType type) {
@@ -151,10 +152,13 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
 
     @Override
     public Iterator<SimpleFeature> apply(final SimpleFeature scene) {
+      if (scene == null) {
+        return Collections.emptyIterator();
+      }
       final String entityId = scene.getID();
       final int path = (int) scene.getAttribute(SceneFeatureIterator.PATH_ATTRIBUTE_NAME);
       final int row = (int) scene.getAttribute(SceneFeatureIterator.ROW_ATTRIBUTE_NAME);
-      final List<SimpleFeature> bands = new ArrayList<SimpleFeature>();
+      final List<SimpleFeature> bands = new ArrayList<>();
       final String indexHtml = getDownloadIndexHtml(entityId, path, row);
       List<String> htmlLines;
       int retry = 0;

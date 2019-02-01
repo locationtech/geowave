@@ -60,8 +60,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
 
-public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
-    implements IngestFromHdfsPlugin<AvroWholeFile, Object>, LocalFileIngestPlugin<Object> {
+public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object> implements
+    IngestFromHdfsPlugin<AvroWholeFile, Object>,
+    LocalFileIngestPlugin<Object> {
   private static Logger LOGGER = LoggerFactory.getLogger(Stanag4676IngestPlugin.class);
   public static final Index IMAGE_CHIP_INDEX = new NullIndex("IMAGERY_CHIPS");
 
@@ -121,8 +122,8 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
     return new IngestWithReducerImpl().getDataAdapters(globalVisibility);
   }
 
-  public static class IngestWithReducerImpl
-      implements IngestWithReducer<AvroWholeFile, Text, Stanag4676EventWritable, Object>,
+  public static class IngestWithReducerImpl implements
+      IngestWithReducer<AvroWholeFile, Text, Stanag4676EventWritable, Object>,
       IngestWithMapper<AvroWholeFile, Object> {
     private final SimpleFeatureBuilder ptBuilder;
 

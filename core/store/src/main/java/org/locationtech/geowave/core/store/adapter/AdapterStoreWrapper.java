@@ -11,7 +11,6 @@ package org.locationtech.geowave.core.store.adapter;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 
 /**
@@ -59,20 +58,14 @@ public class AdapterStoreWrapper implements PersistentAdapterStore {
   @Override
   public CloseableIterator<InternalDataAdapter<?>> getAdapters() {
     final CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters();
-    return new CloseableIteratorWrapper<>(
-        it,
-        Iterators.transform(it, new Function<DataTypeAdapter<?>, InternalDataAdapter<?>>() {
-
-          @Override
-          public InternalDataAdapter<?> apply(final DataTypeAdapter<?> adapter) {
-            if (adapter instanceof InternalDataAdapter) {
-              return (InternalDataAdapter<?>) adapter;
-            }
-            return new InternalDataAdapterWrapper<>(
-                adapter,
-                internalAdapterStore.getAdapterId(adapter.getTypeName()));
-          }
-        }));
+    return new CloseableIteratorWrapper<>(it, Iterators.transform(it, adapter -> {
+      if (adapter instanceof InternalDataAdapter) {
+        return (InternalDataAdapter<?>) adapter;
+      }
+      return new InternalDataAdapterWrapper<>(
+          adapter,
+          internalAdapterStore.getAdapterId(adapter.getTypeName()));
+    }));
   }
 
   @Override

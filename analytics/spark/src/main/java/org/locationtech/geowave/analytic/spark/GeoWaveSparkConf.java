@@ -19,6 +19,10 @@ import org.slf4j.LoggerFactory;
 // This class is used to create SparkConf and SparkSessions that will be compatible with GeoWave.
 public class GeoWaveSparkConf implements Serializable {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkConf.class);
 
   // Returns a SparkConf with just the basic settings necessary for spark to
@@ -49,24 +53,24 @@ public class GeoWaveSparkConf implements Serializable {
 
   // Create a default SparkSession with GeoWave settings applied to config.
   public static SparkSession createDefaultSession() {
-    SparkConf defaultConfig = GeoWaveSparkConf.getDefaultConfig();
+    final SparkConf defaultConfig = GeoWaveSparkConf.getDefaultConfig();
     return GeoWaveSparkConf.internalCreateSession(defaultConfig, null);
   }
 
   // Create a SparkSession with GeoWave settings and then user configuration
   // options added on top of defaults.
   public static SparkSession createDefaultSession(final SparkConf addonOptions) {
-    SparkConf defaultConfig = GeoWaveSparkConf.getDefaultConfig();
+    final SparkConf defaultConfig = GeoWaveSparkConf.getDefaultConfig();
     return GeoWaveSparkConf.internalCreateSession(defaultConfig, addonOptions);
   }
 
   // Create a SparkSession from default config with additional options, if
   // set. Mainly used from Command line runners.
   public static SparkSession createSessionFromParams(
-      String appName,
+      final String appName,
       String master,
-      String host,
-      String jars) {
+      final String host,
+      final String jars) {
     // Grab default config for GeoWave
     SparkConf defaultConfig = GeoWaveSparkConf.getDefaultConfig();
     // Apply master from default
@@ -78,11 +82,9 @@ public class GeoWaveSparkConf implements Serializable {
     if (appName != null) {
       defaultConfig = defaultConfig.setAppName(appName);
     }
-    if (master != null) {
-      defaultConfig = defaultConfig.setMaster(master);
-    }
+    defaultConfig = defaultConfig.setMaster(master);
     if (host != null) {
-      if (master != null && master != "yarn") {
+      if (master != "yarn") {
         defaultConfig = defaultConfig.set("spark.driver.host", host);
       } else {
         LOGGER.warn(
@@ -98,7 +100,9 @@ public class GeoWaveSparkConf implements Serializable {
     return GeoWaveSparkConf.internalCreateSession(defaultConfig, null);
   }
 
-  private static SparkSession internalCreateSession(SparkConf conf, SparkConf addonOptions) {
+  private static SparkSession internalCreateSession(
+      final SparkConf conf,
+      final SparkConf addonOptions) {
 
     // Create initial SessionBuilder from default Configuration.
     Builder builder = SparkSession.builder().config(conf);

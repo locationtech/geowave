@@ -47,9 +47,11 @@ public class GeoWaveRasterConfig {
   protected static enum ConfigParameter {
     // the following two are optional parameters that will override the
     // behavior of tile mosaicing that is already set within each adapter
-    INTERPOLATION("interpolationOverride"), SCALE_TO_8BIT("scaleTo8Bit"), EQUALIZE_HISTOGRAM(
-        "equalizeHistogramOverride"), AUTHORIZATION_PROVIDER(
-            "authorizationProvider"), AUTHORIZATION_URL("authorizationUrl");
+    INTERPOLATION("interpolationOverride"),
+    SCALE_TO_8BIT("scaleTo8Bit"),
+    EQUALIZE_HISTOGRAM("equalizeHistogramOverride"),
+    AUTHORIZATION_PROVIDER("authorizationProvider"),
+    AUTHORIZATION_URL("authorizationUrl");
     private String configName;
 
     private ConfigParameter(final String configName) {

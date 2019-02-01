@@ -19,9 +19,9 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-public class DuplicateEntryCount<T>
-    extends AbstractDataStatistics<T, Long, IndexStatisticsQueryBuilder<Long>>
-    implements DeleteCallback<T, GeoWaveRow> {
+public class DuplicateEntryCount<T> extends
+    AbstractDataStatistics<T, Long, IndexStatisticsQueryBuilder<Long>> implements
+    DeleteCallback<T, GeoWaveRow> {
   public static final IndexStatisticsType<Long> STATS_TYPE =
       new IndexStatisticsType<>("DUPLICATE_ENTRY_COUNT");
   private long entriesWithDuplicates = 0;

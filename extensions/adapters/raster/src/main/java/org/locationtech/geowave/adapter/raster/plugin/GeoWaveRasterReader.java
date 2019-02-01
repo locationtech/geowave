@@ -86,8 +86,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** the reader gets the connection info and returns a grid coverage for every data adapter */
-public class GeoWaveRasterReader extends AbstractGridCoverage2DReader
-    implements GridCoverage2DReader {
+public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
+    GridCoverage2DReader {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveRasterReader.class);
 
   private GeoWaveRasterConfig config;

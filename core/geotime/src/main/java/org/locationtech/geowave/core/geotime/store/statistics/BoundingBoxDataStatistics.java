@@ -24,8 +24,8 @@ import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constrai
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
 import org.locationtech.jts.geom.Envelope;
 
-public abstract class BoundingBoxDataStatistics<T>
-    extends AbstractDataStatistics<T, Envelope, FieldStatisticsQueryBuilder<Envelope>> {
+public abstract class BoundingBoxDataStatistics<T> extends
+    AbstractDataStatistics<T, Envelope, FieldStatisticsQueryBuilder<Envelope>> {
   public static final FieldStatisticsType<Envelope> STATS_TYPE =
       new FieldStatisticsType<>("BOUNDING_BOX");
 

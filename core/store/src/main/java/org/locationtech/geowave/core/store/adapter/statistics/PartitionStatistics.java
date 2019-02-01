@@ -25,8 +25,8 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
  *
  * @param <T> The type of the row to keep statistics on
  */
-public class PartitionStatistics<T>
-    extends AbstractDataStatistics<T, Set<ByteArray>, IndexStatisticsQueryBuilder<Set<ByteArray>>> {
+public class PartitionStatistics<T> extends
+    AbstractDataStatistics<T, Set<ByteArray>, IndexStatisticsQueryBuilder<Set<ByteArray>>> {
   public static final IndexStatisticsType<Set<ByteArray>> STATS_TYPE =
       new IndexStatisticsType<>("PARTITIONS");
   private Set<ByteArray> partitions = new HashSet<>();
