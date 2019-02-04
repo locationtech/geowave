@@ -121,8 +121,8 @@ var activeTableTab = "activeTableTab";
 <pre>public class <span class="typeNameLabel">AdapterIndexMappingStoreImpl</span>
 extends <a href="../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&gt;
 implements <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in org.locationtech.geowave.core.store.adapter">AdapterIndexMappingStore</a></pre>
-<div class="block">This class will persist Adapter Index Mappings within an Accumulo table for GeoWave metadata. The
- mappings will be persisted in an "AIM" column family.
+<div class="block">This class will persist Adapter Index Mappings within a table for GeoWave metadata. The mappings
+ will be persisted in an "AIM" column family.
 
  <p> There is an LRU cache associated with it so staying in sync with external updates is not
  practical - it assumes the objects are not updated often or at all. The objects are stored in

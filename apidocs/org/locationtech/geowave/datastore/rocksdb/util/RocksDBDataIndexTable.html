@@ -133,7 +133,7 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/ut
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.datastore.rocksdb.util.<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">AbstractRocksDBTable</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#adapterId">adapterId</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#visibilityEnabled">visibilityEnabled</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#adapterId">adapterId</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#compactOnWrite">compactOnWrite</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#visibilityEnabled">visibilityEnabled</a></code></li>
 </ul>
 </li>
 </ul>
@@ -149,11 +149,14 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/ut
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html#RocksDBDataIndexTable-org.rocksdb.Options-org.rocksdb.Options-java.lang.String-short-boolean-">RocksDBDataIndexTable</a></span>(org.rocksdb.Options&nbsp;writeOptions,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html#RocksDBDataIndexTable-org.rocksdb.Options-org.rocksdb.Options-org.rocksdb.WriteOptions-java.lang.String-short-boolean-boolean-int-">RocksDBDataIndexTable</a></span>(org.rocksdb.Options&nbsp;writeOptions,
                      org.rocksdb.Options&nbsp;readOptions,
+                     org.rocksdb.WriteOptions&nbsp;batchWriteOptions,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;subDirectory,
                      short&nbsp;adapterId,
-                     boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
+                     boolean&nbsp;visibilityEnabled,
+                     boolean&nbsp;compactOnWrite,
+                     int&nbsp;batchSize)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -185,7 +188,7 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/ut
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.datastore.rocksdb.util.<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">AbstractRocksDBTable</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#close--">close</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#delete-byte:A-">delete</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#flush--">flush</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#getReadDb--">getReadDb</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#getWriteDb--">getWriteDb</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#put-byte:A-byte:A-">put</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#close--">close</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#compact--">compact</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#delete-byte:A-">delete</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#flush--">flush</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#getReadDb--">getReadDb</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#getWriteDb--">getWriteDb</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#put-byte:A-byte:A-">put</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -208,7 +211,7 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/ut
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="RocksDBDataIndexTable-org.rocksdb.Options-org.rocksdb.Options-java.lang.String-short-boolean-">
+<a name="RocksDBDataIndexTable-org.rocksdb.Options-org.rocksdb.Options-org.rocksdb.WriteOptions-java.lang.String-short-boolean-boolean-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -216,9 +219,12 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/ut
 <h4>RocksDBDataIndexTable</h4>
 <pre>public&nbsp;RocksDBDataIndexTable(org.rocksdb.Options&nbsp;writeOptions,
                              org.rocksdb.Options&nbsp;readOptions,
+                             org.rocksdb.WriteOptions&nbsp;batchWriteOptions,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;subDirectory,
                              short&nbsp;adapterId,
-                             boolean&nbsp;visibilityEnabled)</pre>
+                             boolean&nbsp;visibilityEnabled,
+                             boolean&nbsp;compactOnWrite,
+                             int&nbsp;batchSize)</pre>
 </li>
 </ul>
 </li>

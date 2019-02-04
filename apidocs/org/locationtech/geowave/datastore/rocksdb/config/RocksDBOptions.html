@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -181,18 +181,34 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/StoreFact
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#getBatchWriteSize--">getBatchWriteSize</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#getDirectory--">getDirectory</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in org.locationtech.geowave.core.store">StoreFactoryFamilySpi</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#getStoreFactory--">getStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#getStoreOptions--">getStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#isCompactOnWrite--">isCompactOnWrite</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#setBatchWriteSize-int-">setBatchWriteSize</a></span>(int&nbsp;batchWriteSize)</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#setCompactOnWrite-boolean-">setCompactOnWrite</a></span>(boolean&nbsp;compactOnWrite)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#setDirectory-java.lang.String-">setDirectory</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory)</code>&nbsp;</td>
 </tr>
@@ -268,6 +284,24 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/StoreFact
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="isCompactOnWrite--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isCompactOnWrite</h4>
+<pre>public&nbsp;boolean&nbsp;isCompactOnWrite()</pre>
+</li>
+</ul>
+<a name="setCompactOnWrite-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCompactOnWrite</h4>
+<pre>public&nbsp;void&nbsp;setCompactOnWrite(boolean&nbsp;compactOnWrite)</pre>
+</li>
+</ul>
 <a name="setDirectory-java.lang.String-">
 <!--   -->
 </a>
@@ -302,7 +336,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/StoreFact
 <a name="getStoreOptions--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getStoreOptions</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a>&nbsp;getStoreOptions()</pre>
@@ -310,6 +344,24 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/StoreFact
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#getStoreOptions--">getStoreOptions</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html" title="class in org.locationtech.geowave.core.store">StoreFactoryOptions</a></code></dd>
 </dl>
+</li>
+</ul>
+<a name="getBatchWriteSize--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBatchWriteSize</h4>
+<pre>public&nbsp;int&nbsp;getBatchWriteSize()</pre>
+</li>
+</ul>
+<a name="setBatchWriteSize-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setBatchWriteSize</h4>
+<pre>public&nbsp;void&nbsp;setBatchWriteSize(int&nbsp;batchWriteSize)</pre>
 </li>
 </ul>
 </li>

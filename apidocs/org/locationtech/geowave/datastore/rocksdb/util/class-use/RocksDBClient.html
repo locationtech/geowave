@@ -111,12 +111,12 @@
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBQueryExecution.html#RocksDBQueryExecution-org.locationtech.geowave.datastore.rocksdb.util.RocksDBClient-java.lang.String-short-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.util.Collection-com.google.common.base.Predicate-boolean-boolean-org.apache.commons.lang3.tuple.Pair-boolean-">RocksDBQueryExecution</a></span>(<a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBClient</a>&nbsp;client,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBQueryExecution.html#RocksDBQueryExecution-org.locationtech.geowave.datastore.rocksdb.util.RocksDBClient-java.lang.String-short-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.util.Collection-java.util.function.Predicate-boolean-boolean-org.apache.commons.lang3.tuple.Pair-boolean-">RocksDBQueryExecution</a></span>(<a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBClient</a>&nbsp;client,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexNamePrefix,
                      short&nbsp;adapterId,
                      <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBQueryExecution.html" title="type parameter in RocksDBQueryExecution">T</a>&gt;&nbsp;rowTransformer,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
-                     com.google.common.base.Predicate&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
                      boolean&nbsp;rowMerging,
                      boolean&nbsp;async,
                      org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;&nbsp;groupByRowAndSortByTimePair,
@@ -164,8 +164,10 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClient.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">RocksDBClient</a></code></td>
-<td class="colLast"><span class="typeNameLabel">RocksDBClientCache.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html#getClient-java.lang.String-boolean-">getClient</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory,
-         boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">RocksDBClientCache.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html#getClient-java.lang.String-boolean-boolean-int-">getClient</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory,
+         boolean&nbsp;visibilityEnabled,
+         boolean&nbsp;compactOnWrite,
+         int&nbsp;batchWriteSize)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
