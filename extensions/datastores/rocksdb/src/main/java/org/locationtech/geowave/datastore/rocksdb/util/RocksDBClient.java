@@ -16,6 +16,7 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
+import org.rocksdb.WriteOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -160,14 +161,23 @@ public class RocksDBClient implements Closeable {
       Caffeine.newBuilder().build(key -> loadMetadataTable(key));
   private final String subDirectory;
   private final boolean visibilityEnabled;
+  private final boolean compactOnWrite;
+  private final int batchWriteSize;
 
   protected static Options indexWriteOptions = null;
+  protected static WriteOptions batchWriteOptions = null;
   protected static Options indexReadOptions = null;
   protected static Options metadataOptions = null;
 
-  public RocksDBClient(final String subDirectory, final boolean visibilityEnabled) {
+  public RocksDBClient(
+      final String subDirectory,
+      final boolean visibilityEnabled,
+      final boolean compactOnWrite,
+      final int batchWriteSize) {
     this.subDirectory = subDirectory;
     this.visibilityEnabled = visibilityEnabled;
+    this.compactOnWrite = compactOnWrite;
+    this.batchWriteSize = batchWriteSize;
   }
 
   private RocksDBMetadataTable loadMetadataTable(final CacheKey key) throws RocksDBException {
@@ -178,27 +188,34 @@ public class RocksDBClient implements Closeable {
     return new RocksDBMetadataTable(
         RocksDB.open(metadataOptions, key.directory),
         key.requiresTimestamp,
-        visibilityEnabled);
+        visibilityEnabled,
+        compactOnWrite);
   }
 
   private RocksDBIndexTable loadIndexTable(final IndexCacheKey key) {
     return new RocksDBIndexTable(
         indexWriteOptions,
         indexReadOptions,
+        batchWriteOptions,
         key.directory,
         key.adapterId,
         key.partition,
         key.requiresTimestamp,
-        visibilityEnabled);
+        visibilityEnabled,
+        compactOnWrite,
+        batchWriteSize);
   }
 
   private RocksDBDataIndexTable loadDataIndexTable(final DataIndexCacheKey key) {
     return new RocksDBDataIndexTable(
         indexWriteOptions,
         indexReadOptions,
+        batchWriteOptions,
         key.directory,
         key.adapterId,
-        visibilityEnabled);
+        visibilityEnabled,
+        compactOnWrite,
+        batchWriteSize);
   }
 
   public String getSubDirectory() {
@@ -216,6 +233,8 @@ public class RocksDBClient implements Closeable {
       indexWriteOptions =
           new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
       indexReadOptions = new Options().setIncreaseParallelism(cores);
+      batchWriteOptions =
+          new WriteOptions().setDisableWAL(false).setNoSlowdown(false).setSync(false);
     }
     final String directory = subDirectory + "/" + tableName;
     return indexTableCache.get(
@@ -233,6 +252,8 @@ public class RocksDBClient implements Closeable {
       indexWriteOptions =
           new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
       indexReadOptions = new Options().setIncreaseParallelism(cores);
+      batchWriteOptions =
+          new WriteOptions().setDisableWAL(false).setNoSlowdown(false).setSync(false);
     }
     final String directory = subDirectory + "/" + tableName;
     return dataIndexTableCache.get(
@@ -288,8 +309,21 @@ public class RocksDBClient implements Closeable {
     }
   }
 
+  public boolean isCompactOnWrite() {
+    return compactOnWrite;
+  }
+
   public boolean isVisibilityEnabled() {
     return visibilityEnabled;
+  }
+
+  public void mergeData() {
+    indexTableCache.asMap().values().parallelStream().forEach(db -> db.compact());
+    dataIndexTableCache.asMap().values().parallelStream().forEach(db -> db.compact());
+  }
+
+  public void mergeMetadata() {
+    metadataTableCache.asMap().values().parallelStream().forEach(db -> db.compact());
   }
 
   @Override

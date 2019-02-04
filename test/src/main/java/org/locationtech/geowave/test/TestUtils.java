@@ -628,7 +628,7 @@ public class TestUtils {
   /** @param testName Name of the test that we are starting. */
   public static void printStartOfTest(final Logger logger, final String testName) {
     // Format
-    final String paddedName = StringUtils.center("STARTING " + testName, 37);
+    final String paddedName = StringUtils.center("RUNNING " + testName, 37);
     // Print
     logger.warn("-----------------------------------------");
     logger.warn("*                                       *");

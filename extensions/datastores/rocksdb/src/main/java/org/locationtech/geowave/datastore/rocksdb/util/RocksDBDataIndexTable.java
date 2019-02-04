@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -18,6 +18,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
+import org.rocksdb.WriteOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,10 +28,21 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
   public RocksDBDataIndexTable(
       final Options writeOptions,
       final Options readOptions,
+      final WriteOptions batchWriteOptions,
       final String subDirectory,
       final short adapterId,
-      final boolean visibilityEnabled) {
-    super(writeOptions, readOptions, subDirectory, adapterId, visibilityEnabled);
+      final boolean visibilityEnabled,
+      final boolean compactOnWrite,
+      final int batchSize) {
+    super(
+        writeOptions,
+        readOptions,
+        batchWriteOptions,
+        subDirectory,
+        adapterId,
+        visibilityEnabled,
+        compactOnWrite,
+        batchSize);
   }
 
   public synchronized void add(final byte[] dataId, final GeoWaveValue value) {

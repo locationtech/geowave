@@ -58,7 +58,7 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
           // GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
-      options = {"enableSecondaryIndex=true"},
+      options = {"enableSecondaryIndexing=true"},
       namespace = "MapReduceSecondaryIndexIT_tmp")
   protected DataStorePluginOptions inputDataStoreOptions;
   private static boolean inputStoreCreated = false;

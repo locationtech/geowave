@@ -24,16 +24,19 @@ public class RocksDBMetadataTable {
   private final RocksDB db;
   private final boolean requiresTimestamp;
   private final boolean visibilityEnabled;
+  private final boolean compactOnWrite;
   private long prevTime = Long.MAX_VALUE;
 
   public RocksDBMetadataTable(
       final RocksDB db,
       final boolean requiresTimestamp,
-      final boolean visibilityEnabled) {
+      final boolean visibilityEnabled,
+      final boolean compactOnWrite) {
     super();
     this.db = db;
     this.requiresTimestamp = requiresTimestamp;
     this.visibilityEnabled = visibilityEnabled;
+    this.compactOnWrite = compactOnWrite;
   }
 
   public void remove(final byte[] key) {
@@ -77,6 +80,14 @@ public class RocksDBMetadataTable {
     put(key, value.getValue());
   }
 
+  public void compact() {
+    try {
+      db.compactRange();
+    } catch (final RocksDBException e) {
+      LOGGER.warn("Unable to force compacting metadata", e);
+    }
+  }
+
   public CloseableIterator<GeoWaveMetadata> iterator(final byte[] primaryId) {
     return prefixIterator(primaryId);
   }
@@ -109,10 +120,12 @@ public class RocksDBMetadataTable {
   }
 
   public void flush() {
-    try {
-      db.compactRange();
-    } catch (final RocksDBException e) {
-      LOGGER.warn("Unable to compact metadata range", e);
+    if (compactOnWrite) {
+      try {
+        db.compactRange();
+      } catch (final RocksDBException e) {
+        LOGGER.warn("Unable to compact metadata", e);
+      }
     }
   }
 
