@@ -33,6 +33,7 @@ abstract public class AbstractRocksDBTable {
   private static final int MAX_CONCURRENT_WRITE = 100;
   // only allow so many outstanding async reads or writes, use this semaphore
   // to control it
+  private final Object BATCH_WRITE_MUTEX = new Object();
   private final Semaphore writeSemaphore = new Semaphore(MAX_CONCURRENT_WRITE);
 
   private WriteBatch currentBatch;
@@ -84,7 +85,7 @@ abstract public class AbstractRocksDBTable {
 
   protected synchronized void put(final byte[] key, final byte[] value) {
     if (batchWrite) {
-      synchronized (writeSemaphore) {
+      synchronized (BATCH_WRITE_MUTEX) {
         if (currentBatch == null) {
           currentBatch = new WriteBatch();
         }
@@ -126,7 +127,7 @@ abstract public class AbstractRocksDBTable {
       justification = "The null check outside of the synchronized block is intentional to minimize the need for synchronization.")
   public void flush() {
     if (batchWrite) {
-      synchronized (writeSemaphore) {
+      synchronized (BATCH_WRITE_MUTEX) {
         if (currentBatch != null) {
           flushWriteQueue();
         }
