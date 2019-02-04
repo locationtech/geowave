@@ -86,6 +86,7 @@ import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.TypeConstraintQuery;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
+import org.locationtech.geowave.core.store.query.options.QueryAllIndices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
@@ -144,7 +145,7 @@ public class BaseDataStore implements DataStore {
   }
 
   private <T> Writer<T> createWriter(final InternalDataAdapter<T> adapter, final Index... indices) {
-    boolean secondaryIndex =
+    final boolean secondaryIndex =
         baseOptions.isSecondaryIndexing() && DataIndexUtils.adapterSupportsDataIndex(adapter);
     final Writer<T>[] writers = new Writer[secondaryIndex ? indices.length + 1 : indices.length];
 
@@ -223,11 +224,25 @@ public class BaseDataStore implements DataStore {
     if (query == null) {
       query = (Query) QueryBuilder.newBuilder().build();
     }
+    final BaseQueryOptions queryOptions;
     // all queries will use the same instance of the dedupe filter for
     // client side filtering because the filter needs to be applied across
     // indices
-    final BaseQueryOptions queryOptions =
-        new BaseQueryOptions(query, adapterStore, internalAdapterStore, scanCallback);
+
+    // if its a delete operation, selecting an index is not relevant and should be removed as an
+    // option and replaced with all indices
+    if (DeletionMode.DONT_DELETE.equals(delete)) {
+      queryOptions = new BaseQueryOptions(query, adapterStore, internalAdapterStore, scanCallback);
+    } else {
+      queryOptions =
+          new BaseQueryOptions(
+              query.getCommonQueryOptions(),
+              query.getDataTypeQueryOptions(),
+              new QueryAllIndices(),
+              adapterStore,
+              internalAdapterStore,
+              scanCallback);
+    }
     return internalQuery(query.getQueryConstraints(), queryOptions, delete);
   }
 
