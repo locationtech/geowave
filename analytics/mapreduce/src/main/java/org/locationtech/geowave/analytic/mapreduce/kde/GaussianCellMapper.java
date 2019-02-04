@@ -31,8 +31,8 @@ import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GaussianCellMapper
-    extends Mapper<GeoWaveInputKey, SimpleFeature, LongWritable, DoubleWritable> {
+public class GaussianCellMapper extends
+    Mapper<GeoWaveInputKey, SimpleFeature, LongWritable, DoubleWritable> {
   private static final Logger LOGGER = LoggerFactory.getLogger(GaussianCellMapper.class);
   protected static final String CQL_FILTER_KEY = "CQL_FILTER";
   protected int minLevel;

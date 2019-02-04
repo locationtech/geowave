@@ -42,8 +42,8 @@ import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SpatialDimensionalityTypeProvider
-    implements DimensionalityTypeProviderSpi<SpatialOptions> {
+public class SpatialDimensionalityTypeProvider implements
+    DimensionalityTypeProviderSpi<SpatialOptions> {
   private static final Logger LOGGER =
       LoggerFactory.getLogger(SpatialDimensionalityTypeProvider.class);
   private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";

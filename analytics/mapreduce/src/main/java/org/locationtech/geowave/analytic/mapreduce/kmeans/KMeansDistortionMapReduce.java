@@ -61,8 +61,8 @@ public class KMeansDistortionMapReduce {
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(KMeansDistortionMapReduce.class);
 
-  public static class KMeansDistortionMapper
-      extends GeoWaveWritableInputMapper<Text, CountofDoubleWritable> {
+  public static class KMeansDistortionMapper extends
+      GeoWaveWritableInputMapper<Text, CountofDoubleWritable> {
 
     private NestedGroupCentroidAssignment<Object> nestedGroupCentroidAssigner;
     private final Text outputKeyWritable = new Text("1");
@@ -154,8 +154,8 @@ public class KMeansDistortionMapReduce {
     }
   }
 
-  public static class KMeansDistorationCombiner
-      extends Reducer<Text, CountofDoubleWritable, Text, CountofDoubleWritable> {
+  public static class KMeansDistorationCombiner extends
+      Reducer<Text, CountofDoubleWritable, Text, CountofDoubleWritable> {
     final CountofDoubleWritable outputValue = new CountofDoubleWritable();
 
     @Override
@@ -176,8 +176,8 @@ public class KMeansDistortionMapReduce {
     }
   }
 
-  public static class KMeansDistortionReduce
-      extends Reducer<Text, CountofDoubleWritable, GeoWaveOutputKey, DistortionEntry> {
+  public static class KMeansDistortionReduce extends
+      Reducer<Text, CountofDoubleWritable, GeoWaveOutputKey, DistortionEntry> {
     private Integer expectedK = null;
     protected final Text output = new Text("");
     private CentroidManagerGeoWave<Object> centroidManager;

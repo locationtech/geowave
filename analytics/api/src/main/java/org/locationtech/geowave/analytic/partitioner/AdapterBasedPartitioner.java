@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.analytic.partitioner;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterators;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,6 +40,7 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterators;
 
 /**
  * This class uses the {@link DataTypeAdapter} to decode the dimension fields to be indexed.
@@ -240,13 +239,7 @@ public class AdapterBasedPartitioner extends AbstractPartitioner<AdapterDataEntr
       final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
       return new CloseableIteratorWrapper<>(
           it,
-          Iterators.transform(it, new Function<InternalDataAdapter<?>, DataTypeAdapter<?>>() {
-
-            @Override
-            public DataTypeAdapter<?> apply(final InternalDataAdapter<?> input) {
-              return input.getAdapter();
-            }
-          }));
+          Iterators.transform(it, input -> input.getAdapter()));
     }
 
     @Override

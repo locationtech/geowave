@@ -18,7 +18,8 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 
 public abstract class AbstractDataStatistics<T, R, B extends StatisticsQueryBuilder<R, B>>
-    implements InternalDataStatistics<T, R, B> {
+    implements
+    InternalDataStatistics<T, R, B> {
   /** ID of source data adapter */
   protected Short adapterId;
 

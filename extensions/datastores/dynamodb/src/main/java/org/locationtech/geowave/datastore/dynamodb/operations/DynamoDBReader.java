@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import org.bouncycastle.util.Arrays;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
@@ -46,12 +48,11 @@ import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 
 public class DynamoDBReader<T> implements RowReader<T> {
   private static final boolean ASYNC = false;
@@ -181,9 +182,9 @@ public class DynamoDBReader<T> implements RowReader<T> {
           @Override
           public Iterator<DynamoDBRow> apply(final Iterator<Map<String, AttributeValue>> input) {
             final Iterator<DynamoDBRow> rowIterator =
-                Iterators.filter(
-                    Iterators.transform(input, new DynamoDBRow.GuavaRowTranslationHelper()),
-                    visibilityFilter);
+                Streams.stream(input).map(
+                new DynamoDBRow.GuavaRowTranslationHelper()).filter(
+                    visibilityFilter).iterator();
             if (rowMerging) {
               return new GeoWaveRowMergingIterator<>(rowIterator);
             } else {
@@ -222,20 +223,15 @@ public class DynamoDBReader<T> implements RowReader<T> {
         // but stats could be disabled so we may need to do client-side
         // filtering by adapter ID
         if ((readerParams.getAdapterIds() != null) && (readerParams.getAdapterIds().length > 0)) {
-          adapterIdFilter = new Predicate<DynamoDBRow>() {
-
-            @Override
-            public boolean apply(final DynamoDBRow input) {
-              return Arrays.contains(readerParams.getAdapterIds(), input.getAdapterId());
-            }
-          };
+          adapterIdFilter =
+              input -> Arrays.contains(readerParams.getAdapterIds(), input.getAdapterId());
         }
       }
     }
 
     Iterator<DynamoDBRow> rowIter = rawToDynamoDBRow.apply(rawIterator);
     if (adapterIdFilter != null) {
-      rowIter = Iterators.filter(rowIter, adapterIdFilter);
+      rowIter = Streams.stream(rowIter).filter(adapterIdFilter).iterator();
     }
     if (parallelDecode) {
       final ParallelDecoder<T> decoder =

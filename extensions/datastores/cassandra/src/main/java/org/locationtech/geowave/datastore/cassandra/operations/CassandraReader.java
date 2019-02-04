@@ -29,9 +29,9 @@ import org.locationtech.geowave.datastore.cassandra.CassandraRow;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import com.datastax.driver.core.querybuilder.Select;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 
 public class CassandraReader<T> implements RowReader<T> {
   private final ReaderParams<T> readerParams;
@@ -76,7 +76,8 @@ public class CassandraReader<T> implements RowReader<T> {
 
     final Set<String> authorizations = Sets.newHashSet(readerParams.getAdditionalAuthorizations());
     final Iterator<GeoWaveRow> iterator =
-        (Iterator) Iterators.filter(results, new ClientVisibilityFilter(authorizations));
+        (Iterator) Streams.stream(results).filter(
+            new ClientVisibilityFilter(authorizations)).iterator();
     return new CloseableIteratorWrapper<>(
         results,
         rowTransformer.apply(
@@ -108,12 +109,9 @@ public class CassandraReader<T> implements RowReader<T> {
         results =
             new CloseableIteratorWrapper<>(
                 results,
-                Iterators.filter(results, new Predicate<CassandraRow>() {
-                  @Override
-                  public boolean apply(final CassandraRow input) {
-                    return Arrays.contains(readerParams.getAdapterIds(), input.getAdapterId());
-                  }
-                }));
+                Iterators.filter(
+                    results,
+                    input -> Arrays.contains(readerParams.getAdapterIds(), input.getAdapterId())));
       }
       iterator = wrapResults(results, readerParams);
     }

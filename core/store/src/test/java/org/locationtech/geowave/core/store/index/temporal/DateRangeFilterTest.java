@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.index.temporal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.function.Supplier;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -18,9 +19,11 @@ import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
+import com.google.common.base.Suppliers;
 
 public class DateRangeFilterTest {
-  private static final SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+  private static final Supplier<SimpleDateFormat> format =
+      Suppliers.ofInstance(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss"));
 
   @Test
   public void testSerialization() {
@@ -42,8 +45,8 @@ public class DateRangeFilterTest {
     final DateRangeFilter filter =
         new DateRangeFilter(
             "myAttribute",
-            format.parse("01-01-2014 11:01:01"),
-            format.parse("12-31-2014 11:01:01"),
+            format.get().parse("01-01-2014 11:01:01"),
+            format.get().parse("12-31-2014 11:01:01"),
             true,
             true);
 
@@ -58,7 +61,7 @@ public class DateRangeFilterTest {
             new PersistentDataset<ByteArray>(
                 "myAttribute",
                 new ByteArray(
-                    TemporalIndexStrategy.toIndexByte(format.parse("06-01-2014 11:01:01")))),
+                    TemporalIndexStrategy.toIndexByte(format.get().parse("06-01-2014 11:01:01")))),
             null);
 
     Assert.assertTrue(filter.accept(null, persistenceEncoding));
@@ -74,7 +77,8 @@ public class DateRangeFilterTest {
             new PersistentDataset<ByteArray>(
                 "myAttribute",
                 new ByteArray(
-                    Lexicoders.LONG.toByteArray(format.parse("01-01-2015 11:01:01").getTime()))),
+                    Lexicoders.LONG.toByteArray(
+                        format.get().parse("01-01-2015 11:01:01").getTime()))),
             null);
 
     Assert.assertFalse(filter.accept(null, persistenceEncoding2));
@@ -90,7 +94,8 @@ public class DateRangeFilterTest {
             new PersistentDataset<ByteArray>(
                 "mismatch",
                 new ByteArray(
-                    Lexicoders.LONG.toByteArray(format.parse("06-01-2014 11:01:01").getTime()))),
+                    Lexicoders.LONG.toByteArray(
+                        format.get().parse("06-01-2014 11:01:01").getTime()))),
             null);
 
     Assert.assertFalse(filter.accept(null, persistenceEncoding3));

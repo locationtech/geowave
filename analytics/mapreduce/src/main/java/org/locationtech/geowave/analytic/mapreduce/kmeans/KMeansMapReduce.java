@@ -142,8 +142,8 @@ public class KMeansMapReduce {
   }
 
   /** Optimization */
-  public static class KMeansCombiner
-      extends Reducer<GroupIDText, BytesWritable, GroupIDText, BytesWritable> {
+  public static class KMeansCombiner extends
+      Reducer<GroupIDText, BytesWritable, GroupIDText, BytesWritable> {
     private final GeoObjectDimensionValues geoObject = new GeoObjectDimensionValues();
     private final BytesWritable outputValWritable = new BytesWritable();
 
@@ -165,8 +165,8 @@ public class KMeansMapReduce {
     }
   }
 
-  public static class KMeansReduce
-      extends Reducer<GroupIDText, BytesWritable, GeoWaveOutputKey, Object> {
+  public static class KMeansReduce extends
+      Reducer<GroupIDText, BytesWritable, GeoWaveOutputKey, Object> {
 
     protected CentroidManager<Object> centroidManager;
     private final GeoObjectDimensionValues geoObject = new GeoObjectDimensionValues();

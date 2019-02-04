@@ -95,8 +95,8 @@ public class NNMapReduce {
   protected static final Logger LOGGER = LoggerFactory.getLogger(NNMapReduce.class);
 
   /** Nearest neighbors...take one */
-  public static class NNMapper<T>
-      extends Mapper<GeoWaveInputKey, Object, PartitionDataWritable, AdapterWithObjectWritable> {
+  public static class NNMapper<T> extends
+      Mapper<GeoWaveInputKey, Object, PartitionDataWritable, AdapterWithObjectWritable> {
     protected Partitioner<T> partitioner;
     protected HadoopWritableSerializationTool serializationTool;
 
@@ -161,8 +161,8 @@ public class NNMapReduce {
     }
   }
 
-  public abstract static class NNReducer<VALUEIN, KEYOUT, VALUEOUT, PARTITION_SUMMARY>
-      extends Reducer<PartitionDataWritable, AdapterWithObjectWritable, KEYOUT, VALUEOUT> {
+  public abstract static class NNReducer<VALUEIN, KEYOUT, VALUEOUT, PARTITION_SUMMARY> extends
+      Reducer<PartitionDataWritable, AdapterWithObjectWritable, KEYOUT, VALUEOUT> {
     protected HadoopWritableSerializationTool serializationTool;
     protected DistanceFn<VALUEIN> distanceFn;
     protected double maxDistance = 1.0;
@@ -320,8 +320,8 @@ public class NNMapReduce {
       LOGGER.info("Maximum Neighbors = {}", maxNeighbors);
     }
 
-    protected class LocalDistanceProfileGenerateFn
-        implements DistanceProfileGenerateFn<Object, VALUEIN> {
+    protected class LocalDistanceProfileGenerateFn implements
+        DistanceProfileGenerateFn<Object, VALUEIN> {
 
       // for GC concerns in the default NN case
       DistanceProfile<Object> singleNotThreadSafeImage = new DistanceProfile<Object>();
@@ -334,8 +334,8 @@ public class NNMapReduce {
     }
   }
 
-  public static class NNSimpleFeatureIDOutputReducer
-      extends NNReducer<SimpleFeature, Text, Text, Boolean> {
+  public static class NNSimpleFeatureIDOutputReducer extends
+      NNReducer<SimpleFeature, Text, Text, Boolean> {
 
     final Text primaryText = new Text();
     final Text neighborsText = new Text();
@@ -387,8 +387,9 @@ public class NNMapReduce {
     }
   }
 
-  public static class PartitionDataWritable
-      implements Writable, WritableComparable<PartitionDataWritable> {
+  public static class PartitionDataWritable implements
+      Writable,
+      WritableComparable<PartitionDataWritable> {
 
     protected PartitionData partitionData;
 

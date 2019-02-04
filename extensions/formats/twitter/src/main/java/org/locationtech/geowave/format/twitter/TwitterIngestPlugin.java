@@ -288,8 +288,8 @@ public class TwitterIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
     return new IngestTwitterFromHdfs(this);
   }
 
-  public static class IngestTwitterFromHdfs
-      extends AbstractIngestSimpleFeatureWithMapper<AvroWholeFile> {
+  public static class IngestTwitterFromHdfs extends
+      AbstractIngestSimpleFeatureWithMapper<AvroWholeFile> {
     public IngestTwitterFromHdfs() {
       this(new TwitterIngestPlugin());
     }

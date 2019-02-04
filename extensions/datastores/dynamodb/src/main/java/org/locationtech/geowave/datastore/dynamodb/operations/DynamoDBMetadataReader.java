@@ -8,14 +8,6 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
-import com.amazonaws.services.dynamodbv2.model.Condition;
-import com.amazonaws.services.dynamodbv2.model.QueryRequest;
-import com.amazonaws.services.dynamodbv2.model.QueryResult;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
-import com.google.common.collect.Iterators;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,6 +22,14 @@ import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBUtils;
 import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBUtils.NoopClosableIteratorWrapper;
 import org.locationtech.geowave.datastore.dynamodb.util.LazyPaginatedQuery;
 import org.locationtech.geowave.datastore.dynamodb.util.LazyPaginatedScan;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import com.google.common.collect.Iterators;
 
 public class DynamoDBMetadataReader implements MetadataReader {
   private final DynamoDBOperations operations;
@@ -102,22 +102,16 @@ public class DynamoDBMetadataReader implements MetadataReader {
         new NoopClosableIteratorWrapper(),
         Iterators.transform(
             scanResult.getItems().iterator(),
-            new com.google.common.base.Function<Map<String, AttributeValue>, GeoWaveMetadata>() {
-              @Override
-              public GeoWaveMetadata apply(final Map<String, AttributeValue> result) {
-
-                return new GeoWaveMetadata(
-                    DynamoDBUtils.getPrimaryId(result),
-                    DynamoDBUtils.getSecondaryId(result),
-                    null,
-                    DynamoDBUtils.getValue(result));
-              }
-            }));
+            result -> new GeoWaveMetadata(
+                DynamoDBUtils.getPrimaryId(result),
+                DynamoDBUtils.getSecondaryId(result),
+                null,
+                DynamoDBUtils.getValue(result))));
   }
 
   private static CloseableIterator<GeoWaveMetadata> getStatisticsIterator(
       final Iterator<Map<String, AttributeValue>> resultIterator,
-      String... authorizations) {
+      final String... authorizations) {
     return new StatisticsRowIterator(
         new CloseableIterator.Wrapper<GeoWaveMetadata>(
             Iterators.transform(

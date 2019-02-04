@@ -8,12 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.spark;
 
-import com.beust.jcommander.ParameterException;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-import com.upplication.s3fs.S3FileSystem;
-import com.upplication.s3fs.S3FileSystemProvider;
-import com.upplication.s3fs.S3Path;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -63,21 +57,29 @@ import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import org.locationtech.geowave.mapreduce.s3.GeoWaveAmazonS3Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
+import com.google.common.collect.Lists;
+import com.upplication.s3fs.S3FileSystem;
+import com.upplication.s3fs.S3FileSystemProvider;
 
 public class SparkIngestDriver implements Serializable {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private static final Logger LOGGER = LoggerFactory.getLogger(SparkIngestDriver.class);
 
   public SparkIngestDriver() {}
 
   public boolean runOperation(
-      File configFile,
-      LocalInputCommandLineOptions localInput,
-      String inputStoreName,
-      String indexList,
-      VisibilityOptions ingestOptions,
-      SparkCommandLineOptions sparkOptions,
-      String basePath) throws IOException {
+      final File configFile,
+      final LocalInputCommandLineOptions localInput,
+      final String inputStoreName,
+      final String indexList,
+      final VisibilityOptions ingestOptions,
+      final SparkCommandLineOptions sparkOptions,
+      final String basePath) throws IOException {
 
     final Properties configProperties = ConfigOptions.loadProperties(configFile);
 
@@ -89,19 +91,20 @@ public class SparkIngestDriver implements Serializable {
     Path inputPath;
     String s3EndpointUrl = null;
 
-    boolean isS3 = basePath.startsWith("s3://");
-    boolean isHDFS = !isS3 && (basePath.startsWith("hdfs://") || basePath.startsWith("file:/"));
+    final boolean isS3 = basePath.startsWith("s3://");
+    final boolean isHDFS =
+        !isS3 && (basePath.startsWith("hdfs://") || basePath.startsWith("file:/"));
 
     // If input path is S3
     if (isS3) {
 
       s3EndpointUrl = ConfigAWSCommand.getS3Url(configProperties);
-      inputPath = (S3Path) IngestUtils.setupS3FileSystem(basePath, s3EndpointUrl);
+      inputPath = IngestUtils.setupS3FileSystem(basePath, s3EndpointUrl);
     }
     // If input path is HDFS
     else if (isHDFS) {
 
-      String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
+      final String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
       inputPath = setUpHDFSFilesystem(basePath, hdfsFSUrl, basePath.startsWith("file:/"));
     } else {
       LOGGER.warn("Spark ingest support only S3 or HDFS as input location");
@@ -113,17 +116,18 @@ public class SparkIngestDriver implements Serializable {
       return false;
     }
 
-    List<Path> inputFileList = new ArrayList<Path>();
+    final List<Path> inputFileList = new ArrayList<>();
     Files.walkFileTree(inputPath, new SimpleFileVisitor<Path>() {
 
       @Override
-      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+      public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
+          throws IOException {
         inputFileList.add(file);
         return FileVisitResult.CONTINUE;
       }
     });
 
-    int numInputFiles = inputFileList.size();
+    final int numInputFiles = inputFileList.size();
 
     if (sparkOptions.getNumExecutors() < 1) {
       numExecutors = (int) Math.ceil((double) numInputFiles / 8);
@@ -158,22 +162,16 @@ public class SparkIngestDriver implements Serializable {
       jsc = JavaSparkContext.fromSparkContext(session.sparkContext());
     }
 
-    JavaRDD<URI> fileRDD =
-        jsc.parallelize(Lists.transform(inputFileList, new Function<Path, URI>() {
-
-          @Override
-          public URI apply(Path arg0) {
-            return arg0.toUri();
-          }
-        }), numPartitions);
+    final JavaRDD<URI> fileRDD =
+        jsc.parallelize(Lists.transform(inputFileList, path -> path.toUri()), numPartitions);
     if (isS3) {
       final String s3FinalEndpointUrl = s3EndpointUrl;
       fileRDD.foreachPartition(uri -> {
-        S3FileSystem fs = initializeS3FS(s3FinalEndpointUrl);
-        List<URI> inputFiles = new ArrayList<URI>();
+        final S3FileSystem fs = initializeS3FS(s3FinalEndpointUrl);
+        final List<URI> inputFiles = new ArrayList<>();
         while (uri.hasNext()) {
-          Path inputFile =
-              (S3Path) fs.getPath(uri.next().toString().replaceFirst(s3FinalEndpointUrl, ""));
+          final Path inputFile =
+              fs.getPath(uri.next().toString().replaceFirst(s3FinalEndpointUrl, ""));
           inputFiles.add(inputFile.toUri());
         }
 
@@ -211,16 +209,16 @@ public class SparkIngestDriver implements Serializable {
   }
 
   public void processInput(
-      File configFile,
-      LocalInputCommandLineOptions localInput,
-      String inputStoreName,
-      String indexList,
-      VisibilityOptions ingestOptions,
-      Properties configProperties,
-      Iterator<URI> inputFiles) throws IOException {
+      final File configFile,
+      final LocalInputCommandLineOptions localInput,
+      final String inputStoreName,
+      final String indexList,
+      final VisibilityOptions ingestOptions,
+      final Properties configProperties,
+      final Iterator<URI> inputFiles) throws IOException {
 
     // Based on the selected formats, select the format plugins
-    IngestFormatPluginOptions pluginFormats = new IngestFormatPluginOptions();
+    final IngestFormatPluginOptions pluginFormats = new IngestFormatPluginOptions();
     // Based on the selected formats, select the format plugins
     pluginFormats.selectPlugin(localInput.getFormats());
     DataStorePluginOptions inputStoreOptions = null;
@@ -246,10 +244,9 @@ public class SparkIngestDriver implements Serializable {
     indexOptions = indexLoader.getLoadedIndexes();
 
     // first collect the local file ingest plugins
-    final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins =
-        new HashMap<String, LocalFileIngestPlugin<?>>();
-    final List<DataTypeAdapter<?>> adapters = new ArrayList<DataTypeAdapter<?>>();
-    for (Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
+    final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<>();
+    final List<DataTypeAdapter<?>> adapters = new ArrayList<>();
+    for (final Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
 
       if (!IngestUtils.checkIndexesAgainstProvider(
           pluginEntry.getKey(),
@@ -264,7 +261,7 @@ public class SparkIngestDriver implements Serializable {
           Arrays.asList(pluginEntry.getValue().getDataAdapters(ingestOptions.getVisibility())));
     }
 
-    LocalFileIngestDriver localIngestDriver =
+    final LocalFileIngestDriver localIngestDriver =
         new LocalFileIngestDriver(
             inputStoreOptions,
             indexOptions,
@@ -275,10 +272,10 @@ public class SparkIngestDriver implements Serializable {
 
     localIngestDriver.startExecutor();
 
-    DataStore dataStore = inputStoreOptions.createDataStore();
+    final DataStore dataStore = inputStoreOptions.createDataStore();
     try (LocalIngestRunData runData = new LocalIngestRunData(adapters, dataStore)) {
 
-      List<PluginVisitor<LocalFileIngestPlugin<?>>> pluginVisitors =
+      final List<PluginVisitor<LocalFileIngestPlugin<?>>> pluginVisitors =
           new ArrayList<>(localFileIngestPlugins.size());
       for (final Entry<String, LocalFileIngestPlugin<?>> localPlugin : localFileIngestPlugins.entrySet()) {
         pluginVisitors.add(
@@ -301,10 +298,10 @@ public class SparkIngestDriver implements Serializable {
         }
       }
 
-    } catch (MalformedURLException e) {
+    } catch (final MalformedURLException e) {
       LOGGER.error("Error in converting input path to URL for " + inputFiles, e);
       throw new MalformedURLException("Error in converting input path to URL for " + inputFiles);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Error processing in processing input", e);
       throw new RuntimeException("Error processing in processing input", e);
     } finally {
@@ -319,9 +316,12 @@ public class SparkIngestDriver implements Serializable {
     }
   }
 
-  public Path setUpHDFSFilesystem(String basePath, String hdfsFSUrl, boolean isLocalPath) {
+  public Path setUpHDFSFilesystem(
+      final String basePath,
+      final String hdfsFSUrl,
+      final boolean isLocalPath) {
 
-    String hdfsInputPath = basePath.replaceFirst("hdfs://", "/");
+    final String hdfsInputPath = basePath.replaceFirst("hdfs://", "/");
 
     Path path = null;
     try {
@@ -337,7 +337,7 @@ public class SparkIngestDriver implements Serializable {
       // What Fortify considers "user input" comes only
       // from users with OS-level access anyway
 
-    } catch (URISyntaxException e) {
+    } catch (final URISyntaxException e) {
       LOGGER.error("Unable to ingest data, Inavlid HDFS Path", e);
       return null;
     }
@@ -345,7 +345,7 @@ public class SparkIngestDriver implements Serializable {
     return path;
   }
 
-  public S3FileSystem initializeS3FS(String s3EndpointUrl) throws URISyntaxException {
+  public S3FileSystem initializeS3FS(final String s3EndpointUrl) throws URISyntaxException {
 
     try {
       IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
@@ -364,13 +364,13 @@ public class SparkIngestDriver implements Serializable {
 
   public static void setHdfsURLStreamHandlerFactory() throws NoSuchFieldException,
       SecurityException, IllegalArgumentException, IllegalAccessException {
-    Field factoryField = URL.class.getDeclaredField("factory");
+    final Field factoryField = URL.class.getDeclaredField("factory");
     factoryField.setAccessible(true);
     // HP Fortify "Access Control" false positive
     // The need to change the accessibility here is
     // necessary, has been review and judged to be safe
 
-    URLStreamHandlerFactory urlStreamHandlerFactory =
+    final URLStreamHandlerFactory urlStreamHandlerFactory =
         (URLStreamHandlerFactory) factoryField.get(null);
 
     if (urlStreamHandlerFactory == null) {
@@ -382,7 +382,7 @@ public class SparkIngestDriver implements Serializable {
         // The need to change the accessibility here is
         // necessary, has been review and judged to be safe
         factoryField.set(null, new FsUrlStreamHandlerFactory());
-      } catch (IllegalAccessException e1) {
+      } catch (final IllegalAccessException e1) {
         LOGGER.error("Could not access URLStreamHandler factory field on URL class: {}", e1);
         throw new RuntimeException(
             "Could not access URLStreamHandler factory field on URL class: {}",

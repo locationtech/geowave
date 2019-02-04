@@ -20,8 +20,8 @@ import org.opengis.feature.simple.SimpleFeature;
  * This represents an ingest format plugin provider for GeoTools vector data stores. It currently
  * only supports ingesting data directly from a local file system into GeoWave.
  */
-public class GeoToolsVectorDataStoreIngestFormat
-    implements IngestFormatPluginProviderSpi<Object, SimpleFeature> {
+public class GeoToolsVectorDataStoreIngestFormat implements
+    IngestFormatPluginProviderSpi<Object, SimpleFeature> {
   @Override
   public GeoWaveAvroFormatPlugin<Object, SimpleFeature> createAvroFormatPlugin(
       IngestFormatOptions options) {

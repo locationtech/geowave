@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
  * This class can be sub-classed as a general-purpose recipe for parallelizing ingestion of files by
  * directly staging the binary of the file to Avro.
  */
-public abstract class AbstractStageWholeFileToAvro<O>
-    implements GeoWaveAvroFormatPlugin<AvroWholeFile, O> {
+public abstract class AbstractStageWholeFileToAvro<O> implements
+    GeoWaveAvroFormatPlugin<AvroWholeFile, O> {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractStageWholeFileToAvro.class);
 
   @Override

@@ -8,13 +8,9 @@
  */
 package org.locationtech.geowave.analytic.spark.sparksql.operations;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +29,12 @@ import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.jts.util.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @GeowaveOperation(name = "sql", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "SparkSQL queries")
@@ -127,6 +129,7 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
     return null;
   }
 
+  @SuppressFBWarnings("SF_SWITCH_FALLTHROUGH")
   private String initStores(final File configFile, final String sql, final String outputStoreName) {
     final Pattern storeDetect = Pattern.compile("(\\\"[^\\\"]*\\\"|'[^']*')|([%][^.,\\s]+)");
     final String escapedDelimRegex = java.util.regex.Pattern.quote(STORE_ADAPTER_DELIM);
@@ -165,7 +168,7 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
               "Ambiguous datastore"
                   + STORE_ADAPTER_DELIM
                   + "adapter designation: "
-                  + storeNameParts);
+                  + Arrays.toString(storeNameParts));
       }
 
       final StoreLoader inputStoreLoader = new StoreLoader(storeName);

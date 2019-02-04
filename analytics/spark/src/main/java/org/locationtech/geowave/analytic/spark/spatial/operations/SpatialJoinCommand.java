@@ -126,6 +126,7 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
     if (spatialJoinOptions.getOutputRightAdapterTypeName() != null) {
       runner.setOutputRightAdapterTypeName(spatialJoinOptions.getOutputRightAdapterTypeName());
     }
+    runner.setNegativeTest(spatialJoinOptions.isNegativeTest());
 
     // Finally call run to execute the join
     runner.run();

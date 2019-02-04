@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -23,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.geotools.data.DataAccessFactory.Param;
 import org.geotools.data.Parameter;
@@ -146,7 +145,7 @@ public class GeoWavePluginConfig {
   private final IndexQueryStrategySPI indexQueryStrategy;
   private final AdapterIndexMappingStore adapterIndexMappingStore;
 
-  private static Map<String, List<Param>> paramMap = new HashMap<String, List<Param>>();
+  private static Map<String, List<Param>> paramMap = new HashMap<>();
 
   public static synchronized List<Param> getPluginParams(
       final StoreFactoryFamilySpi storeFactoryFamily) {
@@ -155,10 +154,8 @@ public class GeoWavePluginConfig {
       final ConfigOption[] configOptions =
           GeoWaveStoreFinder.getAllOptions(storeFactoryFamily, false);
       params =
-          new ArrayList<Param>(
-              Lists.transform(
-                  Lists.newArrayList(configOptions),
-                  new GeoWaveConfigOptionToGeoToolsConfigOption()));
+          Arrays.stream(configOptions).map(new GeoWaveConfigOptionToGeoToolsConfigOption()).collect(
+              Collectors.toList());
       params.addAll(BASE_GEOWAVE_PLUGIN_PARAMS);
       paramMap.put(storeFactoryFamily.getType(), params);
     }
@@ -179,7 +176,7 @@ public class GeoWavePluginConfig {
 
     Serializable param = params.get(GEOWAVE_NAMESPACE_KEY);
     name = storeFactoryFamily.getType() + (param == null ? "" : ("_" + param));
-    final Map<String, String> paramStrs = new HashMap<String, String>();
+    final Map<String, String> paramStrs = new HashMap<>();
     // first converts serializable objects to String to avoid any issue if
     // there's a difference how geotools is converting objects to how
     // geowave intends to convert objects
@@ -346,12 +343,12 @@ public class GeoWavePluginConfig {
   }
 
   private static Map<String, List<String>> getLockMgtOptions() {
-    final List<String> options = new ArrayList<String>();
+    final List<String> options = new ArrayList<>();
     final Iterator<LockingManagementFactory> it = getLockManagementFactoryList();
     while (it.hasNext()) {
       options.add(it.next().toString());
     }
-    final Map<String, List<String>> map = new HashMap<String, List<String>>();
+    final Map<String, List<String>> map = new HashMap<>();
     map.put(Parameter.OPTIONS, options);
     return map;
   }
@@ -359,24 +356,24 @@ public class GeoWavePluginConfig {
   static final List<String> BooleanOptions = Arrays.asList("true", "false");
 
   private static Map<String, List<String>> getIndexQueryStrategyOptions() {
-    final List<String> options = new ArrayList<String>();
+    final List<String> options = new ArrayList<>();
 
     final Iterator<IndexQueryStrategySPI> it = getInxexQueryStrategyList();
     while (it.hasNext()) {
       options.add(it.next().toString());
     }
-    final Map<String, List<String>> map = new HashMap<String, List<String>>();
+    final Map<String, List<String>> map = new HashMap<>();
     map.put(Parameter.OPTIONS, options);
     return map;
   }
 
   private static Map<String, List<String>> getAuthSPIOptions() {
-    final List<String> options = new ArrayList<String>();
+    final List<String> options = new ArrayList<>();
     final Iterator<AuthorizationFactorySPI> it = getAuthorizationFactoryList();
     while (it.hasNext()) {
       options.add(it.next().toString());
     }
-    final Map<String, List<String>> map = new HashMap<String, List<String>>();
+    final Map<String, List<String>> map = new HashMap<>();
     map.put(Parameter.OPTIONS, options);
     return map;
   }
@@ -393,8 +390,8 @@ public class GeoWavePluginConfig {
     return new SPIServiceRegistry(GeoWavePluginConfig.class).load(IndexQueryStrategySPI.class);
   }
 
-  private static class GeoWaveConfigOptionToGeoToolsConfigOption
-      implements Function<ConfigOption, Param> {
+  private static class GeoWaveConfigOptionToGeoToolsConfigOption implements
+      Function<ConfigOption, Param> {
 
     @Override
     public Param apply(final ConfigOption input) {

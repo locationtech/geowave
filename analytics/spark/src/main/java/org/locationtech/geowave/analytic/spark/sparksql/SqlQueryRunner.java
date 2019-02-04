@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.analytic.spark.sparksql;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -40,13 +36,16 @@ import org.locationtech.geowave.analytic.spark.spatial.SpatialJoinRunner;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class SqlQueryRunner {
   private static final Logger LOGGER = LoggerFactory.getLogger(SqlQueryRunner.class);
@@ -221,7 +220,7 @@ public class SqlQueryRunner {
         } else {
 
           final String logicalOperand = tokens[0].trim();
-          if ((logicalOperand == ">") || (logicalOperand == ">=")) {
+          if ((logicalOperand.equals(">")) || (logicalOperand.equals(">="))) {
             negativePredicate = true;
           }
           final String radiusStr = tokens[1].trim();
@@ -424,7 +423,7 @@ public class SqlQueryRunner {
     this.sql = sql;
   }
 
-  private class InputStoreInfo {
+  private static class InputStoreInfo {
     public InputStoreInfo(
         final DataStorePluginOptions storeOptions,
         final String typeName,
@@ -436,7 +435,6 @@ public class SqlQueryRunner {
 
     private final DataStorePluginOptions storeOptions;
     private IndexStore indexStore = null;
-    private PersistentAdapterStore adapterStore = null;
     private InternalAdapterStore internalAdapterStore = null;
     private AdapterIndexMappingStore adapterIndexMappingStore = null;
     private final String typeName;
@@ -448,13 +446,6 @@ public class SqlQueryRunner {
         indexStore = storeOptions.createIndexStore();
       }
       return indexStore;
-    }
-
-    private PersistentAdapterStore getOrCreateAdapterStore() {
-      if (adapterStore == null) {
-        adapterStore = storeOptions.createAdapterStore();
-      }
-      return adapterStore;
     }
 
     private InternalAdapterStore getOrCreateInternalAdapterStore() {
@@ -472,7 +463,7 @@ public class SqlQueryRunner {
     }
   }
 
-  private class ExtractedGeomPredicate {
+  private static class ExtractedGeomPredicate {
     private GeomFunction predicate;
     private String predicateName;
     private String leftTableRelation = null;

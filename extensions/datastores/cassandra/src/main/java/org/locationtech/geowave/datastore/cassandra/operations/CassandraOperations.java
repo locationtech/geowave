@@ -20,6 +20,8 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
@@ -71,11 +73,8 @@ import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
 import com.datastax.driver.core.schemabuilder.Create;
 import com.datastax.driver.core.schemabuilder.SchemaBuilder;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.MoreExecutors;
 
 public class CassandraOperations implements MapReduceDataStoreOperations {
@@ -314,7 +313,7 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
                 internalAdapterId)).and(
                     QueryBuilder.in(
                         CassandraField.GW_DATA_ID_KEY.getFieldName(),
-                        Lists.transform(Arrays.asList(dataIds), new ByteArrayToByteBuffer()))));
+                        Arrays.stream(dataIds).map(new ByteArrayToByteBuffer()))));
     return true;
   }
 
@@ -334,14 +333,10 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
                 getCassandraSafeName(tableName)).allowFiltering());
     return new CloseableIteratorWrapper<>(
         everything,
-        Iterators.filter(everything, new Predicate<GeoWaveRow>() {
-
-          @Override
-          public boolean apply(final GeoWaveRow input) {
-            return dataIdsSet.contains(new ByteArray(input.getDataId()))
-                && (input.getAdapterId() == internalAdapterId);
-          }
-        }));
+        Iterators.filter(
+            everything,
+            input -> dataIdsSet.contains(new ByteArray(input.getDataId()))
+                && (input.getAdapterId() == internalAdapterId)));
   }
 
   public boolean deleteRow(

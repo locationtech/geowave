@@ -127,8 +127,7 @@ public class AnalyzeRunner {
       if (count == null) {
         count = 0;
       }
-      count++;
-      processingLevelCounts.put(processingLevel, count);
+      processingLevelCounts.put(processingLevel, ++count);
 
       startDate = Math.min(startDate, date.getTime());
       endDate = Math.max(endDate, date.getTime());

@@ -30,8 +30,13 @@ import org.slf4j.LoggerFactory;
  *
  * @param <T> Entry type
  */
-public class StatsCompositionTool<T> implements IngestCallback<T>, ScanCallback<T, GeoWaveRow>,
-    DeleteCallback<T, GeoWaveRow>, AutoCloseable, Closeable, Flushable {
+public class StatsCompositionTool<T> implements
+    IngestCallback<T>,
+    ScanCallback<T, GeoWaveRow>,
+    DeleteCallback<T, GeoWaveRow>,
+    AutoCloseable,
+    Closeable,
+    Flushable {
   private static final Logger LOGGER = LoggerFactory.getLogger(StatsCompositionTool.class);
   public static final int FLUSH_STATS_THRESHOLD = 1000000;
 

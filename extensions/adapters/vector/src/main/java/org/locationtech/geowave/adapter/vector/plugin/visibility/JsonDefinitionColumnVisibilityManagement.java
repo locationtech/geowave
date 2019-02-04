@@ -31,14 +31,14 @@ import org.slf4j.LoggerFactory;
  * another, as shown in the example. The expression ".*" matches all attributes. The more specific
  * expression "geo.*" must be ordered first.
  */
-public class JsonDefinitionColumnVisibilityManagement<T>
-    implements ColumnVisibilityManagementSpi<T> {
+public class JsonDefinitionColumnVisibilityManagement<T> implements
+    ColumnVisibilityManagementSpi<T> {
 
   private static final Logger LOGGER =
       LoggerFactory.getLogger(JsonDefinitionColumnVisibilityManagement.class);
 
-  private static class JsonDefinitionFieldLevelVisibilityHandler<T, CommonIndexValue>
-      extends FieldLevelVisibilityHandler<T, CommonIndexValue> {
+  private static class JsonDefinitionFieldLevelVisibilityHandler<T, CommonIndexValue> extends
+      FieldLevelVisibilityHandler<T, CommonIndexValue> {
     public JsonDefinitionFieldLevelVisibilityHandler(
         String fieldName,
         FieldVisibilityHandler<T, Object> fieldVisiblityHandler,

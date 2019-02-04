@@ -47,8 +47,9 @@ import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.HBaseBulkD
 import org.locationtech.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
 
-public class HBaseBulkDeleteEndpoint extends BulkDeleteService
-    implements CoprocessorService, Coprocessor {
+public class HBaseBulkDeleteEndpoint extends BulkDeleteService implements
+    CoprocessorService,
+    Coprocessor {
   private static final String NO_OF_VERSIONS_TO_DELETE = "noOfVersionsToDelete";
   private static final Logger LOGGER = Logger.getLogger(HBaseBulkDeleteEndpoint.class);
 

@@ -40,8 +40,9 @@ import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AggregationEndpoint extends AggregationProtosServer.AggregationService
-    implements Coprocessor, CoprocessorService {
+public class AggregationEndpoint extends AggregationProtosServer.AggregationService implements
+    Coprocessor,
+    CoprocessorService {
   private static final Logger LOGGER = LoggerFactory.getLogger(AggregationEndpoint.class);
 
   private RegionCoprocessorEnvironment env;

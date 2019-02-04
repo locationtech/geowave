@@ -20,8 +20,9 @@ import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.opengis.filter.Filter;
 
-abstract public class AbstractVectorConstraints<T extends QueryConstraints>
-    implements AdapterAndIndexBasedQueryConstraints, QueryConstraints {
+abstract public class AbstractVectorConstraints<T extends QueryConstraints> implements
+    AdapterAndIndexBasedQueryConstraints,
+    QueryConstraints {
   protected T delegateConstraints;
 
   protected AbstractVectorConstraints() {}

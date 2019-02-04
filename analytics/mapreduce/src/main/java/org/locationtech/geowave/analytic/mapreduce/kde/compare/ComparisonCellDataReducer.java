@@ -14,8 +14,8 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.locationtech.geowave.analytic.mapreduce.kde.KDEJobRunner;
 
-public class ComparisonCellDataReducer
-    extends Reducer<DoubleWritable, LongWritable, LongWritable, DoubleWritable> {
+public class ComparisonCellDataReducer extends
+    Reducer<DoubleWritable, LongWritable, LongWritable, DoubleWritable> {
   private long totalKeys = 0;
   private long currentKey = 0;
 

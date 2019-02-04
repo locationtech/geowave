@@ -19,7 +19,8 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.operation.distance.DistanceOp;
 
 /** Calculate distance between two cluster items. */
-public class ClusterItemDistanceFn implements DistanceFn<ClusterItem>,
+public class ClusterItemDistanceFn implements
+    DistanceFn<ClusterItem>,
     DistanceProfileGenerateFn<ClusterProfileContext, ClusterItem> {
 
   /** */

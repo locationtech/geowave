@@ -47,9 +47,6 @@ public class GeoWaveRDDLoader {
       final RDDOptions rddOpts,
       final NumericIndexStrategy indexStrategy) throws IOException {
     final GeoWaveRDD wrappedRDD = GeoWaveRDDLoader.loadRDD(sc, storeOptions, rddOpts);
-    if (wrappedRDD == null) {
-      return null;
-    }
     // Index strategy can be expensive so we will broadcast it and store it
     Broadcast<NumericIndexStrategy> broadcastStrategy = null;
     if (indexStrategy != null) {

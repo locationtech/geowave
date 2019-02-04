@@ -27,6 +27,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,8 +55,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SceneFeatureIterator implements SimpleFeatureIterator {
-  protected static class BestCloudCoverComparator
-      implements Comparator<SimpleFeature>, Serializable {
+  protected static class BestCloudCoverComparator implements
+      Comparator<SimpleFeature>,
+      Serializable {
     private static final long serialVersionUID = -5294130929073387335L;
 
     @Override
@@ -427,6 +429,9 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
     // entityId,acquisitionDate,cloudCover,processingLevel,path,row,min_lat,min_lon,max_lat,max_lon,download_url
     @Override
     public SimpleFeature apply(final CSVRecord input) {
+      if (input == null) {
+        return null;
+      }
       final String entityId = input.get("entityId");
       final double cloudCover = Double.parseDouble(input.get("cloudCover"));
       final String processingLevel = input.get("processingLevel");

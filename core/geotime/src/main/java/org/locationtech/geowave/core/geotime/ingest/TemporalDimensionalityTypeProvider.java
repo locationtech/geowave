@@ -28,8 +28,8 @@ import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
 
-public class TemporalDimensionalityTypeProvider
-    implements DimensionalityTypeProviderSpi<TemporalOptions> {
+public class TemporalDimensionalityTypeProvider implements
+    DimensionalityTypeProviderSpi<TemporalOptions> {
   private static final String DEFAULT_TEMPORAL_ID_STR = "TIME_IDX";
 
   public static final NumericDimensionDefinition[] TEMPORAL_DIMENSIONS =

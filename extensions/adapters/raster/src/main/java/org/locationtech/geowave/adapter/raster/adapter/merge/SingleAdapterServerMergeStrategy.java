@@ -22,8 +22,9 @@ import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SingleAdapterServerMergeStrategy<T extends Persistable>
-    implements ServerMergeStrategy, Persistable {
+public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
+    ServerMergeStrategy,
+    Persistable {
   private static final Logger LOGGER =
       LoggerFactory.getLogger(SingleAdapterServerMergeStrategy.class);
   // the purpose for these maps instead of a list of samplemodel and adapter

@@ -194,8 +194,8 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
     return Collections.emptyMap();
   }
 
-  private static class GeoWaveGTDataStoreFactoryIteratorProvider
-      implements FactoryIteratorProvider {
+  private static class GeoWaveGTDataStoreFactoryIteratorProvider implements
+      FactoryIteratorProvider {
 
     @Override
     public <T> Iterator<T> iterator(final Class<T> cls) {
@@ -205,8 +205,8 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
       return null;
     }
 
-    private static class GeoWaveGTDataStoreFactoryIterator
-        implements Iterator<DataStoreFactorySpi> {
+    private static class GeoWaveGTDataStoreFactoryIterator implements
+        Iterator<DataStoreFactorySpi> {
       private final Iterator<DataStoreFactorySpi> it;
 
       private GeoWaveGTDataStoreFactoryIterator() {
@@ -237,8 +237,8 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
    * individual geowave data store must be registered as a different class (the alternative is
    * dynamic compilation of classes to add to the classloader).
    */
-  private static class GeoWaveStoreToGeoToolsDataStore
-      implements Function<StoreFactoryFamilySpi, DataStoreFactorySpi> {
+  private static class GeoWaveStoreToGeoToolsDataStore implements
+      Function<StoreFactoryFamilySpi, DataStoreFactorySpi> {
     private int i = 0;
 
     public GeoWaveStoreToGeoToolsDataStore() {}

@@ -26,7 +26,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.BatchDeleter;
@@ -120,7 +119,6 @@ import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import com.aol.cyclops.util.function.TriFunction;
-import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
@@ -1399,20 +1397,8 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     try {
       return Maps.transformValues(
           connector.tableOperations().listIterators(getQualifiedTableName(index)),
-          new Function<EnumSet<IteratorScope>, ImmutableSet<ServerOpScope>>() {
-
-            @Override
-            public ImmutableSet<ServerOpScope> apply(final EnumSet<IteratorScope> input) {
-              return Sets.immutableEnumSet(
-                  Iterables.transform(input, new Function<IteratorScope, ServerOpScope>() {
-
-                    @Override
-                    public ServerOpScope apply(final IteratorScope input) {
-                      return fromAccumulo(input);
-                    }
-                  }));
-            }
-          });
+          input -> Sets.immutableEnumSet(
+              (Iterable) Iterables.transform(input, i -> fromAccumulo(i))));
     } catch (AccumuloSecurityException | AccumuloException | TableNotFoundException e) {
       LOGGER.error("Unable to list iterators for table '" + index + "'", e);
     }
@@ -1444,14 +1430,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   }
 
   private static EnumSet<IteratorScope> toEnumSet(final ImmutableSet<ServerOpScope> scopes) {
-    final Collection<IteratorScope> c =
-        Collections2.transform(scopes, new Function<ServerOpScope, IteratorScope>() {
-
-          @Override
-          public IteratorScope apply(@Nonnull final ServerOpScope scope) {
-            return toAccumulo(scope);
-          }
-        });
+    final Collection<IteratorScope> c = Collections2.transform(scopes, scope -> toAccumulo(scope));
     EnumSet<IteratorScope> itSet;
     if (!c.isEmpty()) {
       final Iterator<IteratorScope> it = c.iterator();

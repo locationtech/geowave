@@ -22,8 +22,8 @@ import org.locationtech.geowave.mapreduce.JobContextIndexStore;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.coverage.grid.GridCoverage;
 
-public class ComparisonAccumuloStatsReducer
-    extends Reducer<ComparisonCellData, LongWritable, GeoWaveOutputKey, GridCoverage> {
+public class ComparisonAccumuloStatsReducer extends
+    Reducer<ComparisonCellData, LongWritable, GeoWaveOutputKey, GridCoverage> {
   public static final int NUM_BANDS = 4;
   protected static final String[] NAME_PER_BAND =
       new String[] {"Summer", "Winter", "Combined", "Combined Percentile"};

@@ -104,24 +104,16 @@ public class InsertionIds implements Persistable {
   }
 
   public QueryRanges asQueryRanges() {
-    return new QueryRanges(
-        Collections2.transform(
-            partitionKeys,
-            new Function<SinglePartitionInsertionIds, SinglePartitionQueryRanges>() {
-              @Override
-              public SinglePartitionQueryRanges apply(final SinglePartitionInsertionIds input) {
-                return new SinglePartitionQueryRanges(
-                    input.getPartitionKey(),
-                    Collections2.transform(
-                        input.getSortKeys(),
-                        new Function<byte[], ByteArrayRange>() {
-                          @Override
-                          public ByteArrayRange apply(final byte[] input) {
-                            return new ByteArrayRange(input, input, false);
-                          }
-                        }));
-              }
-            }));
+    return new QueryRanges(Collections2.transform(partitionKeys, input -> {
+      return new SinglePartitionQueryRanges(
+          input.getPartitionKey(),
+          Collections2.transform(input.getSortKeys(), new Function<byte[], ByteArrayRange>() {
+            @Override
+            public ByteArrayRange apply(final byte[] input) {
+              return new ByteArrayRange(input, input, false);
+            }
+          }));
+    }));
   }
 
   public List<byte[]> getCompositeInsertionIds() {

@@ -34,7 +34,8 @@ import org.opengis.feature.simple.SimpleFeature;
  */
 public class FeatureNumericHistogramStatistics extends
     AbstractDataStatistics<SimpleFeature, Pair<DoubleHistogram, DoubleHistogram>, FieldStatisticsQueryBuilder<Pair<DoubleHistogram, DoubleHistogram>>>
-    implements FieldNameStatistic {
+    implements
+    FieldNameStatistic {
   public static final FieldStatisticsType<Pair<DoubleHistogram, DoubleHistogram>> STATS_TYPE =
       new FieldStatisticsType<>("ATT_HISTOGRAM");
   private DoubleHistogram positiveHistogram = new LocalDoubleHistogram();

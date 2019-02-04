@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -33,8 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Streams;
 import com.google.common.primitives.UnsignedBytes;
 
 public class RocksDBQueryExecution<T> {
@@ -155,7 +156,7 @@ public class RocksDBQueryExecution<T> {
   }
 
   private CloseableIterator<T> transformAndFilter(final CloseableIterator<GeoWaveRow> result) {
-    final Iterator<GeoWaveRow> iterator = Iterators.filter(result, filter);
+    final Iterator<GeoWaveRow> iterator = Streams.stream(result).filter(filter).iterator();
     return new CloseableIteratorWrapper<>(
         result,
         rowTransformer.apply(

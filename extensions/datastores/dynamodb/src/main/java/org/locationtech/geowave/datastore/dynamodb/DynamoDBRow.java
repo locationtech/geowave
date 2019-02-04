@@ -11,6 +11,7 @@ package org.locationtech.geowave.datastore.dynamodb;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
@@ -21,7 +22,6 @@ import org.locationtech.geowave.core.store.entities.MergeableGeoWaveRow;
 import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBUtils;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.beust.jcommander.internal.Lists;
-import com.google.common.base.Function;
 
 public class DynamoDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
   public static final String GW_PARTITION_ID_KEY = "P";

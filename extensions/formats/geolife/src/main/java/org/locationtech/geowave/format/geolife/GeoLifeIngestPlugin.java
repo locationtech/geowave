@@ -235,8 +235,8 @@ public class GeoLifeIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
     return new IngestGeoLifeFromHdfs(this);
   }
 
-  public static class IngestGeoLifeFromHdfs
-      extends AbstractIngestSimpleFeatureWithMapper<AvroWholeFile> {
+  public static class IngestGeoLifeFromHdfs extends
+      AbstractIngestSimpleFeatureWithMapper<AvroWholeFile> {
     public IngestGeoLifeFromHdfs() {
       this(new GeoLifeIngestPlugin());
     }

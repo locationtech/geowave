@@ -14,9 +14,9 @@ import org.locationtech.geowave.core.store.query.aggregate.AggregationQueryBuild
 import org.locationtech.geowave.core.store.query.options.AggregateTypeQueryOptions;
 import org.opengis.feature.simple.SimpleFeature;
 
-public class VectorAggregationQueryBuilderImpl<P extends Persistable, R>
-    extends AggregationQueryBuilderImpl<P, R, SimpleFeature, VectorAggregationQueryBuilder<P, R>>
-    implements VectorAggregationQueryBuilder<P, R> {
+public class VectorAggregationQueryBuilderImpl<P extends Persistable, R> extends
+    AggregationQueryBuilderImpl<P, R, SimpleFeature, VectorAggregationQueryBuilder<P, R>> implements
+    VectorAggregationQueryBuilder<P, R> {
 
   @Override
   public VectorAggregationQueryBuilder<P, R> bboxOfResults(final String... typeNames) {

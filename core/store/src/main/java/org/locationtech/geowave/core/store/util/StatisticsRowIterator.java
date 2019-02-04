@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.store.util;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +19,7 @@ import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
+import com.google.common.collect.Iterators;
 
 public class StatisticsRowIterator implements CloseableIterator<GeoWaveMetadata> {
   private final CloseableIterator<GeoWaveMetadata> it;
@@ -32,31 +31,23 @@ public class StatisticsRowIterator implements CloseableIterator<GeoWaveMetadata>
     if ((authorizations != null) && (authorizations.length > 0)) {
       final Set<String> authorizationsSet = new HashSet<>(Arrays.asList(authorizations));
       it =
-          new CloseableIteratorWrapper<>(
-              resultIterator,
-              Iterators.filter(resultIterator, new Predicate<GeoWaveMetadata>() {
-                @Override
-                public boolean apply(final GeoWaveMetadata input) {
-                  String visibility = "";
-                  if (input.getVisibility() != null) {
-                    visibility = StringUtils.stringFromBinary(input.getVisibility());
-                  }
-                  return VisibilityExpression.evaluate(visibility, authorizationsSet);
-                }
-              }));
+          new CloseableIteratorWrapper<>(resultIterator, Iterators.filter(resultIterator, input -> {
+            String visibility = "";
+            if (input.getVisibility() != null) {
+              visibility = StringUtils.stringFromBinary(input.getVisibility());
+            }
+            return VisibilityExpression.evaluate(visibility, authorizationsSet);
+          }));
     } else {
       it =
           new CloseableIteratorWrapper<>(
               resultIterator,
-              Iterators.filter(resultIterator, new Predicate<GeoWaveMetadata>() {
-                @Override
-                public boolean apply(final GeoWaveMetadata input) {
-                  // we don't have any authorizations
-                  // so this row cannot have any
-                  // visibilities
-                  return (input.getVisibility() == null) || (input.getVisibility().length == 0);
-                }
-              }));
+              // we don't have any authorizations
+              // so this row cannot have any
+              // visibilities
+              Iterators.filter(
+                  resultIterator,
+                  input -> (input.getVisibility() == null) || (input.getVisibility().length == 0)));
     }
   }
 

@@ -62,8 +62,6 @@ public class SpatialJoinCmdOptions {
 
   // TODO: Experiment with collecting + broadcasting rdds when one side can
   // fit into memory
-  private boolean leftBroadcast = false;
-  private boolean rightBroadcast = false;
 
   public SpatialJoinCmdOptions() {}
 
@@ -145,5 +143,13 @@ public class SpatialJoinCmdOptions {
 
   public void setOutputRightAdapterTypeName(String outRightAdapterTypeName) {
     this.outRightAdapterTypeName = outRightAdapterTypeName;
+  }
+
+  public boolean isNegativeTest() {
+    return negativeTest;
+  }
+
+  public void setNegativeTest(boolean negativeTest) {
+    this.negativeTest = negativeTest;
   }
 }
