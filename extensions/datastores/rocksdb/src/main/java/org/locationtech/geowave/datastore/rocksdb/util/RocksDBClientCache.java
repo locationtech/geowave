@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.util;
 
-import org.apache.commons.lang3.tuple.Pair;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
@@ -22,21 +21,33 @@ public class RocksDBClientCache {
     return singletonInstance;
   }
 
-  private final LoadingCache<Pair<String, Boolean>, RocksDBClient> clientCache =
+  private final LoadingCache<ClientKey, RocksDBClient> clientCache =
       Caffeine.newBuilder().build(subDirectoryVisiblityPair -> {
         return new RocksDBClient(
-            subDirectoryVisiblityPair.getLeft(),
-            subDirectoryVisiblityPair.getRight());
+            subDirectoryVisiblityPair.directory,
+            subDirectoryVisiblityPair.visibilityEnabled,
+            subDirectoryVisiblityPair.compactOnWrite,
+            subDirectoryVisiblityPair.batchSize);
       });
 
   protected RocksDBClientCache() {}
 
-  public RocksDBClient getClient(final String directory, final boolean visibilityEnabled) {
-    return clientCache.get(Pair.of(directory, visibilityEnabled));
+  public RocksDBClient getClient(
+      final String directory,
+      final boolean visibilityEnabled,
+      final boolean compactOnWrite,
+      final int batchWriteSize) {
+    return clientCache.get(
+        new ClientKey(directory, visibilityEnabled, compactOnWrite, batchWriteSize));
   }
 
-  public synchronized void close(final String directory, final boolean visibilityEnabled) {
-    final Pair<String, Boolean> key = Pair.of(directory, visibilityEnabled);
+  public synchronized void close(
+      final String directory,
+      final boolean visibilityEnabled,
+      final boolean compactOnWrite,
+      final int batchWriteSize) {
+    final ClientKey key =
+        new ClientKey(directory, visibilityEnabled, compactOnWrite, batchWriteSize);
     final RocksDBClient client = clientCache.getIfPresent(key);
     if (client != null) {
       clientCache.invalidate(key);
@@ -55,6 +66,10 @@ public class RocksDBClientCache {
         RocksDBClient.indexReadOptions.close();
         RocksDBClient.indexReadOptions = null;
       }
+      if (RocksDBClient.batchWriteOptions != null) {
+        RocksDBClient.batchWriteOptions.close();
+        RocksDBClient.batchWriteOptions = null;
+      }
     }
   }
 
@@ -72,6 +87,71 @@ public class RocksDBClientCache {
     if (RocksDBClient.indexReadOptions != null) {
       RocksDBClient.indexReadOptions.close();
       RocksDBClient.indexReadOptions = null;
+    }
+    if (RocksDBClient.batchWriteOptions != null) {
+      RocksDBClient.batchWriteOptions.close();
+      RocksDBClient.batchWriteOptions = null;
+    }
+  }
+
+  private static class ClientKey {
+    private final String directory;
+    private final boolean visibilityEnabled;
+    private final boolean compactOnWrite;;
+    private final int batchSize;
+
+    public ClientKey(
+        final String directory,
+        final boolean visibilityEnabled,
+        final boolean compactOnWrite,
+        final int batchSize) {
+      super();
+      this.directory = directory;
+      this.visibilityEnabled = visibilityEnabled;
+      this.compactOnWrite = compactOnWrite;
+      this.batchSize = batchSize;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = (prime * result) + batchSize;
+      result = (prime * result) + (compactOnWrite ? 1231 : 1237);
+      result = (prime * result) + ((directory == null) ? 0 : directory.hashCode());
+      result = (prime * result) + (visibilityEnabled ? 1231 : 1237);
+      return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null) {
+        return false;
+      }
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+      final ClientKey other = (ClientKey) obj;
+      if (batchSize != other.batchSize) {
+        return false;
+      }
+      if (compactOnWrite != other.compactOnWrite) {
+        return false;
+      }
+      if (directory == null) {
+        if (other.directory != null) {
+          return false;
+        }
+      } else if (!directory.equals(other.directory)) {
+        return false;
+      }
+      if (visibilityEnabled != other.visibilityEnabled) {
+        return false;
+      }
+      return true;
     }
   }
 }

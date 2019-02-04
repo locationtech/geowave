@@ -18,6 +18,7 @@ import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksIterator;
 import org.rocksdb.Slice;
+import org.rocksdb.WriteOptions;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
 
@@ -29,12 +30,23 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
   public RocksDBIndexTable(
       final Options writeOptions,
       final Options readOptions,
+      final WriteOptions batchWriteOptions,
       final String subDirectory,
       final short adapterId,
       final byte[] partition,
       final boolean requiresTimestamp,
-      final boolean visibilityEnabled) {
-    super(writeOptions, readOptions, subDirectory, adapterId, visibilityEnabled);
+      final boolean visibilityEnabled,
+      final boolean compactOnWrite,
+      final int batchSize) {
+    super(
+        writeOptions,
+        readOptions,
+        batchWriteOptions,
+        subDirectory,
+        adapterId,
+        visibilityEnabled,
+        compactOnWrite,
+        batchSize);
     this.requiresTimestamp = requiresTimestamp;
     this.partition = partition;
   }

@@ -13,9 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import org.apache.commons.io.FileUtils;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
@@ -45,6 +47,8 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
   private final RocksDBClient client;
   private final String directory;
   private final boolean visibilityEnabled;
+  private final boolean compactOnWrite;
+  private final int batchWriteSize;
 
   public RocksDBOperations(final RocksDBOptions options) {
     directory =
@@ -56,8 +60,43 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
                     : options.getGeoWaveNamespace());
 
     visibilityEnabled = options.getStoreOptions().isVisibilityEnabled();
+    compactOnWrite = options.isCompactOnWrite();
+    batchWriteSize = options.getBatchWriteSize();
     // a factory method that returns a RocksDB instance
-    client = RocksDBClientCache.getInstance().getClient(directory, visibilityEnabled);
+    client =
+        RocksDBClientCache.getInstance().getClient(
+            directory,
+            visibilityEnabled,
+            compactOnWrite,
+            batchWriteSize);
+  }
+
+  @Override
+  public boolean mergeData(
+      final Index index,
+      final PersistentAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
+      final AdapterIndexMappingStore adapterIndexMappingStore,
+      final Integer maxRangeDecomposition) {
+    final boolean retVal =
+        MapReduceDataStoreOperations.super.mergeData(
+            index,
+            adapterStore,
+            internalAdapterStore,
+            adapterIndexMappingStore,
+            maxRangeDecomposition);
+    client.mergeData();
+    return retVal;
+  }
+
+  @Override
+  public boolean mergeStats(
+      final DataStatisticsStore statsStore,
+      final InternalAdapterStore internalAdapterStore) {
+    final boolean retVal =
+        MapReduceDataStoreOperations.super.mergeStats(statsStore, internalAdapterStore);
+    client.mergeMetadata();
+    return retVal;
   }
 
   @Override
@@ -187,6 +226,10 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
 
   @Override
   public void close() {
-    RocksDBClientCache.getInstance().close(directory, visibilityEnabled);
+    RocksDBClientCache.getInstance().close(
+        directory,
+        visibilityEnabled,
+        compactOnWrite,
+        batchWriteSize);
   }
 }
