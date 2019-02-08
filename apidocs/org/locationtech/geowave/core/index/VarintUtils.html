@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -205,38 +205,68 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#unsignedShortByteLength-short-">unsignedShortByteLength</a></span>(short&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeSignedInt-int-">writeSignedInt</a></span>(int&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeSignedInt-int-java.nio.ByteBuffer-">writeSignedInt</a></span>(int&nbsp;value,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeSignedLong-long-">writeSignedLong</a></span>(long&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeSignedLong-long-java.nio.ByteBuffer-">writeSignedLong</a></span>(long&nbsp;value,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeTime-long-">writeTime</a></span>(long&nbsp;time)</code>
+<div class="block">Encode a timestamp using varint encoding.</div>
+</td>
+</tr>
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeTime-long-java.nio.ByteBuffer-">writeTime</a></span>(long&nbsp;time,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>
 <div class="block">Encode a timestamp using varint encoding.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeUnsignedInt-int-">writeUnsignedInt</a></span>(int&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeUnsignedInt-int-java.nio.ByteBuffer-">writeUnsignedInt</a></span>(int&nbsp;value,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeUnsignedIntReversed-int-">writeUnsignedIntReversed</a></span>(int&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeUnsignedIntReversed-int-java.nio.ByteBuffer-">writeUnsignedIntReversed</a></span>(int&nbsp;value,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i23" class="rowColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeUnsignedLong-long-">writeUnsignedLong</a></span>(long&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeUnsignedLong-long-java.nio.ByteBuffer-">writeUnsignedLong</a></span>(long&nbsp;value,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i25" class="rowColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeUnsignedShort-short-">writeUnsignedShort</a></span>(short&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/VarintUtils.html#writeUnsignedShort-short-java.nio.ByteBuffer-">writeUnsignedShort</a></span>(short&nbsp;value,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
@@ -317,6 +347,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</pre>
 </li>
 </ul>
+<a name="writeSignedInt-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSignedInt</h4>
+<pre>public static&nbsp;byte[]&nbsp;writeSignedInt(int&nbsp;value)</pre>
+</li>
+</ul>
 <a name="writeUnsignedInt-int-java.nio.ByteBuffer-">
 <!--   -->
 </a>
@@ -325,6 +364,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>writeUnsignedInt</h4>
 <pre>public static&nbsp;void&nbsp;writeUnsignedInt(int&nbsp;value,
                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</pre>
+</li>
+</ul>
+<a name="writeUnsignedInt-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeUnsignedInt</h4>
+<pre>public static&nbsp;byte[]&nbsp;writeUnsignedInt(int&nbsp;value)</pre>
 </li>
 </ul>
 <a name="writeUnsignedShort-short-java.nio.ByteBuffer-">
@@ -337,6 +385,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</pre>
 </li>
 </ul>
+<a name="writeUnsignedShort-short-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeUnsignedShort</h4>
+<pre>public static&nbsp;byte[]&nbsp;writeUnsignedShort(short&nbsp;value)</pre>
+</li>
+</ul>
 <a name="writeUnsignedIntReversed-int-java.nio.ByteBuffer-">
 <!--   -->
 </a>
@@ -345,6 +402,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>writeUnsignedIntReversed</h4>
 <pre>public static&nbsp;void&nbsp;writeUnsignedIntReversed(int&nbsp;value,
                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</pre>
+</li>
+</ul>
+<a name="writeUnsignedIntReversed-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeUnsignedIntReversed</h4>
+<pre>public static&nbsp;byte[]&nbsp;writeUnsignedIntReversed(int&nbsp;value)</pre>
 </li>
 </ul>
 <a name="readSignedInt-java.nio.ByteBuffer-">
@@ -411,6 +477,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</pre>
 </li>
 </ul>
+<a name="writeSignedLong-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSignedLong</h4>
+<pre>public static&nbsp;byte[]&nbsp;writeSignedLong(long&nbsp;value)</pre>
+</li>
+</ul>
 <a name="writeUnsignedLong-long-java.nio.ByteBuffer-">
 <!--   -->
 </a>
@@ -419,6 +494,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>writeUnsignedLong</h4>
 <pre>public static&nbsp;void&nbsp;writeUnsignedLong(long&nbsp;value,
                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</pre>
+</li>
+</ul>
+<a name="writeUnsignedLong-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeUnsignedLong</h4>
+<pre>public static&nbsp;byte[]&nbsp;writeUnsignedLong(long&nbsp;value)</pre>
 </li>
 </ul>
 <a name="readSignedLong-java.nio.ByteBuffer-">
@@ -463,6 +547,21 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>writeTime</h4>
 <pre>public static&nbsp;void&nbsp;writeTime(long&nbsp;time,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</pre>
+<div class="block">Encode a timestamp using varint encoding.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>time</code> - the timestamp</dd>
+<dd><code>buffer</code> - the <code>ByteBuffer</code> to write the timestamp to</dd>
+</dl>
+</li>
+</ul>
+<a name="writeTime-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeTime</h4>
+<pre>public static&nbsp;byte[]&nbsp;writeTime(long&nbsp;time)</pre>
 <div class="block">Encode a timestamp using varint encoding.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
