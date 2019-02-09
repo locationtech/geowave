@@ -8,10 +8,14 @@
  */
 package org.locationtech.geowave.core.store.adapter;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import com.google.common.primitives.Bytes;
 import org.apache.commons.lang3.Range;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.CoordinateRange;
@@ -144,6 +148,36 @@ public class MockComponents {
         return FieldUtils.getDefaultWriterForClass(String.class);
       }
       return null;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      final MockAbstractDataAdapter that = (MockAbstractDataAdapter) o;
+      return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(id);
+    }
+
+    @Override
+    public byte[] toBinary() {
+      byte[] idBinary = StringUtils.stringToBinary(id);
+      return Bytes.concat(ByteBuffer.allocate(4).putInt(idBinary.length).array(),idBinary, super.toBinary());
+    }
+
+    @Override
+    public void fromBinary(final byte[] bytes) {
+      ByteBuffer buf = ByteBuffer.wrap(bytes);
+      byte[] idBinary = new byte[buf.getInt()];
+      buf.get(idBinary);
+      id = StringUtils.stringFromBinary(idBinary);
+      byte[] superBytes = new byte[bytes.length - 4 - idBinary.length];
+      buf.get(superBytes);
+      super.fromBinary(superBytes);
     }
 
     @Override
