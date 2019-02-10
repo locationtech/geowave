@@ -23,5 +23,12 @@
 			<artifactId>geowave-core-cli</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.kudu</groupId>
+			<artifactId>kudu-client</artifactId>
+			<version>1.8.0</version>
+		</dependency>
 	</dependencies>
+
 </project>
