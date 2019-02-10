@@ -1005,7 +1005,8 @@ public class BaseDataStore implements DataStore {
         new InternalDataAdapterWrapper<>(
             dataTypeAdapter,
             internalAdapterStore.addTypeName(dataTypeAdapter.getTypeName()));
-    final Index[] initialIndicesUnique = Arrays.stream(initialIndices).distinct().toArray(size -> new Index[size]);
+    final Index[] initialIndicesUnique =
+        Arrays.stream(initialIndices).distinct().toArray(size -> new Index[size]);
     internalAddIndices(adapter, initialIndicesUnique, false);
     store(adapter);
   }
