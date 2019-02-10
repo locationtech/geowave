@@ -12,6 +12,51 @@
 	<name>GeoWave Kudu</name>
 	<description>Geowave Data Store on Apache Kudu</description>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>org.kududb.examples.sample.KuduSample</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>cdh.repo</id>
+			<name>Cloudera Repositories</name>
+			<url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
@@ -23,5 +68,12 @@
 			<artifactId>geowave-core-cli</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.kudu</groupId>
+			<artifactId>kudu-client</artifactId>
+			<version>1.8.0</version>
+		</dependency>
 	</dependencies>
+
 </project>
