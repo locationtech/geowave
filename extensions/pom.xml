@@ -21,6 +21,7 @@
 		<module>datastores/dynamodb</module>
 		<module>datastores/redis</module>
 		<module>datastores/rocksdb</module>
+		<module>datastores/kudu</module>
 		<module>formats/geolife</module>
 		<module>formats/geotools-raster</module>
 		<module>formats/geotools-vector</module>
