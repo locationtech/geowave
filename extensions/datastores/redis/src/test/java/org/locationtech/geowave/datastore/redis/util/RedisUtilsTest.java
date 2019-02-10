@@ -9,9 +9,9 @@
 package org.locationtech.geowave.datastore.redis.util;
 
 import static org.junit.Assert.assertEquals;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Random;
-import org.bouncycastle.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.ByteArray;

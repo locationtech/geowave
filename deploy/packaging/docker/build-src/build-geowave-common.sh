@@ -56,7 +56,7 @@ fi
 
 ## Build the pyspark module
 if [[ ! -f $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz ]]; then
-    mvn package -am -pl analytics/pyspark -Ppyspark -Dpython.executable=python3.6
+    mvn package -am -pl analytics/pyspark -P python -Dpython.executable=python3.6
     mv $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION_STR}.tar.gz $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
 fi
 
