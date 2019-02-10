@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>geowave-extension-parent</artifactId>
+		<groupId>org.locationtech.geowave</groupId>
+		<relativePath>../../</relativePath>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>geowave-datastore-kudu</artifactId>
+	<name>GeoWave Kudu</name>
+	<description>Geowave Data Store on Apache Kudu</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-core-mapreduce</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-core-cli</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
