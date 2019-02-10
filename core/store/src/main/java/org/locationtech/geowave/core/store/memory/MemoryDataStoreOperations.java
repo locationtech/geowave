@@ -100,6 +100,7 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
 
   @Override
   public void deleteAll() throws Exception {
+    metadataStore.clear();
     storeData.clear();
     metadataStore.clear();
   }
