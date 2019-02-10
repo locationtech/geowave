@@ -1262,9 +1262,10 @@
 		<module>docs</module>
 		<module>examples/java-api</module>
 		<module>extensions</module>
+        <module>python</module>
 		<module>services</module>
 		<module>test</module>
-	</modules>
+    </modules>
 	<repositories>
 		<repository>
 			<snapshots>
