@@ -263,17 +263,17 @@ public class VarintUtils {
    */
   public static void writeTime(final long time, final ByteBuffer buffer) {
     writeSignedLong(time - TIME_EPOCH, buffer);
-  }  
-  
+  }
+
   /**
    * Encode a timestamp using varint encoding.
-  *
-  * @param time the timestamp
-  * @param buffer the {@code ByteBuffer} to write the timestamp to
-  */
- public static byte[] writeTime(final long time) {
-   return writeSignedLong(time - TIME_EPOCH);
- }
+   *
+   * @param time the timestamp
+   * @param buffer the {@code ByteBuffer} to write the timestamp to
+   */
+  public static byte[] writeTime(final long time) {
+    return writeSignedLong(time - TIME_EPOCH);
+  }
 
   /**
    * Read a timestamp from a {@code ByteBuffer} that was previously encoded with {@link #writeTime}.

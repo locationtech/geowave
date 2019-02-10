@@ -21,12 +21,15 @@ import org.locationtech.geowave.core.store.adapter.MockComponents;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.index.NullIndex;
+import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import static org.junit.Assert.*;
 
 public class DataStoreTest {
 
