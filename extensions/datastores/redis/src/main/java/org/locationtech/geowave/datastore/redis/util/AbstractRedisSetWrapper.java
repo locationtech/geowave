@@ -45,6 +45,9 @@ abstract public class AbstractRedisSetWrapper<A, S> implements AutoCloseable {
     final RBatch flushBatch = this.currentBatch;
     currentAsync = null;
     currentBatch = null;
+    if (flushBatch == null) {
+      return;
+    }
     try {
       writeSemaphore.acquire();
       flushBatch.executeAsync().handle((r, t) -> {
