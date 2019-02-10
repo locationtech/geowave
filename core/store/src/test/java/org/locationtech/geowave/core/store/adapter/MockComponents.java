@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import com.google.common.primitives.Bytes;
 import org.apache.commons.lang3.Range;
 import org.locationtech.geowave.core.index.Coordinate;
@@ -152,8 +151,10 @@ public class MockComponents {
 
     @Override
     public boolean equals(final Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o)
+        return true;
+      if (o == null || getClass() != o.getClass())
+        return false;
       final MockAbstractDataAdapter that = (MockAbstractDataAdapter) o;
       return Objects.equals(id, that.id);
     }
@@ -166,7 +167,10 @@ public class MockComponents {
     @Override
     public byte[] toBinary() {
       byte[] idBinary = StringUtils.stringToBinary(id);
-      return Bytes.concat(ByteBuffer.allocate(4).putInt(idBinary.length).array(),idBinary, super.toBinary());
+      return Bytes.concat(
+          ByteBuffer.allocate(4).putInt(idBinary.length).array(),
+          idBinary,
+          super.toBinary());
     }
 
     @Override
