@@ -12,6 +12,4 @@
     </parent>
     <artifactId>geowave-python</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-
 </project>
