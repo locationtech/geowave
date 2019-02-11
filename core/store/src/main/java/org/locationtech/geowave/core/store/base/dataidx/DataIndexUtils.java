@@ -45,17 +45,19 @@ public class DataIndexUtils {
       final byte[] serializedValue,
       final boolean visibilityEnabled) {
     final ByteBuffer buf = ByteBuffer.wrap(serializedValue);
+    int lengthBytes = 1;
     final byte[] fieldMask = new byte[serializedValue[serializedValue.length - 1]];
     buf.get(fieldMask);
 
     final byte[] visibility;
     if (visibilityEnabled) {
+      lengthBytes++;
       visibility = new byte[serializedValue[serializedValue.length - 2]];
       buf.get(visibility);
     } else {
       visibility = new byte[0];
     }
-    final byte[] value = new byte[buf.remaining()];
+    final byte[] value = new byte[buf.remaining() - lengthBytes];
     buf.get(value);
     return new GeoWaveValueImpl(fieldMask, visibility, value);
   }
