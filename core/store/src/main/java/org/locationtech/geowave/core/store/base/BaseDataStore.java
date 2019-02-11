@@ -1510,7 +1510,7 @@ public class BaseDataStore implements DataStore {
     // the type.
     final Short adapterId = internalAdapterStore.getAdapterId(typeName);
 
-    if (adapterId != -1) {
+    if (adapterId != null) {
       final AdapterToIndexMapping mapping = indexMappingStore.getIndicesForAdapter(adapterId);
       final String[] indexNames = mapping.getIndexNames();
 
