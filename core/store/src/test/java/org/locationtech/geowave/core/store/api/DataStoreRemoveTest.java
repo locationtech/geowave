@@ -20,6 +20,7 @@ import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.adapter.MockComponents;
 import org.locationtech.geowave.core.store.index.IndexImpl;
+import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
 public class DataStoreRemoveTest {
@@ -31,7 +32,7 @@ public class DataStoreRemoveTest {
 
   @Before
   public void createStore() {
-    dataStore = DataStoreFactory.createDataStore(new MemoryRequiredNameSpaceOptions(counter + ""));
+    dataStore = DataStoreFactory.createDataStore(new MemoryRequiredOptions());
 
     final Index index =
         new IndexImpl(
@@ -194,29 +195,5 @@ public class DataStoreRemoveTest {
 
     // then
     throw new AssertionError();
-  }
-
-  private class MemoryRequiredNameSpaceOptions extends StoreFactoryOptions {
-    public MemoryRequiredNameSpaceOptions(String namespace) {
-      super(namespace);
-    }
-
-    private final DataStoreOptions options = new BaseDataStoreOptions() {
-      @Override
-      public boolean isServerSideLibraryEnabled() {
-        // memory datastore doesn't have a serverside option
-        return false;
-      }
-    };
-
-    @Override
-    public StoreFactoryFamilySpi getStoreFactory() {
-      return new MemoryStoreFactoryFamily();
-    }
-
-    @Override
-    public DataStoreOptions getStoreOptions() {
-      return options;
-    }
   }
 }
