@@ -100,8 +100,8 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
 
   @Override
   public void deleteAll() throws Exception {
-    metadataStore.clear();
     storeData.clear();
+    metadataStore.clear();
   }
 
   @Override
@@ -488,7 +488,14 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
                     query.getAuthorizations()));
       }
       final Iterator<GeoWaveMetadata> itTransformed =
-          Iterators.transform(it, input -> input.metadata);
+          Iterators.transform(
+              it,
+              input -> new GeoWaveMetadataWithUUID(
+                  input.metadata.getPrimaryId(),
+                  input.metadata.getSecondaryId(),
+                  input.metadata.getVisibility(),
+                  input.metadata.getValue(),
+                  input.uuidBytes));
       if (MetadataType.STATS.equals(type)) {
         return new CloseableIterator.Wrapper(new Iterator<GeoWaveMetadata>() {
           final PeekingIterator<GeoWaveMetadata> peekingIt =
@@ -625,7 +632,8 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
         }
       }
       for (final GeoWaveMetadata r : toRemove) {
-        metadataStore.get(type).remove(new MemoryMetadataEntry(r));
+        metadataStore.get(type).remove(
+            new MemoryMetadataEntry(r, ((GeoWaveMetadataWithUUID) r).uuidBytes));
       }
       return true;
     }
@@ -708,5 +716,38 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
   @Override
   public boolean metadataExists(final MetadataType type) throws IOException {
     return true;
+  }
+
+  public static class GeoWaveMetadataWithUUID extends GeoWaveMetadata {
+    byte[] uuidBytes;
+
+    public GeoWaveMetadataWithUUID(
+        byte[] primaryId,
+        byte[] secondaryId,
+        byte[] visibility,
+        byte[] value,
+        byte[] uuidBytes) {
+      super(primaryId, secondaryId, visibility, value);
+      this.uuidBytes = uuidBytes;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+      if (this == o)
+        return true;
+      if (o == null || getClass() != o.getClass())
+        return false;
+      if (!super.equals(o))
+        return false;
+      final GeoWaveMetadataWithUUID that = (GeoWaveMetadataWithUUID) o;
+      return Arrays.equals(uuidBytes, that.uuidBytes);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = super.hashCode();
+      result = 31 * result + Arrays.hashCode(uuidBytes);
+      return result;
+    }
   }
 }
