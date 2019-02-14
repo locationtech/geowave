@@ -28,7 +28,6 @@ import org.locationtech.geowave.core.store.callback.ScanCallbackList;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
@@ -179,15 +178,9 @@ abstract class BaseQuery {
   }
 
   protected byte[] getFieldBitmask() {
-    if ((fieldIdsAdapterPair != null) && (fieldIdsAdapterPair.getLeft() != null)) {
-      return BitmaskUtils.generateFieldSubsetBitmask(
-          dataIndexRetrieval != null ? DataIndexUtils.DATA_ID_INDEX.getIndexModel()
-              : index.getIndexModel(),
-          fieldIdsAdapterPair.getLeft(),
-          fieldIdsAdapterPair.getRight());
-    }
-
-    return null;
+    return BaseDataStoreUtils.getFieldBitmask(
+        fieldIdsAdapterPair,
+        dataIndexRetrieval != null ? DataIndexUtils.DATA_ID_INDEX : index);
   }
 
   protected boolean isAuthorizationsLimiting() {

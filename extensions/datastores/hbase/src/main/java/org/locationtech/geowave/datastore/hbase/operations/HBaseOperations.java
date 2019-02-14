@@ -544,6 +544,34 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
   }
 
   public Iterator<GeoWaveRow> getDataIndexResults(
+      final byte[] startRow,
+      final byte[] endRow,
+      final short adapterId,
+      final String... additionalAuthorizations) {
+    Result[] results = null;
+    final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
+    try (final Table table = conn.getTable(getTableName(DataIndexUtils.DATA_ID_INDEX.getName()))) {
+      final Scan scan = new Scan();
+      scan.setStartRow(startRow);
+      scan.setStopRow(HBaseUtils.getInclusiveEndKey(endRow));
+      try (ResultScanner s = table.getScanner(scan)) {
+        results = Iterators.toArray(s.iterator(), Result.class);
+      }
+    } catch (final IOException e) {
+      LOGGER.error("Unable to close HBase table", e);
+    }
+    if (results != null) {
+      return Arrays.stream(results).map(
+          r -> DataIndexUtils.deserializeDataIndexRow(
+              r.getRow(),
+              adapterId,
+              r.getValue(family, new byte[0]),
+              false)).iterator();
+    }
+    return Collections.emptyIterator();
+  }
+
+  public Iterator<GeoWaveRow> getDataIndexResults(
       final byte[][] rows,
       final short adapterId,
       final String... additionalAuthorizations) {
@@ -1553,7 +1581,6 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
 
   @Override
   public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
-
     // Currently, the InsertionIdQueryFilter is incompatible with the hbase
     // bulk deleter when the MultiRowRangeFilter is present. This check
     // prevents the situation by deferring to a single row delete.
@@ -1580,11 +1607,21 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
 
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
-    return new RowReaderWrapper<>(
-        new Wrapper<>(
-            getDataIndexResults(
-                readerParams.getDataIds(),
-                readerParams.getAdapterId(),
-                readerParams.getAdditionalAuthorizations())));
+    if (readerParams.getDataIds() != null) {
+      return new RowReaderWrapper<>(
+          new Wrapper<>(
+              getDataIndexResults(
+                  readerParams.getDataIds(),
+                  readerParams.getAdapterId(),
+                  readerParams.getAdditionalAuthorizations())));
+    } else {
+      return new RowReaderWrapper<>(
+          new Wrapper<>(
+              getDataIndexResults(
+                  readerParams.getStartInclusiveDataId(),
+                  readerParams.getEndInclusiveDataId(),
+                  readerParams.getAdapterId(),
+                  readerParams.getAdditionalAuthorizations())));
+    }
   }
 }

@@ -182,8 +182,7 @@ public class DynamoDBReader<T> implements RowReader<T> {
           @Override
           public Iterator<DynamoDBRow> apply(final Iterator<Map<String, AttributeValue>> input) {
             final Iterator<DynamoDBRow> rowIterator =
-                Streams.stream(input).map(
-                new DynamoDBRow.GuavaRowTranslationHelper()).filter(
+                Streams.stream(input).map(new DynamoDBRow.GuavaRowTranslationHelper()).filter(
                     visibilityFilter).iterator();
             if (rowMerging) {
               return new GeoWaveRowMergingIterator<>(rowIterator);

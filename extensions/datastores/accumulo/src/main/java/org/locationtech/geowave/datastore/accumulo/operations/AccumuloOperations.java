@@ -124,6 +124,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 
 /**
  * This class holds all parameters necessary for establishing Accumulo connections and provides
@@ -509,6 +510,40 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final String tableName,
       final String... additionalAuthorizations) throws TableNotFoundException {
     return new ClientSideIteratorScanner(createScanner(tableName, additionalAuthorizations));
+  }
+
+  public Iterator<GeoWaveRow> getDataIndexResults(
+      final byte[] startRow,
+      final byte[] endRow,
+      final short adapterId,
+      final String... additionalAuthorizations) {
+    final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
+
+    // to have backwards compatibility before 1.8.0 we can assume BaseScanner is autocloseable
+    Scanner scanner = null;
+    try {
+      scanner = createScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations);
+
+      if ((startRow == null) || (startRow.length == 0)) {
+        return Collections.emptyIterator();
+      }
+      scanner.setRange(
+          AccumuloUtils.byteArrayRangeToAccumuloRange(new ByteArrayRange(startRow, endRow)));
+      scanner.fetchColumnFamily(new Text(family));
+      return Streams.stream(scanner.iterator()).map(
+          entry -> DataIndexUtils.deserializeDataIndexRow(
+              entry.getKey().getRow().getBytes(),
+              adapterId,
+              entry.getValue().get(),
+              false)).iterator();
+    } catch (final TableNotFoundException e) {
+      LOGGER.error("unable to find data index table", e);
+    } finally {
+      if (scanner != null) {
+        scanner.close();
+      }
+    }
+    return Collections.emptyIterator();
   }
 
   public Iterator<GeoWaveRow> getDataIndexResults(

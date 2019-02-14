@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.index;
 
+import java.nio.ByteBuffer;
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more contributor license
  * agreements. See the NOTICE file distributed with this work for additional information regarding
@@ -23,7 +24,6 @@ package org.locationtech.geowave.core.index;
  * limitations under the License.
  */
 import com.google.common.annotations.VisibleForTesting;
-import java.nio.ByteBuffer;
 
 /**
  * Based on {@link com.clearspring.analytics.util.Varint}. Provides additional functionality to
@@ -40,7 +40,7 @@ public class VarintUtils {
    * @see {@code com.clearsprint.analytics.util.Varint}
    */
   @VisibleForTesting
-  static int signedToUnsignedInt(int value) {
+  static int signedToUnsignedInt(final int value) {
     return (value << 1) ^ (value >> 31);
   }
 
@@ -50,16 +50,16 @@ public class VarintUtils {
    * @see {@code com.clearsprint.analytics.util.Varint}
    */
   @VisibleForTesting
-  static int unsignedToSignedInt(int value) {
-    int temp = (((value << 31) >> 31) ^ value) >> 1;
+  static int unsignedToSignedInt(final int value) {
+    final int temp = (((value << 31) >> 31) ^ value) >> 1;
     return temp ^ (value & (1 << 31));
   }
 
-  public static int signedIntByteLength(int value) {
+  public static int signedIntByteLength(final int value) {
     return unsignedIntByteLength(signedToUnsignedInt(value));
   }
 
-  public static int unsignedIntByteLength(int value) {
+  public static int unsignedIntByteLength(final int value) {
     final int numRelevantBits = 32 - Integer.numberOfLeadingZeros(value);
     int numBytes = (numRelevantBits + 6) / 7;
     if (numBytes == 0) {
@@ -68,32 +68,51 @@ public class VarintUtils {
     return numBytes;
   }
 
-  public static int unsignedShortByteLength(short value) {
+  public static int unsignedShortByteLength(final short value) {
     return unsignedIntByteLength(value & 0xFFFF);
   }
 
-  public static void writeSignedInt(int value, ByteBuffer buffer) {
+  public static void writeSignedInt(final int value, final ByteBuffer buffer) {
     writeUnsignedInt(signedToUnsignedInt(value), buffer);
   }
 
-  public static void writeUnsignedInt(int value, ByteBuffer buffer) {
+  public static byte[] writeSignedInt(final int value) {
+    return writeUnsignedInt(signedToUnsignedInt(value));
+  }
+
+  public static void writeUnsignedInt(int value, final ByteBuffer buffer) {
     while ((value & 0xFFFFFF80) != 0) {
-      buffer.put((byte) (value & 0x7F | 0x80));
+      buffer.put((byte) ((value & 0x7F) | 0x80));
       value >>>= 7;
     }
     buffer.put((byte) (value & 0x7F));
   }
 
-  public static void writeUnsignedShort(short value, ByteBuffer buffer) {
+  public static byte[] writeUnsignedInt(int value) {
+    final byte[] retVal = new byte[unsignedIntByteLength(value)];
+    int i = 0;
+    while ((value & 0xFFFFFF80) != 0) {
+      retVal[i++] = (byte) ((value & 0x7F) | 0x80);
+      value >>>= 7;
+    }
+    retVal[i] = (byte) (value & 0x7F);
+    return retVal;
+  }
+
+  public static void writeUnsignedShort(final short value, final ByteBuffer buffer) {
     writeUnsignedInt(value & 0xFFFF, buffer);
   }
 
-  public static void writeUnsignedIntReversed(int value, ByteBuffer buffer) {
-    int startPosition = buffer.position();
-    int byteLength = VarintUtils.unsignedIntByteLength(value);
-    int position = startPosition + byteLength - 1;
+  public static byte[] writeUnsignedShort(final short value) {
+    return writeUnsignedInt(value & 0xFFFF);
+  }
+
+  public static void writeUnsignedIntReversed(int value, final ByteBuffer buffer) {
+    final int startPosition = buffer.position();
+    final int byteLength = unsignedIntByteLength(value);
+    int position = (startPosition + byteLength) - 1;
     while ((value & 0xFFFFFF80) != 0) {
-      buffer.put(position, (byte) (value & 0x7F | 0x80));
+      buffer.put(position, (byte) ((value & 0x7F) | 0x80));
       value >>>= 7;
       position--;
     }
@@ -101,11 +120,23 @@ public class VarintUtils {
     buffer.position(startPosition + byteLength);
   }
 
-  public static int readSignedInt(ByteBuffer buffer) {
+  public static byte[] writeUnsignedIntReversed(int value) {
+    final int byteLength = unsignedIntByteLength(value);
+    final byte[] retVal = new byte[byteLength];
+    int i = retVal.length - 1;
+    while ((value & 0xFFFFFF80) != 0) {
+      retVal[i--] = (byte) ((value & 0x7F) | 0x80);
+      value >>>= 7;
+    }
+    retVal[0] = (byte) (value & 0x7F);
+    return retVal;
+  }
+
+  public static int readSignedInt(final ByteBuffer buffer) {
     return unsignedToSignedInt(readUnsignedInt(buffer));
   }
 
-  public static int readUnsignedInt(ByteBuffer buffer) {
+  public static int readUnsignedInt(final ByteBuffer buffer) {
     int value = 0;
     int i = 0;
     int currByte;
@@ -116,12 +147,12 @@ public class VarintUtils {
     return value | (currByte << i);
   }
 
-  public static short readUnsignedShort(ByteBuffer buffer) {
-    int value = readUnsignedInt(buffer);
+  public static short readUnsignedShort(final ByteBuffer buffer) {
+    final int value = readUnsignedInt(buffer);
     return (short) (value & 0xFFFF);
   }
 
-  public static int readUnsignedIntReversed(ByteBuffer buffer) {
+  public static int readUnsignedIntReversed(final ByteBuffer buffer) {
     int value = 0;
     int i = 0;
     int currByte;
@@ -144,7 +175,7 @@ public class VarintUtils {
    * @see {@code com.clearsprint.analytics.util.Varint}
    */
   @VisibleForTesting
-  static long signedToUnsignedLong(long value) {
+  static long signedToUnsignedLong(final long value) {
     return (value << 1) ^ (value >> 63);
   }
 
@@ -154,16 +185,16 @@ public class VarintUtils {
    * @see {@code com.clearsprint.analytics.util.Varint}
    */
   @VisibleForTesting
-  static long unsignedToSignedLong(long value) {
-    long temp = (((value << 63) >> 63) ^ value) >> 1;
+  static long unsignedToSignedLong(final long value) {
+    final long temp = (((value << 63) >> 63) ^ value) >> 1;
     return temp ^ (value & (1L << 63));
   }
 
-  public static int signedLongByteLength(long value) {
+  public static int signedLongByteLength(final long value) {
     return unsignedLongByteLength(signedToUnsignedLong(value));
   }
 
-  public static int unsignedLongByteLength(long value) {
+  public static int unsignedLongByteLength(final long value) {
     final int numRelevantBits = 64 - Long.numberOfLeadingZeros(value);
     int numBytes = (numRelevantBits + 6) / 7;
     if (numBytes == 0) {
@@ -172,23 +203,38 @@ public class VarintUtils {
     return numBytes;
   }
 
-  public static void writeSignedLong(long value, ByteBuffer buffer) {
+  public static void writeSignedLong(final long value, final ByteBuffer buffer) {
     writeUnsignedLong(signedToUnsignedLong(value), buffer);
   }
 
-  public static void writeUnsignedLong(long value, ByteBuffer buffer) {
+  public static byte[] writeSignedLong(final long value) {
+    return writeUnsignedLong(signedToUnsignedLong(value));
+  }
+
+  public static void writeUnsignedLong(long value, final ByteBuffer buffer) {
     while ((value & 0xFFFFFFFFFFFFFF80L) != 0L) {
-      buffer.put((byte) (value & 0x7F | 0x80));
+      buffer.put((byte) ((value & 0x7F) | 0x80));
       value >>>= 7;
     }
     buffer.put((byte) (value & 0x7F));
   }
 
-  public static long readSignedLong(ByteBuffer buffer) {
+  public static byte[] writeUnsignedLong(long value) {
+    final byte[] retVal = new byte[unsignedLongByteLength(value)];
+    int i = 0;
+    while ((value & 0xFFFFFFFFFFFFFF80L) != 0L) {
+      retVal[i++] = (byte) ((value & 0x7F) | 0x80);
+      value >>>= 7;
+    }
+    retVal[i] = (byte) (value & 0x7F);
+    return retVal;
+  }
+
+  public static long readSignedLong(final ByteBuffer buffer) {
     return unsignedToSignedLong(readUnsignedLong(buffer));
   }
 
-  public static long readUnsignedLong(ByteBuffer buffer) {
+  public static long readUnsignedLong(final ByteBuffer buffer) {
     long value = 0;
     int i = 0;
     long currByte;
@@ -205,8 +251,8 @@ public class VarintUtils {
    * @param time the timestamp
    * @return the number of bytes the encoded timestamp will use
    */
-  public static int timeByteLength(long time) {
-    return VarintUtils.signedLongByteLength(time - TIME_EPOCH);
+  public static int timeByteLength(final long time) {
+    return signedLongByteLength(time - TIME_EPOCH);
   }
 
   /**
@@ -215,8 +261,18 @@ public class VarintUtils {
    * @param time the timestamp
    * @param buffer the {@code ByteBuffer} to write the timestamp to
    */
-  public static void writeTime(long time, ByteBuffer buffer) {
-    VarintUtils.writeSignedLong(time - TIME_EPOCH, buffer);
+  public static void writeTime(final long time, final ByteBuffer buffer) {
+    writeSignedLong(time - TIME_EPOCH, buffer);
+  }
+
+  /**
+   * Encode a timestamp using varint encoding.
+   *
+   * @param time the timestamp
+   * @param buffer the {@code ByteBuffer} to write the timestamp to
+   */
+  public static byte[] writeTime(final long time) {
+    return writeSignedLong(time - TIME_EPOCH);
   }
 
   /**
@@ -225,7 +281,7 @@ public class VarintUtils {
    * @param buffer the {@code ByteBuffer} to read from
    * @return the decoded timestamp
    */
-  public static long readTime(ByteBuffer buffer) {
+  public static long readTime(final ByteBuffer buffer) {
     return VarintUtils.readSignedLong(buffer) + TIME_EPOCH;
   }
 }

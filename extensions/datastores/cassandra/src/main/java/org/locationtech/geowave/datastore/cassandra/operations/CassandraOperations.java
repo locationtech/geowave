@@ -75,6 +75,7 @@ import com.datastax.driver.core.schemabuilder.Create;
 import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.MoreExecutors;
 
 public class CassandraOperations implements MapReduceDataStoreOperations {
@@ -499,9 +500,66 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
 
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
+    if (readerParams.getDataIds() == null) {
+      return new RowReaderWrapper<>(
+          new CloseableIterator.Wrapper(
+              getRows(
+                  readerParams.getStartInclusiveDataId(),
+                  readerParams.getEndInclusiveDataId(),
+                  readerParams.getAdapterId())));
+    }
     return new RowReaderWrapper<>(
         new CloseableIterator.Wrapper(
             getRows(readerParams.getDataIds(), readerParams.getAdapterId())));
+  }
+
+  public Iterator<GeoWaveRow> getRows(
+      final byte[] startId,
+      final byte[] endId,
+      final short adapterId) {
+    PreparedStatement preparedRead;
+    final String tableName = DataIndexUtils.DATA_ID_INDEX.getName();
+    final String safeTableName = getCassandraSafeName(tableName);
+    synchronized (state.preparedRangeReadsPerTable) {
+      preparedRead = state.preparedRangeReadsPerTable.get(safeTableName);
+      if (preparedRead == null) {
+        final Select select = getSelect(safeTableName);
+        select.where(
+            QueryBuilder.gte(
+                CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+                QueryBuilder.bindMarker(
+                    CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getLowerBoundBindMarkerName()))).and(
+                        QueryBuilder.lte(
+                            CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+                            QueryBuilder.bindMarker(
+                                CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getUpperBoundBindMarkerName()))).and(
+                                    QueryBuilder.eq(
+                                        CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+                                        QueryBuilder.bindMarker(
+                                            CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName())));
+        preparedRead = session.prepare(select);
+        state.preparedRangeReadsPerTable.put(safeTableName, preparedRead);
+      }
+    }
+    final BoundStatement statement = new BoundStatement(preparedRead);
+    statement.set(
+        CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
+        adapterId,
+        TypeCodec.smallInt());
+    statement.set(
+        CassandraField.GW_PARTITION_ID_KEY.getLowerBoundBindMarkerName(),
+        ByteBuffer.wrap(startId),
+        TypeCodec.blob());
+    statement.set(
+        CassandraField.GW_PARTITION_ID_KEY.getUpperBoundBindMarkerName(),
+        ByteBuffer.wrap(endId),
+        TypeCodec.blob());
+    final ResultSet results = getSession().execute(statement);
+    return Streams.stream(results).map(r -> {
+      final byte[] d = r.getBytes(CassandraField.GW_PARTITION_ID_KEY.getFieldName()).array();
+      final byte[] v = r.getBytes(CassandraField.GW_VALUE_KEY.getFieldName()).array();
+      return DataIndexUtils.deserializeDataIndexRow(d, adapterId, v, options.isVisibilityEnabled());
+    }).iterator();
   }
 
   public Iterator<GeoWaveRow> getRows(final byte[][] dataIds, final short adapterId) {

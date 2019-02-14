@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.operations;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.ByteArrayRange;
@@ -62,31 +63,65 @@ public interface DataStoreOperations {
   <T> RowReader<T> createReader(ReaderParams<T> readerParams);
 
   default RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
-    final List<RowReader<GeoWaveRow>> readers =
-        Arrays.stream(readerParams.getDataIds()).map(dataId -> {
-          final byte[] sortKey = Bytes.concat(new byte[] {(byte) dataId.length}, dataId);
-          return createReader(
-              new ReaderParams<>(
-                  DataIndexUtils.DATA_ID_INDEX,
-                  readerParams.getAdapterStore(),
-                  readerParams.getInternalAdapterStore(),
-                  new short[] {readerParams.getAdapterId()},
-                  null,
-                  readerParams.getAggregation(),
-                  readerParams.getFieldSubsets(),
-                  false,
-                  false,
-                  false,
-                  false,
-                  new QueryRanges(new ByteArrayRange(sortKey, sortKey, false)),
-                  null,
-                  1,
-                  null,
-                  null,
-                  null,
-                  GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
-                  new String[0]));
-        }).collect(Collectors.toList());
+    final List<RowReader<GeoWaveRow>> readers;
+    if (readerParams.getDataIds() != null) {
+      readers = Arrays.stream(readerParams.getDataIds()).map(dataId -> {
+        final byte[] sortKey = Bytes.concat(new byte[] {(byte) dataId.length}, dataId);
+        return createReader(
+            new ReaderParams<>(
+                DataIndexUtils.DATA_ID_INDEX,
+                readerParams.getAdapterStore(),
+                readerParams.getInternalAdapterStore(),
+                new short[] {readerParams.getAdapterId()},
+                null,
+                readerParams.getAggregation(),
+                readerParams.getFieldSubsets(),
+                false,
+                false,
+                false,
+                false,
+                new QueryRanges(new ByteArrayRange(sortKey, sortKey, false)),
+                null,
+                1,
+                null,
+                null,
+                null,
+                GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
+                new String[0]));
+      }).collect(Collectors.toList());
+    } else {
+      final byte[] startKey =
+          Bytes.concat(
+              new byte[] {(byte) readerParams.getStartInclusiveDataId().length},
+              readerParams.getStartInclusiveDataId());
+      final byte[] endKey =
+          Bytes.concat(
+              new byte[] {(byte) readerParams.getEndInclusiveDataId().length},
+              readerParams.getEndInclusiveDataId());
+      readers =
+          Collections.singletonList(
+              createReader(
+                  new ReaderParams<>(
+                      DataIndexUtils.DATA_ID_INDEX,
+                      readerParams.getAdapterStore(),
+                      readerParams.getInternalAdapterStore(),
+                      new short[] {readerParams.getAdapterId()},
+                      null,
+                      readerParams.getAggregation(),
+                      readerParams.getFieldSubsets(),
+                      false,
+                      false,
+                      false,
+                      false,
+                      new QueryRanges(new ByteArrayRange(startKey, endKey, false)),
+                      null,
+                      1,
+                      null,
+                      null,
+                      null,
+                      GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
+                      new String[0])));
+    }
     return new RowReaderWrapper<>(new CloseableIteratorWrapper(new Closeable() {
       @Override
       public void close() {

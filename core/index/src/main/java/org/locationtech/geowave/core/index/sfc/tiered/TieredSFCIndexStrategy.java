@@ -388,24 +388,7 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
     // this range does not fit into a single row ID at the lowest
     // tier, decompose it
     for (final ByteArrayRange range : rangeDecomp.getRanges()) {
-      byte[] currentRowId = Arrays.copyOf(range.getStart(), range.getStart().length);
-      retVal.add(currentRowId);
-      while (!Arrays.equals(currentRowId, range.getEnd())) {
-        currentRowId = Arrays.copyOf(currentRowId, currentRowId.length);
-        // increment until we reach the end row ID
-        boolean overflow = !ByteArrayUtils.increment(currentRowId);
-        if (!overflow) {
-          retVal.add(currentRowId);
-        } else {
-          // the increment caused an overflow which shouldn't
-          // ever happen assuming the start row ID is less
-          // than the end row ID
-          LOGGER.warn(
-              "Row IDs overflowed when ingesting data; start of range decomposition must be less than or equal to end of range. This may be because the start of the decomposed range is higher than the end of the range.");
-          overflow = true;
-          break;
-        }
-      }
+      ByteArrayUtils.addAllIntermediaryByteArrays(retVal, range);
     }
     return new SinglePartitionInsertionIds(tierAndBinId, retVal);
   }
