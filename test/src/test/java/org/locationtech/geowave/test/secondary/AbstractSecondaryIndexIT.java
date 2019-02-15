@@ -10,7 +10,10 @@ package org.locationtech.geowave.test.secondary;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.junit.Assert;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -81,8 +84,6 @@ abstract public class AbstractSecondaryIndexIT extends AbstractGeoWaveBasicVecto
             bldr.constraints(
                 bldr.constraintsFactory().dataIds(
                     StringUtils.stringToBinary("hail.860"))).build())) {
-      // try(CloseableIterator<SimpleFeature> it =
-      // getDataStorePluginOptions().createDataStore().query(bldr.build())){
       while (it.hasNext()) {
         final String id = it.next().getID();
         Assert.assertEquals("hail.860", id);
@@ -93,15 +94,22 @@ abstract public class AbstractSecondaryIndexIT extends AbstractGeoWaveBasicVecto
         getDataStorePluginOptions().createDataStore().query(
             bldr.constraints(
                 bldr.constraintsFactory().dataIdsByRange(
-                    StringUtils.stringToBinary("hail.860"),
-                    StringUtils.stringToBinary("hail.870"))).build())) {
+                    StringUtils.stringToBinary("hail.8600"),
+                    StringUtils.stringToBinary("hail.8609"))).build())) {
 
-      int i = 860;
-      while (it.hasNext() && (i <= 870)) {
+      final Set<Integer> expectedIntIds =
+          IntStream.rangeClosed(8600, 8609).boxed().collect(Collectors.toSet());
+      while (it.hasNext() && (!expectedIntIds.isEmpty())) {
         final String id = it.next().getID();
-        Assert.assertEquals("hail." + i++, id);
+        // ignore the expected "hail." and get the int portion
+        final int intId = Integer.parseInt(id.substring(5));
+        Assert.assertTrue(
+            "ID '" + intId + "' not found in expected set",
+            expectedIntIds.remove(intId));
       }
-      Assert.assertFalse("The iterator should be exhausted after hail.870", it.hasNext());
+      Assert.assertFalse(
+          "The iterator should be exhausted after expected set is depleted",
+          it.hasNext());
     }
   }
 }

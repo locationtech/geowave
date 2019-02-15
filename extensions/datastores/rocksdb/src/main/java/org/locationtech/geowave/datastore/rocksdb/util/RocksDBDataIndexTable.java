@@ -62,7 +62,7 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
       final List<byte[]> dataIdsList = Arrays.asList(dataIds);
       final Map<byte[], byte[]> dataIdxResults = readDb.multiGet(dataIdsList);
       return new CloseableIterator.Wrapper(
-          dataIdsList.stream().map(
+          dataIdsList.stream().filter(dataId -> dataIdxResults.containsKey(dataId)).map(
               dataId -> DataIndexUtils.deserializeDataIndexRow(
                   dataId,
                   adapterId,

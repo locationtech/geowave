@@ -13,6 +13,7 @@ import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
+import com.google.common.primitives.UnsignedBytes;
 
 public class DataIdRangeQueryFilter implements QueryFilter {
   private byte[] startDataIdInclusive;
@@ -32,9 +33,13 @@ public class DataIdRangeQueryFilter implements QueryFilter {
       final CommonIndexModel indexModel,
       final IndexedPersistenceEncoding persistenceEncoding) {
     return ((startDataIdInclusive == null)
-        || (ByteArrayUtils.compare(startDataIdInclusive, persistenceEncoding.getDataId()) <= 0))
+        || (UnsignedBytes.lexicographicalComparator().compare(
+            startDataIdInclusive,
+            persistenceEncoding.getDataId()) <= 0))
         && ((endDataIdInclusive == null)
-            || (ByteArrayUtils.compare(endDataIdInclusive, persistenceEncoding.getDataId()) <= 0));
+            || (UnsignedBytes.lexicographicalComparator().compare(
+                endDataIdInclusive,
+                persistenceEncoding.getDataId()) >= 0));
   }
 
 

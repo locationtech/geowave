@@ -63,7 +63,7 @@ public class StatsManagerTest {
   public void test() {
     final StatsManager statsManager = new StatsManager(dataAdapter, schema);
     final StatisticsId[] ids = statsManager.getSupportedStatistics();
-    assertTrue(ids.length > 6);
+    assertTrue(ids.length > 5);
     assertTrue(
         ArrayUtils.contains(
             ids,
