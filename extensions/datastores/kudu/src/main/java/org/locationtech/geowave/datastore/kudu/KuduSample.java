@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KuduSample {
-  private static final String KUDU_MASTER = System.getProperty(
-          "kuduMaster", "kudu.dannyqiu.me:7051");
+  private static final String KUDU_MASTER =
+      System.getProperty("kuduMaster", "kudu.dannyqiu.me:7051");
 
   public static void main(String[] args) {
     System.out.println("-----------------------------------------------");
