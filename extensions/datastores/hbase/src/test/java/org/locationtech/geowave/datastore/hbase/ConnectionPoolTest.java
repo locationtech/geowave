@@ -3,7 +3,6 @@ package org.locationtech.geowave.datastore.hbase;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.datastore.hbase.util.ConnectionPool;
-import org.mockito.Mockito;
 
 import java.io.IOException;
 

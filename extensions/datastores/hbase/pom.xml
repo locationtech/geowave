@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>geowave-extension-parent</artifactId>
@@ -12,36 +11,6 @@
     <description>Geowave Data Store on Apache Hbase</description>
 
     <dependencies>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.1.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-testing-util</artifactId>
-            <version>2.1.2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.hbase</groupId>
-                    <artifactId>hbase-client</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.locationtech.geowave</groupId>
-            <artifactId>geowave-core-geotime</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.locationtech.jts</groupId>
-            <artifactId>jts-core</artifactId>
-            <version>${jts.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -136,25 +105,25 @@
                             <target>
                                 <copy toDir="target/protobuf">
                                     <fileset dir="src/main/protobuf">
-                                        <include name="**/*.proto"/>
+                                        <include name="**/*.proto" />
                                     </fileset>
                                     <mapper>
-                                        <mapper type="regexp" from="(.*)\.proto(.*)" to="\1Server\.proto\2"/>
+                                        <mapper type="regexp" from="(.*)\.proto(.*)" to="\1Server\.proto\2" />
                                     </mapper>
                                 </copy>
                                 <copy toDir="target/protobuf">
                                     <fileset dir="src/main/protobuf">
-                                        <include name="**/*.proto"/>
+                                        <include name="**/*.proto" />
                                     </fileset>
                                     <mapper>
-                                        <mapper type="regexp" from="(.*)\.proto(.*)" to="\1Client.proto\2"/>
+                                        <mapper type="regexp" from="(.*)\.proto(.*)" to="\1Client.proto\2" />
                                     </mapper>
                                 </copy>
                                 <replace token="Protos" value="ProtosServer" dir="target/protobuf">
-                                    <include name="**/*Server.proto"/>
+                                    <include name="**/*Server.proto" />
                                 </replace>
                                 <replace token="Protos" value="ProtosClient" dir="target/protobuf">
-                                    <include name="**/*Client.proto"/>
+                                    <include name="**/*Client.proto" />
                                 </replace>
                             </target>
                         </configuration>
@@ -167,13 +136,11 @@
                         </goals>
                         <configuration>
                             <target>
-                                <replace token="com.google.protobuf."
-                                         value="org.apache.hadoop.hbase.shaded.com.google.protobuf."
-                                         dir="src/main/java">
-                                    <include name="**/*ProtosClient.java"/>
+                                <replace token="com.google.protobuf." value="org.apache.hadoop.hbase.shaded.com.google.protobuf." dir="src/main/java">
+                                    <include name="**/*ProtosClient.java" />
                                 </replace>
                                 <delete>
-                                    <fileset dir="target/protobuf" includes="*.proto"/>
+                                    <fileset dir="target/protobuf" includes="*.proto" />
                                 </delete>
                             </target>
                         </configuration>
