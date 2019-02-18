@@ -1,7 +1,8 @@
-dist: precise
+dist: xenial
 language: java
 jdk:
-  - oraclejdk8
+  # oraclejdk8 is not available on xenial
+  # - oraclejdk8
 env:
   matrix:
     # The first line of the matrix just builds docs (only on master) and runs unit tests
@@ -18,9 +19,9 @@ env:
     - NAME='Bigtable IT on Latest ASF Versions' MAVEN_PROFILES='bigtable-it' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo Server IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='accumulo-it-server,compatibility' BUILD_DOCS=false  IT_ONLY=true
     - NAME='HBase Client IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='hbase-it-client,compatibility' BUILD_DOCS=false  IT_ONLY=true	
-    - NAME='Accumulo Server IT on Latest CDH Versions' MAVEN_PROFILES='accumulo-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
+#    - NAME='Accumulo Server IT on Latest CDH Versions' MAVEN_PROFILES='accumulo-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo Server IT on Latest HDP Versions' MAVEN_PROFILES='accumulo-it-server,hortonworks' BUILD_DOCS=false  IT_ONLY=true 
-    - NAME='HBase Server IT on Latest CDH Versions'  MAVEN_PROFILES='hbase-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
+#    - NAME='HBase Server IT on Latest CDH Versions'  MAVEN_PROFILES='hbase-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
     - NAME='RockDB IT with Secondary Indexing'  MAVEN_PROFILES='rocksdb-it,secondary-index-it' BUILD_DOCS=false  IT_ONLY=true
   global:
     - secure: C3gdJmFavZxvsRVqCLpRUAaisNV3MhWbSYf4Wjs2SBLC/AIEwN0vDWHOuYiUExuXR1kApBVdNffuCX7bt/5siewHgmiVUGyY1xytxDdv+PAKZihlfYZRGattyg3XUbEFwyjr7c74639Y1w45NPUoBMUT4SKHZkfqD+FDU47OHIM=
@@ -39,6 +40,16 @@ script:
   # This script uses the IT_ONLY flag to determine whether to run unit tests using verify, or ITs only using failsafe
   - .utility/run-tests.sh
 before_install:
+  # Remove travis CI jdk 11 from path
+  - rm ${HOME}/.bash_profile.d/travis_jdk.bash
+  - export PATH=${PATH/:\/usr\/local\/lib\/jvm\/openjdk11\/bin/}
+  # Need to manually install oraclejdk8 since it is not available in Travis anymore
+  - echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
+  - sudo apt-get install -y oracle-java8-installer oracle-java8-set-default
+  - sudo update-java-alternatives -s java-8-oracle
+  - export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+  # Check that oracle java 8 is installed
+  - java -version
   - sudo apt-get install lzop
   # This must match the dev-resources version from the parent pom:
   - export DEV_RESOURCES_VERSION=1.2
@@ -56,8 +67,14 @@ notifications:
     urls:
       - https://webhooks.gitter.im/e/1dd2fadd07a92dcdc3d8
 addons:
-  apt_packages:
-    - pandoc
+  apt:
+    sources:
+      - webupd8team-java
+    update: true
+    packages:
+      - pandoc
+      - python-software-properties
+      - debconf-utils
   coverity_scan:
     project:
       name: locationtech/geowave
