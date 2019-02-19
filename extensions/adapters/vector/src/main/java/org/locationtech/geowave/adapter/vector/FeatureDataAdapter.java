@@ -690,11 +690,15 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
       builder = new ThreadLocal<FeatureRowBuilder>() {
         @Override
         protected FeatureRowBuilder initialValue() {
-          return new FeatureRowBuilder(reprojectedFeatureType);
+          return internalCreateRowBuilder();
         }
       };
     }
     return builder.get();
+  }
+
+  protected FeatureRowBuilder internalCreateRowBuilder() {
+    return new FeatureRowBuilder(reprojectedFeatureType);
   }
 
   @Override

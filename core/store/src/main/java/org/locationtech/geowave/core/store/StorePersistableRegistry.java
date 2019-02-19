@@ -39,6 +39,7 @@ import org.locationtech.geowave.core.store.query.aggregate.DataStatisticsAggrega
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeQuery;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.DataIdRangeQuery;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.core.store.query.constraints.InsertionIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
@@ -46,6 +47,7 @@ import org.locationtech.geowave.core.store.query.filter.AdapterIdQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.CoordinateRangeQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.DataIdQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.DataIdRangeQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
 import org.locationtech.geowave.core.store.query.filter.FilterList;
 import org.locationtech.geowave.core.store.query.filter.InsertionIdQueryFilter;
@@ -80,7 +82,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 217, IndexImpl::new),
         new PersistableIdAndConstructor((short) 218, CustomNameIndex::new),
         new PersistableIdAndConstructor((short) 219, NullIndex::new),
-        // 220 is available
+        new PersistableIdAndConstructor((short) 220, DataIdRangeQuery::new),
         new PersistableIdAndConstructor((short) 221, NumberRangeFilter::new),
         new PersistableIdAndConstructor((short) 222, NumericFieldIndexStrategy::new),
         new PersistableIdAndConstructor((short) 224, DateRangeFilter::new),
@@ -91,7 +93,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 229, CoordinateRangeQuery::new),
         new PersistableIdAndConstructor((short) 230, CoordinateRangeQueryFilter::new),
         new PersistableIdAndConstructor((short) 231, CommonQueryOptions::new),
-        // 232 is available
+        new PersistableIdAndConstructor((short) 232, DataIdRangeQueryFilter::new),
         new PersistableIdAndConstructor((short) 233, CountAggregation::new),
         new PersistableIdAndConstructor((short) 234, DataStatisticsAggregation::new),
         new PersistableIdAndConstructor((short) 235, InsertionIdQueryFilter::new),

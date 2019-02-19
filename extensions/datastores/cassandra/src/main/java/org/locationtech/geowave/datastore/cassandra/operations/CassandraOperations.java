@@ -238,38 +238,6 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
         rowFilter);
   }
 
-  public RowRead getRowRead(
-      final String tableName,
-      final byte[] partitionKey,
-      final byte[] sortKey,
-      final Short internalAdapterId) {
-    PreparedStatement preparedRead;
-    final String safeTableName = getCassandraSafeName(tableName);
-    synchronized (state.preparedRowReadPerTable) {
-      preparedRead = state.preparedRowReadPerTable.get(safeTableName);
-      if (preparedRead == null) {
-        final Select select = getSelect(safeTableName);
-        select.where(
-            QueryBuilder.eq(
-                CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-                QueryBuilder.bindMarker(
-                    CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName()))).and(
-                        QueryBuilder.in(
-                            CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-                            QueryBuilder.bindMarker(
-                                CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName()))).and(
-                                    QueryBuilder.eq(
-                                        CassandraRow.CassandraField.GW_SORT_KEY.getFieldName(),
-                                        QueryBuilder.bindMarker(
-                                            CassandraRow.CassandraField.GW_SORT_KEY.getBindMarkerName())));
-        preparedRead = session.prepare(select);
-        state.preparedRowReadPerTable.put(safeTableName, preparedRead);
-      }
-    }
-
-    return new RowRead(preparedRead, this, partitionKey, sortKey, internalAdapterId);
-  }
-
   public CloseableIterator<CassandraRow> executeQuery(final Statement... statements) {
     final Iterator<Iterator<Row>> results =
         Iterators.transform(
