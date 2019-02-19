@@ -235,7 +235,8 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
         result = getResults(result.getUnprocessedKeys(), adapterId, resultMap);
       }
     }
-    return Arrays.stream(dataIds).map(d -> resultMap.get(new ByteArray(d))).iterator();
+    return Arrays.stream(dataIds).map(d -> resultMap.get(new ByteArray(d))).filter(
+        r -> r != null).iterator();
   }
 
   private BatchGetItemResult getResults(

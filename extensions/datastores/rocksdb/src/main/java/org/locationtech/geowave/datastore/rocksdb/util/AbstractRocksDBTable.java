@@ -43,7 +43,7 @@ abstract public class AbstractRocksDBTable {
   private final Options writeOptions;
   private final Options readOptions;
   private final WriteOptions batchWriteOptions;
-  private final String subDirectory;
+  protected final String subDirectory;
   private boolean readerDirty = false;
   private boolean exists;
   protected final short adapterId;
@@ -134,6 +134,10 @@ abstract public class AbstractRocksDBTable {
         waitForBatchWrite();
       }
     }
+    internalFlush();
+  }
+
+  protected void internalFlush() {
     if (compactOnWrite) {
       final RocksDB db = getWriteDb();
       try {

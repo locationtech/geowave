@@ -208,6 +208,7 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
       final String typeName) {
     final RocksDBDataIndexTable table = RocksDBUtils.getDataIndexTable(client, typeName, adapterId);
     Arrays.stream(dataIds).forEach(d -> table.delete(d));
+    table.flush();
   }
 
   @Override

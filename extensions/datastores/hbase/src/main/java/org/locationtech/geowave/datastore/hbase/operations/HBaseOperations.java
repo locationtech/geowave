@@ -529,15 +529,16 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
 
   public void deleteRowsFromDataIndex(final byte[][] rows, final short adapterId) {
     try {
-      final BufferedMutator mutator =
-          getBufferedMutator(getTableName(DataIndexUtils.DATA_ID_INDEX.getName()));
+      try (final BufferedMutator mutator =
+          getBufferedMutator(getTableName(DataIndexUtils.DATA_ID_INDEX.getName()))) {
 
-      final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
-      mutator.mutate(Arrays.stream(rows).map(r -> {
-        final Delete delete = new Delete(r);
-        delete.addFamily(family);
-        return delete;
-      }).collect(Collectors.toList()));
+        final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
+        mutator.mutate(Arrays.stream(rows).map(r -> {
+          final Delete delete = new Delete(r);
+          delete.addFamily(family);
+          return delete;
+        }).collect(Collectors.toList()));
+      }
     } catch (final IOException e) {
       LOGGER.warn("Unable to delete from data index", e);
     }
@@ -561,7 +562,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
       LOGGER.error("Unable to close HBase table", e);
     }
     if (results != null) {
-      return Arrays.stream(results).map(
+      return Arrays.stream(results).filter(r -> r.containsColumn(family, new byte[0])).map(
           r -> DataIndexUtils.deserializeDataIndexRow(
               r.getRow(),
               adapterId,
@@ -590,7 +591,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
       LOGGER.error("Unable to close HBase table", e);
     }
     if (results != null) {
-      return Arrays.stream(results).map(
+      return Arrays.stream(results).filter(r -> r.containsColumn(family, new byte[0])).map(
           r -> DataIndexUtils.deserializeDataIndexRow(
               r.getRow(),
               adapterId,

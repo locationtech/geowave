@@ -568,7 +568,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
           entry -> results.put(
               new ByteArray(entry.getKey().getRow().getBytes()),
               entry.getValue().get()));
-      return Arrays.stream(rows).map(
+      return Arrays.stream(rows).filter(r -> results.containsKey(new ByteArray(r))).map(
           r -> DataIndexUtils.deserializeDataIndexRow(
               r,
               adapterId,
@@ -597,6 +597,15 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
 
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
+    if (readerParams.getDataIds() == null) {
+      return new RowReaderWrapper<>(
+          new Wrapper<>(
+              getDataIndexResults(
+                  readerParams.getStartInclusiveDataId(),
+                  readerParams.getEndInclusiveDataId(),
+                  readerParams.getAdapterId(),
+                  readerParams.getAdditionalAuthorizations())));
+    }
     return new RowReaderWrapper<>(
         new Wrapper<>(
             getDataIndexResults(
