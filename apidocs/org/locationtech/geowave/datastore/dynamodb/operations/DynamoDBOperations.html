@@ -263,8 +263,9 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#deleteRowsFromDataIndex-byte:A:A-short-">deleteRowsFromDataIndex</a></span>(byte[][]&nbsp;dataIds,
-                       short&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#deleteRowsFromDataIndex-byte:A:A-short-java.lang.String-">deleteRowsFromDataIndex</a></span>(byte[][]&nbsp;dataIds,
+                       short&nbsp;adapterId,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -289,8 +290,9 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#getRowsFromDataIndex-byte:A:A-short-">getRowsFromDataIndex</a></span>(byte[][]&nbsp;dataIds,
-                    short&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#getRowsFromDataIndex-byte:A:A-short-java.lang.String-">getRowsFromDataIndex</a></span>(byte[][]&nbsp;dataIds,
+                    short&nbsp;adapterId,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -606,14 +608,15 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </dl>
 </li>
 </ul>
-<a name="deleteRowsFromDataIndex-byte:A:A-short-">
+<a name="deleteRowsFromDataIndex-byte:A:A-short-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>deleteRowsFromDataIndex</h4>
 <pre>public&nbsp;void&nbsp;deleteRowsFromDataIndex(byte[][]&nbsp;dataIds,
-                                    short&nbsp;adapterId)</pre>
+                                    short&nbsp;adapterId,
+                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
 </li>
 </ul>
 <a name="createReader-org.locationtech.geowave.core.store.operations.DataIndexReaderParams-">
@@ -629,14 +632,15 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </dl>
 </li>
 </ul>
-<a name="getRowsFromDataIndex-byte:A:A-short-">
+<a name="getRowsFromDataIndex-byte:A:A-short-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getRowsFromDataIndex</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;getRowsFromDataIndex(byte[][]&nbsp;dataIds,
-                                                 short&nbsp;adapterId)</pre>
+                                                 short&nbsp;adapterId,
+                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
 </li>
 </ul>
 <a name="createMetadataWriter-org.locationtech.geowave.core.store.operations.MetadataType-">
