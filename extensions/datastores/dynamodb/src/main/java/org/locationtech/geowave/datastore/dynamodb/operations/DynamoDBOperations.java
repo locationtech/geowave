@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
@@ -191,9 +193,21 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
     // TODO use authorizations if provided
+    byte[][] dataIds;
+    if (readerParams.getDataIds() != null) {
+      dataIds = readerParams.getDataIds();
+    } else {
+      final List<byte[]> intermediaries = new ArrayList<>();
+      ByteArrayUtils.addAllIntermediaryByteArrays(
+          intermediaries,
+          new ByteArrayRange(
+              readerParams.getStartInclusiveDataId(),
+              readerParams.getEndInclusiveDataId()));
+      dataIds = intermediaries.toArray(new byte[0][]);
+    }
     return new RowReaderWrapper<>(
         new CloseableIterator.Wrapper<>(
-            getRowsFromDataIndex(readerParams.getDataIds(), readerParams.getAdapterId())));
+            getRowsFromDataIndex(dataIds, readerParams.getAdapterId())));
   }
 
   public Iterator<GeoWaveRow> getRowsFromDataIndex(final byte[][] dataIds, final short adapterId) {
@@ -221,7 +235,8 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
         result = getResults(result.getUnprocessedKeys(), adapterId, resultMap);
       }
     }
-    return Arrays.stream(dataIds).map(d -> resultMap.get(new ByteArray(d))).iterator();
+    return Arrays.stream(dataIds).map(d -> resultMap.get(new ByteArray(d))).filter(
+        r -> r != null).iterator();
   }
 
   private BatchGetItemResult getResults(

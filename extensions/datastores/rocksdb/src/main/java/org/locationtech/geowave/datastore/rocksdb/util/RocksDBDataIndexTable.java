@@ -11,13 +11,17 @@ package org.locationtech.geowave.datastore.rocksdb.util;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.rocksdb.Options;
+import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
+import org.rocksdb.RocksIterator;
+import org.rocksdb.Slice;
 import org.rocksdb.WriteOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +62,7 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
       final List<byte[]> dataIdsList = Arrays.asList(dataIds);
       final Map<byte[], byte[]> dataIdxResults = readDb.multiGet(dataIdsList);
       return new CloseableIterator.Wrapper(
-          dataIdsList.stream().map(
+          dataIdsList.stream().filter(dataId -> dataIdxResults.containsKey(dataId)).map(
               dataId -> DataIndexUtils.deserializeDataIndexRow(
                   dataId,
                   adapterId,
@@ -68,5 +72,31 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
       LOGGER.error("Unable to get values by data ID", e);
     }
     return new CloseableIterator.Empty<>();
+  }
+
+  public synchronized CloseableIterator<GeoWaveRow> dataIndexIterator(
+      final byte[] startDataId,
+      final byte[] endDataId) {
+    final RocksDB readDb = getReadDb();
+    if (readDb == null) {
+      return new CloseableIterator.Empty<>();
+    }
+    final ReadOptions options;
+    final RocksIterator it;
+    if (endDataId == null) {
+      options = null;
+      it = readDb.newIterator();
+    } else {
+      options =
+          new ReadOptions().setIterateUpperBound(
+              new Slice(ByteArrayUtils.getNextPrefix(endDataId)));
+      it = readDb.newIterator(options);
+    }
+    if (startDataId == null) {
+      it.seekToFirst();
+    } else {
+      it.seek(startDataId);
+    }
+    return new DataIndexRowIterator(options, it, adapterId, visibilityEnabled);
   }
 }

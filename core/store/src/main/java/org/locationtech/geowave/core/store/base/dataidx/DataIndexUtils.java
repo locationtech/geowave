@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -165,7 +165,7 @@ public class DataIndexUtils {
     return null;
   }
 
-  protected static RowReader<GeoWaveRow> getRowReader(
+  public static RowReader<GeoWaveRow> getRowReader(
       final DataStoreOperations operations,
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
@@ -181,6 +181,26 @@ public class DataIndexUtils {
                 additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
                     adapterId).dataIds(dataIds).fieldSubsets(fieldSubsets).aggregation(
                         aggregation).build();
+    return operations.createReader(readerParams);
+  }
+
+  public static RowReader<GeoWaveRow> getRowReader(
+      final DataStoreOperations operations,
+      final PersistentAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
+      final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
+      final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+      final String[] additionalAuthorizations,
+      final short adapterId,
+      final byte[] startDataId,
+      final byte[] endDataId) {
+    final DataIndexReaderParams readerParams =
+        new DataIndexReaderParamsBuilder<>(
+            adapterStore,
+            internalAdapterStore).additionalAuthorizations(
+                additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
+                    adapterId).dataIdsByRange(startDataId, endDataId).fieldSubsets(
+                        fieldSubsets).aggregation(aggregation).build();
     return operations.createReader(readerParams);
   }
 }

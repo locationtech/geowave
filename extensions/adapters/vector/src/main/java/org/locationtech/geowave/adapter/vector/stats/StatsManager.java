@@ -122,15 +122,11 @@ public class StatsManager {
       }
 
       // ---------------------------------------------------------------------
-      // If this numeric, then add two stats objects that relate
+      // If this numeric, then add a stats object that relate
 
       else if (Number.class.isAssignableFrom(descriptor.getType().getBinding())) {
         addStats(
             new FeatureNumericRangeStatistics(descriptor.getLocalName()),
-            descriptor.getLocalName());
-
-        addStats(
-            new FeatureFixedBinNumericStatistics(descriptor.getLocalName()),
             descriptor.getLocalName());
       }
     }

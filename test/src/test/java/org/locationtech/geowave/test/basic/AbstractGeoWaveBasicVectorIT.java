@@ -385,7 +385,6 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
           QueryBuilder.newBuilder().addTypeName(
               testFeature.getFeatureType().getTypeName()).indexName(index.getName()).constraints(
                   new DataIdQuery(dataId.getBytes())).build())) {
-
         success =
             !hasAtLeastOne(
                 geowaveStore.query(

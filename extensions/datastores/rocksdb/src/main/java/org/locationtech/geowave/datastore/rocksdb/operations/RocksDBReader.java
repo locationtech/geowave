@@ -190,7 +190,12 @@ public class RocksDBReader<T> implements RowReader<T> {
             dataIndexReaderParams.getInternalAdapterStore().getTypeName(
                 dataIndexReaderParams.getAdapterId()),
             dataIndexReaderParams.getAdapterId());
-    return dataIndexTable.dataIndexIterator(dataIndexReaderParams.getDataIds());
+    if (dataIndexReaderParams.getDataIds() != null) {
+      return dataIndexTable.dataIndexIterator(dataIndexReaderParams.getDataIds());
+    }
+    return dataIndexTable.dataIndexIterator(
+        dataIndexReaderParams.getStartInclusiveDataId(),
+        dataIndexReaderParams.getEndInclusiveDataId());
   }
 
   @SuppressWarnings("unchecked")

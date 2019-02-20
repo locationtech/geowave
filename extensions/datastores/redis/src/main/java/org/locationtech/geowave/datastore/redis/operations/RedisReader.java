@@ -220,15 +220,28 @@ public class RedisReader<T> implements RowReader<T> {
       final DataIndexReaderParams dataIndexReaderParams,
       final String namespace,
       final boolean visibilityEnabled) {
-    return new DataIndexRead(
-        client,
-        compression,
-        namespace,
-        dataIndexReaderParams.getInternalAdapterStore().getTypeName(
-            dataIndexReaderParams.getAdapterId()),
-        dataIndexReaderParams.getAdapterId(),
-        dataIndexReaderParams.getDataIds(),
-        visibilityEnabled).results();
+    if (dataIndexReaderParams.getDataIds() != null) {
+      return new DataIndexRead(
+          client,
+          compression,
+          namespace,
+          dataIndexReaderParams.getInternalAdapterStore().getTypeName(
+              dataIndexReaderParams.getAdapterId()),
+          dataIndexReaderParams.getAdapterId(),
+          dataIndexReaderParams.getDataIds(),
+          visibilityEnabled).results();
+    } else {
+      return new DataIndexRangeRead(
+          client,
+          compression,
+          namespace,
+          dataIndexReaderParams.getInternalAdapterStore().getTypeName(
+              dataIndexReaderParams.getAdapterId()),
+          dataIndexReaderParams.getAdapterId(),
+          dataIndexReaderParams.getStartInclusiveDataId(),
+          dataIndexReaderParams.getEndInclusiveDataId(),
+          visibilityEnabled).results();
+    }
   }
 
   private CloseableIterator<T> createIteratorForRecordReader(

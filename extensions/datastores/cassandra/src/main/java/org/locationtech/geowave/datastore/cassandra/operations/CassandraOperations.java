@@ -10,11 +10,13 @@ package org.locationtech.geowave.datastore.cassandra.operations;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -24,6 +26,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
@@ -235,38 +239,6 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
         rowMerging,
         rowTransformer,
         rowFilter);
-  }
-
-  public RowRead getRowRead(
-      final String tableName,
-      final byte[] partitionKey,
-      final byte[] sortKey,
-      final Short internalAdapterId) {
-    PreparedStatement preparedRead;
-    final String safeTableName = getCassandraSafeName(tableName);
-    synchronized (state.preparedRowReadPerTable) {
-      preparedRead = state.preparedRowReadPerTable.get(safeTableName);
-      if (preparedRead == null) {
-        final Select select = getSelect(safeTableName);
-        select.where(
-            QueryBuilder.eq(
-                CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-                QueryBuilder.bindMarker(
-                    CassandraRow.CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName()))).and(
-                        QueryBuilder.in(
-                            CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-                            QueryBuilder.bindMarker(
-                                CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName()))).and(
-                                    QueryBuilder.eq(
-                                        CassandraRow.CassandraField.GW_SORT_KEY.getFieldName(),
-                                        QueryBuilder.bindMarker(
-                                            CassandraRow.CassandraField.GW_SORT_KEY.getBindMarkerName())));
-        preparedRead = session.prepare(select);
-        state.preparedRowReadPerTable.put(safeTableName, preparedRead);
-      }
-    }
-
-    return new RowRead(preparedRead, this, partitionKey, sortKey, internalAdapterId);
   }
 
   public CloseableIterator<CassandraRow> executeQuery(final Statement... statements) {
@@ -499,9 +471,20 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
 
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
+    final byte[][] dataIds;
+    if (readerParams.getDataIds() == null) {
+      final List<byte[]> intermediaries = new ArrayList<>();
+      ByteArrayUtils.addAllIntermediaryByteArrays(
+          intermediaries,
+          new ByteArrayRange(
+              readerParams.getStartInclusiveDataId(),
+              readerParams.getEndInclusiveDataId()));
+      dataIds = intermediaries.toArray(new byte[0][]);
+    } else {
+      dataIds = readerParams.getDataIds();
+    }
     return new RowReaderWrapper<>(
-        new CloseableIterator.Wrapper(
-            getRows(readerParams.getDataIds(), readerParams.getAdapterId())));
+        new CloseableIterator.Wrapper(getRows(dataIds, readerParams.getAdapterId())));
   }
 
   public Iterator<GeoWaveRow> getRows(final byte[][] dataIds, final short adapterId) {
@@ -543,7 +526,8 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
           new ByteArray(d),
           DataIndexUtils.deserializeDataIndexRow(d, adapterId, v, options.isVisibilityEnabled()));
     });
-    return Arrays.stream(dataIds).map(d -> resultsMap.get(new ByteArray(d))).iterator();
+    return Arrays.stream(dataIds).map(d -> resultsMap.get(new ByteArray(d))).filter(
+        r -> r != null).iterator();
   }
 
   @Override

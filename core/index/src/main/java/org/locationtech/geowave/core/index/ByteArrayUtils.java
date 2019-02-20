@@ -15,6 +15,8 @@ import java.util.Base64.Encoder;
 import java.util.List;
 import java.util.UUID;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 
 /**
@@ -27,6 +29,7 @@ import com.google.common.base.Preconditions;
  * incrementing them.
  */
 public class ByteArrayUtils {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ByteArrayUtils.class);
   private static Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
 
   private static byte[] internalCombineArrays(final byte[] beginning, final byte[] end) {
@@ -302,5 +305,28 @@ public class ByteArrayUtils {
       }
     }
     return new ByteArrayRange(start, end);
+  }
+
+  public static void addAllIntermediaryByteArrays(
+      final List<byte[]> retVal,
+      final ByteArrayRange range) {
+    byte[] currentRowId = Arrays.copyOf(range.getStart(), range.getStart().length);
+    retVal.add(currentRowId);
+    while (!Arrays.equals(currentRowId, range.getEnd())) {
+      currentRowId = Arrays.copyOf(currentRowId, currentRowId.length);
+      // increment until we reach the end row ID
+      boolean overflow = !ByteArrayUtils.increment(currentRowId);
+      if (!overflow) {
+        retVal.add(currentRowId);
+      } else {
+        // the increment caused an overflow which shouldn't
+        // ever happen assuming the start row ID is less
+        // than the end row ID
+        LOGGER.warn(
+            "Row IDs overflowed when ingesting data; start of range decomposition must be less than or equal to end of range. This may be because the start of the decomposed range is higher than the end of the range.");
+        overflow = true;
+        break;
+      }
+    }
   }
 }

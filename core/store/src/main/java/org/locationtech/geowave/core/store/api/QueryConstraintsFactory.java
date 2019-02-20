@@ -25,6 +25,17 @@ public interface QueryConstraintsFactory {
   QueryConstraints dataIds(final byte[]... dataIds);
 
   /**
+   * constrain a query using a range of data IDs, assuming big endian ordering
+   *
+   * @param startDataIdInclusive the start of data ID range (inclusive)
+   * @param endDataIdInclusive the end of data ID range (inclusive)
+   * @return the constraints
+   */
+  QueryConstraints dataIdsByRange(
+      final byte[] startDataIdInclusive,
+      final byte[] endDataIdInclusive);
+
+  /**
    * constrain a query by prefix
    *
    * @param partitionKey the prefix

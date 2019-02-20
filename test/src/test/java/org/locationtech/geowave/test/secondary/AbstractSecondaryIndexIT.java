@@ -10,10 +10,18 @@ package org.locationtech.geowave.test.secondary;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import org.junit.Assert;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
+import org.opengis.feature.simple.SimpleFeature;
 import com.aol.cyclops.util.function.TriConsumer;
 
 abstract public class AbstractSecondaryIndexIT extends AbstractGeoWaveBasicVectorIT {
@@ -53,6 +61,7 @@ abstract public class AbstractSecondaryIndexIT extends AbstractGeoWaveBasicVecto
             new File(HAIL_SHAPEFILE_FILE).toURI().toURL(),
             new File(TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()};
     verifyStats.accept(dimensionality, urls);
+    testQueryByDataId();
     testSpatialTemporalLocalExportAndReingestWithCQL(
         new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
         1,
@@ -66,5 +75,41 @@ abstract public class AbstractSecondaryIndexIT extends AbstractGeoWaveBasicVecto
     testDeleteByBasicQuery(new File(TEST_POLYGON_TEMPORAL_FILTER_FILE).toURI().toURL(), null);
     testDeleteByBasicQuery(new File(TEST_POLYGON_FILTER_FILE).toURI().toURL(), null);
     TestUtils.deleteAll(getDataStorePluginOptions());
+  }
+
+  protected void testQueryByDataId() {
+    VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+    try (CloseableIterator<SimpleFeature> it =
+        getDataStorePluginOptions().createDataStore().query(
+            bldr.constraints(
+                bldr.constraintsFactory().dataIds(
+                    StringUtils.stringToBinary("hail.860"))).build())) {
+      while (it.hasNext()) {
+        final String id = it.next().getID();
+        Assert.assertEquals("hail.860", id);
+      }
+    }
+    bldr = VectorQueryBuilder.newBuilder();
+    try (CloseableIterator<SimpleFeature> it =
+        getDataStorePluginOptions().createDataStore().query(
+            bldr.constraints(
+                bldr.constraintsFactory().dataIdsByRange(
+                    StringUtils.stringToBinary("hail.8600"),
+                    StringUtils.stringToBinary("hail.8609"))).build())) {
+
+      final Set<Integer> expectedIntIds =
+          IntStream.rangeClosed(8600, 8609).boxed().collect(Collectors.toSet());
+      while (it.hasNext() && (!expectedIntIds.isEmpty())) {
+        final String id = it.next().getID();
+        // ignore the expected "hail." and get the int portion
+        final int intId = Integer.parseInt(id.substring(5));
+        Assert.assertTrue(
+            "ID '" + intId + "' not found in expected set",
+            expectedIntIds.remove(intId));
+      }
+      Assert.assertFalse(
+          "The iterator should be exhausted after expected set is depleted",
+          it.hasNext());
+    }
   }
 }

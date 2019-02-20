@@ -22,7 +22,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
  * wraps a geotools SimpleFeatureBuilder.
  */
 public class FeatureRowBuilder implements RowBuilder<SimpleFeature, Object> {
-  private final SimpleFeatureBuilder builder;
+  protected final SimpleFeatureBuilder builder;
 
   public FeatureRowBuilder(final SimpleFeatureType type) {
     builder = new SimpleFeatureBuilder(type);

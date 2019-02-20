@@ -296,6 +296,18 @@ public class BaseDataStoreUtils {
     return -1;
   }
 
+  protected static byte[] getFieldBitmask(
+      final Pair<String[], InternalDataAdapter<?>> fieldIdsAdapterPair,
+      final Index index) {
+    if ((fieldIdsAdapterPair != null) && (fieldIdsAdapterPair.getLeft() != null)) {
+      return BitmaskUtils.generateFieldSubsetBitmask(
+          index.getIndexModel(),
+          fieldIdsAdapterPair.getLeft(),
+          fieldIdsAdapterPair.getRight());
+    }
+    return null;
+  }
+
   protected static <T> IntermediaryWriteEntryInfo getWriteInfo(
       final T entry,
       final InternalDataAdapter<T> adapter,

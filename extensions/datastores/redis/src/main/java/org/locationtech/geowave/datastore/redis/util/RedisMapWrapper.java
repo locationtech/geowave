@@ -8,10 +8,14 @@
  */
 package org.locationtech.geowave.datastore.redis.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
@@ -53,7 +57,24 @@ public class RedisMapWrapper extends
   public Iterator<GeoWaveRow> getRows(final byte[][] dataIds, final short adapterId) {
     final Map<byte[], byte[]> results =
         getCurrentSyncCollection().getAll(new HashSet<>(Arrays.asList(dataIds)));
-    return Arrays.stream(dataIds).map(
+    return Arrays.stream(dataIds).filter(dataId -> results.containsKey(dataId)).map(
+        dataId -> DataIndexUtils.deserializeDataIndexRow(
+            dataId,
+            adapterId,
+            results.get(dataId),
+            visibilityEnabled)).iterator();
+  }
+
+  public Iterator<GeoWaveRow> getRows(
+      final byte[] startDataId,
+      final byte[] endDataId,
+      final short adapterId) {
+    // this is not a common use case, if it were a different (sorted) collection may be an
+    // improvement
+    final List<byte[]> list = new ArrayList<>();
+    ByteArrayUtils.addAllIntermediaryByteArrays(list, new ByteArrayRange(startDataId, endDataId));
+    final Map<byte[], byte[]> results = getCurrentSyncCollection().getAll(new HashSet<>(list));
+    return list.stream().filter(dataId -> results.containsKey(dataId)).map(
         dataId -> DataIndexUtils.deserializeDataIndexRow(
             dataId,
             adapterId,

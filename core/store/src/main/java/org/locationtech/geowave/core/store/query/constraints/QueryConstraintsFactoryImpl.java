@@ -51,4 +51,11 @@ public class QueryConstraintsFactoryImpl implements QueryConstraintsFactory {
   public QueryConstraints noConstraints() {
     return new EverythingQuery();
   }
+
+  @Override
+  public QueryConstraints dataIdsByRange(
+      final byte[] startDataIdInclusive,
+      final byte[] endDataIdInclusive) {
+    return new DataIdRangeQuery(startDataIdInclusive, endDataIdInclusive);
+  }
 }
