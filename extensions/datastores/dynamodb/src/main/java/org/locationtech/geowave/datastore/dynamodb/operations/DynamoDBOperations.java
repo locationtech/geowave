@@ -152,8 +152,10 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
   @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
     final boolean isDataIndex = DataIndexUtils.isDataIndex(index.getName());
-    final String qName = getQualifiedTableName(index.getName());
-
+    String qName = getQualifiedTableName(index.getName());
+    if (isDataIndex) {
+      qName = adapter.getTypeName() + "_" + qName;
+    }
     final DynamoDBWriter writer = new DynamoDBWriter(client, qName, isDataIndex);
 
     createTable(qName, isDataIndex);
@@ -167,11 +169,20 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
 
   @Override
   public void delete(final DataIndexReaderParams readerParams) {
-    deleteRowsFromDataIndex(readerParams.getDataIds(), readerParams.getAdapterId());
+    final String typeName =
+        readerParams.getInternalAdapterStore().getTypeName(readerParams.getAdapterId());
+    if (typeName == null) {
+      return;
+    }
+    deleteRowsFromDataIndex(readerParams.getDataIds(), readerParams.getAdapterId(), typeName);
   }
 
-  public void deleteRowsFromDataIndex(final byte[][] dataIds, final short adapterId) {
-    final String tableName = getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName());
+  public void deleteRowsFromDataIndex(
+      final byte[][] dataIds,
+      final short adapterId,
+      final String typeName) {
+    final String tableName =
+        typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName());
     final Iterator<byte[]> dataIdIterator = Arrays.stream(dataIds).iterator();
     while (dataIdIterator.hasNext()) {
       final List<WriteRequest> deleteRequests = new ArrayList<>();
@@ -192,6 +203,11 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
 
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
+    final String typeName =
+        readerParams.getInternalAdapterStore().getTypeName(readerParams.getAdapterId());
+    if (typeName == null) {
+      return new RowReaderWrapper<>(new CloseableIterator.Empty<GeoWaveRow>());
+    }
     // TODO use authorizations if provided
     byte[][] dataIds;
     if (readerParams.getDataIds() != null) {
@@ -207,10 +223,13 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
     }
     return new RowReaderWrapper<>(
         new CloseableIterator.Wrapper<>(
-            getRowsFromDataIndex(dataIds, readerParams.getAdapterId())));
+            getRowsFromDataIndex(dataIds, readerParams.getAdapterId(), typeName)));
   }
 
-  public Iterator<GeoWaveRow> getRowsFromDataIndex(final byte[][] dataIds, final short adapterId) {
+  public Iterator<GeoWaveRow> getRowsFromDataIndex(
+      final byte[][] dataIds,
+      final short adapterId,
+      final String typeName) {
     final Map<ByteArray, GeoWaveRow> resultMap = new HashMap<>();
     final Iterator<byte[]> dataIdIterator = Arrays.stream(dataIds).iterator();
     while (dataIdIterator.hasNext()) {
@@ -227,7 +246,7 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
       BatchGetItemResult result =
           getResults(
               Collections.singletonMap(
-                  getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName()),
+                  typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName()),
                   new KeysAndAttributes().withKeys(dataIdsForRequest)),
               adapterId,
               resultMap);

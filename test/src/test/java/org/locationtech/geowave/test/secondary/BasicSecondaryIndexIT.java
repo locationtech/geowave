@@ -32,7 +32,7 @@ public class BasicSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
-          // GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       options = {"enableSecondaryIndexing=true"})
