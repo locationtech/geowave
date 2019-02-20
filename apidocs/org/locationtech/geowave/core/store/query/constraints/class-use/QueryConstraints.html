@@ -419,11 +419,18 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#dataIdsByRange-byte:A-byte:A-">dataIdsByRange</a></span>(byte[]&nbsp;startDataIdInclusive,
+              byte[]&nbsp;endDataIdInclusive)</code>
+<div class="block">constrain a query using a range of data IDs, assuming big endian ordering</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><span class="typeNameLabel">QueryConstraintsFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#noConstraints--">noConstraints</a></span>()</code>
 <div class="block">no query constraints, meaning wide open query (this is the default)</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><span class="typeNameLabel">QueryConstraintsFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#prefix-byte:A-byte:A-">prefix</a></span>(byte[]&nbsp;partitionKey,
       byte[]&nbsp;sortKeyPrefix)</code>
@@ -615,13 +622,17 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/EverythingQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">EverythingQuery</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/DataIdRangeQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">DataIdRangeQuery</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/InsertionIdQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">InsertionIdQuery</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/EverythingQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">EverythingQuery</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/InsertionIdQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">InsertionIdQuery</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/PrefixIdQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">PrefixIdQuery</a></span></code>&nbsp;</td>
 </tr>
@@ -659,9 +670,14 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#noConstraints--">noConstraints</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#dataIdsByRange-byte:A-byte:A-">dataIdsByRange</a></span>(byte[]&nbsp;startDataIdInclusive,
+              byte[]&nbsp;endDataIdInclusive)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#noConstraints--">noConstraints</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#prefix-byte:A-byte:A-">prefix</a></span>(byte[]&nbsp;partitionKey,
       byte[]&nbsp;sortKeyPrefix)</code>&nbsp;</td>

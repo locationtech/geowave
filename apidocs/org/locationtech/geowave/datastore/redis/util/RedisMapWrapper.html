@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -169,22 +169,28 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/redis/util
        short&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisMapWrapper.html#getRows-byte:A-byte:A-short-">getRows</a></span>(byte[]&nbsp;startDataId,
+       byte[]&nbsp;endDataId,
+       short&nbsp;adapterId)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected org.redisson.api.RMapAsync&lt;byte[],byte[]&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisMapWrapper.html#initAsyncCollection-org.redisson.api.RBatch-java.lang.String-org.redisson.client.codec.Codec-">initAsyncCollection</a></span>(org.redisson.api.RBatch&nbsp;batch,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setName,
                    org.redisson.client.codec.Codec&nbsp;codec)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>protected org.redisson.api.RMap&lt;byte[],byte[]&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisMapWrapper.html#initSyncCollection-org.redisson.api.RedissonClient-java.lang.String-org.redisson.client.codec.Codec-">initSyncCollection</a></span>(org.redisson.api.RedissonClient&nbsp;client,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setName,
                   org.redisson.client.codec.Codec&nbsp;codec)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisMapWrapper.html#remove-byte:A-">remove</a></span>(byte[]&nbsp;dataId)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/redis/util/RedisMapWrapper.html#remove-byte:A:A-">remove</a></span>(byte[][]&nbsp;dataIds)</code>&nbsp;</td>
 </tr>
@@ -272,6 +278,17 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/redis/util
 <li class="blockList">
 <h4>getRows</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;getRows(byte[][]&nbsp;dataIds,
+                                    short&nbsp;adapterId)</pre>
+</li>
+</ul>
+<a name="getRows-byte:A-byte:A-short-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRows</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;getRows(byte[]&nbsp;startDataId,
+                                    byte[]&nbsp;endDataId,
                                     short&nbsp;adapterId)</pre>
 </li>
 </ul>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -133,7 +133,7 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/ut
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.datastore.rocksdb.util.<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">AbstractRocksDBTable</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#adapterId">adapterId</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#compactOnWrite">compactOnWrite</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#visibilityEnabled">visibilityEnabled</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#adapterId">adapterId</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#compactOnWrite">compactOnWrite</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#subDirectory">subDirectory</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#visibilityEnabled">visibilityEnabled</a></code></li>
 </ul>
 </li>
 </ul>
@@ -182,13 +182,18 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/ut
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html#dataIndexIterator-byte:A:A-">dataIndexIterator</a></span>(byte[][]&nbsp;dataIds)</code>&nbsp;</td>
 </tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html#dataIndexIterator-byte:A-byte:A-">dataIndexIterator</a></span>(byte[]&nbsp;startDataId,
+                 byte[]&nbsp;endDataId)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.datastore.rocksdb.util.AbstractRocksDBTable">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.datastore.rocksdb.util.<a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">AbstractRocksDBTable</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#close--">close</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#compact--">compact</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#delete-byte:A-">delete</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#flush--">flush</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#getReadDb--">getReadDb</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#getWriteDb--">getWriteDb</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#put-byte:A-byte:A-">put</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#close--">close</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#compact--">compact</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#delete-byte:A-">delete</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#flush--">flush</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#getReadDb--">getReadDb</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#getWriteDb--">getWriteDb</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#internalFlush--">internalFlush</a>, <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html#put-byte:A-byte:A-">put</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -248,10 +253,20 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/ut
 <a name="dataIndexIterator-byte:A:A-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>dataIndexIterator</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;dataIndexIterator(byte[][]&nbsp;dataIds)</pre>
+</li>
+</ul>
+<a name="dataIndexIterator-byte:A-byte:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>dataIndexIterator</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;dataIndexIterator(byte[]&nbsp;startDataId,
+                                                       byte[]&nbsp;endDataId)</pre>
 </li>
 </ul>
 </li>

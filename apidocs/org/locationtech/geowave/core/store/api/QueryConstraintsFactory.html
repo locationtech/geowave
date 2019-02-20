@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -157,11 +157,18 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#dataIdsByRange-byte:A-byte:A-">dataIdsByRange</a></span>(byte[]&nbsp;startDataIdInclusive,
+              byte[]&nbsp;endDataIdInclusive)</code>
+<div class="block">constrain a query using a range of data IDs, assuming big endian ordering</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#noConstraints--">noConstraints</a></span>()</code>
 <div class="block">no query constraints, meaning wide open query (this is the default)</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#prefix-byte:A-byte:A-">prefix</a></span>(byte[]&nbsp;partitionKey,
       byte[]&nbsp;sortKeyPrefix)</code>
@@ -194,6 +201,24 @@ var activeTableTab = "activeTableTab";
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dataIds</code> - the data IDs to constrain to</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the constraints</dd>
+</dl>
+</li>
+</ul>
+<a name="dataIdsByRange-byte:A-byte:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dataIdsByRange</h4>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;dataIdsByRange(byte[]&nbsp;startDataIdInclusive,
+                                byte[]&nbsp;endDataIdInclusive)</pre>
+<div class="block">constrain a query using a range of data IDs, assuming big endian ordering</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>startDataIdInclusive</code> - the start of data ID range (inclusive)</dd>
+<dd><code>endDataIdInclusive</code> - the end of data ID range (inclusive)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the constraints</dd>
 </dl>
