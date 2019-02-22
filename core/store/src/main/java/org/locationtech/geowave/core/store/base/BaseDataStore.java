@@ -298,7 +298,8 @@ public class BaseDataStore implements DataStore {
     if (!delete
         && baseOptions.isSecondaryIndexing()
         && ((sanitizedConstraints instanceof DataIdQuery)
-            || (sanitizedConstraints instanceof DataIdRangeQuery))) {
+            || (sanitizedConstraints instanceof DataIdRangeQuery)
+            || (sanitizedConstraints instanceof EverythingQuery))) {
       try {
         // just grab the values directly from the Data Index
         final InternalDataAdapter<?>[] adapters = queryOptions.getAdaptersArray(adapterStore);
@@ -317,7 +318,7 @@ public class BaseDataStore implements DataStore {
                     queryOptions.getAuthorizations(),
                     adapter.getAdapterId(),
                     ((DataIdQuery) sanitizedConstraints).getDataIds());
-          } else {
+          } else if (sanitizedConstraints instanceof DataIdRangeQuery) {
             rowReader =
                 DataIndexUtils.getRowReader(
                     baseOperations,
@@ -329,6 +330,16 @@ public class BaseDataStore implements DataStore {
                     adapter.getAdapterId(),
                     ((DataIdRangeQuery) sanitizedConstraints).getStartDataIdInclusive(),
                     ((DataIdRangeQuery) sanitizedConstraints).getEndDataIdInclusive());
+          } else {
+            rowReader =
+                DataIndexUtils.getRowReader(
+                    baseOperations,
+                    adapterStore,
+                    internalAdapterStore,
+                    queryOptions.getFieldIdsAdapterPair(),
+                    queryOptions.getAggregation(),
+                    queryOptions.getAuthorizations(),
+                    adapter.getAdapterId());
           }
           results.add(
               new CloseableIteratorWrapper(
@@ -343,8 +354,19 @@ public class BaseDataStore implements DataStore {
                           queryOptions.getFieldIdsAdapterPair(),
                           DataIndexUtils.DATA_ID_INDEX),
                       queryOptions.getMaxResolutionSubsamplingPerDimension(),
-                      true, // perhaps should check whether its a commonindexaggregation
+                      !BaseDataStoreUtils.isCommonIndexAggregation(queryOptions.getAggregation()),
                       null)));
+        }
+        if (BaseDataStoreUtils.isAggregation(queryOptions.getAggregation())) {
+          return BaseDataStoreUtils.aggregate(new CloseableIteratorWrapper(new Closeable() {
+            @Override
+            public void close() throws IOException {
+              for (final CloseableIterator<Object> result : results) {
+                result.close();
+              }
+            }
+          }, Iterators.concat(results.iterator())),
+              (Aggregation) queryOptions.getAggregation().getRight());
         }
       } catch (final IOException e1) {
         LOGGER.error("Failed to resolve adapter or index for query", e1);

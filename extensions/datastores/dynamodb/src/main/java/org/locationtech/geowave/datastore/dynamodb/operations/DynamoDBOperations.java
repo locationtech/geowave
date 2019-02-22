@@ -62,6 +62,8 @@ import com.amazonaws.services.dynamodbv2.model.KeysAndAttributes;
 import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.TableStatus;
 import com.amazonaws.services.dynamodbv2.model.WriteRequest;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
@@ -213,17 +215,44 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
     if (readerParams.getDataIds() != null) {
       dataIds = readerParams.getDataIds();
     } else {
-      final List<byte[]> intermediaries = new ArrayList<>();
-      ByteArrayUtils.addAllIntermediaryByteArrays(
-          intermediaries,
-          new ByteArrayRange(
-              readerParams.getStartInclusiveDataId(),
-              readerParams.getEndInclusiveDataId()));
-      dataIds = intermediaries.toArray(new byte[0][]);
+      if ((readerParams.getStartInclusiveDataId() != null)
+          || (readerParams.getEndInclusiveDataId() != null)) {
+        final List<byte[]> intermediaries = new ArrayList<>();
+        ByteArrayUtils.addAllIntermediaryByteArrays(
+            intermediaries,
+            new ByteArrayRange(
+                readerParams.getStartInclusiveDataId(),
+                readerParams.getEndInclusiveDataId()));
+        dataIds = intermediaries.toArray(new byte[0][]);
+      } else {
+        return new RowReaderWrapper<>(
+            new CloseableIterator.Wrapper<>(
+                getRowsFromDataIndex(readerParams.getAdapterId(), typeName)));
+      }
     }
     return new RowReaderWrapper<>(
         new CloseableIterator.Wrapper<>(
             getRowsFromDataIndex(dataIds, readerParams.getAdapterId(), typeName)));
+  }
+
+  public Iterator<GeoWaveRow> getRowsFromDataIndex(final short adapterId, final String typeName) {
+    final List<GeoWaveRow> resultList = new ArrayList<>();
+    // fill result list
+    ScanResult result =
+        getResults(
+            typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName()),
+            adapterId,
+            resultList,
+            null);
+    while ((result.getLastEvaluatedKey() != null) && !result.getLastEvaluatedKey().isEmpty()) {
+      result =
+          getResults(
+              typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName()),
+              adapterId,
+              resultList,
+              result.getLastEvaluatedKey());
+    }
+    return resultList.iterator();
   }
 
   public Iterator<GeoWaveRow> getRowsFromDataIndex(
@@ -256,6 +285,26 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
     }
     return Arrays.stream(dataIds).map(d -> resultMap.get(new ByteArray(d))).filter(
         r -> r != null).iterator();
+  }
+
+  private ScanResult getResults(
+      final String tableName,
+      final short adapterId,
+      final List<GeoWaveRow> resultList,
+      final Map<String, AttributeValue> lastEvaluatedKey) {
+    final ScanRequest request = new ScanRequest(tableName);
+    if ((lastEvaluatedKey != null) && !lastEvaluatedKey.isEmpty()) {
+      request.setExclusiveStartKey(lastEvaluatedKey);
+    }
+    final ScanResult result = client.scan(request);
+    result.getItems().forEach(objMap -> {
+      final byte[] dataId = objMap.get(DynamoDBRow.GW_PARTITION_ID_KEY).getB().array();
+      final AttributeValue valueAttr = objMap.get(DynamoDBRow.GW_VALUE_KEY);
+      final byte[] value = valueAttr == null ? null : valueAttr.getB().array();
+
+      resultList.add(DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, false));
+    });
+    return result;
   }
 
   private BatchGetItemResult getResults(

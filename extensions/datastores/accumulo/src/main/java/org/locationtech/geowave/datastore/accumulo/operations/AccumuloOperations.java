@@ -547,6 +547,33 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   }
 
   public Iterator<GeoWaveRow> getDataIndexResults(
+      final short adapterId,
+      final String... additionalAuthorizations) {
+    final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
+
+    // to have backwards compatibility before 1.8.0 we can assume BaseScanner is autocloseable
+    BatchScanner batchScanner = null;
+    try {
+      batchScanner =
+          createBatchScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations);
+      batchScanner.fetchColumnFamily(new Text(family));
+      return Streams.stream(batchScanner).map(
+          entry -> DataIndexUtils.deserializeDataIndexRow(
+              entry.getKey().getRow().getBytes(),
+              adapterId,
+              entry.getValue().get(),
+              false)).iterator();
+    } catch (final TableNotFoundException e) {
+      LOGGER.error("unable to find data index table", e);
+    } finally {
+      if (batchScanner != null) {
+        batchScanner.close();
+      }
+    }
+    return Collections.emptyIterator();
+  }
+
+  public Iterator<GeoWaveRow> getDataIndexResults(
       final byte[][] rows,
       final short adapterId,
       final String... additionalAuthorizations) {
@@ -598,13 +625,22 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
     if (readerParams.getDataIds() == null) {
-      return new RowReaderWrapper<>(
-          new Wrapper<>(
-              getDataIndexResults(
-                  readerParams.getStartInclusiveDataId(),
-                  readerParams.getEndInclusiveDataId(),
-                  readerParams.getAdapterId(),
-                  readerParams.getAdditionalAuthorizations())));
+      if ((readerParams.getStartInclusiveDataId() != null)
+          || (readerParams.getEndInclusiveDataId() != null)) {
+        return new RowReaderWrapper<>(
+            new Wrapper<>(
+                getDataIndexResults(
+                    readerParams.getStartInclusiveDataId(),
+                    readerParams.getEndInclusiveDataId(),
+                    readerParams.getAdapterId(),
+                    readerParams.getAdditionalAuthorizations())));
+      } else {
+        return new RowReaderWrapper<>(
+            new Wrapper<>(
+                getDataIndexResults(
+                    readerParams.getAdapterId(),
+                    readerParams.getAdditionalAuthorizations())));
+      }
     }
     return new RowReaderWrapper<>(
         new Wrapper<>(

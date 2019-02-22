@@ -153,8 +153,7 @@ abstract class BaseQuery {
   }
 
   public boolean isAggregation() {
-    final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation = getAggregation();
-    return ((aggregation != null) && (aggregation.getRight() != null));
+    return BaseDataStoreUtils.isAggregation(getAggregation());
   }
 
   public List<MultiDimensionalCoordinateRangesArray> getCoordinateRanges() {

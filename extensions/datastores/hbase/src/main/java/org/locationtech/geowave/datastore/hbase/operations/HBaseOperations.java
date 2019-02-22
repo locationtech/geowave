@@ -553,8 +553,12 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
     final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
     try (final Table table = conn.getTable(getTableName(DataIndexUtils.DATA_ID_INDEX.getName()))) {
       final Scan scan = new Scan();
-      scan.setStartRow(startRow);
-      scan.setStopRow(HBaseUtils.getInclusiveEndKey(endRow));
+      if (startRow != null) {
+        scan.setStartRow(startRow);
+      }
+      if (endRow != null) {
+        scan.setStopRow(HBaseUtils.getInclusiveEndKey(endRow));
+      }
       try (ResultScanner s = table.getScanner(scan)) {
         results = Iterators.toArray(s.iterator(), Result.class);
       }

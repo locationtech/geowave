@@ -279,7 +279,7 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
 
   @Override
   protected boolean isCommonIndexAggregation() {
-    return isAggregation() && (aggregation.getRight() instanceof CommonIndexAggregation);
+    return BaseDataStoreUtils.isCommonIndexAggregation(aggregation);
   }
 
   @Override

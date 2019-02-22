@@ -66,9 +66,6 @@ public class DataIndexReaderParamsBuilder<T> extends
           isAuthorizationsLimiting,
           additionalAuthorizations);
     }
-    if (dataIds == null) {
-      dataIds = new byte[0][];
-    }
     return new DataIndexReaderParams(
         adapterStore,
         internalAdapterStore,

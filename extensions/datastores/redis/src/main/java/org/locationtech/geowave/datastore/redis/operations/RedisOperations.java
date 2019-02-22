@@ -9,7 +9,6 @@
 package org.locationtech.geowave.datastore.redis.operations;
 
 import java.io.IOException;
-import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;

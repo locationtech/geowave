@@ -203,4 +203,21 @@ public class DataIndexUtils {
                         fieldSubsets).aggregation(aggregation).build();
     return operations.createReader(readerParams);
   }
+
+  public static RowReader<GeoWaveRow> getRowReader(
+      final DataStoreOperations operations,
+      final PersistentAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
+      final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
+      final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+      final String[] additionalAuthorizations,
+      final short adapterId) {
+    final DataIndexReaderParams readerParams =
+        new DataIndexReaderParamsBuilder<>(
+            adapterStore,
+            internalAdapterStore).additionalAuthorizations(
+                additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
+                    adapterId).fieldSubsets(fieldSubsets).aggregation(aggregation).build();
+    return operations.createReader(readerParams);
+  }
 }

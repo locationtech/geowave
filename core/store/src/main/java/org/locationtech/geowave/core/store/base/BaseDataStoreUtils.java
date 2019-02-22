@@ -68,6 +68,7 @@ import org.locationtech.geowave.core.store.flatten.BitmaskedPairComparator;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexStore;
+import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
@@ -663,5 +664,15 @@ public class BaseDataStoreUtils {
       }
     }
     return false;
+  }
+
+  public static boolean isAggregation(
+      final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation) {
+    return (aggregation != null) && (aggregation.getRight() != null);
+  }
+
+  public static boolean isCommonIndexAggregation(
+      final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation) {
+    return isAggregation(aggregation) && (aggregation.getRight() instanceof CommonIndexAggregation);
   }
 }

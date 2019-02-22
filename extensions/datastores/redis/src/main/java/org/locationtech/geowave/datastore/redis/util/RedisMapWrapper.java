@@ -69,6 +69,14 @@ public class RedisMapWrapper extends
       final byte[] startDataId,
       final byte[] endDataId,
       final short adapterId) {
+    if ((startDataId == null) && (endDataId == null)) {
+      return getCurrentSyncCollection().entrySet().stream().map(
+          e -> DataIndexUtils.deserializeDataIndexRow(
+              e.getKey(),
+              adapterId,
+              e.getValue(),
+              visibilityEnabled)).iterator();
+    }
     // this is not a common use case, if it were a different (sorted) collection may be an
     // improvement
     final List<byte[]> list = new ArrayList<>();
