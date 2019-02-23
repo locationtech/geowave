@@ -84,7 +84,7 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
     TestUtils.printEndOfTest(LOGGER, testName, startMillis);
   }
 
-  // @Test
+  @Test
   public void testDataIndexOnly() throws Exception {
     TestUtils.testLocalIngest(
         getDataStorePluginOptions(),
@@ -142,7 +142,9 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
         IntStream.rangeClosed(0, 9).boxed().collect(Collectors.toSet());
     try (CloseableIterator<LatLonTime> it =
         (CloseableIterator) dataStore.query(QueryBuilder.newBuilder().build())) {
-      Assert.assertTrue(expectedIntIds.remove(it.next().getId()));
+      while (it.hasNext()) {
+        Assert.assertTrue(expectedIntIds.remove(it.next().getId()));
+      }
     }
     Assert.assertTrue(expectedIntIds.isEmpty());
     TestUtils.deleteAll(dataIdxOnlyDataStoreOptions);

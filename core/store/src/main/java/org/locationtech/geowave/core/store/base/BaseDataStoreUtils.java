@@ -483,7 +483,10 @@ public class BaseDataStoreUtils {
       final Entry<ByteArray, List<Pair<Integer, FieldInfo<?>>>> entry) {
     final SortedSet<Integer> fieldPositions = new TreeSet<>();
     final List<Pair<Integer, FieldInfo<?>>> fieldInfoList = entry.getValue();
-    final byte[] combinedValue = combineValues(fieldInfoList);
+    final byte[] combinedValue =
+        fieldInfoList.size() > 1 ? combineValues(fieldInfoList)
+            : fieldInfoList.size() > 0 ? fieldInfoList.get(0).getRight().getWrittenValue()
+                : new byte[0];
     fieldInfoList.stream().forEach(p -> fieldPositions.add(p.getLeft()));
     final byte[] compositeBitmask = BitmaskUtils.generateCompositeBitmask(fieldPositions);
     return new GeoWaveValueImpl(compositeBitmask, entry.getKey().getBytes(), combinedValue);
