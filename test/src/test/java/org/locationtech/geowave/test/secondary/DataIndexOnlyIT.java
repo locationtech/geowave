@@ -95,6 +95,7 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
     final DataStore store = dataStoreOptions.createDataStore();
     final DataStore dataIdxStore = dataIdxOnlyDataStoreOptions.createDataStore();
     final FeatureDataAdapter adapter = (FeatureDataAdapter) store.getTypes()[0];
+    dataIdxStore.addType(adapter);
     try (Writer<SimpleFeature> writer = dataIdxStore.createWriter(adapter.getTypeName())) {
       try (CloseableIterator<SimpleFeature> it =
           store.query(VectorQueryBuilder.newBuilder().build())) {

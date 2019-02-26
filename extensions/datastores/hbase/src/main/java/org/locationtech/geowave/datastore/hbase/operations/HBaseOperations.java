@@ -559,6 +559,9 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
       if (endRow != null) {
         scan.setStopRow(HBaseUtils.getInclusiveEndKey(endRow));
       }
+      if ((additionalAuthorizations != null) && (additionalAuthorizations.length > 0)) {
+        scan.setAuthorizations(new Authorizations(additionalAuthorizations));
+      }
       try (ResultScanner s = table.getScanner(scan)) {
         results = Iterators.toArray(s.iterator(), Result.class);
       }

@@ -556,6 +556,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     try {
       batchScanner =
           createBatchScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations);
+      batchScanner.setRanges(Collections.singleton(new Range()));
       batchScanner.fetchColumnFamily(new Text(family));
       return Streams.stream(batchScanner).map(
           entry -> DataIndexUtils.deserializeDataIndexRow(
