@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.datastore.accumulo.operations;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,7 +63,8 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
+import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -512,7 +514,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     return new ClientSideIteratorScanner(createScanner(tableName, additionalAuthorizations));
   }
 
-  public Iterator<GeoWaveRow> getDataIndexResults(
+  public CloseableIterator<GeoWaveRow> getDataIndexResults(
       final byte[] startRow,
       final byte[] endRow,
       final short adapterId,
@@ -520,71 +522,72 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
 
     // to have backwards compatibility before 1.8.0 we can assume BaseScanner is autocloseable
-    Scanner scanner = null;
+    final Scanner scanner;
     try {
       scanner = createScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations);
 
-      if ((startRow == null) || (startRow.length == 0)) {
-        return Collections.emptyIterator();
-      }
       scanner.setRange(
           AccumuloUtils.byteArrayRangeToAccumuloRange(new ByteArrayRange(startRow, endRow)));
       scanner.fetchColumnFamily(new Text(family));
-      return Streams.stream(scanner.iterator()).map(
-          entry -> DataIndexUtils.deserializeDataIndexRow(
-              entry.getKey().getRow().getBytes(),
-              adapterId,
-              entry.getValue().get(),
-              false)).iterator();
+      return new CloseableIteratorWrapper(new Closeable() {
+        @Override
+        public void close() throws IOException {
+          scanner.close();
+        }
+      },
+          Streams.stream(scanner.iterator()).map(
+              entry -> DataIndexUtils.deserializeDataIndexRow(
+                  entry.getKey().getRow().getBytes(),
+                  adapterId,
+                  entry.getValue().get(),
+                  false)).iterator());
     } catch (final TableNotFoundException e) {
       LOGGER.error("unable to find data index table", e);
-    } finally {
-      if (scanner != null) {
-        scanner.close();
-      }
     }
-    return Collections.emptyIterator();
+    return new CloseableIterator.Empty<>();
   }
 
-  public Iterator<GeoWaveRow> getDataIndexResults(
+  public CloseableIterator<GeoWaveRow> getDataIndexResults(
       final short adapterId,
       final String... additionalAuthorizations) {
     final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
 
     // to have backwards compatibility before 1.8.0 we can assume BaseScanner is autocloseable
-    BatchScanner batchScanner = null;
+    final BatchScanner batchScanner;
     try {
       batchScanner =
           createBatchScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations);
       batchScanner.setRanges(Collections.singleton(new Range()));
       batchScanner.fetchColumnFamily(new Text(family));
-      return Streams.stream(batchScanner).map(
-          entry -> DataIndexUtils.deserializeDataIndexRow(
-              entry.getKey().getRow().getBytes(),
-              adapterId,
-              entry.getValue().get(),
-              false)).iterator();
+      return new CloseableIteratorWrapper(new Closeable() {
+        @Override
+        public void close() throws IOException {
+          batchScanner.close();
+        }
+      },
+          Streams.stream(batchScanner).map(
+              entry -> DataIndexUtils.deserializeDataIndexRow(
+                  entry.getKey().getRow().getBytes(),
+                  adapterId,
+                  entry.getValue().get(),
+                  false)).iterator());
     } catch (final TableNotFoundException e) {
       LOGGER.error("unable to find data index table", e);
-    } finally {
-      if (batchScanner != null) {
-        batchScanner.close();
-      }
     }
-    return Collections.emptyIterator();
+    return new CloseableIterator.Empty<>();
   }
 
-  public Iterator<GeoWaveRow> getDataIndexResults(
+  public CloseableIterator<GeoWaveRow> getDataIndexResults(
       final byte[][] rows,
       final short adapterId,
       final String... additionalAuthorizations) {
     if ((rows == null) || (rows.length == 0)) {
-      return Collections.emptyIterator();
+      return new CloseableIterator.Empty<>();
     }
     final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
 
     // to have backwards compatibility before 1.8.0 we can assume BaseScanner is autocloseable
-    BatchScanner batchScanner = null;
+    final BatchScanner batchScanner;
     try {
       batchScanner =
           createBatchScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations);
@@ -596,20 +599,22 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
           entry -> results.put(
               new ByteArray(entry.getKey().getRow().getBytes()),
               entry.getValue().get()));
-      return Arrays.stream(rows).filter(r -> results.containsKey(new ByteArray(r))).map(
-          r -> DataIndexUtils.deserializeDataIndexRow(
-              r,
-              adapterId,
-              results.get(new ByteArray(r)),
-              false)).iterator();
+      return new CloseableIteratorWrapper(new Closeable() {
+        @Override
+        public void close() throws IOException {
+          batchScanner.close();
+        }
+      },
+          Arrays.stream(rows).filter(r -> results.containsKey(new ByteArray(r))).map(
+              r -> DataIndexUtils.deserializeDataIndexRow(
+                  r,
+                  adapterId,
+                  results.get(new ByteArray(r)),
+                  false)).iterator());
     } catch (final TableNotFoundException e) {
       LOGGER.error("unable to find data index table", e);
-    } finally {
-      if (batchScanner != null) {
-        batchScanner.close();
-      }
     }
-    return Collections.emptyIterator();
+    return new CloseableIterator.Empty<>();
   }
 
   @Override
@@ -629,26 +634,23 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       if ((readerParams.getStartInclusiveDataId() != null)
           || (readerParams.getEndInclusiveDataId() != null)) {
         return new RowReaderWrapper<>(
-            new Wrapper<>(
-                getDataIndexResults(
-                    readerParams.getStartInclusiveDataId(),
-                    readerParams.getEndInclusiveDataId(),
-                    readerParams.getAdapterId(),
-                    readerParams.getAdditionalAuthorizations())));
+            getDataIndexResults(
+                readerParams.getStartInclusiveDataId(),
+                readerParams.getEndInclusiveDataId(),
+                readerParams.getAdapterId(),
+                readerParams.getAdditionalAuthorizations()));
       } else {
         return new RowReaderWrapper<>(
-            new Wrapper<>(
-                getDataIndexResults(
-                    readerParams.getAdapterId(),
-                    readerParams.getAdditionalAuthorizations())));
+            getDataIndexResults(
+                readerParams.getAdapterId(),
+                readerParams.getAdditionalAuthorizations()));
       }
     }
     return new RowReaderWrapper<>(
-        new Wrapper<>(
-            getDataIndexResults(
-                readerParams.getDataIds(),
-                readerParams.getAdapterId(),
-                readerParams.getAdditionalAuthorizations())));
+        getDataIndexResults(
+            readerParams.getDataIds(),
+            readerParams.getAdapterId(),
+            readerParams.getAdditionalAuthorizations()));
   }
 
   public Scanner createScanner(final String tableName, final String... additionalAuthorizations)

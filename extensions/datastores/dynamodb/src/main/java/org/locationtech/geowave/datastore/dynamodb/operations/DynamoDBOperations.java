@@ -311,8 +311,10 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
       final byte[] dataId = objMap.get(DynamoDBRow.GW_PARTITION_ID_KEY).getB().array();
       final AttributeValue valueAttr = objMap.get(DynamoDBRow.GW_VALUE_KEY);
       final byte[] value = valueAttr == null ? null : valueAttr.getB().array();
+      final AttributeValue visAttr = objMap.get(DynamoDBRow.GW_VISIBILITY_KEY);
+      final byte[] vis = visAttr == null ? new byte[0] : visAttr.getB().array();
 
-      resultList.add(DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, false));
+      resultList.add(DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, vis));
     });
     return result;
   }
@@ -328,10 +330,11 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
       final byte[] dataId = objMap.get(DynamoDBRow.GW_PARTITION_ID_KEY).getB().array();
       final AttributeValue valueAttr = objMap.get(DynamoDBRow.GW_VALUE_KEY);
       final byte[] value = valueAttr == null ? null : valueAttr.getB().array();
-
+      final AttributeValue visAttr = objMap.get(DynamoDBRow.GW_VISIBILITY_KEY);
+      final byte[] vis = visAttr == null ? new byte[0] : visAttr.getB().array();
       resultMap.put(
           new ByteArray(dataId),
-          DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, false));
+          DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, vis));
     }));
     return result;
   }

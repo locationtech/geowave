@@ -482,28 +482,23 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   }
 
   public Iterator<GeoWaveRow> getRows(final short adapterId) {
-    PreparedStatement preparedRead;
     final String tableName = DataIndexUtils.DATA_ID_INDEX.getName();
     final String safeTableName = getCassandraSafeName(tableName);
-    synchronized (state.preparedRangeReadsPerTable) {
-      preparedRead = state.preparedRangeReadsPerTable.get(safeTableName);
-      if (preparedRead == null) {
-        final Select select = getSelect(safeTableName);
-        select.where(
-            QueryBuilder.eq(
-                CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-                QueryBuilder.bindMarker(
-                    CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName()))).allowFiltering();
-        preparedRead = session.prepare(select);
-        state.preparedRangeReadsPerTable.put(safeTableName, preparedRead);
-      }
-    }
-    final BoundStatement statement = new BoundStatement(preparedRead);
-    statement.set(
-        CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
-        adapterId,
-        TypeCodec.smallInt());
-    final ResultSet results = getSession().execute(statement);
+
+    // the datastax client API does not allow for unconstrained partition keys (not a recommended
+    // usage, but this interface must support it)
+    // so CQL is built manually here
+    final ResultSet results =
+        getSession().execute(
+            "select * from "
+                + gwNamespace
+                + "."
+                + safeTableName
+                + " where "
+                + CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName()
+                + " = "
+                + adapterId
+                + " ALLOW FILTERING");
     return Streams.stream(results.iterator()).map(r -> {
       final byte[] d = r.getBytes(CassandraField.GW_PARTITION_ID_KEY.getFieldName()).array();
       final byte[] v = r.getBytes(CassandraField.GW_VALUE_KEY.getFieldName()).array();
