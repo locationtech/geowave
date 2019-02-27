@@ -403,15 +403,15 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
 
       final AttributeDescriptor descriptor = internalType.getGeometryDescriptor();
       final VisibilityConfiguration visConfig = new VisibilityConfiguration(internalType);
-
-      defaultHandlers.add(
-          new FeatureGeometryHandler(
-              descriptor,
-              visConfig.getManager().createVisibilityHandler(
-                  descriptor.getLocalName(),
-                  fieldVisiblityHandler,
-                  visConfig.getAttributeName())));
-
+      if (descriptor != null) {
+        defaultHandlers.add(
+            new FeatureGeometryHandler(
+                descriptor,
+                visConfig.getManager().createVisibilityHandler(
+                    descriptor.getLocalName(),
+                    fieldVisiblityHandler,
+                    visConfig.getAttributeName())));
+      }
       return defaultHandlers;
     }
 
