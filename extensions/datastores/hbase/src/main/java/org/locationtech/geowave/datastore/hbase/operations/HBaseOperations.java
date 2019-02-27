@@ -551,22 +551,26 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
       final String... additionalAuthorizations) {
     Result[] results = null;
     final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
-    try (final Table table = conn.getTable(getTableName(DataIndexUtils.DATA_ID_INDEX.getName()))) {
-      final Scan scan = new Scan();
-      if (startRow != null) {
-        scan.setStartRow(startRow);
-      }
-      if (endRow != null) {
-        scan.setStopRow(HBaseUtils.getInclusiveEndKey(endRow));
-      }
-      if ((additionalAuthorizations != null) && (additionalAuthorizations.length > 0)) {
-        scan.setAuthorizations(new Authorizations(additionalAuthorizations));
-      }
-      try (ResultScanner s = table.getScanner(scan)) {
-        results = Iterators.toArray(s.iterator(), Result.class);
-      }
+    final Scan scan = new Scan();
+    if (startRow != null) {
+      scan.setStartRow(startRow);
+    }
+    if (endRow != null) {
+      scan.setStopRow(HBaseUtils.getInclusiveEndKey(endRow));
+    }
+    if ((additionalAuthorizations != null) && (additionalAuthorizations.length > 0)) {
+      scan.setAuthorizations(new Authorizations(additionalAuthorizations));
+    }
+    Iterable<Result> s = null;
+    try {
+      s = getScannedResults(scan, DataIndexUtils.DATA_ID_INDEX.getName());
+      results = Iterators.toArray(s.iterator(), Result.class);
     } catch (final IOException e) {
       LOGGER.error("Unable to close HBase table", e);
+    } finally {
+      if (s instanceof ResultScanner) {
+        ((ResultScanner) s).close();
+      }
     }
     if (results != null) {
       return Arrays.stream(results).filter(r -> r.containsColumn(family, new byte[0])).map(
