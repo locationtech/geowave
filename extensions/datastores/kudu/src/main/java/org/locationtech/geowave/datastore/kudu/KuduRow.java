@@ -1,0 +1,137 @@
+/**
+ * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
+package org.locationtech.geowave.datastore.kudu;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.kudu.ColumnSchema;
+import org.apache.kudu.client.RowResult;
+import org.apache.log4j.Logger;
+import org.apache.kudu.Type;
+import org.locationtech.geowave.core.store.entities.*;
+import java.util.List;
+import java.util.function.BiConsumer;
+
+public class KuduRow extends MergeableGeoWaveRow {
+  private static final Logger LOGGER = Logger.getLogger(KuduRow.class);
+
+  private final byte[] partitionKey;
+  private final short adapterId;
+  private final byte[] sortKey;
+  private final byte[] dataId;
+  private final byte[] fieldVisibility;
+  private final byte[] nanoTime;
+  private final byte[] fieldMask;
+  private final byte[] value;
+  private final int numDuplicates;
+
+  private enum ColumnType {
+    PARTITION_KEY((final List<ColumnSchema> c, final Pair<String, Type> f) -> c.add(
+        new ColumnSchema.ColumnSchemaBuilder(f.getLeft(), f.getRight()).key(true).build())),
+    CLUSTER_COLUMN((final List<ColumnSchema> c, final Pair<String, Type> f) -> c.add(
+        new ColumnSchema.ColumnSchemaBuilder(f.getLeft(), f.getRight()).key(true).build())),
+    OTHER_COLUMN((final List<ColumnSchema> c, final Pair<String, Type> f) -> c.add(
+        new ColumnSchema.ColumnSchemaBuilder(f.getLeft(), f.getRight()).build()));
+
+    private BiConsumer<List<ColumnSchema>, Pair<String, Type>> createFunction;
+
+    ColumnType(final BiConsumer<List<ColumnSchema>, Pair<String, Type>> createFunction) {
+      this.createFunction = createFunction;
+    }
+  }
+
+  public enum KuduField {
+    GW_PARTITION_ID_KEY("partition", Type.BINARY, ColumnType.PARTITION_KEY, true),
+    GW_ADAPTER_ID_KEY("adapter_id", Type.INT16, ColumnType.CLUSTER_COLUMN, true),
+    GW_SORT_KEY("sort", Type.BINARY, ColumnType.CLUSTER_COLUMN),
+    GW_DATA_ID_KEY("data_id", Type.BINARY, ColumnType.CLUSTER_COLUMN),
+    GW_FIELD_VISIBILITY_KEY("vis", Type.BINARY, ColumnType.CLUSTER_COLUMN),
+    GW_NANO_TIME_KEY("nano_time", Type.BINARY, ColumnType.CLUSTER_COLUMN),
+    GW_FIELD_MASK_KEY("field_mask", Type.BINARY, ColumnType.OTHER_COLUMN),
+    GW_VALUE_KEY("value", Type.BINARY, ColumnType.OTHER_COLUMN, true),
+    GW_NUM_DUPLICATES_KEY("num_duplicates", Type.INT8, ColumnType.OTHER_COLUMN);
+
+    private final String fieldName;
+    private final Type dataType;
+    private ColumnType columnType;
+    private final boolean isDataIndexColumn;
+
+    KuduField(final String fieldName, final Type dataType, final ColumnType columnType) {
+      this(fieldName, dataType, columnType, false);
+    }
+
+    KuduField(
+        final String fieldName,
+        final Type dataType,
+        final ColumnType columnType,
+        final boolean isDataIndexColumn) {
+      this.fieldName = fieldName;
+      this.dataType = dataType;
+      this.columnType = columnType;
+      this.isDataIndexColumn = isDataIndexColumn;
+    }
+
+    public boolean isDataIndexColumn() {
+      return isDataIndexColumn;
+    }
+
+    public String getFieldName() {
+      return fieldName;
+    }
+
+    public void addColumn(final List<ColumnSchema> columns) {
+      columnType.createFunction.accept(columns, Pair.of(fieldName, dataType));
+    }
+  }
+
+  public KuduRow(final RowResult row) {
+    super(getFieldValues(row));
+    this.partitionKey = row.getBinaryCopy(KuduField.GW_PARTITION_ID_KEY.getFieldName());
+    this.adapterId = row.getShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName());
+    this.sortKey = row.getBinaryCopy(KuduField.GW_SORT_KEY.getFieldName());
+    this.dataId = row.getBinaryCopy(KuduField.GW_DATA_ID_KEY.getFieldName());
+    this.fieldVisibility = row.getBinaryCopy(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName());
+    this.nanoTime = row.getBinaryCopy(KuduField.GW_NANO_TIME_KEY.getFieldName());
+    this.fieldMask = row.getBinaryCopy(KuduField.GW_FIELD_MASK_KEY.getFieldName());
+    this.value = row.getBinaryCopy(KuduField.GW_VALUE_KEY.getFieldName());
+    this.numDuplicates = row.getByte(KuduField.GW_NUM_DUPLICATES_KEY.getFieldName());
+  }
+
+  @Override
+  public byte[] getDataId() {
+    return dataId;
+  }
+
+  @Override
+  public byte[] getSortKey() {
+    return sortKey;
+  }
+
+  @Override
+  public byte[] getPartitionKey() {
+    return partitionKey;
+  }
+
+  @Override
+  public int getNumberOfDuplicates() {
+    return numDuplicates;
+  }
+
+  @Override
+  public short getAdapterId() {
+    return adapterId;
+  }
+
+  private static GeoWaveValue[] getFieldValues(final RowResult row) {
+    final byte[] fieldMask = row.getBinaryCopy(KuduField.GW_FIELD_MASK_KEY.getFieldName());
+    final byte[] value = row.getBinaryCopy(KuduField.GW_VALUE_KEY.getFieldName());
+    final byte[] visibility = row.getBinaryCopy(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName());
+
+    return new GeoWaveValueImpl[] {new GeoWaveValueImpl(fieldMask, visibility, value)};
+  }
+}
