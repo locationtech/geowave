@@ -38,7 +38,8 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.HBASE,
+          // HBase for cloudera 5.14 takes too long
+          // GeoWaveStoreType.HBASE,
           GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
           // DYNAMODB takes too long
@@ -52,7 +53,8 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.HBASE,
+          // HBase for cloudera 5.14 takes too long
+          // GeoWaveStoreType.HBASE,
           GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
           // GeoWaveStoreType.DYNAMODB,
