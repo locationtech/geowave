@@ -466,6 +466,7 @@ href="images/geowave-icon-logo-small.png">
 <ul class="sectlevel2">
 <li><a href="#overview-2">Overview</a></li>
 <li><a href="#ingest-plugins">Ingest Plugins</a></li>
+<li><a href="#ingest-statistics">Ingest Statistics and Time Dimension Configuration</a></li>
 </ul>
 </li>
 <li><a href="#analytics-overview">Analytics</a>
@@ -1406,8 +1407,218 @@ Available datastores currently registered:
     A GeoWave store backed by tables in Apache HBase</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="ingest-statistics"><a class="anchor" href="#ingest-statistics"></a>Ingest Statistics and Time Dimension Configuration</h3>
 <div class="paragraph">
-<p>Unresolved directive in userguide.adoc - include::057-ingeststats.adoc[]</p>
+<p>The available plugins for vector support adjustments to their configuration via the command line.
+The system property 'SIMPLE_FEATURE_CONFIG_FILE' may be assigned to the name of a locally accessible JSON file defining
+the configuration.</p>
+</div>
+<div class="sect3">
+<h4 id="example"><a class="anchor" href="#example"></a>Example</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>$ GEOWAVE_TOOL_JAVA_OPT="-DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json"
+$ geowave ingest localtogw ./ingest mystore myindex</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configuration consists of several parts:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Selecting temporal attributes for a temporal index</p>
+</li>
+<li>
+<p>Assigning to each attribute the type of statistics to be captured within the Statistics Store</p>
+</li>
+<li>
+<p>Determining which attributes should be indexed in a secondary index</p>
+</li>
+<li>
+<p>Determining which attribute contains visibility information for other attributes</p>
+</li>
+<li>
+<p>Setting the names of the indices to update in WFS-T transactions via the GeoServer plug-in</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The JSON file is made up of configurations. Each configuration is defined by a class name and a set of attributes. Configurations are grouped by the Simple Feature Type name.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="temporal-configuration"><a class="anchor" href="#temporal-configuration"></a>Temporal Configuration</h4>
+<div class="paragraph">
+<p>There are three attributes for the temporal configuration:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>timeName</p>
+</li>
+<li>
+<p>startRangeName</p>
+</li>
+<li>
+<p>endRangeName</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>These attributes are associated with the name of a simple feature type attribute that references a time value.  To index by a single time attribute, set <code><em>timeName</em></code> to the name of the single attribute.  To index by a range, set both <code><em>startRangeName</em></code> and <code><em>endRangeName</em></code> to the names of the simple feature type attributes that define start and end time values.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="statistics-configuration"><a class="anchor" href="#statistics-configuration"></a>Statistics Configuration</h4>
+<div class="paragraph">
+<p>Each simple feature type attribute may have several assigned statistics. Bounding box and range statistics are automatically captured for geometry and temporal attributes.</p>
+</div>
+<table class="tableblock frame-topbot grid-rows spread">
+<colgroup>
+<col style="width: 12%;">
+<col style="width: 25%;">
+<col style="width: 20%;">
+<col style="width: 43%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute Type</th>
+<th class="tableblock halign-left valign-top">Statistic Name</th>
+<th class="tableblock halign-left valign-top">Statistic Configuration Attributes (with default values)</th>
+<th class="tableblock halign-left valign-top">Statistic Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">Numeric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fixed Bin Histogram</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">minValue=-&#8734;, maxValue=&#8734;, bins=32</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.java#L130" target="_blank">org.locationtech.geowave.adapter.vector.stats.
+FeatureFixedBinNumericStatistics$FeatureFixedBinConfig</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dynamic Histogram</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.java#L356" target="_blank">org.locationtech.geowave.adapter.vector.stats.
+FeatureNumericHistogramStatistics$FeatureNumericHistogramConfig</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric Range</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.java#L128" target="_blank">org.locationtech.geowave.adapter.vector.stats.
+FeatureNumericRangeStatistics$FeatureNumericRangeConfig</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count Min Sketch</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">errorFactor=0.001, probabilityOfCorrectness=0.98</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.java#L203" target="_blank">org.locationtech.geowave.adapter.vector.stats.
+FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hyper Log Log</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">precision=16</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.java#L205" target="_blank">org.locationtech.geowave.adapter.vector.stats.
+FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="visibility-configuration"><a class="anchor" href="#visibility-configuration"></a>Visibility Configuration</h4>
+<div class="paragraph">
+<p>Visibility configuration has two attributes: the visibility manager class and the visibility attribute name.</p>
+</div>
+<div class="paragraph">
+<p>A Visibility Manager extends <em><a href="https://github.com/locationtech/geowave/blob/master/core/store/src/main/java/org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.java" target="_blank">org.locationtech.geowave.core.store.data.visibility.VisibilityManagement</a></em>. An instance of this class interprets the contents of a visibility attribute, within a simple feature, to determine the visibility constraints of the other attributes in that simple feature. The default visibility management class is <em><a href="https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java" target="_blank">org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement</a></em>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="secondary-index-configuration"><a class="anchor" href="#secondary-index-configuration"></a>Secondary Index Configuration</h4>
+<div class="paragraph">
+<p>Secondary Index Configurations is made up of one of three classes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em><a href="https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/NumericSecondaryIndexConfiguration.java" target="_blank">org.locationtech.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration</a></em></p>
+</li>
+<li>
+<p><em><a href="https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/TemporalSecondaryIndexConfiguration.java" target="_blank">org.locationtech.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration</a></em></p>
+</li>
+<li>
+<p><em><a href="https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/TextSecondaryIndexConfiguration.java" target="_blank">org.locationtech.geowave.adapter.vector.index.TextSecondaryIndexConfiguration</a></em></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Each of this configurations maintains a set of simple feature attribute names to index in a secondary index.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="primary-index-identifiers"><a class="anchor" href="#primary-index-identifiers"></a>Primary Index Identifiers</h4>
+<div class="paragraph">
+<p>The class <em><a href="https://github.com/locationtech/geowave/blob/master/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java" target="_blank">org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</a></em> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plug-in (FeatureWriter).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="example-2"><a class="anchor" href="#example-2"></a>Example</h4>
+<div class="listingblock">
+<div class="content">
+<pre>{
+  "configurations": {
+    "myFeatureTypeName" : [
+      {
+        "@class" : "org.locationtech.geowave.adapter.vector.utils.TimeDescriptors$TimeDescriptorConfiguration",
+        "startRangeName":null,
+        "endRangeName":null,
+        "timeName":"captureTime"
+       },
+       {
+         "@class": "org.locationtech.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration",
+         "attributes" : ["pop"]
+       },
+       {
+         "@class": "org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
+         "attributeName" : "vis"
+       },
+       {
+        "@class": "org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration",
+         "indexNames": ["SPATIAL_IDX"]
+       }
+       {
+         "@class" : "org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
+         "attConfig" : {
+           "population" : {
+             "configurationsForAttribute" :  [
+             {
+               "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig",
+               "bins" : 24
+             }
+             ]
+            },
+          "country" : {
+            "configurationsForAttribute" :  [
+             {
+               "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig",
+               "probabilityOfCorrectness" : 0.98,
+               "errorFactor" :0.001
+             },
+             {
+               "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig"
+             }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2890,7 +3101,7 @@ For configuring the password encryption enabled setting:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-02-20 16:12:10 +00:00
+Last updated 2019-03-01 19:55:32 +00:00
 </div>
 </div>
 </body>
