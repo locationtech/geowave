@@ -13,6 +13,7 @@ import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT.Duplicat
 import org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT.MergeCounter;
 import org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT.SumAndAveragingMergeStrategy;
 import org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT.SummingMergeStrategy;
+import org.locationtech.geowave.test.secondary.DataIndexOnlyIT.LatLonTimeAdapter;
 
 public class IntegrationTestPersistableRegistry implements PersistableRegistrySpi {
 
@@ -22,6 +23,7 @@ public class IntegrationTestPersistableRegistry implements PersistableRegistrySp
         new PersistableIdAndConstructor((short) 10775, SummingMergeStrategy::new),
         new PersistableIdAndConstructor((short) 10776, SumAndAveragingMergeStrategy::new),
         new PersistableIdAndConstructor((short) 10777, MergeCounter::new),
-        new PersistableIdAndConstructor((short) 10778, DuplicateCountAggregation::new),};
+        new PersistableIdAndConstructor((short) 10778, DuplicateCountAggregation::new),
+        new PersistableIdAndConstructor((short) 10779, LatLonTimeAdapter::new),};
   }
 }

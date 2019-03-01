@@ -220,28 +220,39 @@ public class RedisReader<T> implements RowReader<T> {
       final DataIndexReaderParams dataIndexReaderParams,
       final String namespace,
       final boolean visibilityEnabled) {
+    Iterator<GeoWaveRow> retVal;
     if (dataIndexReaderParams.getDataIds() != null) {
-      return new DataIndexRead(
-          client,
-          compression,
-          namespace,
-          dataIndexReaderParams.getInternalAdapterStore().getTypeName(
-              dataIndexReaderParams.getAdapterId()),
-          dataIndexReaderParams.getAdapterId(),
-          dataIndexReaderParams.getDataIds(),
-          visibilityEnabled).results();
+      retVal =
+          new DataIndexRead(
+              client,
+              compression,
+              namespace,
+              dataIndexReaderParams.getInternalAdapterStore().getTypeName(
+                  dataIndexReaderParams.getAdapterId()),
+              dataIndexReaderParams.getAdapterId(),
+              dataIndexReaderParams.getDataIds(),
+              visibilityEnabled).results();
     } else {
-      return new DataIndexRangeRead(
-          client,
-          compression,
-          namespace,
-          dataIndexReaderParams.getInternalAdapterStore().getTypeName(
-              dataIndexReaderParams.getAdapterId()),
-          dataIndexReaderParams.getAdapterId(),
-          dataIndexReaderParams.getStartInclusiveDataId(),
-          dataIndexReaderParams.getEndInclusiveDataId(),
-          visibilityEnabled).results();
+      retVal =
+          new DataIndexRangeRead(
+              client,
+              compression,
+              namespace,
+              dataIndexReaderParams.getInternalAdapterStore().getTypeName(
+                  dataIndexReaderParams.getAdapterId()),
+              dataIndexReaderParams.getAdapterId(),
+              dataIndexReaderParams.getStartInclusiveDataId(),
+              dataIndexReaderParams.getEndInclusiveDataId(),
+              visibilityEnabled).results();
     }
+    if (visibilityEnabled) {
+      Stream<GeoWaveRow> stream = Streams.stream(retVal);
+      final Set<String> authorizations =
+          Sets.newHashSet(dataIndexReaderParams.getAdditionalAuthorizations());
+      stream = stream.filter(new ClientVisibilityFilter(authorizations));
+      retVal = stream.iterator();
+    }
+    return retVal;
   }
 
   private CloseableIterator<T> createIteratorForRecordReader(

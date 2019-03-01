@@ -190,12 +190,23 @@ public class RocksDBReader<T> implements RowReader<T> {
             dataIndexReaderParams.getInternalAdapterStore().getTypeName(
                 dataIndexReaderParams.getAdapterId()),
             dataIndexReaderParams.getAdapterId());
+    Iterator<GeoWaveRow> iterator;
     if (dataIndexReaderParams.getDataIds() != null) {
-      return dataIndexTable.dataIndexIterator(dataIndexReaderParams.getDataIds());
+      iterator = dataIndexTable.dataIndexIterator(dataIndexReaderParams.getDataIds());
+    } else {
+      iterator =
+          dataIndexTable.dataIndexIterator(
+              dataIndexReaderParams.getStartInclusiveDataId(),
+              dataIndexReaderParams.getEndInclusiveDataId());
     }
-    return dataIndexTable.dataIndexIterator(
-        dataIndexReaderParams.getStartInclusiveDataId(),
-        dataIndexReaderParams.getEndInclusiveDataId());
+    if (client.isVisibilityEnabled()) {
+      Stream<GeoWaveRow> stream = Streams.stream(iterator);
+      final Set<String> authorizations =
+          Sets.newHashSet(dataIndexReaderParams.getAdditionalAuthorizations());
+      stream = stream.filter(new ClientVisibilityFilter(authorizations));
+      iterator = stream.iterator();
+    }
+    return iterator;
   }
 
   @SuppressWarnings("unchecked")
@@ -206,8 +217,11 @@ public class RocksDBReader<T> implements RowReader<T> {
       final GeoWaveRowIteratorTransformer<T> rowTransformer,
       final Set<String> authorizations,
       final boolean visibilityEnabled) {
-    final Iterator<GeoWaveRow> iterator =
-        Streams.stream(results).filter(new ClientVisibilityFilter(authorizations)).iterator();
+    Stream<GeoWaveRow> stream = Streams.stream(results);
+    if (visibilityEnabled) {
+      stream = stream.filter(new ClientVisibilityFilter(authorizations));
+    }
+    final Iterator<GeoWaveRow> iterator = stream.iterator();
     return new CloseableIteratorWrapper<>(
         closeable,
         rowTransformer.apply(

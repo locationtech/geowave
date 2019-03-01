@@ -310,9 +310,32 @@ public class ByteArrayUtils {
   public static void addAllIntermediaryByteArrays(
       final List<byte[]> retVal,
       final ByteArrayRange range) {
-    byte[] currentRowId = Arrays.copyOf(range.getStart(), range.getStart().length);
+    byte[] start;
+    byte[] end;
+    // they had better not both be null or this method would quickly eat up memory
+    if (range.getStart() == null) {
+      start = new byte[0];
+    } else {
+      start = range.getStart();
+    }
+    if (range.getEnd() == null) {
+      // this isn't precisely the end because the actual end is infinite, it'd be far better to set
+      // the start and end but this at least covers the edge case if they're not given
+      end =
+          new byte[] {
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF,
+              (byte) 0xFF};
+    } else {
+      end = range.getEnd();
+    }
+    byte[] currentRowId = Arrays.copyOf(start, start.length);
     retVal.add(currentRowId);
-    while (!Arrays.equals(currentRowId, range.getEnd())) {
+    while (!Arrays.equals(currentRowId, end)) {
       currentRowId = Arrays.copyOf(currentRowId, currentRowId.length);
       // increment until we reach the end row ID
       boolean overflow = !ByteArrayUtils.increment(currentRowId);

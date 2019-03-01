@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +24,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -32,7 +32,6 @@ import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -51,6 +50,7 @@ import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.RowReaderWrapper;
 import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import org.locationtech.geowave.datastore.cassandra.config.CassandraOptions;
@@ -79,6 +79,8 @@ import com.datastax.driver.core.schemabuilder.Create;
 import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.MoreExecutors;
 
 public class CassandraOperations implements MapReduceDataStoreOperations {
@@ -289,28 +291,6 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
     return true;
   }
 
-  public CloseableIterator<CassandraRow> getRows(
-      final String tableName,
-      final byte[][] dataIds,
-      final Short internalAdapterId,
-      final String... additionalAuthorizations) {
-    final Set<ByteArray> dataIdsSet = new HashSet<>(dataIds.length);
-    for (int i = 0; i < dataIds.length; i++) {
-      dataIdsSet.add(new ByteArray(dataIds[i]));
-    }
-    final CloseableIterator<CassandraRow> everything =
-        executeQuery(
-            QueryBuilder.select().from(
-                gwNamespace,
-                getCassandraSafeName(tableName)).allowFiltering());
-    return new CloseableIteratorWrapper<>(
-        everything,
-        Iterators.filter(
-            everything,
-            input -> dataIdsSet.contains(new ByteArray(input.getDataId()))
-                && (input.getAdapterId() == internalAdapterId)));
-  }
-
   public boolean deleteRow(
       final String tableName,
       final GeoWaveRow row,
@@ -472,19 +452,59 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
     final byte[][] dataIds;
+    Iterator<GeoWaveRow> iterator;
     if (readerParams.getDataIds() == null) {
-      final List<byte[]> intermediaries = new ArrayList<>();
-      ByteArrayUtils.addAllIntermediaryByteArrays(
-          intermediaries,
-          new ByteArrayRange(
-              readerParams.getStartInclusiveDataId(),
-              readerParams.getEndInclusiveDataId()));
-      dataIds = intermediaries.toArray(new byte[0][]);
+      if ((readerParams.getStartInclusiveDataId() != null)
+          || (readerParams.getEndInclusiveDataId() != null)) {
+        final List<byte[]> intermediaries = new ArrayList<>();
+        ByteArrayUtils.addAllIntermediaryByteArrays(
+            intermediaries,
+            new ByteArrayRange(
+                readerParams.getStartInclusiveDataId(),
+                readerParams.getEndInclusiveDataId()));
+        dataIds = intermediaries.toArray(new byte[0][]);
+        iterator = getRows(dataIds, readerParams.getAdapterId());
+      } else {
+        iterator = getRows(readerParams.getAdapterId());
+      }
     } else {
       dataIds = readerParams.getDataIds();
+      iterator = getRows(dataIds, readerParams.getAdapterId());
     }
-    return new RowReaderWrapper<>(
-        new CloseableIterator.Wrapper(getRows(dataIds, readerParams.getAdapterId())));
+    if (options.isVisibilityEnabled()) {
+      Stream<GeoWaveRow> stream = Streams.stream(iterator);
+      final Set<String> authorizations =
+          Sets.newHashSet(readerParams.getAdditionalAuthorizations());
+      stream = stream.filter(new ClientVisibilityFilter(authorizations));
+      iterator = stream.iterator();
+    }
+    return new RowReaderWrapper<>(new CloseableIterator.Wrapper(iterator));
+  }
+
+  public Iterator<GeoWaveRow> getRows(final short adapterId) {
+    final String tableName = DataIndexUtils.DATA_ID_INDEX.getName();
+    final String safeTableName = getCassandraSafeName(tableName);
+
+    // the datastax client API does not allow for unconstrained partition keys (not a recommended
+    // usage, but this interface must support it)
+    // so CQL is built manually here
+    final ResultSet results =
+        getSession().execute(
+            "select * from "
+                + gwNamespace
+                + "."
+                + safeTableName
+                + " where "
+                + CassandraRow.CassandraField.GW_ADAPTER_ID_KEY.getFieldName()
+                + " = "
+                + adapterId
+                + " ALLOW FILTERING");
+    return Streams.stream(results.iterator()).map(r -> {
+      final byte[] d = r.getBytes(CassandraField.GW_PARTITION_ID_KEY.getFieldName()).array();
+      final byte[] v = r.getBytes(CassandraField.GW_VALUE_KEY.getFieldName()).array();
+
+      return DataIndexUtils.deserializeDataIndexRow(d, adapterId, v, options.isVisibilityEnabled());
+    }).iterator();
   }
 
   public Iterator<GeoWaveRow> getRows(final byte[][] dataIds, final short adapterId) {

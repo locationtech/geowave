@@ -43,6 +43,19 @@ public class DataIndexUtils {
 
   public static GeoWaveValue deserializeDataIndexValue(
       final byte[] serializedValue,
+      final byte[] visibility) {
+    return deserializeDataIndexValue(serializedValue, visibility, false);
+  }
+
+  public static GeoWaveValue deserializeDataIndexValue(
+      final byte[] serializedValue,
+      final boolean visibilityEnabled) {
+    return deserializeDataIndexValue(serializedValue, null, visibilityEnabled);
+  }
+
+  public static GeoWaveValue deserializeDataIndexValue(
+      final byte[] serializedValue,
+      final byte[] visibilityInput,
       final boolean visibilityEnabled) {
     final ByteBuffer buf = ByteBuffer.wrap(serializedValue);
     int lengthBytes = 1;
@@ -50,7 +63,9 @@ public class DataIndexUtils {
     buf.get(fieldMask);
 
     final byte[] visibility;
-    if (visibilityEnabled) {
+    if (visibilityInput != null) {
+      visibility = visibilityInput;
+    } else if (visibilityEnabled) {
       lengthBytes++;
       visibility = new byte[serializedValue[serializedValue.length - 2]];
       buf.get(visibility);
@@ -65,6 +80,16 @@ public class DataIndexUtils {
   public static boolean adapterSupportsDataIndex(final DataTypeAdapter<?> adapter) {
     // currently row merging is not supported by the data index
     return !BaseDataStoreUtils.isRowMerging(adapter);
+  }
+
+  public static GeoWaveRow deserializeDataIndexRow(
+      final byte[] dataId,
+      final short adapterId,
+      final byte[] serializedValue,
+      final byte[] serializedVisibility) {
+    return new GeoWaveRowImpl(
+        new GeoWaveKeyImpl(dataId, adapterId, new byte[0], new byte[0], 0),
+        new GeoWaveValue[] {deserializeDataIndexValue(serializedValue, serializedVisibility)});
   }
 
   public static GeoWaveRow deserializeDataIndexRow(
@@ -201,6 +226,23 @@ public class DataIndexUtils {
                 additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
                     adapterId).dataIdsByRange(startDataId, endDataId).fieldSubsets(
                         fieldSubsets).aggregation(aggregation).build();
+    return operations.createReader(readerParams);
+  }
+
+  public static RowReader<GeoWaveRow> getRowReader(
+      final DataStoreOperations operations,
+      final PersistentAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
+      final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
+      final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+      final String[] additionalAuthorizations,
+      final short adapterId) {
+    final DataIndexReaderParams readerParams =
+        new DataIndexReaderParamsBuilder<>(
+            adapterStore,
+            internalAdapterStore).additionalAuthorizations(
+                additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
+                    adapterId).fieldSubsets(fieldSubsets).aggregation(aggregation).build();
     return operations.createReader(readerParams);
   }
 }

@@ -30,6 +30,7 @@ import org.locationtech.geowave.test.query.AttributesSubsetQueryIT;
 import org.locationtech.geowave.test.query.PolygonDataIdQueryIT;
 import org.locationtech.geowave.test.query.SpatialTemporalQueryIT;
 import org.locationtech.geowave.test.secondary.BasicSecondaryIndexIT;
+import org.locationtech.geowave.test.secondary.DataIndexOnlyIT;
 import org.locationtech.geowave.test.secondary.MapReduceSecondaryIndexIT;
 import org.locationtech.geowave.test.secondary.VisibilitySecondaryIndexIT;
 import org.locationtech.geowave.test.services.ConfigServicesIT;
@@ -56,6 +57,7 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
     BasicKafkaIT.class,
     BasicMapReduceIT.class,
     BasicSecondaryIndexIT.class,
+    DataIndexOnlyIT.class,
     MapReduceSecondaryIndexIT.class,
     VisibilitySecondaryIndexIT.class,
     // // for now tests are taking too long in travis and landsatIT is a long

@@ -18,7 +18,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -40,6 +42,7 @@ import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.RowReaderWrapper;
 import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBClientPool;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBOptions;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
@@ -62,10 +65,14 @@ import com.amazonaws.services.dynamodbv2.model.KeysAndAttributes;
 import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.TableStatus;
 import com.amazonaws.services.dynamodbv2.model.WriteRequest;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.amazonaws.services.dynamodbv2.util.TableUtils.TableNeverTransitionedToStateException;
+import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 
 public class DynamoDBOperations implements MapReduceDataStoreOperations {
   private final Logger LOGGER = LoggerFactory.getLogger(DynamoDBOperations.class);
@@ -208,22 +215,54 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
     if (typeName == null) {
       return new RowReaderWrapper<>(new CloseableIterator.Empty<GeoWaveRow>());
     }
-    // TODO use authorizations if provided
     byte[][] dataIds;
+    Iterator<GeoWaveRow> iterator;
     if (readerParams.getDataIds() != null) {
       dataIds = readerParams.getDataIds();
+      iterator = getRowsFromDataIndex(dataIds, readerParams.getAdapterId(), typeName);
     } else {
-      final List<byte[]> intermediaries = new ArrayList<>();
-      ByteArrayUtils.addAllIntermediaryByteArrays(
-          intermediaries,
-          new ByteArrayRange(
-              readerParams.getStartInclusiveDataId(),
-              readerParams.getEndInclusiveDataId()));
-      dataIds = intermediaries.toArray(new byte[0][]);
+      if ((readerParams.getStartInclusiveDataId() != null)
+          || (readerParams.getEndInclusiveDataId() != null)) {
+        final List<byte[]> intermediaries = new ArrayList<>();
+        ByteArrayUtils.addAllIntermediaryByteArrays(
+            intermediaries,
+            new ByteArrayRange(
+                readerParams.getStartInclusiveDataId(),
+                readerParams.getEndInclusiveDataId()));
+        dataIds = intermediaries.toArray(new byte[0][]);
+        iterator = getRowsFromDataIndex(dataIds, readerParams.getAdapterId(), typeName);
+      } else {
+        iterator = getRowsFromDataIndex(readerParams.getAdapterId(), typeName);
+      }
     }
-    return new RowReaderWrapper<>(
-        new CloseableIterator.Wrapper<>(
-            getRowsFromDataIndex(dataIds, readerParams.getAdapterId(), typeName)));
+    if (options.getBaseOptions().isVisibilityEnabled()) {
+      Stream<GeoWaveRow> stream = Streams.stream(iterator);
+      final Set<String> authorizations =
+          Sets.newHashSet(readerParams.getAdditionalAuthorizations());
+      stream = stream.filter(new ClientVisibilityFilter(authorizations));
+      iterator = stream.iterator();
+    }
+    return new RowReaderWrapper<>(new CloseableIterator.Wrapper<>(iterator));
+  }
+
+  public Iterator<GeoWaveRow> getRowsFromDataIndex(final short adapterId, final String typeName) {
+    final List<GeoWaveRow> resultList = new ArrayList<>();
+    // fill result list
+    ScanResult result =
+        getResults(
+            typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName()),
+            adapterId,
+            resultList,
+            null);
+    while ((result.getLastEvaluatedKey() != null) && !result.getLastEvaluatedKey().isEmpty()) {
+      result =
+          getResults(
+              typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName()),
+              adapterId,
+              resultList,
+              result.getLastEvaluatedKey());
+    }
+    return resultList.iterator();
   }
 
   public Iterator<GeoWaveRow> getRowsFromDataIndex(
@@ -258,6 +297,28 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
         r -> r != null).iterator();
   }
 
+  private ScanResult getResults(
+      final String tableName,
+      final short adapterId,
+      final List<GeoWaveRow> resultList,
+      final Map<String, AttributeValue> lastEvaluatedKey) {
+    final ScanRequest request = new ScanRequest(tableName);
+    if ((lastEvaluatedKey != null) && !lastEvaluatedKey.isEmpty()) {
+      request.setExclusiveStartKey(lastEvaluatedKey);
+    }
+    final ScanResult result = client.scan(request);
+    result.getItems().forEach(objMap -> {
+      final byte[] dataId = objMap.get(DynamoDBRow.GW_PARTITION_ID_KEY).getB().array();
+      final AttributeValue valueAttr = objMap.get(DynamoDBRow.GW_VALUE_KEY);
+      final byte[] value = valueAttr == null ? null : valueAttr.getB().array();
+      final AttributeValue visAttr = objMap.get(DynamoDBRow.GW_VISIBILITY_KEY);
+      final byte[] vis = visAttr == null ? new byte[0] : visAttr.getB().array();
+
+      resultList.add(DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, vis));
+    });
+    return result;
+  }
+
   private BatchGetItemResult getResults(
       final Map<String, KeysAndAttributes> requestItems,
       final short adapterId,
@@ -269,10 +330,11 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
       final byte[] dataId = objMap.get(DynamoDBRow.GW_PARTITION_ID_KEY).getB().array();
       final AttributeValue valueAttr = objMap.get(DynamoDBRow.GW_VALUE_KEY);
       final byte[] value = valueAttr == null ? null : valueAttr.getB().array();
-
+      final AttributeValue visAttr = objMap.get(DynamoDBRow.GW_VISIBILITY_KEY);
+      final byte[] vis = visAttr == null ? new byte[0] : visAttr.getB().array();
       resultMap.put(
           new ByteArray(dataId),
-          DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, false));
+          DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, vis));
     }));
     return result;
   }
