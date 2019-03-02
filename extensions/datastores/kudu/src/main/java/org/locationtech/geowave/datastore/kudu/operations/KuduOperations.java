@@ -17,6 +17,7 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.*;
 import org.locationtech.geowave.datastore.kudu.KuduRow;
 import org.locationtech.geowave.datastore.kudu.config.KuduOptions;
@@ -26,10 +27,12 @@ import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import static org.locationtech.geowave.datastore.kudu.KuduRow.*;
 
 public class KuduOperations implements MapReduceDataStoreOperations {
@@ -71,6 +74,15 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       final String typeName,
       final Short adapterId,
       final String... additionalAuthorizations) {
+    try {
+      KuduSession session = this.getSession();
+      Delete delete = this.getDelete(indexName);
+      PartialRow partialRow = delete.getRow();
+      addAdapterIdToPartialRow(partialRow, null, adapterId);
+      session.apply(delete);
+    } catch (KuduException e) {
+      LOGGER.error("Encountered error while deleting all", e);
+    }
     return true;
   }
 
@@ -126,7 +138,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
       final String... authorizations) {
-    return null;
+    return new KuduDeleter(this, indexName);
   }
 
   @Override
@@ -135,7 +147,24 @@ public class KuduOperations implements MapReduceDataStoreOperations {
   }
 
   @Override
-  public void delete(final DataIndexReaderParams readerParams) {}
+  public void delete(final DataIndexReaderParams readerParams) {
+    // TODO: check data_id vs partition_id for delete
+    try {
+      byte[][] dataIds = readerParams.getDataIds();
+      short adapterId = readerParams.getAdapterId();
+      KuduSession session = this.getSession();
+      String tableName = DataIndexUtils.DATA_ID_INDEX.getName();
+      for (byte[] dataId : dataIds) {
+        Delete delete = this.getDelete(tableName);
+        PartialRow partialRow = delete.getRow();
+        addAdapterIdToPartialRow(partialRow, dataId, adapterId);
+        session.apply(delete);
+      }
+    } catch (KuduException e) {
+      LOGGER.error("Encountered error while deleting row", e);
+    }
+  }
+
 
   public KuduSession getSession() {
     return client.newSession();
@@ -183,4 +212,40 @@ public class KuduOperations implements MapReduceDataStoreOperations {
     KuduTable table = client.openTable(getKuduSafeName(tableName));
     return table.newInsert();
   }
+
+  public Delete getDelete(String tableName) throws KuduException {
+    KuduTable table = client.openTable(getKuduSafeName(tableName));
+    return table.newDelete();
+  }
+
+  public void addToPartialRow(
+      GeoWaveRow row,
+      GeoWaveValue value,
+      PartialRow partialRow,
+      ByteBuffer nanoBuffer) {
+    byte[] partitionKey = row.getPartitionKey();
+    short adapterId = row.getAdapterId();
+    byte[] sortKey = row.getSortKey();
+    byte[] dataId = row.getDataId();
+    int numDuplicates = row.getNumberOfDuplicates();
+    partialRow.addBinary(KuduField.GW_PARTITION_ID_KEY.getFieldName(), partitionKey);
+    partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
+    partialRow.addBinary(KuduField.GW_SORT_KEY.getFieldName(), sortKey);
+    partialRow.addBinary(KuduField.GW_DATA_ID_KEY.getFieldName(), dataId);
+    partialRow.addBinary(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName(), value.getVisibility());
+    partialRow.addBinary(KuduField.GW_FIELD_MASK_KEY.getFieldName(), value.getFieldMask());
+    partialRow.addBinary(KuduField.GW_VALUE_KEY.getFieldName(), value.getValue());
+    partialRow.addByte(KuduField.GW_NUM_DUPLICATES_KEY.getFieldName(), (byte) numDuplicates);
+    if (nanoBuffer != null) {
+      partialRow.addBinary(KuduField.GW_NANO_TIME_KEY.getFieldName(), nanoBuffer);
+    }
+  }
+
+  public void addAdapterIdToPartialRow(PartialRow partialRow, byte[] dataId, short adapterId) {
+    if (dataId != null) {
+      partialRow.addBinary(KuduField.GW_DATA_ID_KEY.getFieldName(), dataId);
+    }
+    partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
+  }
+
 }

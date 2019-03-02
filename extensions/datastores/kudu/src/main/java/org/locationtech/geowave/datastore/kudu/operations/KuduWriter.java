@@ -36,27 +36,12 @@ public class KuduWriter implements RowWriter {
   @Override
   public void write(GeoWaveRow row) {
     try {
-      byte[] partitionKey = row.getPartitionKey();
-      short adapterId = row.getAdapterId();
-      byte[] sortKey = row.getSortKey();
-      byte[] dataId = row.getDataId();
-      int numDuplicates = row.getNumberOfDuplicates();
       for (GeoWaveValue value : row.getFieldValues()) {
         ByteBuffer nanoBuffer = ByteBuffer.allocate(8);
         nanoBuffer.putLong(0, Long.MAX_VALUE - System.nanoTime());
         Insert insert = operations.getInsert(tableName);
         PartialRow partialRow = insert.getRow();
-        partialRow.addBinary(KuduField.GW_PARTITION_ID_KEY.getFieldName(), partitionKey);
-        partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
-        partialRow.addBinary(KuduField.GW_SORT_KEY.getFieldName(), sortKey);
-        partialRow.addBinary(KuduField.GW_DATA_ID_KEY.getFieldName(), dataId);
-        partialRow.addBinary(
-            KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName(),
-            value.getVisibility());
-        partialRow.addBinary(KuduField.GW_NANO_TIME_KEY.getFieldName(), nanoBuffer);
-        partialRow.addBinary(KuduField.GW_FIELD_MASK_KEY.getFieldName(), value.getFieldMask());
-        partialRow.addBinary(KuduField.GW_VALUE_KEY.getFieldName(), value.getValue());
-        partialRow.addByte(KuduField.GW_NUM_DUPLICATES_KEY.getFieldName(), (byte) numDuplicates);
+        operations.addToPartialRow(row, value, partialRow, nanoBuffer);
         session.apply(insert);
       }
     } catch (KuduException e) {
