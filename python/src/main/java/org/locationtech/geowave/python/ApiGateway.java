@@ -1,27 +1,23 @@
 package org.locationtech.geowave.python;
 
-import org.locationtech.geowave.core.store.api.DataStore;
-import org.locationtech.geowave.core.store.api.DataStoreFactory;
-import org.locationtech.geowave.datastore.rocksdb.config.RocksDBOptions;
+import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import py4j.GatewayServer;
 
 public class ApiGateway {
-    // Some starter code
-    public DataStore getRocksDB(String namespace, String dir) {
-        RocksDBOptions ops = new RocksDBOptions(namespace);
 
-        ops.setDirectory(dir);
+  /**
+   * Declaring public fields which act as "submodules"
+   */
 
-        return DataStoreFactory.createDataStore(ops);
-    }
+  public Debug debug = new Debug();
+  public DataStoreInterfacer storeInterfacer = new DataStoreInterfacer();
+  // Expose the simpleIngest example code
+  public SimpleIngest simpleIngest = new SimpleIngest();
 
-    public int getSize(DataStore d) {
-        return d.getIndices().length;
-    }
+  public static void main(String[] args) {
+    GatewayServer server = new GatewayServer(new ApiGateway());
+    GatewayServer.turnLoggingOn();
+    server.start();
+  }
 
-    public static void main(String[] args) {
-        GatewayServer server = new GatewayServer(new ApiGateway());
-
-        server.start();
-    }
 }
