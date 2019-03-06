@@ -28,7 +28,8 @@ import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEnco
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -99,7 +100,7 @@ public class AggregationIterator extends Filter {
   @Override
   public boolean accept(final Key key, final Value value) {
     if (queryFilterIterator != null) {
-      final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<>();
+      final PersistentDataSet<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
       key.getRow(currentRow);
       final FlattenedUnreadData unreadData =
           queryFilterIterator.aggregateFieldData(key, value, commonData);
@@ -137,12 +138,12 @@ public class AggregationIterator extends Filter {
       }
     } else if (((Short) (persistenceEncoding.getInternalAdapterId())).equals(
         (adapter.getAdapterId()))) {
-      final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<>();
+      final PersistentDataSet<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
       if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
         ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
             adapter,
             model);
-        final PersistentDataset<Object> existingExtValues =
+        final PersistentDataSet<Object> existingExtValues =
             ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
         if (existingExtValues != null) {
           adapterExtendedValues.addValues(existingExtValues.getValues());
@@ -157,7 +158,7 @@ public class AggregationIterator extends Filter {
               persistenceEncoding.getInsertionSortKey(),
               persistenceEncoding.getDuplicateCount(),
               persistenceEncoding.getCommonData(),
-              new PersistentDataset<byte[]>(),
+              new MultiFieldPersistentDataset<byte[]>(),
               adapterExtendedValues);
       // the data adapter can't use the numeric index strategy and only
       // the common index model to decode which is the case for feature

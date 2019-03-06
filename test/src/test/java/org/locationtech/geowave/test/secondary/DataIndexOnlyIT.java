@@ -24,7 +24,7 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -247,8 +247,8 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
         final CommonIndexModel indexModel) {
       return new AdapterPersistenceEncoding(
           getDataId(entry),
-          new PersistentDataset<>(),
-          new PersistentDataset<>(Collections.singletonMap(SINGLETON_FIELD, entry)));
+          new MultiFieldPersistentDataset<>(),
+          new MultiFieldPersistentDataset<>(Collections.singletonMap(SINGLETON_FIELD, entry)));
     }
 
     @Override

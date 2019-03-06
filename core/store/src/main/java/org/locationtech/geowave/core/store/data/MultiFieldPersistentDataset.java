@@ -18,51 +18,58 @@ import java.util.Map;
  *
  * @param <T> The most specific generalization for the type for all of the values in this dataset.
  */
-public class PersistentDataset<T> {
+public class MultiFieldPersistentDataset<T> implements PersistentDataSet<T> {
   private final Map<String, T> fieldNameToValueMap;
 
-  public PersistentDataset() {
+  public MultiFieldPersistentDataset() {
     fieldNameToValueMap = new HashMap<>();
   }
 
-  public PersistentDataset(final String fieldName, final T value) {
+  public MultiFieldPersistentDataset(final String fieldName, final T value) {
     this();
     addValue(fieldName, value);
   }
 
-  public PersistentDataset(final Map<String, T> fieldIdToValueMap) {
+  public MultiFieldPersistentDataset(final Map<String, T> fieldIdToValueMap) {
     this.fieldNameToValueMap = fieldIdToValueMap;
   }
 
-  /**
-   * Add the field ID/value pair to this data set. Do not overwrite.
+  /*
+   * (non-Javadoc)
    *
-   * @param value the field ID/value pair to add
+   * @see org.locationtech.geowave.core.store.data.PersistentDataSet#addValue(java.lang.String, T)
    */
+  @Override
   public void addValue(final String fieldName, final T value) {
     fieldNameToValueMap.put(fieldName, value);
   }
 
-  /** Add several values to the data set. */
+  /*
+   * (non-Javadoc)
+   *
+   * @see org.locationtech.geowave.core.store.data.PersistentDataSet#addValues(java.util.Map)
+   */
+  @Override
   public void addValues(final Map<String, T> values) {
     fieldNameToValueMap.putAll(values);
   }
 
-  /**
-   * Given a field ID, get the associated value
+  /*
+   * (non-Javadoc)
    *
-   * @param fieldName the field ID
-   * @return the stored field value, null if this does not contain a value for the ID
+   * @see org.locationtech.geowave.core.store.data.PersistentDataSet#getValue(java.lang.String)
    */
+  @Override
   public T getValue(final String fieldName) {
     return fieldNameToValueMap.get(fieldName);
   }
 
-  /**
-   * Get all of the values from this persistent data set
+  /*
+   * (non-Javadoc)
    *
-   * @return all of the value
+   * @see org.locationtech.geowave.core.store.data.PersistentDataSet#getValues()
    */
+  @Override
   public Map<String, T> getValues() {
     return fieldNameToValueMap;
   }

@@ -9,7 +9,8 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
@@ -22,16 +23,16 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
 public class AdapterPersistenceEncoding extends AbstractAdapterPersistenceEncoding {
   public AdapterPersistenceEncoding(
       final byte[] dataId,
-      final PersistentDataset<CommonIndexValue> commonData,
-      final PersistentDataset<Object> adapterExtendedData) {
+      final PersistentDataSet<CommonIndexValue> commonData,
+      final PersistentDataSet<Object> adapterExtendedData) {
     this((short) -1, dataId, commonData, adapterExtendedData);
   }
 
   public AdapterPersistenceEncoding(
       final short internalAdapterId,
       final byte[] dataId,
-      final PersistentDataset<CommonIndexValue> commonData,
-      final PersistentDataset<Object> adapterExtendedData) {
+      final PersistentDataSet<CommonIndexValue> commonData,
+      final PersistentDataSet<Object> adapterExtendedData) {
     super(
         internalAdapterId,
         dataId,
@@ -39,7 +40,7 @@ public class AdapterPersistenceEncoding extends AbstractAdapterPersistenceEncodi
         null,
         0,
         commonData,
-        new PersistentDataset<byte[]>(),
+        new MultiFieldPersistentDataset<byte[]>(),
         adapterExtendedData); // all data is identified by
     // the adapter, there is
     // inherently no unknown

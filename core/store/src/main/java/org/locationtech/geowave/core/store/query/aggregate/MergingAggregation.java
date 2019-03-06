@@ -1,0 +1,62 @@
+package org.locationtech.geowave.core.store.query.aggregate;
+
+import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.store.api.Aggregation;
+
+public class MergingAggregation<T extends Mergeable> implements Aggregation<Persistable, T, T> {
+  private T result = null;
+
+  @Override
+  public byte[] toBinary() {
+    return new byte[0];
+  }
+
+  @Override
+  public void fromBinary(final byte[] bytes) {}
+
+  @Override
+  public Persistable getParameters() {
+    return null;
+  }
+
+  @Override
+  public void setParameters(final Persistable parameters) {}
+
+  @Override
+  public T getResult() {
+    return result;
+  }
+
+  @Override
+  public byte[] resultToBinary(final T result) {
+    if (result == null) {
+      return new byte[0];
+    }
+    return PersistenceUtils.toBinary(result);
+  }
+
+  @Override
+  public T resultFromBinary(final byte[] binary) {
+    if (binary.length > 0) {
+      return (T) PersistenceUtils.fromBinary(binary);
+    }
+    return null;
+  }
+
+  @Override
+  public void clearResult() {
+    result = null;
+  }
+
+  @Override
+  public void aggregate(final T entry) {
+    if (result == null) {
+      result = entry;
+    } else {
+      result.merge(entry);
+    }
+  }
+
+}

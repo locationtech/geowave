@@ -91,13 +91,6 @@ public class SpatialDimensionalityTypeProvider implements
   }
 
   @Override
-  public int getPriority() {
-    // arbitrary - just higher than spatial temporal so that the default
-    // will be spatial over spatial-temporal
-    return 10;
-  }
-
-  @Override
   public SpatialOptions createOptions() {
     return new SpatialOptions();
   }

@@ -41,6 +41,8 @@ import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DefaultFieldStatisticVisibility;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
@@ -53,7 +55,7 @@ import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -232,10 +234,10 @@ public class AccumuloDataStoreStatsTest {
                 adapter.getTypeName()).addAuthorization("bbb").build());
     assertEquals(1, count.longValue());
 
-    BoundingBoxDataStatistics<?> bboxStats =
-        (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
+    BoundingBoxDataStatistics<?, ?> bboxStats =
+        (BoundingBoxDataStatistics<?, ?>) statsStore.getDataStatistics(
             internalAdapterId,
-            BoundingBoxDataStatistics.STATS_TYPE,
+            GeoBoundingBoxStatistics.STATS_TYPE,
             new String[] {"aaa"}).next();
     assertTrue(
         (bboxStats.getMinX() == 25)
@@ -244,9 +246,9 @@ public class AccumuloDataStoreStatsTest {
             && (bboxStats.getMaxY() == 32));
 
     bboxStats =
-        (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
+        (BoundingBoxDataStatistics<?, ?>) statsStore.getDataStatistics(
             internalAdapterId,
-            BoundingBoxDataStatistics.STATS_TYPE,
+            GeoBoundingBoxStatistics.STATS_TYPE,
             new String[] {"bbb"}).next();
     assertTrue(
         (bboxStats.getMinX() == 27)
@@ -255,9 +257,9 @@ public class AccumuloDataStoreStatsTest {
             && (bboxStats.getMaxY() == 32));
 
     bboxStats =
-        (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
+        (BoundingBoxDataStatistics<?, ?>) statsStore.getDataStatistics(
             internalAdapterId,
-            BoundingBoxDataStatistics.STATS_TYPE,
+            GeoBoundingBoxStatistics.STATS_TYPE,
             new String[] {"aaa", "bbb"}).next();
     assertTrue(
         (bboxStats.getMinX() == 25)
@@ -333,9 +335,9 @@ public class AccumuloDataStoreStatsTest {
     assertEquals(1, count.longValue());
 
     bboxStats =
-        (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
+        (BoundingBoxDataStatistics<?, ?>) statsStore.getDataStatistics(
             internalAdapterId,
-            BoundingBoxDataStatistics.STATS_TYPE,
+            GeoBoundingBoxStatistics.STATS_TYPE,
             new String[] {"aaa"}).next();
     assertTrue(
         (bboxStats.getMinX() == 25)
@@ -344,9 +346,9 @@ public class AccumuloDataStoreStatsTest {
             && (bboxStats.getMaxY() == 32));
 
     bboxStats =
-        (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
+        (BoundingBoxDataStatistics<?, ?>) statsStore.getDataStatistics(
             internalAdapterId,
-            BoundingBoxDataStatistics.STATS_TYPE,
+            GeoBoundingBoxStatistics.STATS_TYPE,
             new String[] {"bbb"}).next();
     assertTrue(
         (bboxStats.getMinX() == 27)
@@ -355,9 +357,9 @@ public class AccumuloDataStoreStatsTest {
             && (bboxStats.getMaxY() == 32));
 
     bboxStats =
-        (BoundingBoxDataStatistics<?>) statsStore.getDataStatistics(
+        (BoundingBoxDataStatistics<?, ?>) statsStore.getDataStatistics(
             internalAdapterId,
-            BoundingBoxDataStatistics.STATS_TYPE,
+            GeoBoundingBoxStatistics.STATS_TYPE,
             new String[] {"aaa", "bbb"}).next();
     assertTrue(
         (bboxStats.getMinX() == 25)
@@ -494,7 +496,7 @@ public class AccumuloDataStoreStatsTest {
 
           @Override
           public CommonIndexValue toIndexValue(
-              final PersistentDataset<Object> adapterPersistenceEncoding) {
+              final PersistentDataSet<Object> adapterPersistenceEncoding) {
             return new GeometryWrapper(
                 (Geometry) adapterPersistenceEncoding.getValue(GEOM),
                 new byte[0]);
@@ -565,7 +567,7 @@ public class AccumuloDataStoreStatsTest {
     @Override
     public InternalDataStatistics<TestGeometry, ?, ?> createDataStatistics(
         final StatisticsId statisticsId) {
-      if (BoundingBoxDataStatistics.STATS_TYPE.equals(statisticsId.getType())) {
+      if (GeoBoundingBoxStatistics.STATS_TYPE.equals(statisticsId.getType())) {
         return new GeoBoundingBoxStatistics();
       } else if (CountDataStatistics.STATS_TYPE.equals(statisticsId.getType())) {
         return new CountDataStatistics<>();
@@ -663,12 +665,16 @@ public class AccumuloDataStoreStatsTest {
 
   private static final StatisticsId[] SUPPORTED_STATS_IDS =
       new StatisticsId[] {
-          BoundingBoxDataStatistics.STATS_TYPE.newBuilder().build().getId(),
+          GeoBoundingBoxStatistics.STATS_TYPE.newBuilder().build().getId(),
           CountDataStatistics.STATS_TYPE.newBuilder().build().getId()};
 
-  protected static class GeoBoundingBoxStatistics extends BoundingBoxDataStatistics<TestGeometry> {
+  protected static class GeoBoundingBoxStatistics extends
+      BoundingBoxDataStatistics<TestGeometry, FieldStatisticsQueryBuilder<Envelope>> {
+    public static final FieldStatisticsType<Envelope> STATS_TYPE =
+        new FieldStatisticsType<>("BOUNDING_BOX");
+
     protected GeoBoundingBoxStatistics() {
-      super(null);
+      super(STATS_TYPE);
     }
 
     @Override

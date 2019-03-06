@@ -11,7 +11,8 @@ package org.locationtech.geowave.core.store.adapter;
 import java.util.List;
 import java.util.function.Supplier;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
@@ -49,9 +50,9 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
         partitionKey,
         sortKey,
         duplicateCount,
-        new PersistentDataset<CommonIndexValue>(),
-        new PersistentDataset<byte[]>(),
-        new PersistentDataset<>());
+        new MultiFieldPersistentDataset<CommonIndexValue>(),
+        new MultiFieldPersistentDataset<byte[]>(),
+        new MultiFieldPersistentDataset<>());
     deferredFieldReader =
         new InstanceFieldValueReader(
             fieldSubsetBitmask,
@@ -77,9 +78,9 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
         partitionKey,
         sortKey,
         duplicateCount,
-        new PersistentDataset<CommonIndexValue>(),
-        new PersistentDataset<byte[]>(),
-        new PersistentDataset<>());
+        new MultiFieldPersistentDataset<CommonIndexValue>(),
+        new MultiFieldPersistentDataset<byte[]>(),
+        new MultiFieldPersistentDataset<>());
     deferredFieldReader =
         new SupplierFieldValueReader(
             fieldSubsetBitmask,
@@ -90,21 +91,21 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
   }
 
   @Override
-  public PersistentDataset<Object> getAdapterExtendedData() {
+  public PersistentDataSet<Object> getAdapterExtendedData() {
     // defer any reading of fieldValues until necessary
     deferredReadFields();
     return super.getAdapterExtendedData();
   }
 
   @Override
-  public PersistentDataset<byte[]> getUnknownData() {
+  public PersistentDataSet<byte[]> getUnknownData() {
     // defer any reading of fieldValues until necessary
     deferredReadFields();
     return super.getUnknownData();
   }
 
   @Override
-  public PersistentDataset<CommonIndexValue> getCommonData() {
+  public PersistentDataSet<CommonIndexValue> getCommonData() {
     // defer any reading of fieldValues until necessary
     deferredReadFields();
     return super.getCommonData();

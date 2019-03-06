@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.store.adapter;
 import java.util.Collections;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 public class FitToIndexPersistenceEncoding extends AdapterPersistenceEncoding {
@@ -19,8 +19,8 @@ public class FitToIndexPersistenceEncoding extends AdapterPersistenceEncoding {
 
   public FitToIndexPersistenceEncoding(
       final byte[] dataId,
-      final PersistentDataset<CommonIndexValue> commonData,
-      final PersistentDataset<Object> adapterExtendedData,
+      final PersistentDataSet<CommonIndexValue> commonData,
+      final PersistentDataSet<Object> adapterExtendedData,
       final byte[] partitionKey,
       final byte[] sortKey) {
     super(dataId, commonData, adapterExtendedData);

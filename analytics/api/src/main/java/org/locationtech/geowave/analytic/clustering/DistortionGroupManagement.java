@@ -34,7 +34,7 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -343,8 +343,8 @@ public class DistortionGroupManagement {
       fieldNameToValueMap.put(DISTORTION_FIELD_NAME, entry.getDistortionValue());
       return new AdapterPersistenceEncoding(
           entry.getDataId(),
-          new PersistentDataset<CommonIndexValue>(),
-          new PersistentDataset<>(fieldNameToValueMap));
+          new MultiFieldPersistentDataset<CommonIndexValue>(),
+          new MultiFieldPersistentDataset<>(fieldNameToValueMap));
     }
 
     @Override

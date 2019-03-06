@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
@@ -16,24 +17,32 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 public interface RowMergingDataAdapter<T, M extends Mergeable> extends DataTypeAdapter<T> {
-  public RowTransform<M> getTransform();
+  default RowTransform<M> getTransform() {
+    return new SimpleRowTransform(mergeableClassId());
+  }
 
-  public Map<String, String> getOptions(
-      short internalAdapterId,
-      Map<String, String> existingOptions);
+  default Short mergeableClassId() {
+    return null;
+  }
 
-  public static interface RowTransform<M extends Mergeable> extends Persistable {
-    public void initOptions(final Map<String, String> options) throws IOException;
+  default Map<String, String> getOptions(
+      final short internalAdapterId,
+      final Map<String, String> existingOptions) {
+    return Collections.EMPTY_MAP;
+  }
 
-    public M getRowAsMergeableObject(
+  static interface RowTransform<M extends Mergeable> extends Persistable {
+    void initOptions(final Map<String, String> options) throws IOException;
+
+    M getRowAsMergeableObject(
         final short internalAdapterId,
         final ByteArray fieldId,
         final byte[] rowValueBinary);
 
-    public byte[] getBinaryFromMergedObject(final M rowObject);
+    byte[] getBinaryFromMergedObject(final M rowObject);
 
-    public String getTransformName();
+    String getTransformName();
 
-    public int getBaseTransformPriority();
+    int getBaseTransformPriority();
   }
 }

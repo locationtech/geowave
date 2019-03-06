@@ -27,8 +27,8 @@ public class IndexedPersistenceEncoding<T> extends PersistenceEncoding<T> {
       final byte[] insertionPartitionKey,
       final byte[] insertionSortKey,
       final int duplicateCount,
-      final PersistentDataset<T> commonData,
-      final PersistentDataset<byte[]> unknownData) {
+      final PersistentDataSet<T> commonData,
+      final PersistentDataSet<byte[]> unknownData) {
     super(internalAdapterId, dataId, commonData, unknownData);
     this.insertionPartitionKey = insertionPartitionKey;
     this.insertionSortKey = insertionSortKey;

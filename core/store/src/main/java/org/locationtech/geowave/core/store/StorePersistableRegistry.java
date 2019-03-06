@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store;
 
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
+import org.locationtech.geowave.core.store.adapter.SimpleRowTransform;
 import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
@@ -36,6 +37,7 @@ import org.locationtech.geowave.core.store.index.text.TextExactMatchFilter;
 import org.locationtech.geowave.core.store.index.text.TextIndexStrategy;
 import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.DataStatisticsAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.MergingAggregation;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeQuery;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
@@ -114,6 +116,8 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 250, FilterList::new),
         new PersistableIdAndConstructor((short) 251, PrefixIdQuery::new),
         new PersistableIdAndConstructor((short) 252, InsertionIdQuery::new),
-        new PersistableIdAndConstructor((short) 253, EverythingQuery::new)};
+        new PersistableIdAndConstructor((short) 253, EverythingQuery::new),
+        new PersistableIdAndConstructor((short) 254, SimpleRowTransform::new),
+        new PersistableIdAndConstructor((short) 255, MergingAggregation::new)};
   }
 }

@@ -18,7 +18,8 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.jts.geom.Coordinate;
@@ -44,7 +45,7 @@ public class SpatialQueryTest {
   }
 
   private IndexedPersistenceEncoding createData(final Geometry geomData) {
-    final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<>();
+    final PersistentDataSet<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
 
     commonData.addValue(GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME, new GeometryWrapper(geomData));
 
@@ -55,7 +56,7 @@ public class SpatialQueryTest {
         StringUtils.stringToBinary("1"),
         1,
         commonData,
-        new PersistentDataset<byte[]>());
+        new MultiFieldPersistentDataset<byte[]>());
   }
 
   public void performOp(final CompareOperation op, final boolean[] expectedResults) {

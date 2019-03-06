@@ -127,12 +127,12 @@ public class BasicKafkaIT extends AbstractGeoWaveIT {
                 adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build().getId();
         // query by the full bounding box, make sure there is more than
         // 0 count and make sure the count matches the number of results
-        try (final CloseableIterator<BoundingBoxDataStatistics<?>> bboxStatIt =
+        try (final CloseableIterator<BoundingBoxDataStatistics<?, ?>> bboxStatIt =
             (CloseableIterator) statsStore.getDataStatistics(
                 internalDataAdapter.getAdapterId(),
                 statsId.getExtendedId(),
                 statsId.getType())) {
-          final BoundingBoxDataStatistics<?> bboxStat = bboxStatIt.next();
+          final BoundingBoxDataStatistics<?, ?> bboxStat = bboxStatIt.next();
           try (final CloseableIterator<CountDataStatistics<SimpleFeature>> countStatIt =
               (CloseableIterator) statsStore.getDataStatistics(
                   internalDataAdapter.getAdapterId(),

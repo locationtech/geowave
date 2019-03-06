@@ -35,7 +35,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
@@ -170,7 +170,7 @@ public class BasicQueryTest {
                 StringUtils.stringToBinary("partition"),
                 StringUtils.stringToBinary("sort"),
                 1, // duplicate count
-                new PersistentDataset(fieldIdToValueMap),
+                new MultiFieldPersistentDataset(fieldIdToValueMap),
                 null)));
     fieldIdToValueMap.put("one", new ConstrainedIndexValue(0.1, 0.1));
     assertFalse(
@@ -182,7 +182,7 @@ public class BasicQueryTest {
                 StringUtils.stringToBinary("partition"),
                 StringUtils.stringToBinary("sort"),
                 1, // duplicate count
-                new PersistentDataset(fieldIdToValueMap),
+                new MultiFieldPersistentDataset(fieldIdToValueMap),
                 null)));
 
     fieldIdToValueMap.put("one", new ConstrainedIndexValue(0.4, 0.4));
@@ -196,7 +196,7 @@ public class BasicQueryTest {
                 StringUtils.stringToBinary("partition"),
                 StringUtils.stringToBinary("sort"),
                 1, // duplicate count
-                new PersistentDataset(fieldIdToValueMap),
+                new MultiFieldPersistentDataset(fieldIdToValueMap),
                 null)));
 
     /** Tests the 'OR' Case */
@@ -210,7 +210,7 @@ public class BasicQueryTest {
                 StringUtils.stringToBinary("partition"),
                 StringUtils.stringToBinary("sort"),
                 1, // duplicate count
-                new PersistentDataset(fieldIdToValueMap),
+                new MultiFieldPersistentDataset(fieldIdToValueMap),
                 null)));
   }
 

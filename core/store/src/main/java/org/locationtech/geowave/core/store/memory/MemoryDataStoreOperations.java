@@ -40,7 +40,8 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.data.UnreadFieldDataList;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -209,7 +210,7 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
       @Override
       public boolean apply(final MemoryStoreEntry input) {
         if ((readerParams.getFilter() != null) && options.isServerSideLibraryEnabled()) {
-          final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<>();
+          final PersistentDataSet<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
           final List<FlattenedUnreadData> unreadData = new ArrayList<>();
           final List<String> commonIndexFieldNames =
               DataStoreUtils.getUniqueDimensionFields(readerParams.getIndex().getIndexModel());

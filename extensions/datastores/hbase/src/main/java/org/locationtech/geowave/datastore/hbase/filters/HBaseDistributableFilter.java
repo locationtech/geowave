@@ -24,7 +24,8 @@ import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEnco
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.flatten.FlattenedDataSet;
@@ -53,7 +54,7 @@ public class HBaseDistributableFilter extends FilterBase {
   private List<String> commonIndexFieldIds = new ArrayList<>();
 
   // CACHED decoded data:
-  private PersistentDataset<CommonIndexValue> commonData;
+  private PersistentDataSet<CommonIndexValue> commonData;
   private FlattenedUnreadData unreadData;
   private CommonIndexedPersistenceEncoding persistenceEncoding;
   private IndexedAdapterPersistenceEncoding adapterEncoding;
@@ -173,7 +174,7 @@ public class HBaseDistributableFilter extends FilterBase {
       final Iterator<Cell> it = rowCells.iterator();
 
       GeoWaveKeyImpl rowKey = null;
-      commonData = new PersistentDataset<>();
+      commonData = new MultiFieldPersistentDataset<>();
 
       while (it.hasNext()) {
         final Cell cell = it.next();
@@ -207,7 +208,7 @@ public class HBaseDistributableFilter extends FilterBase {
       return ReturnCode.INCLUDE_AND_NEXT_COL;
     }
 
-    commonData = new PersistentDataset<>();
+    commonData = new MultiFieldPersistentDataset<>();
 
     unreadData = aggregateFieldData(cell, commonData);
 
@@ -244,7 +245,7 @@ public class HBaseDistributableFilter extends FilterBase {
 
   protected static CommonIndexedPersistenceEncoding getPersistenceEncoding(
       final GeoWaveKeyImpl rowKey,
-      final PersistentDataset<CommonIndexValue> commonData,
+      final PersistentDataSet<CommonIndexValue> commonData,
       final FlattenedUnreadData unreadData) {
 
     return new DeferredReadCommonIndexedPersistenceEncoding(
@@ -262,12 +263,12 @@ public class HBaseDistributableFilter extends FilterBase {
   }
 
   public IndexedAdapterPersistenceEncoding getAdapterEncoding(final DataTypeAdapter dataAdapter) {
-    final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<>();
+    final PersistentDataSet<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
     if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
       ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
           dataAdapter,
           model);
-      final PersistentDataset<Object> existingExtValues =
+      final PersistentDataSet<Object> existingExtValues =
           ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
       if (existingExtValues != null) {
         adapterExtendedValues.addValues(existingExtValues.getValues());
@@ -282,7 +283,7 @@ public class HBaseDistributableFilter extends FilterBase {
             persistenceEncoding.getInsertionSortKey(),
             persistenceEncoding.getDuplicateCount(),
             persistenceEncoding.getCommonData(),
-            new PersistentDataset<byte[]>(),
+            new MultiFieldPersistentDataset<byte[]>(),
             adapterExtendedValues);
 
     return adapterEncoding;
@@ -320,7 +321,7 @@ public class HBaseDistributableFilter extends FilterBase {
 
   protected FlattenedUnreadData aggregateFieldData(
       final Cell cell,
-      final PersistentDataset<CommonIndexValue> commonData) {
+      final PersistentDataSet<CommonIndexValue> commonData) {
     final byte[] qualBuf = CellUtil.cloneQualifier(cell);
     final byte[] valBuf = CellUtil.cloneValue(cell);
 

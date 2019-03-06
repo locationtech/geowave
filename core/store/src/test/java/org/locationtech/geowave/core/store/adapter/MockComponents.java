@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import com.google.common.primitives.Bytes;
 import org.apache.commons.lang3.Range;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.CoordinateRange;
@@ -36,6 +35,7 @@ import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldNameStatisticVisibility;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
@@ -43,7 +43,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -52,6 +52,7 @@ import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import com.google.common.collect.Lists;
+import com.google.common.primitives.Bytes;
 
 public class MockComponents {
   // Mock class instantiating abstract class so we can test logic
@@ -100,7 +101,7 @@ public class MockComponents {
       public void fromBinary(final byte[] bytes) {}
 
       @Override
-      public TestIndexFieldType toIndexValue(PersistentDataset<Object> adapterPersistenceEncoding) {
+      public TestIndexFieldType toIndexValue(final PersistentDataSet<Object> adapterPersistenceEncoding) {
         return new TestIndexFieldType((Integer) adapterPersistenceEncoding.getValue(INTEGER));
       }
     }
@@ -151,10 +152,12 @@ public class MockComponents {
 
     @Override
     public boolean equals(final Object o) {
-      if (this == o)
+      if (this == o) {
         return true;
-      if (o == null || getClass() != o.getClass())
+      }
+      if ((o == null) || (getClass() != o.getClass())) {
         return false;
+      }
       final MockAbstractDataAdapter that = (MockAbstractDataAdapter) o;
       return Objects.equals(id, that.id);
     }
@@ -166,7 +169,7 @@ public class MockComponents {
 
     @Override
     public byte[] toBinary() {
-      byte[] idBinary = StringUtils.stringToBinary(id);
+      final byte[] idBinary = StringUtils.stringToBinary(id);
       return Bytes.concat(
           ByteBuffer.allocate(4).putInt(idBinary.length).array(),
           idBinary,
@@ -175,11 +178,11 @@ public class MockComponents {
 
     @Override
     public void fromBinary(final byte[] bytes) {
-      ByteBuffer buf = ByteBuffer.wrap(bytes);
-      byte[] idBinary = new byte[buf.getInt()];
+      final ByteBuffer buf = ByteBuffer.wrap(bytes);
+      final byte[] idBinary = new byte[buf.getInt()];
       buf.get(idBinary);
       id = StringUtils.stringFromBinary(idBinary);
-      byte[] superBytes = new byte[bytes.length - 4 - idBinary.length];
+      final byte[] superBytes = new byte[bytes.length - 4 - idBinary.length];
       buf.get(superBytes);
       super.fromBinary(superBytes);
     }
@@ -282,12 +285,13 @@ public class MockComponents {
     }
   } // class MockAbstractDataAdapter
 
-  public static class IntegerRangeDataStatistics extends NumericRangeDataStatistics<Integer> {
+  public static class IntegerRangeDataStatistics extends
+      NumericRangeDataStatistics<Integer, FieldStatisticsQueryBuilder<Range<Double>>> {
     protected static final FieldStatisticsType<Range<Double>> TYPE =
         new FieldStatisticsType<>("Integer_Range");
 
     public IntegerRangeDataStatistics() {
-      super();
+      super(TYPE);
     }
 
     public IntegerRangeDataStatistics(final String fieldName) {
@@ -451,7 +455,7 @@ public class MockComponents {
     public void fromBinary(final byte[] bytes) {}
 
     @Override
-    public TestIndexFieldType toIndexValue(PersistentDataset<Object> adapterPersistenceEncoding) {
+    public TestIndexFieldType toIndexValue(final PersistentDataSet<Object> adapterPersistenceEncoding) {
       return toIndexValue(
           (Integer) adapterPersistenceEncoding.getValue(MockAbstractDataAdapter.INTEGER));
     }

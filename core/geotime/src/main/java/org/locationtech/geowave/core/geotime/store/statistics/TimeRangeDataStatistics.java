@@ -17,25 +17,33 @@ import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
-import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
+import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.threeten.extra.Interval;
 
-public abstract class TimeRangeDataStatistics<T> extends
-    AbstractDataStatistics<T, Interval, FieldStatisticsQueryBuilder<Interval>> {
+public abstract class TimeRangeDataStatistics<T, B extends StatisticsQueryBuilder<Interval, B>>
+    extends
+    AbstractDataStatistics<T, Interval, B> {
 
-  public static final FieldStatisticsType<Interval> STATS_TYPE =
-      new FieldStatisticsType<>("TIME_RANGE");
   private long min = Long.MAX_VALUE;
   private long max = Long.MIN_VALUE;
 
-  protected TimeRangeDataStatistics() {
-    super();
+  protected TimeRangeDataStatistics(final StatisticsType<Interval, B> statisticsType) {
+    super(null, statisticsType);
   }
 
-  public TimeRangeDataStatistics(final Short internalDataAdapterId, final String fieldName) {
-    super(internalDataAdapterId, STATS_TYPE, fieldName);
+  public TimeRangeDataStatistics(
+      final Short internalDataAdapterId,
+      final StatisticsType<Interval, B> statisticsType) {
+    super(internalDataAdapterId, statisticsType);
+  }
+
+  public TimeRangeDataStatistics(
+      final Short internalDataAdapterId,
+      final StatisticsType<Interval, B> statisticsType,
+      final String extendedId) {
+    super(internalDataAdapterId, statisticsType, extendedId);
   }
 
   public boolean isSet() {
@@ -91,7 +99,7 @@ public abstract class TimeRangeDataStatistics<T> extends
   @Override
   public void merge(final Mergeable statistics) {
     if ((statistics != null) && (statistics instanceof TimeRangeDataStatistics)) {
-      final TimeRangeDataStatistics<T> stats = (TimeRangeDataStatistics<T>) statistics;
+      final TimeRangeDataStatistics<T, ?> stats = (TimeRangeDataStatistics<T, ?>) statistics;
       if (stats.isSet()) {
         min = Math.min(min, stats.getMin());
         max = Math.max(max, stats.getMax());

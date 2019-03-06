@@ -41,8 +41,8 @@ public class CommonIndexedPersistenceEncoding extends IndexedPersistenceEncoding
       final byte[] insertionPartitionKey,
       final byte[] insertionSortKey,
       final int duplicateCount,
-      final PersistentDataset<CommonIndexValue> commonData,
-      final PersistentDataset<byte[]> unknownData) {
+      final PersistentDataSet<CommonIndexValue> commonData,
+      final PersistentDataSet<byte[]> unknownData) {
     super(
         internalAdapterId,
         dataId,
@@ -200,7 +200,7 @@ public class CommonIndexedPersistenceEncoding extends IndexedPersistenceEncoding
     }
 
     for (final Entry<String, DimensionRangePair> entry : fieldsRangeData.entrySet()) {
-      final PersistentDataset<CommonIndexValue> commonData = getCommonData();
+      final PersistentDataSet<CommonIndexValue> commonData = getCommonData();
       if (commonData != null) {
         final CommonIndexValue value = commonData.getValue(entry.getKey());
         if ((value != null)

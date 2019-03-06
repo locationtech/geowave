@@ -19,7 +19,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 
@@ -66,7 +66,7 @@ public class SecondaryIndexQueryFilterIterator extends RowFilter {
                   null, // not needed
                   null, // not needed
                   0, // not needed
-                  new PersistentDataset<ByteArray>(
+                  new MultiFieldPersistentDataset<ByteArray>(
                       StringUtils.stringFromBinary(key.getColumnQualifierData().getBackingArray()),
                       new ByteArray(value.get())),
                   null);

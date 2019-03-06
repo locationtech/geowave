@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -62,8 +62,8 @@ public class ImageChipDataAdapter implements DataTypeAdapter<ImageChip> {
     fieldIdToValueMap.put(IMAGE_FIELD_NAME, entry.getImageBinary());
     return new AdapterPersistenceEncoding(
         entry.getDataId(),
-        new PersistentDataset<CommonIndexValue>(),
-        new PersistentDataset<>(fieldIdToValueMap));
+        new MultiFieldPersistentDataset<CommonIndexValue>(),
+        new MultiFieldPersistentDataset<>(fieldIdToValueMap));
   }
 
   @Override

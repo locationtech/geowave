@@ -9,7 +9,7 @@
 package org.locationtech.geowave.adapter.vector;
 
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.opengis.feature.simple.SimpleFeature;
 
 /**

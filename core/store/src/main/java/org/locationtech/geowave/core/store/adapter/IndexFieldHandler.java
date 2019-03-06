@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.store.adapter;
 
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
@@ -26,7 +26,7 @@ public interface IndexFieldHandler<RowType, IndexFieldType extends CommonIndexVa
 
   public IndexFieldType toIndexValue(RowType row);
 
-  public IndexFieldType toIndexValue(PersistentDataset<Object> adapterPersistenceEncoding);
+  public IndexFieldType toIndexValue(PersistentDataSet<Object> adapterPersistenceEncoding);
 
   public PersistentValue<NativeFieldType>[] toNativeValues(IndexFieldType indexValue);
 }

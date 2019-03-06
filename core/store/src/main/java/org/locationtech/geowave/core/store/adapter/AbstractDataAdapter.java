@@ -23,7 +23,8 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -151,7 +152,7 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
 
   @Override
   public AdapterPersistenceEncoding encode(final T entry, final CommonIndexModel indexModel) {
-    final PersistentDataset<CommonIndexValue> indexData = new PersistentDataset<CommonIndexValue>();
+    final PersistentDataSet<CommonIndexValue> indexData = new MultiFieldPersistentDataset<CommonIndexValue>();
     final Set<String> nativeFieldsInIndex = new HashSet<String>();
 
     for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
@@ -173,7 +174,7 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
       nativeFieldsInIndex.addAll(Arrays.asList(fieldHandler.getNativeFieldNames()));
     }
 
-    final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
+    final PersistentDataSet<Object> extendedData = new MultiFieldPersistentDataset<Object>();
 
     // now for the other data
     if (nativeFieldHandlers != null) {

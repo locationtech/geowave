@@ -18,7 +18,8 @@ import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
 import org.locationtech.geowave.core.store.data.UnreadFieldDataList;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -39,8 +40,8 @@ public class WholeRowQueryFilterIterator extends WholeRowIterator {
   @Override
   protected boolean filter(final Text currentRow, final List<Key> keys, final List<Value> values) {
     if ((queryFilterIterator != null) && queryFilterIterator.isSet()) {
-      final PersistentDataset<CommonIndexValue> commonData =
-          new PersistentDataset<CommonIndexValue>();
+      final PersistentDataSet<CommonIndexValue> commonData =
+          new MultiFieldPersistentDataset<CommonIndexValue>();
       final List<FlattenedUnreadData> unreadData = new ArrayList<>();
       for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
         final Key key = keys.get(i);

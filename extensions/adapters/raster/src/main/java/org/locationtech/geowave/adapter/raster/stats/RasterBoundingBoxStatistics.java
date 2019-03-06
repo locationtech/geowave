@@ -11,16 +11,22 @@ package org.locationtech.geowave.adapter.raster.stats;
 import org.geotools.geometry.GeneralEnvelope;
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
 import org.locationtech.jts.geom.Envelope;
 import org.opengis.coverage.grid.GridCoverage;
 
-public class RasterBoundingBoxStatistics extends BoundingBoxDataStatistics<GridCoverage> {
+public class RasterBoundingBoxStatistics extends
+    BoundingBoxDataStatistics<GridCoverage, BaseStatisticsQueryBuilder<Envelope>> {
+  public static final BaseStatisticsType<Envelope> STATS_TYPE =
+      new BaseStatisticsType<>("BOUNDING_BOX");
+
   public RasterBoundingBoxStatistics() {
     this(null);
   }
 
   public RasterBoundingBoxStatistics(final Short internalAdapterId) {
-    super(internalAdapterId);
+    super(internalAdapterId, STATS_TYPE);
   }
 
   @Override

@@ -86,7 +86,6 @@ import org.locationtech.geowave.adapter.raster.util.SampleModelPersistenceUtils;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
-import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
@@ -113,7 +112,9 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
+import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.SingleFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
@@ -455,7 +456,7 @@ public class RasterDataAdapter implements
 
     supportedStats = new StatisticsId[supportedStatsLength];
     supportedStats[0] = OverviewStatistics.STATS_TYPE.newBuilder().build().getId();
-    supportedStats[1] = BoundingBoxDataStatistics.STATS_TYPE.newBuilder().build().getId();
+    supportedStats[1] = RasterBoundingBoxStatistics.STATS_TYPE.newBuilder().build().getId();
 
     if (histogramConfig != null) {
       supportedStats[2] = HistogramStatistics.STATS_TYPE.newBuilder().build().getId();
@@ -1112,14 +1113,14 @@ public class RasterDataAdapter implements
   public AdapterPersistenceEncoding encode(
       final GridCoverage entry,
       final CommonIndexModel indexModel) {
-    final PersistentDataset<Object> adapterExtendedData = new PersistentDataset<>();
+    final PersistentDataSet<Object> adapterExtendedData = new SingleFieldPersistentDataset<>();
     adapterExtendedData.addValue(DATA_FIELD_ID, getRasterTileFromCoverage(entry));
     final AdapterPersistenceEncoding encoding;
     if (entry instanceof FitToIndexGridCoverage) {
       encoding =
           new FitToIndexPersistenceEncoding(
               new byte[0],
-              new PersistentDataset<CommonIndexValue>(),
+              new MultiFieldPersistentDataset<CommonIndexValue>(),
               adapterExtendedData,
               ((FitToIndexGridCoverage) entry).getPartitionKey(),
               ((FitToIndexGridCoverage) entry).getSortKey());
@@ -1129,7 +1130,7 @@ public class RasterDataAdapter implements
       encoding =
           new AdapterPersistenceEncoding(
               new byte[0],
-              new PersistentDataset<CommonIndexValue>(),
+              new MultiFieldPersistentDataset<CommonIndexValue>(),
               adapterExtendedData);
     }
     return encoding;
@@ -1502,7 +1503,7 @@ public class RasterDataAdapter implements
     InternalDataStatistics<GridCoverage, ?, ?> retVal = null;
     if (OverviewStatistics.STATS_TYPE.equals(statisticsId.getType())) {
       retVal = new OverviewStatistics();
-    } else if (BoundingBoxDataStatistics.STATS_TYPE.equals(statisticsId.getType())) {
+    } else if (RasterBoundingBoxStatistics.STATS_TYPE.equals(statisticsId.getType())) {
       retVal = new RasterBoundingBoxStatistics();
     } else if (RasterFootprintStatistics.STATS_TYPE.equals(statisticsId.getType())) {
       retVal = new RasterFootprintStatistics();
