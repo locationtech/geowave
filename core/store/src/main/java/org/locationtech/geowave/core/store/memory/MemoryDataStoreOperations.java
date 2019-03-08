@@ -210,7 +210,8 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
       @Override
       public boolean apply(final MemoryStoreEntry input) {
         if ((readerParams.getFilter() != null) && options.isServerSideLibraryEnabled()) {
-          final PersistentDataSet<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
+          final PersistentDataSet<CommonIndexValue> commonData =
+              new MultiFieldPersistentDataset<>();
           final List<FlattenedUnreadData> unreadData = new ArrayList<>();
           final List<String> commonIndexFieldNames =
               DataStoreUtils.getUniqueDimensionFields(readerParams.getIndex().getIndexModel());

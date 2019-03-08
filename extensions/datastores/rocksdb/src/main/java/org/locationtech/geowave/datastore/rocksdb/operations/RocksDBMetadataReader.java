@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.operations;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 import java.util.Arrays;
 import java.util.Iterator;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -20,6 +18,8 @@ import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.util.StatisticsRowIterator;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBMetadataTable;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 
 public class RocksDBMetadataReader implements MetadataReader {
   private final RocksDBMetadataTable table;
@@ -36,13 +36,8 @@ public class RocksDBMetadataReader implements MetadataReader {
     CloseableIterator<GeoWaveMetadata> originalResults;
     Iterator<GeoWaveMetadata> resultsIt;
     if (query.hasPrimaryId()) {
-      if (query.hasSecondaryId()) {
-        originalResults = table.iterator(query.getPrimaryId(), query.getSecondaryId());
-        resultsIt = originalResults;
-      } else {
-        originalResults = table.iterator(query.getPrimaryId());
-        resultsIt = originalResults;
-      }
+      originalResults = table.iterator(query.getPrimaryId());
+      resultsIt = originalResults;
     } else {
       originalResults = table.iterator();
       resultsIt = originalResults;

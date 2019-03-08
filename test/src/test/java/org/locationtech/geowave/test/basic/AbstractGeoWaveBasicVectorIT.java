@@ -813,27 +813,14 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
         final StatisticsId id = query.getId();
         final Envelope bboxStat =
             getDataStorePluginOptions().createDataStore().aggregateStatistics(query);
-        Assert.assertNotNull(bboxStat);
-        Assert.assertEquals(
-            "The min X of the bounding box stat does not match the expected value",
-            cachedValue.minX,
-            bboxStat.getMinX(),
-            MathUtils.EPSILON);
-        Assert.assertEquals(
-            "The min Y of the bounding box stat does not match the expected value",
-            cachedValue.minY,
-            bboxStat.getMinY(),
-            MathUtils.EPSILON);
-        Assert.assertEquals(
-            "The max X of the bounding box stat does not match the expected value",
-            cachedValue.maxX,
-            bboxStat.getMaxX(),
-            MathUtils.EPSILON);
-        Assert.assertEquals(
-            "The max Y of the bounding box stat does not match the expected value",
-            cachedValue.maxY,
-            bboxStat.getMaxY(),
-            MathUtils.EPSILON);
+        validateBBox(bboxStat, cachedValue);
+        // now make sure it works without giving field name because there is only one geometry field
+        // anyways
+        validateBBox(
+            getDataStorePluginOptions().createDataStore().aggregateStatistics(
+                VectorStatisticsQueryBuilder.newBuilder().factory().bbox().dataType(
+                    adapter.getTypeName()).build()),
+            cachedValue);
         Assert.assertTrue(
             "Unable to remove individual stat",
             statsStore.removeStatistics(
@@ -850,6 +837,30 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
         }
       }
     }
+  }
+
+  private static void validateBBox(final Envelope bboxStat, final StatisticsCache cachedValue) {
+    Assert.assertNotNull(bboxStat);
+    Assert.assertEquals(
+        "The min X of the bounding box stat does not match the expected value",
+        cachedValue.minX,
+        bboxStat.getMinX(),
+        MathUtils.EPSILON);
+    Assert.assertEquals(
+        "The min Y of the bounding box stat does not match the expected value",
+        cachedValue.minY,
+        bboxStat.getMinY(),
+        MathUtils.EPSILON);
+    Assert.assertEquals(
+        "The max X of the bounding box stat does not match the expected value",
+        cachedValue.maxX,
+        bboxStat.getMaxX(),
+        MathUtils.EPSILON);
+    Assert.assertEquals(
+        "The max Y of the bounding box stat does not match the expected value",
+        cachedValue.maxY,
+        bboxStat.getMaxY(),
+        MathUtils.EPSILON);
   }
 
   protected static class StatisticsCache implements IngestCallback<SimpleFeature> {

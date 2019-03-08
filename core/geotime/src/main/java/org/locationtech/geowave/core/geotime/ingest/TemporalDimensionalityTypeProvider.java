@@ -51,7 +51,7 @@ public class TemporalDimensionalityTypeProvider implements
   public String getDimensionalityTypeDescription() {
     return "This dimensionality type matches all indices that only require Time.";
   }
-  
+
   @Override
   public TemporalOptions createOptions() {
     return new TemporalOptions();

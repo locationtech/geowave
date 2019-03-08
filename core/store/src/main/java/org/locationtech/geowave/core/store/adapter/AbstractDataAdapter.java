@@ -152,7 +152,8 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
 
   @Override
   public AdapterPersistenceEncoding encode(final T entry, final CommonIndexModel indexModel) {
-    final PersistentDataSet<CommonIndexValue> indexData = new MultiFieldPersistentDataset<CommonIndexValue>();
+    final PersistentDataSet<CommonIndexValue> indexData =
+        new MultiFieldPersistentDataset<CommonIndexValue>();
     final Set<String> nativeFieldsInIndex = new HashSet<String>();
 
     for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {

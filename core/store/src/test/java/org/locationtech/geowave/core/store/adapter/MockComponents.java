@@ -101,7 +101,8 @@ public class MockComponents {
       public void fromBinary(final byte[] bytes) {}
 
       @Override
-      public TestIndexFieldType toIndexValue(final PersistentDataSet<Object> adapterPersistenceEncoding) {
+      public TestIndexFieldType toIndexValue(
+          final PersistentDataSet<Object> adapterPersistenceEncoding) {
         return new TestIndexFieldType((Integer) adapterPersistenceEncoding.getValue(INTEGER));
       }
     }
@@ -455,7 +456,8 @@ public class MockComponents {
     public void fromBinary(final byte[] bytes) {}
 
     @Override
-    public TestIndexFieldType toIndexValue(final PersistentDataSet<Object> adapterPersistenceEncoding) {
+    public TestIndexFieldType toIndexValue(
+        final PersistentDataSet<Object> adapterPersistenceEncoding) {
       return toIndexValue(
           (Integer) adapterPersistenceEncoding.getValue(MockAbstractDataAdapter.INTEGER));
     }
