@@ -10,6 +10,7 @@ package org.locationtech.geowave.datastore.kudu.util;
 
 public class KuduUtils {
 
+  public static final byte[] EMPTY_PARTITION_KEY = new byte[] {0};
   public static int KUDU_DEFAULT_MAX_RANGE_DECOMPOSITION = 250;
   public static int KUDU_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION = 250;
 }

@@ -11,12 +11,15 @@ package org.locationtech.geowave.datastore.kudu.operations;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Schema;
 import org.apache.kudu.client.*;
+import org.apache.kudu.client.KuduScanner.KuduScannerBuilder;
+import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.*;
 import org.locationtech.geowave.datastore.kudu.KuduRow;
@@ -30,9 +33,11 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.function.Predicate;
 import static org.locationtech.geowave.datastore.kudu.KuduRow.*;
 
 public class KuduOperations implements MapReduceDataStoreOperations {
@@ -165,7 +170,6 @@ public class KuduOperations implements MapReduceDataStoreOperations {
     }
   }
 
-
   public KuduSession getSession() {
     return client.newSession();
   }
@@ -246,6 +250,34 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       partialRow.addBinary(KuduField.GW_DATA_ID_KEY.getFieldName(), dataId);
     }
     partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
+  }
+
+  public <T> KuduRangeRead getKuduRangeRead(
+      final String tableName,
+      final short[] adapterIds,
+      final Collection<SinglePartitionQueryRanges> ranges,
+      final boolean rowMerging,
+      final GeoWaveRowIteratorTransformer<T> rowTransformer,
+      final Predicate<GeoWaveRow> rowFilter,
+      final boolean visibilityEnabled) throws KuduException {
+    KuduTable table = getTable(tableName);
+    return new KuduRangeRead(
+        ranges,
+        adapterIds,
+        table,
+        this,
+        visibilityEnabled,
+        rowFilter,
+        rowTransformer,
+        rowMerging);
+  }
+
+  public KuduTable getTable(String tableName) throws KuduException {
+    return client.openTable(getKuduSafeName(tableName));
+  }
+
+  public KuduScannerBuilder getScannerBuilder(KuduTable table) {
+    return client.newScannerBuilder(table);
   }
 
 }
