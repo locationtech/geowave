@@ -13,15 +13,19 @@ import java.util.Date;
 import java.util.TimeZone;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 import org.threeten.extra.Interval;
 
-public class FeatureTimeRangeStatistics extends TimeRangeDataStatistics<SimpleFeature> implements
+public class FeatureTimeRangeStatistics extends
+    TimeRangeDataStatistics<SimpleFeature, FieldStatisticsQueryBuilder<Interval>> implements
     FieldNameStatistic {
+  public static final FieldStatisticsType<Interval> STATS_TYPE =
+      new FieldStatisticsType<>("TIME_RANGE");
 
   public FeatureTimeRangeStatistics() {
-    super();
+    super(STATS_TYPE);
   }
 
   public FeatureTimeRangeStatistics(final String fieldName) {
@@ -29,7 +33,7 @@ public class FeatureTimeRangeStatistics extends TimeRangeDataStatistics<SimpleFe
   }
 
   public FeatureTimeRangeStatistics(final Short adapterId, final String fieldName) {
-    super(adapterId, fieldName);
+    super(adapterId, STATS_TYPE, fieldName);
   }
 
   @Override

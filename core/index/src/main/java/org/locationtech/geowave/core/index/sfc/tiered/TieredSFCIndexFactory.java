@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.core.index.sfc.tiered;
 
-import com.google.common.collect.ImmutableBiMap;
 import java.util.Arrays;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
+import com.google.common.collect.ImmutableBiMap;
 
 /**
  * A factory for creating TieredSFCIndexStrategy using various approaches for breaking down the bits
@@ -98,7 +98,7 @@ public class TieredSFCIndexFactory {
       final NumericDimensionDefinition[] baseDefinitions,
       final int[] maxBitsPerDimension,
       final SFCType sfcType,
-      Long maxEstimatedDuplicatedIds) {
+      final Long maxEstimatedDuplicatedIds) {
     if (maxBitsPerDimension.length == 0) {
       final ImmutableBiMap<Integer, Byte> emptyMap = ImmutableBiMap.of();
       return new TieredSFCIndexStrategy(baseDefinitions, new SpaceFillingCurve[] {}, emptyMap);
@@ -122,7 +122,7 @@ public class TieredSFCIndexFactory {
 
       spaceFillingCurves[sfcIndex] = SFCFactory.createSpaceFillingCurve(sfcDimensions, sfcType);
     }
-    if (maxEstimatedDuplicatedIds != null && maxEstimatedDuplicatedIds > 0) {
+    if ((maxEstimatedDuplicatedIds != null) && (maxEstimatedDuplicatedIds > 0)) {
       return new TieredSFCIndexStrategy(
           baseDefinitions,
           spaceFillingCurves,

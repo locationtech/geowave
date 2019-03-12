@@ -201,10 +201,19 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
           if (adapter == null) {
             LOGGER.warn("Unable to find type matching an adapter dependent query");
           }
-          this.constraints =
+          final QueryConstraints tempConstraints =
               ((AdapterAndIndexBasedQueryConstraints) constraints).createQueryConstraints(
                   adapter,
                   splitInfo.getIndex());
+          if (tempConstraints == null) {
+            LOGGER.warn(
+                "Adapter and Index based constraints not satisfied for adapter '"
+                    + adapter.getTypeName()
+                    + "'");
+            continue;
+          } else {
+            constraints = tempConstraints;
+          }
         }
 
         queryFilters = constraints.createFilters(splitInfo.getIndex());

@@ -43,8 +43,8 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
         sortKey,
         duplicateCount,
         commonData,
-        new PersistentDataset<byte[]>(),
-        new PersistentDataset<>());
+        new MultiFieldPersistentDataset<byte[]>(),
+        new MultiFieldPersistentDataset<>());
     this.unreadData = unreadData;
   }
 

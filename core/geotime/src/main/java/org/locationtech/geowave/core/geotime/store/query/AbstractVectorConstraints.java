@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -12,7 +12,6 @@ import java.util.List;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.IndexOptimizationUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
@@ -69,7 +68,11 @@ abstract public class AbstractVectorConstraints<T extends QueryConstraints> impl
         IndexOptimizationUtils.unwrapGeotoolsFeatureDataAdapter(adapter);
     if (gtAdapter != null) {
       if (!isSupported(index, gtAdapter)) {
-        return new ExplicitCQLQuery(delegateConstraints, getFilter(gtAdapter), gtAdapter);
+        final Filter filter = getFilter(gtAdapter);
+        if (filter == null) {
+          return null;
+        }
+        return new ExplicitCQLQuery(delegateConstraints, filter, gtAdapter);
       }
     }
     // otherwise just unwrap this

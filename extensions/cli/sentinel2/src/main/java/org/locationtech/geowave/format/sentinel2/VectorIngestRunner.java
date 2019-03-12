@@ -12,6 +12,7 @@ import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.TimeZone;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.cli.api.OperationParams;

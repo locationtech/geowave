@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.adapter;
 
 import java.util.concurrent.CompletableFuture;
 import org.locationtech.geowave.core.store.base.dataidx.BatchDataIndexRetrieval;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -37,9 +38,9 @@ public class AsyncPersistenceEncoding extends IndexedAdapterPersistenceEncoding 
         partitionKey,
         sortKey,
         duplicateCount,
-        new PersistentDataset<CommonIndexValue>(),
-        new PersistentDataset<byte[]>(),
-        new PersistentDataset<>());
+        new MultiFieldPersistentDataset<CommonIndexValue>(),
+        new MultiFieldPersistentDataset<byte[]>(),
+        new MultiFieldPersistentDataset<>());
     this.asyncRetrieval = asyncRetrieval;
   }
 

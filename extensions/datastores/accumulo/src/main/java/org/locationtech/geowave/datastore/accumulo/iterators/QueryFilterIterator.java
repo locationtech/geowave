@@ -24,6 +24,7 @@ import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
@@ -130,7 +131,7 @@ public class QueryFilterIterator extends Filter {
   @Override
   public boolean accept(final Key key, final Value value) {
     if (isSet()) {
-      final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<>();
+      final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
 
       final FlattenedUnreadData unreadData = aggregateFieldData(key, value, commonData);
       return applyRowFilter(key.getRow(currentRow), commonData, unreadData);

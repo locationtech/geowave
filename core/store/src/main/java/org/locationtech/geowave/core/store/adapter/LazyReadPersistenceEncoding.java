@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.adapter;
 import java.util.List;
 import java.util.function.Supplier;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
@@ -49,9 +50,9 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
         partitionKey,
         sortKey,
         duplicateCount,
-        new PersistentDataset<CommonIndexValue>(),
-        new PersistentDataset<byte[]>(),
-        new PersistentDataset<>());
+        new MultiFieldPersistentDataset<CommonIndexValue>(),
+        new MultiFieldPersistentDataset<byte[]>(),
+        new MultiFieldPersistentDataset<>());
     deferredFieldReader =
         new InstanceFieldValueReader(
             fieldSubsetBitmask,
@@ -77,9 +78,9 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
         partitionKey,
         sortKey,
         duplicateCount,
-        new PersistentDataset<CommonIndexValue>(),
-        new PersistentDataset<byte[]>(),
-        new PersistentDataset<>());
+        new MultiFieldPersistentDataset<CommonIndexValue>(),
+        new MultiFieldPersistentDataset<byte[]>(),
+        new MultiFieldPersistentDataset<>());
     deferredFieldReader =
         new SupplierFieldValueReader(
             fieldSubsetBitmask,

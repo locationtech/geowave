@@ -53,12 +53,6 @@ public class TemporalDimensionalityTypeProvider implements
   }
 
   @Override
-  public int getPriority() {
-    // arbitrary - just lower than others so it won't be the default
-    return 4;
-  }
-
-  @Override
   public TemporalOptions createOptions() {
     return new TemporalOptions();
   }

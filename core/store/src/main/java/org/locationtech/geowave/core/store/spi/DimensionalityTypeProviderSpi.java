@@ -43,15 +43,6 @@ public interface DimensionalityTypeProviderSpi<T extends DimensionalityTypeOptio
   public String getDimensionalityTypeDescription();
 
   /**
-   * If there are multiple acceptable dimensionality types, the one with the highest priority will
-   * be used
-   *
-   * @return a priority value, any integer will work, it is merely important to consider values
-   *         relative to each other
-   */
-  public int getPriority();
-
-  /**
    * This will return the primary index that match the options
    *
    * @return the primary index

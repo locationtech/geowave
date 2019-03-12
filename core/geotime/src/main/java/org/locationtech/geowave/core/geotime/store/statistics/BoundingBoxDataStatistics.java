@@ -17,33 +17,37 @@ import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
-import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
+import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
 import org.locationtech.jts.geom.Envelope;
 
-public abstract class BoundingBoxDataStatistics<T> extends
-    AbstractDataStatistics<T, Envelope, FieldStatisticsQueryBuilder<Envelope>> {
-  public static final FieldStatisticsType<Envelope> STATS_TYPE =
-      new FieldStatisticsType<>("BOUNDING_BOX");
+public abstract class BoundingBoxDataStatistics<T, B extends StatisticsQueryBuilder<Envelope, B>>
+    extends
+    AbstractDataStatistics<T, Envelope, B> {
 
   protected double minX = Double.MAX_VALUE;
   protected double minY = Double.MAX_VALUE;
   protected double maxX = -Double.MAX_VALUE;
   protected double maxY = -Double.MAX_VALUE;
 
-  public BoundingBoxDataStatistics() {
-    this(null);
+  public BoundingBoxDataStatistics(final StatisticsType<Envelope, B> statisticsType) {
+    this(null, statisticsType);
   }
 
-  public BoundingBoxDataStatistics(final Short adapterId) {
-    super(adapterId, STATS_TYPE);
+  public BoundingBoxDataStatistics(
+      final Short adapterId,
+      final StatisticsType<Envelope, B> statisticsType) {
+    super(adapterId, statisticsType);
   }
 
-  public BoundingBoxDataStatistics(final Short adapterId, final String fieldName) {
-    super(adapterId, STATS_TYPE, fieldName);
+  public BoundingBoxDataStatistics(
+      final Short adapterId,
+      final StatisticsType<Envelope, B> statisticsType,
+      final String fieldName) {
+    super(adapterId, statisticsType, fieldName);
   }
 
   public boolean isSet() {
@@ -133,7 +137,8 @@ public abstract class BoundingBoxDataStatistics<T> extends
   @Override
   public void merge(final Mergeable statistics) {
     if ((statistics != null) && (statistics instanceof BoundingBoxDataStatistics)) {
-      final BoundingBoxDataStatistics<T> bboxStats = (BoundingBoxDataStatistics<T>) statistics;
+      final BoundingBoxDataStatistics<T, ?> bboxStats =
+          (BoundingBoxDataStatistics<T, ?>) statistics;
       if (bboxStats.isSet()) {
         minX = Math.min(minX, bboxStats.minX);
         minY = Math.min(minY, bboxStats.minY);

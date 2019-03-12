@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -39,7 +40,7 @@ public class AdapterPersistenceEncoding extends AbstractAdapterPersistenceEncodi
         null,
         0,
         commonData,
-        new PersistentDataset<byte[]>(),
+        new MultiFieldPersistentDataset<byte[]>(),
         adapterExtendedData); // all data is identified by
     // the adapter, there is
     // inherently no unknown

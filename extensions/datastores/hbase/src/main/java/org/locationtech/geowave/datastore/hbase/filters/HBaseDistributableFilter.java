@@ -24,6 +24,7 @@ import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEnco
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
@@ -173,7 +174,7 @@ public class HBaseDistributableFilter extends FilterBase {
       final Iterator<Cell> it = rowCells.iterator();
 
       GeoWaveKeyImpl rowKey = null;
-      commonData = new PersistentDataset<>();
+      commonData = new MultiFieldPersistentDataset<>();
 
       while (it.hasNext()) {
         final Cell cell = it.next();
@@ -207,7 +208,7 @@ public class HBaseDistributableFilter extends FilterBase {
       return ReturnCode.INCLUDE_AND_NEXT_COL;
     }
 
-    commonData = new PersistentDataset<>();
+    commonData = new MultiFieldPersistentDataset<>();
 
     unreadData = aggregateFieldData(cell, commonData);
 
@@ -262,7 +263,7 @@ public class HBaseDistributableFilter extends FilterBase {
   }
 
   public IndexedAdapterPersistenceEncoding getAdapterEncoding(final DataTypeAdapter dataAdapter) {
-    final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<>();
+    final PersistentDataset<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
     if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
       ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
           dataAdapter,
@@ -282,7 +283,7 @@ public class HBaseDistributableFilter extends FilterBase {
             persistenceEncoding.getInsertionSortKey(),
             persistenceEncoding.getDuplicateCount(),
             persistenceEncoding.getCommonData(),
-            new PersistentDataset<byte[]>(),
+            new MultiFieldPersistentDataset<byte[]>(),
             adapterExtendedValues);
 
     return adapterEncoding;

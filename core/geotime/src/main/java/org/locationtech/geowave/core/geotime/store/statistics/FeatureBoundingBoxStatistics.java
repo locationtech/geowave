@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.geotime.store.statistics;
 
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
@@ -19,15 +20,16 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
-public class FeatureBoundingBoxStatistics extends BoundingBoxDataStatistics<SimpleFeature>
-    implements
+public class FeatureBoundingBoxStatistics extends
+    BoundingBoxDataStatistics<SimpleFeature, FieldStatisticsQueryBuilder<Envelope>> implements
     FieldNameStatistic {
-
+  public static final FieldStatisticsType<Envelope> STATS_TYPE =
+      new FieldStatisticsType<>("BOUNDING_BOX");
   private SimpleFeatureType reprojectedType;
   private MathTransform transform;
 
   public FeatureBoundingBoxStatistics() {
-    super();
+    super(STATS_TYPE);
   }
 
   public FeatureBoundingBoxStatistics(final String fieldName) {
@@ -50,7 +52,7 @@ public class FeatureBoundingBoxStatistics extends BoundingBoxDataStatistics<Simp
       final String fieldName,
       final SimpleFeatureType reprojectedType,
       final MathTransform transform) {
-    super(adapterId, fieldName);
+    super(adapterId, STATS_TYPE, fieldName);
     this.reprojectedType = reprojectedType;
     this.transform = transform;
   }

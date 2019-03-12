@@ -72,7 +72,7 @@ public class SpatialTemporalConstraintsBuilderImpl implements SpatialTemporalCon
 
   @Override
   public SpatialTemporalConstraintsBuilder addTimeRange(final Interval timeRange) {
-    ArrayUtils.add(timeRanges, timeRange);
+    timeRanges = ArrayUtils.add(timeRanges, timeRange);
     return this;
   }
 

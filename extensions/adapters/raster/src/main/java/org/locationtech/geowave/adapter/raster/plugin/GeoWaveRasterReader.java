@@ -47,6 +47,7 @@ import org.locationtech.geowave.adapter.raster.Resolution;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.stats.HistogramStatistics;
 import org.locationtech.geowave.adapter.raster.stats.OverviewStatistics;
+import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistics;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
@@ -323,14 +324,14 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
   public GeneralEnvelope getOriginalEnvelope(final String coverageName) {
     final Envelope envelope =
         geowaveDataStore.aggregateStatistics(
-            BoundingBoxDataStatistics.STATS_TYPE.newBuilder().setAuthorizations(
+            RasterBoundingBoxStatistics.STATS_TYPE.newBuilder().setAuthorizations(
                 authorizationSPI.getAuthorizations()).dataType(coverageName).build());
     if (envelope == null) {
-      CoordinateReferenceSystem crs = getCoordinateReferenceSystem(coverageName);
-      double minX = crs.getCoordinateSystem().getAxis(0).getMinimumValue();
-      double maxX = crs.getCoordinateSystem().getAxis(0).getMaximumValue();
-      double minY = crs.getCoordinateSystem().getAxis(1).getMinimumValue();
-      double maxY = crs.getCoordinateSystem().getAxis(1).getMaximumValue();
+      final CoordinateReferenceSystem crs = getCoordinateReferenceSystem(coverageName);
+      final double minX = crs.getCoordinateSystem().getAxis(0).getMinimumValue();
+      final double maxX = crs.getCoordinateSystem().getAxis(0).getMaximumValue();
+      final double minY = crs.getCoordinateSystem().getAxis(1).getMinimumValue();
+      final double maxY = crs.getCoordinateSystem().getAxis(1).getMaximumValue();
       final GeneralEnvelope env =
           new GeneralEnvelope(new Rectangle2D.Double(minX, minY, maxX - minX, maxY - minY));
       env.setCoordinateReferenceSystem(crs);
@@ -370,7 +371,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
     try (CloseableIterator<InternalDataStatistics<?, ?, ?>> statisticsIt =
         geowaveStatisticsStore.getDataStatistics(
             getAdapterId(coverageName),
-            BoundingBoxDataStatistics.STATS_TYPE,
+            RasterBoundingBoxStatistics.STATS_TYPE,
             authorizationSPI.getAuthorizations())) {
 
       int width = 0;
@@ -382,7 +383,8 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
         statistics = statisticsIt.next();
       }
       if ((statistics != null) && (statistics instanceof BoundingBoxDataStatistics)) {
-        final BoundingBoxDataStatistics<?> bboxStats = (BoundingBoxDataStatistics<?>) statistics;
+        final BoundingBoxDataStatistics<?, ?> bboxStats =
+            (BoundingBoxDataStatistics<?, ?>) statistics;
         try (CloseableIterator<InternalDataStatistics<?, ?, ?>> overviewStatisticsIt =
             geowaveStatisticsStore.getDataStatistics(
                 getAdapterId(coverageName),
@@ -684,7 +686,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
     // portions of the inherited class, which does not handle
     // multiple coverage names
     final double[][] resLevels = getResolutionLevels(coverageName);
-    if (resLevels == null || resLevels.length == 0) {
+    if ((resLevels == null) || (resLevels.length == 0)) {
       return false;
     }
     numOverviews = resLevels.length - 1;

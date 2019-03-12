@@ -8,12 +8,6 @@
  */
 package org.locationtech.geowave.test.services.grpc;
 
-import com.google.protobuf.ByteString;
-import com.google.protobuf.util.Timestamps;
-import io.grpc.ManagedChannel;
-import io.grpc.internal.DnsNameResolverProvider;
-import io.grpc.netty.NettyChannelBuilder;
-import io.grpc.stub.StreamObserver;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -22,7 +16,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -51,8 +44,8 @@ import org.locationtech.geowave.service.grpc.protobuf.CoreMapreduceGrpc.CoreMapr
 import org.locationtech.geowave.service.grpc.protobuf.CoreStoreGrpc;
 import org.locationtech.geowave.service.grpc.protobuf.CoreStoreGrpc.CoreStoreBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.DBScanCommandParametersProtos;
-import org.locationtech.geowave.service.grpc.protobuf.FeatureProtos;
 import org.locationtech.geowave.service.grpc.protobuf.FeatureAttributeProtos;
+import org.locationtech.geowave.service.grpc.protobuf.FeatureProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageStoreCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoServerAddDatastoreCommandParametersProtos;
@@ -120,6 +113,12 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.io.WKBWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.util.Timestamps;
+import io.grpc.ManagedChannel;
+import io.grpc.internal.DnsNameResolverProvider;
+import io.grpc.netty.NettyChannelBuilder;
+import io.grpc.stub.StreamObserver;
 
 public class GeoWaveGrpcTestClient {
   private static final Logger LOGGER =
@@ -186,7 +185,8 @@ public class GeoWaveGrpcTestClient {
       final int minLon,
       final int maxLon,
       final int latStepDegs,
-      final int lonStepDegs) throws InterruptedException, UnsupportedEncodingException {
+      final int lonStepDegs)
+      throws InterruptedException, UnsupportedEncodingException, ParseException {
     LOGGER.info("Performing Vector Ingest...");
     final VectorStoreParametersProtos baseParams =
         VectorStoreParametersProtos.newBuilder().setStoreName(
@@ -240,8 +240,10 @@ public class GeoWaveGrpcTestClient {
         // indicate UTC,
         // no timezone offset
         df.setTimeZone(tz);
-        final String isoDate = df.format(new Date());
-        attBuilder.setValString(isoDate);
+        attBuilder.setValDate(
+            Timestamps.fromMillis(
+                (df.parse(GeoWaveGrpcTestUtils.temporalQueryStartTime).getTime()
+                    + df.parse(GeoWaveGrpcTestUtils.temporalQueryEndTime).getTime()) / 2));
         requestBuilder.putFeature("TimeStamp", attBuilder.build());
 
         attBuilder.setValDouble(latitude);
@@ -368,7 +370,7 @@ public class GeoWaveGrpcTestClient {
     features = vectorBlockingStub.spatialTemporalQuery(request);
 
     // iterate over features
-    for (int i = 1; features.hasNext(); i++) {
+    while (features.hasNext()) {
       final FeatureProtos feature = features.next();
       feature_list.add(feature);
     }

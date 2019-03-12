@@ -93,14 +93,14 @@ public class GeoWaveFeatureSourceTest extends BaseDataStoreTest {
             internalAdapterId)) {
       assertTrue(stats.hasNext());
       int count = 0;
-      BoundingBoxDataStatistics<SimpleFeature> bboxStats = null;
+      BoundingBoxDataStatistics<SimpleFeature, ?> bboxStats = null;
       CountDataStatistics<SimpleFeature> cStats = null;
       FeatureTimeRangeStatistics timeRangeStats = null;
       FeatureNumericRangeStatistics popStats = null;
       while (stats.hasNext()) {
         final InternalDataStatistics<?, ?, ?> statsData = stats.next();
         if (statsData instanceof BoundingBoxDataStatistics) {
-          bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsData;
+          bboxStats = (BoundingBoxDataStatistics<SimpleFeature, ?>) statsData;
         } else if (statsData instanceof CountDataStatistics) {
           cStats = (CountDataStatistics<SimpleFeature>) statsData;
         } else if (statsData instanceof FeatureTimeRangeStatistics) {

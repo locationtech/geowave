@@ -74,7 +74,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
       // GEOWAVE-60 optimization
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap =
           reader.getTransaction().getDataStatistics();
-      StatisticsId id = CountDataStatistics.STATS_TYPE.newBuilder().build().getId();
+      final StatisticsId id = CountDataStatistics.STATS_TYPE.newBuilder().build().getId();
       if (statsMap.containsKey(id)) {
         final CountDataStatistics stats = (CountDataStatistics) statsMap.get(id);
         if ((stats != null) && stats.isSet()) {
@@ -115,8 +115,8 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
           VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
               reader.getFeatureType().getGeometryDescriptor().getLocalName()).build().getId();
       if (statsMap.containsKey(statId)) {
-        final BoundingBoxDataStatistics<SimpleFeature> stats =
-            (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(statId);
+        final BoundingBoxDataStatistics<SimpleFeature, ?> stats =
+            (BoundingBoxDataStatistics<SimpleFeature, ?>) statsMap.get(statId);
         return new ReferencedEnvelope(
             stats.getMinX(),
             stats.getMaxX(),

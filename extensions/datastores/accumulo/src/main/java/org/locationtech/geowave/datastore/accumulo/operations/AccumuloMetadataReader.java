@@ -70,7 +70,7 @@ public class AccumuloMetadataReader implements MetadataReader {
       }
       final Collection<Range> ranges = new ArrayList<>();
       if (query.hasPrimaryId()) {
-        ranges.add(new Range(new Text(query.getPrimaryId())));
+        ranges.add(Range.prefix(new Text(query.getPrimaryId())));
       } else {
         ranges.add(new Range());
       }

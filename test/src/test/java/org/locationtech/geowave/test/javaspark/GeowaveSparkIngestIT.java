@@ -97,7 +97,6 @@ public class GeowaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
 
     final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
     final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
-    int adapterCount = 0;
     try (CloseableIterator<InternalDataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
       while (adapterIterator.hasNext()) {
         final InternalDataAdapter<?> internalDataAdapter = adapterIterator.next();
@@ -108,12 +107,12 @@ public class GeowaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
         final StatisticsId statsId =
             VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
                 adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build().getId();
-        try (final CloseableIterator<BoundingBoxDataStatistics<?>> bboxStatIt =
+        try (final CloseableIterator<BoundingBoxDataStatistics<?, ?>> bboxStatIt =
             (CloseableIterator) statsStore.getDataStatistics(
                 internalDataAdapter.getAdapterId(),
                 statsId.getExtendedId(),
                 statsId.getType())) {
-          final BoundingBoxDataStatistics<?> bboxStat = bboxStatIt.next();
+          final BoundingBoxDataStatistics<?, ?> bboxStat = bboxStatIt.next();
           try (final CloseableIterator<CountDataStatistics<SimpleFeature>> countStatIt =
               (CloseableIterator) statsStore.getDataStatistics(
                   internalDataAdapter.getAdapterId(),
@@ -150,8 +149,6 @@ public class GeowaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
                     + "' adapter entries ingested does not match expected count",
                 new Integer(GDELT_COUNT),
                 new Integer(resultCount));
-
-            adapterCount++;
           }
         }
       }

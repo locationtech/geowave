@@ -181,8 +181,8 @@ public class QueryIndexHelper {
     final StatisticsId statId =
         VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
             geoAttrName).build().getId();
-    final BoundingBoxDataStatistics<SimpleFeature> bboxStats =
-        (BoundingBoxDataStatistics<SimpleFeature>) statsMap.get(statId);
+    final BoundingBoxDataStatistics<SimpleFeature, ?> bboxStats =
+        (BoundingBoxDataStatistics<SimpleFeature, ?>) statsMap.get(statId);
     return (bboxStats != null) ? bboxStats.getConstraints() : new ConstraintSet();
   }
 

@@ -462,6 +462,9 @@ public class BaseDataStore implements DataStore {
                   ((AdapterAndIndexBasedQueryConstraints) sanitizedConstraints).createQueryConstraints(
                       adapter,
                       indexAdapterPair.getLeft());
+              if (adapterIndexConstraints == null) {
+                continue;
+              }
             } else {
               adapterIndexConstraints = sanitizedConstraints;
             }
@@ -1172,7 +1175,7 @@ public class BaseDataStore implements DataStore {
 
   protected <R> CloseableIterator<InternalDataStatistics<?, R, ?>> internalQueryStatistics(
       final StatisticsQuery<R> query) {
-    // sanity check, although suing the builders should disallow this type
+    // sanity check, although using the builders should disallow this type
     // of query
     if ((query.getStatsType() == null)
         && (query.getExtendedId() != null)

@@ -90,9 +90,6 @@ public class SplitsProvider {
         internalAdapterStore,
         adapterIndexMappingStore,
         indexStore)) {
-      indexIdToAdaptersMap.put(
-          indexAdapterIdPair.getKey().getName(),
-          indexAdapterIdPair.getValue());
       QueryConstraints indexAdapterConstraints;
       if (constraints instanceof AdapterAndIndexBasedQueryConstraints) {
         final List<Short> adapters = indexAdapterIdPair.getRight();
@@ -113,6 +110,9 @@ public class SplitsProvider {
               ((AdapterAndIndexBasedQueryConstraints) constraints).createQueryConstraints(
                   adapter,
                   indexAdapterIdPair.getLeft());
+          if (indexAdapterConstraints == null) {
+            continue;
+          }
           // make sure we pass along the new constraints to the record
           // reader - for spark on YARN (not localy though), job
           // configuration is immutable so while picking up the
@@ -127,6 +127,10 @@ public class SplitsProvider {
       } else {
         indexAdapterConstraints = constraints;
       }
+
+      indexIdToAdaptersMap.put(
+          indexAdapterIdPair.getKey().getName(),
+          indexAdapterIdPair.getValue());
       IndexMetaData[] indexMetadata;
       if (indexAdapterConstraints != null) {
         indexMetadata =
@@ -348,7 +352,7 @@ public class SplitsProvider {
       final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache,
       final ByteArray partitionKey,
       final String[] authorizations) throws IOException {
-    Pair<Index, ByteArray> key = Pair.of(index, partitionKey);
+    final Pair<Index, ByteArray> key = Pair.of(index, partitionKey);
     RowRangeHistogramStatistics<?> rangeStats = statsCache.get(key);
 
     if (rangeStats == null) {

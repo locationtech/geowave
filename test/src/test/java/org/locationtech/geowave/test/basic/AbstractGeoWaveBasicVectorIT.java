@@ -78,6 +78,8 @@ import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.datastore.cassandra.CassandraStoreFactoryFamily;
+import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
 import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
@@ -813,27 +815,21 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
         final StatisticsId id = query.getId();
         final Envelope bboxStat =
             getDataStorePluginOptions().createDataStore().aggregateStatistics(query);
-        Assert.assertNotNull(bboxStat);
-        Assert.assertEquals(
-            "The min X of the bounding box stat does not match the expected value",
-            cachedValue.minX,
-            bboxStat.getMinX(),
-            MathUtils.EPSILON);
-        Assert.assertEquals(
-            "The min Y of the bounding box stat does not match the expected value",
-            cachedValue.minY,
-            bboxStat.getMinY(),
-            MathUtils.EPSILON);
-        Assert.assertEquals(
-            "The max X of the bounding box stat does not match the expected value",
-            cachedValue.maxX,
-            bboxStat.getMaxX(),
-            MathUtils.EPSILON);
-        Assert.assertEquals(
-            "The max Y of the bounding box stat does not match the expected value",
-            cachedValue.maxY,
-            bboxStat.getMaxY(),
-            MathUtils.EPSILON);
+        validateBBox(bboxStat, cachedValue);
+        // now make sure it works without giving field name because there is only one geometry field
+        // anyways
+        // TODO this doesn't work for cassandra and dynamoDB which expect the stats primary ID to be
+        // an exact match (no prefix scanning without field names like this)
+        if (!(getDataStorePluginOptions().getType().equals(
+            new CassandraStoreFactoryFamily().getDataStoreFactory().getType())
+            || getDataStorePluginOptions().getType().equals(
+                new DynamoDBStoreFactoryFamily().getDataStoreFactory().getType()))) {
+          validateBBox(
+              getDataStorePluginOptions().createDataStore().aggregateStatistics(
+                  VectorStatisticsQueryBuilder.newBuilder().factory().bbox().dataType(
+                      adapter.getTypeName()).build()),
+              cachedValue);
+        }
         Assert.assertTrue(
             "Unable to remove individual stat",
             statsStore.removeStatistics(
@@ -850,6 +846,30 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
         }
       }
     }
+  }
+
+  private static void validateBBox(final Envelope bboxStat, final StatisticsCache cachedValue) {
+    Assert.assertNotNull(bboxStat);
+    Assert.assertEquals(
+        "The min X of the bounding box stat does not match the expected value",
+        cachedValue.minX,
+        bboxStat.getMinX(),
+        MathUtils.EPSILON);
+    Assert.assertEquals(
+        "The min Y of the bounding box stat does not match the expected value",
+        cachedValue.minY,
+        bboxStat.getMinY(),
+        MathUtils.EPSILON);
+    Assert.assertEquals(
+        "The max X of the bounding box stat does not match the expected value",
+        cachedValue.maxX,
+        bboxStat.getMaxX(),
+        MathUtils.EPSILON);
+    Assert.assertEquals(
+        "The max Y of the bounding box stat does not match the expected value",
+        cachedValue.maxY,
+        bboxStat.getMaxY(),
+        MathUtils.EPSILON);
   }
 
   protected static class StatisticsCache implements IngestCallback<SimpleFeature> {

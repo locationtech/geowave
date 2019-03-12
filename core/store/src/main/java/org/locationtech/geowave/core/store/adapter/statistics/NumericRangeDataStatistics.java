@@ -14,21 +14,29 @@ import java.util.Map;
 import org.apache.commons.lang3.Range;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-public abstract class NumericRangeDataStatistics<T> extends
-    AbstractDataStatistics<T, Range<Double>, FieldStatisticsQueryBuilder<Range<Double>>> {
+public abstract class NumericRangeDataStatistics<T, B extends StatisticsQueryBuilder<Range<Double>, B>>
+    extends
+    AbstractDataStatistics<T, Range<Double>, B> {
 
   private double min = Double.MAX_VALUE;
   private double max = -Double.MAX_VALUE;
 
-  protected NumericRangeDataStatistics() {
-    super();
+  protected NumericRangeDataStatistics(final StatisticsType<Range<Double>, B> type) {
+    super(null, type);
   }
 
   public NumericRangeDataStatistics(
       final Short internalDataAdapterId,
-      final StatisticsType<Range<Double>, FieldStatisticsQueryBuilder<Range<Double>>> type,
+      final StatisticsType<Range<Double>, B> type) {
+    super(internalDataAdapterId, type);
+  }
+
+  public NumericRangeDataStatistics(
+      final Short internalDataAdapterId,
+      final StatisticsType<Range<Double>, B> type,
       final String fieldName) {
     super(internalDataAdapterId, type, fieldName);
   }
@@ -81,7 +89,7 @@ public abstract class NumericRangeDataStatistics<T> extends
   @Override
   public void merge(final Mergeable statistics) {
     if ((statistics != null) && (statistics instanceof NumericRangeDataStatistics)) {
-      final NumericRangeDataStatistics<T> stats = (NumericRangeDataStatistics<T>) statistics;
+      final NumericRangeDataStatistics<T, ?> stats = (NumericRangeDataStatistics<T, ?>) statistics;
       if (stats.isSet()) {
         min = Math.min(min, stats.getMin());
         max = Math.max(max, stats.getMax());
@@ -111,7 +119,7 @@ public abstract class NumericRangeDataStatistics<T> extends
   @Override
   protected Object resultsValue() {
     if (isSet()) {
-      Map<String, Double> map = new HashMap<>();
+      final Map<String, Double> map = new HashMap<>();
       map.put("min", min);
       map.put("max", max);
       return map;

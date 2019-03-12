@@ -29,12 +29,7 @@ public class TestDimensionalityTypeProvider implements DimensionalityTypeProvide
   }
 
   @Override
-  public int getPriority() {
-    return 0;
-  }
-
-  @Override
-  public Index createIndex(DimensionalityTypeOptions options) {
+  public Index createIndex(final DimensionalityTypeOptions options) {
     return null;
   }
 

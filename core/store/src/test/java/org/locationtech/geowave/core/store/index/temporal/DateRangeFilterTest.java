@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import com.google.common.base.Suppliers;
 
 public class DateRangeFilterTest {
@@ -58,7 +58,7 @@ public class DateRangeFilterTest {
             null,
             null,
             0,
-            new PersistentDataset<ByteArray>(
+            new MultiFieldPersistentDataset<ByteArray>(
                 "myAttribute",
                 new ByteArray(
                     TemporalIndexStrategy.toIndexByte(format.get().parse("06-01-2014 11:01:01")))),
@@ -74,7 +74,7 @@ public class DateRangeFilterTest {
             null,
             null,
             0,
-            new PersistentDataset<ByteArray>(
+            new MultiFieldPersistentDataset<ByteArray>(
                 "myAttribute",
                 new ByteArray(
                     Lexicoders.LONG.toByteArray(
@@ -91,7 +91,7 @@ public class DateRangeFilterTest {
             null,
             null,
             0,
-            new PersistentDataset<ByteArray>(
+            new MultiFieldPersistentDataset<ByteArray>(
                 "mismatch",
                 new ByteArray(
                     Lexicoders.LONG.toByteArray(

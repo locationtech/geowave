@@ -42,7 +42,7 @@ import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEnco
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
+import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexImpl;
@@ -203,7 +203,7 @@ public class GeoWaveAvroFeatureDataAdapterTest {
             null,
             1,
             persistenceEncoding.getCommonData(),
-            new PersistentDataset<byte[]>(),
+            new MultiFieldPersistentDataset<byte[]>(),
             persistenceEncoding.getAdapterExtendedData());
 
     final SimpleFeature decodedFeature =

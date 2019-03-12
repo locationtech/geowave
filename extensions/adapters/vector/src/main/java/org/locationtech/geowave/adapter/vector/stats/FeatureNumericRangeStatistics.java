@@ -19,15 +19,15 @@ import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatis
 import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 
-public class FeatureNumericRangeStatistics extends NumericRangeDataStatistics<SimpleFeature>
-    implements
+public class FeatureNumericRangeStatistics extends
+    NumericRangeDataStatistics<SimpleFeature, FieldStatisticsQueryBuilder<Range<Double>>> implements
     FieldNameStatistic {
 
   public static final FieldStatisticsType<Range<Double>> STATS_TYPE =
       new FieldStatisticsType<>("FEATURE_NUMERIC_RANGE");
 
   public FeatureNumericRangeStatistics() {
-    super();
+    super(STATS_TYPE);
   }
 
   public FeatureNumericRangeStatistics(final String fieldName) {

@@ -105,12 +105,12 @@ public class GeoWaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
         final StatisticsId statsId =
             VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
                 adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build().getId();
-        try (final CloseableIterator<BoundingBoxDataStatistics<?>> bboxStatIt =
+        try (final CloseableIterator<BoundingBoxDataStatistics<?, ?>> bboxStatIt =
             (CloseableIterator) statsStore.getDataStatistics(
                 internalDataAdapter.getAdapterId(),
                 statsId.getExtendedId(),
                 statsId.getType())) {
-          final BoundingBoxDataStatistics<?> bboxStat = bboxStatIt.next();
+          final BoundingBoxDataStatistics<?, ?> bboxStat = bboxStatIt.next();
           try (final CloseableIterator<CountDataStatistics<SimpleFeature>> countStatIt =
               (CloseableIterator) statsStore.getDataStatistics(
                   internalDataAdapter.getAdapterId(),

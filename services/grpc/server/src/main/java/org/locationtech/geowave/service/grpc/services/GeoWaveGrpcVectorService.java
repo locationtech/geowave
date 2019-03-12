@@ -10,6 +10,7 @@ package org.locationtech.geowave.service.grpc.services;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.geotools.data.simple.SimpleFeatureIterator;
@@ -192,6 +193,10 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
                   typeBuilder.add(mapEntry.getKey(), Double.class);
                   break;
                 }
+                case VALDATE: {
+                  typeBuilder.add(mapEntry.getKey(), Date.class);
+                  break;
+                }
                 case VALGEOMETRY: {
                   typeBuilder.add(mapEntry.getKey(), Geometry.class);
                   break;
@@ -270,6 +275,13 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
               featureBuilder.set(attribute.getKey(), attribute.getValue().getValDouble());
               break;
             }
+            case VALDATE: {
+              featureBuilder.set(
+                  attribute.getKey(),
+                  new Date(Timestamps.toMillis(attribute.getValue().getValDate())));
+              break;
+            }
+
             case VALGEOMETRY: {
               Geometry geom = null;
               try {
@@ -544,6 +556,10 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
         }
         case "Double": {
           attBuilder.setValDouble((Double) simpleFeatureAttribute);
+          break;
+        }
+        case "Date": {
+          attBuilder.setValDate(Timestamps.fromMillis(((Date) simpleFeatureAttribute).getTime()));
           break;
         }
         case "Geoemetry": {

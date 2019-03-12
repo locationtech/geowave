@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.operations;
 
-import com.google.common.collect.Iterators;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.NavigableMap;
@@ -16,6 +15,7 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
@@ -29,6 +29,7 @@ import org.locationtech.geowave.datastore.hbase.util.HBaseUtils.ScannerClosableW
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterators;
 
 public class HBaseMetadataReader implements MetadataReader {
   private static final Logger LOGGER = LoggerFactory.getLogger(HBaseMetadataReader.class);
@@ -61,7 +62,7 @@ public class HBaseMetadataReader implements MetadataReader {
 
       if (query.hasPrimaryId()) {
         scanner.setStartRow(query.getPrimaryId());
-        scanner.setStopRow(query.getPrimaryId());
+        scanner.setStopRow(ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
       }
       final boolean clientsideStatsMerge =
           (metadataType == MetadataType.STATS) && !options.isServerSideLibraryEnabled();
@@ -69,7 +70,7 @@ public class HBaseMetadataReader implements MetadataReader {
         scanner.setMaxVersions(); // Get all versions
       }
 
-      String[] additionalAuthorizations = query.getAuthorizations();
+      final String[] additionalAuthorizations = query.getAuthorizations();
       if ((additionalAuthorizations != null) && (additionalAuthorizations.length > 0)) {
         scanner.setAuthorizations(new Authorizations(additionalAuthorizations));
       }

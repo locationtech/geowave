@@ -30,12 +30,12 @@ public class VectorStatisticsQueryBuilderImpl<R> extends
 
     @Override
     public FieldStatisticsQueryBuilder<Envelope> bbox() {
-      return BoundingBoxDataStatistics.STATS_TYPE.newBuilder();
+      return FeatureBoundingBoxStatistics.STATS_TYPE.newBuilder();
     }
 
     @Override
     public FieldStatisticsQueryBuilder<Interval> timeRange() {
-      return TimeRangeDataStatistics.STATS_TYPE.newBuilder();
+      return FeatureTimeRangeStatistics.STATS_TYPE.newBuilder();
     }
   }
 }
