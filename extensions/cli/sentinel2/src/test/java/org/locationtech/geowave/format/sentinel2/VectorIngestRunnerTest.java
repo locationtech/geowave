@@ -9,12 +9,11 @@
 package org.locationtech.geowave.format.sentinel2;
 
 import static org.junit.Assert.assertTrue;
-import com.beust.jcommander.ParameterException;
-import it.geosolutions.jaiext.JAIExt;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.TimeZone;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.api.OperationParams;
@@ -27,6 +26,8 @@ import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
+import com.beust.jcommander.ParameterException;
+import it.geosolutions.jaiext.JAIExt;
 
 public class VectorIngestRunnerTest {
   @BeforeClass
@@ -34,6 +35,7 @@ public class VectorIngestRunnerTest {
     GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
         "memory",
         new MemoryStoreFactoryFamily());
+    TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
   }
 
   @Test
