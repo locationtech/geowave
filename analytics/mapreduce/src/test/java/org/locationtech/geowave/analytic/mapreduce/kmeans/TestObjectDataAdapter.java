@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -63,7 +63,7 @@ public class TestObjectDataAdapter extends AbstractDataAdapter<TestObject> imple
         public void fromBinary(final byte[] bytes) {}
 
         @Override
-        public CommonIndexValue toIndexValue(PersistentDataSet<Object> adapterPersistenceEncoding) {
+        public CommonIndexValue toIndexValue(PersistentDataset<Object> adapterPersistenceEncoding) {
           return new GeometryWrapper(
               (Geometry) adapterPersistenceEncoding.getValue(GEOM),
               new byte[0]);

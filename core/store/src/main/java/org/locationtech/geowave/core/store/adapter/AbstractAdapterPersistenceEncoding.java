@@ -10,13 +10,13 @@ package org.locationtech.geowave.core.store.adapter;
 
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 /** @since 0.9.1 */
 public abstract class AbstractAdapterPersistenceEncoding extends CommonIndexedPersistenceEncoding {
-  protected final PersistentDataSet<Object> adapterExtendedData;
+  protected final PersistentDataset<Object> adapterExtendedData;
 
   public AbstractAdapterPersistenceEncoding(
       final short internalAdapterId,
@@ -24,9 +24,9 @@ public abstract class AbstractAdapterPersistenceEncoding extends CommonIndexedPe
       final byte[] partitionKey,
       final byte[] sortKey,
       final int duplicateCount,
-      final PersistentDataSet<CommonIndexValue> commonData,
-      final PersistentDataSet<byte[]> unknownData,
-      final PersistentDataSet<Object> adapterExtendedData) {
+      final PersistentDataset<CommonIndexValue> commonData,
+      final PersistentDataset<byte[]> unknownData,
+      final PersistentDataset<Object> adapterExtendedData) {
     super(
         internalAdapterId,
         dataId,
@@ -43,7 +43,7 @@ public abstract class AbstractAdapterPersistenceEncoding extends CommonIndexedPe
    *
    * @return the extended data beyond the common index fields that are provided by the adapter
    */
-  public PersistentDataSet<Object> getAdapterExtendedData() {
+  public PersistentDataset<Object> getAdapterExtendedData() {
     return adapterExtendedData;
   }
 

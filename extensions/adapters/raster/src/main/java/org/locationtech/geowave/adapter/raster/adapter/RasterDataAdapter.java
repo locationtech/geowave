@@ -113,7 +113,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.SingleFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
@@ -1113,7 +1113,7 @@ public class RasterDataAdapter implements
   public AdapterPersistenceEncoding encode(
       final GridCoverage entry,
       final CommonIndexModel indexModel) {
-    final PersistentDataSet<Object> adapterExtendedData = new SingleFieldPersistentDataset<>();
+    final PersistentDataset<Object> adapterExtendedData = new SingleFieldPersistentDataset<>();
     adapterExtendedData.addValue(DATA_FIELD_ID, getRasterTileFromCoverage(entry));
     final AdapterPersistenceEncoding encoding;
     if (entry instanceof FitToIndexGridCoverage) {

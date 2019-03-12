@@ -39,7 +39,7 @@ import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -455,7 +455,7 @@ public class AccumuloOptionsTest {
 
           @Override
           public CommonIndexValue toIndexValue(
-              PersistentDataSet<Object> adapterPersistenceEncoding) {
+              PersistentDataset<Object> adapterPersistenceEncoding) {
             return new GeometryWrapper(
                 (Geometry) adapterPersistenceEncoding.getValue(GEOM),
                 new byte[0]);

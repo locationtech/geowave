@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
@@ -131,7 +131,7 @@ public class QueryFilterIterator extends Filter {
   @Override
   public boolean accept(final Key key, final Value value) {
     if (isSet()) {
-      final PersistentDataSet<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
+      final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
 
       final FlattenedUnreadData unreadData = aggregateFieldData(key, value, commonData);
       return applyRowFilter(key.getRow(currentRow), commonData, unreadData);
@@ -144,7 +144,7 @@ public class QueryFilterIterator extends Filter {
   protected FlattenedUnreadData aggregateFieldData(
       final Key key,
       final Value value,
-      final PersistentDataSet<CommonIndexValue> commonData) {
+      final PersistentDataset<CommonIndexValue> commonData) {
     final GeoWaveKey gwKey = new GeoWaveKeyImpl(key.getRow().copyBytes(), partitionKeyLength);
     final GeoWaveValue gwValue =
         new GeoWaveValueImpl(
@@ -171,7 +171,7 @@ public class QueryFilterIterator extends Filter {
 
   protected boolean applyRowFilter(
       final Text currentRow,
-      final PersistentDataSet<CommonIndexValue> commonData,
+      final PersistentDataset<CommonIndexValue> commonData,
       final FlattenedUnreadData unreadData) {
     return applyRowFilter(getEncoding(currentRow, partitionKeyLength, commonData, unreadData));
   }
@@ -179,7 +179,7 @@ public class QueryFilterIterator extends Filter {
   protected static CommonIndexedPersistenceEncoding getEncoding(
       final Text currentRow,
       final int partitionKeyLength,
-      final PersistentDataSet<CommonIndexValue> commonData,
+      final PersistentDataset<CommonIndexValue> commonData,
       final FlattenedUnreadData unreadData) {
     final GeoWaveKeyImpl rowId = new GeoWaveKeyImpl(currentRow.copyBytes(), partitionKeyLength);
     return new DeferredReadCommonIndexedPersistenceEncoding(

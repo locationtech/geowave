@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * @param <T> The most specific generalization for the type for all of the values in this dataset.
  */
-public class MultiFieldPersistentDataset<T> implements PersistentDataSet<T> {
+public class MultiFieldPersistentDataset<T> implements PersistentDataset<T> {
   private final Map<String, T> fieldNameToValueMap;
 
   public MultiFieldPersistentDataset() {

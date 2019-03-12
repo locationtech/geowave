@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.flatten.FlattenedDataSet;
@@ -54,7 +54,7 @@ public class HBaseDistributableFilter extends FilterBase {
   private List<String> commonIndexFieldIds = new ArrayList<>();
 
   // CACHED decoded data:
-  private PersistentDataSet<CommonIndexValue> commonData;
+  private PersistentDataset<CommonIndexValue> commonData;
   private FlattenedUnreadData unreadData;
   private CommonIndexedPersistenceEncoding persistenceEncoding;
   private IndexedAdapterPersistenceEncoding adapterEncoding;
@@ -245,7 +245,7 @@ public class HBaseDistributableFilter extends FilterBase {
 
   protected static CommonIndexedPersistenceEncoding getPersistenceEncoding(
       final GeoWaveKeyImpl rowKey,
-      final PersistentDataSet<CommonIndexValue> commonData,
+      final PersistentDataset<CommonIndexValue> commonData,
       final FlattenedUnreadData unreadData) {
 
     return new DeferredReadCommonIndexedPersistenceEncoding(
@@ -263,12 +263,12 @@ public class HBaseDistributableFilter extends FilterBase {
   }
 
   public IndexedAdapterPersistenceEncoding getAdapterEncoding(final DataTypeAdapter dataAdapter) {
-    final PersistentDataSet<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
+    final PersistentDataset<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
     if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
       ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
           dataAdapter,
           model);
-      final PersistentDataSet<Object> existingExtValues =
+      final PersistentDataset<Object> existingExtValues =
           ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
       if (existingExtValues != null) {
         adapterExtendedValues.addValues(existingExtValues.getValues());
@@ -321,7 +321,7 @@ public class HBaseDistributableFilter extends FilterBase {
 
   protected FlattenedUnreadData aggregateFieldData(
       final Cell cell,
-      final PersistentDataSet<CommonIndexValue> commonData) {
+      final PersistentDataset<CommonIndexValue> commonData) {
     final byte[] qualBuf = CellUtil.cloneQualifier(cell);
     final byte[] valBuf = CellUtil.cloneValue(cell);
 

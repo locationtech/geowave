@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.store.adapter;
 import java.util.concurrent.CompletableFuture;
 import org.locationtech.geowave.core.store.base.dataidx.BatchDataIndexRetrieval;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
@@ -54,21 +54,21 @@ public class AsyncPersistenceEncoding extends IndexedAdapterPersistenceEncoding 
   }
 
   @Override
-  public PersistentDataSet<Object> getAdapterExtendedData() {
+  public PersistentDataset<Object> getAdapterExtendedData() {
     // defer any reading of fieldValues until necessary
     deferredReadFields();
     return super.getAdapterExtendedData();
   }
 
   @Override
-  public PersistentDataSet<byte[]> getUnknownData() {
+  public PersistentDataset<byte[]> getUnknownData() {
     // defer any reading of fieldValues until necessary
     deferredReadFields();
     return super.getUnknownData();
   }
 
   @Override
-  public PersistentDataSet<CommonIndexValue> getCommonData() {
+  public PersistentDataset<CommonIndexValue> getCommonData() {
     // defer any reading of fieldValues until necessary
     deferredReadFields();
     return super.getCommonData();

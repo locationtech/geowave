@@ -34,7 +34,7 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
       final byte[] partitionKey,
       final byte[] sortKey,
       final int duplicateCount,
-      final PersistentDataSet<CommonIndexValue> commonData,
+      final PersistentDataset<CommonIndexValue> commonData,
       final FlattenedUnreadData unreadData) {
     super(
         adapterId,

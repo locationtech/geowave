@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
@@ -38,7 +38,7 @@ public class BasicQueryTest {
   SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
 
   private CommonIndexedPersistenceEncoding createData(final Date start, final Date end) {
-    final PersistentDataSet<CommonIndexValue> commonData =
+    final PersistentDataset<CommonIndexValue> commonData =
         new MultiFieldPersistentDataset<CommonIndexValue>();
 
     commonData.addValue(

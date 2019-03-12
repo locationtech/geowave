@@ -29,7 +29,7 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -100,7 +100,7 @@ public class AggregationIterator extends Filter {
   @Override
   public boolean accept(final Key key, final Value value) {
     if (queryFilterIterator != null) {
-      final PersistentDataSet<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
+      final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
       key.getRow(currentRow);
       final FlattenedUnreadData unreadData =
           queryFilterIterator.aggregateFieldData(key, value, commonData);
@@ -138,12 +138,12 @@ public class AggregationIterator extends Filter {
       }
     } else if (((Short) (persistenceEncoding.getInternalAdapterId())).equals(
         (adapter.getAdapterId()))) {
-      final PersistentDataSet<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
+      final PersistentDataset<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
       if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
         ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
             adapter,
             model);
-        final PersistentDataSet<Object> existingExtValues =
+        final PersistentDataset<Object> existingExtValues =
             ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
         if (existingExtValues != null) {
           adapterExtendedValues.addValues(existingExtValues.getValues());

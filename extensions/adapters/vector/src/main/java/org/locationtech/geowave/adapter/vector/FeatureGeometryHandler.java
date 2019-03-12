@@ -10,7 +10,7 @@ package org.locationtech.geowave.adapter.vector;
 
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.jts.geom.Geometry;
@@ -68,7 +68,7 @@ public class FeatureGeometryHandler implements
   }
 
   @Override
-  public GeometryWrapper toIndexValue(final PersistentDataSet<Object> adapterPersistenceEncoding) {
+  public GeometryWrapper toIndexValue(final PersistentDataset<Object> adapterPersistenceEncoding) {
     final Geometry geometry =
         (Geometry) adapterPersistenceEncoding.getValue(nativeGeometryHandler.getFieldName());
     // visibility is unnecessary because this only happens after the geometry is read (its only used

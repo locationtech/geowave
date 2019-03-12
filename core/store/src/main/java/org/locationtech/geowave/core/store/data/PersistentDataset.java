@@ -3,7 +3,7 @@ package org.locationtech.geowave.core.store.data;
 import java.util.Map;
 
 
-public interface PersistentDataSet<T> {
+public interface PersistentDataset<T> {
 
   /**
    * Add the field ID/value pair to this data set. Do not overwrite.

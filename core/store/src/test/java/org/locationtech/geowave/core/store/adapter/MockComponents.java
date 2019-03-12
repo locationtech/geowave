@@ -43,7 +43,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -102,7 +102,7 @@ public class MockComponents {
 
       @Override
       public TestIndexFieldType toIndexValue(
-          final PersistentDataSet<Object> adapterPersistenceEncoding) {
+          final PersistentDataset<Object> adapterPersistenceEncoding) {
         return new TestIndexFieldType((Integer) adapterPersistenceEncoding.getValue(INTEGER));
       }
     }
@@ -457,7 +457,7 @@ public class MockComponents {
 
     @Override
     public TestIndexFieldType toIndexValue(
-        final PersistentDataSet<Object> adapterPersistenceEncoding) {
+        final PersistentDataset<Object> adapterPersistenceEncoding) {
       return toIndexValue(
           (Integer) adapterPersistenceEncoding.getValue(MockAbstractDataAdapter.INTEGER));
     }

@@ -21,7 +21,7 @@ import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEnc
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
@@ -53,12 +53,12 @@ public class CQLQueryFilter implements QueryFilter {
       final CommonIndexModel indexModel,
       final IndexedPersistenceEncoding persistenceEncoding) {
     if ((filter != null) && (indexModel != null) && (adapter != null)) {
-      final PersistentDataSet<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
+      final PersistentDataset<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
       if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
         ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
             adapter,
             indexModel);
-        final PersistentDataSet<Object> existingExtValues =
+        final PersistentDataset<Object> existingExtValues =
             ((AbstractAdapterPersistenceEncoding) persistenceEncoding).getAdapterExtendedData();
 
         if (persistenceEncoding.isAsync()) {

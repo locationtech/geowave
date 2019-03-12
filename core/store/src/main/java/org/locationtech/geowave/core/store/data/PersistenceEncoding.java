@@ -22,16 +22,16 @@ import org.slf4j.LoggerFactory;
 public class PersistenceEncoding<T> {
   private Short internalAdapterId;
   private final byte[] dataId;
-  protected final PersistentDataSet<T> commonData;
-  protected final PersistentDataSet<byte[]> unknownData;
+  protected final PersistentDataset<T> commonData;
+  protected final PersistentDataset<byte[]> unknownData;
   protected static final Logger LOGGER = LoggerFactory.getLogger(PersistenceEncoding.class);
   protected static final double DOUBLE_TOLERANCE = 1E-12d;
 
   public PersistenceEncoding(
       final Short internalAdapterId,
       final byte[] dataId,
-      final PersistentDataSet<T> commonData,
-      final PersistentDataSet<byte[]> unknownData) {
+      final PersistentDataset<T> commonData,
+      final PersistentDataset<byte[]> unknownData) {
     this.internalAdapterId = internalAdapterId;
     this.dataId = dataId;
     this.commonData = commonData;
@@ -51,7 +51,7 @@ public class PersistenceEncoding<T> {
    *
    * @return the unknown data that is yet to be identified by a field reader
    */
-  public PersistentDataSet<byte[]> getUnknownData() {
+  public PersistentDataset<byte[]> getUnknownData() {
     return unknownData;
   }
 
@@ -60,7 +60,7 @@ public class PersistenceEncoding<T> {
    *
    * @return the common index data
    */
-  public PersistentDataSet<T> getCommonData() {
+  public PersistentDataset<T> getCommonData() {
     return commonData;
   }
 

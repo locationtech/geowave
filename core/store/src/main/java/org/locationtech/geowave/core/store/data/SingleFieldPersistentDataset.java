@@ -11,7 +11,7 @@ import java.util.Map.Entry;
  *
  * @param <T> The most specific generalization for the type for all of the values in this dataset.
  */
-public class SingleFieldPersistentDataset<T> implements PersistentDataSet<T> {
+public class SingleFieldPersistentDataset<T> implements PersistentDataset<T> {
   private String fieldName;
   private T value;
 

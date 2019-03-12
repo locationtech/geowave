@@ -48,7 +48,7 @@ import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
@@ -115,7 +115,7 @@ public class DataStoreUtils {
   public static FlattenedUnreadData aggregateFieldData(
       final GeoWaveKey key,
       final GeoWaveValue value,
-      final PersistentDataSet<CommonIndexValue> commonData,
+      final PersistentDataset<CommonIndexValue> commonData,
       final CommonIndexModel model,
       final List<String> commonIndexFieldIds) {
     final byte[] fieldMask = value.getFieldMask();

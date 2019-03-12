@@ -55,7 +55,7 @@ import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -496,7 +496,7 @@ public class AccumuloDataStoreStatsTest {
 
           @Override
           public CommonIndexValue toIndexValue(
-              final PersistentDataSet<Object> adapterPersistenceEncoding) {
+              final PersistentDataset<Object> adapterPersistenceEncoding) {
             return new GeometryWrapper(
                 (Geometry) adapterPersistenceEncoding.getValue(GEOM),
                 new byte[0]);

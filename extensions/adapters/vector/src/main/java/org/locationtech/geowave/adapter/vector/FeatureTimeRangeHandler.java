@@ -16,7 +16,7 @@ import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
-import org.locationtech.geowave.core.store.data.PersistentDataSet;
+import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.opengis.feature.simple.SimpleFeature;
@@ -104,7 +104,7 @@ public class FeatureTimeRangeHandler implements IndexFieldHandler<SimpleFeature,
   }
 
   @Override
-  public Time toIndexValue(final PersistentDataSet<Object> adapterPersistenceEncoding) {
+  public Time toIndexValue(final PersistentDataset<Object> adapterPersistenceEncoding) {
     final Object startObj =
         adapterPersistenceEncoding.getValue(nativeStartTimeHandler.getFieldName());
     final Object endObj = adapterPersistenceEncoding.getValue(nativeEndTimeHandler.getFieldName());
