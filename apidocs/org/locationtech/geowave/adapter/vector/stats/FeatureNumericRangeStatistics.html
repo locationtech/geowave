@@ -100,10 +100,10 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics</a>&lt;T,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics</a>&lt;T,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,B&gt;</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics</li>
@@ -124,7 +124,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">FeatureNumericRangeStatistics</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;
+extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;
 implements <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/FieldNameStatistic.html" title="interface in org.locationtech.geowave.core.geotime.store.statistics">FieldNameStatistic</a></pre>
 </li>
 </ul>
@@ -357,7 +357,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a>&nbsp;getRange(org.opengis.feature.simple.SimpleFeature&nbsp;entry)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#getRange-T-">getRange</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#getRange-T-">getRange</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -385,7 +385,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;toString()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#toString--">toString</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#toString--">toString</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -398,7 +398,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;resultsName()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#resultsName--">resultsName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#resultsName--">resultsName</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -411,7 +411,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;resultsValue()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#resultsValue--">resultsValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#resultsValue--">resultsValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>

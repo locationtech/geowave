@@ -83,14 +83,18 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.statistics">org.locationtech.geowave.core.geotime.store.statistics</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.api">org.locationtech.geowave.core.store.api</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.api">org.locationtech.geowave.core.store.api</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.metadata">org.locationtech.geowave.core.store.metadata</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -99,6 +103,43 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="org.locationtech.geowave.core.geotime.store.statistics">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a> in <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/package-summary.html">org.locationtech.geowave.core.geotime.store.statistics</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/package-summary.html">org.locationtech.geowave.core.geotime.store.statistics</a> with parameters of type <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#BoundingBoxDataStatistics-java.lang.Short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-">BoundingBoxDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;adapterId,
+                         <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.locationtech.jts.geom.Envelope,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="type parameter in BoundingBoxDataStatistics">B</a>&gt;&nbsp;statisticsType)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#BoundingBoxDataStatistics-java.lang.Short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String-">BoundingBoxDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;adapterId,
+                         <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.locationtech.jts.geom.Envelope,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="type parameter in BoundingBoxDataStatistics">B</a>&gt;&nbsp;statisticsType,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#BoundingBoxDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-">BoundingBoxDataStatistics</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.locationtech.jts.geom.Envelope,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="type parameter in BoundingBoxDataStatistics">B</a>&gt;&nbsp;statisticsType)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html#TimeRangeDataStatistics-java.lang.Short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-">TimeRangeDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
+                       <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.threeten.extra.Interval,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html" title="type parameter in TimeRangeDataStatistics">B</a>&gt;&nbsp;statisticsType)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html#TimeRangeDataStatistics-java.lang.Short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String-">TimeRangeDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
+                       <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.threeten.extra.Interval,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html" title="type parameter in TimeRangeDataStatistics">B</a>&gt;&nbsp;statisticsType,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;extendedId)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html#TimeRangeDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-">TimeRangeDataStatistics</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.threeten.extra.Interval,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html" title="type parameter in TimeRangeDataStatistics">B</a>&gt;&nbsp;statisticsType)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="org.locationtech.geowave.core.store.adapter.statistics">
 <!--   -->
 </a>
@@ -282,9 +323,16 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/IndexStatisticsQueryBuilder.html#IndexStatisticsQueryBuilder-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-">IndexStatisticsQueryBuilder</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/IndexStatisticsQueryBuilder.html" title="type parameter in IndexStatisticsQueryBuilder">R</a>,<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/IndexStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">IndexStatisticsQueryBuilder</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/IndexStatisticsQueryBuilder.html" title="type parameter in IndexStatisticsQueryBuilder">R</a>&gt;&gt;&nbsp;statsType)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#NumericRangeDataStatistics-java.lang.Short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-">NumericRangeDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
+                          <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="type parameter in NumericRangeDataStatistics">B</a>&gt;&nbsp;type)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#NumericRangeDataStatistics-java.lang.Short-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-java.lang.String-">NumericRangeDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
-                          <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&gt;&nbsp;type,
+                          <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="type parameter in NumericRangeDataStatistics">B</a>&gt;&nbsp;type,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#NumericRangeDataStatistics-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-">NumericRangeDataStatistics</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="type parameter in NumericRangeDataStatistics">B</a>&gt;&nbsp;type)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html#PartitionStatisticsQueryBuilder-org.locationtech.geowave.core.store.adapter.statistics.StatisticsType-">PartitionStatisticsQueryBuilder</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="type parameter in PartitionStatisticsQueryBuilder">R</a>,<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">PartitionStatisticsQueryBuilder</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/PartitionStatisticsQueryBuilder.html" title="type parameter in PartitionStatisticsQueryBuilder">R</a>&gt;&gt;&nbsp;statsType)</code>&nbsp;</td>

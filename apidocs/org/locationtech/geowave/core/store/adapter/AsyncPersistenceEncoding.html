@@ -203,13 +203,13 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/I
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="interface in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AsyncPersistenceEncoding.html#getAdapterExtendedData--">getAdapterExtendedData</a></span>()</code>
 <div class="block">This returns a representation of the custom fields for the data adapter</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="interface in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AsyncPersistenceEncoding.html#getCommonData--">getCommonData</a></span>()</code>
 <div class="block">Return the common index data that has been persisted</div>
 </td>
@@ -219,7 +219,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/I
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AsyncPersistenceEncoding.html#getFieldValuesFuture--">getFieldValuesFuture</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="interface in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AsyncPersistenceEncoding.html#getUnknownData--">getUnknownData</a></span>()</code>
 <div class="block">Return the data that has been persisted but not identified by a field reader</div>
 </td>
@@ -328,7 +328,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/I
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdapterExtendedData</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getAdapterExtendedData()</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="interface in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getAdapterExtendedData()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractAdapterPersistenceEncoding.html#getAdapterExtendedData--">AbstractAdapterPersistenceEncoding</a></code></span></div>
 <div class="block">This returns a representation of the custom fields for the data adapter</div>
 <dl>
@@ -345,7 +345,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/I
 <ul class="blockList">
 <li class="blockList">
 <h4>getUnknownData</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;getUnknownData()</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="interface in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;getUnknownData()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#getUnknownData--">PersistenceEncoding</a></code></span></div>
 <div class="block">Return the data that has been persisted but not identified by a field reader</div>
 <dl>
@@ -362,7 +362,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/I
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getCommonData</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="class in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;getCommonData()</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="interface in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;getCommonData()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/data/PersistenceEncoding.html#getCommonData--">PersistenceEncoding</a></code></span></div>
 <div class="block">Return the common index data that has been persisted</div>
 <dl>

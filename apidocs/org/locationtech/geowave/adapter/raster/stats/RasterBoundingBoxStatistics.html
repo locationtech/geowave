@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -100,10 +100,10 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics</a>&lt;T,org.locationtech.jts.geom.Envelope,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics</a>&lt;T,org.locationtech.jts.geom.Envelope,B&gt;</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/BaseStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">BaseStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistics</li>
@@ -119,12 +119,12 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage,org.locationtech.jts.geom.Envelope,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/FieldStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">FieldStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage,org.locationtech.jts.geom.Envelope,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/BaseStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">BaseStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="interface in org.locationtech.geowave.core.store.callback">IngestCallback</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">RasterBoundingBoxStatistics</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</pre>
+extends <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/BaseStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">BaseStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;</pre>
 </li>
 </ul>
 </div>
@@ -137,12 +137,23 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/store/s
 <!--   -->
 </a>
 <h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/BaseStatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">BaseStatisticsType</a>&lt;org.locationtech.jts.geom.Envelope&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/stats/RasterBoundingBoxStatistics.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics">
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.geotime.store.statistics.<a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#maxX">maxX</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#maxY">maxY</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#minX">minX</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#minY">minY</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#STATS_TYPE">STATS_TYPE</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#maxX">maxX</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#maxY">maxY</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#minX">minX</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#minY">minY</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics">
@@ -226,6 +237,23 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/store/s
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="STATS_TYPE">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>STATS_TYPE</h4>
+<pre>public static final&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/BaseStatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">BaseStatisticsType</a>&lt;org.locationtech.jts.geom.Envelope&gt; STATS_TYPE</pre>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
@@ -267,7 +295,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/store/s
 <pre>protected&nbsp;org.locationtech.jts.geom.Envelope&nbsp;getEnvelope(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getEnvelope-T-">getEnvelope</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html#getEnvelope-T-">getEnvelope</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/BaseStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">BaseStatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -325,13 +353,13 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/store/s
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

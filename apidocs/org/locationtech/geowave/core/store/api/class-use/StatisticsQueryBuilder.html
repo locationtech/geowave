@@ -154,6 +154,23 @@
 </a>
 <h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a> in <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/package-summary.html">org.locationtech.geowave.core.geotime.store.statistics</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/package-summary.html">org.locationtech.geowave.core.geotime.store.statistics</a> with type parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/BoundingBoxDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">BoundingBoxDataStatistics</a>&lt;T,B extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;org.locationtech.jts.geom.Envelope,B&gt;&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html" title="class in org.locationtech.geowave.core.geotime.store.statistics">TimeRangeDataStatistics</a>&lt;T,B extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;org.threeten.extra.Interval,B&gt;&gt;</span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
 <caption><span>Classes in <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/package-summary.html">org.locationtech.geowave.core.geotime.store.statistics</a> that implement <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -218,9 +235,13 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsQueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsQueryBuilderImpl</a>&lt;R,B extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,B&gt;&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;T,B extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;,B&gt;&gt;</span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsQueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsQueryBuilderImpl</a>&lt;R,B extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,B&gt;&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a>&lt;R,B extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticsQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">StatisticsQueryBuilder</a>&lt;R,B&gt;&gt;</span></code>
 <div class="block">This is a marker class extending ByteArrayId that additionally provides type checking with a

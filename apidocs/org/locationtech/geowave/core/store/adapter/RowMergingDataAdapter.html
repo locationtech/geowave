@@ -18,8 +18,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var methods = {"i0":18,"i1":18,"i2":18};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -143,19 +143,23 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/api/DataT
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colFirst"><code>default <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html#getOptions-short-java.util.Map-">getOptions</a></span>(short&nbsp;internalAdapterId,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;existingOptions)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html" title="type parameter in RowMergingDataAdapter">M</a>&gt;</code></td>
+<td class="colFirst"><code>default <a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html" title="type parameter in RowMergingDataAdapter">M</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html#getTransform--">getTransform</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>default <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html#mergeableClassId--">mergeableClassId</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -206,7 +210,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/api/DataT
 <ul class="blockList">
 <li class="blockList">
 <h4>getTransform</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html" title="type parameter in RowMergingDataAdapter">M</a>&gt;&nbsp;getTransform()</pre>
+<pre>default&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.html" title="type parameter in RowMergingDataAdapter">M</a>&gt;&nbsp;getTransform()</pre>
+</li>
+</ul>
+<a name="mergeableClassId--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>mergeableClassId</h4>
+<pre>default&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;mergeableClassId()</pre>
 </li>
 </ul>
 <a name="getOptions-short-java.util.Map-">
@@ -215,8 +228,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/api/DataT
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getOptions</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getOptions(short&nbsp;internalAdapterId,
-                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;existingOptions)</pre>
+<pre>default&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getOptions(short&nbsp;internalAdapterId,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;existingOptions)</pre>
 </li>
 </ul>
 </li>
