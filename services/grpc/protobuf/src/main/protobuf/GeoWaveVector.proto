@@ -78,7 +78,7 @@ message FeatureAttributeProtos {
     int64  valInt64 = 6;
     float  valFloat = 7;
     double valDouble = 8;
-    //google.protobuf.Timestamp valDate = 9;
+    google.protobuf.Timestamp valDate = 9;
     bytes valGeometry = 10; //ISO 19107 Geometry binary definition (WKB)
   }
 }

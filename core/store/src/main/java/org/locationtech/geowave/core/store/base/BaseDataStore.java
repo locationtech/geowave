@@ -462,6 +462,9 @@ public class BaseDataStore implements DataStore {
                   ((AdapterAndIndexBasedQueryConstraints) sanitizedConstraints).createQueryConstraints(
                       adapter,
                       indexAdapterPair.getLeft());
+              if (adapterIndexConstraints == null) {
+                continue;
+              }
             } else {
               adapterIndexConstraints = sanitizedConstraints;
             }

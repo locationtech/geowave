@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -13,8 +13,11 @@ import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.IndexOptimizationUtils;
 import org.locationtech.geowave.core.store.api.Index;
 import org.opengis.filter.Filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpatialTemporalQuery extends AbstractVectorConstraints<ExplicitSpatialTemporalQuery> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(SpatialTemporalQuery.class);
 
   public SpatialTemporalQuery() {
     super();
@@ -37,9 +40,17 @@ public class SpatialTemporalQuery extends AbstractVectorConstraints<ExplicitSpat
 
   @Override
   protected Filter getFilter(final GeotoolsFeatureDataAdapter adapter) {
-    return CommonFactoryFinder.getFilterFactory2().and(
-        SpatialQuery.getFilter(adapter, delegateConstraints),
-        TemporalQuery.getFilter(adapter, delegateConstraints));
+    final Filter spatialFilter = SpatialQuery.getFilter(adapter, delegateConstraints);
+    if (spatialFilter == null) {
+      LOGGER.warn("Spatial filter does not apply to type '" + adapter.getTypeName() + "'");
+      return null;
+    }
+    final Filter temporalFilter = TemporalQuery.getFilter(adapter, delegateConstraints);
+    if (temporalFilter == null) {
+      LOGGER.warn("Temporal filter does not apply to type '" + adapter.getTypeName() + "'");
+      return null;
+    }
+    return CommonFactoryFinder.getFilterFactory2().and(spatialFilter, temporalFilter);
   }
 
 }
