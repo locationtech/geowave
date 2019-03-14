@@ -34,7 +34,7 @@ public class Tests {
 
   // Raster to validate JP2 support in GDAL.
   private static final String JP2_TEST_FILE =
-      "../../../test/data/raster/sentinel2_band_example.jp2";
+      "../../../test/src/test/resources/sentinel/sentinel2_band_example.jp2";
   // Flag to indicate whether the native JP2ECW plugin is properly setup.
   private static int JP2ECW_PLUGIN_AVAILABLE_FLAG = 0;
 
