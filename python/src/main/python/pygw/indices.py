@@ -1,5 +1,5 @@
-from .config import config
-from .base_models import Index
+from pygw.config import config
+from pygw.base_models import Index
 
 class SpatialIndex(Index):
     """Geotools SpatialIndex."""

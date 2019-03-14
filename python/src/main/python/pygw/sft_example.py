@@ -41,12 +41,17 @@ for data in j_data:
 
 # Close the writer
 writer.close()
+
+# Query everything from the datastore
+res = ds.query(Query.everything())
+
+#Iterate over the results
+for r in res:
+    print_obj(r)
+
 ```
 """
-from .config import config
-from .base_models import *
-from .stores import *
-from .indices import *
+from pygw import *
 
 class SimpleFeatureType(PyGwJavaWrapper):
     """Nothing for now. Just a place holder"""
