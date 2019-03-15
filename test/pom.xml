@@ -789,6 +789,13 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>kudu-it</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreType>KUDU</testStoreType>
+			</properties>
+		</profile>
+		<profile>
 			<id>redis-it</id>
 			<properties>
 				<skipITs>false</skipITs>

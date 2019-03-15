@@ -23,6 +23,7 @@ env:
     - NAME='Accumulo Server IT on Latest HDP Versions' MAVEN_PROFILES='accumulo-it-server,hortonworks' BUILD_DOCS=false  IT_ONLY=true 
 #    - NAME='HBase Server IT on Latest CDH Versions'  MAVEN_PROFILES='hbase-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
     - NAME='RockDB IT with Secondary Indexing'  MAVEN_PROFILES='rocksdb-it,secondary-index-it' BUILD_DOCS=false  IT_ONLY=true
+    - NAME='Kudu IT on Latest ASF Versions' MAVEN_PROFILES='kudu-it' BUILD_DOCS=false  IT_ONLY=true
   global:
     - secure: C3gdJmFavZxvsRVqCLpRUAaisNV3MhWbSYf4Wjs2SBLC/AIEwN0vDWHOuYiUExuXR1kApBVdNffuCX7bt/5siewHgmiVUGyY1xytxDdv+PAKZihlfYZRGattyg3XUbEFwyjr7c74639Y1w45NPUoBMUT4SKHZkfqD+FDU47OHIM=
 
@@ -32,7 +33,7 @@ cache:
   - test/landsat8
   - test/sentinel2
   - test/target/temp/gdal
-install: 
+install:
   - .utility/pull-dev-resources.sh
   # This will only run on master w/ BUILD_DOCS=true
   - travis_wait 30 .utility/build-docs.sh
@@ -40,6 +41,8 @@ script:
   # This script uses the IT_ONLY flag to determine whether to run unit tests using verify, or ITs only using failsafe
   - .utility/run-tests.sh
 before_install:
+  # Force an ntp time sync which is required for Kudu to start (ntp is already installed on travis)
+  - sudo service ntp stop && sudo ntpd -gq && sudo service ntp start
   # Remove travis CI jdk 11 from path
   - rm ${HOME}/.bash_profile.d/travis_jdk.bash
   - export PATH=${PATH/:\/usr\/local\/lib\/jvm\/openjdk11\/bin/}

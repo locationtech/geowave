@@ -20,6 +20,7 @@ import org.locationtech.geowave.test.HBaseStoreTestEnvironment;
 import org.locationtech.geowave.test.RedisStoreTestEnvironment;
 import org.locationtech.geowave.test.RocksDBStoreTestEnvironment;
 import org.locationtech.geowave.test.StoreTestEnvironment;
+import org.locationtech.geowave.test.KuduStoreTestEnvironment;
 import org.locationtech.geowave.test.TestUtils;
 
 /**
@@ -47,6 +48,7 @@ public @interface GeoWaveTestStore {
     BIGTABLE(BigtableStoreTestEnvironment.getInstance()),
     CASSANDRA(CassandraStoreTestEnvironment.getInstance()),
     HBASE(HBaseStoreTestEnvironment.getInstance()),
+    KUDU(KuduStoreTestEnvironment.getInstance()),
     REDIS(RedisStoreTestEnvironment.getInstance()),
     ROCKSDB(RocksDBStoreTestEnvironment.getInstance());
     private final StoreTestEnvironment testEnvironment;

@@ -36,6 +36,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
