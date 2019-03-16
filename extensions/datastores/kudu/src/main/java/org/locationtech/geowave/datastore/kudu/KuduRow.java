@@ -30,45 +30,30 @@ public class KuduRow extends MergeableGeoWaveRow {
   private final byte[] value;
   private final int numDuplicates;
 
-  private enum ColumnType {
-    PARTITION_KEY((final List<ColumnSchema> c, final Pair<String, Type> f) -> c.add(
-        new ColumnSchema.ColumnSchemaBuilder(f.getLeft(), f.getRight()).key(true).build())),
-    CLUSTER_COLUMN((final List<ColumnSchema> c, final Pair<String, Type> f) -> c.add(
-        new ColumnSchema.ColumnSchemaBuilder(f.getLeft(), f.getRight()).key(true).build())),
-    OTHER_COLUMN((final List<ColumnSchema> c, final Pair<String, Type> f) -> c.add(
-        new ColumnSchema.ColumnSchemaBuilder(f.getLeft(), f.getRight()).build()));
-
-    private BiConsumer<List<ColumnSchema>, Pair<String, Type>> createFunction;
-
-    ColumnType(final BiConsumer<List<ColumnSchema>, Pair<String, Type>> createFunction) {
-      this.createFunction = createFunction;
-    }
-  }
-
   public enum KuduField {
-    GW_PARTITION_ID_KEY("partition", Type.BINARY, ColumnType.PARTITION_KEY, true),
-    GW_ADAPTER_ID_KEY("adapter_id", Type.INT16, ColumnType.CLUSTER_COLUMN, true),
-    GW_SORT_KEY("sort", Type.BINARY, ColumnType.CLUSTER_COLUMN),
-    GW_DATA_ID_KEY("data_id", Type.BINARY, ColumnType.CLUSTER_COLUMN),
-    GW_FIELD_VISIBILITY_KEY("vis", Type.BINARY, ColumnType.CLUSTER_COLUMN),
-    GW_NANO_TIME_KEY("nano_time", Type.BINARY, ColumnType.CLUSTER_COLUMN),
-    GW_FIELD_MASK_KEY("field_mask", Type.BINARY, ColumnType.OTHER_COLUMN),
-    GW_VALUE_KEY("value", Type.BINARY, ColumnType.OTHER_COLUMN, true),
-    GW_NUM_DUPLICATES_KEY("num_duplicates", Type.INT8, ColumnType.OTHER_COLUMN);
+    GW_PARTITION_ID_KEY("partition", Type.BINARY, KuduColumnType.PARTITION_KEY, true),
+    GW_ADAPTER_ID_KEY("adapter_id", Type.INT16, KuduColumnType.CLUSTER_COLUMN, true),
+    GW_SORT_KEY("sort", Type.BINARY, KuduColumnType.CLUSTER_COLUMN),
+    GW_DATA_ID_KEY("data_id", Type.BINARY, KuduColumnType.CLUSTER_COLUMN),
+    GW_FIELD_VISIBILITY_KEY("vis", Type.BINARY, KuduColumnType.CLUSTER_COLUMN),
+    GW_NANO_TIME_KEY("nano_time", Type.BINARY, KuduColumnType.CLUSTER_COLUMN),
+    GW_FIELD_MASK_KEY("field_mask", Type.BINARY, KuduColumnType.OTHER_COLUMN),
+    GW_VALUE_KEY("value", Type.BINARY, KuduColumnType.OTHER_COLUMN, true),
+    GW_NUM_DUPLICATES_KEY("num_duplicates", Type.INT8, KuduColumnType.OTHER_COLUMN);
 
     private final String fieldName;
     private final Type dataType;
-    private ColumnType columnType;
+    private KuduColumnType columnType;
     private final boolean isDataIndexColumn;
 
-    KuduField(final String fieldName, final Type dataType, final ColumnType columnType) {
+    KuduField(final String fieldName, final Type dataType, final KuduColumnType columnType) {
       this(fieldName, dataType, columnType, false);
     }
 
     KuduField(
         final String fieldName,
         final Type dataType,
-        final ColumnType columnType,
+        final KuduColumnType columnType,
         final boolean isDataIndexColumn) {
       this.fieldName = fieldName;
       this.dataType = dataType;
