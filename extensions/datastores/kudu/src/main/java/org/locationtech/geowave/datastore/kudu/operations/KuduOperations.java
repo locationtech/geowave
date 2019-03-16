@@ -21,9 +21,8 @@ import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
+import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.operations.*;
-import org.locationtech.geowave.datastore.kudu.KuduRow;
-import org.locationtech.geowave.datastore.kudu.config.KuduOptions;
 import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
@@ -31,14 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 import java.util.function.Predicate;
-import static org.locationtech.geowave.datastore.kudu.KuduRow.*;
+import static org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
 
 public class KuduOperations implements MapReduceDataStoreOperations {
   private static final Logger LOGGER = LoggerFactory.getLogger(KuduOperations.class);
@@ -98,7 +92,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
-    createTable(index.getName());
+    createTable(index.getName(), index.getIndexStrategy().getPredefinedSplits().length);
     return new KuduWriter(index.getName(), this);
   }
 
@@ -153,7 +147,6 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public void delete(final DataIndexReaderParams readerParams) {
-    // TODO: check data_id vs partition_id for delete
     try {
       byte[][] dataIds = readerParams.getDataIds();
       short adapterId = readerParams.getAdapterId();
@@ -174,7 +167,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
     return client.newSession();
   }
 
-  private boolean createTable(final String indexName) {
+  private boolean createTable(final String indexName, int numPartitions) {
     final String tableName = getKuduSafeName(indexName);
     synchronized (CREATE_TABLE_MUTEX) {
       try {
@@ -189,13 +182,12 @@ public class KuduOperations implements MapReduceDataStoreOperations {
           for (final KuduField f : fields) {
             f.addColumn(columns);
           }
-          // TODO: get number of buckets based on num partitions specified for index
           client.createTable(
               tableName,
               new Schema(columns),
               new CreateTableOptions().addHashPartitions(
                   Collections.singletonList(KuduField.GW_PARTITION_ID_KEY.getFieldName()),
-                  1));
+                  numPartitions));
           return true;
         }
       } catch (final IOException e) {
