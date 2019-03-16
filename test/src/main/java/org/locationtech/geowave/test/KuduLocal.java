@@ -41,8 +41,7 @@ public class KuduLocal {
   private final int numTablets;
   private final File kuduLocalDir;
 
-  private final ExecuteWatchdog watchdog;
-  private final Executor executor = new DefaultExecutor();
+  private ExecuteWatchdog watchdog;
 
   public KuduLocal(String localDir, int numTablets) {
     if (TestUtils.isSet(localDir)) {
@@ -57,9 +56,6 @@ public class KuduLocal {
     }
     this.numTablets = numTablets;
 
-    this.watchdog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
-    executor.setWatchdog(this.watchdog);
-    executor.setWorkingDirectory(this.kuduLocalDir);
   }
 
   public boolean start() {
@@ -165,6 +161,11 @@ public class KuduLocal {
   }
 
   private void startKuduLocal() throws ExecuteException, IOException, InterruptedException {
+    watchdog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
+    Executor executor = new DefaultExecutor();
+    executor.setWatchdog(this.watchdog);
+    executor.setWorkingDirectory(this.kuduLocalDir);
+
     // Using a result handler makes the local instance run async
     DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
 
