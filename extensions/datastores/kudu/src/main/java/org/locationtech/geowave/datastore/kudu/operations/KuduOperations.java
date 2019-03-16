@@ -21,7 +21,7 @@ import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
+import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.*;
 import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
@@ -56,16 +56,21 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public boolean indexExists(final String indexName) throws IOException {
-    return true;
+    String tableName = getKuduSafeName(indexName);
+    return client.tableExists(tableName);
   }
 
   @Override
   public boolean metadataExists(final MetadataType type) throws IOException {
-    return true;
+    return indexExists(getMetadataTableName(type));
   }
 
   @Override
-  public void deleteAll() throws Exception {}
+  public void deleteAll() throws Exception {
+    for (String table : client.getTablesList().getTablesList()) {
+      client.deleteTable(table);
+    }
+  }
 
   @Override
   public boolean deleteAll(
@@ -98,7 +103,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public RowWriter createDataIndexWriter(final InternalDataAdapter<?> adapter) {
-    return null;
+    return createWriter(DataIndexUtils.DATA_ID_INDEX, adapter);
   }
 
   @Override
@@ -118,17 +123,12 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public <T> RowReader<T> createReader(final ReaderParams<T> readerParams) {
-    return null;
-  }
-
-  @Override
-  public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
-    return null;
+    return new KuduReader<>(readerParams, this, options.getStoreOptions().isVisibilityEnabled());
   }
 
   @Override
   public RowReader<GeoWaveRow> createReader(final RecordReaderParams readerParams) {
-    return null;
+    return new KuduReader<>(readerParams, this, options.getStoreOptions().isVisibilityEnabled());
   }
 
   @Override
@@ -204,14 +204,16 @@ public class KuduOperations implements MapReduceDataStoreOperations {
     return name;
   }
 
+  public KuduTable getTable(String tableName) throws KuduException {
+    return client.openTable(getKuduSafeName(tableName));
+  }
+
   public Insert getInsert(String tableName) throws KuduException {
-    KuduTable table = client.openTable(getKuduSafeName(tableName));
-    return table.newInsert();
+    return getTable(tableName).newInsert();
   }
 
   public Delete getDelete(String tableName) throws KuduException {
-    KuduTable table = client.openTable(getKuduSafeName(tableName));
-    return table.newDelete();
+    return getTable(tableName).newDelete();
   }
 
   public void addToPartialRow(
@@ -264,12 +266,13 @@ public class KuduOperations implements MapReduceDataStoreOperations {
         rowMerging);
   }
 
-  public KuduTable getTable(String tableName) throws KuduException {
-    return client.openTable(getKuduSafeName(tableName));
-  }
-
   public KuduScannerBuilder getScannerBuilder(KuduTable table) {
     return client.newScannerBuilder(table);
+  }
+
+  public String getMetadataTableName(final MetadataType metadataType) {
+    final String tableName = metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
+    return tableName;
   }
 
 }

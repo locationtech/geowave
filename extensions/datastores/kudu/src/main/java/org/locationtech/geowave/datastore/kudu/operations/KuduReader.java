@@ -44,7 +44,6 @@ public class KuduReader<T> implements RowReader<T> {
   public KuduReader(
       RecordReaderParams recordReaderParams,
       KuduOperations operations,
-      GeoWaveRowIteratorTransformer<T> rowTransformer,
       boolean visibilityEnabled) {
     this.readerParams = null;
     this.recordReaderParams = recordReaderParams;
