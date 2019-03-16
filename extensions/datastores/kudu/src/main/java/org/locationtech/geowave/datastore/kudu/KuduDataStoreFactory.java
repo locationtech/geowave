@@ -12,7 +12,7 @@ import org.locationtech.geowave.core.store.BaseDataStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
-import org.locationtech.geowave.datastore.kudu.config.KuduOptions;
+import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
 import org.locationtech.geowave.datastore.kudu.operations.KuduOperations;
 
 public class KuduDataStoreFactory extends BaseDataStoreFactory {
@@ -26,8 +26,8 @@ public class KuduDataStoreFactory extends BaseDataStoreFactory {
 
   @Override
   public DataStore createStore(final StoreFactoryOptions options) {
-    if (!(options instanceof KuduOptions)) {
-      throw new AssertionError("Expected " + KuduOptions.class.getSimpleName());
+    if (!(options instanceof KuduRequiredOptions)) {
+      throw new AssertionError("Expected " + KuduRequiredOptions.class.getSimpleName());
     }
 
     return new KuduDataStore(

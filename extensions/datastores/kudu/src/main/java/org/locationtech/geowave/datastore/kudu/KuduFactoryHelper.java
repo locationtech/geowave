@@ -11,14 +11,13 @@ package org.locationtech.geowave.datastore.kudu;
 import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.datastore.kudu.config.KuduOptions;
 import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
 import org.locationtech.geowave.datastore.kudu.operations.KuduOperations;
 
 public class KuduFactoryHelper implements StoreFactoryHelper {
   @Override
   public StoreFactoryOptions createOptionsInstance() {
-    return new KuduOptions();
+    return new KuduRequiredOptions();
   }
 
   @Override
