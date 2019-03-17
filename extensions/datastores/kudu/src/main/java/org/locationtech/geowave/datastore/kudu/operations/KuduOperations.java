@@ -198,7 +198,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
-    return null;
+    return new KuduReader<>(readerParams, this, options.getStoreOptions().isVisibilityEnabled());
   }
 
   @Override
@@ -267,18 +267,20 @@ public class KuduOperations implements MapReduceDataStoreOperations {
     return client.openTable(getKuduSafeName(tableName));
   }
 
-  public <T> KuduRangeRead getKuduRangeRead(
+  public <T> KuduRangeRead<T> getKuduRangeRead(
       final String tableName,
       final short[] adapterIds,
+      final byte[][] dataIds,
       final Collection<SinglePartitionQueryRanges> ranges,
       final boolean rowMerging,
       final GeoWaveRowIteratorTransformer<T> rowTransformer,
       final Predicate<GeoWaveRow> rowFilter,
       final boolean visibilityEnabled) throws KuduException {
     KuduTable table = getTable(tableName);
-    return new KuduRangeRead(
+    return new KuduRangeRead<T>(
         ranges,
         adapterIds,
+        dataIds,
         table,
         this,
         visibilityEnabled,

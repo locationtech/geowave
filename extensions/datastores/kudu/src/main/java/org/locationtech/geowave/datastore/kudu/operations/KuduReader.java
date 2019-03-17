@@ -7,7 +7,9 @@ import org.apache.kudu.client.KuduException;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
@@ -22,6 +24,7 @@ import com.google.common.collect.Sets;
 public class KuduReader<T> implements RowReader<T> {
   private final ReaderParams<T> readerParams;
   private final RecordReaderParams recordReaderParams;
+  private final DataIndexReaderParams dataIndexReaderParams;
   private final KuduOperations operations;
   private final GeoWaveRowIteratorTransformer<T> rowTransformer;
   private CloseableIterator<T> iterator;
@@ -33,7 +36,8 @@ public class KuduReader<T> implements RowReader<T> {
       final KuduOperations operations,
       final boolean visibilityEnabled) {
     this.readerParams = readerParams;
-    recordReaderParams = null;
+    this.recordReaderParams = null;
+    this.dataIndexReaderParams = null;
     this.operations = operations;
     this.rowTransformer = readerParams.getRowTransformer();
     this.visibilityEnabled = visibilityEnabled;
@@ -42,11 +46,27 @@ public class KuduReader<T> implements RowReader<T> {
   }
 
   public KuduReader(
+      final DataIndexReaderParams dataIndexReaderParams,
+      final KuduOperations operations,
+      final boolean visibilityEnabled) {
+    this.dataIndexReaderParams = dataIndexReaderParams;
+    this.readerParams = null;
+    this.recordReaderParams = null;
+    this.operations = operations;
+    this.rowTransformer =
+        (GeoWaveRowIteratorTransformer<T>) GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER;
+    this.visibilityEnabled = visibilityEnabled;
+
+    initDataIndexScanner();
+  }
+
+  public KuduReader(
       RecordReaderParams recordReaderParams,
       KuduOperations operations,
       boolean visibilityEnabled) {
     this.readerParams = null;
     this.recordReaderParams = recordReaderParams;
+    this.dataIndexReaderParams = null;
     this.operations = operations;
     this.rowTransformer =
         (GeoWaveRowIteratorTransformer<T>) GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER;
@@ -54,7 +74,6 @@ public class KuduReader<T> implements RowReader<T> {
     initRecordScanner();
   }
 
-  @SuppressWarnings("unchecked")
   protected void initScanner() {
     final Collection<SinglePartitionQueryRanges> ranges =
         readerParams.getQueryRanges().getPartitionQueryRanges();
@@ -63,6 +82,7 @@ public class KuduReader<T> implements RowReader<T> {
           operations.getKuduRangeRead(
               readerParams.getIndex().getName(),
               readerParams.getAdapterIds(),
+              null,
               ranges,
               DataStoreUtils.isMergingIteratorRequired(readerParams, visibilityEnabled),
               rowTransformer,
@@ -74,7 +94,27 @@ public class KuduReader<T> implements RowReader<T> {
     }
   }
 
-  @SuppressWarnings("unchecked")
+  protected void initDataIndexScanner() {
+    try {
+      iterator =
+          operations.getKuduRangeRead(
+              DataIndexUtils.DATA_ID_INDEX.getName(),
+              new short[] {dataIndexReaderParams.getAdapterId()},
+              dataIndexReaderParams.getDataIds(),
+              null,
+              false,
+              // TODO: DataStoreUtils.isMergingIteratorRequired(dataIndexReaderParams,
+              // visibilityEnabled),
+              // isMerginIteratorRequired not defined for dataIndexReaderParams
+              rowTransformer,
+              new ClientVisibilityFilter(
+                  Sets.newHashSet(dataIndexReaderParams.getAdditionalAuthorizations())),
+              visibilityEnabled).results();
+    } catch (final KuduException e) {
+      LOGGER.error("Error in initializing reader", e);
+    }
+  }
+
   protected void initRecordScanner() {
     final short[] adapterIds =
         recordReaderParams.getAdapterIds() != null ? recordReaderParams.getAdapterIds()
@@ -92,6 +132,7 @@ public class KuduReader<T> implements RowReader<T> {
           operations.getKuduRangeRead(
               recordReaderParams.getIndex().getName(),
               adapterIds,
+              null,
               Collections.singleton(partitionRange),
               DataStoreUtils.isMergingIteratorRequired(recordReaderParams, visibilityEnabled),
               rowTransformer,
