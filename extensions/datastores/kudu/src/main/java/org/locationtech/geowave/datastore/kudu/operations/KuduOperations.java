@@ -118,7 +118,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public MetadataDeleter createMetadataDeleter(final MetadataType metadataType) {
-    return null;
+    return new KuduMetadataDeleter(this, metadataType);
   }
 
   @Override
