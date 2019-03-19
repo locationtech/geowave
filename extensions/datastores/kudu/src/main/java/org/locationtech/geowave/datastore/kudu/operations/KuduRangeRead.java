@@ -75,7 +75,7 @@ public class KuduRangeRead<T> {
         for (final SinglePartitionQueryRanges r : ranges) {
           final byte[] partitionKey =
               ((r.getPartitionKey() == null) || (r.getPartitionKey().length == 0))
-                  ? KuduUtils.EMPTY_PARTITION_KEY
+                  ? KuduUtils.EMPTY_KEY
                   : r.getPartitionKey();
           for (final ByteArrayRange range : r.getSortKeyRanges()) {
             final byte[] start = range.getStart() != null ? range.getStart() : new byte[0];
