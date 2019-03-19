@@ -8,10 +8,23 @@
  */
 package org.locationtech.geowave.datastore.kudu.operations;
 
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Streams;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Schema;
-import org.apache.kudu.client.*;
+import org.apache.kudu.client.CreateTableOptions;
+import org.apache.kudu.client.Delete;
+import org.apache.kudu.client.KuduClient;
+import org.apache.kudu.client.KuduException;
+import org.apache.kudu.client.KuduPredicate;
+import org.apache.kudu.client.KuduScanner;
 import org.apache.kudu.client.KuduScanner.KuduScannerBuilder;
+import org.apache.kudu.client.KuduSession;
+import org.apache.kudu.client.KuduTable;
+import org.apache.kudu.client.PartialRow;
+import org.apache.kudu.client.RowResult;
+import org.apache.kudu.client.RowResultIterator;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
@@ -20,17 +33,31 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
-import org.locationtech.geowave.core.store.operations.*;
+import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
+import org.locationtech.geowave.core.store.operations.MetadataDeleter;
+import org.locationtech.geowave.core.store.operations.MetadataReader;
+import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.core.store.operations.MetadataWriter;
+import org.locationtech.geowave.core.store.operations.ReaderParams;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.datastore.kudu.KuduRow;
+import org.locationtech.geowave.datastore.kudu.PersistentKuduRow;
 import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import static org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
 
@@ -79,11 +106,18 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       final Short adapterId,
       final String... additionalAuthorizations) {
     try {
-      KuduSession session = this.getSession();
-      Delete delete = this.getDelete(indexName);
-      PartialRow partialRow = delete.getRow();
-      addAdapterIdToPartialRow(partialRow, null, adapterId);
-      session.apply(delete);
+      KuduSession session = getSession();
+      KuduTable table = getTable(indexName);
+      Schema schema = table.getSchema();
+      List<KuduPredicate> preds =
+          Collections.singletonList(
+              KuduPredicate.newComparisonPredicate(
+                  schema.getColumn(KuduField.GW_ADAPTER_ID_KEY.getFieldName()),
+                  KuduPredicate.ComparisonOp.EQUAL,
+                  adapterId));
+      for (Delete delete : getDeletions(table, preds, KuduRow::new)) {
+        session.apply(delete);
+      }
     } catch (KuduException e) {
       LOGGER.error("Encountered error while deleting all", e);
     }
@@ -150,12 +184,14 @@ public class KuduOperations implements MapReduceDataStoreOperations {
     try {
       byte[][] dataIds = readerParams.getDataIds();
       short adapterId = readerParams.getAdapterId();
-      KuduSession session = this.getSession();
+      KuduSession session = getSession();
       String tableName = DataIndexUtils.DATA_ID_INDEX.getName();
+      KuduTable table = getTable(tableName);
       for (byte[] dataId : dataIds) {
-        Delete delete = this.getDelete(tableName);
+        Delete delete = table.newDelete();
         PartialRow partialRow = delete.getRow();
-        addAdapterIdToPartialRow(partialRow, dataId, adapterId);
+        partialRow.addBinary(KuduField.GW_PARTITION_ID_KEY.getFieldName(), dataId);
+        partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
         session.apply(delete);
       }
     } catch (KuduException e) {
@@ -208,44 +244,6 @@ public class KuduOperations implements MapReduceDataStoreOperations {
     return client.openTable(getKuduSafeName(tableName));
   }
 
-  public Insert getInsert(String tableName) throws KuduException {
-    return getTable(tableName).newInsert();
-  }
-
-  public Delete getDelete(String tableName) throws KuduException {
-    return getTable(tableName).newDelete();
-  }
-
-  public void addToPartialRow(
-      GeoWaveRow row,
-      GeoWaveValue value,
-      PartialRow partialRow,
-      ByteBuffer nanoBuffer) {
-    byte[] partitionKey = row.getPartitionKey();
-    short adapterId = row.getAdapterId();
-    byte[] sortKey = row.getSortKey();
-    byte[] dataId = row.getDataId();
-    int numDuplicates = row.getNumberOfDuplicates();
-    partialRow.addBinary(KuduField.GW_PARTITION_ID_KEY.getFieldName(), partitionKey);
-    partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
-    partialRow.addBinary(KuduField.GW_SORT_KEY.getFieldName(), sortKey);
-    partialRow.addBinary(KuduField.GW_DATA_ID_KEY.getFieldName(), dataId);
-    partialRow.addBinary(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName(), value.getVisibility());
-    partialRow.addBinary(KuduField.GW_FIELD_MASK_KEY.getFieldName(), value.getFieldMask());
-    partialRow.addBinary(KuduField.GW_VALUE_KEY.getFieldName(), value.getValue());
-    partialRow.addByte(KuduField.GW_NUM_DUPLICATES_KEY.getFieldName(), (byte) numDuplicates);
-    if (nanoBuffer != null) {
-      partialRow.addBinary(KuduField.GW_NANO_TIME_KEY.getFieldName(), nanoBuffer);
-    }
-  }
-
-  public void addAdapterIdToPartialRow(PartialRow partialRow, byte[] dataId, short adapterId) {
-    if (dataId != null) {
-      partialRow.addBinary(KuduField.GW_DATA_ID_KEY.getFieldName(), dataId);
-    }
-    partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
-  }
-
   public <T> KuduRangeRead getKuduRangeRead(
       final String tableName,
       final short[] adapterIds,
@@ -273,6 +271,32 @@ public class KuduOperations implements MapReduceDataStoreOperations {
   public String getMetadataTableName(final MetadataType metadataType) {
     final String tableName = metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
     return tableName;
+  }
+
+  public List<Delete> getDeletions(
+      KuduTable table,
+      List<KuduPredicate> predicates,
+      Function<RowResult, PersistentKuduRow> adapter) throws KuduException {
+    // TODO: Kudu Java API does not support deleting with predicates, so we first perform a scan and
+    // then perform individual row deletions with the full primary key. This is inefficient, because
+    // we need to read in entire rows in order to perform deletions.
+    KuduScannerBuilder scannerBuilder = getScannerBuilder(table);
+    for (KuduPredicate pred : predicates) {
+      scannerBuilder.addPredicate(pred);
+    }
+    KuduScanner scanner = scannerBuilder.build();
+    List<RowResultIterator> allResults = new ArrayList<>();
+    while (scanner.hasMoreRows()) {
+      allResults.add(scanner.nextRows());
+    }
+    Iterator<Delete> deletions =
+        Streams.stream(Iterators.concat(allResults.iterator())).map(result -> {
+          PersistentKuduRow row = adapter.apply(result);
+          Delete delete = table.newDelete();
+          row.populatePartialRowPrimaryKey(delete.getRow());
+          return delete;
+        }).iterator();
+    return Lists.newArrayList(deletions);
   }
 
 }

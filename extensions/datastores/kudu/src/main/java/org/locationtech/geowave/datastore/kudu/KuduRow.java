@@ -10,14 +10,16 @@ package org.locationtech.geowave.datastore.kudu;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.kudu.ColumnSchema;
+import org.apache.kudu.client.PartialRow;
 import org.apache.kudu.client.RowResult;
 import org.apache.log4j.Logger;
 import org.apache.kudu.Type;
 import org.locationtech.geowave.core.store.entities.*;
+import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class KuduRow extends MergeableGeoWaveRow {
+public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
   private static final Logger LOGGER = Logger.getLogger(KuduRow.class);
 
   private final byte[] partitionKey;
@@ -87,6 +89,20 @@ public class KuduRow extends MergeableGeoWaveRow {
     this.numDuplicates = row.getByte(KuduField.GW_NUM_DUPLICATES_KEY.getFieldName());
   }
 
+  public KuduRow(GeoWaveRow row, GeoWaveValue value) {
+    ByteBuffer nanoBuffer = ByteBuffer.allocate(8);
+    nanoBuffer.putLong(0, Long.MAX_VALUE - System.nanoTime());
+    this.partitionKey = row.getPartitionKey();
+    this.adapterId = row.getAdapterId();
+    this.sortKey = row.getSortKey();
+    this.dataId = row.getDataId();
+    this.numDuplicates = row.getNumberOfDuplicates();
+    this.nanoTime = nanoBuffer.array();
+    this.fieldVisibility = value.getVisibility();
+    this.fieldMask = value.getFieldMask();
+    this.value = value.getValue();
+  }
+
   @Override
   public byte[] getDataId() {
     return dataId;
@@ -118,5 +134,23 @@ public class KuduRow extends MergeableGeoWaveRow {
     final byte[] visibility = row.getBinaryCopy(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName());
 
     return new GeoWaveValueImpl[] {new GeoWaveValueImpl(fieldMask, visibility, value)};
+  }
+
+  @Override
+  public void populatePartialRow(PartialRow partialRow) {
+    populatePartialRowPrimaryKey(partialRow);
+    partialRow.addBinary(KuduField.GW_FIELD_MASK_KEY.getFieldName(), fieldMask);
+    partialRow.addBinary(KuduField.GW_VALUE_KEY.getFieldName(), value);
+    partialRow.addByte(KuduField.GW_NUM_DUPLICATES_KEY.getFieldName(), (byte) numDuplicates);
+  }
+
+  @Override
+  public void populatePartialRowPrimaryKey(PartialRow partialRow) {
+    partialRow.addBinary(KuduField.GW_PARTITION_ID_KEY.getFieldName(), partitionKey);
+    partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
+    partialRow.addBinary(KuduField.GW_SORT_KEY.getFieldName(), sortKey);
+    partialRow.addBinary(KuduField.GW_DATA_ID_KEY.getFieldName(), dataId);
+    partialRow.addBinary(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName(), fieldVisibility);
+    partialRow.addBinary(KuduField.GW_NANO_TIME_KEY.getFieldName(), nanoTime);
   }
 }

@@ -11,12 +11,15 @@ package org.locationtech.geowave.datastore.kudu;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Type;
+import org.apache.kudu.client.PartialRow;
+import org.apache.kudu.client.RowResult;
 import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
+import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-public class KuduMetadataRow {
+public class KuduMetadataRow implements PersistentKuduRow {
   private static final Logger LOGGER = Logger.getLogger(KuduMetadataRow.class);
 
   private final byte[] primaryId;
@@ -64,6 +67,14 @@ public class KuduMetadataRow {
     this.timestamp = timestampBuffer.array();
   }
 
+  public KuduMetadataRow(final RowResult result) {
+    this.primaryId = result.getBinaryCopy(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName());
+    this.secondaryId = result.getBinaryCopy(KuduMetadataField.GW_SECONDARY_ID_KEY.getFieldName());
+    this.visibility = result.getBinaryCopy(KuduMetadataField.GW_VISIBILITY_KEY.getFieldName());
+    this.value = result.getBinaryCopy(KuduMetadataField.GW_VALUE_KEY.getFieldName());
+    this.timestamp = result.getBinaryCopy(KuduMetadataField.GW_TIMESTAMP_KEY.getFieldName());
+  }
+
   public byte[] getPrimaryId() {
     return primaryId;
   }
@@ -84,4 +95,19 @@ public class KuduMetadataRow {
     return timestamp;
   }
 
+  @Override
+  public void populatePartialRow(PartialRow partialRow) {
+    populatePartialRowPrimaryKey(partialRow);
+    partialRow.addBinary(KuduMetadataField.GW_VISIBILITY_KEY.getFieldName(), visibility);
+    partialRow.addBinary(KuduMetadataField.GW_VALUE_KEY.getFieldName(), value);
+  }
+
+  @Override
+  public void populatePartialRowPrimaryKey(PartialRow partialRow) {
+    partialRow.addBinary(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName(), primaryId);
+    partialRow.addBinary(
+        KuduMetadataField.GW_SECONDARY_ID_KEY.getFieldName(),
+        secondaryId == null ? KuduUtils.EMPTY_KEY : secondaryId);
+    partialRow.addBinary(KuduMetadataField.GW_TIMESTAMP_KEY.getFieldName(), timestamp);
+  }
 }
