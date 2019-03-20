@@ -105,8 +105,8 @@
 		<spotbugs.failOnError>true</spotbugs.failOnError>
 		<spotbugs.maxHeap>1024</spotbugs.maxHeap>
 		<spotbugs.filterFile>findbugs/findbugs-exclude.xml</spotbugs.filterFile>
-		<fmt.action>format</fmt.action>
-		<fmt.skip>false</fmt.skip>
+		<formatter.action>format</formatter.action>
+		<formatter.skip>false</formatter.skip>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -1230,7 +1230,7 @@
 				<configuration>
 					<configFile>eclipse/eclipse-formatter.xml</configFile>
 					<lineEnding>KEEP</lineEnding>
-					<skip>${fmt.skip}</skip>
+					<skip>${formatter.skip}</skip>
 					<excludes>
 						<exclude>**/*Protos*.java</exclude>
 						<exclude>**/Avro*.java</exclude>
@@ -1240,7 +1240,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>${fmt.action}</goal>
+							<goal>${formatter.action}</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -1346,7 +1346,7 @@
 			<properties>
 				<skipITs>true</skipITs>
 				<skipTests>true</skipTests>
-				<fmt.skip>true</fmt.skip>
+				<formatter.skip>true</formatter.skip>
 				<spotbugs.skip>true</spotbugs.skip>
 			</properties>
 		</profile>

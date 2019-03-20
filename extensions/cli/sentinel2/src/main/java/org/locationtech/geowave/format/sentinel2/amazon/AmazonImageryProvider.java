@@ -143,7 +143,7 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
           LOGGER.error("Unable to validate the JP2ECW plugin for GDAL", e);
         }
         System.err.println(
-            "The native JP2ECW plugin for GDAL seems not to be set in your GDAL_PROVIDER_PATH environment variable. AWS Sentinel2 provider is not available.");
+            "The native JP2ECW plugin for GDAL seems not to be set in your GDAL_DRIVER_PATH environment variable. AWS Sentinel2 provider is not available.");
         JP2ECW_PLUGIN_AVAILABLE_FLAG = 2;
         return false;
       }
