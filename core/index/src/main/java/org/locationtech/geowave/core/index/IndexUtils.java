@@ -174,7 +174,8 @@ public class IndexUtils {
     final int extraBits = (bitPosition + 1) % 8;
 
     // If there was a remainder, add 1 to the number of bytes
-    if (extraBits > 0) {
+    boolean isRemainder = extraBits > 0;
+    if (isRemainder) {
       numBytes++;
     }
     // Copy affected bytes
@@ -184,14 +185,18 @@ public class IndexUtils {
     final int lastByte = rowCopy.length - 1;
 
     // Turn on all bits after the bit position
-    rowCopy[lastByte] |= 0xFF >> (extraBits);
+    if (isRemainder) {
+      rowCopy[lastByte] |= 0xFF >> (extraBits);
+    }
 
     // Increment the bit represented by the bit position
     for (int i = lastByte; i >= 0; i--) {
       rowCopy[i]++;
       if (rowCopy[i] != 0) {
         // Turn on all bits after the bit position
-        rowCopy[lastByte] |= 0xFF >> (extraBits);
+        if (isRemainder) {
+          rowCopy[lastByte] |= 0xFF >> (extraBits);
+        }
         return rowCopy;
       }
     }

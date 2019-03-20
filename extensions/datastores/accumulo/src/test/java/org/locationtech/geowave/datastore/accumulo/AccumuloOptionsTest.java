@@ -30,6 +30,7 @@ import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
+import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -455,7 +456,7 @@ public class AccumuloOptionsTest {
 
           @Override
           public CommonIndexValue toIndexValue(
-              PersistentDataset<Object> adapterPersistenceEncoding) {
+              final PersistentDataset<Object> adapterPersistenceEncoding) {
             return new GeometryWrapper(
                 (Geometry) adapterPersistenceEncoding.getValue(GEOM),
                 new byte[0]);
@@ -492,6 +493,14 @@ public class AccumuloOptionsTest {
     @Override
     public String getTypeName() {
       return "test";
+    }
+
+    @Override
+    protected void init(
+        final List<? extends IndexFieldHandler<TestGeometry, ? extends CommonIndexValue, Object>> indexFieldHandlers,
+        final Object defaultIndexHandlerData) {
+      nativeFieldHandlers = NATIVE_FIELD_HANDLER_LIST;
+      super.init(COMMON_FIELD_HANDLER_LIST, null);
     }
 
     @Override

@@ -26,6 +26,7 @@ import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 class BaseIndexWriter<T> implements Writer<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseIndexWriter.class);
@@ -66,28 +67,26 @@ class BaseIndexWriter<T> implements Writer<T> {
   @Override
   public WriteResults write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter) {
     IntermediaryWriteEntryInfo entryInfo;
-    synchronized (this) {
-      ensureOpen();
+    ensureOpen();
 
-      if (writer == null) {
-        LOGGER.error("Null writer - empty list returned");
-        return new WriteResults();
-      }
-      entryInfo =
-          BaseDataStoreUtils.getWriteInfo(
-              entry,
-              adapter,
-              index,
-              fieldVisibilityWriter,
-              options.isSecondaryIndexing(),
-              false,
-              options.isVisibilityEnabled());
-      verifyVisibility(fieldVisibilityWriter, entryInfo);
-      final GeoWaveRow[] rows = entryInfo.getRows();
-
-      writer.write(rows);
-      callback.entryIngested(entry, rows);
+    if (writer == null) {
+      LOGGER.error("Null writer - empty list returned");
+      return new WriteResults();
     }
+    entryInfo =
+        BaseDataStoreUtils.getWriteInfo(
+            entry,
+            adapter,
+            index,
+            fieldVisibilityWriter,
+            options.isSecondaryIndexing(),
+            false,
+            options.isVisibilityEnabled());
+    verifyVisibility(fieldVisibilityWriter, entryInfo);
+    final GeoWaveRow[] rows = entryInfo.getRows();
+
+    writer.write(rows);
+    callback.entryIngested(entry, rows);
     return new WriteResults(index.getName(), entryInfo.getInsertionIds());
   }
 
@@ -147,12 +146,17 @@ class BaseIndexWriter<T> implements Writer<T> {
     }
   }
 
-  protected synchronized void ensureOpen() {
+  @SuppressFBWarnings(justification = "This is intentional to avoid unnecessary sync")
+  protected void ensureOpen() {
     if (writer == null) {
-      try {
-        writer = operations.createWriter(index, adapter);
-      } catch (final Exception e) {
-        LOGGER.error("Unable to open writer", e);
+      synchronized (this) {
+        if (writer == null) {
+          try {
+            writer = operations.createWriter(index, adapter);
+          } catch (final Exception e) {
+            LOGGER.error("Unable to open writer", e);
+          }
+        }
       }
     }
   }

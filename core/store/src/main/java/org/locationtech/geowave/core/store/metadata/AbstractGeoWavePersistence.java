@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.store.metadata;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -26,6 +24,8 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 /**
  * This abstract class does most of the work for storing persistable objects in Geowave datastores
@@ -87,8 +87,10 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
   }
 
   protected ByteArray getCombinedId(final ByteArray primaryId, final ByteArray secondaryId) {
-    // the secondaryId is optional so check for null
-    if (secondaryId != null) {
+    // the secondaryId is optional so check for null or empty
+    if ((secondaryId != null)
+        && (secondaryId.getBytes() != null)
+        && (secondaryId.getBytes().length > 0)) {
       return new ByteArray(primaryId.getString() + "_" + secondaryId.getString());
     }
     return primaryId;
@@ -272,7 +274,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
     if (result != null) {
       addObjectToCache(
           new ByteArray(entry.getPrimaryId()),
-          entry.getSecondaryId() == null ? null : new ByteArray(entry.getSecondaryId()),
+          (entry.getSecondaryId() == null) || (entry.getSecondaryId().length == 0) ? null
+              : new ByteArray(entry.getSecondaryId()),
           result,
           authorizations);
     }
