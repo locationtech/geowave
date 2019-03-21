@@ -67,14 +67,7 @@ for r in res:
 
 ```
 """
-<<<<<<< HEAD
 from pygw import *
-=======
-from pygw.config import config
-from .base_models import *
-from .stores import *
-from .indices import *
->>>>>>> fe7f503f0786c09f20cc8e31882197b20812e5fc
 
 class SimpleFeatureType(PyGwJavaWrapper):
     """Nothing for now. Just a place holder"""

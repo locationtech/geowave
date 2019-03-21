@@ -1,6 +1,42 @@
 from pygw.config import config
 from pygw.base_models import QueryBuilderInterface, QueryInterface
 
+class Query(QueryInterface):
+    """ NOTE: This utilizes a factory pattern"""
+
+    def __init__(self, java_ref=None):
+        super().__init__(config.GATEWAY, java_ref)
+
+    @classmethod
+    def build(cls, constraint=None, index=None, auths=None, limit=None, type_names=None, which_fields=None):
+        """
+        Build a new query.
+        """
+        qb = QueryBuilder()
+
+        if constraint:
+            qb.set_constraint(constraint)
+        if index:
+            qb.set_index(index)
+        if auths:
+            qb.set_auth(auths)
+        if limit:
+            qb.set_limits(limit)
+        if type_names:
+            qb.set_type_names(type_names)
+        if which_fields:
+            qb.set_fields(which_fields)
+
+        return cls(qb.build())
+
+    @classmethod
+    def everything(cls):
+        """
+        Creates an everything-query.
+        Effectively the same as `Query.build()`.
+        """
+        return cls.build()
+
 class QueryBuilder(QueryBuilderInterface):
     """
     NOTE: this might never have to be exposed to end-user 
@@ -51,39 +87,3 @@ class QueryBuilder(QueryBuilderInterface):
 
     def build(self):
         return self._java_ref.build()
-
-class Query(QueryInterface):
-    """ NOTE: This utilizes a factory pattern"""
-
-    def __init__(self, java_ref=None):
-        super().__init__(config.GATEWAY, java_ref)
-
-    @classmethod
-    def build(cls, constraint=None, index=None, auths=None, limit=None, type_names=None, which_fields=None):
-        """
-        Build a new query.
-        """
-        qb = QueryBuilder()
-
-        if constraint:
-            qb.set_constraint(constraint)
-        if index:
-            qb.set_index(index)
-        if auths:
-            qb.set_auth(auths)
-        if limit:
-            qb.set_limits(limit)
-        if type_names:
-            qb.set_type_names(type_names)
-        if which_fields:
-            qb.set_fields(which_fields)
-
-        return cls(qb.build())
-
-    @classmethod
-    def everything(cls):
-        """
-        Creates an everything-query.
-        Effectively the same as `Query.build()`.
-        """
-        return cls.build()
