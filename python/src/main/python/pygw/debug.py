@@ -1,5 +1,5 @@
 from pygw.config import config
-from .base_models import PyGwJavaWrapper
+from pygw.base_models import PyGwJavaWrapper
 
 def print_obj(to_print, verbose=False):
     """Print method to help with debugging"""

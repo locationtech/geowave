@@ -148,7 +148,3 @@ class QueryInterface(PyGwJavaWrapper):
     
     def describe(self):
         print("I'm a query! ... Please implement a better description for me...")
-
-class QueryBuilderInterface(PyGwJavaWrapper):
-    # Necessary? See QueryBuilder in query.py
-    pass
