@@ -26,30 +26,7 @@ class DataStore(PyGwJavaWrapper):
     def __init__(self, gateway, java_ref):
         super().__init__(gateway, java_ref)
 
-    def get_indices(self, type_name=None):
-        if type_name:
-            j_indices = self._java_ref.getIndices(type_name)
-        else:
-            j_indices = self._java_ref.getIndices()
-        return [Index(self._gateway, j_index) for j_index in j_indices]
-
-    def add_type(self, type_adapter, *initial_indices):
-        assert isinstance(type_adapter,DataTypeAdapter)
-
-        n = len(initial_indices)
-        j_index_class = config.MODULE__core_store.Index
-        j_index_arr = config.GATEWAY.new_array(j_index_class,n)
-        for idx, py_obj in enumerate(initial_indices):
-                j_index_arr[idx] = py_obj._java_ref
-    
-        self._java_ref.addType(type_adapter._java_ref,j_index_arr)
-
-    def create_writer(self, type_adapter_name):
-        j_writer = self._java_ref.createWriter(type_adapter_name)
-        return Writer(self._gateway, j_writer)
-
-    def ingest(self, url, *indices, ingest_options=None):
-        #TODO: Ingest Options
+    def ingest(self, url, *indices):
 
         assert isinstance(url,str)
 
@@ -59,8 +36,8 @@ class DataStore(PyGwJavaWrapper):
         for idx, name in enumerate(indices):
                 j_index_arr[idx] = name._java_ref
         java_url = config.GATEWAY.jvm.java.net.URL(url)
-        self._java_ref.ingest(java_url,ingest_options,j_index_arr)
-    
+        return self._java_ref.ingest(java_url,j_index_arr)
+
     def query(self, q):
         assert isinstance(q, QueryInterface)
         j_query = q._java_ref
@@ -78,18 +55,40 @@ class DataStore(PyGwJavaWrapper):
         # TODO
         raise NotImplementedError
 
+
     def aggregate_statistics(self, q):
         # TODO
         raise NotImplementedError
 
-    def copy_to(self, other, q=None):
-        # TODO
-        raise NotImplementedError
+    def get_indices(self, type_name=None):
+        if type_name:
+            j_indices = self._java_ref.getIndices(type_name)
+        else:
+            j_indices = self._java_ref.getIndices()
+        return [Index(self._gateway, j_index) for j_index in j_indices]
+
+    def copy_to(self, ds, q=None):
+        assert isinstance(ds, DataStore)
+
+        return self._java_ref.copyTo(ds._java_ref,q)
     
+    def add_index(self, type_name, *indices):
+        assert isinstance(type_name,str)
+
+        n = len(indices)
+        j_index_class = config.MODULE__core_store.Index
+        j_index_arr = config.GATEWAY.new_array(j_index_class,n)
+        for idx, py_obj in enumerate(indices):
+                j_index_arr[idx] = py_obj._java_ref
+    
+        self._java_ref.addType(type_name,j_index_arr)
+
     def remove_index(self, index_name, type_name=None):
-        # TODO
-        raise NotImplementedError
-    
+        if type_name:
+            return self._java_ref.removeIndex(index_name,type_name)
+        else:
+            return self._java_ref.removeIndex(index_name)
+
     def remove_type(self, type_name):
         # TODO
         raise NotImplementedError
@@ -101,6 +100,21 @@ class DataStore(PyGwJavaWrapper):
     def delete_all(self, q):
         # TODO
         raise NotImplementedError
+
+    def add_type(self, type_adapter, *initial_indices):
+        assert isinstance(type_adapter,DataTypeAdapter)
+
+        n = len(initial_indices)
+        j_index_class = config.MODULE__core_store.Index
+        j_index_arr = config.GATEWAY.new_array(j_index_class,n)
+        for idx, py_obj in enumerate(initial_indices):
+                j_index_arr[idx] = py_obj._java_ref
+    
+        self._java_ref.addType(type_adapter._java_ref,j_index_arr)
+
+    def create_writer(self, type_adapter_name):
+        j_writer = self._java_ref.createWriter(type_adapter_name)
+        return Writer(self._gateway, j_writer)
 
 class DataTypeAdapter(PyGwJavaWrapper):
     """Wrapper to expose all of DataTypeAdapter API"""
