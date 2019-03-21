@@ -13,7 +13,6 @@ public class ApiGateway {
    */
 
   private Debug debug = new Debug();
-  public DataStoreInterfacer storeInterfacer = new DataStoreInterfacer();
   // Expose the simpleIngest example code
   private SimpleIngest simpleIngest = new SimpleIngest();
 
