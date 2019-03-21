@@ -90,16 +90,19 @@ class DataStore(PyGwJavaWrapper):
             return self._java_ref.removeIndex(index_name)
 
     def remove_type(self, type_name):
-        # TODO
-        raise NotImplementedError
+        assert isinstance(str,type_name)
+
+        return self._java_ref.removeType(type_name)
     
     def delete(self, q):
-        # TODO
-        raise NotImplementedError
+        assert isinstance(q,QueryInterface)
 
-    def delete_all(self, q):
-        # TODO
-        raise NotImplementedError
+        return self._java_ref.delete(q)
+
+    def delete_all(self):
+        
+      return self._java_ref.deleteAll()
+
 
     def add_type(self, type_adapter, *initial_indices):
         assert isinstance(type_adapter,DataTypeAdapter)
