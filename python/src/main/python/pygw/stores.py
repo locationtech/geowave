@@ -1,5 +1,5 @@
-from .config import config
-from .base_models import DataStore
+from pygw.config import config
+from pygw.base_models import DataStore
 
 class RocksDbDs(DataStore):
     """ Geowave RocksDB Datastore."""
