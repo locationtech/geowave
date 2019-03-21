@@ -91,16 +91,19 @@ class DataStore(PyGwJavaWrapper):
         raise NotImplementedError
     
     def remove_type(self, type_name):
-        # TODO
-        raise NotImplementedError
+        assert isinstance(str,type_name)
+
+        return self._java_ref.removeType(type_name)
     
     def delete(self, q):
-        # TODO
-        raise NotImplementedError
+        assert isinstance(q,QueryInterface)
 
-    def delete_all(self, q):
-        # TODO
-        raise NotImplementedError
+        return self._java_ref.delete(q)
+
+    def delete_all(self):
+        
+      return self._java_ref.deleteAll()
+
 
 class DataTypeAdapter(PyGwJavaWrapper):
     """Wrapper to expose all of DataTypeAdapter API"""
