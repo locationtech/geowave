@@ -21,7 +21,6 @@ import java.util.List;
 
 public class KuduMetadataRow implements PersistentKuduRow {
   private static final Logger LOGGER = Logger.getLogger(KuduMetadataRow.class);
-
   private final byte[] primaryId;
   private final byte[] secondaryId;
   private final byte[] timestamp;
@@ -98,8 +97,12 @@ public class KuduMetadataRow implements PersistentKuduRow {
   @Override
   public void populatePartialRow(PartialRow partialRow) {
     populatePartialRowPrimaryKey(partialRow);
-    partialRow.addBinary(KuduMetadataField.GW_VISIBILITY_KEY.getFieldName(), visibility);
-    partialRow.addBinary(KuduMetadataField.GW_VALUE_KEY.getFieldName(), value);
+    partialRow.addBinary(
+        KuduMetadataField.GW_VISIBILITY_KEY.getFieldName(),
+        visibility == null ? KuduUtils.EMPTY_KEY : visibility);
+    partialRow.addBinary(
+        KuduMetadataField.GW_VALUE_KEY.getFieldName(),
+        value == null ? KuduUtils.EMPTY_KEY : value);
   }
 
   @Override
