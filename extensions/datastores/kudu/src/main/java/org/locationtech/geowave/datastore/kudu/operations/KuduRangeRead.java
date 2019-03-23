@@ -20,6 +20,7 @@ import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
+import org.locationtech.geowave.core.store.util.RowConsumer;
 import org.locationtech.geowave.datastore.kudu.KuduRow;
 import org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
 import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
@@ -124,14 +125,11 @@ public class KuduRangeRead<T> {
           Streams.stream(Iterators.concat(results.iterator())).map(
               r -> (GeoWaveRow) new KuduRow(r)).filter(filter).iterator();
     } else {
-      tmpIterator =
-          Iterators.transform(
-              Iterators.concat(results.iterator()),
-              r -> (GeoWaveRow) new KuduRow(r));
+      tmpIterator = Iterators.transform(Iterators.concat(results.iterator()), r -> new KuduRow(r));
     }
-    rowTransformer.apply(rowMerging ? new GeoWaveRowMergingIterator(tmpIterator) : tmpIterator);
+
     return new CloseableIteratorWrapper<>(() -> {
-    }, (Iterator<T>) tmpIterator);
+    }, rowTransformer.apply(rowMerging ? new GeoWaveRowMergingIterator(tmpIterator) : tmpIterator));
   }
 
   private void executeQuery(KuduScanner scanner, List<RowResultIterator> results) {

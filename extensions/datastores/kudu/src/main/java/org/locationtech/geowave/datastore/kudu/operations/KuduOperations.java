@@ -45,7 +45,9 @@ import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.datastore.kudu.KuduRow;
 import org.locationtech.geowave.datastore.kudu.PersistentKuduRow;
+import org.locationtech.geowave.datastore.kudu.KuduMetadataRow;
 import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
+import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
@@ -142,12 +144,32 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public MetadataWriter createMetadataWriter(final MetadataType metadataType) {
-    return null;
+    final String tableName = getMetadataTableName(metadataType);
+    synchronized (CREATE_TABLE_MUTEX) {
+      try {
+        if (!metadataExists(metadataType)) {
+          List<ColumnSchema> columns = new ArrayList<>();
+          for (KuduMetadataRow.KuduMetadataField f : KuduMetadataRow.KuduMetadataField.values()) {
+            f.addColumn(columns);
+          }
+          client.createTable(
+              tableName,
+              new Schema(columns),
+              new CreateTableOptions().addHashPartitions(
+                  Collections.singletonList(
+                      KuduMetadataRow.KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                  KuduUtils.KUDU_DEFAULT_BUCKETS).setNumReplicas(KuduUtils.KUDU_DEFAULT_REPLICAS));
+        }
+      } catch (final IOException e) {
+        LOGGER.error("Unable to create metadata table '" + tableName + "'", e);
+      }
+    }
+    return new KuduMetadataWriter(this, metadataType);
   }
 
   @Override
   public MetadataReader createMetadataReader(final MetadataType metadataType) {
-    return null;
+    return new KuduMetadataReader(this, metadataType);
   }
 
   @Override
@@ -223,7 +245,8 @@ public class KuduOperations implements MapReduceDataStoreOperations {
               new Schema(columns),
               new CreateTableOptions().addHashPartitions(
                   Collections.singletonList(KuduField.GW_PARTITION_ID_KEY.getFieldName()),
-                  numPartitions));
+                  Math.max(numPartitions, KuduUtils.KUDU_DEFAULT_BUCKETS)).setNumReplicas(
+                      KuduUtils.KUDU_DEFAULT_REPLICAS));
           return true;
         }
       } catch (final IOException e) {
@@ -270,7 +293,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   public String getMetadataTableName(final MetadataType metadataType) {
     final String tableName = metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
-    return tableName;
+    return getKuduSafeName(tableName);
   }
 
   public List<Delete> getDeletions(
