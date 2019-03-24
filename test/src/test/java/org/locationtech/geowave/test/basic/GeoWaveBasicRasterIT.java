@@ -63,6 +63,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;

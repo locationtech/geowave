@@ -45,6 +45,7 @@ public class KuduStoreTestEnvironment extends StoreTestEnvironment {
   @Override
   public void tearDown() throws Exception {
     kuduLocal.stop();
+    kuduLocal.destroyDB();
   }
 
   @Override
