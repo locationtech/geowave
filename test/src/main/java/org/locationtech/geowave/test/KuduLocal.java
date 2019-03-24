@@ -8,6 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
@@ -17,7 +19,6 @@ import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
-import org.apache.commons.exec.Executor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
@@ -36,12 +37,14 @@ public class KuduLocal {
       "kudu_1.7.0+cdh5.16.1+0-1.cdh5.16.1.p0.3~xenial-cdh5.16.1_amd64.deb";
   private static final String KUDU_MASTER = "kudu-master";
   private static final String KUDU_TABLET = "kudu-tserver";
-  private static final long STARTUP_DELAY_MS = 1000L;
+  private static final long STARTUP_DELAY_MS = 1500L;
 
   private final int numTablets;
   private final File kuduLocalDir;
+  private final File kuduDBDir; // storage for database files
 
-  private ExecuteWatchdog watchdog;
+  // require a separate watchdog for each master/tablet server
+  private final List<ExecuteWatchdog> watchdogs;
 
   public KuduLocal(String localDir, int numTablets) {
     if (TestUtils.isSet(localDir)) {
@@ -54,8 +57,9 @@ public class KuduLocal {
     } else if (!this.kuduLocalDir.isDirectory()) {
       LOGGER.error("{} exists but is not a directory", this.kuduLocalDir.getAbsolutePath());
     }
+    this.kuduDBDir = new File(kuduLocalDir, "db");
+    this.watchdogs = new ArrayList<>();
     this.numTablets = numTablets;
-
   }
 
   public boolean start() {
@@ -81,11 +85,26 @@ public class KuduLocal {
   }
 
   public boolean isRunning() {
-    return (watchdog != null && watchdog.isWatching());
+    return watchdogs.stream().anyMatch(w -> w.isWatching());
   }
 
   public void stop() {
-    watchdog.destroyProcess();
+    for (ExecuteWatchdog w : watchdogs) {
+      w.destroyProcess();
+    }
+    try {
+      Thread.sleep(STARTUP_DELAY_MS);
+    } catch (InterruptedException e) {
+    }
+  }
+
+  public void destroyDB() throws IOException {
+    try {
+      FileUtils.deleteDirectory(kuduDBDir);
+    } catch (IOException e) {
+      LOGGER.error("Could not destroy database files", e);
+      throw e;
+    }
   }
 
   private boolean isInstalled() {
@@ -137,7 +156,7 @@ public class KuduLocal {
 
     for (File f : new File[] {debPackageFile, debDataTarGz}) {
       if (!f.delete()) {
-        LOGGER.warn("cannot delete " + f.getAbsolutePath());
+        LOGGER.warn("cannot delete {}", f.getAbsolutePath());
       }
     }
 
@@ -160,35 +179,45 @@ public class KuduLocal {
     }
   }
 
-  private void startKuduLocal() throws ExecuteException, IOException, InterruptedException {
-    watchdog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
-    Executor executor = new DefaultExecutor();
-    executor.setWatchdog(this.watchdog);
-    executor.setWorkingDirectory(this.kuduLocalDir);
-
+  private void executeAsyncAndWatch(CommandLine command) throws ExecuteException, IOException {
+    LOGGER.info("Running async: {}", command.toString());
+    ExecuteWatchdog watchdog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
+    DefaultExecutor executor = new DefaultExecutor();
+    executor.setWatchdog(watchdog);
+    executor.setWorkingDirectory(kuduLocalDir);
+    watchdogs.add(watchdog);
     // Using a result handler makes the local instance run async
-    DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
+    executor.execute(command, new DefaultExecuteResultHandler());
+  }
+
+  private void startKuduLocal() throws ExecuteException, IOException, InterruptedException {
+    if (!this.kuduDBDir.exists() && !this.kuduDBDir.mkdirs()) {
+      LOGGER.error("unable to create directory {}", this.kuduDBDir.getAbsolutePath());
+    } else if (!this.kuduDBDir.isDirectory()) {
+      LOGGER.error("{} exists but is not a directory", this.kuduDBDir.getAbsolutePath());
+    }
 
     File kuduMasterBinary = new File(kuduLocalDir.getAbsolutePath(), KUDU_MASTER);
+    File kuduTabletBinary = new File(kuduLocalDir.getAbsolutePath(), KUDU_TABLET);
+
     CommandLine startMaster = new CommandLine(kuduMasterBinary.getAbsolutePath());
     startMaster.addArgument("--fs_data_dirs");
-    startMaster.addArgument(new File(kuduLocalDir, "master_fs_data").getAbsolutePath());
+    startMaster.addArgument(new File(kuduDBDir, "master_fs_data").getAbsolutePath());
     startMaster.addArgument("--fs_metadata_dir");
-    startMaster.addArgument(new File(kuduLocalDir, "master_fs_metadata").getAbsolutePath());
+    startMaster.addArgument(new File(kuduDBDir, "master_fs_metadata").getAbsolutePath());
     startMaster.addArgument("--fs_wal_dir");
-    startMaster.addArgument(new File(kuduLocalDir, "master_fs_wal").getAbsolutePath());
-    executor.execute(startMaster, resultHandler);
+    startMaster.addArgument(new File(kuduDBDir, "master_fs_wal").getAbsolutePath());
+    executeAsyncAndWatch(startMaster);
 
-    File kuduTabletBinary = new File(kuduLocalDir.getAbsolutePath(), KUDU_TABLET);
     for (int i = 0; i < numTablets; i++) {
       CommandLine startTablet = new CommandLine(kuduTabletBinary.getAbsolutePath());
       startTablet.addArgument("--fs_data_dirs");
-      startTablet.addArgument(new File(kuduLocalDir, "t" + i + "_fs_data_").getAbsolutePath());
+      startTablet.addArgument(new File(kuduDBDir, "t" + i + "_fs_data").getAbsolutePath());
       startTablet.addArgument("--fs_metadata_dir");
-      startTablet.addArgument(new File(kuduLocalDir, "t" + i + "_fs_metadata").getAbsolutePath());
+      startTablet.addArgument(new File(kuduDBDir, "t" + i + "_fs_metadata").getAbsolutePath());
       startTablet.addArgument("--fs_wal_dir");
-      startTablet.addArgument(new File(kuduLocalDir, "t" + i + "_fs_wal").getAbsolutePath());
-      executor.execute(startTablet, resultHandler);
+      startTablet.addArgument(new File(kuduDBDir, "t" + i + "_fs_wal").getAbsolutePath());
+      executeAsyncAndWatch(startTablet);
     }
 
     Thread.sleep(STARTUP_DELAY_MS);
