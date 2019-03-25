@@ -1,3 +1,4 @@
+from pygw.config import config
 # These classes define methods for interfacing with the
 # abstract Classes/ Interfaces as defined in the core.store.api
 # No Java objects should be instantiated here.
@@ -24,29 +25,41 @@ class DataStore(PyGwJavaWrapper):
 
     def __init__(self, gateway, java_ref):
         super().__init__(gateway, java_ref)
-        self.interfacer = gateway.entry_point.storeInterfacer
 
     def get_indices(self, type_name=None):
         if type_name:
-            j_indices = self.interfacer.getIndices(self._java_ref, type_name)
+            j_indices = self._java_ref.getIndices(type_name)
         else:
-            j_indices = self.interfacer.getIndices(self._java_ref)
+            j_indices = self._java_ref.getIndices()
         return [Index(self._gateway, j_index) for j_index in j_indices]
 
-    def add_type(self, type_adapter, index):
-        # NOTE: This is slightly different from java api. Currently does not support var-arg initial indices
-        # TODO: Fix
-        j_adapter = type_adapter._java_ref
-        j_index = index._java_ref
-        self.interfacer.addType(self._java_ref, j_adapter, j_index)
+    def add_type(self, type_adapter, *initial_indices):
+        assert isinstance(type_adapter,DataTypeAdapter)
+
+        n = len(initial_indices)
+        j_index_class = config.MODULE__core_store.Index
+        j_index_arr = config.GATEWAY.new_array(j_index_class,n)
+        for idx, py_obj in enumerate(initial_indices):
+                j_index_arr[idx] = py_obj._java_ref
+    
+        self._java_ref.addType(type_adapter._java_ref,j_index_arr)
 
     def create_writer(self, type_adapter_name):
         j_writer = self._java_ref.createWriter(type_adapter_name)
         return Writer(self._gateway, j_writer)
 
     def ingest(self, url, *indices, ingest_options=None):
-        # TODO
-        raise NotImplementedError
+        #TODO: Ingest Options
+
+        assert isinstance(url,str)
+
+        n = len(indices)
+        j_index_class = config.MODULE__core_store.Index
+        j_index_arr = config.GATEWAY.new_array(j_index_class,n)
+        for idx, name in enumerate(indices):
+                j_index_arr[idx] = name._java_ref
+        java_url = config.GATEWAY.jvm.java.net.URL(url)
+        self._java_ref.ingest(java_url,ingest_options,j_index_arr)
     
     def query(self, q):
         assert isinstance(q, QueryInterface)
@@ -78,16 +91,18 @@ class DataStore(PyGwJavaWrapper):
         raise NotImplementedError
     
     def remove_type(self, type_name):
-        # TODO
-        raise NotImplementedError
+        assert isinstance(str,type_name)
+
+        return self._java_ref.removeType(type_name)
     
     def delete(self, q):
-        # TODO
-        raise NotImplementedError
+        assert isinstance(q,QueryInterface)
 
-    def delete_all(self, q):
-        # TODO
-        raise NotImplementedError
+        return self._java_ref.delete(q)
+
+    def delete_all(self):
+        
+      return self._java_ref.deleteAll()
 
 class DataTypeAdapter(PyGwJavaWrapper):
     """Wrapper to expose all of DataTypeAdapter API"""
@@ -135,7 +150,3 @@ class QueryInterface(PyGwJavaWrapper):
     
     def describe(self):
         print("I'm a query! ... Please implement a better description for me...")
-
-class QueryBuilderInterface(PyGwJavaWrapper):
-    # Necessary? See QueryBuilder in query.py
-    pass

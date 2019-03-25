@@ -8,6 +8,22 @@ See `org.locationtech.geowave.examples.ingest.SimpleIngest` for more about this 
 
 #### To try this example for yourself, in a python shell run: ####
 ```
+
+from pygw import *
+from pygw.sft_example import *
+point = Point()
+builder = PointBuilder(point)
+adapter = PointFeatureDataAdapter(point)
+index = SpatialIndex()
+ds = RocksDbDs("geowave.hello", "./world")
+ds.add_type(adapter, index)
+ds.get_indices()
+ds2 = RocksDbDs("geowave.hello2","./world2")
+
+ds2.get_indices()
+
+ds.copyTo(ds2)
+
 from pygw.sft_example import *
 
 # Create a point feature type
@@ -60,14 +76,14 @@ class SimpleFeatureType(PyGwJavaWrapper):
 class Point(SimpleFeatureType):
     """A Point Feature"""
     def __init__(self):
-        j_point_feature = config.GATEWAY.entry_point.simpleIngest.createPointFeatureType()
+        j_point_feature = config.GATEWAY.entry_point.getSimpleIngest().createPointFeatureType()
         super().__init__(config.GATEWAY, j_point_feature)
 
 class PointFeatureDataAdapter(DataTypeAdapter):
     """A Point Feature Adapter"""
     def __init__(self, simple_feature_type):
         self.simple_feature_type = simple_feature_type
-        j_adapter = config.GATEWAY.entry_point.simpleIngest.createDataAdapter(simple_feature_type._java_ref)
+        j_adapter = config.GATEWAY.entry_point.getSimpleIngest().createDataAdapter(simple_feature_type._java_ref)
         super().__init__(config.GATEWAY, j_adapter)
 
 class PointBuilder(PyGwJavaWrapper):
