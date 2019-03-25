@@ -104,7 +104,6 @@ class DataStore(PyGwJavaWrapper):
         
       return self._java_ref.deleteAll()
 
-
 class DataTypeAdapter(PyGwJavaWrapper):
     """Wrapper to expose all of DataTypeAdapter API"""
  

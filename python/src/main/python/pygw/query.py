@@ -138,4 +138,3 @@ class QueryBuilder(PyGwJavaWrapper):
 
     class InvalidConstraintError(Exception): pass
     class IncompatibleOptions(Exception): pass
-    
