@@ -339,6 +339,22 @@ public class BaseDataStoreUtils {
                             fieldValue.getValue()));
           }
         }
+        if (indexModel.useInSecondaryIndex()) {
+          final List<FieldInfo<?>> fieldInfoList = new ArrayList<>();
+          addCommonFields(
+              entry,
+              index,
+              indexModel,
+              customFieldVisibilityWriter,
+              encodedData,
+              visibilityEnabled,
+              fieldInfoList);
+          BaseDataStoreUtils.composeFlattenedFields(
+              fieldInfoList,
+              indexModel,
+              adapter,
+              dataIdIndex);
+        }
         return new IntermediaryWriteEntryInfo(
             dataId,
             internalAdapterId,
@@ -347,19 +363,14 @@ public class BaseDataStoreUtils {
                 new GeoWaveValueImpl(new byte[0], indexModelVisibility, new byte[0])});
       } else {
         final List<FieldInfo<?>> fieldInfoList = new ArrayList<>();
-        for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
-          final FieldInfo<?> fieldInfo =
-              getFieldInfo(
-                  indexModel,
-                  fieldValue.getKey(),
-                  fieldValue.getValue(),
-                  entry,
-                  customFieldVisibilityWriter,
-                  visibilityEnabled);
-          if (fieldInfo != null) {
-            fieldInfoList.add(fieldInfo);
-          }
-        }
+        addCommonFields(
+            entry,
+            index,
+            indexModel,
+            customFieldVisibilityWriter,
+            encodedData,
+            visibilityEnabled,
+            fieldInfoList);
         for (final Entry<String, Object> fieldValue : encodedData.getAdapterExtendedData().getValues().entrySet()) {
           if (fieldValue.getValue() != null) {
             final FieldInfo<?> fieldInfo =
@@ -399,6 +410,30 @@ public class BaseDataStoreUtils {
           internalAdapterId,
           insertionIds,
           new GeoWaveValueImpl[0]);
+    }
+  }
+
+  private static <T> void addCommonFields(
+      final T entry,
+      final Index index,
+      final CommonIndexModel indexModel,
+      final VisibilityWriter<T> customFieldVisibilityWriter,
+      final AdapterPersistenceEncoding encodedData,
+      final boolean visibilityEnabled,
+      final List<FieldInfo<?>> fieldInfoList) {
+
+    for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
+      final FieldInfo<?> fieldInfo =
+          getFieldInfo(
+              indexModel,
+              fieldValue.getKey(),
+              fieldValue.getValue(),
+              entry,
+              customFieldVisibilityWriter,
+              visibilityEnabled);
+      if (fieldInfo != null) {
+        fieldInfoList.add(fieldInfo);
+      }
     }
   }
 

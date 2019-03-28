@@ -1049,7 +1049,8 @@ public class BaseDataStore implements DataStore {
           try (Writer writer = createWriter(adapter, newIndices)) {
             try (
                 // TODO what about authorizations
-                final CloseableIterator it = query(QueryBuilder.newBuilder().build())) {
+                final CloseableIterator it =
+                    query(QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).build())) {
               while (it.hasNext()) {
                 writer.write(it.next());
               }
