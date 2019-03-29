@@ -70,7 +70,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
   private static final int KUDU_IDENTIFIER_MAX_LENGTH = 256;
 
   private final String gwNamespace;
-  private final KuduRequiredOptions options;
+  protected final KuduRequiredOptions options;
 
   private final KuduClient client;
   private final Object CREATE_TABLE_MUTEX = new Object();

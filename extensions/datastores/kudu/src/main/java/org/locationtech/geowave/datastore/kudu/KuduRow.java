@@ -13,20 +13,21 @@ import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.client.PartialRow;
 import org.apache.kudu.client.RowResult;
 import org.apache.kudu.Type;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.*;
 import java.nio.ByteBuffer;
 import java.util.List;
 
 public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
 
-  private final byte[] partitionKey;
+  private byte[] partitionKey;
   private final short adapterId;
   private final byte[] sortKey;
   private final byte[] dataId;
   private final byte[] fieldVisibility;
   private final byte[] nanoTime;
   private final byte[] fieldMask;
-  private final byte[] value;
+  private byte[] value;
   private final int numDuplicates;
 
   public enum KuduField {
@@ -98,6 +99,18 @@ public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
     this.fieldVisibility = value.getVisibility();
     this.fieldMask = value.getFieldMask();
     this.value = value.getValue();
+  }
+
+  public KuduRow(
+      GeoWaveRow row,
+      GeoWaveValue value,
+      boolean isDataIndex,
+      boolean isVisibilityEnabled) {
+    this(row, value);
+    if (isDataIndex) {
+      this.partitionKey = row.getDataId();
+      this.value = DataIndexUtils.serializeDataIndexValue(value, isVisibilityEnabled);
+    }
   }
 
   @Override

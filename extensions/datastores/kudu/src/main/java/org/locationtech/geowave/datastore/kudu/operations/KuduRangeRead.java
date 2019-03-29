@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import org.apache.kudu.Schema;
 import org.apache.kudu.client.KuduException;
 import org.apache.kudu.client.KuduPredicate;
@@ -18,6 +17,7 @@ import org.apache.kudu.client.RowResult;
 import org.apache.kudu.client.RowResultIterator;
 import org.apache.kudu.client.KuduPredicate.ComparisonOp;
 import org.apache.kudu.client.KuduScanner.KuduScannerBuilder;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -26,7 +26,6 @@ import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
-import org.locationtech.geowave.core.store.util.RowConsumer;
 import org.locationtech.geowave.datastore.kudu.KuduRow;
 import org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
 import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
@@ -152,27 +151,29 @@ public class KuduRangeRead<T> {
                 Iterators.concat(results.iterator()),
                 r -> (GeoWaveRow) new KuduRow(r));
       }
-      rowTransformer.apply(rowMerging ? new GeoWaveRowMergingIterator(tmpIterator) : tmpIterator);
+      return new CloseableIteratorWrapper<>(() -> {
+      },
+          rowTransformer.apply(
+              rowMerging ? new GeoWaveRowMergingIterator(tmpIterator) : tmpIterator));
     } else {
       Iterator<RowResult> rowResultIterator = Iterators.concat(results.iterator());
       // Order the rows for data index query
-      final Map<byte[], GeoWaveRow> resultsMap = new HashMap<>();
+      final Map<ByteArray, GeoWaveRow> resultsMap = new HashMap<>();
       while (rowResultIterator.hasNext()) {
         RowResult r = rowResultIterator.next();
         final byte[] d = r.getBinaryCopy(KuduField.GW_PARTITION_ID_KEY.getFieldName());
         resultsMap.put(
-            d,
+            new ByteArray(d),
             DataIndexUtils.deserializeDataIndexRow(
                 d,
                 adapterIds[0],
                 r.getBinaryCopy(KuduField.GW_VALUE_KEY.getFieldName()),
                 visibilityEnabled));
       }
-      tmpIterator = Arrays.stream(dataIds).map(d -> resultsMap.get(d)).iterator();
+      tmpIterator = Arrays.stream(dataIds).map(d -> resultsMap.get(new ByteArray(d))).iterator();
+      return new CloseableIteratorWrapper<>(() -> {
+      }, (Iterator<T>) tmpIterator);
     }
-
-    return new CloseableIteratorWrapper<>(() -> {
-    }, rowTransformer.apply(rowMerging ? new GeoWaveRowMergingIterator(tmpIterator) : tmpIterator));
   }
 
   private void executeQuery(KuduScanner scanner, List<RowResultIterator> results) {

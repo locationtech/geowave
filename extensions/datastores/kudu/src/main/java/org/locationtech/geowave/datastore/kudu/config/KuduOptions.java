@@ -17,8 +17,4 @@ public class KuduOptions extends BaseDataStoreOptions {
     return false;
   }
 
-  public KuduOptions() {
-    super();
-  }
-
 }
