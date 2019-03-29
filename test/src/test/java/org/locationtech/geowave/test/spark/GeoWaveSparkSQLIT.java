@@ -50,6 +50,7 @@ public class GeoWaveSparkSQLIT extends AbstractGeoWaveBasicVectorIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;

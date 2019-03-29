@@ -42,6 +42,7 @@ public class ConfigServicesIT extends BaseServiceIT {
       GeoWaveStoreType.HBASE,
       GeoWaveStoreType.CASSANDRA,
       GeoWaveStoreType.DYNAMODB,
+      GeoWaveStoreType.KUDU,
       GeoWaveStoreType.REDIS,
       GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStorePluginOptions;

@@ -93,6 +93,7 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       namespace = "customcrs")
