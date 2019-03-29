@@ -11,6 +11,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.datastore.kudu.KuduRow;
+import org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,10 +38,11 @@ public class KuduWriter implements RowWriter {
   @Override
   public synchronized void write(GeoWaveRow row) {
     boolean isDataIndex = DataIndexUtils.isDataIndex(tableName);
+    boolean isVisibilityEnabled = operations.options.getStoreOptions().isVisibilityEnabled();
     try {
       KuduTable table = operations.getTable(tableName);
       for (GeoWaveValue value : row.getFieldValues()) {
-        KuduRow kuduRow = new KuduRow(row, value);
+        KuduRow kuduRow = new KuduRow(row, value, isDataIndex, isVisibilityEnabled);
         Insert insert = table.newInsert();
         if (isDataIndex) {
           kuduRow.populatePartialRowDataIndex(insert.getRow());
