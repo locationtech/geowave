@@ -150,4 +150,11 @@ public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
     partialRow.addBinary(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName(), fieldVisibility);
     partialRow.addBinary(KuduField.GW_NANO_TIME_KEY.getFieldName(), nanoTime);
   }
+
+  public void populatePartialRowDataIndex(PartialRow partialRow) {
+    partialRow.addBinary(KuduField.GW_PARTITION_ID_KEY.getFieldName(), partitionKey);
+    partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
+    partialRow.addBinary(KuduField.GW_VALUE_KEY.getFieldName(), value);
+  }
+
 }

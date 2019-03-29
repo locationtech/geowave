@@ -77,6 +77,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
       // GeoServer and this thread have different class
       // loaders so the RocksDB "singleton" instances are not shared in

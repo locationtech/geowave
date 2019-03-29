@@ -77,6 +77,7 @@ import org.slf4j.LoggerFactory;
         // HBase also seems to be up near the time limit, for now ignore HBase, but in the future we
         // should trim HBase timing elsewhere
         // GeoWaveStoreType.HBASE,
+        GeoWaveStoreType.KUDU,
         GeoWaveStoreType.REDIS,
         GeoWaveStoreType.ROCKSDB})
 public class SpatialTemporalQueryIT {

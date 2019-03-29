@@ -57,6 +57,7 @@ public class GeoWaveSparkKMeansIT {
           // TODO: Dynamo test takes too long to finish on Travis (>5 minutes)
           // GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions inputDataStore;

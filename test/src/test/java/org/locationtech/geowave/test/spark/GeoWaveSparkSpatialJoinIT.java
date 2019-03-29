@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
         GeoWaveStoreType.BIGTABLE,
         GeoWaveStoreType.DYNAMODB,
         GeoWaveStoreType.CASSANDRA,
+        GeoWaveStoreType.KUDU,
         GeoWaveStoreType.REDIS,
         GeoWaveStoreType.ROCKSDB})
 public class GeoWaveSparkSpatialJoinIT extends AbstractGeoWaveBasicVectorIT {

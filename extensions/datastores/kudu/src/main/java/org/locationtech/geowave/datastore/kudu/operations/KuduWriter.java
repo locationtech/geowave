@@ -6,6 +6,7 @@ import org.apache.kudu.client.KuduSession;
 import org.apache.kudu.client.KuduTable;
 import org.apache.kudu.client.OperationResponse;
 import org.apache.kudu.client.RowError;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowWriter;
@@ -35,12 +36,17 @@ public class KuduWriter implements RowWriter {
 
   @Override
   public synchronized void write(GeoWaveRow row) {
+    boolean isDataIndex = DataIndexUtils.isDataIndex(tableName);
     try {
       KuduTable table = operations.getTable(tableName);
       for (GeoWaveValue value : row.getFieldValues()) {
         KuduRow kuduRow = new KuduRow(row, value);
         Insert insert = table.newInsert();
-        kuduRow.populatePartialRow(insert.getRow());
+        if (isDataIndex) {
+          kuduRow.populatePartialRowDataIndex(insert.getRow());
+        } else {
+          kuduRow.populatePartialRow(insert.getRow());
+        }
         OperationResponse resp = session.apply(insert);
         if (resp.hasRowError()) {
           LOGGER.error("Encountered error while applying insert: {}", resp.getRowError());
