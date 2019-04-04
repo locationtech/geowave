@@ -147,9 +147,14 @@ public class BaseDataStore implements DataStore {
     return internalAdapterStore.getAdapterId(typeName);
   }
 
-  private <T> Writer<T> createWriter(final InternalDataAdapter<T> adapter, final Index... indices) {
+  private <T> Writer<T> createWriter(
+      final InternalDataAdapter<T> adapter,
+      final boolean writeToDataIndex,
+      final Index... indices) {
     final boolean secondaryIndex =
-        baseOptions.isSecondaryIndexing() && DataIndexUtils.adapterSupportsDataIndex(adapter);
+        writeToDataIndex
+            && baseOptions.isSecondaryIndexing()
+            && DataIndexUtils.adapterSupportsDataIndex(adapter);
     final Writer<T>[] writers = new Writer[secondaryIndex ? indices.length + 1 : indices.length];
 
     int i = 0;
@@ -1046,10 +1051,11 @@ public class BaseDataStore implements DataStore {
                   + "'. Writing existing data to new indices for consistency.");
 
           internalAddIndices(adapter, newIndices, true);
-          try (Writer writer = createWriter(adapter, newIndices)) {
+          try (Writer writer = createWriter(adapter, false, newIndices)) {
             try (
                 // TODO what about authorizations
-                final CloseableIterator it = query(QueryBuilder.newBuilder().build())) {
+                final CloseableIterator it =
+                    query(QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).build())) {
               while (it.hasNext()) {
                 writer.write(it.next());
               }
@@ -1126,7 +1132,7 @@ public class BaseDataStore implements DataStore {
               + "'. Add indices using addIndex(<typename>, <indices>).");
       return null;
     }
-    return createWriter(adapter, mapping.getIndices(indexStore));
+    return createWriter(adapter, true, mapping.getIndices(indexStore));
   }
 
   @Override

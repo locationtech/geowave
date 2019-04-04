@@ -40,10 +40,12 @@ import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.AsyncPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.FullAsyncPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.LazyReadPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.PartialAsyncPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
@@ -186,14 +188,32 @@ public class BaseDataStoreUtils {
     if (isSecondaryIndex) {
       // this implies its a Secondary Index and the actual values must be looked up
       if (dataIndexRetrieval instanceof BatchDataIndexRetrieval) {
-        encodedRow =
-            new AsyncPersistenceEncoding(
-                decodePackage.getDataAdapter().getAdapterId(),
-                row.getDataId(),
-                row.getPartitionKey(),
-                row.getSortKey(),
-                row.getNumberOfDuplicates(),
-                (BatchDataIndexRetrieval) dataIndexRetrieval);
+        if (decodePackage.getIndex().getIndexModel().useInSecondaryIndex()) {
+          encodedRow =
+              new PartialAsyncPersistenceEncoding(
+                  decodePackage.getDataAdapter().getAdapterId(),
+                  row.getDataId(),
+                  row.getPartitionKey(),
+                  row.getSortKey(),
+                  row.getNumberOfDuplicates(),
+                  (BatchDataIndexRetrieval) dataIndexRetrieval,
+                  decodePackage.getDataAdapter(),
+                  decodePackage.getIndex().getIndexModel(),
+                  fieldSubsetBitmask,
+                  Suppliers.memoize(
+                      () -> dataIndexRetrieval.getData(
+                          decodePackage.getDataAdapter().getAdapterId(),
+                          row.getDataId())));
+        } else {
+          encodedRow =
+              new FullAsyncPersistenceEncoding(
+                  decodePackage.getDataAdapter().getAdapterId(),
+                  row.getDataId(),
+                  row.getPartitionKey(),
+                  row.getSortKey(),
+                  row.getNumberOfDuplicates(),
+                  (BatchDataIndexRetrieval) dataIndexRetrieval);
+        }
       } else {
         encodedRow =
             new LazyReadPersistenceEncoding(
@@ -339,6 +359,22 @@ public class BaseDataStoreUtils {
                             fieldValue.getValue()));
           }
         }
+        if (indexModel.useInSecondaryIndex()) {
+          final List<FieldInfo<?>> fieldInfoList = new ArrayList<>();
+          addCommonFields(
+              entry,
+              index,
+              indexModel,
+              customFieldVisibilityWriter,
+              encodedData,
+              visibilityEnabled,
+              fieldInfoList);
+          BaseDataStoreUtils.composeFlattenedFields(
+              fieldInfoList,
+              indexModel,
+              adapter,
+              dataIdIndex);
+        }
         return new IntermediaryWriteEntryInfo(
             dataId,
             internalAdapterId,
@@ -347,19 +383,14 @@ public class BaseDataStoreUtils {
                 new GeoWaveValueImpl(new byte[0], indexModelVisibility, new byte[0])});
       } else {
         final List<FieldInfo<?>> fieldInfoList = new ArrayList<>();
-        for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
-          final FieldInfo<?> fieldInfo =
-              getFieldInfo(
-                  indexModel,
-                  fieldValue.getKey(),
-                  fieldValue.getValue(),
-                  entry,
-                  customFieldVisibilityWriter,
-                  visibilityEnabled);
-          if (fieldInfo != null) {
-            fieldInfoList.add(fieldInfo);
-          }
-        }
+        addCommonFields(
+            entry,
+            index,
+            indexModel,
+            customFieldVisibilityWriter,
+            encodedData,
+            visibilityEnabled,
+            fieldInfoList);
         for (final Entry<String, Object> fieldValue : encodedData.getAdapterExtendedData().getValues().entrySet()) {
           if (fieldValue.getValue() != null) {
             final FieldInfo<?> fieldInfo =
@@ -399,6 +430,30 @@ public class BaseDataStoreUtils {
           internalAdapterId,
           insertionIds,
           new GeoWaveValueImpl[0]);
+    }
+  }
+
+  private static <T> void addCommonFields(
+      final T entry,
+      final Index index,
+      final CommonIndexModel indexModel,
+      final VisibilityWriter<T> customFieldVisibilityWriter,
+      final AdapterPersistenceEncoding encodedData,
+      final boolean visibilityEnabled,
+      final List<FieldInfo<?>> fieldInfoList) {
+
+    for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
+      final FieldInfo<?> fieldInfo =
+          getFieldInfo(
+              indexModel,
+              fieldValue.getKey(),
+              fieldValue.getValue(),
+              entry,
+              customFieldVisibilityWriter,
+              visibilityEnabled);
+      if (fieldInfo != null) {
+        fieldInfoList.add(fieldInfo);
+      }
     }
   }
 

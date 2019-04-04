@@ -26,4 +26,9 @@ public class SimpleIntegerIndexStrategy extends SimpleNumericIndexStrategy<Integ
   protected Integer cast(final double value) {
     return (int) value;
   }
+
+  @Override
+  protected boolean isInteger() {
+    return true;
+  }
 }

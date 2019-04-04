@@ -26,4 +26,9 @@ public class SimpleLongIndexStrategy extends SimpleNumericIndexStrategy<Long> {
   protected Long cast(final double value) {
     return (long) value;
   }
+
+  @Override
+  protected boolean isInteger() {
+    return true;
+  }
 }

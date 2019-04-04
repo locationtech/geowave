@@ -21,7 +21,11 @@ public interface CommonIndexModel extends
     DataReader<CommonIndexValue>,
     DataWriter<Object, CommonIndexValue>,
     Persistable {
-  public NumericDimensionField<? extends CommonIndexValue>[] getDimensions();
+  NumericDimensionField<? extends CommonIndexValue>[] getDimensions();
 
-  public String getId();
+  String getId();
+
+  default boolean useInSecondaryIndex() {
+    return false;
+  }
 }

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.IndexMetaData;
@@ -64,6 +63,13 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
   protected abstract T cast(double value);
 
   /**
+   * Checks whehter
+   *
+   * @return the value represented as a T
+   */
+  protected abstract boolean isInteger();
+
+  /**
    * Always returns a single range since this is a 1-dimensional index. The sort-order of the bytes
    * is the same as the sort order of values, so an indexedRange can be represented by a single
    * contiguous ByteArrayRange. {@inheritDoc}
@@ -87,7 +93,10 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
       final IndexMetaData... hints) {
     final T min = cast(indexedRange.getMinValuesPerDimension()[0]);
     final byte[] start = lexicoder.toByteArray(min);
-    final T max = cast(Math.ceil(indexedRange.getMaxValuesPerDimension()[0]));
+    final T max =
+        cast(
+            isInteger() ? Math.ceil(indexedRange.getMaxValuesPerDimension()[0])
+                : indexedRange.getMaxValuesPerDimension()[0]);
     final byte[] end = lexicoder.toByteArray(max);
     final ByteArrayRange range = new ByteArrayRange(start, end);
     final SinglePartitionQueryRanges partitionRange =
@@ -118,10 +127,10 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
   public InsertionIds getInsertionIds(
       final MultiDimensionalNumericData indexedData,
       final int maxEstimatedDuplicateIds) {
-    final long min = (long) indexedData.getMinValuesPerDimension()[0];
-    final long max = (long) Math.ceil(indexedData.getMaxValuesPerDimension()[0]);
+    final double min = indexedData.getMinValuesPerDimension()[0];
+    final double max = indexedData.getMaxValuesPerDimension()[0];
     final List<byte[]> insertionIds = new ArrayList<>((int) (max - min) + 1);
-    for (long i = min; i <= max; i++) {
+    for (double i = min; i <= max; i++) {
       insertionIds.add(lexicoder.toByteArray(cast(i)));
     }
     return new InsertionIds(insertionIds);
@@ -136,7 +145,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
   public MultiDimensionalNumericData getRangeForId(
       final byte[] partitionKey,
       final byte[] sortKey) {
-    final long value = Long.class.cast(lexicoder.fromByteArray(sortKey));
+    final double value = lexicoder.fromByteArray(sortKey).doubleValue();
     final NumericData[] dataPerDimension = new NumericData[] {new NumericValue(value)};
     return new BasicNumericDataset(dataPerDimension);
   }
@@ -147,15 +156,14 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
       final byte[] sortKey) {
     return new MultiDimensionalCoordinates(
         null,
-        new Coordinate[] {new Coordinate(Long.class.cast(lexicoder.fromByteArray(sortKey)), null)});
+        new Coordinate[] {new Coordinate(lexicoder.fromByteArray(sortKey).longValue(), null)});
   }
 
   @Override
   public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
       final MultiDimensionalNumericData dataRange,
       final IndexMetaData... hints) {
-    // TODO: not sure what to do here
-    return new MultiDimensionalCoordinateRanges[] {new MultiDimensionalCoordinateRanges()};
+    return null;
   }
 
   @Override
