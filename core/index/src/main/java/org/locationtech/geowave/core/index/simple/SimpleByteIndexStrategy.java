@@ -16,15 +16,15 @@ import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
  * strategy will not perform well for inserting ranges because there will be too much replication of
  * data.
  */
-public class SimpleShortIndexStrategy extends SimpleNumericIndexStrategy<Short> {
+public class SimpleByteIndexStrategy extends SimpleNumericIndexStrategy<Byte> {
 
-  public SimpleShortIndexStrategy() {
-    super(Lexicoders.SHORT);
+  public SimpleByteIndexStrategy() {
+    super(Lexicoders.BYTE);
   }
 
   @Override
-  protected Short cast(final double value) {
-    return (short) value;
+  protected Byte cast(final double value) {
+    return (byte) value;
   }
 
   @Override

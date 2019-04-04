@@ -52,6 +52,7 @@ import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
+import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
@@ -417,6 +418,25 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
 
     LOGGER.warn("Simple Feature Type could not be used for handling the indexed data");
     return super.getDefaultTypeMatchingHandlers(reprojectedFeatureType);
+  }
+
+  @Override
+  public IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object> getFieldHandler(
+      final NumericDimensionField<? extends CommonIndexValue> dimension) {
+    if (dimension instanceof FeatureAttributeDimensionField) {
+      final VisibilityConfiguration visConfig = new VisibilityConfiguration(reprojectedFeatureType);
+      final AttributeDescriptor desc =
+          reprojectedFeatureType.getDescriptor(dimension.getFieldName());
+      if (desc != null) {
+        return new FeatureAttributeCommonIndexFieldHandler(
+            desc,
+            visConfig.getManager().createVisibilityHandler(
+                desc.getLocalName(),
+                fieldVisiblityHandler,
+                visConfig.getAttributeName()));
+      }
+    }
+    return super.getFieldHandler(dimension);
   }
 
   /**

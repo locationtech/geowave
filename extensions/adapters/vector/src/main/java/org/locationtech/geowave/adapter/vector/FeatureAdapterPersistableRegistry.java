@@ -80,7 +80,7 @@ public class FeatureAdapterPersistableRegistry implements PersistableRegistrySpi
         new PersistableIdAndConstructor((short) 529, FeatureHyperLogLogConfig::new),
         new PersistableIdAndConstructor((short) 530, FeatureNumericHistogramConfig::new),
         new PersistableIdAndConstructor((short) 531, FeatureNumericRangeConfig::new),
-        // 532 is available
+        new PersistableIdAndConstructor((short) 532, FeatureAttributeDimensionField::new),
         new PersistableIdAndConstructor((short) 533, SimpleFeaturePrimaryIndexConfiguration::new),
         // 534 and 535 is available
         new PersistableIdAndConstructor((short) 536, GeometrySimpOptionProvider::new)};

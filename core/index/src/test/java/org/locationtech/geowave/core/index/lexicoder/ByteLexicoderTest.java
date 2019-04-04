@@ -10,23 +10,22 @@ package org.locationtech.geowave.core.index.lexicoder;
 
 import com.google.common.primitives.UnsignedBytes;
 
-public class DoubleLexicoderTest extends AbstractLexicoderTest<Double> {
-  public DoubleLexicoderTest() {
+public class ByteLexicoderTest extends AbstractLexicoderTest<Byte> {
+  public ByteLexicoderTest() {
     super(
-        Lexicoders.DOUBLE,
-        -Double.MAX_VALUE,
-        Double.MAX_VALUE,
-        new Double[] {
-            -10d,
-            -Double.MAX_VALUE,
-            11d,
-            -14.2,
-            14.2,
-            -100.002,
-            100.002,
-            -11d,
-            Double.MAX_VALUE,
-            0d},
+        Lexicoders.BYTE,
+        Byte.MIN_VALUE,
+        Byte.MAX_VALUE,
+        new Byte[] {
+            (byte) -10,
+            Byte.MIN_VALUE,
+            (byte) 11,
+            (byte) -122,
+            (byte) 122,
+            (byte) -100,
+            (byte) 100,
+            Byte.MAX_VALUE,
+            (byte) 0},
         UnsignedBytes.lexicographicalComparator());
   }
 }

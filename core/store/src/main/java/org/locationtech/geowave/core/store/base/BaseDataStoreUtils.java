@@ -40,10 +40,12 @@ import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.AsyncPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.FullAsyncPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.LazyReadPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.PartialAsyncPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
@@ -186,14 +188,32 @@ public class BaseDataStoreUtils {
     if (isSecondaryIndex) {
       // this implies its a Secondary Index and the actual values must be looked up
       if (dataIndexRetrieval instanceof BatchDataIndexRetrieval) {
-        encodedRow =
-            new AsyncPersistenceEncoding(
-                decodePackage.getDataAdapter().getAdapterId(),
-                row.getDataId(),
-                row.getPartitionKey(),
-                row.getSortKey(),
-                row.getNumberOfDuplicates(),
-                (BatchDataIndexRetrieval) dataIndexRetrieval);
+        if (decodePackage.getIndex().getIndexModel().useInSecondaryIndex()) {
+          encodedRow =
+              new PartialAsyncPersistenceEncoding(
+                  decodePackage.getDataAdapter().getAdapterId(),
+                  row.getDataId(),
+                  row.getPartitionKey(),
+                  row.getSortKey(),
+                  row.getNumberOfDuplicates(),
+                  (BatchDataIndexRetrieval) dataIndexRetrieval,
+                  decodePackage.getDataAdapter(),
+                  decodePackage.getIndex().getIndexModel(),
+                  fieldSubsetBitmask,
+                  Suppliers.memoize(
+                      () -> dataIndexRetrieval.getData(
+                          decodePackage.getDataAdapter().getAdapterId(),
+                          row.getDataId())));
+        } else {
+          encodedRow =
+              new FullAsyncPersistenceEncoding(
+                  decodePackage.getDataAdapter().getAdapterId(),
+                  row.getDataId(),
+                  row.getPartitionKey(),
+                  row.getSortKey(),
+                  row.getNumberOfDuplicates(),
+                  (BatchDataIndexRetrieval) dataIndexRetrieval);
+        }
       } else {
         encodedRow =
             new LazyReadPersistenceEncoding(

@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.index.IndexMetaData;
+import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
@@ -35,7 +36,6 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransforme
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.RowReader;
-import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.filter.CoordinateRangeQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
@@ -300,9 +300,11 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
       final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
       final List<MultiDimensionalCoordinateRangesArray> ranges = new ArrayList<>();
       for (final MultiDimensionalNumericData nd : constraints) {
-        ranges.add(
-            new MultiDimensionalCoordinateRangesArray(
-                indexStrategy.getCoordinateRangesPerDimension(nd, indexMetaData)));
+        final MultiDimensionalCoordinateRanges[] indexStrategyCoordRanges =
+            indexStrategy.getCoordinateRangesPerDimension(nd, indexMetaData);
+        if (indexStrategyCoordRanges != null) {
+          ranges.add(new MultiDimensionalCoordinateRangesArray(indexStrategyCoordRanges));
+        }
       }
       return ranges;
     }

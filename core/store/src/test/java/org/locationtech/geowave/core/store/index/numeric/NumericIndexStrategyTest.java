@@ -65,7 +65,6 @@ public class NumericIndexStrategyTest {
     final QueryRanges ranges =
         strategy.getQueryRanges(new NumericLessThanOrEqualToConstraint(fieldId, number));
     Assert.assertTrue(!ranges.isMultiRange());
-
     Assert.assertTrue(
         ranges.getCompositeQueryRanges().get(0).equals(
             new ByteArrayRange(

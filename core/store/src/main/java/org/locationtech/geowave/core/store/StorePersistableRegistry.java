@@ -45,6 +45,7 @@ import org.locationtech.geowave.core.store.query.constraints.DataIdRangeQuery;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.core.store.query.constraints.InsertionIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.SimpleNumericQuery;
 import org.locationtech.geowave.core.store.query.filter.AdapterIdQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.CoordinateRangeQueryFilter;
@@ -118,6 +119,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 252, InsertionIdQuery::new),
         new PersistableIdAndConstructor((short) 253, EverythingQuery::new),
         new PersistableIdAndConstructor((short) 254, SimpleRowTransform::new),
-        new PersistableIdAndConstructor((short) 255, MergingAggregation::new)};
+        new PersistableIdAndConstructor((short) 255, MergingAggregation::new),
+        new PersistableIdAndConstructor((short) 256, SimpleNumericQuery::new),};
   }
 }

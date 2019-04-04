@@ -28,6 +28,9 @@ import org.locationtech.geowave.core.index.sfc.xz.XZOrderSFC;
 import org.locationtech.geowave.core.index.sfc.zorder.ZOrderSFC;
 import org.locationtech.geowave.core.index.simple.HashKeyIndexStrategy;
 import org.locationtech.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
+import org.locationtech.geowave.core.index.simple.SimpleByteIndexStrategy;
+import org.locationtech.geowave.core.index.simple.SimpleDoubleIndexStrategy;
+import org.locationtech.geowave.core.index.simple.SimpleFloatIndexStrategy;
 import org.locationtech.geowave.core.index.simple.SimpleIntegerIndexStrategy;
 import org.locationtech.geowave.core.index.simple.SimpleLongIndexStrategy;
 import org.locationtech.geowave.core.index.simple.SimpleShortIndexStrategy;
@@ -67,6 +70,9 @@ public class IndexPersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 127, XZHierarchicalIndexMetaData::new),
         new PersistableIdAndConstructor((short) 128, InsertionIds::new),
         new PersistableIdAndConstructor((short) 129, PartitionIndexStrategyWrapper::new),
-        new PersistableIdAndConstructor((short) 130, SinglePartitionInsertionIds::new),};
+        new PersistableIdAndConstructor((short) 130, SinglePartitionInsertionIds::new),
+        new PersistableIdAndConstructor((short) 131, SimpleFloatIndexStrategy::new),
+        new PersistableIdAndConstructor((short) 132, SimpleDoubleIndexStrategy::new),
+        new PersistableIdAndConstructor((short) 133, SimpleByteIndexStrategy::new),};
   }
 }

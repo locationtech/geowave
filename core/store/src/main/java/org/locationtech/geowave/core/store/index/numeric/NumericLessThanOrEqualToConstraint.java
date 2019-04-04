@@ -11,6 +11,6 @@ package org.locationtech.geowave.core.store.index.numeric;
 public class NumericLessThanOrEqualToConstraint extends NumericQueryConstraint {
 
   public NumericLessThanOrEqualToConstraint(final String fieldName, final Number number) {
-    super(fieldName, Double.MIN_VALUE, number, true, true);
+    super(fieldName, -Double.MAX_VALUE, number, true, true);
   }
 }
