@@ -108,19 +108,23 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureAttributeCommonIndexFieldHandler.html" title="class in org.locationtech.geowave.adapter.vector">FeatureAttributeCommonIndexFieldHandler</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureGeometryHandler.html" title="class in org.locationtech.geowave.adapter.vector">FeatureGeometryHandler</a></span></code>
 <div class="block">This class handles the internal responsibility of persisting JTS geometry to and from a GeoWave
  common index field for SimpleFeature data.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureTimeRangeHandler.html" title="class in org.locationtech.geowave.adapter.vector">FeatureTimeRangeHandler</a></span></code>
 <div class="block">This class handles the internal responsibility of persisting time ranges based on a start time
  attribute and end time attribute to and from a GeoWave common index field for SimpleFeature data.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureTimestampHandler.html" title="class in org.locationtech.geowave.adapter.vector">FeatureTimestampHandler</a></span></code>
 <div class="block">This class handles the internal responsibility of persisting single timestamp instants based on a
@@ -138,6 +142,10 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">FeatureDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#getFieldHandler-org.locationtech.geowave.core.store.dimension.NumericDimensionField-">getFieldHandler</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;dimension)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">FeatureDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#getTimeRangeHandler-org.opengis.feature.simple.SimpleFeatureType-">getTimeRangeHandler</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType)</code>
 <div class="block">Attempts to find a time descriptor (range or timestamp) within provided featureType and return
