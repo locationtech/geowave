@@ -72,6 +72,7 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
@@ -848,5 +849,14 @@ public class TestUtils {
   // Overload method with option to automatically generate assertion message.
   public static void assertStatusCode(final int expectedCode, final Response response) {
     assertStatusCode("REST call", expectedCode, response);
+  }
+
+  public static StoreTestEnvironment getTestEnvironment(final String type) {
+    for (final GeoWaveStoreType t : GeoWaveStoreType.values()) {
+      if (t.getTestEnvironment().getDataStoreFactory().getType().equals(type)) {
+        return t.getTestEnvironment();
+      }
+    }
+    return null;
   }
 }

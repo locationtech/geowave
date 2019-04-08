@@ -13,14 +13,12 @@ import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Type;
 import org.apache.kudu.client.PartialRow;
 import org.apache.kudu.client.RowResult;
-import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
 import java.nio.ByteBuffer;
 import java.util.List;
 
 public class KuduMetadataRow implements PersistentKuduRow {
-  private static final Logger LOGGER = Logger.getLogger(KuduMetadataRow.class);
   private final byte[] primaryId;
   private final byte[] secondaryId;
   private final byte[] timestamp;

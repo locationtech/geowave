@@ -12,15 +12,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.client.PartialRow;
 import org.apache.kudu.client.RowResult;
-import org.apache.log4j.Logger;
 import org.apache.kudu.Type;
 import org.locationtech.geowave.core.store.entities.*;
 import java.nio.ByteBuffer;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
-  private static final Logger LOGGER = Logger.getLogger(KuduRow.class);
 
   private final byte[] partitionKey;
   private final short adapterId;

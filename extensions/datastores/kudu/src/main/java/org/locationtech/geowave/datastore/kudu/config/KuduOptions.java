@@ -9,51 +9,16 @@
 package org.locationtech.geowave.datastore.kudu.config;
 
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
-import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
-import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.datastore.kudu.KuduStoreFactoryFamily;
 import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
 
-public class KuduOptions extends StoreFactoryOptions {
-  protected BaseDataStoreOptions baseOptions = new BaseDataStoreOptions() {
-    @Override
-    public boolean isServerSideLibraryEnabled() {
-      return false;
-    }
-
-    @Override
-    protected int defaultMaxRangeDecomposition() {
-      return KuduUtils.KUDU_DEFAULT_MAX_RANGE_DECOMPOSITION;
-    }
-
-    @Override
-    protected int defaultAggregationMaxRangeDecomposition() {
-      return KuduUtils.KUDU_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION;
-    }
-
-    @Override
-    protected boolean defaultEnableVisibility() {
-      return false;
-    }
-  };
+public class KuduOptions extends BaseDataStoreOptions {
+  @Override
+  public boolean isServerSideLibraryEnabled() {
+    return false;
+  }
 
   public KuduOptions() {
     super();
-  }
-
-  public KuduOptions(final String geowaveNamespace) {
-    super(geowaveNamespace);
-  }
-
-  @Override
-  public StoreFactoryFamilySpi getStoreFactory() {
-    return new KuduStoreFactoryFamily();
-  }
-
-  @Override
-  public DataStoreOptions getStoreOptions() {
-    return baseOptions;
   }
 
 }

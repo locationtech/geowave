@@ -48,6 +48,7 @@ public class KuduRequiredOptions extends StoreFactoryOptions {
 
   @Override
   public DataStoreOptions getStoreOptions() {
-    return additionalOptions.getStoreOptions();
+    return additionalOptions;
   }
+
 }

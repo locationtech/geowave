@@ -78,11 +78,6 @@ public class KuduDeleter implements RowDeleter {
                 schema.getColumn(KuduField.GW_FIELD_MASK_KEY.getFieldName()),
                 KuduPredicate.ComparisonOp.EQUAL,
                 value.getFieldMask()));
-        preds.add(
-            KuduPredicate.newComparisonPredicate(
-                schema.getColumn(KuduField.GW_VALUE_KEY.getFieldName()),
-                KuduPredicate.ComparisonOp.EQUAL,
-                value.getValue()));
         for (Delete delete : operations.getDeletions(table, preds, KuduRow::new)) {
           session.apply(delete);
         }
