@@ -73,7 +73,7 @@ abstract public class AbstractRocksDBTable {
     batchWrite = batchSize > 1;
   }
 
-  public synchronized void delete(final byte[] key) {
+  public void delete(final byte[] key) {
     final RocksDB db = getWriteDb();
     try {
       readerDirty = true;
@@ -83,22 +83,34 @@ abstract public class AbstractRocksDBTable {
     }
   }
 
-  protected synchronized void put(final byte[] key, final byte[] value) {
+  @SuppressFBWarnings(
+      justification = "The null check outside of the synchronized block is intentional to minimize the need for synchronization.")
+  protected void put(final byte[] key, final byte[] value) {
     if (batchWrite) {
-      synchronized (BATCH_WRITE_MUTEX) {
-        if (currentBatch == null) {
-          currentBatch = new WriteBatch();
-        }
-        try {
-          currentBatch.put(key, value);
-        } catch (final RocksDBException e) {
-          LOGGER.warn("Unable to add data to batched write", e);
-        }
-        if (currentBatch.count() >= batchSize) {
-          flushWriteQueue();
+      WriteBatch thisBatch = currentBatch;
+      if (thisBatch == null) {
+        synchronized (BATCH_WRITE_MUTEX) {
+          if (currentBatch == null) {
+            currentBatch = new WriteBatch();
+          }
+          thisBatch = currentBatch;
         }
       }
-    } else {
+      try {
+        thisBatch.put(key, value);
+      } catch (final RocksDBException e) {
+        LOGGER.warn("Unable to add data to batched write", e);
+      }
+      if (thisBatch.count() >= batchSize) {
+        synchronized (BATCH_WRITE_MUTEX) {
+          if (currentBatch != null) {
+            flushWriteQueue();
+          }
+        }
+      }
+    } else
+
+    {
       final RocksDB db = getWriteDb();
       try {
         readerDirty = true;
