@@ -21,7 +21,6 @@ public class KuduWriter implements RowWriter {
   private final String tableName;
   private final KuduSession session;
 
-
   public KuduWriter(String tableName, KuduOperations operations) {
     this.tableName = tableName;
     this.operations = operations;

@@ -17,4 +17,14 @@ public class KuduOptions extends BaseDataStoreOptions {
     return false;
   }
 
+  @Override
+  protected int defaultMaxRangeDecomposition() {
+    return KuduUtils.KUDU_DEFAULT_MAX_RANGE_DECOMPOSITION;
+  }
+
+  @Override
+  protected int defaultAggregationMaxRangeDecomposition() {
+    return KuduUtils.KUDU_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION;
+  }
+
 }
