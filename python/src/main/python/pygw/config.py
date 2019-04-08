@@ -29,6 +29,10 @@ class GlobalConfigurations:
                 java_import(config.GATEWAY.jvm, "org.geotools.feature.simple")
                 self.MODULE__feature_simple = self.GATEWAY.jvm.org.geotools.feature.simple
 
+                # Geowave Query Constraints
+                java_import(self.GATEWAY.jvm, "org.locationtech.geowave.core.store.query.constraints")
+                self.MODULE__query_constraints = self.GATEWAY.jvm.org.locationtech.geowave.core.store.query.constraints
+
 # Note - Module-wide Singleton!
 global config
 config = GlobalConfigurations()
