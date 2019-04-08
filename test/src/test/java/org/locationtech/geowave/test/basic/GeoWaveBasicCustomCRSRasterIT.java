@@ -93,9 +93,16 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
   @Test
   public void testNoDataMergeStrategy() throws IOException {
     final String coverageName = "testNoDataMergeStrategy";
-    final int tileSize = 64; // 256 fails on bigtable exceeding maximum
-    // size, 128 fails on DynamoDB exceeding
-    // maximum size
+    final int maxCellSize =
+        TestUtils.getTestEnvironment(dataStoreOptions.getType()).getMaxCellSize();
+    final int tileSize;
+    if (maxCellSize <= 64 * 1024) {
+      tileSize = 24;
+    } else {
+      tileSize = 64; // 256 fails on bigtable exceeding maximum size
+                     // 128 fails on DynamoDB exceeding maximum size
+                     // 64 fails on kudu exceeding maximum size
+    }
     final double westLon = 0;
     final double eastLon = SpatialDimensionalityTypeProvider.DEFAULT_UNBOUNDED_CRS_INTERVAL / 8;
     final double southLat = 0;
@@ -110,13 +117,23 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
     final String summingCoverageName = "testMultipleMergeStrategies_SummingMergeStrategy";
     final String sumAndAveragingCoverageName =
         "testMultipleMergeStrategies_SumAndAveragingMergeStrategy";
+    final int maxCellSize =
+        TestUtils.getTestEnvironment(dataStoreOptions.getType()).getMaxCellSize();
+
     final int summingNumBands = 8;
     final int summingNumRasters = 4;
 
     final int sumAndAveragingNumBands = 12;
     final int sumAndAveragingNumRasters = 15;
-    final int noDataTileSize = 64;
-    final int summingTileSize = 32;
+    final int noDataTileSize;
+    final int summingTileSize;
+    if (maxCellSize <= 64 * 1024) {
+      noDataTileSize = 24;
+      summingTileSize = 24;
+    } else {
+      noDataTileSize = 64;
+      summingTileSize = 32;
+    }
     final int sumAndAveragingTileSize = 8;
     final double minX = 0;
     final double maxX = SpatialDimensionalityTypeProvider.DEFAULT_UNBOUNDED_CRS_INTERVAL / 2048;

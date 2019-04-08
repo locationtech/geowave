@@ -61,4 +61,8 @@ public abstract class StoreTestEnvironment implements TestEnvironment {
     pluginOptions.setFactoryOptions(opts);
     return pluginOptions;
   }
+
+  public int getMaxCellSize() {
+    return Integer.MAX_VALUE;
+  }
 }

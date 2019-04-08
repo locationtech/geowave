@@ -69,4 +69,10 @@ public class KuduStoreTestEnvironment extends StoreTestEnvironment {
     kuduOptions.setKuduMaster("127.0.0.1:7051");
   }
 
+  @Override
+  public int getMaxCellSize() {
+    // https://www.cloudera.com/documentation/enterprise/latest/topics/kudu_limitations.html#schema_design_limitations
+    return 64 * 1024;
+  }
+
 }
