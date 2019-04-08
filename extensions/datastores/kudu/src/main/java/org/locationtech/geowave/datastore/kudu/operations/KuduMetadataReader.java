@@ -16,6 +16,7 @@ import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.util.StatisticsRowIterator;
 import org.locationtech.geowave.datastore.kudu.KuduMetadataRow.KuduMetadataField;
+import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
@@ -23,20 +24,19 @@ import java.util.Iterator;
 import java.util.List;
 
 public class KuduMetadataReader implements MetadataReader {
+  private static final Logger LOGGER = LoggerFactory.getLogger(KuduMetadataReader.class);
   private final KuduOperations operations;
   private final MetadataType metadataType;
-  private final String tableName;
-  private static final Logger LOGGER = LoggerFactory.getLogger(KuduMetadataReader.class);
 
   public KuduMetadataReader(KuduOperations operations, MetadataType metadataType) {
     this.operations = operations;
     this.metadataType = metadataType;
-    this.tableName = operations.getMetadataTableName(metadataType);
   }
 
   @Override
   public CloseableIterator<GeoWaveMetadata> query(MetadataQuery query) {
     List<RowResultIterator> queryResult = new ArrayList<>();
+    final String tableName = operations.getMetadataTableName(metadataType);
     try {
       KuduTable table = operations.getTable(tableName);
       Schema schema = table.getSchema();
@@ -58,10 +58,7 @@ public class KuduMetadataReader implements MetadataReader {
         scannerBuilder = scannerBuilder.addPredicate(secondaryPred);
       }
       KuduScanner scanner = scannerBuilder.build();
-      while (scanner.hasMoreRows()) {
-        queryResult.add(scanner.nextRows());
-      }
-      scanner.close();
+      KuduUtils.executeQuery(scanner, queryResult);
     } catch (KuduException e) {
       LOGGER.error("Encountered error while reading metadata row", e);
     }

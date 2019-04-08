@@ -118,7 +118,7 @@ public class KuduRangeRead<T> {
             KuduScanner scanner =
                 scannerBuilder.addPredicate(lowerPred).addPredicate(upperPred).addPredicate(
                     partitionPred).addPredicate(adapterIdPred).build();
-            executeQuery(scanner, results);
+            KuduUtils.executeQuery(scanner, results);
           }
         }
       } else if (dataIds != null) {
@@ -131,12 +131,12 @@ public class KuduRangeRead<T> {
           KuduScannerBuilder scannerBuilder = operations.getScannerBuilder(table);
           KuduScanner scanner =
               scannerBuilder.addPredicate(partitionPred).addPredicate(adapterIdPred).build();
-          executeQuery(scanner, results);
+          KuduUtils.executeQuery(scanner, results);
         }
       } else {
         KuduScannerBuilder scannerBuilder = operations.getScannerBuilder(table);
         KuduScanner scanner = scannerBuilder.addPredicate(adapterIdPred).build();
-        executeQuery(scanner, results);
+        KuduUtils.executeQuery(scanner, results);
       }
     }
 
@@ -176,18 +176,4 @@ public class KuduRangeRead<T> {
     }
   }
 
-  private void executeQuery(KuduScanner scanner, List<RowResultIterator> results) {
-    while (scanner.hasMoreRows()) {
-      try {
-        results.add(scanner.nextRows());
-      } catch (KuduException e) {
-        LOGGER.error("Error when reading rows", e);
-      }
-    }
-    try {
-      scanner.close();
-    } catch (KuduException e) {
-      LOGGER.error("Error when closing scanner", e);
-    }
-  }
 }

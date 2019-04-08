@@ -49,6 +49,7 @@ import org.locationtech.geowave.datastore.kudu.KuduRow;
 import org.locationtech.geowave.datastore.kudu.PersistentKuduRow;
 import org.locationtech.geowave.datastore.kudu.KuduMetadataRow;
 import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
+import org.locationtech.geowave.datastore.kudu.util.ClientPool;
 import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
@@ -82,18 +83,17 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       gwNamespace = options.getGeoWaveNamespace();
     }
     this.options = options;
-    client = new KuduClient.KuduClientBuilder(options.getKuduMaster()).build();
+    client = ClientPool.getInstance().getClient(options.getKuduMaster());
   }
 
   @Override
   public boolean indexExists(final String indexName) throws IOException {
-    String tableName = getKuduSafeName(indexName);
-    return client.tableExists(tableName);
+    return client.tableExists(getKuduQualifiedName(indexName));
   }
 
   @Override
   public boolean metadataExists(final MetadataType type) throws IOException {
-    return indexExists(getMetadataTableName(type));
+    return client.tableExists(getKuduQualifiedName(getMetadataTableName(type)));
   }
 
   @Override
@@ -109,8 +109,8 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       final String typeName,
       final Short adapterId,
       final String... additionalAuthorizations) {
+    KuduSession session = getSession();
     try {
-      KuduSession session = getSession();
       KuduTable table = getTable(indexName);
       Schema schema = table.getSchema();
       List<KuduPredicate> preds =
@@ -125,10 +125,17 @@ public class KuduOperations implements MapReduceDataStoreOperations {
           LOGGER.error("Encountered error while deleting all: {}", resp.getRowError());
         }
       }
+      return true;
     } catch (KuduException e) {
       LOGGER.error("Encountered error while deleting all", e);
+      return false;
+    } finally {
+      try {
+        session.close();
+      } catch (KuduException e) {
+        LOGGER.error("Encountered error while closing Kudu session", e);
+      }
     }
-    return true;
   }
 
   @Override
@@ -138,7 +145,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
-    createTable(index.getName(), index.getIndexStrategy().getPredefinedSplits().length);
+    createIndexTable(index.getName(), index.getIndexStrategy().getPredefinedSplits().length);
     return new KuduWriter(index.getName(), this);
   }
 
@@ -149,7 +156,6 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public MetadataWriter createMetadataWriter(final MetadataType metadataType) {
-    final String tableName = getMetadataTableName(metadataType);
     synchronized (CREATE_TABLE_MUTEX) {
       try {
         if (!metadataExists(metadataType)) {
@@ -158,7 +164,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
             f.addColumn(columns);
           }
           client.createTable(
-              tableName,
+              getKuduQualifiedName(getMetadataTableName(metadataType)),
               new Schema(columns),
               new CreateTableOptions().addHashPartitions(
                   Collections.singletonList(
@@ -166,7 +172,10 @@ public class KuduOperations implements MapReduceDataStoreOperations {
                   KuduUtils.KUDU_DEFAULT_BUCKETS).setNumReplicas(KuduUtils.KUDU_DEFAULT_REPLICAS));
         }
       } catch (final IOException e) {
-        LOGGER.error("Unable to create metadata table '" + tableName + "'", e);
+        LOGGER.error(
+            "Unable to create metadata table '{}'",
+            getKuduQualifiedName(getMetadataTableName(metadataType)),
+            e);
       }
     }
     return new KuduMetadataWriter(this, metadataType);
@@ -208,11 +217,11 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public void delete(final DataIndexReaderParams readerParams) {
+    byte[][] dataIds = readerParams.getDataIds();
+    short adapterId = readerParams.getAdapterId();
+    final String tableName = DataIndexUtils.DATA_ID_INDEX.getName();
+    KuduSession session = getSession();
     try {
-      byte[][] dataIds = readerParams.getDataIds();
-      short adapterId = readerParams.getAdapterId();
-      KuduSession session = getSession();
-      String tableName = DataIndexUtils.DATA_ID_INDEX.getName();
       KuduTable table = getTable(tableName);
       for (byte[] dataId : dataIds) {
         Delete delete = table.newDelete();
@@ -226,21 +235,22 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       }
     } catch (KuduException e) {
       LOGGER.error("Encountered error while deleting row", e);
+    } finally {
+      try {
+        session.close();
+      } catch (KuduException e) {
+        LOGGER.error("Encountered error while closing Kudu session", e);
+      }
     }
   }
 
-  public KuduSession getSession() {
-    return client.newSession();
-  }
-
-  private boolean createTable(final String indexName, int numPartitions) {
-    final String tableName = getKuduSafeName(indexName);
+  private boolean createIndexTable(final String indexName, int numPartitions) {
     synchronized (CREATE_TABLE_MUTEX) {
       try {
         if (!indexExists(indexName)) {
           List<ColumnSchema> columns = new ArrayList<>();
           KuduField[] fields = KuduField.values();
-          if (DataIndexUtils.isDataIndex(tableName)) {
+          if (DataIndexUtils.isDataIndex(indexName)) {
             fields =
                 Arrays.stream(fields).filter(KuduField::isDataIndexColumn).toArray(
                     KuduField[]::new);
@@ -249,7 +259,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
             f.addColumn(columns);
           }
           client.createTable(
-              tableName,
+              getKuduQualifiedName(indexName),
               new Schema(columns),
               new CreateTableOptions().addHashPartitions(
                   Collections.singletonList(KuduField.GW_PARTITION_ID_KEY.getFieldName()),
@@ -258,25 +268,14 @@ public class KuduOperations implements MapReduceDataStoreOperations {
           return true;
         }
       } catch (final IOException e) {
-        LOGGER.error("Unable to create table '" + indexName + "'", e);
+        LOGGER.error("Unable to create table '{}'", getKuduQualifiedName(indexName), e);
       }
       return false;
     }
   }
 
-  private static String getKuduSafeName(final String name) {
-    if (name.length() > KUDU_IDENTIFIER_MAX_LENGTH) {
-      return name.substring(0, KUDU_IDENTIFIER_MAX_LENGTH);
-    }
-    return name;
-  }
-
-  public KuduTable getTable(String tableName) throws KuduException {
-    return client.openTable(getKuduSafeName(tableName));
-  }
-
   public <T> KuduRangeRead<T> getKuduRangeRead(
-      final String tableName,
+      final String indexName,
       final short[] adapterIds,
       final byte[][] dataIds,
       final Collection<SinglePartitionQueryRanges> ranges,
@@ -284,7 +283,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       final GeoWaveRowIteratorTransformer<T> rowTransformer,
       final Predicate<GeoWaveRow> rowFilter,
       final boolean visibilityEnabled) throws KuduException {
-    KuduTable table = getTable(tableName);
+    KuduTable table = getTable(indexName);
     return new KuduRangeRead<T>(
         ranges,
         adapterIds,
@@ -301,9 +300,34 @@ public class KuduOperations implements MapReduceDataStoreOperations {
     return client.newScannerBuilder(table);
   }
 
+  public KuduTable getTable(String tableName) throws KuduException {
+    return client.openTable(getKuduQualifiedName(tableName));
+  }
+
+  public KuduSession getSession() {
+    return client.newSession();
+  }
+
+  /**
+   * Returns a modified table name that includes the geowave namespace.
+   */
+  private String getQualifiedName(final String name) {
+    return (gwNamespace == null) ? name : gwNamespace + "_" + name;
+  }
+
+  private String getKuduSafeName(final String name) {
+    if (name.length() > KUDU_IDENTIFIER_MAX_LENGTH) {
+      return name.substring(0, KUDU_IDENTIFIER_MAX_LENGTH);
+    }
+    return name;
+  }
+
+  public String getKuduQualifiedName(final String name) {
+    return getKuduSafeName(getQualifiedName(name));
+  }
+
   public String getMetadataTableName(final MetadataType metadataType) {
-    final String tableName = metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
-    return getKuduSafeName(tableName);
+    return metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
   }
 
   public List<Delete> getDeletions(

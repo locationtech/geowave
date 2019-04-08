@@ -32,8 +32,9 @@ public class KuduMetadataDeleter implements MetadataDeleter {
 
   @Override
   public boolean delete(final MetadataQuery query) {
+    final String tableName = operations.getMetadataTableName(metadataType);
     try {
-      KuduTable table = operations.getTable(operations.getMetadataTableName(metadataType));
+      KuduTable table = operations.getTable(tableName);
       Schema schema = table.getSchema();
       List<KuduPredicate> preds = new ArrayList<>();
       // Note: Kudu Java API requires specifying entire primary key in order to perform deletion,
