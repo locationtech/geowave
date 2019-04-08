@@ -1,6 +1,7 @@
 from py4j.java_gateway import JavaGateway, GatewayParameters, java_import
 
 class GlobalConfigurations:
+        """Sets up for gateway, and does imports"""
 
         def init(self):
                 # Set-up Main Gateway Connection to JVM
