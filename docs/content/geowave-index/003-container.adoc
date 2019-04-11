@@ -19,7 +19,7 @@
                     <div class="carousel-caption panel panel-default">
                         <div class="panel-body">
                             <h1>About GeoWave</h1>
-                            <p>Geospatial indexing and analysis on sorted key-value datastores</p>
+                            <p>Geospatial and temporal indexing and analysis on sorted key-value datastores</p>
                         </div>
                     </div>
                 </div>
@@ -68,10 +68,8 @@
         <div class="row">
             <div class="col-lg-4">
                 <h2>What is GeoWave?</h2>
-                <p class="padding-bottom">
-                    GeoWave is a software library that connects the scalability of distributed computing frameworks and 
-					key-value stores with modern geospatial software to store, retrieve and analyze massive geospatial 
-					datasets.
+                <p class="padding-bottom" style="text-align: left">
+                    GeoWave is a software library that connects the scalability of distributed computing frameworks and key-value stores with modern geospatial software to store, retrieve and analyze massive geospatial datasets.
                 </p>
 				<p>
 					<img src="images/geowave-icon-logo-small.png">
@@ -108,10 +106,10 @@
             <div class="col-lg-4">
                 <h2>Features</h2>
                 <ul style="text-align: left">
-                    <li>Adds multi-dimensional indexing to Accumulo, HBase, BigTable and others</li>
+                    <li>Adds multi-dimensional indexing to Accumulo, HBase, BigTable, Cassandra, Redis, RocksDB, DynamoDB and others</li>
                     <li>Adds support for geographic objects and geospatial operators to distributed key-value stores</li>
                     <li>A GeoServer plugin to allow geospatial data in a GeoWave datastore to be shared and visualized via OGC standard services</li>
-                    <li>Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data</li>
+                    <li>Provides Hadoop input and output formats and Spark RDDs for distributed processing and analysis of geospatial data</li>
                 </ul>
             </div>
         </div>
