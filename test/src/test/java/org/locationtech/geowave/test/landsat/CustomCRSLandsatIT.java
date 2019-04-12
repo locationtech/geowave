@@ -180,7 +180,7 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
     ingestOptions.setCreatePyramid(false);
     ingestOptions.setCreateHistogram(false);
     ingestOptions.setCoverageName("test");
-    ingestOptions.setTileSize(128);
+    ingestOptions.setTileSize(64);
     // crop to the specified bbox
     ingestOptions.setCropToSpatialConstraint(true);
     final RasterIngestTester runner =
