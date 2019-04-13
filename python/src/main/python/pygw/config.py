@@ -32,6 +32,11 @@ class GlobalConfigurations:
                 java_import(self.GATEWAY.jvm, "org.locationtech.geowave.core.store.query.constraints")
                 self.MODULE__query_constraints = self.GATEWAY.jvm.org.locationtech.geowave.core.store.query.constraints
 
+                # Geowave Geotime Query API
+                java_import(self.GATEWAY.jvm, "org.locationtech.geowave.core.geotime.store.query.api")
+                self.MODULE__geotime_query = self.GATEWAY.jvm.org.locationtech.geowave.core.geotime.store.query.api
+
+
 # Note - Module-wide Singleton!
 global config
 config = GlobalConfigurations()
