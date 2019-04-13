@@ -3,7 +3,9 @@ package org.locationtech.geowave.datastore.kudu.operations;
 import org.apache.kudu.client.Insert;
 import org.apache.kudu.client.KuduException;
 import org.apache.kudu.client.KuduSession;
+import org.apache.kudu.client.OperationResponse;
 import org.apache.kudu.client.PartialRow;
+import org.apache.kudu.client.RowError;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
@@ -30,7 +32,10 @@ public class KuduMetadataWriter implements MetadataWriter {
       PartialRow partialRow = insert.getRow();
       KuduMetadataRow row = new KuduMetadataRow(metadata);
       row.populatePartialRow(partialRow);
-      session.apply(insert);
+      OperationResponse resp = session.apply(insert);
+      if (resp.hasRowError()) {
+        LOGGER.error("Encountered error while writing metadata: {}", resp.getRowError());
+      }
     } catch (KuduException e) {
       LOGGER.error("Kudu error when writing metadata", e);
     }
@@ -44,6 +49,9 @@ public class KuduMetadataWriter implements MetadataWriter {
         LOGGER.error(
             "Got {} pending errors while flushing Kudu MetadataWriter session",
             session.countPendingErrors());
+        for (RowError err : session.getPendingErrors().getRowErrors()) {
+          LOGGER.error("{}", err);
+        }
       }
     } catch (KuduException e) {
       LOGGER.error("Encountered error while flushing MetadataWriter Kudu session", e);

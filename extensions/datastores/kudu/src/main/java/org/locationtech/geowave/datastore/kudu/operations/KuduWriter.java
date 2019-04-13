@@ -4,6 +4,8 @@ import org.apache.kudu.client.Insert;
 import org.apache.kudu.client.KuduException;
 import org.apache.kudu.client.KuduSession;
 import org.apache.kudu.client.KuduTable;
+import org.apache.kudu.client.OperationResponse;
+import org.apache.kudu.client.RowError;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowWriter;
@@ -39,7 +41,10 @@ public class KuduWriter implements RowWriter {
         KuduRow kuduRow = new KuduRow(row, value);
         Insert insert = table.newInsert();
         kuduRow.populatePartialRow(insert.getRow());
-        session.apply(insert);
+        OperationResponse resp = session.apply(insert);
+        if (resp.hasRowError()) {
+          LOGGER.error("Encountered error while applying insert: {}", resp.getRowError());
+        }
       }
     } catch (KuduException e) {
       LOGGER.error("Encountered error while writing row", e);
@@ -54,6 +59,9 @@ public class KuduWriter implements RowWriter {
         LOGGER.error(
             "Got {} pending errors while flushing Kudu session",
             session.countPendingErrors());
+        for (RowError err : session.getPendingErrors().getRowErrors()) {
+          LOGGER.error("{}", err);
+        }
       }
     } catch (KuduException e) {
       LOGGER.error("Encountered error while flushing Kudu session", e);

@@ -6,6 +6,8 @@ import org.apache.kudu.client.KuduException;
 import org.apache.kudu.client.KuduPredicate;
 import org.apache.kudu.client.KuduSession;
 import org.apache.kudu.client.KuduTable;
+import org.apache.kudu.client.OperationResponse;
+import org.apache.kudu.client.RowError;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
@@ -79,7 +81,10 @@ public class KuduDeleter implements RowDeleter {
                 KuduPredicate.ComparisonOp.EQUAL,
                 value.getFieldMask()));
         for (Delete delete : operations.getDeletions(table, preds, KuduRow::new)) {
-          session.apply(delete);
+          OperationResponse resp = session.apply(delete);
+          if (resp.hasRowError()) {
+            LOGGER.error("Encountered error while deleting row: {}", resp.getRowError());
+          }
         }
       }
     } catch (KuduException e) {
@@ -95,6 +100,9 @@ public class KuduDeleter implements RowDeleter {
         LOGGER.error(
             "Got {} pending errors while flushing Kudu session",
             session.countPendingErrors());
+        for (RowError err : session.getPendingErrors().getRowErrors()) {
+          LOGGER.error("{}", err);
+        }
       }
     } catch (KuduException e) {
       LOGGER.error("Encountered error while flushing Kudu session", e);

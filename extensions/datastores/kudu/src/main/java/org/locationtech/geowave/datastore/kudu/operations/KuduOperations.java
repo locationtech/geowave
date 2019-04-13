@@ -22,6 +22,8 @@ import org.apache.kudu.client.KuduScanner;
 import org.apache.kudu.client.KuduScanner.KuduScannerBuilder;
 import org.apache.kudu.client.KuduSession;
 import org.apache.kudu.client.KuduTable;
+import org.apache.kudu.client.Operation;
+import org.apache.kudu.client.OperationResponse;
 import org.apache.kudu.client.PartialRow;
 import org.apache.kudu.client.RowResult;
 import org.apache.kudu.client.RowResultIterator;
@@ -118,7 +120,10 @@ public class KuduOperations implements MapReduceDataStoreOperations {
                   KuduPredicate.ComparisonOp.EQUAL,
                   adapterId));
       for (Delete delete : getDeletions(table, preds, KuduRow::new)) {
-        session.apply(delete);
+        OperationResponse resp = session.apply(delete);
+        if (resp.hasRowError()) {
+          LOGGER.error("Encountered error while deleting all: {}", resp.getRowError());
+        }
       }
     } catch (KuduException e) {
       LOGGER.error("Encountered error while deleting all", e);
@@ -214,7 +219,10 @@ public class KuduOperations implements MapReduceDataStoreOperations {
         PartialRow partialRow = delete.getRow();
         partialRow.addBinary(KuduField.GW_PARTITION_ID_KEY.getFieldName(), dataId);
         partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
-        session.apply(delete);
+        OperationResponse resp = session.apply(delete);
+        if (resp.hasRowError()) {
+          LOGGER.error("Encountered error while deleting row: {}", resp.getRowError());
+        }
       }
     } catch (KuduException e) {
       LOGGER.error("Encountered error while deleting row", e);
