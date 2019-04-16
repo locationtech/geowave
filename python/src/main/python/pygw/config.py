@@ -1,6 +1,7 @@
 from py4j.java_gateway import JavaGateway, GatewayParameters, java_import
 
 class GlobalConfigurations:
+        """Sets up for gateway, and does imports"""
 
         def init(self):
                 # Set-up Main Gateway Connection to JVM
@@ -31,6 +32,11 @@ class GlobalConfigurations:
                 # Geowave Query Constraints
                 java_import(self.GATEWAY.jvm, "org.locationtech.geowave.core.store.query.constraints")
                 self.MODULE__query_constraints = self.GATEWAY.jvm.org.locationtech.geowave.core.store.query.constraints
+
+                # Geowave Geotime Query API
+                java_import(self.GATEWAY.jvm, "org.locationtech.geowave.core.geotime.store.query.api")
+                self.MODULE__geotime_query = self.GATEWAY.jvm.org.locationtech.geowave.core.geotime.store.query.api
+
 
 # Note - Module-wide Singleton!
 global config

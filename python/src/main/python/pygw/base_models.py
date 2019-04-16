@@ -5,13 +5,28 @@ from pygw.config import config
 class PyGwJavaWrapper:
     """[INTERNAL] Base Class for all PyGw Objects that wrap py4j objects"""
 
+    """ sets gateway and java ref for wrapper
+    Args:
+        gateway [py4j]
+        java_ref [Java ref] 
+    """
     def __init__(self, gateway, java_ref):
         self._gateway = gateway
         self._java_ref = java_ref
 
+    """ JavaRef of PyGW object
+    Returns:
+        String: Formatted string with PyGW class and JavaRef
+    """
     def __repr__(self):
         return "PyGW {} Object with JavaRef@{}".format(self.__class__, self._java_ref)
 
+    """ Equality of two PyGw Java wrappers
+    Args:
+        other [PyGwJavaWrapper]: A PyGwJavaWrapper instance
+    Returns:
+        bool: equality of this Java Wrapper and the other Java Wrapper
+    """
     def __eq__(self, other):
         if not isinstance(other, PyGwJavaWrapper):
             return False
@@ -146,6 +161,7 @@ class DataStore(PyGwJavaWrapper):
     
         self._java_ref.addType(type_adapter._java_ref,j_index_arr)
 
+<<<<<<< HEAD
     """
     Returns an index writer to perform batched write operations for the given data type name. It
     assumes the type has already been used previously or added using addType and assumes one or
@@ -158,6 +174,17 @@ class DataStore(PyGwJavaWrapper):
     """    
     def create_writer(self, type_name):
         j_writer = self._java_ref.createWriter(type_name)
+=======
+    """ A data writter for the given datastore
+    Args:
+        type_adapter [type_adapter_name]: Type of type adapter
+    Returns:
+        Write: A data writter
+
+    """
+    def create_writer(self, type_adapter_name):
+        j_writer = self._java_ref.createWriter(type_adapter_name)
+>>>>>>> bf22f8f368ef57e4352e5339da800a3a0180f5e4
         return Writer(self._gateway, j_writer)
 
     """
@@ -216,13 +243,28 @@ class DataTypeAdapter(PyGwJavaWrapper):
 
 class Index(PyGwJavaWrapper):
     """Wrapper to expose all of Index API"""
+    """
+     name of this Index
+    Returns:
+        String: Name of Index
+    """
     def get_name(self):
         return self._java_ref.getName()
     
+    """
+     Strategy name of this Index
+    Returns:
+        String: Index strategy
+    """
     def get_index_strategy(self):
         j_obj = self._java_ref.getIndexStrategy()
         return j_obj.getClass().toString()
 
+    """
+    Model name of this Index
+    Returns:
+        String: Index model
+    """
     def get_index_model(self):
         j_obj = self._java_ref.getIndexModel()
         return j_obj.getClass().toString()
@@ -233,11 +275,19 @@ class Writer(PyGwJavaWrapper):
         super().__init__(gateway, java_ref)
         self.is_open = True
 
+    """
+    Writes data with this writer
+    Args:
+        String: data
+    Raises:
+        RuntimeError: 'Writer is already closed' If writer is closed
+    """
     def write(self, data):
         if not self.is_open:
             raise RuntimeError("Writer is already closed!")
         self._java_ref.write(data)
     
+    """ closes this writer"""
     def close(self):
         if self.is_open:
             self._java_ref.close()

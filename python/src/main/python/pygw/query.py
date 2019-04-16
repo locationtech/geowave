@@ -37,6 +37,24 @@ class Query(QueryInterface):
         """
         return cls.build()
 
+    @classmethod
+    def cql(cls, cql_query, index=None, auths=None, limit=None, type_names=None, which_fields=None):
+        qb = VectorQueryBuilder()
+        qb.set_cql_constraint(cql_query)
+
+        if index:
+            qb.set_index(index)
+        if auths:
+            qb.set_auth(auths)
+        if limit:
+            qb.set_limit(limit)
+        if type_names:
+            qb.set_type_names(type_names)
+        if which_fields:
+            qb.set_fields(which_fields)
+
+        return cls(qb.build())
+
 class QueryBuilder(PyGwJavaWrapper):
     """
     [INTERNAL]
@@ -117,6 +135,7 @@ class QueryBuilder(PyGwJavaWrapper):
         return self._java_ref.build()
 
     # For now just doing those in query constraints
+    # TODO: Refactor - A better way to do this would probably involve using the Singleton ConstraintsFactory in QueryBuilder.
     VALID_CONSTRAINTS = {
         "everything" : lambda : config.MODULE__query_constraints.EverythingQuery(),
 
@@ -138,4 +157,15 @@ class QueryBuilder(PyGwJavaWrapper):
 
     class InvalidConstraintError(Exception): pass
     class IncompatibleOptions(Exception): pass
-    
+
+class VectorQueryBuilder(QueryBuilder):
+    """QueryBuilder for vector (SimpleFeature) data."""
+
+    def __init__(self):
+        j_vector_qbuilder = config.MODULE__geotime_query.VectorQueryBuilder.newBuilder()
+        PyGwJavaWrapper.__init__(self, config.GATEWAY, j_vector_qbuilder)
+        
+    def set_cql_constraint(self, cql_query_string):
+        j_vector_query_constraints_factory = self._java_ref.constraintsFactory()
+        j_cql_constraint = j_vector_query_constraints_factory.cqlConstraints(cql_query_string)
+        self._java_ref.constraints(j_cql_constraint)
