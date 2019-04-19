@@ -1,7 +1,8 @@
 dist: xenial
 language: java
 jdk:
-  # oraclejdk8 is not available on xenial
+  # jdk8 is not available on xenial
+  # - openjdk8
   # - oraclejdk8
 env:
   matrix:
@@ -30,6 +31,7 @@ env:
 cache:
   directories:
   - $HOME/.m2
+  - $HOME/.downloads
   - test/landsat8
   - test/sentinel2
   - test/target/temp/gdal
@@ -46,14 +48,11 @@ before_install:
   # Remove travis CI jdk 11 from path
   - rm ${HOME}/.bash_profile.d/travis_jdk.bash
   - export PATH=${PATH/:\/usr\/local\/lib\/jvm\/openjdk11\/bin/}
-  # Need to manually install oraclejdk8 since it is not available in Travis anymore
-  - echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
-  - sudo apt-get install -y oracle-java8-installer oracle-java8-set-default
-  - sudo update-java-alternatives -s java-8-oracle
-  - export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-  # Check that oracle java 8 is installed
+  # Need to manually install jdk 8 since it is not available in Travis anymore
+  - sudo update-java-alternatives -s java-1.8.0-openjdk-amd64
+  - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+  # Check that jdk 8 is installed
   - java -version
-  - sudo apt-get install lzop
   # This must match the dev-resources version from the parent pom:
   - export DEV_RESOURCES_VERSION=1.2
   - export MAVEN_OPTS="-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
@@ -72,12 +71,14 @@ notifications:
 addons:
   apt:
     sources:
-      - webupd8team-java
+      - ppa: openjdk-r/ppa
     update: true
     packages:
+      - lzop
       - pandoc
       - python-software-properties
       - debconf-utils
+      - openjdk-8-jdk
   coverity_scan:
     project:
       name: locationtech/geowave
