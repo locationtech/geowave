@@ -283,9 +283,3 @@ class Writer(PyGwJavaWrapper):
     # Might want to introduce a method/flag here that bulk writes in java.
     # Ex. give it a list of a data and it calls a java endpoint to do all the writing and closing.
     # Current pipeline will make N py4j calls for an N-element ingest
-
-class QueryInterface(PyGwJavaWrapper):
-    # TODO: Just describe its properties
-    
-    def describe(self):
-        print("I'm a query! ... Please implement a better description for me...")
