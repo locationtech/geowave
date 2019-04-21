@@ -217,7 +217,7 @@ class DataStore(PyGwJavaWrapper):
 
     def aggregate_statistics(self, q):
         # TODO
-        raise NotImplementedError
+        return self._java_ref.aggregateStatistics(q._java_ref)
 
 
 class DataTypeAdapter(PyGwJavaWrapper):
