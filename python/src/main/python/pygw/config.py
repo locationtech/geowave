@@ -35,7 +35,7 @@ class GlobalConfigurations:
                 # Geotools Feature
                 java_import(self.GATEWAY.jvm, "org.geotools.feature")
                 self.MODULE__feature = self.GATEWAY.jvm.org.geotools.feature
-                
+
                 # Geotools Vector Adapter
                 java_import(self.GATEWAY.jvm, "org.locationtech.geowave.adapter.vector")
                 self.MODULE__adapter_vector = self.GATEWAY.jvm.org.locationtech.geowave.adapter.vector
@@ -48,6 +48,13 @@ class GlobalConfigurations:
                 java_import(self.GATEWAY.jvm, "org.locationtech.geowave.core.geotime.store.query.api")
                 self.MODULE__geotime_query = self.GATEWAY.jvm.org.locationtech.geowave.core.geotime.store.query.api
 
+                # Locationtech JTS Geom
+                java_import(self.GATEWAY.jvm, "org.locationtech.jts.geom")
+                self.MODULE__jts_geom = self.GATEWAY.jvm.org.locationtech.jts.geom
+
+                # Geowave Geotime Util
+                java_import(self.GATEWAY.jvm, "org.locationtech.geowave.core.geotime.util")
+                self.MODULE__geotime_util = self.GATEWAY.jvm.org.locationtech.geowave.core.geotime.util
 
 # Note - Module-wide Singleton!
 global config
