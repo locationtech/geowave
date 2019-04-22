@@ -42,6 +42,7 @@ public class KuduRangeRead<T> {
   final byte[][] dataIds;
   private final KuduTable table;
   private final KuduOperations operations;
+  private final boolean isDataIndex;
   private final boolean visibilityEnabled;
   private final Predicate<GeoWaveRow> filter;
   private final GeoWaveRowIteratorTransformer<T> rowTransformer;
@@ -54,6 +55,7 @@ public class KuduRangeRead<T> {
       final byte[][] dataIds,
       final KuduTable table,
       final KuduOperations operations,
+      final boolean isDataIndex,
       final boolean visibilityEnabled,
       final Predicate<GeoWaveRow> filter,
       final GeoWaveRowIteratorTransformer<T> rowTransformer,
@@ -64,6 +66,7 @@ public class KuduRangeRead<T> {
     this.table = table;
     this.schema = table.getSchema();
     this.operations = operations;
+    this.isDataIndex = isDataIndex;
     this.visibilityEnabled = visibilityEnabled;
     this.filter = filter;
     this.rowTransformer = rowTransformer;
@@ -142,14 +145,26 @@ public class KuduRangeRead<T> {
 
     if (dataIds == null) {
       if (visibilityEnabled) {
-        tmpIterator =
-            Streams.stream(Iterators.concat(results.iterator())).map(
-                r -> (GeoWaveRow) new KuduRow(r)).filter(filter).iterator();
+        if (isDataIndex) {
+          tmpIterator =
+              Streams.stream(Iterators.concat(results.iterator())).map(
+                  r -> KuduRow.deserializeDataIndexRow(r, visibilityEnabled)).filter(
+                      filter).iterator();
+        } else {
+          tmpIterator =
+              Streams.stream(Iterators.concat(results.iterator())).map(
+                  r -> (GeoWaveRow) new KuduRow(r)).filter(filter).iterator();
+        }
       } else {
-        tmpIterator =
-            Iterators.transform(
-                Iterators.concat(results.iterator()),
-                r -> (GeoWaveRow) new KuduRow(r));
+        if (isDataIndex) {
+          tmpIterator =
+              Iterators.transform(
+                  Iterators.concat(results.iterator()),
+                  r -> KuduRow.deserializeDataIndexRow(r, visibilityEnabled));
+        } else {
+          tmpIterator =
+              Iterators.transform(Iterators.concat(results.iterator()), r -> new KuduRow(r));
+        }
       }
       return new CloseableIteratorWrapper<>(() -> {
       },
@@ -170,7 +185,9 @@ public class KuduRangeRead<T> {
                 r.getBinaryCopy(KuduField.GW_VALUE_KEY.getFieldName()),
                 visibilityEnabled));
       }
-      tmpIterator = Arrays.stream(dataIds).map(d -> resultsMap.get(new ByteArray(d))).iterator();
+      tmpIterator =
+          Arrays.stream(dataIds).map(d -> resultsMap.get(new ByteArray(d))).filter(
+              r -> r != null).iterator();
       return new CloseableIteratorWrapper<>(() -> {
       }, (Iterator<T>) tmpIterator);
     }

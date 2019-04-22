@@ -283,6 +283,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       final GeoWaveRowIteratorTransformer<T> rowTransformer,
       final Predicate<GeoWaveRow> rowFilter,
       final boolean visibilityEnabled) throws KuduException {
+    boolean isDataIndex = DataIndexUtils.isDataIndex(indexName);
     KuduTable table = getTable(indexName);
     return new KuduRangeRead<T>(
         ranges,
@@ -290,6 +291,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
         dataIds,
         table,
         this,
+        isDataIndex,
         visibilityEnabled,
         rowFilter,
         rowTransformer,

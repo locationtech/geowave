@@ -170,4 +170,11 @@ public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
     partialRow.addBinary(KuduField.GW_VALUE_KEY.getFieldName(), value);
   }
 
+  public static GeoWaveRow deserializeDataIndexRow(RowResult row, boolean isVisibilityEnabled) {
+    return DataIndexUtils.deserializeDataIndexRow(
+        row.getBinaryCopy(KuduField.GW_PARTITION_ID_KEY.getFieldName()),
+        row.getShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName()),
+        row.getBinaryCopy(KuduField.GW_VALUE_KEY.getFieldName()),
+        isVisibilityEnabled);
+  }
 }

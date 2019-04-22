@@ -9,6 +9,7 @@ import org.apache.kudu.client.KuduScanner;
 import org.apache.kudu.client.KuduTable;
 import org.apache.kudu.client.RowResult;
 import org.apache.kudu.client.RowResultIterator;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
@@ -42,12 +43,18 @@ public class KuduMetadataReader implements MetadataReader {
       Schema schema = table.getSchema();
       KuduScanner.KuduScannerBuilder scannerBuilder = operations.getScannerBuilder(table);
       if (query.hasPrimaryId()) {
-        KuduPredicate primaryPred =
+        KuduPredicate primaryLowerPred =
             KuduPredicate.newComparisonPredicate(
                 schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
-                KuduPredicate.ComparisonOp.EQUAL,
+                KuduPredicate.ComparisonOp.GREATER_EQUAL,
                 query.getPrimaryId());
-        scannerBuilder = scannerBuilder.addPredicate(primaryPred);
+        KuduPredicate primaryUpperPred =
+            KuduPredicate.newComparisonPredicate(
+                schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                KuduPredicate.ComparisonOp.LESS,
+                ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
+        scannerBuilder =
+            scannerBuilder.addPredicate(primaryLowerPred).addPredicate(primaryUpperPred);
       }
       if (query.hasSecondaryId()) {
         KuduPredicate secondaryPred =
