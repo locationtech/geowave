@@ -35,6 +35,10 @@ class GlobalConfigurations:
                 # Geotools Feature
                 java_import(self.GATEWAY.jvm, "org.geotools.feature")
                 self.MODULE__feature = self.GATEWAY.jvm.org.geotools.feature
+                
+                # Geotools Vector Adapter
+                java_import(self.GATEWAY.jvm, "org.locationtech.geowave.adapter.vector")
+                self.MODULE__adapter_vector = self.GATEWAY.jvm.org.locationtech.geowave.adapter.vector
 
                 # Geowave Query Constraints
                 java_import(self.GATEWAY.jvm, "org.locationtech.geowave.core.store.query.constraints")
