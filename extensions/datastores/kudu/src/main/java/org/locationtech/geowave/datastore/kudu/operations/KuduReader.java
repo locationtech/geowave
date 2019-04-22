@@ -1,10 +1,13 @@
 package org.locationtech.geowave.datastore.kudu.operations;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import org.apache.kudu.client.KuduException;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
@@ -95,12 +98,29 @@ public class KuduReader<T> implements RowReader<T> {
   }
 
   protected void initDataIndexScanner() {
+    final byte[][] dataIds;
+    if (dataIndexReaderParams.getDataIds() == null) {
+      if (dataIndexReaderParams.getStartInclusiveDataId() != null
+          || dataIndexReaderParams.getEndInclusiveDataId() != null) {
+        final List<byte[]> intermediaries = new ArrayList<>();
+        ByteArrayUtils.addAllIntermediaryByteArrays(
+            intermediaries,
+            new ByteArrayRange(
+                dataIndexReaderParams.getStartInclusiveDataId(),
+                dataIndexReaderParams.getEndInclusiveDataId()));
+        dataIds = intermediaries.toArray(new byte[0][]);
+      } else {
+        dataIds = null;
+      }
+    } else {
+      dataIds = dataIndexReaderParams.getDataIds();
+    }
     try {
       iterator =
           operations.getKuduRangeRead(
               DataIndexUtils.DATA_ID_INDEX.getName(),
               new short[] {dataIndexReaderParams.getAdapterId()},
-              dataIndexReaderParams.getDataIds(),
+              dataIds,
               null,
               false,
               // TODO: DataStoreUtils.isMergingIteratorRequired(dataIndexReaderParams,
