@@ -41,6 +41,15 @@ class DataStore(PyGwJavaWrapper):
     def __init__(self, gateway, java_ref):
         super().__init__(gateway, java_ref)
 
+    """
+    Get the indices that have been used within this data store for a particular type. If data type
+        name is null it will return all indices.
+    Args:
+        string [type_name]: Data type name
+    Returns:
+       Index List: An array of the indices for a given data type.
+
+    """
     def get_indices(self, type_name=None):
         if type_name:
             j_indices = self._java_ref.getIndices(type_name)
@@ -48,6 +57,99 @@ class DataStore(PyGwJavaWrapper):
             j_indices = self._java_ref.getIndices()
         return [Index(self._gateway, j_index) for j_index in j_indices]
 
+    """
+    Copy the subset of data matching this query from this store into a 
+        specified other store, if query is null it will copy all data. 
+    Args:
+        string [type_name]: Data type name
+    Returns:
+       Index List: An array of the indices for a given data type.
+
+    """
+    def copy_to(self, ds, q=None):
+        assert isinstance(ds, DataStore)
+
+        return self._java_ref.copyTo(ds._java_ref,q)
+
+    """
+    Add new indices for the given type. If there is data in other indices for this type, for
+    consistency it will need to copy all of the data into the new indices, which could be a long
+    process for lots of data.
+
+    Args:
+        string [type_name]: Data type name
+    Returns:
+       Index List: the new indices to add.
+
+    """
+    def add_index(self, type_name, *indices):
+        assert isinstance(type_name,str)
+
+        n = len(indices)
+        j_index_class = config.MODULE__core_store.Index
+        j_index_arr = config.GATEWAY.new_array(j_index_class,n)
+        for idx, py_obj in enumerate(indices):
+                j_index_arr[idx] = py_obj._java_ref
+    
+        self._java_ref.addType(type_name,j_index_arr)
+    """
+    Remove an index completely for a given type. If type_name is null, it will remove the 
+    index for all types. If this is the last index for any type it throws an
+    illegal state exception, expecting the user to remove the type before removing the index to
+    protect a user from losing any reference to their data unknowingly for a type.
+
+    Args:
+        string [type_name]: the type name
+        string [index_name]: the index name
+    Throws:
+       IllegalStateException: if this is the last index for a type, remove the type first
+
+    """
+    def remove_index(self, index_name, type_name=None):
+        if type_name:
+            return self._java_ref.removeIndex(index_name,type_name)
+        else:
+            return self._java_ref.removeIndex(index_name)
+
+    """
+    Remove statistics for type
+
+    Args:
+        string [type_name]: the type name
+    """
+    def remove_type(self, type_name):
+        assert isinstance(str,type_name)
+
+        return self._java_ref.removeType(type_name)
+    
+    """
+    Delete all data in this data store that matches the query parameter.
+
+    Args:
+        query [q]: query the query criteria to use for deletion
+    Returns:
+        Bool: true on success
+    """
+    def delete(self, q):
+        assert isinstance(q,QueryInterface)
+
+        return self._java_ref.delete(q)
+
+    """
+    Delete ALL data and ALL metadata for this datastore. This is provided for convenience as a
+    simple way to wipe a datastore cleanly, but don't be surprised if everything is gone.
+    """
+    def delete_all(self):
+        
+      return self._java_ref.deleteAll()
+
+    """
+    Add this type to the data store. This only needs to be called one time ever per type.
+
+    Args:
+        string [type_adapter]: the data type adapter for this type that is used to read and write GeoWave entries
+        Index list [initial_indices]: the initial indexing for this type, in the future additional indices can be added
+    """
     def add_type(self, type_adapter, *initial_indices):
         assert isinstance(type_adapter,DataTypeAdapter)
 
@@ -59,17 +161,30 @@ class DataStore(PyGwJavaWrapper):
     
         self._java_ref.addType(type_adapter._java_ref,j_index_arr)
 
-    """ A data writter for the given datastore
-    Args:
-        type_adapter [type_adapter_name]: Type of type adapter
-    Returns:
-        Write: A data writter
-
     """
-    def create_writer(self, type_adapter_name):
-        j_writer = self._java_ref.createWriter(type_adapter_name)
+    Returns an index writer to perform batched write operations for the given data type name. It
+    assumes the type has already been used previously or added using addType and assumes one or
+    more indices have been provided for this type.
+
+    Args:
+        string [type_name]: the type name
+    Returns:
+        writer: a writer which can be used to write entries into this datastore of the given type 
+    """    
+    def create_writer(self, type_name):
+        j_writer = self._java_ref.createWriter(type_name)
         return Writer(self._gateway, j_writer)
 
+    """
+    Ingest from URL. If this is a directory, this method will recursively search for valid files to
+    ingest in the directory. This will iterate through registered IngestFormatPlugins to find one
+    that works for a given file. The applicable ingest format plugin will choose the
+    DataTypeAdapter and may even use additional indices than the one provided.
+
+    Args:
+        string [url]: The URL for data to read and ingest into this data store
+        Index List [indices]: The indexing approach to use.
+    """ 
     def ingest(self, url, *indices, ingest_options=None):
         #TODO: Ingest Options
 
@@ -102,29 +217,8 @@ class DataStore(PyGwJavaWrapper):
 
     def aggregate_statistics(self, q):
         # TODO
-        raise NotImplementedError
+        return self._java_ref.aggregateStatistics(q._java_ref)
 
-    def copy_to(self, other, q=None):
-        # TODO
-        raise NotImplementedError
-    
-    def remove_index(self, index_name, type_name=None):
-        # TODO
-        raise NotImplementedError
-    
-    def remove_type(self, type_name):
-        assert isinstance(str,type_name)
-
-        return self._java_ref.removeType(type_name)
-    
-    def delete(self, q):
-        assert isinstance(q,QueryInterface)
-
-        return self._java_ref.delete(q)
-
-    def delete_all(self):
-        
-      return self._java_ref.deleteAll()
 
 class DataTypeAdapter(PyGwJavaWrapper):
     """Wrapper to expose all of DataTypeAdapter API"""
@@ -189,9 +283,3 @@ class Writer(PyGwJavaWrapper):
     # Might want to introduce a method/flag here that bulk writes in java.
     # Ex. give it a list of a data and it calls a java endpoint to do all the writing and closing.
     # Current pipeline will make N py4j calls for an N-element ingest
-
-class QueryInterface(PyGwJavaWrapper):
-    # TODO: Just describe its properties
-    
-    def describe(self):
-        print("I'm a query! ... Please implement a better description for me...")

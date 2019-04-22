@@ -7,6 +7,9 @@ class GlobalConfigurations:
                 # Set-up Main Gateway Connection to JVM
                 self.GATEWAY = JavaGateway(gateway_parameters=GatewayParameters(auto_field=True))
 
+                ### Reflection utility ###
+                self.reflection_util= config.GATEWAY.jvm.py4j.reflection.ReflectionUtil
+
                 ### Import Java Modules and Define Names here for easier access: ###
 
                 # Geowave Core Store
@@ -32,6 +35,10 @@ class GlobalConfigurations:
                 # Geotools Vector Adapter
                 java_import(self.GATEWAY.jvm, "org.locationtech.geowave.adapter.vector")
                 self.MODULE__adapter_vector = self.GATEWAY.jvm.org.locationtech.geowave.adapter.vector
+                
+                # Geotools Feature
+                java_import(self.GATEWAY.jvm, "org.geotools.feature")
+                self.MODULE__feature = self.GATEWAY.jvm.org.geotools.feature
 
                 # Geowave Query Constraints
                 java_import(self.GATEWAY.jvm, "org.locationtech.geowave.core.store.query.constraints")

@@ -5,6 +5,7 @@ from pygw.indices import *
 from pygw.query import *
 from pygw.geotools import *
 from pygw.debug import *
+from pygw.statistics_query import *
 
 from py4j.protocol import Py4JNetworkError
 
