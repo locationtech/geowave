@@ -1,7 +1,7 @@
 from pygw.config import config
-from pygw.base_models import PyGwJavaWrapper
+from pygw.base_models import PyGwJavaWrapper, QueryInterface
 
-class Query(PyGwJavaWrapper):
+class Query(QueryInterface):
     """ NOTE: This utilizes a factory pattern"""
 
     def __init__(self, java_ref):

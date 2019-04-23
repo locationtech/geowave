@@ -3,6 +3,7 @@ from pygw.base_models import *
 from pygw.stores import *
 from pygw.indices import *
 from pygw.query import *
+from pygw.geotools import *
 from pygw.debug import *
 from pygw.statistics_query import *
 
