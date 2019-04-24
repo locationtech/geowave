@@ -203,9 +203,12 @@ class DataStore(PyGwJavaWrapper):
         j_query = q._java_ref
         return self._java_ref.query(j_query)
 
+    """
+    Note: aggregateQuery umimplemented ATM. 
+    """
     def aggregate(self, q):
         # TODO
-        raise NotImplementedError
+        return self._java_ref.aggregate(q._java_ref)
     
     def get_types(self):
         j_adapter_arr = self._java_ref.getTypes()
