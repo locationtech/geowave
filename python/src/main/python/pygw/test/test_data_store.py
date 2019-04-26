@@ -61,25 +61,73 @@ def test_remove_index():
     assert len(ds.get_indices()) == 1
 
 
+# TODO: this test needs a different exception and different assert message
 def test_remove_index_last():
-    pass
+    with pytest.raises(Exception) as exec:
+        # given
+        ds = RocksDbDs("geowave.hello", "./world")
+        point = Point()
+        index = SpatialIndex()
+        adapter = PointFeatureDataAdapter(point)
+        ds.add_type(adapter, index)
+
+        # when
+        ds.remove_index(index.get_name(), adapter)
+
+    # then
+    assert 'some error message' in str(exec.value)
 
 
 def test_remove_index_non_exist():
-    pass
+    # given
+    ds = RocksDbDs("geowave.hello", "./world")
+    point = Point()
+    index = SpatialIndex()
+    adapter = PointFeatureDataAdapter(point)
+    ds.add_type(adapter, index)
+
+    # when
+    ds.remove_index("Corgi", adapter)
+
+    # then
+    assert len(ds.get_indices()) == 1
 
 
 def test_remove_type():
-    pass
+    # given
+    ds = RocksDbDs("geowave.hello", "./world")
+    point = Point()
+    index = SpatialIndex()
+    adapter = PointFeatureDataAdapter(point)
+    ds.add_type(adapter, index)
+
+    # when
+    ds.remove_type(adapter.get_type_name())
+
+    # then
+    assert len(ds.get_indices(adapter.get_type_name())) == 0
 
 
 # Test Deleting #
+# TODO: delete this with querying
 def test_delete():
     pass
 
 
+# TODO: make this a better assert than a carbon copy of test_remove_type
 def test_delete_all():
-    pass
+    # given
+    ds = RocksDbDs("geowave.hello", "./world")
+    point = Point()
+    index = SpatialIndex()
+    adapter = PointFeatureDataAdapter(point)
+    ds.add_type(adapter, index)
+
+    # when
+    ds.delete_all()
+
+    # then
+    assert len(ds.get_indices()) == 0
 
 
 # Test Copy #
