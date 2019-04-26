@@ -11,6 +11,7 @@ import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.datastore.kudu.KuduDataIndexRow;
 import org.locationtech.geowave.datastore.kudu.KuduRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +43,12 @@ public class KuduWriter implements RowWriter {
     try {
       KuduTable table = operations.getTable(tableName);
       for (GeoWaveValue value : row.getFieldValues()) {
-        KuduRow kuduRow = new KuduRow(row, value, isDataIndex, isVisibilityEnabled);
         Insert insert = table.newInsert();
         if (isDataIndex) {
-          kuduRow.populatePartialRowDataIndex(insert.getRow());
+          KuduDataIndexRow kuduRow = new KuduDataIndexRow(row, value, isVisibilityEnabled);
+          kuduRow.populatePartialRow(insert.getRow());
         } else {
+          KuduRow kuduRow = new KuduRow(row, value);
           kuduRow.populatePartialRow(insert.getRow());
         }
         session.apply(insert);
