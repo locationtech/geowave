@@ -1,5 +1,31 @@
 package org.locationtech.geowave.datastore.kudu.operations;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Streams;
+import org.apache.kudu.Schema;
+import org.apache.kudu.client.KuduPredicate;
+import org.apache.kudu.client.KuduPredicate.ComparisonOp;
+import org.apache.kudu.client.KuduScanner;
+import org.apache.kudu.client.KuduScanner.KuduScannerBuilder;
+import org.apache.kudu.client.KuduTable;
+import org.apache.kudu.client.RowResult;
+import org.apache.kudu.client.RowResultIterator;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
+import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
+import org.locationtech.geowave.datastore.kudu.KuduDataIndexRow;
+import org.locationtech.geowave.datastore.kudu.KuduDataIndexRow.KuduDataIndexField;
+import org.locationtech.geowave.datastore.kudu.KuduRow;
+import org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
+import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,32 +33,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
-import org.apache.kudu.Schema;
-import org.apache.kudu.client.KuduException;
-import org.apache.kudu.client.KuduPredicate;
-import org.apache.kudu.client.KuduScanner;
-import org.apache.kudu.client.KuduTable;
-import org.apache.kudu.client.RowResult;
-import org.apache.kudu.client.RowResultIterator;
-import org.apache.kudu.client.KuduPredicate.ComparisonOp;
-import org.apache.kudu.client.KuduScanner.KuduScannerBuilder;
-import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.ByteArrayRange;
-import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
-import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
-import org.locationtech.geowave.datastore.kudu.KuduRow;
-import org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
-import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Streams;
 
 public class KuduRangeRead<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(KuduRangeRead.class);
@@ -76,14 +78,16 @@ public class KuduRangeRead<T> {
 
   public CloseableIterator<T> results() {
     results = new ArrayList<>();
-    Iterator<GeoWaveRow> tmpIterator;
+    final String adapterIdField =
+        isDataIndex ? KuduDataIndexField.GW_ADAPTER_ID_KEY.getFieldName()
+            : KuduField.GW_ADAPTER_ID_KEY.getFieldName();
     for (final short adapterId : adapterIds) {
       KuduPredicate adapterIdPred =
           KuduPredicate.newComparisonPredicate(
-              schema.getColumn(KuduField.GW_ADAPTER_ID_KEY.getFieldName()),
+              schema.getColumn(adapterIdField),
               ComparisonOp.EQUAL,
               adapterId);
-      if ((ranges != null) && !ranges.isEmpty()) {
+      if (!isDataIndex && ranges != null && !ranges.isEmpty()) {
         for (final SinglePartitionQueryRanges r : ranges) {
           final byte[] partitionKey =
               ((r.getPartitionKey() == null) || (r.getPartitionKey().length == 0))
@@ -119,21 +123,24 @@ public class KuduRangeRead<T> {
 
             KuduScannerBuilder scannerBuilder = operations.getScannerBuilder(table);
             KuduScanner scanner =
-                scannerBuilder.addPredicate(lowerPred).addPredicate(upperPred).addPredicate(
-                    partitionPred).addPredicate(adapterIdPred).build();
+                scannerBuilder.addPredicate(adapterIdPred).addPredicate(lowerPred).addPredicate(
+                    upperPred).addPredicate(partitionPred).build();
             KuduUtils.executeQuery(scanner, results);
           }
         }
       } else if (dataIds != null) {
+        final String partitionIdField =
+            isDataIndex ? KuduDataIndexField.GW_PARTITION_ID_KEY.getFieldName()
+                : KuduField.GW_PARTITION_ID_KEY.getFieldName();
         for (final byte[] dataId : dataIds) {
           KuduPredicate partitionPred =
               KuduPredicate.newComparisonPredicate(
-                  schema.getColumn(KuduField.GW_PARTITION_ID_KEY.getFieldName()),
+                  schema.getColumn(partitionIdField),
                   ComparisonOp.EQUAL,
                   dataId);
           KuduScannerBuilder scannerBuilder = operations.getScannerBuilder(table);
           KuduScanner scanner =
-              scannerBuilder.addPredicate(partitionPred).addPredicate(adapterIdPred).build();
+              scannerBuilder.addPredicate(adapterIdPred).addPredicate(partitionPred).build();
           KuduUtils.executeQuery(scanner, results);
         }
       } else {
@@ -143,51 +150,37 @@ public class KuduRangeRead<T> {
       }
     }
 
+    final Iterator<GeoWaveRow> tmpIterator;
+    Iterator<RowResult> concatIterator = Iterators.concat(results.iterator());
     if (dataIds == null) {
-      if (visibilityEnabled) {
-        if (isDataIndex) {
-          tmpIterator =
-              Streams.stream(Iterators.concat(results.iterator())).map(
-                  r -> KuduRow.deserializeDataIndexRow(r, visibilityEnabled)).filter(
-                      filter).iterator();
-        } else {
-          tmpIterator =
-              Streams.stream(Iterators.concat(results.iterator())).map(
-                  r -> (GeoWaveRow) new KuduRow(r)).filter(filter).iterator();
-        }
+      Function<RowResult, GeoWaveRow> adapter;
+      if (isDataIndex) {
+        adapter = r -> KuduDataIndexRow.deserializeDataIndexRow(r, visibilityEnabled);
       } else {
-        if (isDataIndex) {
-          tmpIterator =
-              Iterators.transform(
-                  Iterators.concat(results.iterator()),
-                  r -> KuduRow.deserializeDataIndexRow(r, visibilityEnabled));
-        } else {
-          tmpIterator =
-              Iterators.transform(Iterators.concat(results.iterator()), r -> new KuduRow(r));
-        }
+        adapter = KuduRow::new;
+      }
+      if (visibilityEnabled) {
+        tmpIterator = Streams.stream(concatIterator).map(adapter).filter(filter).iterator();
+      } else {
+        tmpIterator = Iterators.transform(concatIterator, adapter);
       }
       return new CloseableIteratorWrapper<>(() -> {
       },
           rowTransformer.apply(
               rowMerging ? new GeoWaveRowMergingIterator(tmpIterator) : tmpIterator));
     } else {
-      Iterator<RowResult> rowResultIterator = Iterators.concat(results.iterator());
       // Order the rows for data index query
       final Map<ByteArray, GeoWaveRow> resultsMap = new HashMap<>();
-      while (rowResultIterator.hasNext()) {
-        RowResult r = rowResultIterator.next();
-        final byte[] d = r.getBinaryCopy(KuduField.GW_PARTITION_ID_KEY.getFieldName());
+      while (concatIterator.hasNext()) {
+        RowResult r = concatIterator.next();
+        final byte[] d = r.getBinaryCopy(KuduDataIndexField.GW_PARTITION_ID_KEY.getFieldName());
         resultsMap.put(
             new ByteArray(d),
-            DataIndexUtils.deserializeDataIndexRow(
-                d,
-                adapterIds[0],
-                r.getBinaryCopy(KuduField.GW_VALUE_KEY.getFieldName()),
-                visibilityEnabled));
+            KuduDataIndexRow.deserializeDataIndexRow(r, visibilityEnabled));
       }
       tmpIterator =
           Arrays.stream(dataIds).map(d -> resultsMap.get(new ByteArray(d))).filter(
-              r -> r != null).iterator();
+              Objects::nonNull).iterator();
       return new CloseableIteratorWrapper<>(() -> {
       }, (Iterator<T>) tmpIterator);
     }

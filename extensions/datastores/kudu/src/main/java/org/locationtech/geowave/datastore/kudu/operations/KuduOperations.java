@@ -22,9 +22,7 @@ import org.apache.kudu.client.KuduScanner;
 import org.apache.kudu.client.KuduScanner.KuduScannerBuilder;
 import org.apache.kudu.client.KuduSession;
 import org.apache.kudu.client.KuduTable;
-import org.apache.kudu.client.Operation;
 import org.apache.kudu.client.OperationResponse;
-import org.apache.kudu.client.PartialRow;
 import org.apache.kudu.client.RowResult;
 import org.apache.kudu.client.RowResultIterator;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
@@ -45,9 +43,11 @@ import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.RowWriter;
-import org.locationtech.geowave.datastore.kudu.KuduRow;
+import org.locationtech.geowave.datastore.kudu.KuduDataIndexRow;
+import org.locationtech.geowave.datastore.kudu.KuduDataIndexRow.KuduDataIndexField;
+import org.locationtech.geowave.datastore.kudu.KuduMetadataRow.KuduMetadataField;
+import org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
 import org.locationtech.geowave.datastore.kudu.PersistentKuduRow;
-import org.locationtech.geowave.datastore.kudu.KuduMetadataRow;
 import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
 import org.locationtech.geowave.datastore.kudu.util.ClientPool;
 import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
@@ -57,14 +57,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import static org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
 
 public class KuduOperations implements MapReduceDataStoreOperations {
   private static final Logger LOGGER = LoggerFactory.getLogger(KuduOperations.class);
@@ -109,33 +107,36 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       final String typeName,
       final Short adapterId,
       final String... additionalAuthorizations) {
-    KuduSession session = getSession();
-    try {
-      KuduTable table = getTable(indexName);
-      Schema schema = table.getSchema();
-      List<KuduPredicate> preds =
-          Collections.singletonList(
-              KuduPredicate.newComparisonPredicate(
-                  schema.getColumn(KuduField.GW_ADAPTER_ID_KEY.getFieldName()),
-                  KuduPredicate.ComparisonOp.EQUAL,
-                  adapterId));
-      for (Delete delete : getDeletions(table, preds, KuduRow::new)) {
-        OperationResponse resp = session.apply(delete);
-        if (resp.hasRowError()) {
-          LOGGER.error("Encountered error while deleting all: {}", resp.getRowError());
-        }
-      }
-      return true;
-    } catch (KuduException e) {
-      LOGGER.error("Encountered error while deleting all", e);
-      return false;
-    } finally {
-      try {
-        session.close();
-      } catch (KuduException e) {
-        LOGGER.error("Encountered error while closing Kudu session", e);
-      }
-    }
+    // TODO: this deletion does not currently take into account the typeName, and authorizations are
+    // not supported
+    // KuduSession session = getSession();
+    // try {
+    // KuduTable table = getTable(indexName);
+    // Schema schema = table.getSchema();
+    // List<KuduPredicate> preds =
+    // Collections.singletonList(
+    // KuduPredicate.newComparisonPredicate(
+    // schema.getColumn(KuduField.GW_ADAPTER_ID_KEY.getFieldName()),
+    // KuduPredicate.ComparisonOp.EQUAL,
+    // adapterId));
+    // for (Delete delete : getDeletions(table, preds, KuduRow::new)) {
+    // OperationResponse resp = session.apply(delete);
+    // if (resp.hasRowError()) {
+    // LOGGER.error("Encountered error while deleting all: {}", resp.getRowError());
+    // }
+    // }
+    // return true;
+    // } catch (KuduException e) {
+    // LOGGER.error("Encountered error while deleting all", e);
+    // return false;
+    // } finally {
+    // try {
+    // session.close();
+    // } catch (KuduException e) {
+    // LOGGER.error("Encountered error while closing Kudu session", e);
+    // }
+    // }
+    return false;
   }
 
   @Override
@@ -160,15 +161,14 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       try {
         if (!metadataExists(metadataType)) {
           List<ColumnSchema> columns = new ArrayList<>();
-          for (KuduMetadataRow.KuduMetadataField f : KuduMetadataRow.KuduMetadataField.values()) {
+          for (KuduMetadataField f : KuduMetadataField.values()) {
             f.addColumn(columns);
           }
           client.createTable(
               getKuduQualifiedName(getMetadataTableName(metadataType)),
               new Schema(columns),
               new CreateTableOptions().addHashPartitions(
-                  Collections.singletonList(
-                      KuduMetadataRow.KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                  Collections.singletonList(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
                   KuduUtils.KUDU_DEFAULT_BUCKETS).setNumReplicas(KuduUtils.KUDU_DEFAULT_REPLICAS));
         }
       } catch (final IOException e) {
@@ -225,9 +225,8 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       KuduTable table = getTable(tableName);
       for (byte[] dataId : dataIds) {
         Delete delete = table.newDelete();
-        PartialRow partialRow = delete.getRow();
-        partialRow.addBinary(KuduField.GW_PARTITION_ID_KEY.getFieldName(), dataId);
-        partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
+        KuduDataIndexRow row = new KuduDataIndexRow(dataId, adapterId, null);
+        row.populatePartialRowPrimaryKey(delete.getRow());
         OperationResponse resp = session.apply(delete);
         if (resp.hasRowError()) {
           LOGGER.error("Encountered error while deleting row: {}", resp.getRowError());
@@ -249,20 +248,24 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       try {
         if (!indexExists(indexName)) {
           List<ColumnSchema> columns = new ArrayList<>();
-          KuduField[] fields = KuduField.values();
-          if (DataIndexUtils.isDataIndex(indexName)) {
-            fields =
-                Arrays.stream(fields).filter(KuduField::isDataIndexColumn).toArray(
-                    KuduField[]::new);
-          }
-          for (final KuduField f : fields) {
-            f.addColumn(columns);
+          boolean isDataIndex = DataIndexUtils.isDataIndex(indexName);
+          final String hashPartitionColumn;
+          if (isDataIndex) {
+            for (final KuduDataIndexField f : KuduDataIndexField.values()) {
+              f.addColumn(columns);
+            }
+            hashPartitionColumn = KuduDataIndexField.GW_PARTITION_ID_KEY.getFieldName();
+          } else {
+            for (final KuduField f : KuduField.values()) {
+              f.addColumn(columns);
+            }
+            hashPartitionColumn = KuduField.GW_PARTITION_ID_KEY.getFieldName();
           }
           client.createTable(
               getKuduQualifiedName(indexName),
               new Schema(columns),
               new CreateTableOptions().addHashPartitions(
-                  Collections.singletonList(KuduField.GW_PARTITION_ID_KEY.getFieldName()),
+                  Collections.singletonList(hashPartitionColumn),
                   Math.max(numPartitions, KuduUtils.KUDU_DEFAULT_BUCKETS)).setNumReplicas(
                       KuduUtils.KUDU_DEFAULT_REPLICAS));
           return true;

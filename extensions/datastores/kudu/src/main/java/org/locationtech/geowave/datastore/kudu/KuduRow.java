@@ -10,11 +10,13 @@ package org.locationtech.geowave.datastore.kudu;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.kudu.ColumnSchema;
+import org.apache.kudu.Type;
 import org.apache.kudu.client.PartialRow;
 import org.apache.kudu.client.RowResult;
-import org.apache.kudu.Type;
-import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
-import org.locationtech.geowave.core.store.entities.*;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveValue;
+import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
+import org.locationtech.geowave.core.store.entities.MergeableGeoWaveRow;
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -31,38 +33,24 @@ public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
   private final int numDuplicates;
 
   public enum KuduField {
-    GW_PARTITION_ID_KEY("partition", Type.BINARY, KuduColumnType.PARTITION_KEY, true),
-    GW_ADAPTER_ID_KEY("adapter_id", Type.INT16, KuduColumnType.CLUSTER_COLUMN, true),
+    GW_PARTITION_ID_KEY("partition", Type.BINARY, KuduColumnType.PARTITION_KEY),
+    GW_ADAPTER_ID_KEY("adapter_id", Type.INT16, KuduColumnType.CLUSTER_COLUMN),
     GW_SORT_KEY("sort", Type.BINARY, KuduColumnType.CLUSTER_COLUMN),
     GW_DATA_ID_KEY("data_id", Type.BINARY, KuduColumnType.CLUSTER_COLUMN),
     GW_FIELD_VISIBILITY_KEY("vis", Type.BINARY, KuduColumnType.CLUSTER_COLUMN),
     GW_NANO_TIME_KEY("nano_time", Type.BINARY, KuduColumnType.CLUSTER_COLUMN),
     GW_FIELD_MASK_KEY("field_mask", Type.BINARY, KuduColumnType.OTHER_COLUMN),
-    GW_VALUE_KEY("value", Type.BINARY, KuduColumnType.OTHER_COLUMN, true),
+    GW_VALUE_KEY("value", Type.BINARY, KuduColumnType.OTHER_COLUMN),
     GW_NUM_DUPLICATES_KEY("num_duplicates", Type.INT8, KuduColumnType.OTHER_COLUMN);
 
     private final String fieldName;
     private final Type dataType;
     private KuduColumnType columnType;
-    private final boolean isDataIndexColumn;
 
     KuduField(final String fieldName, final Type dataType, final KuduColumnType columnType) {
-      this(fieldName, dataType, columnType, false);
-    }
-
-    KuduField(
-        final String fieldName,
-        final Type dataType,
-        final KuduColumnType columnType,
-        final boolean isDataIndexColumn) {
       this.fieldName = fieldName;
       this.dataType = dataType;
       this.columnType = columnType;
-      this.isDataIndexColumn = isDataIndexColumn;
-    }
-
-    public boolean isDataIndexColumn() {
-      return isDataIndexColumn;
     }
 
     public String getFieldName() {
@@ -99,18 +87,6 @@ public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
     this.fieldVisibility = value.getVisibility();
     this.fieldMask = value.getFieldMask();
     this.value = value.getValue();
-  }
-
-  public KuduRow(
-      GeoWaveRow row,
-      GeoWaveValue value,
-      boolean isDataIndex,
-      boolean isVisibilityEnabled) {
-    this(row, value);
-    if (isDataIndex) {
-      this.partitionKey = row.getDataId();
-      this.value = DataIndexUtils.serializeDataIndexValue(value, isVisibilityEnabled);
-    }
   }
 
   @Override
@@ -162,19 +138,5 @@ public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
     partialRow.addBinary(KuduField.GW_DATA_ID_KEY.getFieldName(), dataId);
     partialRow.addBinary(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName(), fieldVisibility);
     partialRow.addBinary(KuduField.GW_NANO_TIME_KEY.getFieldName(), nanoTime);
-  }
-
-  public void populatePartialRowDataIndex(PartialRow partialRow) {
-    partialRow.addBinary(KuduField.GW_PARTITION_ID_KEY.getFieldName(), partitionKey);
-    partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
-    partialRow.addBinary(KuduField.GW_VALUE_KEY.getFieldName(), value);
-  }
-
-  public static GeoWaveRow deserializeDataIndexRow(RowResult row, boolean isVisibilityEnabled) {
-    return DataIndexUtils.deserializeDataIndexRow(
-        row.getBinaryCopy(KuduField.GW_PARTITION_ID_KEY.getFieldName()),
-        row.getShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName()),
-        row.getBinaryCopy(KuduField.GW_VALUE_KEY.getFieldName()),
-        isVisibilityEnabled);
   }
 }

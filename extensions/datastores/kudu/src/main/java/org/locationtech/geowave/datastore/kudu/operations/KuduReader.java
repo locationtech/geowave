@@ -1,10 +1,6 @@
 package org.locationtech.geowave.datastore.kudu.operations;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import com.google.common.collect.Sets;
 import org.apache.kudu.client.KuduException;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -17,12 +13,14 @@ import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.locationtech.geowave.datastore.kudu.operations.KuduOperations;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.Sets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class KuduReader<T> implements RowReader<T> {
   private final ReaderParams<T> readerParams;
@@ -123,9 +121,6 @@ public class KuduReader<T> implements RowReader<T> {
               dataIds,
               null,
               false,
-              // TODO: DataStoreUtils.isMergingIteratorRequired(dataIndexReaderParams,
-              // visibilityEnabled),
-              // isMerginIteratorRequired not defined for dataIndexReaderParams
               rowTransformer,
               new ClientVisibilityFilter(
                   Sets.newHashSet(dataIndexReaderParams.getAdditionalAuthorizations())),
