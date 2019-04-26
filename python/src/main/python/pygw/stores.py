@@ -9,14 +9,20 @@ Data stores
 """
 
 class RocksDbDs(DataStore):
-    """RocksDB datastore.
-
-    Args:
-        gw_namespace (string): namespace of geowave
-        dir (str): directory of datastore
-
     """
+    GeoWave RocksDB datastore.
+    """
+
     def __init__(self, gw_namespace=None, dir="rocksdb", compact_on_write=True, batch_write_size=1000):
+        """
+        Create a RocksDB datastore.
+
+        Args:
+            gw_namespace (string) : namespace 
+            dir (str) : directory of datastore
+            compact_on_write (bool)
+            batch_write_size (int)
+        """
         if gw_namespace:
             j_rock_opts = config.MODULE__rocksdb_config.RocksDBOptions(gw_namespace)
         else:
@@ -31,13 +37,17 @@ class RocksDbDs(DataStore):
         super().__init__(config.GATEWAY, j_ds)
 
 class HBaseDs(DataStore):
-    """HBaseDs datastore.
-
-    Args:
-        zookeeperh (string): zoopkeer for hbase
-        hbase_namespace (str): namespace of hbase
+    """
+    GeoWave HBaseDs datastore.
     """
     def __init__(self, zookeeperh="example", hbase_namespace=None):
+        """
+        Create an HBase data store
+
+        zookeeperh (string): zoopkeeper for hbase
+        hbase_namespace (str): namespace of hbase
+        """
+
         if hbase_namespace:
             j_hbase_opts = config.MODULE__hbase_config.HBaseOptions(hbase_namespace)
         else:
@@ -47,13 +57,12 @@ class HBaseDs(DataStore):
         super().__init__(config.GATEWAY, j_ds)
 
 class RedisDs(DataStore):
-    """GeoWave RedisDB datastore.
-
-    Args:
-        gw_namespace (str): namespace of hbase
-        compression (string): compression algorithm
     """
+    GeoWave RedisDB datastore.
+    """
+
     __compression_opts = ["snappy", "lz4", "none"]
+
     __compression_to_j_enum = {
         # Key: [compression_type : string] => Value: [function : () -> Java Ref to RedisOptions.Compression Enum]
         "snappy": lambda : config.MODULE__redis_config.RedisOptions.Compression.SNAPPY,
@@ -62,6 +71,14 @@ class RedisDs(DataStore):
     }
 
     def  __init__(self, address, gw_namespace=None, compression="snappy"):
+        """
+        Create a Redis Datastore. 
+        
+        Args:
+            address (str) : address of Redis DB
+            gw_namespace (str) : gw namespace
+            compression (str) : compression type to use. Must be one of 'snappy', 'lz4', or 'none'.
+        """
         if compression not in RedisDs.__compression_opts:
             raise RuntimeError("`compression` must be one of {}".format(RedisDs.__compression_opts))
         if gw_namespace:
