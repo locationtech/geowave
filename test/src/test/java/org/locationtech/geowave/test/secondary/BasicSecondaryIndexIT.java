@@ -32,7 +32,8 @@ public class BasicSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
-          GeoWaveStoreType.DYNAMODB,
+          // TODO: DynamoDB disabled, because it takes abnormally long on this test (~500s)
+          // GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
