@@ -24,9 +24,10 @@ class PyGwJavaWrapper:
         if not isinstance(other, PyGwJavaWrapper):
             return False
         return self._java_ref == other._java_ref
-    
+
     def is_instance_of(self, java_class):
         return isinstance(self._gateway, self._java_ref, java_class)
+
 
 class DataStore(PyGwJavaWrapper):
     """
@@ -138,6 +139,29 @@ class DataStore(PyGwJavaWrapper):
         """
         
         return self._java_ref.deleteAll()
+
+    def create_writer(self, type_adapter_name):
+        j_writer = self._java_ref.createWriter(type_adapter_name)
+
+        if j_writer is None:
+            return None
+
+        return Writer(self._gateway, j_writer)
+
+
+class DataTypeAdapter(PyGwJavaWrapper):
+    """Wrapper to expose all of DataTypeAdapter API"""
+
+    # TODO: Implement API
+    def get_type_name(self):
+        return self._java_ref.getTypeName()
+
+
+class Index(PyGwJavaWrapper):
+    """Wrapper to expose all of Index API"""
+
+    def get_name(self):
+        return self._java_ref.getName()
 
 
     def add_type(self, type_adapter, *initial_indices):
@@ -275,10 +299,12 @@ class Index(PyGwJavaWrapper):
         j_obj = self._java_ref.getIndexModel()
         return j_obj.getClass().toString()
 
+
 class Writer(PyGwJavaWrapper):
     """
     Models a Writer
     """
+
     def __init__(self, gateway, java_ref):
         super().__init__(gateway, java_ref)
         self.is_open = True
@@ -301,7 +327,7 @@ class Writer(PyGwJavaWrapper):
             data = data._java_ref
         
         self._java_ref.write(data)
-    
+
     def close(self):
         """
         Close the writer.
