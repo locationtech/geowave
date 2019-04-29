@@ -11,3 +11,9 @@ geowave-parent/extensions/datastores/hbase/src/main/java/org.locationtech.geowav
 
 geowave官方源码打包命令
 mvn package -P hbase-container-singlejar -DskipTests
+
+geoserver 数据源插件的代码位置
+org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory
+extensions/adapters/vector/src/main/resources/META-INFO.services
+extensions/adapters/vector/src/main/java/org/locationtech.geowave.adapter.vector/plugin/GeoWaveGTDataStoreFactory
+
