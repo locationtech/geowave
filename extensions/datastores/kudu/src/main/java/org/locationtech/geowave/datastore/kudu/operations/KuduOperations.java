@@ -357,5 +357,4 @@ public class KuduOperations implements MapReduceDataStoreOperations {
         }).iterator();
     return Lists.newArrayList(deletions);
   }
-
 }
