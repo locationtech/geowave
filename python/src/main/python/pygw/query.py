@@ -2,15 +2,28 @@ from pygw.config import config
 from pygw.base_models import PyGwJavaWrapper, QueryInterface
 
 class Query(QueryInterface):
-    """ NOTE: This utilizes a factory pattern"""
+    """
+    Models a Query
+    """
 
     def __init__(self, java_ref):
+        """[NOTE]: DO NOT USE DIRECTLY. Use appropriate classmethods to instantiate instead"""
         super().__init__(config.GATEWAY, java_ref)
 
     @classmethod
     def build(cls, constraint=None, index=None, auths=None, limit=None, type_names=None, which_fields=None):
         """
-        Build a new query.
+        Build a new query with provided options.
+        Args:
+            contraint:
+            index:
+            auths:
+            limit:
+            type_names:
+            which_fields:
+            
+        Returns:
+            a pygw.query.Query Instance
         """
         qb = QueryBuilder()
 
@@ -32,13 +45,24 @@ class Query(QueryInterface):
     @classmethod
     def everything(cls):
         """
-        Creates an everything-query.
-        Effectively the same as `Query.build()`.
+        Creates an everything-query. Effectively the same as `Query.build()`.
+
+        Returns:
+            a pygw.query.Query Instance
         """
         return cls.build()
 
     @classmethod
     def cql(cls, cql_query, index=None, auths=None, limit=None, type_names=None, which_fields=None):
+        """
+        Creates a CQL query. 
+
+        Args:
+            cql_query (str) : valid CQL query string
+
+        Returns:
+            a pygw.query.Query Instance
+        """
         qb = VectorQueryBuilder()
         qb.set_cql_constraint(cql_query)
 
@@ -65,7 +89,6 @@ class QueryBuilder(PyGwJavaWrapper):
     - Limits (default: null)
     - Fields: all fields or a subset (only 1 type-name if subset; default all)
     - Type names: all or a subset (default: all)
-    - Hints(??)
     """
     def __init__(self):
         j_qbuilder = config.MODULE__core_store.QueryBuilder.newBuilder()
