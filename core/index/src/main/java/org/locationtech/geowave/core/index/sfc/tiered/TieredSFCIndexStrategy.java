@@ -355,9 +355,9 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
     return new SinglePartitionInsertionIds(null, new ArrayList<byte[]>());
   }
 
-  protected static SinglePartitionInsertionIds getRowIdsAtTier(
+  public static SinglePartitionInsertionIds getRowIdsAtTier(
       final BinnedNumericDataset index,
-      final byte tierId,
+      final Byte tierId,
       final SpaceFillingCurve sfc,
       final BigInteger maxEstimatedDuplicateIds,
       final int sfcIndex) {
@@ -380,10 +380,12 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
 
   protected static SinglePartitionInsertionIds decomposeRangesForEntry(
       final BinnedNumericDataset index,
-      final byte tierId,
+      final Byte tierId,
       final SpaceFillingCurve sfc) {
     final List<byte[]> retVal = new ArrayList<>();
-    final byte[] tierAndBinId = ByteArrayUtils.combineArrays(new byte[] {tierId}, index.getBinId());
+    final byte[] tierAndBinId =
+        tierId != null ? ByteArrayUtils.combineArrays(new byte[] {tierId}, index.getBinId())
+            : index.getBinId();
     final RangeDecomposition rangeDecomp = sfc.decomposeRange(index, false, DEFAULT_MAX_RANGES);
     // this range does not fit into a single row ID at the lowest
     // tier, decompose it

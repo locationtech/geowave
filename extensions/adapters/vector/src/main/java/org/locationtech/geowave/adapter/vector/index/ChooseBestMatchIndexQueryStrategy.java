@@ -21,7 +21,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.StatisticsQuery;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class ChooseBestMatchIndexQueryStrategy implements IndexQueryStrategySPI 
   @Override
   public CloseableIterator<Index> getIndices(
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
-      final BasicQuery query,
+      final BasicQueryByClass query,
       final Index[] indices,
       final Map<QueryHint, Object> hints) {
     return new CloseableIterator<Index>() {

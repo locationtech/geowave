@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.threeten.extra.Interval;
 
 /**
@@ -20,7 +20,7 @@ import org.threeten.extra.Interval;
  * applied represents an intersection operation on the query geometry AND a date range intersection
  * based on startTime and endTime.
  */
-public class ExplicitTemporalQuery extends BasicQuery {
+public class ExplicitTemporalQuery extends BasicQueryByClass {
   public ExplicitTemporalQuery(final Interval[] intervals) {
     super(createTemporalConstraints(intervals));
   }
@@ -33,7 +33,7 @@ public class ExplicitTemporalQuery extends BasicQuery {
     super();
   }
 
-  private static Constraints createTemporalConstraints(
+  private static ConstraintsByClass createTemporalConstraints(
       final TemporalConstraints temporalConstraints) {
     final List<ConstraintSet> constraints = new ArrayList<>();
     for (final TemporalRange range : temporalConstraints.getRanges()) {
@@ -44,10 +44,10 @@ public class ExplicitTemporalQuery extends BasicQuery {
                   new NumericRange(range.getStartTime().getTime(), range.getEndTime().getTime()),
                   false)));
     }
-    return new Constraints(constraints);
+    return new ConstraintsByClass(constraints);
   }
 
-  private static Constraints createTemporalConstraints(final Interval[] intervals) {
+  private static ConstraintsByClass createTemporalConstraints(final Interval[] intervals) {
     final List<ConstraintSet> constraints = new ArrayList<>();
     for (final Interval range : intervals) {
       constraints.add(
@@ -61,6 +61,6 @@ public class ExplicitTemporalQuery extends BasicQuery {
                       Math.max(range.getEnd().toEpochMilli() - 1, range.getStart().toEpochMilli())),
                   false)));
     }
-    return new Constraints(constraints);
+    return new ConstraintsByClass(constraints);
   }
 }

@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStor
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -50,7 +50,7 @@ public class SimpleIngestTest {
     final CloseableIterator itr =
         ds.query(
             QueryBuilder.newBuilder().constraints(
-                new BasicQuery(new BasicQuery.Constraints())).build());
+                new BasicQueryByClass(new BasicQueryByClass.ConstraintsByClass())).build());
     final Set<Point> readPoints = new TreeSet<>();
     while (itr.hasNext()) {
       final Object n = itr.next();

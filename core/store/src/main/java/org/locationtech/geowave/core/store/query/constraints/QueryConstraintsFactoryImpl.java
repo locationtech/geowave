@@ -11,7 +11,8 @@ package org.locationtech.geowave.core.store.query.constraints;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.store.api.QueryConstraintsFactory;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicOrderedConstraintQuery.OrderedConstraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 
 public class QueryConstraintsFactoryImpl implements QueryConstraintsFactory {
@@ -37,6 +38,13 @@ public class QueryConstraintsFactoryImpl implements QueryConstraintsFactory {
 
   @Override
   public QueryConstraints constraints(final Constraints constraints) {
+    if (constraints instanceof ConstraintsByClass) {
+      // slightly optimized wrapper for ConstraintsByClass
+      return new BasicQueryByClass((ConstraintsByClass) constraints);
+    } else if (constraints instanceof OrderedConstraints) {
+      // slightly optimized wrapper for OrderedConstraints
+      return new BasicOrderedConstraintQuery((OrderedConstraints) constraints);
+    }
     return new BasicQuery(constraints);
   }
 
@@ -44,6 +52,13 @@ public class QueryConstraintsFactoryImpl implements QueryConstraintsFactory {
   public QueryConstraints constraints(
       final Constraints constraints,
       final BasicQueryCompareOperation compareOp) {
+    if (constraints instanceof ConstraintsByClass) {
+      // slightly optimized wrapper for ConstraintsByClass
+      return new BasicQueryByClass((ConstraintsByClass) constraints, compareOp);
+    } else if (constraints instanceof OrderedConstraints) {
+      // slightly optimized wrapper for OrderedConstraints
+      return new BasicOrderedConstraintQuery((OrderedConstraints) constraints, compareOp);
+    }
     return new BasicQuery(constraints, compareOp);
   }
 

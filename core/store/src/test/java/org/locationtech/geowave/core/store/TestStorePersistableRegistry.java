@@ -16,8 +16,8 @@ import org.locationtech.geowave.core.store.adapter.MockComponents.MockIndexStrat
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestDimensionField;
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestIndexModel;
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestPersistentIndexFieldHandler;
-import org.locationtech.geowave.core.store.query.BasicQueryTest.ExampleDimensionOne;
-import org.locationtech.geowave.core.store.query.BasicQueryTest.ExampleNumericIndexStrategy;
+import org.locationtech.geowave.core.store.query.BasicQueryByClassTest.ExampleDimensionOne;
+import org.locationtech.geowave.core.store.query.BasicQueryByClassTest.ExampleNumericIndexStrategy;
 
 public class TestStorePersistableRegistry implements PersistableRegistrySpi {
 

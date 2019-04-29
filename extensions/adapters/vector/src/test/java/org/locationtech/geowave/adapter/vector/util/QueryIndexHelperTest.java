@@ -40,8 +40,8 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.query.constraints.Constraints;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
@@ -285,8 +285,8 @@ public class QueryIndexHelperTest {
     final TemporalConstraintsSet constraintsSet = new TemporalConstraintsSet();
     constraintsSet.getConstraintsForRange("start", "end").add(new TemporalRange(stime, etime));
 
-    final BasicQuery query =
-        new BasicQuery(
+    final BasicQueryByClass query =
+        new BasicQueryByClass(
             QueryIndexHelper.composeConstraints(
                 rangeType,
                 rangeTimeDescriptors,
@@ -299,8 +299,8 @@ public class QueryIndexHelperTest {
     assertEquals(stime.getTime(), (long) nd.get(0).getDataPerDimension()[2].getMin());
     assertEquals(etime.getTime(), (long) nd.get(0).getDataPerDimension()[2].getMax());
 
-    final BasicQuery query1 =
-        new BasicQuery(
+    final BasicQueryByClass query1 =
+        new BasicQueryByClass(
             QueryIndexHelper.composeConstraints(
                 rangeType,
                 rangeTimeDescriptors,
@@ -336,8 +336,8 @@ public class QueryIndexHelperTest {
 
     final Envelope bounds = new Envelope(21.23, 26.23, 41.75, 43.1);
 
-    final BasicQuery query =
-        new BasicQuery(
+    final BasicQueryByClass query =
+        new BasicQueryByClass(
             QueryIndexHelper.composeConstraints(
                 geoType,
                 geoTimeDescriptors,
@@ -486,7 +486,7 @@ public class QueryIndexHelperTest {
             statsMap,
             constraintsSet);
     final List<MultiDimensionalNumericData> nd =
-        constraints.getIndexConstraints(SPATIAL_TEMPORAL_INDEX.getIndexStrategy());
+        constraints.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
     assertTrue(nd.isEmpty());
 
     final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics("geometry");
@@ -512,7 +512,7 @@ public class QueryIndexHelperTest {
             null,
             constraintsSet);
     final List<MultiDimensionalNumericData> nd1 =
-        constraints1.getIndexConstraints(SPATIAL_TEMPORAL_INDEX.getIndexStrategy());
+        constraints1.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
     assertTrue(nd1.isEmpty());
     /*
      * assertEquals( stime.getTime(), (long) nd1.get( 0).getDataPerDimension()[2].getMin());
@@ -529,7 +529,7 @@ public class QueryIndexHelperTest {
             statsMap,
             constraintsSet2);
     final List<MultiDimensionalNumericData> nd2 =
-        constraints2.getIndexConstraints(SPATIAL_TEMPORAL_INDEX.getIndexStrategy());
+        constraints2.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
     assertTrue(nd2.isEmpty());
   }
 

@@ -58,8 +58,8 @@ import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
@@ -161,11 +161,11 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     return countIssuer.count;
   }
 
-  private BasicQuery getQuery(
+  private BasicQueryByClass getQuery(
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
       final Geometry jtsBounds,
       final TemporalConstraintsSet timeBounds) {
-    final Constraints timeConstraints =
+    final ConstraintsByClass timeConstraints =
         QueryIndexHelper.composeTimeBoundedConstraints(
             components.getAdapter().getFeatureType(),
             components.getAdapter().getTimeDescriptors(),
@@ -179,7 +179,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
      * NOTE: query to an index that requires a constraint and the constraint is missing equates to a
      * full table scan. @see BasicQuery
      */
-    final BasicQuery query = composeQuery(geoConstraints, timeConstraints);
+    final BasicQueryByClass query = composeQuery(geoConstraints, timeConstraints);
     query.setExact(timeBounds.isExact());
     return query;
   }
@@ -193,7 +193,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap =
         transaction.getDataStatistics();
 
-    final BasicQuery query = getQuery(statsMap, jtsBounds, timeBounds);
+    final BasicQueryByClass query = getQuery(statsMap, jtsBounds, timeBounds);
 
     boolean spatialOnly = false;
     if (this.query.getHints().containsKey(SubsampleProcess.SUBSAMPLE_ENABLED)
@@ -273,7 +273,9 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     }
 
     @Override
-    public CloseableIterator<SimpleFeature> query(final Index index, final BasicQuery query) {
+    public CloseableIterator<SimpleFeature> query(
+        final Index index,
+        final BasicQueryByClass query) {
       VectorQueryBuilder bldr =
           VectorQueryBuilder.newBuilder().addTypeName(
               components.getAdapter().getTypeName()).indexName(index.getName()).setAuthorizations(
@@ -311,7 +313,9 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     }
 
     @Override
-    public CloseableIterator<SimpleFeature> query(final Index index, final BasicQuery query) {
+    public CloseableIterator<SimpleFeature> query(
+        final Index index,
+        final BasicQueryByClass query) {
       VectorAggregationQueryBuilder<Persistable, Long> bldr =
           (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder().count(
               components.getAdapter().getTypeName()).indexName(index.getName()).setAuthorizations(
@@ -353,7 +357,9 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     }
 
     @Override
-    public CloseableIterator<SimpleFeature> query(final Index index, final BasicQuery query) {
+    public CloseableIterator<SimpleFeature> query(
+        final Index index,
+        final BasicQueryByClass query) {
 
       VectorQueryBuilder bldr =
           VectorQueryBuilder.newBuilder().addTypeName(
@@ -414,7 +420,9 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     }
 
     @Override
-    public CloseableIterator<SimpleFeature> query(final Index index, final BasicQuery query) {
+    public CloseableIterator<SimpleFeature> query(
+        final Index index,
+        final BasicQueryByClass query) {
       final VectorAggregationQueryBuilder<DistributedRenderOptions, DistributedRenderResult> bldr =
           (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder().indexName(
               index.getName()).setAuthorizations(transaction.composeAuthorizations());
@@ -535,9 +543,9 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         transaction.getDataStatistics());
   }
 
-  private BasicQuery composeQuery(
+  private BasicQueryByClass composeQuery(
       final GeoConstraintsWrapper geoConstraints,
-      final Constraints temporalConstraints) {
+      final ConstraintsByClass temporalConstraints) {
 
     // TODO: this actually doesn't boost performance much, if at
     // all, and one key is missing - the query geometry has to be

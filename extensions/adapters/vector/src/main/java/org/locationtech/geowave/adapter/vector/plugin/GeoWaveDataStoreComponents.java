@@ -32,7 +32,7 @@ import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.opengis.feature.simple.SimpleFeature;
 import org.spark_project.guava.collect.Maps;
 
@@ -102,7 +102,7 @@ public class GeoWaveDataStoreComponents {
 
   public CloseableIterator<Index> getIndices(
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
-      final BasicQuery query,
+      final BasicQueryByClass query,
       final boolean spatialOnly) {
     final GeoWaveGTDataStore gtStore = getGTstore();
     final Map<QueryHint, Object> queryHints = Maps.newHashMap();

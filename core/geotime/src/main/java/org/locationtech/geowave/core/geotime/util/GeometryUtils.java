@@ -46,9 +46,10 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
+import org.locationtech.geowave.core.store.query.constraints.Constraints;
 import org.locationtech.geowave.core.store.util.ClasspathUtils;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
@@ -147,12 +148,12 @@ public class GeometryUtils {
     }
   }
 
-  public static Constraints basicConstraintsFromGeometry(final Geometry geometry) {
+  public static ConstraintsByClass basicConstraintsFromGeometry(final Geometry geometry) {
 
     final List<ConstraintSet> set = new LinkedList<>();
     constructListOfConstraintSetsFromGeometry(geometry, set, false);
 
-    return new Constraints(set);
+    return new ConstraintsByClass(set);
   }
 
   /**
@@ -169,7 +170,10 @@ public class GeometryUtils {
     final boolean geometryConstraintsExactMatch =
         constructListOfConstraintSetsFromGeometry(geometry, set, true);
 
-    return new GeoConstraintsWrapper(new Constraints(set), geometryConstraintsExactMatch, geometry);
+    return new GeoConstraintsWrapper(
+        new ConstraintsByClass(set),
+        geometryConstraintsExactMatch,
+        geometry);
   }
 
   /**
@@ -243,7 +247,7 @@ public class GeometryUtils {
    */
   public static Constraints basicConstraintsFromEnvelope(final Envelope env) {
 
-    return new Constraints(basicConstraintSetFromEnvelope(env));
+    return new ConstraintsByClass(basicConstraintSetFromEnvelope(env));
   }
 
   /**
@@ -385,12 +389,12 @@ public class GeometryUtils {
   }
 
   public static class GeoConstraintsWrapper {
-    private final Constraints constraints;
+    private final ConstraintsByClass constraints;
     private final boolean constraintsMatchGeometry;
     private final Geometry jtsBounds;
 
     public GeoConstraintsWrapper(
-        final Constraints constraints,
+        final ConstraintsByClass constraints,
         final boolean constraintsMatchGeometry,
         final Geometry jtsBounds) {
       this.constraints = constraints;
@@ -398,7 +402,7 @@ public class GeometryUtils {
       this.jtsBounds = jtsBounds;
     }
 
-    public Constraints getConstraints() {
+    public ConstraintsByClass getConstraints() {
       return constraints;
     }
 

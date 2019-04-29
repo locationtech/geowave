@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
@@ -43,13 +42,14 @@ import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.index.IndexImpl;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
-public class BasicQueryTest {
+public class BasicQueryByClassTest {
 
   final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
 
@@ -82,15 +82,15 @@ public class BasicQueryTest {
         ExampleDimensionTwo.class,
         new ConstraintData(new ConstrainedIndexValue(0.1, 0.2), true));
 
-    final Constraints constraints =
-        new Constraints(Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
+    final ConstraintsByClass constraints =
+        new ConstraintsByClass(Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
 
     assertEquals(
         expectedResults,
-        constraints.getIndexConstraints(new ExampleNumericIndexStrategy()));
+        constraints.getIndexConstraints(new IndexImpl(new ExampleNumericIndexStrategy(), null)));
 
-    final byte[] image = new BasicQuery(constraints).toBinary();
-    final BasicQuery query = new BasicQuery();
+    final byte[] image = new BasicQueryByClass(constraints).toBinary();
+    final BasicQueryByClass query = new BasicQueryByClass();
     query.fromBinary(image);
 
     assertEquals(expectedResults, query.getIndexConstraints(index));
@@ -134,15 +134,15 @@ public class BasicQueryTest {
         ExampleDimensionTwo.class,
         new ConstraintData(new ConstrainedIndexValue(3.4, 3.7), true));
 
-    final Constraints constraints =
-        new Constraints(Arrays.asList(cs2a, cs2b)).merge(Collections.singletonList(cs1));
+    final ConstraintsByClass constraints =
+        new ConstraintsByClass(Arrays.asList(cs2a, cs2b)).merge(Collections.singletonList(cs1));
 
     assertEquals(
         expectedResults,
-        constraints.getIndexConstraints(new ExampleNumericIndexStrategy()));
+        constraints.getIndexConstraints(new IndexImpl(new ExampleNumericIndexStrategy(), null)));
 
-    final byte[] image = new BasicQuery(constraints).toBinary();
-    final BasicQuery query = new BasicQuery();
+    final byte[] image = new BasicQueryByClass(constraints).toBinary();
+    final BasicQueryByClass query = new BasicQueryByClass();
     query.fromBinary(image);
     final Index index =
         new CustomNameIndex(

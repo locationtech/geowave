@@ -10,7 +10,7 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
-public class SimpleNumericQuery extends BasicQuery {
+public class SimpleNumericQuery extends BasicQueryByClass {
   public SimpleNumericQuery(final Range<Double> range) {
     super(createNumericConstraints(range));
   }
@@ -30,12 +30,12 @@ public class SimpleNumericQuery extends BasicQuery {
     return null;
   }
 
-  private static Constraints createNumericConstraints(final Range<Double> range) {
+  private static ConstraintsByClass createNumericConstraints(final Range<Double> range) {
     final List<ConstraintSet> constraints = new ArrayList<>();
     constraints.add(
         new ConstraintSet(
             BasicDimensionDefinition.class,
             new ConstraintData(new NumericRange(range.getMinimum(), range.getMaximum()), false)));
-    return new Constraints(constraints);
+    return new ConstraintsByClass(constraints);
   }
 }
