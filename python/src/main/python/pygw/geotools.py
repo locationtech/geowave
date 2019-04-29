@@ -90,6 +90,7 @@ class SimpleFeatureType(PyGwJavaWrapper):
             assert isinstance(a, SimpleFeatureTypeAttribute)
             j_builder.add(a._java_ref)
         self.attributes = attributes
+<<<<<<< HEAD
         j_feature_type = j_builder.buildFeatureType()
         super().__init__(config.GATEWAY, j_feature_type)
         self.feature_builder = SimpleFeatureBuilder(self)
@@ -97,6 +98,22 @@ class SimpleFeatureType(PyGwJavaWrapper):
     def get_feature_builder(self):
         return self.feature_builder
 
+=======
+        self.name = feature_name
+        j_feature_type = j_builder.buildFeatureType()
+        super().__init__(config.GATEWAY, j_feature_type)
+        self.feature_builder = SimpleFeatureBuilder(self)
+        
+    def get_name(self):
+        return self.name
+        
+    def get_feature_builder(self):
+        return self.feature_builder
+
+    def get_type_adapter(self):
+        return SimpleFeatureDataAdapter(self)
+
+>>>>>>> 24000de278e... pygw example notebook
     def create_feature(self, id, **kwargs):
         for desc, val in kwargs.items():
             self.feature_builder.set_attr(desc, val)
