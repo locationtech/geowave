@@ -365,7 +365,7 @@ public class BasicQueryByClass extends BasicQuery {
     // these basic queries are tied to NumericDimensionDefinition types, not
     // ideal, but third-parties can and will nned to implement their own
     // queries if they implement their own dimension definitions
-    private final List<ConstraintSet> constraintsSets = new LinkedList<>();
+    private List<ConstraintSet> constraintsSets = new LinkedList<>();
 
     public ConstraintsByClass() {}
 
@@ -510,6 +510,7 @@ public class BasicQueryByClass extends BasicQuery {
         cs.fromBinary(d);
         sets.add(cs);
       }
+      this.constraintsSets = sets;
     }
 
     @Override
