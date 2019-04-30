@@ -220,7 +220,6 @@ class DataStore(PyGwJavaWrapper):
     Note: aggregateQuery umimplemented ATM. 
     """
     def aggregate(self, q):
-        # TODO
         return self._java_ref.aggregate(q._java_ref)
     
     def get_types(self):
@@ -238,7 +237,6 @@ class DataStore(PyGwJavaWrapper):
         raise NotImplementedError
 
     def aggregate_statistics(self, q):
-        # TODO
         return self._java_ref.aggregateStatistics(q._java_ref)
 
 
