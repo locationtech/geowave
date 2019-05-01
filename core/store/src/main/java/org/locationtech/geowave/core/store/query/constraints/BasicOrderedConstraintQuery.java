@@ -25,6 +25,14 @@ public class BasicOrderedConstraintQuery extends BasicQuery {
 
     public OrderedConstraints() {}
 
+    public OrderedConstraints(final Range<Double> rangePerDimension) {
+      this(new Range[] {rangePerDimension}, null);
+    }
+
+    public OrderedConstraints(final Range<Double>[] rangesPerDimension) {
+      this(rangesPerDimension, null);
+    }
+
     public OrderedConstraints(final Range<Double>[] rangesPerDimension, final String indexName) {
       this.rangesPerDimension = rangesPerDimension;
       this.indexName = indexName;
@@ -32,8 +40,12 @@ public class BasicOrderedConstraintQuery extends BasicQuery {
 
     @Override
     public byte[] toBinary() {
-      final byte[] indexNameBinary = StringUtils.stringToBinary(indexName);
-
+      final byte[] indexNameBinary;
+      if (indexName != null) {
+        indexNameBinary = StringUtils.stringToBinary(indexName);
+      } else {
+        indexNameBinary = new byte[0];
+      }
       final ByteBuffer buf =
           ByteBuffer.allocate(
               VarintUtils.unsignedIntByteLength(rangesPerDimension.length)
@@ -58,17 +70,21 @@ public class BasicOrderedConstraintQuery extends BasicQuery {
       for (int i = 0; i < rangesPerDimension.length; i++) {
         rangesPerDimension[i] = Range.between(buf.getDouble(), buf.getDouble());
       }
-      buf.get(indexNameBinary);
-      indexName = StringUtils.stringFromBinary(indexNameBinary);
+      if (indexNameBinary.length > 0) {
+        buf.get(indexNameBinary);
+        indexName = StringUtils.stringFromBinary(indexNameBinary);
+      } else {
+        indexName = null;
+      }
     }
 
     @Override
     public List<MultiDimensionalNumericData> getIndexConstraints(final Index index) {
-      if (indexName.equals(index.getName())
+      if (((indexName == null) || indexName.equals(index.getName()))
           && (index.getIndexStrategy().getOrderedDimensionDefinitions().length == rangesPerDimension.length)) {
         return Collections.singletonList(getIndexConstraints());
       }
-      return Collections.EMPTY_LIST;
+      return Collections.emptyList();
     }
 
     protected MultiDimensionalNumericData getIndexConstraints() {
@@ -80,12 +96,16 @@ public class BasicOrderedConstraintQuery extends BasicQuery {
 
     @Override
     public List<QueryFilter> createFilters(final Index index, final BasicQuery parentQuery) {
-      return Collections.singletonList(
+      final QueryFilter filter =
           parentQuery.createQueryFilter(
               getIndexConstraints(),
               index.getIndexModel().getDimensions(),
               new NumericDimensionField[0],
-              index));
+              index);
+      if (filter != null) {
+        return Collections.singletonList(filter);
+      }
+      return Collections.emptyList();
     }
 
     @Override
