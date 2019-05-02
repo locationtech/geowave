@@ -19,7 +19,7 @@ public class IndexOnlySpatialQuery extends ExplicitSpatialQuery {
     super();
   }
 
-  public IndexOnlySpatialQuery(final Constraints constraints, final Geometry queryGeometry) {
+  public IndexOnlySpatialQuery(final ConstraintsByClass constraints, final Geometry queryGeometry) {
     super(constraints, queryGeometry);
   }
 

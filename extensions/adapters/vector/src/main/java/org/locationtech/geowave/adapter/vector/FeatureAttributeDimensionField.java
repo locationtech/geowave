@@ -23,10 +23,17 @@ public class FeatureAttributeDimensionField extends
     super();
   }
 
+  public FeatureAttributeDimensionField(final AttributeDescriptor attributeDescriptor) {
+    this(attributeDescriptor, null);
+    attributeName = attributeDescriptor.getLocalName();
+  }
+
   public FeatureAttributeDimensionField(
       final AttributeDescriptor attributeDescriptor,
       final Range<Double> range) {
-    super(new BasicDimensionDefinition(range.getMinimum(), range.getMaximum()));
+    super(
+        range == null ? null
+            : new BasicDimensionDefinition(range.getMinimum(), range.getMaximum()));
     writer =
         new FeatureAttributeWriterWrapper(
             (FieldWriter) FieldUtils.getDefaultWriterForClass(
@@ -60,7 +67,12 @@ public class FeatureAttributeDimensionField extends
 
   @Override
   public byte[] toBinary() {
-    final byte[] bytes = baseDefinition.toBinary();
+    final byte[] bytes;
+    if (baseDefinition != null) {
+      bytes = baseDefinition.toBinary();
+    } else {
+      bytes = new byte[0];
+    }
     final byte[] strBytes = StringUtils.stringToBinary(attributeName);
     final ByteBuffer buf =
         ByteBuffer.allocate(
@@ -80,9 +92,13 @@ public class FeatureAttributeDimensionField extends
     attributeName = StringUtils.stringFromBinary(strBytes);
     final byte[] rest =
         new byte[bytes.length - VarintUtils.unsignedIntByteLength(attrNameLength) - attrNameLength];
-    buf.get(rest);
-    baseDefinition = new BasicDimensionDefinition();
-    baseDefinition.fromBinary(rest);
+    if (rest.length > 0) {
+      buf.get(rest);
+      baseDefinition = new BasicDimensionDefinition();
+      baseDefinition.fromBinary(rest);
+    } else {
+      baseDefinition = null;
+    }
   }
 
   private static class FeatureAttributeReaderWrapper implements

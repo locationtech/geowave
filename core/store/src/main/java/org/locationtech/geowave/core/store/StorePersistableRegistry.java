@@ -38,7 +38,11 @@ import org.locationtech.geowave.core.store.index.text.TextIndexStrategy;
 import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.DataStatisticsAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.MergingAggregation;
+import org.locationtech.geowave.core.store.query.constraints.BasicOrderedConstraintQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicOrderedConstraintQuery.OrderedConstraints;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeQuery;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.DataIdRangeQuery;
@@ -92,7 +96,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 225, TemporalIndexStrategy::new),
         new PersistableIdAndConstructor((short) 226, TextExactMatchFilter::new),
         new PersistableIdAndConstructor((short) 227, TextIndexStrategy::new),
-        new PersistableIdAndConstructor((short) 228, BasicQuery::new),
+        new PersistableIdAndConstructor((short) 228, BasicQueryByClass::new),
         new PersistableIdAndConstructor((short) 229, CoordinateRangeQuery::new),
         new PersistableIdAndConstructor((short) 230, CoordinateRangeQueryFilter::new),
         new PersistableIdAndConstructor((short) 231, CommonQueryOptions::new),
@@ -120,6 +124,10 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 253, EverythingQuery::new),
         new PersistableIdAndConstructor((short) 254, SimpleRowTransform::new),
         new PersistableIdAndConstructor((short) 255, MergingAggregation::new),
-        new PersistableIdAndConstructor((short) 256, SimpleNumericQuery::new),};
+        new PersistableIdAndConstructor((short) 256, SimpleNumericQuery::new),
+        new PersistableIdAndConstructor((short) 257, ConstraintsByClass::new),
+        new PersistableIdAndConstructor((short) 258, OrderedConstraints::new),
+        new PersistableIdAndConstructor((short) 259, BasicOrderedConstraintQuery::new),
+        new PersistableIdAndConstructor((short) 260, BasicQuery::new)};
   }
 }

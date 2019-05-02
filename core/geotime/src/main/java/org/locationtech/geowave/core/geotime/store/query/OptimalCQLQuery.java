@@ -29,8 +29,8 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.locationtech.jts.geom.Geometry;
@@ -53,7 +53,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
       final String cql,
       final GeotoolsFeatureDataAdapter adapter,
       final Index index,
-      final BasicQuery baseQuery) throws CQLException {
+      final BasicQueryByClass baseQuery) throws CQLException {
     return createOptimalQuery(cql, adapter, CompareOperation.INTERSECTS, index, baseQuery);
   }
 
@@ -62,7 +62,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
       final GeotoolsFeatureDataAdapter adapter,
       final CompareOperation geoCompareOp,
       final Index index,
-      final BasicQuery baseQuery) throws CQLException {
+      final BasicQueryByClass baseQuery) throws CQLException {
     final Filter cqlFilter = CQL.toFilter(cql);
     return createOptimalQuery(cqlFilter, adapter, geoCompareOp, index, baseQuery);
   }
@@ -78,7 +78,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
       final Filter cqlFilter,
       final GeotoolsFeatureDataAdapter adapter,
       final Index index,
-      final BasicQuery baseQuery) {
+      final BasicQueryByClass baseQuery) {
     return createOptimalQuery(cqlFilter, adapter, CompareOperation.INTERSECTS, index, baseQuery);
   }
 
@@ -87,7 +87,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
       final GeotoolsFeatureDataAdapter adapter,
       final CompareOperation geoCompareOp,
       final Index index,
-      BasicQuery baseQuery) {
+      BasicQueryByClass baseQuery) {
     final ExtractAttributesFilter attributesVisitor = new ExtractAttributesFilter();
 
     final Object obj = cqlFilter.accept(attributesVisitor, null);
@@ -138,7 +138,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
         final GeoConstraintsWrapper geoConstraints =
             GeometryUtils.basicGeoConstraintsWrapperFromGeometry(geometry);
 
-        Constraints constraints = geoConstraints.getConstraints();
+        ConstraintsByClass constraints = geoConstraints.getConstraints();
         final CompareOperation extractedCompareOp = geometryAndCompareOp.getCompareOp();
         if ((timeConstraintSet != null) && !timeConstraintSet.isEmpty()) {
           // determine which time constraints are associated with an
@@ -149,7 +149,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
                   adapter.getTimeDescriptors(),
                   timeConstraintSet);
           // convert to constraints
-          final Constraints timeConstraints =
+          final ConstraintsByClass timeConstraints =
               ExplicitSpatialTemporalQuery.createConstraints(temporalConstraints, false);
           constraints = geoConstraints.getConstraints().merge(timeConstraints);
         }

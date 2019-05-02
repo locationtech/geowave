@@ -34,10 +34,10 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.NullIndex;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class ChooseLocalityPreservingQueryStrategyTest {
@@ -70,7 +70,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(HOUSE, HOUSE, HOUR)),
+            new BasicQueryByClass(createConstraints(HOUSE, HOUSE, HOUR)),
             strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
@@ -85,7 +85,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(HOUSE, HOUSE, DAY)),
+            new BasicQueryByClass(createConstraints(HOUSE, HOUSE, DAY)),
             strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(3).getName(), it.next().getName());
@@ -100,7 +100,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(HOUSE, HOUSE, WEEK)),
+            new BasicQueryByClass(createConstraints(HOUSE, HOUSE, WEEK)),
             strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(3).getName(), it.next().getName());
@@ -115,7 +115,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(BLOCK, BLOCK, HOUR)),
+            new BasicQueryByClass(createConstraints(BLOCK, BLOCK, HOUR)),
             strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
@@ -130,7 +130,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(BLOCK, BLOCK, DAY)),
+            new BasicQueryByClass(createConstraints(BLOCK, BLOCK, DAY)),
             strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(3).getName(), it.next().getName());
@@ -145,7 +145,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(BLOCK, BLOCK, WEEK)),
+            new BasicQueryByClass(createConstraints(BLOCK, BLOCK, WEEK)),
             strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(3).getName(), it.next().getName());
@@ -160,7 +160,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(CITY, CITY, HOUR)),
+            new BasicQueryByClass(createConstraints(CITY, CITY, HOUR)),
             strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
@@ -175,7 +175,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(CITY, CITY, DAY)),
+            new BasicQueryByClass(createConstraints(CITY, CITY, DAY)),
             strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(1).getName(), it.next().getName());
@@ -190,7 +190,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
     final Iterator<Index> it =
         getIndices(
             new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
-            new BasicQuery(createConstraints(CITY, CITY, WEEK)),
+            new BasicQueryByClass(createConstraints(CITY, CITY, WEEK)),
             strategy);
     assertTrue(it.hasNext());
     assertEquals(indices.get(3).getName(), it.next().getName());
@@ -199,7 +199,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
 
   public Iterator<Index> getIndices(
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
-      final BasicQuery query,
+      final BasicQueryByClass query,
       final ChooseLocalityPreservingQueryStrategy strategy) {
     return strategy.getIndices(
         stats,
@@ -232,7 +232,10 @@ public class ChooseLocalityPreservingQueryStrategyTest {
     }
   }
 
-  private Constraints createConstraints(final double lat, final double lon, final double time) {
+  private ConstraintsByClass createConstraints(
+      final double lat,
+      final double lon,
+      final double time) {
     final ConstraintSet cs1 = new ConstraintSet();
     cs1.addConstraint(
         LatitudeDefinition.class,
@@ -247,6 +250,6 @@ public class ChooseLocalityPreservingQueryStrategyTest {
         TimeDefinition.class,
         new ConstraintData(new ConstrainedIndexValue(0, time), true));
 
-    return new Constraints(Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
+    return new ConstraintsByClass(Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
   }
 }

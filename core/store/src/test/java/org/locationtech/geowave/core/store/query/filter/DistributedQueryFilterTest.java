@@ -19,7 +19,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.query.BasicQueryTest;
+import org.locationtech.geowave.core.store.query.BasicQueryByClassTest;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 
 public class DistributedQueryFilterTest {
@@ -30,7 +30,7 @@ public class DistributedQueryFilterTest {
     filters.add(
         new BasicQueryFilter(
             new BasicNumericDataset(new NumericData[] {new NumericValue(0.4)}),
-            new NumericDimensionField[] {new BasicQueryTest.ExampleDimensionOne()},
+            new NumericDimensionField[] {new BasicQueryByClassTest.ExampleDimensionOne()},
             BasicQueryCompareOperation.CONTAINS));
     filters.add(new DedupeFilter());
     FilterList list = new FilterList(false, filters);
@@ -47,7 +47,7 @@ public class DistributedQueryFilterTest {
     filters.add(
         new BasicQueryFilter(
             new BasicNumericDataset(new NumericData[] {new NumericValue(0.5)}),
-            new NumericDimensionField[] {new BasicQueryTest.ExampleDimensionOne()},
+            new NumericDimensionField[] {new BasicQueryByClassTest.ExampleDimensionOne()},
             BasicQueryCompareOperation.INTERSECTS));
     filters.add(new DedupeFilter());
     list = new FilterList(true, filters);

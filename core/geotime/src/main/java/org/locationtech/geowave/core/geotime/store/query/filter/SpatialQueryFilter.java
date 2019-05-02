@@ -363,8 +363,8 @@ public class SpatialQueryFilter extends BasicQueryFilter {
    */
   public static class GeometryImage {
 
-    byte[] geometryBinary;
-    PreparedGeometry preparedGeometry = null;
+    public byte[] geometryBinary;
+    public PreparedGeometry preparedGeometry = null;
 
     public GeometryImage(final PreparedGeometry preparedGeometry) {
       super();

@@ -123,7 +123,7 @@ public class ExplicitSpatialTemporalQuery extends ExplicitSpatialQuery {
             isDefault));
   }
 
-  public static Constraints createConstraints(
+  public static ConstraintsByClass createConstraints(
       final TemporalConstraints temporalConstraints,
       final boolean isDefault) {
     final List<ConstraintSet> constraints = new ArrayList<>();
@@ -135,10 +135,12 @@ public class ExplicitSpatialTemporalQuery extends ExplicitSpatialQuery {
                   new NumericRange(range.getStartTime().getTime(), range.getEndTime().getTime()),
                   isDefault)));
     }
-    return new Constraints(constraints);
+    return new ConstraintsByClass(constraints);
   }
 
-  public static Constraints createConstraints(final Interval[] intervals, final boolean isDefault) {
+  public static ConstraintsByClass createConstraints(
+      final Interval[] intervals,
+      final boolean isDefault) {
     final List<ConstraintSet> constraints = new ArrayList<>();
     for (final Interval range : intervals) {
       constraints.add(
@@ -152,7 +154,7 @@ public class ExplicitSpatialTemporalQuery extends ExplicitSpatialQuery {
                       Math.max(range.getEnd().toEpochMilli() - 1, range.getStart().toEpochMilli())),
                   isDefault)));
     }
-    return new Constraints(constraints);
+    return new ConstraintsByClass(constraints);
   }
 
   /**
@@ -164,11 +166,12 @@ public class ExplicitSpatialTemporalQuery extends ExplicitSpatialQuery {
    * @param queryGeometry
    * @return
    */
-  private static Constraints createSpatialTemporalConstraints(
+  private static ConstraintsByClass createSpatialTemporalConstraints(
       final TemporalConstraints temporalConstraints,
       final Geometry queryGeometry) {
-    final Constraints geoConstraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
-    final Constraints timeConstraints = createConstraints(temporalConstraints, false);
+    final ConstraintsByClass geoConstraints =
+        GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+    final ConstraintsByClass timeConstraints = createConstraints(temporalConstraints, false);
     return geoConstraints.merge(timeConstraints);
   }
 
@@ -181,11 +184,12 @@ public class ExplicitSpatialTemporalQuery extends ExplicitSpatialQuery {
    * @param queryGeometry
    * @return
    */
-  private static Constraints createSpatialTemporalConstraints(
+  private static ConstraintsByClass createSpatialTemporalConstraints(
       final Interval[] intervals,
       final Geometry queryGeometry) {
-    final Constraints geoConstraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
-    final Constraints timeConstraints = createConstraints(intervals, false);
+    final ConstraintsByClass geoConstraints =
+        GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+    final ConstraintsByClass timeConstraints = createConstraints(intervals, false);
     return geoConstraints.merge(timeConstraints);
   }
 
@@ -197,13 +201,14 @@ public class ExplicitSpatialTemporalQuery extends ExplicitSpatialQuery {
    * @param queryGeometry
    * @return
    */
-  private static Constraints createSpatialTemporalConstraints(
+  private static ConstraintsByClass createSpatialTemporalConstraints(
       final Date startTime,
       final Date endTime,
       final Geometry queryGeometry) {
-    final Constraints geoConstraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+    final ConstraintsByClass geoConstraints =
+        GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
     return geoConstraints.merge(
-        new Constraints(
+        new ConstraintsByClass(
             new ConstraintSet(
                 TimeDefinition.class,
                 new ConstraintData(

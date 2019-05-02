@@ -41,10 +41,10 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.NullIndex;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.opengis.feature.simple.SimpleFeature;
 import com.beust.jcommander.internal.Maps;
 
@@ -91,10 +91,10 @@ public class ChooseBestMatchIndexQueryStrategyTest {
         TimeDefinition.class,
         new ConstraintData(new ConstrainedIndexValue(0.1, 0.2), true));
 
-    final Constraints constraints =
-        new Constraints(Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
+    final ConstraintsByClass constraints =
+        new ConstraintsByClass(Arrays.asList(cs2a)).merge(Collections.singletonList(cs1));
 
-    final BasicQuery query = new BasicQuery(constraints);
+    final BasicQueryByClass query = new BasicQueryByClass(constraints);
 
     final NumericIndexStrategy temporalIndexStrategy =
         new SpatialTemporalIndexBuilder().createIndex().getIndexStrategy();
@@ -159,7 +159,7 @@ public class ChooseBestMatchIndexQueryStrategyTest {
 
   public Iterator<Index> getIndices(
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
-      final BasicQuery query,
+      final BasicQueryByClass query,
       final ChooseBestMatchIndexQueryStrategy strategy) {
     return strategy.getIndices(
         stats,

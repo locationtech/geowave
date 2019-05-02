@@ -26,7 +26,7 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.jts.geom.Geometry;
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * The Spatial Query class represents a query in two dimensions. The constraint that is applied
  * represents an intersection operation on the query geometry.
  */
-public class ExplicitSpatialQuery extends BasicQuery {
+public class ExplicitSpatialQuery extends BasicQueryByClass {
   private static final Logger LOGGER = LoggerFactory.getLogger(ExplicitSpatialQuery.class);
 
   private static class CrsCache {
@@ -75,12 +75,12 @@ public class ExplicitSpatialQuery extends BasicQuery {
     this(GeometryUtils.basicConstraintsFromGeometry(queryGeometry), queryGeometry);
   }
 
-  public ExplicitSpatialQuery(final Constraints constraints, final Geometry queryGeometry) {
+  public ExplicitSpatialQuery(final ConstraintsByClass constraints, final Geometry queryGeometry) {
     this(constraints, queryGeometry, (String) null);
   }
 
   public ExplicitSpatialQuery(
-      final Constraints constraints,
+      final ConstraintsByClass constraints,
       final Geometry queryGeometry,
       final String crsCode) {
     this(
@@ -121,7 +121,7 @@ public class ExplicitSpatialQuery extends BasicQuery {
    * @param compareOp predicate associated query geometry
    */
   public ExplicitSpatialQuery(
-      final Constraints constraints,
+      final ConstraintsByClass constraints,
       final Geometry queryGeometry,
       final CompareOperation compareOp) {
     this(constraints, queryGeometry, compareOp, BasicQueryCompareOperation.INTERSECTS);
@@ -149,7 +149,7 @@ public class ExplicitSpatialQuery extends BasicQuery {
    * @param nonSpatialCompareOp predicate associated non-spatial fields (i.e Time)
    */
   public ExplicitSpatialQuery(
-      final Constraints constraints,
+      final ConstraintsByClass constraints,
       final Geometry queryGeometry,
       final CompareOperation compareOp,
       final BasicQueryCompareOperation nonSpatialCompareOp) {
@@ -162,7 +162,7 @@ public class ExplicitSpatialQuery extends BasicQuery {
   }
 
   public ExplicitSpatialQuery(
-      final Constraints constraints,
+      final ConstraintsByClass constraints,
       final Geometry queryGeometry,
       final String crsCode,
       final CompareOperation compareOp,
@@ -281,8 +281,7 @@ public class ExplicitSpatialQuery extends BasicQuery {
   private static List<MultiDimensionalNumericData> indexConstraintsFromGeometry(
       final Geometry geom,
       final Index index) {
-    return GeometryUtils.basicConstraintsFromGeometry(geom).getIndexConstraints(
-        index.getIndexStrategy());
+    return GeometryUtils.basicConstraintsFromGeometry(geom).getIndexConstraints(index);
   }
 
   private static String getCrs(final CommonIndexModel indexModel) {

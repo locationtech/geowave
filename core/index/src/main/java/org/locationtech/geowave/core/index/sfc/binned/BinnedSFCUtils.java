@@ -37,7 +37,7 @@ public class BinnedSFCUtils {
       final List<BinnedNumericDataset> binnedQueries,
       final SpaceFillingCurve sfc,
       final int maxRanges,
-      final byte tier) {
+      final Byte tier) {
     final List<SinglePartitionQueryRanges> queryRanges = new ArrayList<>();
 
     int maxRangeDecompositionPerBin = maxRanges;
@@ -48,10 +48,10 @@ public class BinnedSFCUtils {
     for (final BinnedNumericDataset binnedQuery : binnedQueries) {
       final RangeDecomposition rangeDecomp =
           sfc.decomposeRange(binnedQuery, true, maxRangeDecompositionPerBin);
-      final byte[] tierAndBinId = ByteArrayUtils.combineArrays(new byte[] {tier
+      final byte[] tierAndBinId = tier != null ? ByteArrayUtils.combineArrays(new byte[] {tier
           // we're assuming tiers only go to 127 (the max byte
           // value)
-      }, binnedQuery.getBinId());
+      }, binnedQuery.getBinId()) : binnedQuery.getBinId();
 
       queryRanges.add(
           new SinglePartitionQueryRanges(tierAndBinId, Arrays.asList(rangeDecomp.getRanges())));
@@ -63,7 +63,7 @@ public class BinnedSFCUtils {
       final BinRange[][] binRangesPerDimension,
       final SpaceFillingCurve sfc,
       final int numDimensions,
-      final byte tier) {
+      final Byte tier) {
     final CoordinateRange[][] coordinateRangesPerDimension = new CoordinateRange[numDimensions][];
     for (int d = 0; d < coordinateRangesPerDimension.length; d++) {
       coordinateRangesPerDimension[d] = new CoordinateRange[binRangesPerDimension[d].length];
@@ -77,17 +77,22 @@ public class BinnedSFCUtils {
             new CoordinateRange(range[0], range[1], binRangesPerDimension[d][i].getBinId());
       }
     }
+    if (tier == null) {
+      return new MultiDimensionalCoordinateRanges(new byte[0], coordinateRangesPerDimension);
+    }
     return new MultiDimensionalCoordinateRanges(new byte[] {tier}, coordinateRangesPerDimension);
   }
 
   public static SinglePartitionInsertionIds getSingleBinnedInsertionId(
       final BigInteger rowCount,
-      final byte multiDimensionalId,
+      final Byte multiDimensionalId,
       final BinnedNumericDataset index,
       final SpaceFillingCurve sfc) {
     if (rowCount.equals(BigInteger.ONE)) {
       final byte[] tierAndBinId =
-          ByteArrayUtils.combineArrays(new byte[] {multiDimensionalId}, index.getBinId());
+          multiDimensionalId != null
+              ? ByteArrayUtils.combineArrays(new byte[] {multiDimensionalId}, index.getBinId())
+              : index.getBinId();
       final double[] minValues = index.getMinValuesPerDimension();
       final double[] maxValues = index.getMaxValuesPerDimension();
       byte[] singleId = null;
