@@ -10,7 +10,7 @@ class SimpleFeature(PyGwJavaWrapper):
         assert isinstance(type_, SimpleFeatureType)
         self.type_ = type_
         self.id = id
-        super().__init__(config.GATEWAY, java_ref)
+        super().__init__(self,config.GATEWAY, java_ref)
 
 class SimpleFeatureBuilder(PyGwJavaWrapper):
     """

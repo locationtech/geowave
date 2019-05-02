@@ -141,6 +141,17 @@ class DataStore(PyGwJavaWrapper):
         return self._java_ref.deleteAll()
 
     def create_writer(self, type_adapter_name):
+        """
+        Returns an index writer to perform batched write operations for the given data type name.
+        
+        Assumes the type has already been used previously or added using `add_type` and assumes one or
+        more indices have been provided for this type.
+
+        Args:
+            type_name (str) : the type name
+        Returns:
+            a pygw.base_models.Writer, which can be used to write entries into this datastore of the given type 
+        """    
         j_writer = self._java_ref.createWriter(type_adapter_name)
 
         if j_writer is None:
@@ -148,17 +159,9 @@ class DataStore(PyGwJavaWrapper):
 
         return Writer(self._gateway, j_writer)
 
-
-class DataTypeAdapter(PyGwJavaWrapper):
-    """Wrapper to expose all of DataTypeAdapter API"""
-
     # TODO: Implement API
     def get_type_name(self):
         return self._java_ref.getTypeName()
-
-
-class Index(PyGwJavaWrapper):
-    """Wrapper to expose all of Index API"""
 
     def get_name(self):
         return self._java_ref.getName()
@@ -181,23 +184,6 @@ class Index(PyGwJavaWrapper):
                 j_index_arr[idx] = py_obj._java_ref
     
         self._java_ref.addType(type_adapter._java_ref,j_index_arr)
-
-
-    def create_writer(self, type_name):
-        """
-        Returns an index writer to perform batched write operations for the given data type name.
-        
-        Assumes the type has already been used previously or added using `add_type` and assumes one or
-        more indices have been provided for this type.
-
-        Args:
-            type_name (str) : the type name
-        Returns:
-            a pygw.base_models.Writer, which can be used to write entries into this datastore of the given type 
-        """    
-        j_writer = self._java_ref.createWriter(type_name)
-        return Writer(self._gateway, j_writer)
-
 
     def ingest(self, url, *indices, ingest_options=None):
         """

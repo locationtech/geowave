@@ -15,7 +15,7 @@ class GlobalConfigurations:
         self.MODULE__core_store = self.GATEWAY.jvm.org.locationtech.geowave.core.store.api
 
         ### Reflection utility ###
-        self.reflection_util= config.GATEWAY.jvm.py4j.reflection.ReflectionUtil
+        self.reflection_util= self.GATEWAY.jvm.py4j.reflection.ReflectionUtil
 
         ### Import Java Modules and Define Names here for easier access: ###
 
@@ -32,7 +32,7 @@ class GlobalConfigurations:
         self.MODULE__geotime_ingest = self.GATEWAY.jvm.org.locationtech.geowave.core.geotime.ingest
 
         # Geotools Feature Simple
-        java_import(config.GATEWAY.jvm, "org.geotools.feature.simple")
+        java_import(self.GATEWAY.jvm, "org.geotools.feature.simple")
         self.MODULE__feature_simple = self.GATEWAY.jvm.org.geotools.feature.simple
 
         # Geotools Feature
