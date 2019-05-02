@@ -482,6 +482,10 @@
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SFCDimensionDefinition.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html#getDimensionDefinition--">getDimensionDefinition</a></span>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">BasicSFCIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/BasicSFCIndexStrategy.html#getOrderedDimensionDefinitions--">getOrderedDimensionDefinitions</a></span>()</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
@@ -491,6 +495,10 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/BasicSFCIndexStrategy.html#BasicSFCIndexStrategy-org.locationtech.geowave.core.index.sfc.SpaceFillingCurve-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition:A-">BasicSFCIndexStrategy</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in org.locationtech.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc,
+                     <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html#SFCDimensionDefinition-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition-int-">SFCDimensionDefinition</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;dimensionDefinition,
                       int&nbsp;bitsOfPrecision)</code>&nbsp;</td>
 </tr>
@@ -832,8 +840,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintData</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BasicQuery.ConstraintSet.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html#constraintsPerTypeOfDimensionDefinition">constraintsPerTypeOfDimensionDefinition</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintData</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BasicQueryByClass.ConstraintSet.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintSet.html#constraintsPerTypeOfDimensionDefinition">constraintsPerTypeOfDimensionDefinition</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -846,8 +854,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">BasicQuery.ConstraintSet.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html#addConstraint-java.lang.Class-org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData-">addConstraint</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;&nbsp;dimDefinition,
-             <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintData</a>&nbsp;constraintData)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">BasicQueryByClass.ConstraintSet.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintSet.html#addConstraint-java.lang.Class-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData-">addConstraint</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;&nbsp;dimDefinition,
+             <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintData</a>&nbsp;constraintData)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -858,11 +866,11 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html#ConstraintSet-java.lang.Class-org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData-">ConstraintSet</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;&nbsp;dimDefinition,
-             <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintData</a>&nbsp;constraintData)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintSet.html#ConstraintSet-java.lang.Class-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData-">ConstraintSet</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;&nbsp;dimDefinition,
+             <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintData</a>&nbsp;constraintData)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html#ConstraintSet-java.util.Map-">ConstraintSet</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintData</a>&gt;&nbsp;constraintsPerTypeOfDimensionDefinition)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintSet.html#ConstraintSet-java.util.Map-">ConstraintSet</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintData</a>&gt;&nbsp;constraintsPerTypeOfDimensionDefinition)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

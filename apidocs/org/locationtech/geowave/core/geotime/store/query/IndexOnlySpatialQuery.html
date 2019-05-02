@@ -74,8 +74,8 @@ var activeTableTab = "activeTableTab";
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -103,10 +103,15 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">org.locationtech.geowave.core.store.query.constraints.BasicQuery</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass</a></li>
+<li>
+<ul class="inheritance">
 <li><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery</a></li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -138,11 +143,11 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 </a>
 <h3>Nested Class Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">
+<li class="blockList"><a name="nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass">
 <!--   -->
 </a>
-<h3>Nested classes/interfaces inherited from class&nbsp;org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintData</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.ConstraintSet</a></code></li>
+<h3>Nested classes/interfaces inherited from class&nbsp;org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintData.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintData</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintsByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintsByClass</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintSet.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintSet</a></code></li>
 </ul>
 </li>
 </ul>
@@ -153,11 +158,18 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 </a>
 <h3>Field Summary</h3>
 <ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html#exact">exact</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#exact">exact</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#constraints">constraints</a></code></li>
 </ul>
 </li>
 </ul>
@@ -176,7 +188,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/IndexOnlySpatialQuery.html#IndexOnlySpatialQuery--">IndexOnlySpatialQuery</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/IndexOnlySpatialQuery.html#IndexOnlySpatialQuery-org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints-org.locationtech.jts.geom.Geometry-">IndexOnlySpatialQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;constraints,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/IndexOnlySpatialQuery.html#IndexOnlySpatialQuery-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass-org.locationtech.jts.geom.Geometry-">IndexOnlySpatialQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintsByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintsByClass</a>&nbsp;constraints,
                      org.locationtech.jts.geom.Geometry&nbsp;queryGeometry)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -217,11 +229,18 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <code><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#getIndexConstraints-org.locationtech.geowave.core.store.api.Index-">getIndexConstraints</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#getQueryGeometry--">getQueryGeometry</a>, <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#toBinary--">toBinary</a></code></li>
 </ul>
 <ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html#isExact--">isExact</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html#setExact-boolean-">setExact</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.query.constraints.<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#createFilters-org.locationtech.geowave.core.store.api.Index-">createFilters</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#isExact--">isExact</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#setExact-boolean-">setExact</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#createFilters-org.locationtech.geowave.core.store.api.Index-">createFilters</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -253,13 +272,13 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <pre>public&nbsp;IndexOnlySpatialQuery()</pre>
 </li>
 </ul>
-<a name="IndexOnlySpatialQuery-org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints-org.locationtech.jts.geom.Geometry-">
+<a name="IndexOnlySpatialQuery-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass-org.locationtech.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>IndexOnlySpatialQuery</h4>
-<pre>public&nbsp;IndexOnlySpatialQuery(<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;constraints,
+<pre>public&nbsp;IndexOnlySpatialQuery(<a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintsByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintsByClass</a>&nbsp;constraints,
                              org.locationtech.jts.geom.Geometry&nbsp;queryGeometry)</pre>
 </li>
 </ul>
@@ -359,8 +378,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/geotime/stor
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">Nested</a>&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQuery">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#nested.classes.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

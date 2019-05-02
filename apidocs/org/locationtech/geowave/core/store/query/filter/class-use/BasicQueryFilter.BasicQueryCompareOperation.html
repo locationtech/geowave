@@ -118,7 +118,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#ExplicitSpatialQuery-org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">ExplicitSpatialQuery</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;constraints,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#ExplicitSpatialQuery-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">ExplicitSpatialQuery</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintsByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintsByClass</a>&nbsp;constraints,
                     org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
                     <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
                     <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;nonSpatialCompareOp)</code>
@@ -126,7 +126,7 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#ExplicitSpatialQuery-org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints-org.locationtech.jts.geom.Geometry-java.lang.String-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">ExplicitSpatialQuery</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;constraints,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/ExplicitSpatialQuery.html#ExplicitSpatialQuery-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass-org.locationtech.jts.geom.Geometry-java.lang.String-org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">ExplicitSpatialQuery</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintsByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintsByClass</a>&nbsp;constraints,
                     org.locationtech.jts.geom.Geometry&nbsp;queryGeometry,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode,
                     <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/SpatialQueryFilter.CompareOperation.html" title="enum in org.locationtech.geowave.core.geotime.store.query.filter">SpatialQueryFilter.CompareOperation</a>&nbsp;compareOp,
@@ -182,7 +182,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#constraints-org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">constraints</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;constraints,
+<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#constraints-org.locationtech.geowave.core.store.query.constraints.Constraints-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">constraints</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/Constraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">Constraints</a>&nbsp;constraints,
            <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;compareOp)</code>
 <div class="block">constrain generally by constraints with a compare operation</div>
 </td>
@@ -194,6 +194,19 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a> in <a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a> declared as <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BasicQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#compareOp">compareOp</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a> with parameters of type <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -203,7 +216,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#constraints-org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">constraints</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;constraints,
+<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#constraints-org.locationtech.geowave.core.store.query.constraints.Constraints-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">constraints</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/Constraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">Constraints</a>&nbsp;constraints,
            <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -215,8 +228,16 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#BasicQuery-org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">BasicQuery</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.Constraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery.Constraints</a>&nbsp;constraints,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicOrderedConstraintQuery.html#BasicOrderedConstraintQuery-org.locationtech.geowave.core.store.query.constraints.BasicOrderedConstraintQuery.OrderedConstraints-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">BasicOrderedConstraintQuery</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicOrderedConstraintQuery.OrderedConstraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicOrderedConstraintQuery.OrderedConstraints</a>&nbsp;constraints,
+                           <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#BasicQuery-org.locationtech.geowave.core.store.query.constraints.Constraints-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">BasicQuery</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/Constraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">Constraints</a>&nbsp;constraints,
           <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html#BasicQueryByClass-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass-org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation-">BasicQueryByClass</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.ConstraintsByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass.ConstraintsByClass</a>&nbsp;constraints,
+                 <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.BasicQueryCompareOperation.html" title="enum in org.locationtech.geowave.core.store.query.filter">BasicQueryFilter.BasicQueryCompareOperation</a>&nbsp;compareOp)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
