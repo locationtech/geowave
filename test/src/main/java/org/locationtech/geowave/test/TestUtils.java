@@ -171,6 +171,11 @@ public class TestUtils {
     return VersionUtil.compareVersions(VersionInfo.getVersion(), "2.2.0") >= 0;
   }
 
+  public static boolean isOracleJDK() {
+    return System.getProperty("java.vm.name") != null
+        && System.getProperty("java.vm.name").contains("HotSpot");
+  }
+
   public static void testLocalIngest(
       final DataStorePluginOptions dataStore,
       final DimensionalityType dimensionalityType,

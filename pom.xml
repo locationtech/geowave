@@ -48,6 +48,8 @@
 		<cassandra.version>3.11.3</cassandra.version>
 		<redisson.version>3.8.2</redisson.version>
 		<rocksdb.version>5.15.10</rocksdb.version>
+		<cassandraclient.version>3.5.1</cassandraclient.version>
+		<kuduclient.version>1.8.0</kuduclient.version>
 		<grpc.version>1.13.1</grpc.version>
 		<netty.version>4.1.25.Final</netty.version>
 		<protobuf.version>3.5.1</protobuf.version>
