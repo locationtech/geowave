@@ -8,7 +8,7 @@ class GlobalConfigurations:
                 self.GATEWAY = JavaGateway(gateway_parameters=GatewayParameters(auto_field=True))
 
                 ### Reflection utility ###
-                self.reflection_util= config.GATEWAY.jvm.py4j.reflection.ReflectionUtil
+                self.reflection_util= self.GATEWAY.jvm.py4j.reflection.ReflectionUtil
 
                 ### Import Java Modules and Define Names here for easier access: ###
 
