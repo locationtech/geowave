@@ -19,14 +19,22 @@ env:
     - NAME='DynamoDB IT on Latest ASF Versions' MAVEN_PROFILES='dynamodb-it' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Bigtable IT on Latest ASF Versions' MAVEN_PROFILES='bigtable-it' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo Server IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='accumulo-it-server,compatibility' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='HBase Client IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='hbase-it-client,compatibility' BUILD_DOCS=false  IT_ONLY=true	
-#    - NAME='Accumulo Server IT on Latest CDH Versions' MAVEN_PROFILES='accumulo-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='Accumulo Server IT on Latest HDP Versions' MAVEN_PROFILES='accumulo-it-server,hortonworks' BUILD_DOCS=false  IT_ONLY=true 
-#    - NAME='HBase Server IT on Latest CDH Versions'  MAVEN_PROFILES='hbase-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='RockDB IT with Secondary Indexing'  MAVEN_PROFILES='rocksdb-it,secondary-index-it' BUILD_DOCS=false  IT_ONLY=true
+    - NAME='HBase Client IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='hbase-it-client,compatibility' BUILD_DOCS=false  IT_ONLY=true
+    - NAME='Accumulo Server IT on Latest HDP Versions' MAVEN_PROFILES='accumulo-it-server,hortonworks' BUILD_DOCS=false  IT_ONLY=true
+    - NAME='RocksDB IT with Secondary Indexing'  MAVEN_PROFILES='rocksdb-it,secondary-index-it' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Kudu IT on Latest ASF Versions' MAVEN_PROFILES='kudu-it' BUILD_DOCS=false  IT_ONLY=true
   global:
     - secure: C3gdJmFavZxvsRVqCLpRUAaisNV3MhWbSYf4Wjs2SBLC/AIEwN0vDWHOuYiUExuXR1kApBVdNffuCX7bt/5siewHgmiVUGyY1xytxDdv+PAKZihlfYZRGattyg3XUbEFwyjr7c74639Y1w45NPUoBMUT4SKHZkfqD+FDU47OHIM=
+
+# CDH tests only run in the precise environment. It times out on xenial
+matrix:
+  include:
+    - dist: precise
+      jdk: oraclejdk8
+      env: NAME='HBase Server IT on Latest CDH Versions'  MAVEN_PROFILES='hbase-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
+    - dist: precise
+      jdk: oraclejdk8
+      env: NAME='Accumulo Server IT on Latest CDH Versions' MAVEN_PROFILES='accumulo-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
 
 cache:
   directories:
@@ -45,12 +53,14 @@ script:
 before_install:
   # Force an ntp time sync which is required for Kudu to start (ntp is already installed on travis)
   - sudo service ntp stop && sudo ntpd -gq && sudo service ntp start
-  # Remove travis CI jdk 11 from path
-  - rm ${HOME}/.bash_profile.d/travis_jdk.bash
-  - export PATH=${PATH/:\/usr\/local\/lib\/jvm\/openjdk11\/bin/}
-  # Need to manually install jdk 8 since it is not available in Travis anymore
-  - sudo update-java-alternatives -s java-1.8.0-openjdk-amd64
-  - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+  # Remove travis CI jdk 11 from path (automatically included in xenial)
+  - |
+    lsb_release -a | grep "xenial" \
+    && export PATH=${PATH/:\/usr\/local\/lib\/jvm\/openjdk11\/bin/} \
+    && sudo apt-get install openjdk-8-jdk \
+    && sudo update-java-alternatives -s java-1.8.0-openjdk-amd64 \
+    && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 \
+    || true
   # Check that jdk 8 is installed
   - java -version
   # This must match the dev-resources version from the parent pom:
@@ -70,15 +80,12 @@ notifications:
       - https://webhooks.gitter.im/e/1dd2fadd07a92dcdc3d8
 addons:
   apt:
-    sources:
-      - ppa: openjdk-r/ppa
     update: true
     packages:
       - lzop
       - pandoc
       - python-software-properties
       - debconf-utils
-      - openjdk-8-jdk
   coverity_scan:
     project:
       name: locationtech/geowave

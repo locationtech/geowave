@@ -100,7 +100,8 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
   protected DataStorePluginOptions dataStoreOptions;
 
   private static final String CUSTOM_REFERENCE_LANDSAT_IMAGE_PATH =
-      "src/test/resources/landsat/expected_custom.png";
+      TestUtils.isOracleJDK() ? "src/test/resources/landsat/expected_custom_oraclejdk.png"
+          : "src/test/resources/landsat/expected_custom.png";
   private static final int MIN_PATH = 198;
   private static final int MAX_PATH = 199;
   private static final int MIN_ROW = 36;

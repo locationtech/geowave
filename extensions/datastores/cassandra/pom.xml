@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>com.datastax.cassandra</groupId>
 			<artifactId>cassandra-driver-core</artifactId>
-			<version>3.5.1</version>
+			<version>${cassandraclient.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aol.simplereact</groupId>
