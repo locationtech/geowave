@@ -17,6 +17,7 @@ public class RemoteOperationProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
       new Class<?>[] {
           RemoteSection.class,
+          RemoteCopyCommand.class,
           CalculateStatCommand.class,
           ClearCommand.class,
           ListTypesCommand.class,

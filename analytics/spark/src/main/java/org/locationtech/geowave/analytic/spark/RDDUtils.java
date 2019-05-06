@@ -36,6 +36,7 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.operation.predicate.RectangleIntersects;
+import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class RDDUtils {
       SparkContext sc,
       Index index,
       DataStorePluginOptions outputStoreOptions,
-      FeatureDataAdapter adapter,
+      DataTypeAdapter adapter,
       GeoWaveRDD inputRDD) throws IOException {
     if (!inputRDD.isLoaded()) {
       LOGGER.error("Must provide a loaded RDD.");
@@ -69,7 +70,7 @@ public class RDDUtils {
       SparkContext sc,
       Index[] indices,
       DataStorePluginOptions outputStoreOptions,
-      FeatureDataAdapter adapter,
+      DataTypeAdapter adapter,
       GeoWaveRDD inputRDD) throws IOException {
     if (!inputRDD.isLoaded()) {
       LOGGER.error("Must provide a loaded RDD.");
@@ -219,7 +220,37 @@ public class RDDUtils {
             new GeoWaveOutputKey(typeName.value(), indexName.value()),
             feat)).saveAsNewAPIHadoopDataset(job.getConfiguration());
   }
+  private static void writeRasterToGeoWave(
+      SparkContext sc,
+      Index index,
+      DataStorePluginOptions outputStoreOptions,
+      DataTypeAdapter adapter,
+      JavaRDD<GridCoverage> inputRDD) throws IOException {
 
+    // setup the configuration and the output format
+    Configuration conf = new org.apache.hadoop.conf.Configuration(sc.hadoopConfiguration());
+
+    GeoWaveOutputFormat.setStoreOptions(conf, outputStoreOptions);
+    GeoWaveOutputFormat.addIndex(conf, index);
+    GeoWaveOutputFormat.addDataAdapter(conf, adapter);
+
+    // create the job
+    Job job = new Job(conf);
+    job.setOutputKeyClass(GeoWaveOutputKey.class);
+    job.setOutputValueClass(SimpleFeature.class);
+    job.setOutputFormatClass(GeoWaveOutputFormat.class);
+
+    // broadcast string names
+    ClassTag<String> stringTag = scala.reflect.ClassTag$.MODULE$.apply(String.class);
+    Broadcast<String> typeName = sc.broadcast(adapter.getTypeName(), stringTag);
+    Broadcast<String> indexName = sc.broadcast(index.getName(), stringTag);
+
+    // map to a pair containing the output key and the output value
+    inputRDD.mapToPair(
+        feat -> new Tuple2<GeoWaveOutputKey, GridCoverage>(
+            new GeoWaveOutputKey(typeName.value(), indexName.value()),
+            feat)).saveAsNewAPIHadoopDataset(job.getConfiguration());
+  }
   public static Broadcast<? extends NumericIndexStrategy> broadcastIndexStrategy(
       SparkContext sc,
       NumericIndexStrategy indexStrategy) {
@@ -227,5 +258,19 @@ public class RDDUtils {
         scala.reflect.ClassTag$.MODULE$.apply(indexStrategy.getClass());
     Broadcast<NumericIndexStrategy> broadcastStrategy = sc.broadcast(indexStrategy, indexClassTag);
     return broadcastStrategy;
+  }
+
+  public static void writeRasterRDDToGeoWave(
+      SparkContext sc,
+      Index index,
+      DataStorePluginOptions outputStoreOptions,
+      DataTypeAdapter adapter,
+      GeoWaveRasterRDD inputRDD) throws IOException {
+    if (!inputRDD.isLoaded()) {
+      LOGGER.error("Must provide a loaded RDD.");
+      return;
+    }
+
+    writeRasterToGeoWave(sc, index, outputStoreOptions, adapter, inputRDD.getRawRDD().values());
   }
 }

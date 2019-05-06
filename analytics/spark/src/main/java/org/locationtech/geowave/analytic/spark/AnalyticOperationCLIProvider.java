@@ -9,6 +9,7 @@
 package org.locationtech.geowave.analytic.spark;
 
 import org.locationtech.geowave.analytic.mapreduce.operations.AnalyticSection;
+import org.locationtech.geowave.analytic.spark.kde.operations.KDESparkCommand;
 import org.locationtech.geowave.analytic.spark.kmeans.operations.KmeansSparkCommand;
 import org.locationtech.geowave.analytic.spark.sparksql.operations.SparkSqlCommand;
 import org.locationtech.geowave.analytic.spark.spatial.operations.SpatialJoinCommand;
@@ -19,6 +20,7 @@ public class AnalyticOperationCLIProvider implements CLIOperationProviderSpi {
       new Class<?>[] {
           AnalyticSection.class,
           KmeansSparkCommand.class,
+          KDESparkCommand.class,
           SparkSqlCommand.class,
           SpatialJoinCommand.class};
 
