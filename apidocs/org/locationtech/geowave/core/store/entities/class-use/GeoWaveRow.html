@@ -1631,10 +1631,29 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>com.stumbleupon.async.Deferred&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">KuduRangeRead.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#executeScanner-org.apache.kudu.client.AsyncKuduScanner-java.util.concurrent.Semaphore-java.util.concurrent.BlockingQueue-java.util.concurrent.atomic.AtomicInteger-java.util.concurrent.atomic.AtomicBoolean-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">executeScanner</a></span>(org.apache.kudu.client.AsyncKuduScanner&nbsp;scanner,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Semaphore.html?is-external=true" title="class or interface in java.util.concurrent">Semaphore</a>&nbsp;semaphore,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent">BlockingQueue</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;resultQueue,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicInteger.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicInteger</a>&nbsp;queryCount,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicBoolean.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicBoolean</a>&nbsp;isCanceled,
+              boolean&nbsp;visibilityEnabled,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
+              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;&nbsp;rowTransformer,
+              boolean&nbsp;rowMerging)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduDataIndexRead.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduDataIndexRead</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">KuduOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html#getKuduDataIndexRead-java.lang.String-short-byte:A:A-java.util.function.Predicate-boolean-">getKuduDataIndexRead</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+                    short&nbsp;adapterId,
+                    byte[][]&nbsp;dataIds,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;rowFilter,
+                    boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduRangeRead</a>&lt;T&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">KuduOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html#getKuduRangeRead-java.lang.String-short:A-byte:A:A-java.util.Collection-boolean-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.util.function.Predicate-boolean-">getKuduRangeRead</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+<td class="colLast"><span class="typeNameLabel">KuduOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html#getKuduRangeRead-java.lang.String-short:A-java.util.Collection-boolean-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.util.function.Predicate-boolean-">getKuduRangeRead</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
                 short[]&nbsp;adapterIds,
-                byte[][]&nbsp;dataIds,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
                 boolean&nbsp;rowMerging,
                 <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;T&gt;&nbsp;rowTransformer,
@@ -1650,12 +1669,18 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#KuduRangeRead-java.util.Collection-short:A-byte:A:A-org.apache.kudu.client.KuduTable-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">KuduRangeRead</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduDataIndexRead.html#KuduDataIndexRead-short-byte:A:A-org.apache.kudu.client.KuduTable-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-java.util.function.Predicate-">KuduDataIndexRead</a></span>(short&nbsp;adapterId,
+                 byte[][]&nbsp;dataIds,
+                 org.apache.kudu.client.KuduTable&nbsp;table,
+                 <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
+                 boolean&nbsp;visibilityEnabled,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#KuduRangeRead-java.util.Collection-short:A-org.apache.kudu.client.KuduTable-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">KuduRangeRead</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
              short[]&nbsp;adapterIds,
-             byte[][]&nbsp;dataIds,
              org.apache.kudu.client.KuduTable&nbsp;table,
              <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
-             boolean&nbsp;isDataIndex,
              boolean&nbsp;visibilityEnabled,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;&nbsp;rowTransformer,

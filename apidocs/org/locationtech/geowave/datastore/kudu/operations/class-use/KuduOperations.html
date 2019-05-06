@@ -123,49 +123,55 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduDataIndexRead.html#KuduDataIndexRead-short-byte:A:A-org.apache.kudu.client.KuduTable-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-java.util.function.Predicate-">KuduDataIndexRead</a></span>(short&nbsp;adapterId,
+                 byte[][]&nbsp;dataIds,
+                 org.apache.kudu.client.KuduTable&nbsp;table,
+                 <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
+                 boolean&nbsp;visibilityEnabled,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduDeleter.html#KuduDeleter-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-java.lang.String-">KuduDeleter</a></span>(<a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduMetadataDeleter.html#KuduMetadataDeleter-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-org.locationtech.geowave.core.store.operations.MetadataType-">KuduMetadataDeleter</a></span>(<a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
                    <a href="../../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduMetadataReader.html#KuduMetadataReader-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-org.locationtech.geowave.core.store.operations.MetadataType-">KuduMetadataReader</a></span>(<a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
                   <a href="../../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduMetadataWriter.html#KuduMetadataWriter-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-org.locationtech.geowave.core.store.operations.MetadataType-">KuduMetadataWriter</a></span>(<a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
                   <a href="../../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#KuduRangeRead-java.util.Collection-short:A-byte:A:A-org.apache.kudu.client.KuduTable-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">KuduRangeRead</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#KuduRangeRead-java.util.Collection-short:A-org.apache.kudu.client.KuduTable-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">KuduRangeRead</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
              short[]&nbsp;adapterIds,
-             byte[][]&nbsp;dataIds,
              org.apache.kudu.client.KuduTable&nbsp;table,
              <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
-             boolean&nbsp;isDataIndex,
              boolean&nbsp;visibilityEnabled,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;&nbsp;rowTransformer,
              boolean&nbsp;rowMerging)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduReader.html#KuduReader-org.locationtech.geowave.core.store.operations.DataIndexReaderParams-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-">KuduReader</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataIndexReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">DataIndexReaderParams</a>&nbsp;dataIndexReaderParams,
           <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
           boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduReader.html#KuduReader-org.locationtech.geowave.core.store.operations.ReaderParams-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-">KuduReader</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduReader.html" title="type parameter in KuduReader">T</a>&gt;&nbsp;readerParams,
           <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
           boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduReader.html#KuduReader-org.locationtech.geowave.mapreduce.splits.RecordReaderParams-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-">KuduReader</a></span>(<a href="../../../../../../../org/locationtech/geowave/mapreduce/splits/RecordReaderParams.html" title="class in org.locationtech.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
           <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
           boolean&nbsp;visibilityEnabled)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduWriter.html#KuduWriter-java.lang.String-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-">KuduWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
           <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>

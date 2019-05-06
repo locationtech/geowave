@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,12 +131,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#KuduRangeRead-java.util.Collection-short:A-byte:A:A-org.apache.kudu.client.KuduTable-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">KuduRangeRead</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#KuduRangeRead-java.util.Collection-short:A-org.apache.kudu.client.KuduTable-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">KuduRangeRead</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
              short[]&nbsp;adapterIds,
-             byte[][]&nbsp;dataIds,
              org.apache.kudu.client.KuduTable&nbsp;table,
              <a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
-             boolean&nbsp;isDataIndex,
              boolean&nbsp;visibilityEnabled,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
              <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;&nbsp;rowTransformer,
@@ -158,6 +156,29 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#checkFinalize-org.apache.kudu.client.AsyncKuduScanner-java.util.concurrent.Semaphore-java.util.concurrent.BlockingQueue-java.util.concurrent.atomic.AtomicInteger-">checkFinalize</a></span>(org.apache.kudu.client.AsyncKuduScanner&nbsp;scanner,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Semaphore.html?is-external=true" title="class or interface in java.util.concurrent">Semaphore</a>&nbsp;semaphore,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent">BlockingQueue</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;resultQueue,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicInteger.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicInteger</a>&nbsp;queryCount)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#executeQueryAsync-java.util.List-">executeQueryAsync</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.kudu.client.AsyncKuduScanner&gt;&nbsp;scanners)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>com.stumbleupon.async.Deferred&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#executeScanner-org.apache.kudu.client.AsyncKuduScanner-java.util.concurrent.Semaphore-java.util.concurrent.BlockingQueue-java.util.concurrent.atomic.AtomicInteger-java.util.concurrent.atomic.AtomicBoolean-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">executeScanner</a></span>(org.apache.kudu.client.AsyncKuduScanner&nbsp;scanner,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Semaphore.html?is-external=true" title="class or interface in java.util.concurrent">Semaphore</a>&nbsp;semaphore,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent">BlockingQueue</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;resultQueue,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicInteger.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicInteger</a>&nbsp;queryCount,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicBoolean.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicBoolean</a>&nbsp;isCanceled,
+              boolean&nbsp;visibilityEnabled,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
+              <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;&nbsp;rowTransformer,
+              boolean&nbsp;rowMerging)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html#results--">results</a></span>()</code>&nbsp;</td>
 </tr>
@@ -183,7 +204,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="KuduRangeRead-java.util.Collection-short:A-byte:A:A-org.apache.kudu.client.KuduTable-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">
+<a name="KuduRangeRead-java.util.Collection-short:A-org.apache.kudu.client.KuduTable-org.locationtech.geowave.datastore.kudu.operations.KuduOperations-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -191,10 +212,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>KuduRangeRead</h4>
 <pre>protected&nbsp;KuduRangeRead(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;ranges,
                         short[]&nbsp;adapterIds,
-                        byte[][]&nbsp;dataIds,
                         org.apache.kudu.client.KuduTable&nbsp;table,
                         <a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a>&nbsp;operations,
-                        boolean&nbsp;isDataIndex,
                         boolean&nbsp;visibilityEnabled,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
                         <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;&nbsp;rowTransformer,
@@ -212,10 +231,48 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="results--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>results</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;&nbsp;results()</pre>
+</li>
+</ul>
+<a name="executeQueryAsync-java.util.List-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>executeQueryAsync</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;&nbsp;executeQueryAsync(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.kudu.client.AsyncKuduScanner&gt;&nbsp;scanners)</pre>
+</li>
+</ul>
+<a name="checkFinalize-org.apache.kudu.client.AsyncKuduScanner-java.util.concurrent.Semaphore-java.util.concurrent.BlockingQueue-java.util.concurrent.atomic.AtomicInteger-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>checkFinalize</h4>
+<pre>public&nbsp;void&nbsp;checkFinalize(org.apache.kudu.client.AsyncKuduScanner&nbsp;scanner,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Semaphore.html?is-external=true" title="class or interface in java.util.concurrent">Semaphore</a>&nbsp;semaphore,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent">BlockingQueue</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;resultQueue,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicInteger.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicInteger</a>&nbsp;queryCount)</pre>
+</li>
+</ul>
+<a name="executeScanner-org.apache.kudu.client.AsyncKuduScanner-java.util.concurrent.Semaphore-java.util.concurrent.BlockingQueue-java.util.concurrent.atomic.AtomicInteger-java.util.concurrent.atomic.AtomicBoolean-boolean-java.util.function.Predicate-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>executeScanner</h4>
+<pre>public&nbsp;com.stumbleupon.async.Deferred&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;executeScanner(org.apache.kudu.client.AsyncKuduScanner&nbsp;scanner,
+                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Semaphore.html?is-external=true" title="class or interface in java.util.concurrent">Semaphore</a>&nbsp;semaphore,
+                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent">BlockingQueue</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;resultQueue,
+                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicInteger.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicInteger</a>&nbsp;queryCount,
+                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicBoolean.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicBoolean</a>&nbsp;isCanceled,
+                                                             boolean&nbsp;visibilityEnabled,
+                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;filter,
+                                                             <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduRangeRead.html" title="type parameter in KuduRangeRead">T</a>&gt;&nbsp;rowTransformer,
+                                                             boolean&nbsp;rowMerging)</pre>
 </li>
 </ul>
 </li>
