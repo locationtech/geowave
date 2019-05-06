@@ -380,29 +380,27 @@ public class TieredSpatialJoin extends JoinStrategy {
       final Byte[] buildSide,
       final Byte[] testSide,
       final HashSet<Byte> sharedTiers) {
-    final Map<Byte, HashSet<Byte>> resultMap = Maps.newHashMap();
-    final int testLastIndex = testSide.length;
-    for (final Byte tierLeft : buildSide) {
-      final int firstGreater = Arrays.binarySearch(testSide, tierLeft);
-
-      if (firstGreater >= 0) {
-        // Found in array
-        sharedTiers.add(tierLeft);
+      final Map<Byte, HashSet<Byte>> resultMap = Maps.newHashMap();
+      final int testLastIndex = testSide.length;
+      for (final Byte tierLeft : buildSide) {
+            final int firstGreater = Arrays.binarySearch(testSide, tierLeft);
+            //add same tier id
+            if (firstGreater >= 0) {
+                // Found in array
+                sharedTiers.add(tierLeft);
+            }
+            //add highter tier id
+            HashSet<Byte> higherTiers = Sets.newHashSet();
+            for(Byte testID :testSide)
+            {
+                if(tierLeft<testID)
+                {
+                    higherTiers.add(testID);
+                }
+            }
+            resultMap.put(tierLeft, higherTiers);
       }
-
-      final int insertionPoint = Math.abs(firstGreater);
-      if (insertionPoint >= testLastIndex) {
-        // Not present in array, and none greater than this value
-        continue;
-      }
-
-      // There is at least one value greater than the current copy it and
-      // add to map
-      final HashSet<Byte> higherTiers =
-          Sets.newHashSet(Arrays.copyOfRange(testSide, insertionPoint, testLastIndex));
-      resultMap.put(tierLeft, higherTiers);
-    }
-    return resultMap;
+      return resultMap;
   }
 
   private void setBufferAmount(final double bufferAmount) {
