@@ -17,3 +17,5 @@ org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory
 extensions/adapters/vector/src/main/resources/META-INFO.services
 extensions/adapters/vector/src/main/java/org/locationtech.geowave.adapter.vector/plugin/GeoWaveGTDataStoreFactory
 
+1
+
