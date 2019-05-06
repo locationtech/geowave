@@ -379,10 +379,12 @@ public class TieredSpatialJoin extends JoinStrategy {
   private Map<Byte, HashSet<Byte>> createReprojectMap(
       final Byte[] buildSide,
       final Byte[] testSide,
-      final HashSet<Byte> sharedTiers) {
+      final HashSet<Byte> sharedTiers)
+  {
       final Map<Byte, HashSet<Byte>> resultMap = Maps.newHashMap();
       final int testLastIndex = testSide.length;
-      for (final Byte tierLeft : buildSide) {
+      for (final Byte tierLeft : buildSide)
+      {
             final int firstGreater = Arrays.binarySearch(testSide, tierLeft);
             //add same tier id
             if (firstGreater >= 0) {
@@ -393,7 +395,7 @@ public class TieredSpatialJoin extends JoinStrategy {
             HashSet<Byte> higherTiers = Sets.newHashSet();
             for(Byte testID :testSide)
             {
-                if(tierLeft<testID)
+                if(testID>tierLeft)
                 {
                     higherTiers.add(testID);
                 }
