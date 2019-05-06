@@ -83,7 +83,6 @@ public class KuduReader<T> implements RowReader<T> {
           operations.getKuduRangeRead(
               readerParams.getIndex().getName(),
               readerParams.getAdapterIds(),
-              null,
               ranges,
               DataStoreUtils.isMergingIteratorRequired(readerParams, visibilityEnabled),
               rowTransformer,
@@ -115,13 +114,10 @@ public class KuduReader<T> implements RowReader<T> {
     }
     try {
       iterator =
-          operations.getKuduRangeRead(
+          operations.<T>getKuduDataIndexRead(
               DataIndexUtils.DATA_ID_INDEX.getName(),
-              new short[] {dataIndexReaderParams.getAdapterId()},
+              dataIndexReaderParams.getAdapterId(),
               dataIds,
-              null,
-              false,
-              rowTransformer,
               new ClientVisibilityFilter(
                   Sets.newHashSet(dataIndexReaderParams.getAdditionalAuthorizations())),
               visibilityEnabled).results();
@@ -147,7 +143,6 @@ public class KuduReader<T> implements RowReader<T> {
           operations.getKuduRangeRead(
               recordReaderParams.getIndex().getName(),
               adapterIds,
-              null,
               Collections.singleton(partitionRange),
               DataStoreUtils.isMergingIteratorRequired(recordReaderParams, visibilityEnabled),
               rowTransformer,
