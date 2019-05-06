@@ -167,6 +167,14 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.kudu">org.locationtech.geowave.datastore.kudu</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.kudu.operations">org.locationtech.geowave.datastore.kudu.operations</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.redis">org.locationtech.geowave.datastore.redis</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -221,11 +229,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">StoreFactoryFamilySpi.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html#getDataStoreOperationsFactory--">getDataStoreOperationsFactory</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">BaseDataStoreFamily.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/BaseDataStoreFamily.html#getDataStoreOperationsFactory--">getDataStoreOperationsFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BaseDataStoreFamily.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/BaseDataStoreFamily.html#getDataStoreOperationsFactory--">getDataStoreOperationsFactory</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">StoreFactoryFamilySpi.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html#getDataStoreOperationsFactory--">getDataStoreOperationsFactory</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -822,6 +830,42 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseOperations</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.kudu">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/package-summary.html">org.locationtech.geowave.datastore.kudu</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/package-summary.html">org.locationtech.geowave.datastore.kudu</a> that return <a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a></code></td>
+<td class="colLast"><span class="typeNameLabel">KuduFactoryHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/KuduFactoryHelper.html#createOperations-org.locationtech.geowave.core.store.StoreFactoryOptions-">createOperations</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html" title="class in org.locationtech.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.kudu.operations">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/package-summary.html">org.locationtech.geowave.datastore.kudu.operations</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/package-summary.html">org.locationtech.geowave.datastore.kudu.operations</a> that implement <a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/operations/KuduOperations.html" title="class in org.locationtech.geowave.datastore.kudu.operations">KuduOperations</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

@@ -111,10 +111,14 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.datastore.redis.util">org.locationtech.geowave.datastore.redis.util</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.kudu">org.locationtech.geowave.datastore.kudu</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.redis.util">org.locationtech.geowave.datastore.redis.util</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.rocksdb.util">org.locationtech.geowave.datastore.rocksdb.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -195,17 +199,17 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">BatchIndexRetrievalImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/dataidx/BatchIndexRetrievalImpl.html#getData-short-byte:A-">getData</a></span>(short&nbsp;adapterId,
+<td class="colLast"><span class="typeNameLabel">DataIndexRetrievalImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrievalImpl.html#getData-short-byte:A-">getData</a></span>(short&nbsp;adapterId,
        byte[]&nbsp;dataId)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">DataIndexRetrievalImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrievalImpl.html#getData-short-byte:A-">getData</a></span>(short&nbsp;adapterId,
+<td class="colLast"><span class="typeNameLabel">DataIndexRetrieval.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html#getData-short-byte:A-">getData</a></span>(short&nbsp;adapterId,
        byte[]&nbsp;dataId)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">DataIndexRetrieval.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexRetrieval.html#getData-short-byte:A-">getData</a></span>(short&nbsp;adapterId,
+<td class="colLast"><span class="typeNameLabel">BatchIndexRetrievalImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/dataidx/BatchIndexRetrievalImpl.html#getData-short-byte:A-">getData</a></span>(short&nbsp;adapterId,
        byte[]&nbsp;dataId)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -279,15 +283,15 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">MergeableGeoWaveRow.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/MergeableGeoWaveRow.html#getFieldValues--">getFieldValues</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRowImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowImpl.html#getFieldValues--">getFieldValues</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRowImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowImpl.html#getFieldValues--">getFieldValues</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRow.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html#getFieldValues--">getFieldValues</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRow.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html#getFieldValues--">getFieldValues</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">MergeableGeoWaveRow.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/MergeableGeoWaveRow.html#getFieldValues--">getFieldValues</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -364,6 +368,28 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">HBaseRow.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/HBaseRow.html#getFieldValues--">getFieldValues</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.kudu">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/package-summary.html">org.locationtech.geowave.datastore.kudu</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/datastore/kudu/package-summary.html">org.locationtech.geowave.datastore.kudu</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/KuduDataIndexRow.html#KuduDataIndexRow-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.entities.GeoWaveValue-boolean-">KuduDataIndexRow</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value,
+                boolean&nbsp;isVisibilityEnabled)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/kudu/KuduRow.html#KuduRow-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.entities.GeoWaveValue-">KuduRow</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
+       <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

@@ -540,19 +540,19 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">NearestNeighborCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
 <td class="colLast"><span class="typeNameLabel">DBScanCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/analytic/mapreduce/operations/DBScanCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">KdeCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/analytic/mapreduce/operations/KdeCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
 <td class="colLast"><span class="typeNameLabel">KmeansParallelCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/analytic/mapreduce/operations/KmeansParallelCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">NearestNeighborCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">KdeCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/analytic/mapreduce/operations/KdeCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
@@ -855,8 +855,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected long</code></td>
-<td class="colLast"><span class="typeNameLabel">SparkQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/cli/debug/SparkQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+<td class="colFirst"><code>protected abstract long</code></td>
+<td class="colLast"><span class="typeNameLabel">AbstractGeoWaveQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/cli/debug/AbstractGeoWaveQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
         <a href="../../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
@@ -883,7 +883,7 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected long</code></td>
-<td class="colLast"><span class="typeNameLabel">CQLQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/cli/debug/CQLQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">SparkQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/cli/debug/SparkQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
         <a href="../../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
@@ -891,8 +891,8 @@
         <a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected abstract long</code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractGeoWaveQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/cli/debug/AbstractGeoWaveQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+<td class="colFirst"><code>protected long</code></td>
+<td class="colLast"><span class="typeNameLabel">CQLQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/cli/debug/CQLQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
         <a href="../../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
@@ -1114,19 +1114,19 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">LocalToMapReduceToGeowaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/ingest/operations/LocalToMapReduceToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">MapReduceToGeowaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/ingest/operations/MapReduceToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
 <td class="colLast"><span class="typeNameLabel">LocalToGeowaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/ingest/operations/LocalToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">LocalToMapReduceToGeowaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/ingest/operations/LocalToMapReduceToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
 <td class="colLast"><span class="typeNameLabel">KafkaToGeowaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/ingest/operations/KafkaToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">MapReduceToGeowaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/ingest/operations/MapReduceToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1193,7 +1193,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CombineStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/CombineStatsCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ClearCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/ClearCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
@@ -1201,7 +1201,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ClearCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/ClearCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">CombineStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/CombineStatsCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
@@ -1217,6 +1217,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">RemoveStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/RemoveStatCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected abstract boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/AbstractStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;options,
                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
@@ -1224,27 +1230,21 @@
 <div class="block">Abstracted command method to be called when command selected</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">CalculateStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/CalculateStatCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">RecalculateStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/RecalculateStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">ListStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/ListStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
-                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
-</tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">RemoveStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/RemoveStatCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+<td class="colLast"><span class="typeNameLabel">ListStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/ListStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
 </tr>
@@ -1584,19 +1584,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AddDynamoDBStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddDynamoDBStoreCommand.html#getPluginOptions--">getPluginOptions</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AddHBaseStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddHBaseStoreCommand.html#getPluginOptions--">getPluginOptions</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AddCassandraStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddCassandraStoreCommand.html#getPluginOptions--">getPluginOptions</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
 <td class="colLast"><span class="typeNameLabel">AddRocksDBStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddRocksDBStoreCommand.html#getPluginOptions--">getPluginOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">AddRedisStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddRedisStoreCommand.html#getPluginOptions--">getPluginOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
@@ -1608,7 +1600,19 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AddRedisStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddRedisStoreCommand.html#getPluginOptions--">getPluginOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">AddCassandraStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddCassandraStoreCommand.html#getPluginOptions--">getPluginOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">AddDynamoDBStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddDynamoDBStoreCommand.html#getPluginOptions--">getPluginOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">AddKuduStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddKuduStoreCommand.html#getPluginOptions--">getPluginOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">AddHBaseStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddHBaseStoreCommand.html#getPluginOptions--">getPluginOptions</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1621,19 +1625,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">AddDynamoDBStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddDynamoDBStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">AddHBaseStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddHBaseStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">AddCassandraStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddCassandraStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">AddRocksDBStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddRocksDBStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">AddRedisStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddRedisStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -1645,7 +1641,19 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">AddRedisStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddRedisStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">AddCassandraStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddCassandraStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">AddDynamoDBStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddDynamoDBStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">AddKuduStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddKuduStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">AddHBaseStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/service/rest/operations/AddHBaseStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
