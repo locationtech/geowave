@@ -246,6 +246,17 @@ class DataStore(PyGwJavaWrapper):
         # TODO
         raise NotImplementedError
 
+    """
+    Get a single statistical result that matches the given query criteria
+   
+    Args:
+        q (pygw.special_queries.StatisticsQuery): query the query criteria, use StatisticsQueryBuilder or its extensions and if you're
+           interested in a particular common statistics type use StatisticsQueryBuilder.factory()
+    Returns:
+        If the query does not define that statistics type it will return null as aggregation
+            only makes sense within a single type, otherwise aggregates the results of the query
+            into a single result that is returned
+    """
     def aggregate_statistics(self, q):
         return self._java_ref.aggregateStatistics(q._java_ref)
 
