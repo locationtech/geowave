@@ -2,12 +2,18 @@ from pygw.config import config
 from pygw.base_models import PyGwJavaWrapper, QueryInterface
 
 class StatisticsQuery(QueryInterface):
-  "type is 'bbox' or 'time_range'"
+  """
+  Builds a statistics query for aggregate statistics.
+  To create a StatisticsQuery, for extended_id is the ID of the statisticqs query,
+  and type must either be 'bbox' 'time_range'
+  """
   def __init__(self, extended_id, type):
     if type == "bbox":
       builder = config.MODULE__geotime_query.VectorStatisticsQueryBuilder.newBuilder().factory().bbox()
-    else:
+    elif type == "time_range":
       builder = config.MODULE__geotime_query.VectorStatisticsQueryBuilder.newBuilder().factory().timeRange()
+    else:
+      raise AttributeError("Invalid query type")
 
     builder.fieldName(extended_id)
     java_ref = builder.build()
