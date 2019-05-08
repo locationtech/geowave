@@ -1,6 +1,9 @@
 #!/bin/bash
 
-if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ] && [ "$BUILD_DOCS" == "true" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then  
+if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ] && [ "$BUILD_AND_PUBLISH" == "true" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then  
+  echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
+  echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
+  mvn deploy --settings .utility/.maven.xml -DskipTests=true -Dspotbugs.skip -B -U -Prelease
   echo -e "Generating changelog...\n"
   export CHANGELOG_GITHUB_TOKEN=$GH_TOKEN
   gem install github_changelog_generator

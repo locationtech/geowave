@@ -17,16 +17,14 @@
 		</license>
 	</licenses>
 	<distributionManagement>
-		<repository>
-			<id>geowave-maven-releases</id>
-			<name>GeoWave AWS Release Repository</name>
-			<url>s3://geowave-maven/release</url>
-		</repository>
 		<snapshotRepository>
-			<id>geowave-maven-snapshots</id>
-			<name>GeoWave AWS Snapshot Repository</name>
-			<url>s3://geowave-maven/snapshot</url>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
 	</distributionManagement>
 	<scm>
 		<url>https://github.com/locationtech/geowave.git</url>
@@ -1287,9 +1285,8 @@
 			<url>http://maven.geo-solutions.it</url>
 		</repository>
 		<repository>
-			<id>geowave-maven-snapshots</id>
-			<name>GeoWave AWS Snapshots Repository</name>
-			<url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot</url>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -1466,6 +1463,71 @@
 			<properties>
 				<javadoc.opts>-Xdoclint:none</javadoc.opts>
 			</properties>
+		</profile>
+		<!-- Activate using the release property: mvn clean install -Prelease -->
+		<profile>
+			<id>release</id>
+
+			<build>
+				<plugins>
+					<!-- To release to Maven central -->
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.8</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverid>ossrh</serverid>
+							<nexusurl>https://oss.sonatype.org/</nexusurl>
+							<autoreleaseafterclose>true</autoreleaseafterclose>
+						</configuration>
+					</plugin>
+					<!-- To generate javadoc -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.0.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.10.4</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- To sign the artifacts -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+
+			</build>
 		</profile>
 	</profiles>
 </project>
