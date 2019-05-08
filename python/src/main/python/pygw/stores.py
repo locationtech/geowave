@@ -40,7 +40,7 @@ class HBaseDs(DataStore):
     """
     GeoWave HBaseDs datastore.
     """
-    def __init__(self, zookeeperh="example", hbase_namespace=None):
+    def __init__(self, zookeeper="example", hbase_namespace=None):
         """
         Create an HBase data store
 

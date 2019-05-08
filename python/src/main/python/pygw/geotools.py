@@ -127,23 +127,23 @@ class SimpleFeatureTypeAttribute(PyGwJavaWrapper):
         super().__init__(config.GATEWAY, j_attribute)
 
     @classmethod
-    def string(cls, is_nilable, descriptor):
+    def string(cls, descriptor, is_nilable=False):
         return cls(cls.Type.STRING, is_nilable, descriptor)
 
     @classmethod
-    def date(cls, is_nilable, descriptor):
+    def date(cls, descriptor, is_nilable=False):
         return cls(cls.Type.DATE, is_nilable, descriptor)
 
     @classmethod
-    def double(cls, is_nilable, descriptor):
+    def double(cls, descriptor, is_nilable=False):
         return cls(cls.Type.DOUBLE, is_nilable, descriptor)
 
     @classmethod
-    def integer(cls, is_nilable, descriptor):
+    def integer(cls, descriptor, is_nilable=False):
         return cls(cls.Type.INTEGER, is_nilable, descriptor)
     
     @classmethod
-    def geometry(cls, is_nilable, descriptor):
+    def geometry(cls, descriptor, is_nilable=False):
         return cls(cls.Type.GEOMETRY, is_nilable, descriptor)
 
     class Type(Enum):
