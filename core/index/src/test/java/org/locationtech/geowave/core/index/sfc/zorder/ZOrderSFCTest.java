@@ -8,7 +8,40 @@
  */
 package org.locationtech.geowave.core.index.sfc.zorder;
 
+import org.junit.Assert;
+import org.junit.Test;
+import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
+import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
+import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+
 public class ZOrderSFCTest {
 
-  // TODO: add unit tests for ZOrder implementation
+    @Test
+    public void testIndex() {
+        double[] latLngValues = new double[] {45.D, 22.D};
+        Assert.assertArrayEquals(new byte[] {12}, createSFC().getId(latLngValues));
+    }
+
+    @Test
+    public void testGetRanges() {
+        double[] latLngValues = new double[] {45.D, 22.D};
+        byte[] index = createSFC().getId(latLngValues);
+        MultiDimensionalNumericData ranges = createSFC().getRanges(index);
+        NumericData[] data = ranges.getDataPerDimension();
+        NumericData[] actualDate = new NumericRange[] {
+                new NumericRange(0.0, 90.0),
+                new NumericRange(0.0, 45.0)
+        };
+        Assert.assertArrayEquals(data, actualDate);
+    }
+
+    private ZOrderSFC createSFC() {
+        SFCDimensionDefinition[] dimensions =
+                {
+                        new SFCDimensionDefinition(new BasicDimensionDefinition(-180.0, 180.0), 2),
+                        new SFCDimensionDefinition(new BasicDimensionDefinition(-90.0, 90.0), 2)};
+        return new ZOrderSFC(dimensions);
+    }
 }

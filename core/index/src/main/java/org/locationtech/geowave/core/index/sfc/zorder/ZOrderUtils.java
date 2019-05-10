@@ -24,16 +24,19 @@ public class ZOrderUtils {
       final SFCDimensionDefinition[] dimensionDefinitions) {
     final byte[] littleEndianBytes = swapEndianFormat(bytes);
     final BitSet bitSet = BitSet.valueOf(littleEndianBytes);
+    final int usedBits = bitsPerDimension * dimensionDefinitions.length;
+    final int bitsLength = bytes.length * 8;
+    final int bitOffset = bitsLength - usedBits;
     final NumericRange[] normalizedValues = new NumericRange[dimensionDefinitions.length];
     for (int d = 0; d < dimensionDefinitions.length; d++) {
       final BitSet dimensionSet = new BitSet();
       int j = 0;
-      for (int i = d; i < (bitsPerDimension * dimensionDefinitions.length); i +=
-          dimensionDefinitions.length) {
+      for (int i = bitOffset + d; i < bitsLength; i += dimensionDefinitions.length) {
         dimensionSet.set(j++, bitSet.get(i));
       }
 
-      normalizedValues[d] = decode(dimensionSet, 0, 1, dimensionDefinitions[d]);
+      normalizedValues[d] = decode(dimensionSet, bitsPerDimension,0, 1,
+              dimensionDefinitions[d]);
     }
 
     return normalizedValues;
@@ -77,11 +80,12 @@ public class ZOrderUtils {
 
   private static NumericRange decode(
       final BitSet bs,
+      final int bitsPerDimension,
       double floor,
       double ceiling,
       final SFCDimensionDefinition dimensionDefinition) {
     double mid = 0;
-    for (int i = 0; i < bs.length(); i++) {
+    for (int i = 0; i < bitsPerDimension; i++) {
       mid = (floor + ceiling) / 2;
       if (bs.get(i)) {
         floor = mid;
