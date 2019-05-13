@@ -10,6 +10,8 @@ package org.locationtech.geowave.core.geotime;
 
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
+import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeIndexStrategy;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
@@ -82,7 +84,9 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 330, OptimalCQLQuery::new),
         new PersistableIdAndConstructor((short) 331, SpatialQuery::new),
         new PersistableIdAndConstructor((short) 332, SpatialTemporalQuery::new),
-        new PersistableIdAndConstructor((short) 333, TemporalQuery::new),};
+        new PersistableIdAndConstructor((short) 333, TemporalQuery::new),
+        new PersistableIdAndConstructor((short) 334, SimpleTimeDefinition::new),
+        new PersistableIdAndConstructor((short) 335, SimpleTimeIndexStrategy::new)};
 
   }
 }

@@ -24,6 +24,12 @@ public class TemporalOptions implements DimensionalityTypeOptions {
   protected Unit periodicity = DEFAULT_PERIODICITY;
 
   @Parameter(
+      names = {"--noTimeRange"},
+      required = false,
+      description = "The time index can be more efficient if time ranges don't need to be supported.")
+  protected boolean noTimeRanges = false;
+
+  @Parameter(
       names = {"--maxDuplicates"},
       required = false,
       description = "The max number of duplicates per dimension range.  The default is 2 per range (for example lines and polygon timestamp data would be up to 4 because its 2 dimensions, and line/poly time range data would be 8).")
@@ -31,5 +37,25 @@ public class TemporalOptions implements DimensionalityTypeOptions {
 
   public long getMaxDuplicates() {
     return maxDuplicates;
+  }
+
+  public Unit getPeriodicity() {
+    return periodicity;
+  }
+
+  public boolean isSupportTimeRanges() {
+    return !noTimeRanges;
+  }
+
+  public void setPeriodicity(Unit periodicity) {
+    this.periodicity = periodicity;
+  }
+
+  public void setNoTimeRanges(boolean noTimeRanges) {
+    this.noTimeRanges = noTimeRanges;
+  }
+
+  public void setMaxDuplicates(long maxDuplicates) {
+    this.maxDuplicates = maxDuplicates;
   }
 }

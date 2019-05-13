@@ -440,6 +440,10 @@ public class BaseQueryOptions {
         compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore));
   }
 
+  public boolean isAllIndices() {
+    return indexName == null;
+  }
+
   /**
    * @return a paring of fieldIds and their associated data adapter >>>>>>> wip: bitmask approach
    */

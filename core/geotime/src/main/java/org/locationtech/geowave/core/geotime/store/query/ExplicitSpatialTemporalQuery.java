@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.geotime.store.query;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
@@ -115,12 +116,13 @@ public class ExplicitSpatialTemporalQuery extends ExplicitSpatialQuery {
       final TemporalRange temporalRange,
       final boolean isDefault) {
     return new ConstraintSet(
-        TimeDefinition.class,
         new ConstraintData(
             new NumericRange(
                 temporalRange.getStartTime().getTime(),
                 temporalRange.getEndTime().getTime()),
-            isDefault));
+            isDefault),
+        TimeDefinition.class,
+        SimpleTimeDefinition.class);
   }
 
   public static ConstraintsByClass createConstraints(
@@ -130,10 +132,11 @@ public class ExplicitSpatialTemporalQuery extends ExplicitSpatialQuery {
     for (final TemporalRange range : temporalConstraints.getRanges()) {
       constraints.add(
           new ConstraintSet(
-              TimeDefinition.class,
               new ConstraintData(
                   new NumericRange(range.getStartTime().getTime(), range.getEndTime().getTime()),
-                  isDefault)));
+                  isDefault),
+              TimeDefinition.class,
+              SimpleTimeDefinition.class));
     }
     return new ConstraintsByClass(constraints);
   }
@@ -145,14 +148,15 @@ public class ExplicitSpatialTemporalQuery extends ExplicitSpatialQuery {
     for (final Interval range : intervals) {
       constraints.add(
           new ConstraintSet(
-              TimeDefinition.class,
               new ConstraintData(
                   new NumericRange(
                       range.getStart().toEpochMilli(),
                       // intervals are intended to be exclusive on the end so this adjusts for
                       // exclusivity
                       Math.max(range.getEnd().toEpochMilli() - 1, range.getStart().toEpochMilli())),
-                  isDefault)));
+                  isDefault),
+              TimeDefinition.class,
+              SimpleTimeDefinition.class));
     }
     return new ConstraintsByClass(constraints);
   }
@@ -210,9 +214,8 @@ public class ExplicitSpatialTemporalQuery extends ExplicitSpatialQuery {
     return geoConstraints.merge(
         new ConstraintsByClass(
             new ConstraintSet(
+                new ConstraintData(new NumericRange(startTime.getTime(), endTime.getTime()), false),
                 TimeDefinition.class,
-                new ConstraintData(
-                    new NumericRange(startTime.getTime(), endTime.getTime()),
-                    false))));
+                SimpleTimeDefinition.class)));
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -10,6 +10,8 @@ package org.locationtech.geowave.core.geotime.ingest;
 
 import java.util.Locale;
 import org.apache.commons.lang3.StringUtils;
+import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
+import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeIndexStrategy;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
@@ -72,16 +74,18 @@ public class TemporalDimensionalityTypeProvider implements
 
     final BasicIndexModel indexModel = new BasicIndexModel(fields);
 
-    final String combinedArrayID = DEFAULT_TEMPORAL_ID_STR + "_" + options.periodicity;
-
-    return new CustomNameIndex(
-        XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
-            dimensions,
-            new int[] {63},
-            SFCType.HILBERT,
-            options.maxDuplicates),
-        indexModel,
-        combinedArrayID);
+    if (!options.noTimeRanges) {
+      final String combinedArrayID = DEFAULT_TEMPORAL_ID_STR + "_" + options.periodicity;
+      return new CustomNameIndex(
+          XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
+              dimensions,
+              new int[] {63},
+              SFCType.HILBERT,
+              options.maxDuplicates),
+          indexModel,
+          combinedArrayID);
+    }
+    return new CustomNameIndex(new SimpleTimeIndexStrategy(), indexModel, DEFAULT_TEMPORAL_ID_STR);
   }
 
   @Override
@@ -114,6 +118,10 @@ public class TemporalDimensionalityTypeProvider implements
       options = new TemporalOptions();
     }
 
+    public TemporalIndexBuilder setSupportsTimeRanges(final boolean supportsTimeRanges) {
+      options.noTimeRanges = !supportsTimeRanges;
+      return this;
+    }
 
     public TemporalIndexBuilder setPeriodicity(final Unit periodicity) {
       options.periodicity = periodicity;
@@ -148,7 +156,7 @@ public class TemporalDimensionalityTypeProvider implements
       return false;
     }
     for (final NumericDimensionDefinition definition : dimensions) {
-      if (definition instanceof TimeDefinition) {
+      if ((definition instanceof TimeDefinition) || (definition instanceof SimpleTimeDefinition)) {
         return true;
       }
     }

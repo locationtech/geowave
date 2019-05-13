@@ -1,5 +1,6 @@
 package org.locationtech.geowave.adapter.vector;
 
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
@@ -36,24 +37,37 @@ public class FeatureAttributeCommonIndexFieldHandler implements
     if (value == null) {
       return null;
     }
+    Number number;
     if (value instanceof Number) {
-      byte[] visibility;
-      if (visibilityHandler != null) {
-        visibility = visibilityHandler.getVisibility(row, attrDesc.getLocalName(), value);
-      } else {
-        visibility = new byte[] {};
-      }
-      return new FeatureAttributeCommonIndexValue((Number) value, visibility);
+      number = (Number) value;
+    } else if (TimeUtils.isTemporal(value.getClass())) {
+      number = TimeUtils.getTimeMillis(value);
+    } else {
+      return null;
     }
-    return null;
+    byte[] visibility;
+    if (visibilityHandler != null) {
+      visibility = visibilityHandler.getVisibility(row, attrDesc.getLocalName(), value);
+    } else {
+      visibility = new byte[] {};
+    }
+    return new FeatureAttributeCommonIndexValue(number, visibility);
   }
 
   @Override
   public FeatureAttributeCommonIndexValue toIndexValue(
       final PersistentDataset<Object> adapterPersistenceEncoding) {
-    final Number number = (Number) adapterPersistenceEncoding.getValue(attrDesc.getLocalName());
     // visibility is unnecessary because this only happens after the number is read (its only used
     // in reconstructing common index values when using a secondary index)
+    final Object obj = adapterPersistenceEncoding.getValue(attrDesc.getLocalName());
+    final Number number;
+    if (obj instanceof Number) {
+      number = (Number) obj;
+    } else if (TimeUtils.isTemporal(obj.getClass())) {
+      number = TimeUtils.getTimeMillis(obj);
+    } else {
+      return null;
+    }
     return new FeatureAttributeCommonIndexValue(number, null);
   }
 

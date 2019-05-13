@@ -67,6 +67,15 @@ public class BasicQueryByClass extends BasicQuery {
       addConstraint(dimDefinition, constraintData);
     }
 
+    public ConstraintSet(
+        final ConstraintData constraintData,
+        final Class<? extends NumericDimensionDefinition>... dimDefinitions) {
+      this();
+      for (final Class<? extends NumericDimensionDefinition> dimDefinition : dimDefinitions) {
+        addConstraint(dimDefinition, constraintData);
+      }
+    }
+
     public void addConstraint(
         final Class<? extends NumericDimensionDefinition> dimDefinition,
         final ConstraintData constraintData) {
@@ -145,7 +154,6 @@ public class BasicQueryByClass extends BasicQuery {
       if (constraintsPerTypeOfDimensionDefinition.isEmpty()) {
         return new BasicNumericDataset();
       }
-
       final NumericDimensionDefinition[] dimensionDefinitions =
           indexStrategy.getOrderedDimensionDefinitions();
       final NumericData[] dataPerDimension = new NumericData[dimensionDefinitions.length];
@@ -365,7 +373,7 @@ public class BasicQueryByClass extends BasicQuery {
     // these basic queries are tied to NumericDimensionDefinition types, not
     // ideal, but third-parties can and will nned to implement their own
     // queries if they implement their own dimension definitions
-    private List<ConstraintSet> constraintsSets = new LinkedList<>();
+    protected List<ConstraintSet> constraintsSets = new LinkedList<>();
 
     public ConstraintsByClass() {}
 
@@ -510,7 +518,7 @@ public class BasicQueryByClass extends BasicQuery {
         cs.fromBinary(d);
         sets.add(cs);
       }
-      this.constraintsSets = sets;
+      constraintsSets = sets;
     }
 
     @Override

@@ -54,6 +54,11 @@ public class BasicSecondaryIndexIT extends AbstractSecondaryIndexIT {
   }
 
   @Test
+  public void testLocalIngestAndQueryTemporal() throws Exception {
+    testIngestAndQuery(DimensionalityType.TEMPORAL);
+  }
+
+  @Test
   public void testLocalIngestAndQuerySpatial() throws Exception {
     testIngestAndQuery(DimensionalityType.SPATIAL);
   }
