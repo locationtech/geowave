@@ -150,15 +150,16 @@ public class RedisUtils {
   }
 
   public static double getScore(final byte[] byteArray) {
-    return bytesToLong(byteArray);
+    // swap the sign of the first bit so that the signed value of the long sorts properly
+    return bytesToLong(byteArray) ^ 0x8000000000000000l;
   }
 
   public static byte[] getSortKey(final double score) {
-    return longToBytes((long) score);
+    // swap the sign of the first bit so that the signed value of the long sorts properly
+    return longToBytes(((long) score) ^ 0x8000000000000000l);
   }
 
   private static byte[] longToBytes(long val) {
-
     final int radix = 1 << 8;
     final int mask = radix - 1;
     // we want to eliminate trailing 0's (ie. truncate the byte array by
