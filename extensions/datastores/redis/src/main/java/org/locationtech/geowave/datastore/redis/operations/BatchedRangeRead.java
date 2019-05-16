@@ -157,7 +157,20 @@ public class BatchedRangeRead<T> {
         final double end =
             range.getEnd() != null ? RedisUtils.getScore(range.getEndAsNextPrefix())
                 : Double.POSITIVE_INFINITY;
-        reads.add(new RangeReadInfo(r.getPartitionKey(), start, end));
+        if ((start >= 0) && (end < 0)) {
+          // if we crossed 0 the two's complement of the byte array changes the sign of the score,
+          // break it into multiple ranges, an alternative is flipping the first bit of the score
+          // using bitwise XOR ^ 0x8000000000000000l but it ends up causing many more common sort
+          // keys to be within the precision lost by the double floating point score of the mantissa
+          // (eg. a sort key of 0 when the first bit is flipped becomes -Double.MAX_VALUE which
+          // results in precision lost)
+
+          reads.add(new RangeReadInfo(r.getPartitionKey(), start, Double.POSITIVE_INFINITY));
+
+          reads.add(new RangeReadInfo(r.getPartitionKey(), Double.NEGATIVE_INFINITY, end));
+        } else {
+          reads.add(new RangeReadInfo(r.getPartitionKey(), start, end));
+        }
       }
     }
     if (async) {

@@ -150,13 +150,11 @@ public class RedisUtils {
   }
 
   public static double getScore(final byte[] byteArray) {
-    // swap the sign of the first bit so that the signed value of the long sorts properly
-    return bytesToLong(byteArray) ^ 0x8000000000000000l;
+    return bytesToLong(byteArray);
   }
 
   public static byte[] getSortKey(final double score) {
-    // swap the sign of the first bit so that the signed value of the long sorts properly
-    return longToBytes(((long) score) ^ 0x8000000000000000l);
+    return longToBytes((long) score);
   }
 
   private static byte[] longToBytes(long val) {

@@ -54,7 +54,7 @@ public class GeoWaveBasicTemporalVectorIT extends AbstractGeoWaveBasicVectorIT {
     startMillis = System.currentTimeMillis();
     LOGGER.warn("-----------------------------------------------");
     LOGGER.warn("*                                             *");
-    LOGGER.warn("* RUNNING GeoWaveBasicSpatialTemporalVectorIT *");
+    LOGGER.warn("* RUNNING GeoWaveBasicTemporalVectorIT *");
     LOGGER.warn("*                                             *");
     LOGGER.warn("-----------------------------------------------");
   }
@@ -63,7 +63,7 @@ public class GeoWaveBasicTemporalVectorIT extends AbstractGeoWaveBasicVectorIT {
   public static void reportTestFinish() {
     LOGGER.warn("------------------------------------------------");
     LOGGER.warn("*                                              *");
-    LOGGER.warn("* FINISHED GeoWaveBasicSpatialTemporalVectorIT *");
+    LOGGER.warn("* FINISHED GeoWaveBasicTemporalVectorIT *");
     LOGGER.warn(
         "*                "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -73,7 +73,7 @@ public class GeoWaveBasicTemporalVectorIT extends AbstractGeoWaveBasicVectorIT {
   }
 
   @Test
-  public void testIngestAndQuerySpatialTemporalPointsAndLines() throws Exception {
+  public void testIngestAndQueryTemporalPointsAndLines() throws Exception {
     // ingest both lines and points
     TestUtils.testLocalIngest(
         dataStore,
