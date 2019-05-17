@@ -88,7 +88,7 @@ public class KuduRangeRead<T> {
       for (final SinglePartitionQueryRanges r : ranges) {
         byte[] partitionKey = r.getPartitionKey();
         if (partitionKey == null) {
-          partitionKey = KuduUtils.EMPTY_KEY;
+          partitionKey = new byte[0];
         }
         final KuduPredicate partitionPred =
             KuduPredicate.newComparisonPredicate(

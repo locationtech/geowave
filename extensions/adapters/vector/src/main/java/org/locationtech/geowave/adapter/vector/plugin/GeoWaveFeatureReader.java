@@ -40,9 +40,10 @@ import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.adapter.vector.util.QueryIndexHelper;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
+import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
-import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
@@ -253,7 +254,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       return false;
     }
     for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
-      if (dimension instanceof TimeDefinition) {
+      if ((dimension instanceof TimeDefinition) || (dimension instanceof SimpleTimeDefinition)) {
         return true;
       }
     }

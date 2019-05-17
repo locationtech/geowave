@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.geotime.store.query;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
@@ -39,10 +40,11 @@ public class ExplicitTemporalQuery extends BasicQueryByClass {
     for (final TemporalRange range : temporalConstraints.getRanges()) {
       constraints.add(
           new ConstraintSet(
-              TimeDefinition.class,
               new ConstraintData(
                   new NumericRange(range.getStartTime().getTime(), range.getEndTime().getTime()),
-                  false)));
+                  false),
+              TimeDefinition.class,
+              SimpleTimeDefinition.class));
     }
     return new ConstraintsByClass(constraints);
   }
@@ -52,14 +54,15 @@ public class ExplicitTemporalQuery extends BasicQueryByClass {
     for (final Interval range : intervals) {
       constraints.add(
           new ConstraintSet(
-              TimeDefinition.class,
               new ConstraintData(
                   new NumericRange(
                       range.getStart().toEpochMilli(),
                       // intervals are intended to be exclusive on the end so this adjusts for
                       // exclusivity
                       Math.max(range.getEnd().toEpochMilli() - 1, range.getStart().toEpochMilli())),
-                  false)));
+                  false),
+              TimeDefinition.class,
+              SimpleTimeDefinition.class));
     }
     return new ConstraintsByClass(constraints);
   }

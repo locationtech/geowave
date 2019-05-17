@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.format.geotools.vector;
 
-import org.geoserver.feature.RetypingFeatureCollection;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.filter.identity.FeatureIdImpl;
 import org.locationtech.geowave.format.geotools.vector.RetypingVectorDataPlugin.RetypingVectorDataSource;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -25,8 +25,8 @@ public abstract class AbstractFieldRetypingSource implements RetypingVectorDataS
 
   @Override
   public SimpleFeature getRetypedSimpleFeature(
-      SimpleFeatureBuilder builder,
-      SimpleFeature original) {
+      final SimpleFeatureBuilder builder,
+      final SimpleFeature original) {
 
     final SimpleFeatureType target = builder.getFeatureType();
     for (int i = 0; i < target.getAttributeCount(); i++) {
@@ -42,16 +42,31 @@ public abstract class AbstractFieldRetypingSource implements RetypingVectorDataS
     }
     String featureId = getFeatureId(original);
     if (featureId == null) {
-      // a null ID will default to use the original
       final FeatureId id =
-          RetypingFeatureCollection.reTypeId(
-              original.getIdentifier(),
-              original.getFeatureType(),
-              target);
+          getDefaultFeatureId(original.getIdentifier(), original.getFeatureType(), target);
       featureId = id.getID();
     }
     final SimpleFeature retyped = builder.buildFeature(featureId);
     retyped.getUserData().putAll(original.getUserData());
     return retyped;
+  }
+
+  private static FeatureId getDefaultFeatureId(
+      final FeatureId sourceId,
+      final SimpleFeatureType original,
+      final SimpleFeatureType target) {
+    // a null ID will default to use the original
+    final String originalTypeName = original.getName().getLocalPart();
+    final String destTypeName = target.getName().getLocalPart();
+    if (destTypeName.equals(originalTypeName)) {
+      return sourceId;
+    }
+
+    final String prefix = originalTypeName + ".";
+    if (sourceId.getID().startsWith(prefix)) {
+      return new FeatureIdImpl(destTypeName + "." + sourceId.getID().substring(prefix.length()));
+    } else {
+      return sourceId;
+    }
   }
 }

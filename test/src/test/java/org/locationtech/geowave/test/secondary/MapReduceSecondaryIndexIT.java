@@ -134,6 +134,11 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
   }
 
   @Test
+  public void testDistributedIngestAndQueryTemporal() throws Exception {
+    testIngestAndQuery(DimensionalityType.TEMPORAL);
+  }
+
+  @Test
   public void testDistributedIngestAndQuerySpatial() throws Exception {
     testIngestAndQuery(DimensionalityType.SPATIAL);
   }

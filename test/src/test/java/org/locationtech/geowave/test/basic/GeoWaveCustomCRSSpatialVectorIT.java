@@ -111,6 +111,7 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
           new URL[] {
               new File(HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),
               new File(TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()},
+          null,
           TestUtils.createWebMercatorSpatialIndex(),
           "bounding box constraint only",
           crs,
@@ -125,6 +126,7 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
           new URL[] {
               new File(HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL(),
               new File(TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()},
+          null,
           TestUtils.createWebMercatorSpatialIndex(),
           "polygon constraint only",
           crs,

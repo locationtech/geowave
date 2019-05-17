@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math.util.MathUtils;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.junit.Assert;
@@ -159,12 +160,20 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       final URL[] expectedResultsResources,
       final Index index,
       final String queryDescription) throws Exception {
-    testQuery(savedFilterResource, expectedResultsResources, index, queryDescription, null, false);
+    testQuery(
+        savedFilterResource,
+        expectedResultsResources,
+        null,
+        index,
+        queryDescription,
+        null,
+        false);
   }
 
   protected void testQuery(
       final URL savedFilterResource,
       final URL[] expectedResultsResources,
+      final Pair<String, String> optimalCqlQueryGeometryAndTimeFields,
       final Index index,
       final String queryDescription,
       final CoordinateReferenceSystem crs,
@@ -174,7 +183,8 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
         getDataStorePluginOptions().createDataStore();
     // this file is the filtered dataset (using the previous file as a
     // filter) so use it to ensure the query worked
-    final QueryConstraints constraints = TestUtils.resourceToQuery(savedFilterResource);
+    final QueryConstraints constraints =
+        TestUtils.resourceToQuery(savedFilterResource, optimalCqlQueryGeometryAndTimeFields, true);
     QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder();
     if (index != null) {
       bldr = bldr.indexName(index.getName());
@@ -557,9 +567,11 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     TestUtils.testLocalIngest(
         getDataStorePluginOptions(),
         dimensionalityType,
+        null,
         exportDir.getAbsolutePath(),
         "avro",
-        numThreads);
+        numThreads,
+        false);
     try {
       URL[] expectedResultsUrls;
       if (pointsOnly) {
