@@ -146,6 +146,11 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Numeri
 <td class="colFirst"><code>protected </code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html#SimpleNumericIndexStrategy-org.locationtech.geowave.core.index.lexicoder.NumberLexicoder-">SimpleNumericIndexStrategy</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/lexicoder/NumberLexicoder.html" title="interface in org.locationtech.geowave.core.index.lexicoder">NumberLexicoder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="type parameter in SimpleNumericIndexStrategy">T</a>&gt;&nbsp;lexicoder)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected </code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html#SimpleNumericIndexStrategy-org.locationtech.geowave.core.index.lexicoder.NumberLexicoder-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition:A-">SimpleNumericIndexStrategy</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/lexicoder/NumberLexicoder.html" title="interface in org.locationtech.geowave.core.index.lexicoder">NumberLexicoder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="type parameter in SimpleNumericIndexStrategy">T</a>&gt;&nbsp;lexicoder,
+                          <a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;definitions)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -226,7 +231,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Numeri
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html#getInsertionPartitionKeys-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionPartitionKeys</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;insertionData)</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/index/lexicoder/NumberLexicoder.html" title="interface in org.locationtech.geowave.core.index.lexicoder">NumberLexicoder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="type parameter in SimpleNumericIndexStrategy">T</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/lexicoder/NumberLexicoder.html" title="interface in org.locationtech.geowave.core.index.lexicoder">NumberLexicoder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="type parameter in SimpleNumericIndexStrategy">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html#getLexicoder--">getLexicoder</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
@@ -318,10 +323,20 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Numeri
 <a name="SimpleNumericIndexStrategy-org.locationtech.geowave.core.index.lexicoder.NumberLexicoder-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>SimpleNumericIndexStrategy</h4>
 <pre>protected&nbsp;SimpleNumericIndexStrategy(<a href="../../../../../../org/locationtech/geowave/core/index/lexicoder/NumberLexicoder.html" title="interface in org.locationtech.geowave.core.index.lexicoder">NumberLexicoder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="type parameter in SimpleNumericIndexStrategy">T</a>&gt;&nbsp;lexicoder)</pre>
+</li>
+</ul>
+<a name="SimpleNumericIndexStrategy-org.locationtech.geowave.core.index.lexicoder.NumberLexicoder-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SimpleNumericIndexStrategy</h4>
+<pre>protected&nbsp;SimpleNumericIndexStrategy(<a href="../../../../../../org/locationtech/geowave/core/index/lexicoder/NumberLexicoder.html" title="interface in org.locationtech.geowave.core.index.lexicoder">NumberLexicoder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="type parameter in SimpleNumericIndexStrategy">T</a>&gt;&nbsp;lexicoder,
+                                     <a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;definitions)</pre>
 </li>
 </ul>
 </li>
@@ -338,7 +353,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Numeri
 <ul class="blockList">
 <li class="blockList">
 <h4>getLexicoder</h4>
-<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/lexicoder/NumberLexicoder.html" title="interface in org.locationtech.geowave.core.index.lexicoder">NumberLexicoder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="type parameter in SimpleNumericIndexStrategy">T</a>&gt;&nbsp;getLexicoder()</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/lexicoder/NumberLexicoder.html" title="interface in org.locationtech.geowave.core.index.lexicoder">NumberLexicoder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/simple/SimpleNumericIndexStrategy.html" title="type parameter in SimpleNumericIndexStrategy">T</a>&gt;&nbsp;getLexicoder()</pre>
 </li>
 </ul>
 <a name="cast-double-">
