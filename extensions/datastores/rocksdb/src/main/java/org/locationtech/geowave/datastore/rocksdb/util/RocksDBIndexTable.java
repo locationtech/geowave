@@ -92,7 +92,7 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
   }
 
 
-  public synchronized CloseableIterator<GeoWaveRow> iterator() {
+  public CloseableIterator<GeoWaveRow> iterator() {
     final RocksDB readDb = getReadDb();
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
@@ -109,7 +109,7 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
         visibilityEnabled);
   }
 
-  public synchronized CloseableIterator<GeoWaveRow> iterator(final ByteArrayRange range) {
+  public CloseableIterator<GeoWaveRow> iterator(final ByteArrayRange range) {
     final RocksDB readDb = getReadDb();
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
