@@ -9,7 +9,6 @@
 package org.locationtech.geowave.adapter.raster.operations.options;
 
 import com.beust.jcommander.Parameter;
-import org.locationtech.geowave.mapreduce.operations.HdfsHostPortConverter;
 
 public class RasterTileResizeCommandLineOptions {
   @Parameter(
@@ -30,18 +29,6 @@ public class RasterTileResizeCommandLineOptions {
   @Parameter(names = "--maxSplits", description = "The max partitions for the input data")
   private Integer maxSplits;
 
-  @Parameter(
-      names = "--hdfsHostPort",
-      description = "he hdfs host port",
-      converter = HdfsHostPortConverter.class)
-  private String hdfsHostPort;
-
-  @Parameter(
-      names = "--jobSubmissionHostPort",
-      description = "The job submission tracker",
-      required = true)
-  private String jobTrackerOrResourceManHostPort;
-
   @Parameter(names = "--outputTileSize", description = "The tile size to output", required = true)
   private Integer outputTileSize;
 
@@ -56,16 +43,12 @@ public class RasterTileResizeCommandLineOptions {
       final String outputCoverageName,
       final Integer minSplits,
       final Integer maxSplits,
-      final String hdfsHostPort,
-      final String jobTrackerOrResourceManHostPort,
       final Integer outputTileSize,
       final String indexName) {
     this.inputCoverageName = inputCoverageName;
     this.outputCoverageName = outputCoverageName;
     this.minSplits = minSplits;
     this.maxSplits = maxSplits;
-    this.hdfsHostPort = hdfsHostPort;
-    this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
     this.outputTileSize = outputTileSize;
     this.indexName = indexName;
   }
@@ -84,14 +67,6 @@ public class RasterTileResizeCommandLineOptions {
 
   public Integer getMaxSplits() {
     return maxSplits;
-  }
-
-  public String getHdfsHostPort() {
-    return hdfsHostPort;
-  }
-
-  public String getJobTrackerOrResourceManHostPort() {
-    return jobTrackerOrResourceManHostPort;
   }
 
   public Integer getOutputTileSize() {
@@ -116,14 +91,6 @@ public class RasterTileResizeCommandLineOptions {
 
   public void setMaxSplits(final Integer maxSplits) {
     this.maxSplits = maxSplits;
-  }
-
-  public void setHdfsHostPort(final String hdfsHostPort) {
-    this.hdfsHostPort = hdfsHostPort;
-  }
-
-  public void setJobTrackerOrResourceManHostPort(final String jobTrackerOrResourceManHostPort) {
-    this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
   }
 
   public void setOutputTileSize(final Integer outputTileSize) {

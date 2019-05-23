@@ -60,6 +60,18 @@ public class RasterTileResizeHelper {
     }
   }
 
+  public RasterTileResizeHelper(
+      short oldAdapterId,
+      short newAdapterId,
+      RasterDataAdapter newAdapter,
+      Index index) {
+    this.newAdapter = newAdapter;
+    this.oldAdapterId = oldAdapterId;
+    this.newAdapterId = newAdapterId;
+    this.index = index;
+    indexNames = new String[] {index.getName()};
+  }
+
   public GeoWaveOutputKey getGeoWaveOutputKey() {
     return new GeoWaveOutputKey(newAdapter.getTypeName(), indexNames);
   }

@@ -8,11 +8,12 @@
  */
 package org.locationtech.geowave.adapter.raster.operations;
 
+import org.locationtech.geowave.analytic.spark.kde.ResizeSparkCommand;
 import org.locationtech.geowave.core.cli.spi.CLIOperationProviderSpi;
 
 public class RasterOperationCLIProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
-      new Class<?>[] {RasterSection.class, ResizeCommand.class};
+      new Class<?>[] {RasterSection.class, ResizeMRCommand.class, ResizeSparkCommand.class};
 
   @Override
   public Class<?>[] getOperations() {

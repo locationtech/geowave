@@ -2,60 +2,61 @@ package org.locationtech.geowave.analytic.spark.kde;
 
 import java.awt.image.WritableRaster;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.spark.RangePartitioner;
 import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
-import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.sql.SparkSession;
-import org.geotools.filter.text.cql2.CQLException;
-import org.geotools.filter.text.ecql.ECQL;
+import org.geotools.geometry.jts.JTS;
+import org.geotools.referencing.CRS;
+import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
-import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
+import org.locationtech.geowave.adapter.raster.adapter.ClientMergeableRasterTile;
+import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.analytic.mapreduce.kde.CellCounter;
 import org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter;
-import org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange;
 import org.locationtech.geowave.analytic.mapreduce.kde.KDEReducer;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDD;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
-import org.locationtech.geowave.analytic.spark.GeoWaveRasterRDD;
 import org.locationtech.geowave.analytic.spark.GeoWaveSparkConf;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
 import org.locationtech.geowave.analytic.spark.RDDUtils;
-import org.locationtech.geowave.analytic.spark.kmeans.KMeansRunner;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
-import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
-import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
-import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
-import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.filter.Filter;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.cs.CoordinateSystem;
+import org.opengis.referencing.cs.CoordinateSystemAxis;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterators;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import scala.Tuple2;
 
 public class KDERunner {
   private static final Logger LOGGER = LoggerFactory.getLogger(KDERunner.class);
-  private static final double WEIGHT_EPSILON = 2.22E-14;
 
   public static final int NUM_BANDS = 3;
   protected static final String[] NAME_PER_BAND =
@@ -80,6 +81,7 @@ public class KDERunner {
   private int maxLevel = 20;
   private int tileSize = 1;
   private String coverageName = "kde";
+  private Index outputIndex;
 
   private int minSplits = -1;
   private int maxSplits = -1;
@@ -90,8 +92,10 @@ public class KDERunner {
     if (session == null) {
       String jar = "";
       try {
-        jar =
-            KMeansRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        jar = KDERunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        if (!FilenameUtils.isExtension(jar.toLowerCase(), "jar")) {
+          jar = "";
+        }
       } catch (final URISyntaxException e) {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }
@@ -122,7 +126,6 @@ public class KDERunner {
       throw new IOException("You must supply an input datastore!");
     }
 
-
     // Retrieve the feature adapters
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     List<String> featureTypeNames;
@@ -135,55 +138,57 @@ public class KDERunner {
       featureTypeNames = FeatureDataUtils.getFeatureTypeNames(inputDataStore);
     }
     bldr.setTypeNames(featureTypeNames.toArray(new String[0]));
-
-    // This is required due to some funkiness in GeoWaveInputFormat
-    final PersistentAdapterStore adapterStore = inputDataStore.createAdapterStore();
-    final InternalAdapterStore internalAdapterStore = inputDataStore.createInternalAdapterStore();
-
-    // TODO remove this, but in case there is trouble this is here for
-    // reference temporarily
-    // queryOptions.getAdaptersArray(adapterStore);
-
-    // Add a spatial filter if requested
-    try {
-      if (cqlFilter != null) {
-        Geometry bbox = null;
-        String cqlTypeName;
-        if (typeName == null) {
-          cqlTypeName = featureTypeNames.get(0);
-        } else {
-          cqlTypeName = typeName;
-        }
-
-        final short adapterId = internalAdapterStore.getAdapterId(cqlTypeName);
-
-        final DataTypeAdapter<?> adapter = adapterStore.getAdapter(adapterId).getAdapter();
-
-        if (adapter instanceof FeatureDataAdapter) {
-          final String geometryAttribute =
-              ((FeatureDataAdapter) adapter).getFeatureType().getGeometryDescriptor().getLocalName();
-          Filter filter;
-          filter = ECQL.toFilter(cqlFilter);
-
-          final ExtractGeometryFilterVisitorResult geoAndCompareOpData =
-              (ExtractGeometryFilterVisitorResult) filter.accept(
-                  new ExtractGeometryFilterVisitor(
-                      GeometryUtils.getDefaultCRS(),
-                      geometryAttribute),
-                  null);
-          bbox = geoAndCompareOpData.getGeometry();
-        }
-
-        if ((bbox != null) && !bbox.equals(GeometryUtils.infinity())) {
-          bldr.constraints(
-              bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
-                  bbox).build());
-        }
+    if (indexName != null) {
+      bldr.indexName(indexName);
+    }
+    Index inputPrimaryIndex = null;
+    final Index[] idxArray = inputDataStore.createDataStore().getIndices();
+    for (final Index idx : idxArray) {
+      if ((idx != null) && ((indexName == null) || indexName.equals(idx.getName()))) {
+        inputPrimaryIndex = idx;
+        break;
       }
-    } catch (final CQLException e) {
-      LOGGER.error("Unable to parse CQL: " + cqlFilter);
+    }
+    final CoordinateReferenceSystem inputIndexCrs = GeometryUtils.getIndexCrs(inputPrimaryIndex);
+    final String inputCrsCode = GeometryUtils.getCrsCode(inputIndexCrs);
+
+    Index outputPrimaryIndex = outputIndex;
+    CoordinateReferenceSystem outputIndexCrs = null;
+    final String outputCrsCode;
+
+    if (outputPrimaryIndex != null) {
+      outputIndexCrs = GeometryUtils.getIndexCrs(outputPrimaryIndex);
+      outputCrsCode = GeometryUtils.getCrsCode(outputIndexCrs);
+    } else {
+      final SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
+      final SpatialOptions so = sdp.createOptions();
+      so.setCrs(inputCrsCode);
+      outputPrimaryIndex = sdp.createIndex(so);
+      outputIndexCrs = inputIndexCrs;
+      outputCrsCode = inputCrsCode;
     }
 
+    final CoordinateSystem cs = outputIndexCrs.getCoordinateSystem();
+    final CoordinateSystemAxis csx = cs.getAxis(0);
+    final CoordinateSystemAxis csy = cs.getAxis(1);
+    final double xMax = csx.getMaximumValue();
+    final double xMin = csx.getMinimumValue();
+    final double yMax = csy.getMaximumValue();
+    final double yMin = csy.getMinimumValue();
+
+    if ((xMax == Double.POSITIVE_INFINITY)
+        || (xMin == Double.NEGATIVE_INFINITY)
+        || (yMax == Double.POSITIVE_INFINITY)
+        || (yMin == Double.NEGATIVE_INFINITY)) {
+      LOGGER.error(
+          "Raster KDE resize with raster primary index CRS dimensions min/max equal to positive infinity or negative infinity is not supported");
+      throw new RuntimeException(
+          "Raster KDE resize with raster primary index CRS dimensions min/max equal to positive infinity or negative infinity is not supported");
+    }
+
+    if (cqlFilter != null) {
+      bldr.constraints(bldr.constraintsFactory().cqlConstraints(cqlFilter));
+    }
     // Load RDD from datastore
     final RDDOptions kdeOpts = new RDDOptions();
     kdeOpts.setMinSplits(minSplits);
@@ -195,12 +200,7 @@ public class KDERunner {
       return x + y;
     };
 
-    final SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
-    final SpatialOptions so = sdp.createOptions();
-
-    final Index outputPrimaryIndex = sdp.createIndex(so);
-
-    final DataTypeAdapter<?> adapter =
+    final RasterDataAdapter adapter =
         RasterUtils.createDataAdapterTypeDouble(
             coverageName,
             KDEReducer.NUM_BANDS,
@@ -210,67 +210,161 @@ public class KDERunner {
             NAME_PER_BAND,
             null);
     outputDataStore.createDataStore().addType(adapter, outputPrimaryIndex);
-    for (int level = minLevel; level < maxLevel; level++) {
 
+    // The following "inner" variables are created to give access to member variables within lambda
+    // expressions
+    final int innerTileSize = tileSize;
+    final String innerCoverageName = coverageName;
+    for (int level = minLevel; level <= maxLevel; level++) {
       final int numXTiles = (int) Math.pow(2, level + 1);
       final int numYTiles = (int) Math.pow(2, level);
-      final int numXPosts = numXTiles * tileSize;
-      final int numYPosts = numYTiles * tileSize;
+      final int numXPosts = numXTiles; // * tileSize;
+      final int numYPosts = numYTiles; // * tileSize;
       final GeoWaveRDD kdeRDD =
           GeoWaveRDDLoader.loadRDD(session.sparkContext(), inputDataStore, kdeOpts);
-      // kdeRDD.getRawRDD().cache().aggregate(new Envelope(), (e, p) -> {
-      // if (e.isNull()) {
-      //
-      // }
-      // return e;
-      // }, (e1, e2) -> {
-      // return e1;
-      // });
-      final JavaPairRDD<Double, Long> cells =
+      JavaPairRDD<Double, Long> cells =
           kdeRDD.getRawRDD().flatMapToPair(
-              new GeoWaveCellMapper(numXPosts, numYPosts)).combineByKey(
-                  identity,
-                  sum,
-                  sum).mapToPair(new MyFunction()).sortByKey(false).repartition(1).cache();
-      final double max = cells.first()._1;
-      final long count = cells.count();
-      final JavaPairRDD<GeoWaveInputKey, GridCoverage> rdd =
-          cells.zipWithIndex().mapToPair(
-              new MyFunction2(
-                  max,
-                  count,
+              new GeoWaveCellMapper(
                   numXPosts,
                   numYPosts,
-                  numXTiles,
-                  numYTiles,
-                  numYTiles,
-                  coverageName,
-                  indexName));
+                  xMin,
+                  xMax,
+                  yMin,
+                  yMax,
+                  inputCrsCode,
+                  outputCrsCode)).combineByKey(identity, sum, sum).mapToPair(item -> item.swap());
+      cells =
+          cells.partitionBy(
+              new RangePartitioner(
+                  cells.getNumPartitions(),
+                  cells.rdd(),
+                  true,
+                  scala.math.Ordering.Double$.MODULE$,
+                  scala.reflect.ClassTag$.MODULE$.apply(Double.class))).sortByKey(true).cache();
+      final double max = cells.first()._1;
+      final long count = cells.count();
+
+      JavaRDD<GridCoverage> rdd = cells.zipWithIndex().map(t -> {
+        final TileInfo tileInfo =
+            fromCellIndexToTileInfo(
+                t._1._2,
+                numXPosts,
+                numYPosts,
+                numXTiles,
+                numYTiles,
+                xMin,
+                xMax,
+                yMin,
+                yMax,
+                innerTileSize);
+        final WritableRaster raster = RasterUtils.createRasterTypeDouble(NUM_BANDS, innerTileSize);
+
+        final double normalizedValue = t._1._1 / max;
+        // because we are using a Double as the key, the ordering
+        // isn't always completely reproducible as Double equals does not
+        // take into account an epsilon
+
+        final double percentile = (count - 1 - t._2) / ((double) count - 1);
+        raster.setSample(tileInfo.x, tileInfo.y, 0, t._1._1);
+        raster.setSample(tileInfo.x, tileInfo.y, 1, normalizedValue);
+
+        raster.setSample(tileInfo.x, tileInfo.y, 2, percentile);
+        return RasterUtils.createCoverageTypeDouble(
+            innerCoverageName,
+            tileInfo.tileWestLon,
+            tileInfo.tileEastLon,
+            tileInfo.tileSouthLat,
+            tileInfo.tileNorthLat,
+            MINS_PER_BAND,
+            MAXES_PER_BAND,
+            NAME_PER_BAND,
+            raster,
+            GeometryUtils.DEFAULT_CRS_STR);
+      });
       LOGGER.debug("Writing results to output store...");
-      RDDUtils.writeRasterRDDToGeoWave(
-          jsc.sc(),
-          outputPrimaryIndex,
-          outputDataStore,
-          adapter,
-          new GeoWaveRasterRDD(rdd));
+      if (tileSize > 1) {
+        rdd =
+            rdd.flatMapToPair(new TransformTileSize(adapter, outputPrimaryIndex)).groupByKey().map(
+                new MergeOverlappingTiles(outputPrimaryIndex, adapter));
+      }
+      RDDUtils.writeRasterRDDToGeoWave(jsc.sc(), outputPrimaryIndex, outputDataStore, adapter, rdd);
 
       LOGGER.debug("Results successfully written!");
     }
 
   }
 
-  private static Envelope getEnvelope(final SimpleFeature entry) {
-    final Object o = entry.getDefaultGeometry();
+  private static class PartitionAndSortKey {
+    byte[] partitionKey;
+    byte[] sortKey;
 
-    if ((o != null) && (o instanceof Geometry)) {
-      final Geometry geometry = (Geometry) o;
-      if (!geometry.isEmpty()) {
-        return geometry.getEnvelopeInternal();
-      }
+    public PartitionAndSortKey(final byte[] partitionKey, final byte[] sortKey) {
+      super();
+      this.partitionKey = partitionKey;
+      this.sortKey = sortKey;
     }
-    return null;
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = (prime * result) + Arrays.hashCode(partitionKey);
+      result = (prime * result) + Arrays.hashCode(sortKey);
+      return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null) {
+        return false;
+      }
+      if (getClass() != obj.getClass()) {
+        return false;
+      }
+      final PartitionAndSortKey other = (PartitionAndSortKey) obj;
+      if (!Arrays.equals(partitionKey, other.partitionKey)) {
+        return false;
+      }
+      if (!Arrays.equals(sortKey, other.sortKey)) {
+        return false;
+      }
+      return true;
+    }
   }
 
+  @SuppressFBWarnings(
+      value = "INT_BAD_REM_BY_1",
+      justification = "The calculation is appropriate if we ever want to vary to tile size.")
+  private static TileInfo fromCellIndexToTileInfo(
+      final long index,
+      final int numXPosts,
+      final int numYPosts,
+      final int numXTiles,
+      final int numYTiles,
+      final double xMin,
+      final double xMax,
+      final double yMin,
+      final double yMax,
+      final int tileSize) {
+    final int xPost = (int) (index / numYPosts);
+    final int yPost = (int) (index % numYPosts);
+    final int xTile = xPost / tileSize;
+    final int yTile = yPost / tileSize;
+    final int x = (xPost % tileSize);
+    final int y = (yPost % tileSize);
+    final double crsWidth = xMax - xMin;
+    final double crsHeight = yMax - yMin;
+    final double tileWestLon = ((xTile * crsWidth) / numXTiles) + xMin;
+    final double tileSouthLat = ((yTile * crsHeight) / numYTiles) + yMin;
+    final double tileEastLon = tileWestLon + (crsWidth / numXTiles);
+    final double tileNorthLat = tileSouthLat + (crsHeight / numYTiles);
+    // remember java rasters go from 0 at the top to (height-1) at the bottom, so we have to inverse
+    // the y here which goes from bottom to top
+    return new TileInfo(tileWestLon, tileEastLon, tileSouthLat, tileNorthLat, x, tileSize - y - 1);
+  }
 
   public DataStorePluginOptions getInputDataStore() {
     return inputDataStore;
@@ -282,6 +376,10 @@ public class KDERunner {
 
   public DataStorePluginOptions getOutputDataStore() {
     return outputDataStore;
+  }
+
+  public void setOutputIndex(final Index outputIndex) {
+    this.outputIndex = outputIndex;
   }
 
   public void setOutputDataStore(final DataStorePluginOptions outputDataStore) {
@@ -334,49 +432,181 @@ public class KDERunner {
   }
 
   protected static class GeoWaveCellMapper implements
-      org.apache.spark.api.java.function.PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, Long, Double> {
+      PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, Long, Double> {
+
     /**
-    *
-    */
+     *
+     */
     private static final long serialVersionUID = 1L;
     private final int numXPosts;
     private final int numYPosts;
+    private final double minX;
+    private final double maxX;
+    private final double minY;
+    private final double maxY;
+    private final String inputCrsCode;
+    private final String outputCrsCode;
+    private MathTransform transform = null;
 
-    public GeoWaveCellMapper(final int numXPosts, final int numYPosts) {
+    protected GeoWaveCellMapper(
+        final int numXPosts,
+        final int numYPosts,
+        final double minX,
+        final double maxX,
+        final double minY,
+        final double maxY,
+        final String inputCrsCode,
+        final String outputCrsCode) {
       this.numXPosts = numXPosts;
       this.numYPosts = numYPosts;
+      this.minX = minX;
+      this.maxX = maxX;
+      this.minY = minY;
+      this.maxY = maxY;
+      this.inputCrsCode = inputCrsCode;
+      this.outputCrsCode = outputCrsCode;
     }
 
     @Override
     public Iterator<Tuple2<Long, Double>> call(final Tuple2<GeoWaveInputKey, SimpleFeature> t)
         throws Exception {
-      return getCells(t._2, numXPosts, numYPosts);
+      final List<Tuple2<Long, Double>> cells = new ArrayList<>();
+
+      Point pt = null;
+      if ((t != null) && (t._2 != null)) {
+        final Object geomObj = t._2.getDefaultGeometry();
+        if ((geomObj != null) && (geomObj instanceof Geometry)) {
+          if (inputCrsCode.equals(outputCrsCode)) {
+            pt = ((Geometry) geomObj).getCentroid();
+          } else {
+            if (transform == null) {
+
+              try {
+                transform =
+                    CRS.findMathTransform(
+                        CRS.decode(inputCrsCode, true),
+                        CRS.decode(outputCrsCode, true),
+                        true);
+              } catch (final FactoryException e) {
+                LOGGER.error("Unable to decode " + inputCrsCode + " CRS", e);
+                throw new RuntimeException("Unable to initialize " + inputCrsCode + " object", e);
+              }
+            }
+
+            try {
+              final Geometry transformedGeometry = JTS.transform((Geometry) geomObj, transform);
+              pt = transformedGeometry.getCentroid();
+            } catch (MismatchedDimensionException | TransformException e) {
+              LOGGER.warn(
+                  "Unable to perform transform to specified CRS of the index, the feature geometry will remain in its original CRS",
+                  e);
+            }
+          }
+          GaussianFilter.incrementPtFast(
+              pt.getX(),
+              pt.getY(),
+              minX,
+              maxX,
+              minY,
+              maxY,
+              new CellCounter() {
+                @Override
+                public void increment(final long cellId, final double weight) {
+                  cells.add(new Tuple2<>(cellId, weight));
+
+                }
+              },
+              numXPosts,
+              numYPosts);
+        }
+      }
+      return cells.iterator();
     }
   }
 
-  public static Iterator<Tuple2<Long, Double>> getCells(
-      final SimpleFeature s,
-      final int numXPosts,
-      final int numYPosts) {
+  private static class MergeOverlappingTiles implements
+      Function<Tuple2<PartitionAndSortKey, Iterable<GridCoverage>>, GridCoverage> {
 
-    final List<Tuple2<Long, Double>> cells = new ArrayList<>();
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private final Index index;
+    private final RasterDataAdapter newAdapter;
 
-    Point pt = null;
-    if (s != null) {
-      final Object geomObj = s.getDefaultGeometry();
-      if ((geomObj != null) && (geomObj instanceof Geometry)) {
-        pt = ((Geometry) geomObj).getCentroid();
-        GaussianFilter.incrementPtFast(pt.getY(), pt.getX(), new CellCounter() {
-
-          @Override
-          public void increment(final long cellId, final double weight) {
-            cells.add(new Tuple2<>(cellId, weight));
-
-          }
-        }, numXPosts, numYPosts);
-      }
+    public MergeOverlappingTiles(final Index index, final RasterDataAdapter newAdapter) {
+      super();
+      this.index = index;
+      this.newAdapter = newAdapter;
     }
-    return cells.iterator();
+
+    @Override
+    public GridCoverage call(final Tuple2<PartitionAndSortKey, Iterable<GridCoverage>> v)
+        throws Exception {
+      GridCoverage mergedCoverage = null;
+      ClientMergeableRasterTile<?> mergedTile = null;
+      boolean needsMerge = false;
+      final Iterator it = v._2.iterator();
+      while (it.hasNext()) {
+        final Object value = it.next();
+        if (value instanceof GridCoverage) {
+          if (mergedCoverage == null) {
+            mergedCoverage = (GridCoverage) value;
+          } else {
+            if (!needsMerge) {
+              mergedTile = newAdapter.getRasterTileFromCoverage(mergedCoverage);
+              needsMerge = true;
+            }
+            final ClientMergeableRasterTile thisTile =
+                newAdapter.getRasterTileFromCoverage((GridCoverage) value);
+            if (mergedTile != null) {
+              mergedTile.merge(thisTile);
+            }
+          }
+        }
+      }
+      if (needsMerge) {
+        mergedCoverage =
+            newAdapter.getCoverageFromRasterTile(
+                mergedTile,
+                v._1.partitionKey,
+                v._1.sortKey,
+                index);
+      }
+      return mergedCoverage;
+    }
+
+  }
+
+
+  private static class TransformTileSize implements
+      PairFlatMapFunction<GridCoverage, PartitionAndSortKey, GridCoverage> {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    RasterDataAdapter newAdapter;
+    Index index;
+
+    public TransformTileSize(final RasterDataAdapter newAdapter, final Index index) {
+      super();
+      this.newAdapter = newAdapter;
+      this.index = index;
+    }
+
+    @Override
+    public Iterator<Tuple2<PartitionAndSortKey, GridCoverage>> call(
+        final GridCoverage existingCoverage) throws Exception {
+      final Iterator<GridCoverage> it = newAdapter.convertToIndex(index, existingCoverage);
+      return Iterators.transform(
+          it,
+          g -> new Tuple2<>(
+              new PartitionAndSortKey(
+                  ((FitToIndexGridCoverage) g).getPartitionKey(),
+                  ((FitToIndexGridCoverage) g).getSortKey()),
+              g));
+    }
+
   }
 
   private static final class TileInfo {
@@ -444,142 +674,5 @@ public class KDERunner {
       }
       return true;
     }
-  }
-
-  private static class MyFunction implements
-      PairFunction<Tuple2<Long, Double>, Double, Long>,
-      Serializable {
-    /**
-    *
-    */
-    private static final long serialVersionUID = 1L;
-
-    @Override
-    public Tuple2<Double, Long> call(final Tuple2<Long, Double> item) throws Exception {
-      return item.swap();
-    }
-
-  }
-  private static class MyFunction2 implements
-      PairFunction<Tuple2<Tuple2<Double, Long>, Long>, GeoWaveInputKey, GridCoverage>,
-      Serializable {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-    private final double max;
-    private final long count;
-    private final int numXPosts;
-    private final int numYPosts;
-    private final int numXTiles;
-    private final int numYTiles;
-    private final String coverageName;
-    private final String indexName;
-    private final int tileSize;
-
-    public MyFunction2(
-        final double max,
-        final long count,
-        final int numXPosts,
-        final int numYPosts,
-        final int numXTiles,
-        final int numYTiles,
-        final int tileSize,
-        final String coverageName,
-        final String indexName) {
-      super();
-      this.max = max;
-      this.count = count;
-      this.numXPosts = numXPosts;
-      this.numYPosts = numYPosts;
-      this.numXTiles = numXTiles;
-      this.numYTiles = numYTiles;
-      this.tileSize = tileSize;
-      this.coverageName = coverageName;
-      this.indexName = indexName;
-    }
-
-    private static final ValueRange[] valueRangePerDimension =
-        new ValueRange[] {new ValueRange(-180, 180), new ValueRange(-90, 90)};
-
-    @SuppressFBWarnings(
-        value = "INT_BAD_REM_BY_1",
-        justification = "The calculation is appropriate if we ever want to vary to tile size.")
-    private TileInfo fromCellIndexToTileInfo(
-        final long index,
-        final int numXPosts,
-        final int numYPosts,
-        final int numXTiles,
-        final int numYTiles,
-        final int tileSize) {
-      final int xPost = (int) (index / numYPosts);
-      final int yPost = (int) (index % numYPosts);
-      final int xTile = xPost / tileSize;
-      final int yTile = yPost / tileSize;
-      final int x = (xPost % tileSize);
-      final int y = (yPost % tileSize);
-      final double xMin = valueRangePerDimension[0].getMin();
-      final double xMax = valueRangePerDimension[0].getMax();
-      final double yMin = valueRangePerDimension[1].getMin();
-      final double yMax = valueRangePerDimension[1].getMax();
-      final double crsWidth = xMax - xMin;
-      final double crsHeight = yMax - yMin;
-      final double tileWestLon = ((xTile * crsWidth) / numXTiles) + xMin;
-      final double tileSouthLat = ((yTile * crsHeight) / numYTiles) + yMin;
-      final double tileEastLon = tileWestLon + (crsWidth / numXTiles);
-      final double tileNorthLat = tileSouthLat + (crsHeight / numYTiles);
-      return new TileInfo(
-          tileWestLon,
-          tileEastLon,
-          tileSouthLat,
-          tileNorthLat,
-          x,
-          tileSize - y - 1); // remember
-                             // java
-                             // rasters
-                             // go
-      // from 0 at the
-      // top
-      // to (height-1) at the bottom, so we have
-      // to
-      // inverse the y here which goes from bottom
-      // to top
-    }
-
-    @Override
-    public Tuple2<GeoWaveInputKey, GridCoverage> call(final Tuple2<Tuple2<Double, Long>, Long> t)
-        throws Exception {
-      final TileInfo tileInfo =
-          fromCellIndexToTileInfo(t._1._2, numXPosts, numYPosts, numXTiles, numYTiles, tileSize);
-      final WritableRaster raster = RasterUtils.createRasterTypeDouble(NUM_BANDS, tileSize);
-
-      final double normalizedValue = t._1._1 / max;
-      // for consistency give all cells with matching weight the same
-      // percentile
-      // because we are using a DoubleWritable as the key, the ordering
-      // isn't always completely reproducible as Double equals does not
-      // take into account an epsilon, but we can make it reproducible by
-      // doing a comparison with the previous value using an appropriate
-      // epsilon
-      final double percentile = (count - 1 - t._2) / ((double) count - 1);
-      raster.setSample(tileInfo.x, tileInfo.y, 0, t._1._1);
-      raster.setSample(tileInfo.x, tileInfo.y, 1, normalizedValue);
-
-      raster.setSample(tileInfo.x, tileInfo.y, 2, percentile);
-      return new Tuple2(
-          new GeoWaveOutputKey(coverageName, indexName),
-          RasterUtils.createCoverageTypeDouble(
-              coverageName,
-              tileInfo.tileWestLon,
-              tileInfo.tileEastLon,
-              tileInfo.tileSouthLat,
-              tileInfo.tileNorthLat,
-              MINS_PER_BAND,
-              MAXES_PER_BAND,
-              NAME_PER_BAND,
-              raster,
-              GeometryUtils.DEFAULT_CRS_STR));
-    }
-
   }
 }

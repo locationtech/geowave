@@ -94,7 +94,6 @@ public class GaussianCellMapper extends
   protected void map(final GeoWaveInputKey key, final SimpleFeature value, final Context context)
       throws IOException, InterruptedException {
     Point pt = null;
-    Geometry transformedGeometry = null;
     if (value != null) {
       if ((filter != null) && !filter.evaluate(value)) {
         return;
@@ -119,7 +118,7 @@ public class GaussianCellMapper extends
           }
 
           try {
-            transformedGeometry = JTS.transform((Geometry) geomObj, transform);
+            Geometry transformedGeometry = JTS.transform((Geometry) geomObj, transform);
             pt = transformedGeometry.getCentroid();
           } catch (MismatchedDimensionException | TransformException e) {
             LOGGER.warn(

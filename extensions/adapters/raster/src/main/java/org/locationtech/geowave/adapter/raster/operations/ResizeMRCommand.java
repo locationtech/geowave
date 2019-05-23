@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.adapter.raster.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +22,32 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
+import org.locationtech.geowave.mapreduce.operations.HdfsHostPortConverter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
-@GeowaveOperation(name = "resize", parentOperation = RasterSection.class)
-@Parameters(commandDescription = "Resize Raster Tiles")
-public class ResizeCommand extends DefaultOperation implements Command {
+@GeowaveOperation(name = "resize-mr", parentOperation = RasterSection.class)
+@Parameters(commandDescription = "Resize Raster Tiles in MapReduce")
+public class ResizeMRCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<input store name> <output store name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private RasterTileResizeCommandLineOptions options = new RasterTileResizeCommandLineOptions();
+  @Parameter(
+      names = "--hdfsHostPort",
+      description = "he hdfs host port",
+      converter = HdfsHostPortConverter.class)
+  private String hdfsHostPort;
+
+  @Parameter(
+      names = "--jobSubmissionHostPort",
+      description = "The job submission tracker",
+      required = true)
+  private String jobTrackerOrResourceManHostPort;
 
   private DataStorePluginOptions inputStoreOptions = null;
 
@@ -72,15 +84,20 @@ public class ResizeCommand extends DefaultOperation implements Command {
     }
     outputStoreOptions = outputStoreLoader.getDataStorePlugin();
 
-    if (options.getHdfsHostPort() == null) {
+    if (hdfsHostPort == null) {
 
-      Properties configProperties = ConfigOptions.loadProperties(configFile);
-      String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
-      options.setHdfsHostPort(hdfsFSUrl);
+      final Properties configProperties = ConfigOptions.loadProperties(configFile);
+      final String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
+      hdfsHostPort = hdfsFSUrl;
     }
 
-    RasterTileResizeJobRunner runner =
-        new RasterTileResizeJobRunner(inputStoreOptions, outputStoreOptions, options);
+    final RasterTileResizeJobRunner runner =
+        new RasterTileResizeJobRunner(
+            inputStoreOptions,
+            outputStoreOptions,
+            options,
+            hdfsHostPort,
+            jobTrackerOrResourceManHostPort);
     return runner;
   }
 
@@ -89,7 +106,7 @@ public class ResizeCommand extends DefaultOperation implements Command {
   }
 
   public void setParameters(final String inputStore, final String outputStore) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(inputStore);
     parameters.add(outputStore);
   }
@@ -108,5 +125,21 @@ public class ResizeCommand extends DefaultOperation implements Command {
 
   public DataStorePluginOptions getOutputStoreOptions() {
     return outputStoreOptions;
+  }
+
+  public String getHdfsHostPort() {
+    return hdfsHostPort;
+  }
+
+  public void setHdfsHostPort(String hdfsHostPort) {
+    this.hdfsHostPort = hdfsHostPort;
+  }
+
+  public String getJobTrackerOrResourceManHostPort() {
+    return jobTrackerOrResourceManHostPort;
+  }
+
+  public void setJobTrackerOrResourceManHostPort(String jobTrackerOrResourceManHostPort) {
+    this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
   }
 }

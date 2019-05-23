@@ -28,11 +28,12 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.adapter.raster.operations.ResizeCommand;
+import org.locationtech.geowave.adapter.raster.operations.ResizeMRCommand;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.locationtech.geowave.analytic.mapreduce.operations.KdeCommand;
+import org.locationtech.geowave.analytic.spark.kde.operations.KDESparkCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
@@ -63,7 +64,8 @@ import org.slf4j.LoggerFactory;
     GeoWaveStoreType.REDIS,
     GeoWaveStoreType.ROCKSDB})
 public class CustomCRSKDERasterResizeIT {
-  private static final String TEST_COVERAGE_NAME_PREFIX = "TEST_COVERAGE";
+  private static final String TEST_COVERAGE_NAME_MR_PREFIX = "TEST_COVERAGE_MR";
+  private static final String TEST_COVERAGE_NAME_SPARK_PREFIX = "TEST_COVERAGE_SPARK";
   private static final String TEST_RESIZE_COVERAGE_NAME_PREFIX = "TEST_RESIZE";
   private static final String TEST_COVERAGE_NAMESPACE = "mil_nga_giat_geowave_test_coverage";
   protected static final String TEST_DATA_ZIP_RESOURCE_PATH =
@@ -133,11 +135,11 @@ public class CustomCRSKDERasterResizeIT {
         "geotools-vector",
         1);
 
-    File configFile = File.createTempFile("test_export", null);
-    ManualOperationParams params = new ManualOperationParams();
+    final File configFile = File.createTempFile("test_export", null);
+    final ManualOperationParams params = new ManualOperationParams();
 
     params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
-    AddStoreCommand addStore = new AddStoreCommand();
+    final AddStoreCommand addStore = new AddStoreCommand();
     addStore.setParameters("test-in");
     addStore.setPluginOptions(inputDataStorePluginOptions);
     addStore.execute(params);
@@ -145,12 +147,12 @@ public class CustomCRSKDERasterResizeIT {
     addStore.setPluginOptions(outputDataStorePluginOptions);
     addStore.execute(params);
 
-    String outputIndex = "raster-spatial";
+    final String outputIndex = "raster-spatial";
     final IndexPluginOptions outputIndexOptions = new IndexPluginOptions();
     outputIndexOptions.selectPlugin("spatial");
     ((SpatialOptions) outputIndexOptions.getDimensionalityOptions()).setCrs("EPSG:4240");
 
-    AddIndexCommand addIndex = new AddIndexCommand();
+    final AddIndexCommand addIndex = new AddIndexCommand();
     addIndex.setParameters("raster-spatial");
     addIndex.setPluginOptions(outputIndexOptions);
     addIndex.execute(params);
@@ -176,13 +178,10 @@ public class CustomCRSKDERasterResizeIT {
 
     final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
     for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
-      final String tileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
+      final String tileSizeCoverageName = TEST_COVERAGE_NAME_MR_PREFIX + i;
 
       final KdeCommand command = new KdeCommand();
-
-      // We're going to override these anyway.
       command.setParameters("test-in", "raster-spatial");
-
       command.getKdeOptions().setOutputIndex(outputIndex);
       command.getKdeOptions().setFeatureType(KDE_FEATURE_TYPE_NAME);
       command.getKdeOptions().setMinLevel(BASE_MIN_LEVEL);
@@ -197,13 +196,32 @@ public class CustomCRSKDERasterResizeIT {
 
       ToolRunner.run(command.createRunner(params), new String[] {});
     }
+    for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
+      final String tileSizeCoverageName = TEST_COVERAGE_NAME_SPARK_PREFIX + i;
 
+      final KDESparkCommand command = new KDESparkCommand();
+
+      // We're going to override these anyway.
+      command.setParameters("test-in", "raster-spatial");
+
+      command.getKDESparkOptions().setOutputIndex(outputIndex);
+      command.getKDESparkOptions().setTypeName(KDE_FEATURE_TYPE_NAME);
+      command.getKDESparkOptions().setMinLevel(BASE_MIN_LEVEL);
+      command.getKDESparkOptions().setMaxLevel(BASE_MAX_LEVEL);
+      command.getKDESparkOptions().setMinSplits(MapReduceTestUtils.MIN_INPUT_SPLITS);
+      command.getKDESparkOptions().setMaxSplits(MapReduceTestUtils.MAX_INPUT_SPLITS);
+      command.getKDESparkOptions().setCoverageName(tileSizeCoverageName);
+      command.getKDESparkOptions().setMaster("local[*]");
+      command.getKDESparkOptions().setTileSize((int) Math.pow(2, i));
+      command.setOutputIndexOptions(Collections.singletonList(outputIndexOptions));
+      command.execute(params);
+    }
     final int numLevels = (BASE_MAX_LEVEL - BASE_MIN_LEVEL) + 1;
     final double[][][][] initialSampleValuesPerRequestSize = new double[numLevels][][][];
     for (int l = 0; l < numLevels; l++) {
       initialSampleValuesPerRequestSize[l] =
           testSamplesMatch(
-              TEST_COVERAGE_NAME_PREFIX,
+              TEST_COVERAGE_NAME_MR_PREFIX,
               ((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1,
               queryEnvelope,
               new Rectangle(
@@ -211,12 +229,21 @@ public class CustomCRSKDERasterResizeIT {
                   (int) (numCellsMinLevel * Math.pow(2, l))),
               null);
     }
-
+    for (int l = 0; l < numLevels; l++) {
+      testSamplesMatch(
+          TEST_COVERAGE_NAME_SPARK_PREFIX,
+          ((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1,
+          queryEnvelope,
+          new Rectangle(
+              (int) (numCellsMinLevel * Math.pow(2, l)),
+              (int) (numCellsMinLevel * Math.pow(2, l))),
+          initialSampleValuesPerRequestSize[l]);
+    }
     for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
-      final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_PREFIX + i;
+      final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_MR_PREFIX + i;
       final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_PREFIX + i;
 
-      final ResizeCommand command = new ResizeCommand();
+      final ResizeMRCommand command = new ResizeMRCommand();
 
       // We're going to override these anyway.
       command.setParameters("raster-spatial", "raster-spatial");
@@ -224,8 +251,8 @@ public class CustomCRSKDERasterResizeIT {
       command.getOptions().setInputCoverageName(originalTileSizeCoverageName);
       command.getOptions().setMinSplits(MapReduceTestUtils.MIN_INPUT_SPLITS);
       command.getOptions().setMaxSplits(MapReduceTestUtils.MAX_INPUT_SPLITS);
-      command.getOptions().setHdfsHostPort(env.getHdfs());
-      command.getOptions().setJobTrackerOrResourceManHostPort(env.getJobtracker());
+      command.setHdfsHostPort(env.getHdfs());
+      command.setJobTrackerOrResourceManHostPort(env.getJobtracker());
       command.getOptions().setOutputCoverageName(resizeTileSizeCoverageName);
       command.getOptions().setIndexName(TestUtils.createWebMercatorSpatialIndex().getName());
 
@@ -321,7 +348,7 @@ public class CustomCRSKDERasterResizeIT {
             final double sample = rasters[i].getSampleDouble(x, y, b);
             if (initialResults) {
               expectedResults[x][y][b] = sample;
-              if (!atLeastOneResult && sample != 0) {
+              if (!atLeastOneResult && (sample != 0)) {
                 atLeastOneResult = true;
               }
             } else {

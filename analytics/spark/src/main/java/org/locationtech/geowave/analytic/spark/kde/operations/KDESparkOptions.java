@@ -41,6 +41,19 @@ public class KDESparkOptions {
   @Parameter(names = "--coverageName", required = true, description = "The coverage name")
   private String coverageName;
 
+  @Parameter(
+      names = "--outputIndex",
+      description = "An optional index for output datastore. Only spatial index type is supported")
+  private String outputIndex;
+  
+  public String getOutputIndex() {
+    return outputIndex;
+  }
+
+  public void setOutputIndex(String outputIndex) {
+    this.outputIndex = outputIndex;
+  }
+
   public String getAppName() {
     return appName;
   }
