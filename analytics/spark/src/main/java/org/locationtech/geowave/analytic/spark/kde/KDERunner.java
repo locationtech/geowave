@@ -2,6 +2,9 @@ package org.locationtech.geowave.analytic.spark.kde;
 
 import java.awt.image.WritableRaster;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +24,7 @@ import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.adapter.ClientMergeableRasterTile;
+import org.locationtech.geowave.adapter.raster.adapter.GridCoverageWritable;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.analytic.mapreduce.kde.CellCounter;
@@ -35,8 +39,10 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypePro
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
@@ -213,7 +219,7 @@ public class KDERunner {
 
     // The following "inner" variables are created to give access to member variables within lambda
     // expressions
-    final int innerTileSize = tileSize;
+    final int innerTileSize = 1;// tileSize;
     final String innerCoverageName = coverageName;
     for (int level = minLevel; level <= maxLevel; level++) {
       final int numXTiles = (int) Math.pow(2, level + 1);
@@ -283,9 +289,11 @@ public class KDERunner {
       });
       LOGGER.debug("Writing results to output store...");
       if (tileSize > 1) {
+        // byte[] adapterBytes = PersistenceUtils.toBinary(adapter);
+        // byte[] indexBytes = PersistenceUtils.toBinary(outputPrimaryIndex);
         rdd =
             rdd.flatMapToPair(new TransformTileSize(adapter, outputPrimaryIndex)).groupByKey().map(
-                new MergeOverlappingTiles(outputPrimaryIndex, adapter));
+                new MergeOverlappingTiles(adapter, outputPrimaryIndex));
       }
       RDDUtils.writeRasterRDDToGeoWave(jsc.sc(), outputPrimaryIndex, outputDataStore, adapter, rdd);
 
@@ -294,7 +302,8 @@ public class KDERunner {
 
   }
 
-  private static class PartitionAndSortKey {
+  private static class PartitionAndSortKey implements Serializable {
+    private static final long serialVersionUID = 1L;
     byte[] partitionKey;
     byte[] sortKey;
 
@@ -525,43 +534,64 @@ public class KDERunner {
   }
 
   private static class MergeOverlappingTiles implements
-      Function<Tuple2<PartitionAndSortKey, Iterable<GridCoverage>>, GridCoverage> {
+      Function<Tuple2<PartitionAndSortKey, Iterable<GridCoverageWritable>>, GridCoverage> {
 
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-    private final Index index;
-    private final RasterDataAdapter newAdapter;
+    private Index index;
+    private RasterDataAdapter newAdapter;
+    private HadoopWritableSerializer<GridCoverage, GridCoverageWritable> writableSerializer;
 
-    public MergeOverlappingTiles(final Index index, final RasterDataAdapter newAdapter) {
+
+    public MergeOverlappingTiles(final RasterDataAdapter newAdapter, final Index index) {
       super();
       this.index = index;
       this.newAdapter = newAdapter;
+      writableSerializer = newAdapter.createWritableSerializer();
+    }
+
+    private void readObject(final ObjectInputStream aInputStream)
+        throws ClassNotFoundException, IOException {
+      final byte[] adapterBytes = new byte[aInputStream.readUnsignedShort()];
+      aInputStream.readFully(adapterBytes);
+      final byte[] indexBytes = new byte[aInputStream.readUnsignedShort()];
+      aInputStream.readFully(indexBytes);
+      newAdapter = (RasterDataAdapter) PersistenceUtils.fromBinary(adapterBytes);
+      index = (Index) PersistenceUtils.fromBinary(indexBytes);
+      writableSerializer = newAdapter.createWritableSerializer();
+    }
+
+    private void writeObject(final ObjectOutputStream aOutputStream) throws IOException {
+      final byte[] adapterBytes = PersistenceUtils.toBinary(newAdapter);
+      final byte[] indexBytes = PersistenceUtils.toBinary(index);
+      aOutputStream.writeShort(adapterBytes.length);
+      aOutputStream.write(adapterBytes);
+      aOutputStream.writeShort(indexBytes.length);
+      aOutputStream.write(indexBytes);
     }
 
     @Override
-    public GridCoverage call(final Tuple2<PartitionAndSortKey, Iterable<GridCoverage>> v)
+    public GridCoverage call(final Tuple2<PartitionAndSortKey, Iterable<GridCoverageWritable>> v)
         throws Exception {
       GridCoverage mergedCoverage = null;
       ClientMergeableRasterTile<?> mergedTile = null;
       boolean needsMerge = false;
-      final Iterator it = v._2.iterator();
+      final Iterator<GridCoverageWritable> it = v._2.iterator();
       while (it.hasNext()) {
-        final Object value = it.next();
-        if (value instanceof GridCoverage) {
-          if (mergedCoverage == null) {
-            mergedCoverage = (GridCoverage) value;
-          } else {
-            if (!needsMerge) {
-              mergedTile = newAdapter.getRasterTileFromCoverage(mergedCoverage);
-              needsMerge = true;
-            }
-            final ClientMergeableRasterTile thisTile =
-                newAdapter.getRasterTileFromCoverage((GridCoverage) value);
-            if (mergedTile != null) {
-              mergedTile.merge(thisTile);
-            }
+        final GridCoverageWritable value = it.next();
+        if (mergedCoverage == null) {
+          mergedCoverage = writableSerializer.fromWritable(value);
+        } else {
+          if (!needsMerge) {
+            mergedTile = newAdapter.getRasterTileFromCoverage(mergedCoverage);
+            needsMerge = true;
+          }
+          final ClientMergeableRasterTile thisTile =
+              newAdapter.getRasterTileFromCoverage(writableSerializer.fromWritable(value));
+          if (mergedTile != null) {
+            mergedTile.merge(thisTile);
           }
         }
       }
@@ -580,22 +610,44 @@ public class KDERunner {
 
 
   private static class TransformTileSize implements
-      PairFlatMapFunction<GridCoverage, PartitionAndSortKey, GridCoverage> {
+      PairFlatMapFunction<GridCoverage, PartitionAndSortKey, GridCoverageWritable> {
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-    RasterDataAdapter newAdapter;
-    Index index;
+    private RasterDataAdapter newAdapter;
+    private Index index;
+    private HadoopWritableSerializer<GridCoverage, GridCoverageWritable> writableSerializer;
 
     public TransformTileSize(final RasterDataAdapter newAdapter, final Index index) {
       super();
       this.newAdapter = newAdapter;
       this.index = index;
+      writableSerializer = newAdapter.createWritableSerializer();
+    }
+
+    private void readObject(final ObjectInputStream aInputStream)
+        throws ClassNotFoundException, IOException {
+      final byte[] adapterBytes = new byte[aInputStream.readUnsignedShort()];
+      aInputStream.readFully(adapterBytes);
+      final byte[] indexBytes = new byte[aInputStream.readUnsignedShort()];
+      aInputStream.readFully(indexBytes);
+      newAdapter = (RasterDataAdapter) PersistenceUtils.fromBinary(adapterBytes);
+      index = (Index) PersistenceUtils.fromBinary(indexBytes);
+      writableSerializer = newAdapter.createWritableSerializer();
+    }
+
+    private void writeObject(final ObjectOutputStream aOutputStream) throws IOException {
+      final byte[] adapterBytes = PersistenceUtils.toBinary(newAdapter);
+      final byte[] indexBytes = PersistenceUtils.toBinary(index);
+      aOutputStream.writeShort(adapterBytes.length);
+      aOutputStream.write(adapterBytes);
+      aOutputStream.writeShort(indexBytes.length);
+      aOutputStream.write(indexBytes);
     }
 
     @Override
-    public Iterator<Tuple2<PartitionAndSortKey, GridCoverage>> call(
+    public Iterator<Tuple2<PartitionAndSortKey, GridCoverageWritable>> call(
         final GridCoverage existingCoverage) throws Exception {
       final Iterator<GridCoverage> it = newAdapter.convertToIndex(index, existingCoverage);
       return Iterators.transform(
@@ -604,7 +656,7 @@ public class KDERunner {
               new PartitionAndSortKey(
                   ((FitToIndexGridCoverage) g).getPartitionKey(),
                   ((FitToIndexGridCoverage) g).getSortKey()),
-              g));
+              writableSerializer.toWritable(((FitToIndexGridCoverage) g).getOriginalCoverage())));
     }
 
   }

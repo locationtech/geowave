@@ -24,12 +24,21 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-@GeowaveOperation(name = "resize-mr", parentOperation = RasterSection.class)
+@GeowaveOperation(name = "resizespark", parentOperation = RasterSection.class)
 @Parameters(commandDescription = "Resize Raster Tiles in MapReduce")
 public class ResizeSparkCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<input store name> <output store name>")
   private List<String> parameters = new ArrayList<>();
+
+  @Parameter(names = {"-n", "--name"}, description = "The spark application name")
+  private String appName = "RasterResizeRunner";
+
+  @Parameter(names = {"-ho", "--host"}, description = "The spark driver host")
+  private String host = "localhost";
+
+  @Parameter(names = {"-m", "--master"}, description = "The spark master designation")
+  private String master = "yarn";
 
   @ParametersDelegate
   private RasterTileResizeCommandLineOptions options = new RasterTileResizeCommandLineOptions();
@@ -72,6 +81,9 @@ public class ResizeSparkCommand extends DefaultOperation implements Command {
 
     final RasterTileResizeSparkRunner runner =
         new RasterTileResizeSparkRunner(inputStoreOptions, outputStoreOptions, options);
+    runner.setHost(host);
+    runner.setAppName(appName);
+    runner.setMaster(master);
     return runner;
   }
 
@@ -99,5 +111,17 @@ public class ResizeSparkCommand extends DefaultOperation implements Command {
 
   public DataStorePluginOptions getOutputStoreOptions() {
     return outputStoreOptions;
+  }
+
+  public void setAppName(String appName) {
+    this.appName = appName;
+  }
+
+  public void setHost(String host) {
+    this.host = host;
+  }
+
+  public void setMaster(String master) {
+    this.master = master;
   }
 }

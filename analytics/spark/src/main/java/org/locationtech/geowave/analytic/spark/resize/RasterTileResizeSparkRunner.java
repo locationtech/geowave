@@ -11,6 +11,7 @@ import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.sql.SparkSession;
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
+import org.locationtech.geowave.adapter.raster.adapter.GridCoverageWritable;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions;
 import org.locationtech.geowave.adapter.raster.resize.RasterTileResizeHelper;
@@ -31,15 +32,16 @@ import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jersey.repackaged.com.google.common.collect.Iterables;
 import jersey.repackaged.com.google.common.collect.Iterators;
 import scala.Tuple2;
 
 public class RasterTileResizeSparkRunner {
   private static final Logger LOGGER = LoggerFactory.getLogger(RasterTileResizeSparkRunner.class);
 
-  private final String appName = "RasterResizeRunner";
-  private final String master = "yarn";
-  private final String host = "localhost";
+  private String appName = "RasterResizeRunner";
+  private String master = "yarn";
+  private String host = "localhost";
 
   private JavaSparkContext jsc = null;
   private SparkSession session = null;
@@ -54,6 +56,18 @@ public class RasterTileResizeSparkRunner {
     this.inputStoreOptions = inputStoreOptions;
     this.outputStoreOptions = outputStoreOptions;
     this.rasterResizeOptions = rasterResizeOptions;
+  }
+
+  public void setAppName(final String appName) {
+    this.appName = appName;
+  }
+
+  public void setMaster(final String master) {
+    this.master = master;
+  }
+
+  public void setHost(final String host) {
+    this.host = host;
   }
 
   private void initContext() {
@@ -83,8 +97,6 @@ public class RasterTileResizeSparkRunner {
       LOGGER.error("You must supply an input datastore!");
       throw new IOException("You must supply an input datastore!");
     }
-
-    final String newTypeName = rasterResizeOptions.getOutputCoverageName();
 
     final InternalAdapterStore internalAdapterStore =
         inputStoreOptions.createInternalAdapterStore();
@@ -160,7 +172,7 @@ public class RasterTileResizeSparkRunner {
   }
 
   private static class RasterResizeMappingFunction implements
-      PairFlatMapFunction<Tuple2<GeoWaveInputKey, GridCoverage>, GeoWaveInputKey, GridCoverage> {
+      PairFlatMapFunction<Tuple2<GeoWaveInputKey, GridCoverage>, GeoWaveInputKey, GridCoverageWritable> {
     private final RasterTileResizeHelper helper;
     /**
      *
@@ -177,7 +189,7 @@ public class RasterTileResizeSparkRunner {
     }
 
     @Override
-    public Iterator<Tuple2<GeoWaveInputKey, GridCoverage>> call(
+    public Iterator<Tuple2<GeoWaveInputKey, GridCoverageWritable>> call(
         final Tuple2<GeoWaveInputKey, GridCoverage> t) throws Exception {
 
       if (helper.isOriginalCoverage(t._1.getInternalAdapterId())) {
@@ -201,14 +213,14 @@ public class RasterTileResizeSparkRunner {
                   0);
           final GeoWaveInputKey inputKey =
               new GeoWaveInputKey(helper.getNewAdapterId(), geowaveKey, helper.getIndexName());
-          return new Tuple2<>(inputKey, c);
+          return new Tuple2<>(inputKey, helper.getSerializer().toWritable(c));
         });
       }
       return Collections.emptyIterator();
     }
   }
   private static class MergeRasterFunction implements
-      Function<Tuple2<GeoWaveInputKey, Iterable<GridCoverage>>, GridCoverage> {
+      Function<Tuple2<GeoWaveInputKey, Iterable<GridCoverageWritable>>, GridCoverage> {
     private final RasterTileResizeHelper helper;
     /**
      *
@@ -225,9 +237,11 @@ public class RasterTileResizeSparkRunner {
     }
 
     @Override
-    public GridCoverage call(final Tuple2<GeoWaveInputKey, Iterable<GridCoverage>> tuple)
+    public GridCoverage call(final Tuple2<GeoWaveInputKey, Iterable<GridCoverageWritable>> tuple)
         throws Exception {
-      return helper.getMergedCoverage(tuple._1, (Iterable) tuple._2);
+      return helper.getMergedCoverage(
+          tuple._1,
+          Iterables.transform(tuple._2, gcw -> helper.getSerializer().fromWritable(gcw)));
     }
 
   }

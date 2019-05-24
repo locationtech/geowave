@@ -9,28 +9,36 @@
 package org.locationtech.geowave.adapter.raster.resize;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Iterator;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.adapter.raster.adapter.ClientMergeableRasterTile;
+import org.locationtech.geowave.adapter.raster.adapter.GridCoverageWritable;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
+import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.coverage.grid.GridCoverage;
 
-public class RasterTileResizeHelper {
+public class RasterTileResizeHelper implements Serializable {
+  private static final long serialVersionUID = 1L;
   private RasterDataAdapter newAdapter;
-  private final short oldAdapterId;
-  private final short newAdapterId;
-  private final Index index;
-  private final String[] indexNames;
+  private short oldAdapterId;
+  private short newAdapterId;
+  private Index index;
+  private String[] indexNames;
+  private HadoopWritableSerializer<GridCoverage, GridCoverageWritable> serializer;
 
   public RasterTileResizeHelper(final JobContext context) {
     index = JobContextIndexStore.getIndices(context)[0];
@@ -61,10 +69,10 @@ public class RasterTileResizeHelper {
   }
 
   public RasterTileResizeHelper(
-      short oldAdapterId,
-      short newAdapterId,
-      RasterDataAdapter newAdapter,
-      Index index) {
+      final short oldAdapterId,
+      final short newAdapterId,
+      final RasterDataAdapter newAdapter,
+      final Index index) {
     this.newAdapter = newAdapter;
     this.oldAdapterId = oldAdapterId;
     this.newAdapterId = newAdapterId;
@@ -80,7 +88,7 @@ public class RasterTileResizeHelper {
     return newAdapter.convertToIndex(index, existingCoverage);
   }
 
-  protected GridCoverage getMergedCoverage(final GeoWaveInputKey key, final Iterable<Object> values)
+  public GridCoverage getMergedCoverage(final GeoWaveInputKey key, final Iterable<Object> values)
       throws IOException, InterruptedException {
     GridCoverage mergedCoverage = null;
     ClientMergeableRasterTile<?> mergedTile = null;
@@ -114,6 +122,38 @@ public class RasterTileResizeHelper {
               index);
     }
     return mergedCoverage;
+  }
+
+  private void readObject(final ObjectInputStream aInputStream)
+      throws ClassNotFoundException, IOException {
+    final byte[] adapterBytes = new byte[aInputStream.readUnsignedShort()];
+    aInputStream.readFully(adapterBytes);
+    final byte[] indexBytes = new byte[aInputStream.readUnsignedShort()];
+    aInputStream.readFully(indexBytes);
+    newAdapter = (RasterDataAdapter) PersistenceUtils.fromBinary(adapterBytes);
+    index = (Index) PersistenceUtils.fromBinary(indexBytes);
+    oldAdapterId = aInputStream.readShort();
+    newAdapterId = aInputStream.readShort();
+    indexNames = new String[] {index.getName()};
+  }
+
+  private void writeObject(final ObjectOutputStream aOutputStream) throws IOException {
+    final byte[] adapterBytes = PersistenceUtils.toBinary(newAdapter);
+    final byte[] indexBytes = PersistenceUtils.toBinary(index);
+    aOutputStream.writeShort(adapterBytes.length);
+    aOutputStream.write(adapterBytes);
+    aOutputStream.writeShort(indexBytes.length);
+    aOutputStream.write(indexBytes);
+    aOutputStream.writeShort(oldAdapterId);
+    aOutputStream.writeShort(newAdapterId);
+    aOutputStream.flush();
+  }
+
+  public HadoopWritableSerializer<GridCoverage, GridCoverageWritable> getSerializer() {
+    if (serializer == null) {
+      serializer = newAdapter.createWritableSerializer();
+    }
+    return serializer;
   }
 
   public short getNewAdapterId() {

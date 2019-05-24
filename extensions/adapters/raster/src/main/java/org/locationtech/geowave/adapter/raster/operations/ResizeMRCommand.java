@@ -28,7 +28,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-@GeowaveOperation(name = "resize-mr", parentOperation = RasterSection.class)
+@GeowaveOperation(name = "resizemr", parentOperation = RasterSection.class)
 @Parameters(commandDescription = "Resize Raster Tiles in MapReduce")
 public class ResizeMRCommand extends DefaultOperation implements Command {
 

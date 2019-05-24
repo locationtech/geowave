@@ -34,6 +34,7 @@ import org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.locationtech.geowave.analytic.mapreduce.operations.KdeCommand;
 import org.locationtech.geowave.analytic.spark.kde.operations.KDESparkCommand;
+import org.locationtech.geowave.analytic.spark.resize.ResizeSparkCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
@@ -66,7 +67,8 @@ import org.slf4j.LoggerFactory;
 public class CustomCRSKDERasterResizeIT {
   private static final String TEST_COVERAGE_NAME_MR_PREFIX = "TEST_COVERAGE_MR";
   private static final String TEST_COVERAGE_NAME_SPARK_PREFIX = "TEST_COVERAGE_SPARK";
-  private static final String TEST_RESIZE_COVERAGE_NAME_PREFIX = "TEST_RESIZE";
+  private static final String TEST_RESIZE_COVERAGE_NAME_MR_PREFIX = "TEST_RESIZE_MR";
+  private static final String TEST_RESIZE_COVERAGE_NAME_SPARK_PREFIX = "TEST_RESIZE_SPARK";
   private static final String TEST_COVERAGE_NAMESPACE = "mil_nga_giat_geowave_test_coverage";
   protected static final String TEST_DATA_ZIP_RESOURCE_PATH =
       TestUtils.TEST_RESOURCE_PACKAGE + "kde-testdata.zip";
@@ -196,6 +198,19 @@ public class CustomCRSKDERasterResizeIT {
 
       ToolRunner.run(command.createRunner(params), new String[] {});
     }
+    final int numLevels = (BASE_MAX_LEVEL - BASE_MIN_LEVEL) + 1;
+    final double[][][][] initialSampleValuesPerRequestSize = new double[numLevels][][][];
+    for (int l = 0; l < numLevels; l++) {
+      initialSampleValuesPerRequestSize[l] =
+          testSamplesMatch(
+              TEST_COVERAGE_NAME_MR_PREFIX,
+              ((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1,
+              queryEnvelope,
+              new Rectangle(
+                  (int) (numCellsMinLevel * Math.pow(2, l)),
+                  (int) (numCellsMinLevel * Math.pow(2, l))),
+              null);
+    }
     for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
       final String tileSizeCoverageName = TEST_COVERAGE_NAME_SPARK_PREFIX + i;
 
@@ -216,19 +231,7 @@ public class CustomCRSKDERasterResizeIT {
       command.setOutputIndexOptions(Collections.singletonList(outputIndexOptions));
       command.execute(params);
     }
-    final int numLevels = (BASE_MAX_LEVEL - BASE_MIN_LEVEL) + 1;
-    final double[][][][] initialSampleValuesPerRequestSize = new double[numLevels][][][];
-    for (int l = 0; l < numLevels; l++) {
-      initialSampleValuesPerRequestSize[l] =
-          testSamplesMatch(
-              TEST_COVERAGE_NAME_MR_PREFIX,
-              ((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1,
-              queryEnvelope,
-              new Rectangle(
-                  (int) (numCellsMinLevel * Math.pow(2, l)),
-                  (int) (numCellsMinLevel * Math.pow(2, l))),
-              null);
-    }
+
     for (int l = 0; l < numLevels; l++) {
       testSamplesMatch(
           TEST_COVERAGE_NAME_SPARK_PREFIX,
@@ -239,9 +242,10 @@ public class CustomCRSKDERasterResizeIT {
               (int) (numCellsMinLevel * Math.pow(2, l))),
           initialSampleValuesPerRequestSize[l]);
     }
+    // go from the original mr KDEs to a resized version using the MR command
     for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
       final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_MR_PREFIX + i;
-      final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_PREFIX + i;
+      final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_MR_PREFIX + i;
 
       final ResizeMRCommand command = new ResizeMRCommand();
 
@@ -266,10 +270,47 @@ public class CustomCRSKDERasterResizeIT {
 
       ToolRunner.run(command.createRunner(params), new String[] {});
     }
+    for (int l = 0; l < numLevels; l++) {
+      testSamplesMatch(
+          TEST_RESIZE_COVERAGE_NAME_MR_PREFIX,
+          ((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1,
+          queryEnvelope,
+          new Rectangle(
+              (int) (numCellsMinLevel * Math.pow(2, l)),
+              (int) (numCellsMinLevel * Math.pow(2, l))),
+          initialSampleValuesPerRequestSize[l]);
+    }
+    // similarly go from the original spark KDEs to a resized version using the Spark command
+    for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
+      final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_SPARK_PREFIX + i;
+      final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_SPARK_PREFIX + i;
+
+      final ResizeSparkCommand command = new ResizeSparkCommand();
+
+      // We're going to override these anyway.
+      command.setParameters("raster-spatial", "raster-spatial");
+
+      command.getOptions().setInputCoverageName(originalTileSizeCoverageName);
+      command.getOptions().setMinSplits(MapReduceTestUtils.MIN_INPUT_SPLITS);
+      command.getOptions().setMaxSplits(MapReduceTestUtils.MAX_INPUT_SPLITS);
+      command.getOptions().setOutputCoverageName(resizeTileSizeCoverageName);
+      command.getOptions().setIndexName(TestUtils.createWebMercatorSpatialIndex().getName());
+      command.setMaster("local[*]");
+
+      // due to time considerations when running the test, downsample to
+      // at most 2 powers of 2 lower
+      int targetRes = (MAX_TILE_SIZE_POWER_OF_2 - i);
+      if ((i - targetRes) > 2) {
+        targetRes = i - 2;
+      }
+      command.getOptions().setOutputTileSize((int) Math.pow(2, targetRes));
+
+      command.execute(params);
+    }
 
     for (int l = 0; l < numLevels; l++) {
       testSamplesMatch(
-          TEST_RESIZE_COVERAGE_NAME_PREFIX,
+          TEST_RESIZE_COVERAGE_NAME_SPARK_PREFIX,
           ((MAX_TILE_SIZE_POWER_OF_2 - MIN_TILE_SIZE_POWER_OF_2) / INCREMENT) + 1,
           queryEnvelope,
           new Rectangle(

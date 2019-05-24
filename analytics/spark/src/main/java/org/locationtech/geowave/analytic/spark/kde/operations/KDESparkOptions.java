@@ -45,7 +45,7 @@ public class KDESparkOptions {
       names = "--outputIndex",
       description = "An optional index for output datastore. Only spatial index type is supported")
   private String outputIndex;
-  
+
   public String getOutputIndex() {
     return outputIndex;
   }
