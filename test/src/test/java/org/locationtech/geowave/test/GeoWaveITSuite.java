@@ -68,7 +68,6 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
     // GeoWaveNNIT.class,
     CustomCRSLandsatIT.class,
     GeoWaveBasicRasterIT.class,
-    GeoWaveBasicCustomCRSRasterIT.class,
     CustomCRSKDERasterResizeIT.class,
     BulkIngestInputGenerationIT.class,
     AttributesSubsetQueryIT.class,
@@ -81,6 +80,8 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
     GeoWaveSparkSpatialJoinIT.class,
     GeoServerIT.class,
     GeoServerIngestIT.class,
+    // has to be after SparkEnvironment usage
+    GeoWaveBasicCustomCRSRasterIT.class,
     GeoWaveGrpcIT.class,
     ConfigServicesIT.class,
     RemoteIT.class,
