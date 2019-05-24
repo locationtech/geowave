@@ -1309,8 +1309,7 @@ public class BaseDataStore implements DataStore {
                     internalAdapterStore,
                     GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
             bldr.adapterIds(new short[] {adapter.getAdapterId()});
-            try (RowReader<GeoWaveRow> reader =
-                ((BaseDataStore) other).baseOperations.createReader(bldr.build())) {
+            try (RowReader<GeoWaveRow> reader = baseOperations.createReader(bldr.build())) {
               try (RowWriter writer =
                   ((BaseDataStore) other).baseOperations.createWriter(index, adapter)) {
                 while (reader.hasNext()) {

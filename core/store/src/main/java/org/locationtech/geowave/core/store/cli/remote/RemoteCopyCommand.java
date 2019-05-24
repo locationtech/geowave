@@ -13,7 +13,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "cp", parentOperation = RemoteSection.class)
+@GeowaveOperation(name = "copy", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Copy a data store")
 public class RemoteCopyCommand extends DefaultOperation implements Command {
   @Parameter(description = "<input store name> <output store name>")

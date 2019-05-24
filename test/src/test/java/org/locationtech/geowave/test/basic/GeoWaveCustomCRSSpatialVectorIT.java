@@ -39,6 +39,17 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB},
+      namespace = "cpStore")
+  protected DataStorePluginOptions cpDataStore;
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
 
@@ -75,24 +86,24 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
   public void testIngestAndQuerySpatialPointsAndLines(final int nthreads) throws Exception {
     long mark = System.currentTimeMillis();
 
+    TestUtils.deleteAll(cpDataStore);
     LOGGER.debug("Testing DataStore Type: " + dataStore.getType());
 
     // ingest both lines and points
     TestUtils.testLocalIngest(
-        dataStore,
+        cpDataStore,
         DimensionalityType.SPATIAL,
         TestUtils.CUSTOM_CRSCODE,
         HAIL_SHAPEFILE_FILE,
         "geotools-vector",
         nthreads);
-
     long dur = (System.currentTimeMillis() - mark);
     LOGGER.debug("Ingest (points) duration = " + dur + " ms with " + nthreads + " thread(s).");
 
     mark = System.currentTimeMillis();
 
     TestUtils.testLocalIngest(
-        dataStore,
+        cpDataStore,
         DimensionalityType.SPATIAL,
         TestUtils.CUSTOM_CRSCODE,
         TORNADO_TRACKS_SHAPEFILE_FILE,
@@ -101,6 +112,9 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
 
     dur = (System.currentTimeMillis() - mark);
     LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
+
+    cpDataStore.createDataStore().copyTo(dataStore.createDataStore());
+    TestUtils.deleteAll(cpDataStore);
     try {
       final CoordinateReferenceSystem crs = CRS.decode(TestUtils.CUSTOM_CRSCODE);
       mark = System.currentTimeMillis();
