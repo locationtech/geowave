@@ -26,13 +26,13 @@ import org.locationtech.geowave.core.ingest.hdfs.StageToHdfsDriver;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsDriver;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.MapReduceCommandLineOptions;
-import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "localToMrGW", parentOperation = IngestSection.class)

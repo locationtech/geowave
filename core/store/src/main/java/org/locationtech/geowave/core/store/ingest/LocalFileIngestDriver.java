@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.ingest.local;
+package org.locationtech.geowave.core.store.ingest;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FilenameUtils;
-import org.locationtech.geowave.core.ingest.IngestUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -32,8 +31,6 @@ import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
-import org.locationtech.geowave.core.store.ingest.GeoWaveData;
-import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +70,7 @@ public class LocalFileIngestDriver extends
     final List<DataTypeAdapter<?>> adapters = new ArrayList<>();
     for (final Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
 
-      if (!IngestUtils.checkIndexesAgainstProvider(
+      if (!checkIndexesAgainstProvider(
           pluginEntry.getKey(),
           pluginEntry.getValue(),
           indexOptions)) {
@@ -115,7 +112,9 @@ public class LocalFileIngestDriver extends
    * on the command line.
    */
   public void startExecutor() {
-    ingestExecutor = Executors.newFixedThreadPool(threads);
+    if (threads > 1) {
+      ingestExecutor = Executors.newFixedThreadPool(threads);
+    }
   }
 
   /** This function will wait for executing tasks to complete for up to 10 seconds. */
@@ -184,7 +183,8 @@ public class LocalFileIngestDriver extends
           plugin,
           ingestRunData,
           specifiedPrimaryIndexes,
-          requiredIndexMap);
+          requiredIndexMap,
+          ingestOptions.getVisibility());
 
     } else {
 
@@ -200,13 +200,14 @@ public class LocalFileIngestDriver extends
     LOGGER.info(String.format("Finished ingest for file: [%s]", file.getFile()));
   }
 
-  public void processFileSingleThreaded(
+  public static void processFileSingleThreaded(
       final URL file,
       final String typeName,
       final LocalFileIngestPlugin<?> plugin,
       final LocalIngestRunData ingestRunData,
       final Map<String, Index> specifiedPrimaryIndexes,
-      final Map<String, Index> requiredIndexMap) throws IOException {
+      final Map<String, Index> requiredIndexMap,
+      final String globalVisibility) throws IOException {
 
     int count = 0;
     long dbWriteMs = 0L;
@@ -216,7 +217,7 @@ public class LocalFileIngestDriver extends
         plugin.toGeoWaveData(
             file,
             specifiedPrimaryIndexes.keySet().toArray(new String[0]),
-            ingestOptions.getVisibility())) {
+            globalVisibility)) {
 
       while (geowaveDataIt.hasNext()) {
         final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
@@ -269,7 +270,7 @@ public class LocalFileIngestDriver extends
     }
   }
 
-  private long ingestData(
+  private static long ingestData(
       final GeoWaveData<?> geowaveData,
       final DataTypeAdapter adapter,
       final LocalIngestRunData runData,

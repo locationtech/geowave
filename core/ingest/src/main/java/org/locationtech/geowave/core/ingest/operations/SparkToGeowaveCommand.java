@@ -18,10 +18,10 @@ import java.util.List;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.ingest.spark.SparkCommandLineOptions;
 import org.locationtech.geowave.core.ingest.spark.SparkIngestDriver;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 
 @GeowaveOperation(name = "sparkToGW", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Ingest supported files that already exist in HDFS or S3")
