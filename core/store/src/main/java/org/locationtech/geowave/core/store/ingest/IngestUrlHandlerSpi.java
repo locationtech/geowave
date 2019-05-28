@@ -1,6 +1,8 @@
 package org.locationtech.geowave.core.store.ingest;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Properties;
 
 /**
  * This SPI interface is used to circumvent the need of core store to require HDFS or S3 libraries.
@@ -9,5 +11,5 @@ import java.nio.file.Path;
  *
  */
 public interface IngestUrlHandlerSpi {
-  public Path handlePath(String path);
+  public Path handlePath(String path, Properties configProperties) throws IOException;
 }

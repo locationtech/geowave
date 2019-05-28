@@ -37,23 +37,26 @@ public class IngestTask implements Runnable {
   private volatile boolean isTerminated = false;
   private volatile boolean isFinished = false;
 
-  private Map<String, Writer> indexWriters;
-  private Map<String, AdapterToIndexMapping> adapterMappings;
+  private final Map<String, Writer> indexWriters;
+  private final Map<String, AdapterToIndexMapping> adapterMappings;
+  private final AbstractLocalFileIngestDriver localFileIngestDriver;
 
   public IngestTask(
-      String id,
-      LocalIngestRunData runData,
-      Map<String, Index> specifiedPrimaryIndexes,
-      Map<String, Index> requiredIndexMap,
-      BlockingQueue<GeoWaveData<?>> queue) {
+      final String id,
+      final LocalIngestRunData runData,
+      final Map<String, Index> specifiedPrimaryIndexes,
+      final Map<String, Index> requiredIndexMap,
+      final BlockingQueue<GeoWaveData<?>> queue,
+      final AbstractLocalFileIngestDriver localFileIngestDriver) {
     this.id = id;
     this.runData = runData;
     this.specifiedPrimaryIndexes = specifiedPrimaryIndexes;
     this.requiredIndexMap = requiredIndexMap;
-    this.readQueue = queue;
+    this.localFileIngestDriver = localFileIngestDriver;
+    readQueue = queue;
 
-    this.indexWriters = new HashMap<>();
-    this.adapterMappings = new HashMap<>();
+    indexWriters = new HashMap<>();
+    adapterMappings = new HashMap<>();
   }
 
   /** This function is called by the thread placing items on the blocking queue. */
@@ -67,7 +70,7 @@ public class IngestTask implements Runnable {
    * @return
    */
   public String getId() {
-    return this.id;
+    return id;
   }
 
   /**
@@ -90,18 +93,18 @@ public class IngestTask implements Runnable {
     long dbWriteMs = 0L;
 
     try {
-      LOGGER.debug(String.format("Worker executing for plugin [%s]", this.getId()));
+      LOGGER.debug(String.format("Worker executing for plugin [%s]", getId()));
 
       while (true) {
-        GeoWaveData<?> geowaveData = readQueue.poll(100, TimeUnit.MILLISECONDS);
+        final GeoWaveData<?> geowaveData = readQueue.poll(100, TimeUnit.MILLISECONDS);
         if (geowaveData == null) {
-          if (isTerminated && readQueue.size() == 0) {
+          if (isTerminated && (readQueue.size() == 0)) {
             // Done!
             break;
           }
           // Didn't receive an item. Make sure we haven't been
           // terminated.
-          LOGGER.debug(String.format("Worker waiting for item [%s]", this.getId()));
+          LOGGER.debug(String.format("Worker waiting for item [%s]", getId()));
 
           continue;
         }
@@ -112,7 +115,7 @@ public class IngestTask implements Runnable {
               String.format(
                   "Adapter not found for [%s] worker [%s]",
                   geowaveData.getValue(),
-                  this.getId()));
+                  getId()));
           continue;
         }
 
@@ -121,17 +124,17 @@ public class IngestTask implements Runnable {
 
         count++;
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       // This should really never happen, because we don't limit the
       // amount of items in the IndexWriter pool.
       LOGGER.error("Fatal error occured while trying to get an index writer.", e);
       throw new RuntimeException("Fatal error occured while trying to get an index writer.", e);
     } finally {
       // Clean up index writers
-      for (Entry<String, Writer> writerEntry : indexWriters.entrySet()) {
+      for (final Entry<String, Writer> writerEntry : indexWriters.entrySet()) {
         try {
           runData.releaseIndexWriter(writerEntry.getKey(), writerEntry.getValue());
-        } catch (Exception e) {
+        } catch (final Exception e) {
           LOGGER.warn(
               String.format("Could not return index writer: [%s]", writerEntry.getKey()),
               e);
@@ -141,7 +144,7 @@ public class IngestTask implements Runnable {
       LOGGER.debug(
           String.format(
               "Worker exited for plugin [%s]; Ingested %d items in %d seconds",
-              this.getId(),
+              getId(),
               count,
               (int) dbWriteMs / 1000));
 
@@ -149,14 +152,15 @@ public class IngestTask implements Runnable {
     }
   }
 
-  private long ingestData(GeoWaveData<?> geowaveData, DataTypeAdapter adapter) throws Exception {
+  private long ingestData(final GeoWaveData<?> geowaveData, final DataTypeAdapter adapter)
+      throws Exception {
 
-    String typeName = adapter.getTypeName();
+    final String typeName = adapter.getTypeName();
     // Write the data to the data store.
     Writer writer = indexWriters.get(typeName);
 
     if (writer == null) {
-      List<Index> indices = new ArrayList<Index>();
+      final List<Index> indices = new ArrayList<>();
       for (final String indexName : geowaveData.getIndexNames()) {
         Index index = specifiedPrimaryIndexes.get(indexName);
         if (index == null) {
@@ -167,7 +171,7 @@ public class IngestTask implements Runnable {
                     "Index '%s' not found for %s; worker [%s]",
                     indexName,
                     geowaveData.getValue(),
-                    this.getId()));
+                    getId()));
             continue;
           }
         }
@@ -181,9 +185,9 @@ public class IngestTask implements Runnable {
     }
 
     // Time the DB write
-    long hack = System.currentTimeMillis();
-    writer.write(geowaveData.getValue());
-    long durMs = System.currentTimeMillis() - hack;
+    final long hack = System.currentTimeMillis();
+    localFileIngestDriver.write(writer, geowaveData);
+    final long durMs = System.currentTimeMillis() - hack;
 
     return durMs;
   }

@@ -17,10 +17,10 @@ import org.locationtech.geowave.core.cli.api.DefaultPluginOptions;
 import org.locationtech.geowave.core.cli.api.PluginOptions;
 import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
+import org.locationtech.geowave.core.ingest.local.LocalFileIngestCLIDriver;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginRegistry;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
-import org.locationtech.geowave.core.store.ingest.LocalFileIngestDriver;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 public class IngestFormatPluginOptions extends DefaultPluginOptions implements PluginOptions {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(LocalFileIngestDriver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LocalFileIngestCLIDriver.class);
 
   private String formats;
 

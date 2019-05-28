@@ -1,6 +1,14 @@
 package org.locationtech.geowave.core.store.ingest;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.slf4j.Logger;
@@ -8,6 +16,9 @@ import org.slf4j.LoggerFactory;
 
 public class IngestUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(IngestUtils.class);
+
+  private static List<IngestUrlHandlerSpi> urlHandlerList = null;
+  private static Map<String, LocalFileIngestPlugin<?>> localIngestPlugins = null;
 
   public static boolean checkIndexesAgainstProvider(
       final String providerName,
@@ -60,5 +71,38 @@ public class IngestUtils {
       }
     }
     return true;
+  }
+
+  public static synchronized Path handleIngestUrl(
+      final String ingestUrl,
+      final Properties configProperties) throws IOException {
+    if (urlHandlerList == null) {
+      final Iterator<IngestUrlHandlerSpi> handlers =
+          new SPIServiceRegistry(IngestUrlHandlerSpi.class).load(IngestUrlHandlerSpi.class);
+      urlHandlerList = new ArrayList<>();
+      while (handlers.hasNext()) {
+        urlHandlerList.add(handlers.next());
+      }
+    }
+    for (final IngestUrlHandlerSpi h : urlHandlerList) {
+      final Path path = h.handlePath(ingestUrl, configProperties);
+      if (path != null) {
+        return path;
+      }
+    }
+    return null;
+  }
+
+  public static synchronized Map<String, LocalFileIngestPlugin<?>> getDefaultLocalIngestPlugins() {
+    if (localIngestPlugins == null) {
+      final Iterator<LocalFileIngestPluginRegistrySpi> registries =
+          new SPIServiceRegistry(LocalFileIngestPluginRegistrySpi.class).load(
+              LocalFileIngestPluginRegistrySpi.class);
+      localIngestPlugins = new HashMap<>();
+      while (registries.hasNext()) {
+        localIngestPlugins.putAll(registries.next().getDefaultLocalIngestPlugins());
+      }
+    }
+    return localIngestPlugins;
   }
 }

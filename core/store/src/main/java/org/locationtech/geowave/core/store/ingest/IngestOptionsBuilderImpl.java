@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.store.ingest;
 
+import java.util.Properties;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.ArrayUtils;
@@ -18,23 +19,17 @@ import org.locationtech.geowave.core.store.api.IngestOptions.IngestCallback;
 public class IngestOptionsBuilderImpl<T> implements Builder<T> {
 
   private LocalFileIngestPlugin<T> format = null;
-  private IngestFormatOptions formatOptions = null;
   private int threads = 1;
   private String globalVisibility = null;
   private String[] fileExtensions = new String[0];
   private Predicate<T> filter = null;
   private Function<T, T> transform = null;
   private IngestCallback<T> callback = null;
+  private Properties properties = null;
 
   @Override
   public Builder<T> format(final LocalFileIngestPlugin<T> format) {
     this.format = format;
-    return this;
-  }
-
-  @Override
-  public Builder<T> formatOptions(final IngestFormatOptions formatOptions) {
-    this.formatOptions = formatOptions;
     return this;
   }
 
@@ -81,15 +76,21 @@ public class IngestOptionsBuilderImpl<T> implements Builder<T> {
   }
 
   @Override
+  public Builder<T> properties(final Properties properties) {
+    this.properties = properties;
+    return this;
+  }
+
+  @Override
   public IngestOptions<T> build() {
     return new IngestOptions<>(
         format,
-        formatOptions,
         threads,
         globalVisibility,
         fileExtensions,
         filter,
         transform,
-        callback);
+        callback,
+        properties);
   }
 }

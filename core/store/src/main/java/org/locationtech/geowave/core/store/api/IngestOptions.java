@@ -8,10 +8,9 @@
  */
 package org.locationtech.geowave.core.store.api;
 
+import java.util.Properties;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import org.locationtech.geowave.core.index.InsertionIds;
-import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 import org.locationtech.geowave.core.store.ingest.IngestOptionsBuilderImpl;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 
@@ -36,15 +35,6 @@ public class IngestOptions<T> {
      * @return this builder
      */
     Builder<T> format(LocalFileIngestPlugin<T> format);
-
-    /**
-     * options that will be given to the ingest format plugin. Each plugin may use a different type
-     * of options.
-     *
-     * @param formatOptions the options for the format plugin
-     * @return this builder
-     */
-    Builder<T> formatOptions(IngestFormatOptions formatOptions);
 
     /**
      * Number of threads to use for ingest
@@ -81,7 +71,8 @@ public class IngestOptions<T> {
     Builder<T> addExtension(String fileExtension);
 
     /**
-     * Filter data prior to being ingesting using a Predicate
+     * Filter data prior to being ingesting using a Predicate (if transform is provided, transform
+     * will be applied before the filter)
      *
      * @param filter the filter
      * @return this builder
@@ -106,78 +97,81 @@ public class IngestOptions<T> {
     Builder<T> callback(IngestCallback<T> callback);
 
     /**
+     * provide properties used for particular URL handlers
+     *
+     * @param properties for URL handlers such as s3.endpoint.url=s3.amazonaws.com or
+     *        hdfs.defaultFS.url=sandbox.hortonworks.com:8020
+     * @return this builder
+     */
+    Builder<T> properties(Properties properties);
+
+    /**
      * Construct the IngestOptions with the provided values from this builder
      *
      * @return the IngestOptions
      */
     IngestOptions<T> build();
-
-    /**
-     * get a default implementation of this builder
-     *
-     * @return
-     */
-    public static <T> Builder<T> newBuilder() {
-      return new IngestOptionsBuilderImpl();
-    }
   }
-
+  /**
+   * get a default implementation of this builder
+   *
+   * @return
+   */
+  public static <T> Builder<T> newBuilder() {
+    return new IngestOptionsBuilderImpl();
+  }
   /**
    * An interface to get callbacks of ingest
    *
    * @param <T> the type of data ingested
    */
   public static interface IngestCallback<T> {
-    void dataWritten(InsertionIds insertionIds, T data);
+    void dataWritten(WriteResults insertionIds, T data);
   }
 
   private final LocalFileIngestPlugin<T> format;
-  private final IngestFormatOptions formatOptions;
   private final int threads;
   private final String globalVisibility;
   private final String[] fileExtensions;
   private final Predicate<T> filter;
   private final Function<T, T> transform;
   private final IngestCallback<T> callback;
+  private final Properties properties;
 
   /**
    * Use the Builder to construct instead of this constructor.
    *
    * @param format the ingest format plugin
-   * @param formatOptions options for the plugin
    * @param threads number of threads
    * @param globalVisibility visibility applied to all entries
    * @param fileExtensions an array of acceptable file extensions
    * @param filter a function to filter entries prior to ingest
    * @param transform a function to transform entries prior to ingest
    * @param callback a callback to get entries ingested and their insertion ID(s) in GeoWave
+   * @param properties properties used for particular URL handlers
    */
   public IngestOptions(
       final LocalFileIngestPlugin<T> format,
-      final IngestFormatOptions formatOptions,
       final int threads,
       final String globalVisibility,
       final String[] fileExtensions,
       final Predicate<T> filter,
       final Function<T, T> transform,
-      final IngestCallback<T> callback) {
+      final IngestCallback<T> callback,
+      final Properties properties) {
     super();
     this.format = format;
-    this.formatOptions = formatOptions;
     this.threads = threads;
     this.globalVisibility = globalVisibility;
     this.fileExtensions = fileExtensions;
     this.filter = filter;
     this.transform = transform;
     this.callback = callback;
+    this.properties = properties;
   }
 
   public LocalFileIngestPlugin<T> getFormat() {
     return format;
-  }
-
-  public IngestFormatOptions getFormatOptions() {
-    return formatOptions;
   }
 
   public int getThreads() {
@@ -202,5 +196,9 @@ public class IngestOptions<T> {
 
   public IngestCallback<T> getCallback() {
     return callback;
+  }
+
+  public Properties getProperties() {
+    return properties;
   }
 }

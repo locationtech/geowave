@@ -1,0 +1,2 @@
+org.locationtech.geowave.core.ingest.S3IngestHandler
+org.locationtech.geowave.core.ingest.HdfsIngestHandler

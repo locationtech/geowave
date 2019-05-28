@@ -10,7 +10,6 @@ package org.locationtech.geowave.core.store.base;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,7 +21,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -38,7 +36,6 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
@@ -69,7 +66,7 @@ import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.writer.IndependentAdapterIndexWriter;
 import org.locationtech.geowave.core.store.index.writer.IndexCompositeWriter;
-import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.BaseDataStoreIngestDriver;
 import org.locationtech.geowave.core.store.memory.MemoryPersistentAdapterStore;
 import org.locationtech.geowave.core.store.operations.DataIndexReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
@@ -1150,75 +1147,25 @@ public class BaseDataStore implements DataStore {
   }
 
   @Override
-  public <T> void ingest(final URL url, final Index... index)
-      throws MismatchedIndexToAdapterMapping {
-    ingest(url, null, index);
+  public <T> void ingest(final String inputPath, final Index... index) {
+    ingest(inputPath, null, index);
   }
 
   @Override
-  public <T> void ingest(final URL url, final IngestOptions<T> options, final Index... index)
-      throws MismatchedIndexToAdapterMapping {
-    // TODO Issue #1442 likely need to move logic from LocalFileIngestDriver
-    // into core-store
+  public <T> void ingest(
+      final String inputPath,
+      final IngestOptions<T> options,
+      final Index... index) {
+    // Driver
+    final BaseDataStoreIngestDriver driver =
+        new BaseDataStoreIngestDriver(
+            this,
+            options == null ? IngestOptions.newBuilder().build() : options,
+            index);
 
-    int count = 0;
-    long dbWriteMs = 0L;
-    final Map<String, Writer> indexWriters = new HashMap<>();
-    // Read files until EOF from the command line.
-    try (CloseableIterator<?> geowaveDataIt =
-        plugin.toGeoWaveData(
-            file,
-            specifiedPrimaryIndexes.keySet().toArray(new String[0]),
-            ingestOptions.getVisibility())) {
-
-      while (geowaveDataIt.hasNext()) {
-        final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
-        try {
-          final DataTypeAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
-          if (adapter == null) {
-            LOGGER.warn(
-                String.format(
-                    "Adapter not found for [%s] file [%s]",
-                    geowaveData.getValue(),
-                    FilenameUtils.getName(file.getPath())));
-            continue;
-          }
-
-          // Ingest the data!
-          dbWriteMs +=
-              ingestData(
-                  geowaveData,
-                  adapter,
-                  ingestRunData,
-                  index,
-                  requiredIndexMap,
-                  indexWriters);
-
-          count++;
-
-        } catch (final Exception e) {
-          throw new RuntimeException("Interrupted ingesting GeoWaveData", e);
-        }
-      }
-
-      LOGGER.debug(
-          String.format(
-              "Finished ingest for file: [%s]; Ingested %d items in %d seconds",
-              FilenameUtils.getName(file.getPath()),
-              count,
-              (int) dbWriteMs / 1000));
-
-    } finally {
-      // Clean up index writers
-      for (final Entry<String, Writer> writerEntry : indexWriters.entrySet()) {
-        try {
-          ingestRunData.releaseIndexWriter(writerEntry.getKey(), writerEntry.getValue());
-        } catch (final Exception e) {
-          LOGGER.warn(
-              String.format("Could not return index writer: [%s]", writerEntry.getKey()),
-              e);
-        }
-      }
+    // Execute
+    if (!driver.runOperation(inputPath, null)) {
+      throw new RuntimeException("Ingest failed to execute");
     }
   }
 
