@@ -41,6 +41,7 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 import org.locationtech.geowave.test.kafka.BasicKafkaIT;
+import org.locationtech.geowave.test.spark.SparkTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,6 +79,11 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn(ConfigOptions.getDefaultPropertyFile().getName());
+    try {
+      SparkTestEnvironment.getInstance().tearDown();
+    } catch (final Exception e) {
+      LOGGER.warn("Unable to tear down default spark session", e);
+    }
   }
 
   @AfterClass

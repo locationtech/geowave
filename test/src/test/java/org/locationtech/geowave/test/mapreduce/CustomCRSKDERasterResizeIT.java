@@ -51,6 +51,7 @@ import org.locationtech.geowave.test.annotation.Environments;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.locationtech.geowave.test.spark.SparkTestEnvironment;
 import org.locationtech.geowave.test.annotation.NamespaceOverride;
 import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
@@ -105,6 +106,11 @@ public class CustomCRSKDERasterResizeIT {
     LOGGER.warn("*         RUNNING CustomCRSKDERasterResizeIT    *");
     LOGGER.warn("*                                               *");
     LOGGER.warn("-------------------------------------------------");
+    try {
+      SparkTestEnvironment.getInstance().tearDown();
+    } catch (Exception e) {
+      LOGGER.warn("Unable to tear down default spark session", e);
+    }
   }
 
   @AfterClass
