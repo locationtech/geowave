@@ -51,8 +51,8 @@ import org.locationtech.geowave.test.annotation.Environments;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import org.locationtech.geowave.test.spark.SparkTestEnvironment;
 import org.locationtech.geowave.test.annotation.NamespaceOverride;
+import org.locationtech.geowave.test.spark.SparkTestEnvironment;
 import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +83,7 @@ public class CustomCRSKDERasterResizeIT {
   private static final int MAX_TILE_SIZE_POWER_OF_2 = 4;
   private static final int INCREMENT = 4;
   private static final int BASE_MIN_LEVEL = 15;
-  private static final int BASE_MAX_LEVEL = 17;
+  private static final int BASE_MAX_LEVEL = 16;
 
   @NamespaceOverride(TEST_COVERAGE_NAMESPACE)
   protected DataStorePluginOptions outputDataStorePluginOptions;
@@ -108,7 +108,7 @@ public class CustomCRSKDERasterResizeIT {
     LOGGER.warn("-------------------------------------------------");
     try {
       SparkTestEnvironment.getInstance().tearDown();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.warn("Unable to tear down default spark session", e);
     }
   }
@@ -186,6 +186,7 @@ public class CustomCRSKDERasterResizeIT {
 
     final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
     for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
+      LOGGER.warn("running mapreduce kde: " + i);
       final String tileSizeCoverageName = TEST_COVERAGE_NAME_MR_PREFIX + i;
 
       final KdeCommand command = new KdeCommand();
@@ -206,6 +207,8 @@ public class CustomCRSKDERasterResizeIT {
     }
     final int numLevels = (BASE_MAX_LEVEL - BASE_MIN_LEVEL) + 1;
     final double[][][][] initialSampleValuesPerRequestSize = new double[numLevels][][][];
+
+    LOGGER.warn("testing mapreduce kdes");
     for (int l = 0; l < numLevels; l++) {
       initialSampleValuesPerRequestSize[l] =
           testSamplesMatch(
@@ -218,6 +221,7 @@ public class CustomCRSKDERasterResizeIT {
               null);
     }
     for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
+      LOGGER.warn("running spark kde: " + i);
       final String tileSizeCoverageName = TEST_COVERAGE_NAME_SPARK_PREFIX + i;
 
       final KDESparkCommand command = new KDESparkCommand();
@@ -237,7 +241,7 @@ public class CustomCRSKDERasterResizeIT {
       command.setOutputIndexOptions(Collections.singletonList(outputIndexOptions));
       command.execute(params);
     }
-
+    LOGGER.warn("testing spark kdes");
     for (int l = 0; l < numLevels; l++) {
       testSamplesMatch(
           TEST_COVERAGE_NAME_SPARK_PREFIX,
@@ -250,6 +254,7 @@ public class CustomCRSKDERasterResizeIT {
     }
     // go from the original mr KDEs to a resized version using the MR command
     for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
+      LOGGER.warn("running mapreduce resize: " + i);
       final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_MR_PREFIX + i;
       final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_MR_PREFIX + i;
 
@@ -276,6 +281,7 @@ public class CustomCRSKDERasterResizeIT {
 
       ToolRunner.run(command.createRunner(params), new String[] {});
     }
+    LOGGER.warn("testing mapreduce resize");
     for (int l = 0; l < numLevels; l++) {
       testSamplesMatch(
           TEST_RESIZE_COVERAGE_NAME_MR_PREFIX,
@@ -288,6 +294,7 @@ public class CustomCRSKDERasterResizeIT {
     }
     // similarly go from the original spark KDEs to a resized version using the Spark command
     for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
+      LOGGER.warn("running spark resize: " + i);
       final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_SPARK_PREFIX + i;
       final String resizeTileSizeCoverageName = TEST_RESIZE_COVERAGE_NAME_SPARK_PREFIX + i;
 
@@ -314,6 +321,7 @@ public class CustomCRSKDERasterResizeIT {
       command.execute(params);
     }
 
+    LOGGER.warn("testing spark resize");
     for (int l = 0; l < numLevels; l++) {
       testSamplesMatch(
           TEST_RESIZE_COVERAGE_NAME_SPARK_PREFIX,
