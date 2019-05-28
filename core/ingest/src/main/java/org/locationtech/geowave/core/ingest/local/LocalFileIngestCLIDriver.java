@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -30,14 +29,12 @@ import org.slf4j.LoggerFactory;
  * LocalFileIngestPlugin's that are discovered by the system.
  */
 public class LocalFileIngestCLIDriver extends AbstractLocalFileIngestDriver {
-  public static final int INGEST_BATCH_SIZE = 50000;
   private static final Logger LOGGER = LoggerFactory.getLogger(LocalFileIngestCLIDriver.class);
   protected DataStorePluginOptions storeOptions;
   protected List<IndexPluginOptions> indexOptions;
   protected VisibilityOptions ingestOptions;
   protected Map<String, LocalFileIngestPlugin<?>> ingestPlugins;
   protected int threads;
-  protected ExecutorService ingestExecutor;
 
   public LocalFileIngestCLIDriver(
       final DataStorePluginOptions storeOptions,

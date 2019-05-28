@@ -112,6 +112,7 @@ public class IngestOptions<T> {
      */
     IngestOptions<T> build();
   }
+
   /**
    * get a default implementation of this builder
    *
@@ -120,6 +121,7 @@ public class IngestOptions<T> {
   public static <T> Builder<T> newBuilder() {
     return new IngestOptionsBuilderImpl();
   }
+
   /**
    * An interface to get callbacks of ingest
    *

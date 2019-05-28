@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 abstract public class AbstractLocalFileIngestDriver extends
     AbstractLocalFileDriver<LocalFileIngestPlugin<?>, LocalIngestRunData> {
-  public static final int INGEST_BATCH_SIZE = 50000;
+  private static final int INGEST_BATCH_SIZE = 50000;
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLocalFileIngestDriver.class);
   protected ExecutorService ingestExecutor;
 

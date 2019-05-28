@@ -92,7 +92,8 @@ public class URLIngestUtils {
     }
   }
 
-  public static Path setupS3FileSystem(final String basePath, final String s3EndpointUrl) throws IOException {
+  public static Path setupS3FileSystem(final String basePath, final String s3EndpointUrl)
+      throws IOException {
     Path path = null;
     FileSystem fs = null;
     try {
