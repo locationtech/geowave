@@ -33,6 +33,7 @@ import org.locationtech.geowave.test.query.SpatialTemporalQueryIT;
 import org.locationtech.geowave.test.secondary.BasicSecondaryIndexIT;
 import org.locationtech.geowave.test.secondary.DataIndexOnlyIT;
 import org.locationtech.geowave.test.secondary.MapReduceSecondaryIndexIT;
+import org.locationtech.geowave.test.secondary.SimpleQuerySecondaryIndexIT;
 import org.locationtech.geowave.test.secondary.VisibilitySecondaryIndexIT;
 import org.locationtech.geowave.test.services.ConfigServicesIT;
 import org.locationtech.geowave.test.services.FileUploadIT;
@@ -61,6 +62,7 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
     BasicSecondaryIndexIT.class,
     DataIndexOnlyIT.class,
     MapReduceSecondaryIndexIT.class,
+    SimpleQuerySecondaryIndexIT.class,
     VisibilitySecondaryIndexIT.class,
     // // for now tests are taking too long in travis and landsatIT is a long
     // test
