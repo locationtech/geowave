@@ -21,6 +21,7 @@ import java.util.Map.Entry;
 import javax.media.jai.Interpolation;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -32,6 +33,7 @@ import org.locationtech.geowave.adapter.raster.operations.ResizeMRCommand;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
+import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.analytic.mapreduce.operations.KdeCommand;
 import org.locationtech.geowave.analytic.spark.kde.operations.KDESparkCommand;
 import org.locationtech.geowave.analytic.spark.resize.ResizeSparkCommand;
@@ -53,6 +55,7 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.annotation.NamespaceOverride;
 import org.locationtech.geowave.test.spark.SparkTestEnvironment;
+import org.locationtech.jts.geom.Envelope;
 import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,9 +78,9 @@ public class CustomCRSKDERasterResizeIT {
       TestUtils.TEST_RESOURCE_PACKAGE + "kde-testdata.zip";
   protected static final String KDE_INPUT_DIR = TestUtils.TEST_CASE_BASE + "kde_test_case/";
   private static final String KDE_SHAPEFILE_FILE = KDE_INPUT_DIR + "kde-test.shp";
-  private static final double TARGET_MIN_LON = 155;
-  private static final double TARGET_MIN_LAT = 16;
-  private static final double TARGET_DECIMAL_DEGREES_SIZE = 0.132;
+  private static final double TARGET_MIN_LON = 155.12;
+  private static final double TARGET_MIN_LAT = 16.07;
+  private static final double TARGET_DECIMAL_DEGREES_SIZE = 0.066;
   private static final String KDE_FEATURE_TYPE_NAME = "kde-test";
   private static final int MIN_TILE_SIZE_POWER_OF_2 = 0;
   private static final int MAX_TILE_SIZE_POWER_OF_2 = 4;
@@ -185,12 +188,27 @@ public class CustomCRSKDERasterResizeIT {
                 decimalDegreesPerCellMinLevel * (cellOriginYMinLevel + numCellsMinLevel)});
 
     final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
+    String geomField =
+        ((FeatureDataAdapter) inputDataStorePluginOptions.createDataStore().getTypes()[0]).getFeatureType().getGeometryDescriptor().getLocalName();
+    Envelope cqlEnv =
+        JTS.transform(
+            new Envelope(155.12, 155.17, 16.07, 16.12),
+            CRS.findMathTransform(CRS.decode("EPSG:4326"), CRS.decode("EPSG:4901"), true));
+    String cqlStr =
+        String.format(
+            "BBOX(%s, %f, %f, %f, %f)",
+            geomField,
+            cqlEnv.getMinX(),
+            cqlEnv.getMinY(),
+            cqlEnv.getMaxX(),
+            cqlEnv.getMaxY());
     for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
       LOGGER.warn("running mapreduce kde: " + i);
       final String tileSizeCoverageName = TEST_COVERAGE_NAME_MR_PREFIX + i;
 
       final KdeCommand command = new KdeCommand();
       command.setParameters("test-in", "raster-spatial");
+      command.getKdeOptions().setCqlFilter(cqlStr);
       command.getKdeOptions().setOutputIndex(outputIndex);
       command.getKdeOptions().setFeatureType(KDE_FEATURE_TYPE_NAME);
       command.getKdeOptions().setMinLevel(BASE_MIN_LEVEL);
@@ -230,6 +248,7 @@ public class CustomCRSKDERasterResizeIT {
       command.setParameters("test-in", "raster-spatial");
 
       command.getKDESparkOptions().setOutputIndex(outputIndex);
+      command.getKDESparkOptions().setCqlFilter(cqlStr);
       command.getKDESparkOptions().setTypeName(KDE_FEATURE_TYPE_NAME);
       command.getKDESparkOptions().setMinLevel(BASE_MIN_LEVEL);
       command.getKDESparkOptions().setMaxLevel(BASE_MAX_LEVEL);
@@ -292,7 +311,8 @@ public class CustomCRSKDERasterResizeIT {
               (int) (numCellsMinLevel * Math.pow(2, l))),
           initialSampleValuesPerRequestSize[l]);
     }
-    // similarly go from the original spark KDEs to a resized version using the Spark command
+    // similarly go from the original spark KDEs to a resized version using the
+    // Spark command
     for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {
       LOGGER.warn("running spark resize: " + i);
       final String originalTileSizeCoverageName = TEST_COVERAGE_NAME_SPARK_PREFIX + i;

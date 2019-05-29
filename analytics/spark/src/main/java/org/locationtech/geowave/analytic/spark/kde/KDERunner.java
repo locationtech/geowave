@@ -217,7 +217,8 @@ public class KDERunner {
             null);
     outputDataStore.createDataStore().addType(adapter, outputPrimaryIndex);
 
-    // The following "inner" variables are created to give access to member variables within lambda
+    // The following "inner" variables are created to give access to member
+    // variables within lambda
     // expressions
     final int innerTileSize = 1;// tileSize;
     final String innerCoverageName = coverageName;
@@ -247,8 +248,12 @@ public class KDERunner {
                   true,
                   scala.math.Ordering.Double$.MODULE$,
                   scala.reflect.ClassTag$.MODULE$.apply(Double.class))).sortByKey(true).cache();
-      final double max = cells.first()._1;
       final long count = cells.count();
+      if (count == 0) {
+        LOGGER.warn("No cells produced by KDE");
+        continue;
+      }
+      final double max = cells.first()._1;
 
       JavaRDD<GridCoverage> rdd = cells.zipWithIndex().map(t -> {
         final TileInfo tileInfo =
@@ -370,7 +375,8 @@ public class KDERunner {
     final double tileSouthLat = ((yTile * crsHeight) / numYTiles) + yMin;
     final double tileEastLon = tileWestLon + (crsWidth / numXTiles);
     final double tileNorthLat = tileSouthLat + (crsHeight / numYTiles);
-    // remember java rasters go from 0 at the top to (height-1) at the bottom, so we have to inverse
+    // remember java rasters go from 0 at the top to (height-1) at the bottom, so we
+    // have to inverse
     // the y here which goes from bottom to top
     return new TileInfo(tileWestLon, tileEastLon, tileSouthLat, tileNorthLat, x, tileSize - y - 1);
   }
@@ -544,7 +550,6 @@ public class KDERunner {
     private RasterDataAdapter newAdapter;
     private HadoopWritableSerializer<GridCoverage, GridCoverageWritable> writableSerializer;
 
-
     public MergeOverlappingTiles(final RasterDataAdapter newAdapter, final Index index) {
       super();
       this.index = index;
@@ -607,7 +612,6 @@ public class KDERunner {
     }
 
   }
-
 
   private static class TransformTileSize implements
       PairFlatMapFunction<GridCoverage, PartitionAndSortKey, GridCoverageWritable> {
