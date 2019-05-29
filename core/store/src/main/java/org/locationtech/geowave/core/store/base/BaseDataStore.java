@@ -237,9 +237,10 @@ public class BaseDataStore implements DataStore {
     // client side filtering because the filter needs to be applied across
     // indices
 
-    // if its a delete operation, selecting an index is not relevant and should be removed as an
+    // if its a delete operation when secondary indexing is not used,
+    // selecting an index is not relevant and should be removed as an
     // option and replaced with all indices
-    if (DeletionMode.DONT_DELETE.equals(delete)) {
+    if (DeletionMode.DONT_DELETE.equals(delete) || baseOptions.isSecondaryIndexing()) {
       queryOptions = new BaseQueryOptions(query, adapterStore, internalAdapterStore, scanCallback);
     } else {
       queryOptions =
@@ -404,7 +405,7 @@ public class BaseDataStore implements DataStore {
         // adapter to be queried once
         final Set<Short> queriedAdapters = new HashSet<>();
         final List<Pair<Index, List<InternalDataAdapter<?>>>> indexAdapterPairList =
-            delete
+            (delete && !baseOptions.isSecondaryIndexing())
                 ? queryOptions.getIndicesForAdapters(
                     tempAdapterStore,
                     indexMappingStore,
