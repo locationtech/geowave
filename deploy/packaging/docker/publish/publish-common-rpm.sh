@@ -22,7 +22,6 @@ trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm && exit' ERR
 GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
 BUILD_TYPE=$(cat $WORKSPACE/deploy/target/build-type.txt)
 GEOWAVE_VERSION_URL=$(cat $WORKSPACE/deploy/target/version-url.txt)
-GEOWAVE_BUCKET="maxar-geowave"
 
 echo "---------------------------------------------------------------"
 echo "         Publishing GeoWave Common RPMs"
