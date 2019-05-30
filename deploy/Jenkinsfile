@@ -96,7 +96,7 @@ node ('master') {
   }
 
   // Deploy to geowave-rpms
-  stage('Deploying to s3://geowave-rpms/'){
+  stage('Deploying to S3'){
     def build_type = readFile('deploy/target/build-type.txt').trim()
     if ( build_type == "dev" ) {
       echo 'Build type determined as Dev. Sync will delete content on s3.'
