@@ -8,10 +8,12 @@ node ('master') {
         [
           [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5']],
           [$class: 'ParametersDefinitionProperty', parameterDefinitions: [
-            [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'geowave-rpms', description: 'Bucket name to push rpms to'],
-            [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'geowave', description: 'Bucket to push maven cache to'],
-            [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/geowave/third-party-downloads', description: 'URL to third party downloads directory (No trailing slash)'],
-            [$class: 'StringParameterDefinition', name: 'LOCAL_REPO_DIR', defaultValue: '/var/www/geowave-efs/html/repos/snapshots', description: 'Path on the local filesystem to the repo'],
+            [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'maxar-geowave-rpms', description: 'Bucket for rpms'],
+            [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'maxar-geowave', description: 'Root GeoWave Bucket'],
+            [$class: 'StringParameterDefinition', name: 'notebook_bucket', defaultValue: 'maxar-geowave-notebooks', description: 'Bucket for notebooks'],
+            [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/maxar-geowave/3rd-party', description: 'URL to third party downloads directory (No trailing slash)'],
+            [$class: 'StringParameterDefinition', name: 'LOCAL_REPO_DIR', defaultValue: '/jenkins/gw-repo/snapshots', description: 'Path on the local filesystem to the repo'],
+            [$class: 'StringParameterDefinition', name: 'build_type', defaultValue: 'clean install', description: 'Maven build type. To publish to central change to deploy. Credentials must be added.'],
             [$class: 'ChoiceParameterDefinition', name: 'overwrite_parameters', choices: 'No\nYes', description: 'Set to yes to reset parameters to defaults'],
             ]
           ],
@@ -22,17 +24,37 @@ node ('master') {
       error('Parameters Reset')
     }
   }
+
   // Setting java home for the withMaven block
   jdk = tool name: 'JDK18'
   env.JAVA_HOME = "${jdk}"
+
+  // The following grabs the EC2 role from the instance for things like S3 Access
+  stage('Retrieve Role From IAM'){
+    sh """
+      ROLE=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/`
+      AWS_ACCESS_KEY_ID=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/\${ROLE} | awk '/AccessKeyId/ {print \$3}' | sed 's/[^0-9A-Z]*//g'`
+      AWS_SECRET_ACCESS_KEY=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/\${ROLE} | awk '/SecretAccessKey/ {print \$3}' | sed 's/[^0-9A-Za-z/+=]*//g'`
+      AWS_SESSION_TOKEN=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/\${ROLE} | awk '/Token/ {print \$3}' | sed 's/[^0-9A-Za-z/+=]*//g'`
+      AWS_DEFAULT_REGION='us-east-1'
+      M2_HOME='/var/jenkins_home/.m2'
+      
+      export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_DEFAULT_REGION M2_HOME
+    """
+  }
+
   stage('Wipe workspace'){
     deleteDir()
   }
 
   // Mark the code checkout 'stage'
+  // If using this pipeline script directly in a job, checkout using git command
   stage('Checkout'){
-  // Get GeoWave source from GitHub repository
-    checkout scm
+    // Use the maven checkout in the pom
+    //checkout scm
+
+    // Checkout from gitHub directly
+    git 'https://github.com/locationtech/geowave.git'
   }
   // Mark the create docker image 'stage'
   stage('Create Docker Image'){
@@ -42,7 +64,7 @@ node ('master') {
     sh "docker build -t locationtech/geowave-centos7-publish -f deploy/packaging/docker/geowave-centos7-publish.dockerfile --build-arg third_party_deps_path=${ params.third_party_deps_path } deploy/packaging/docker"
   }
 
-  stage('Maven Deploy'){
+  stage('Maven Build/Deploy'){
     dir("${env.WORKSPACE}/docker-root") {
       sh """
         if [[ ! -z \$(aws s3api head-object --bucket ${params.cache_bucket} --key mvn-cache/mvn-repo-cache-latest.tar.gz) ]]; then
@@ -57,19 +79,20 @@ node ('master') {
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
       mavenOpts: "-Xmx2g -Xms1g",
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
-      sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip"
+      sh "mvn ${params.build_type} -DskipTests -Dfindbugs.skip -Dformatter.skip"
      }
   }
 
   // Mark the build artifacts 'stage'....
   stage('Build and Publish RPMs'){
-    withEnv(["LOCAL_REPO_DIR=${ params.LOCAL_REPO_DIR }"]) {
-      sh 'deploy/packaging/docker/docker-build-rpms.sh'
+    withEnv(["LOCAL_REPO_DIR=${ params.LOCAL_REPO_DIR }","GEOWAVE_BUCKET=${ params.cache_bucket }"]) {
+        sh "deploy/packaging/docker/docker-build-rpms.sh"
     }
   }
 
   stage('Clean bucket and local space'){
-    sh "deploy/scripts/clean-up.py ${env.WORKSPACE}"
+    //sh "deploy/scripts/clean-up.py ${env.WORKSPACE}"
+
   }
 
   // Deploy to geowave-rpms
@@ -86,13 +109,12 @@ node ('master') {
     }
   }
 
-  stage('Bundle maven cache'){
+  stage('Bundle Maven Cache'){
     def build_type = readFile('deploy/target/build-type.txt').trim()
     if ( build_type == "dev" ) {
       dir("${env.WORKSPACE}/docker-root") {
         sh "tar czf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz .m2"
         sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz s3://${params.cache_bucket}/mvn-cache/mvn-repo-cache-latest.tar.gz --quiet"
-     // upload to upload s3://geowave/mvn-cache/dev/mvn-repo-cache-latest.tar.gz
       }
     }
     else if (build_type == "release" ){
@@ -100,7 +122,6 @@ node ('master') {
       dir("${env.WORKSPACE}/docker-root") {
         sh "tar czf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz .m2"
         sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz s3://${params.cache_bucket}/mvn-cache/mvn-repo-cache-${version}.tar.gz --quiet"
-      // $DOCKERROOT/.m2 and upload to upload s3://geowave/mvn-cache/release/mvn-repo-cache-version.tar.gz
       }
     } else {
       error("ERROR: Could not determine build type. Unable to upload maven cache")
