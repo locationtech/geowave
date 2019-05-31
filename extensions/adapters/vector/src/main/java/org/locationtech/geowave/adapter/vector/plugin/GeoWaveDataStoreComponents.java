@@ -113,7 +113,7 @@ public class GeoWaveDataStoreComponents {
     if (spatialOnly && (indices.length == 0)) {
       throw new UnsupportedOperationException("Query required spatial index, but none were found.");
     }
-    return gtStore.getIndexQueryStrategy().getIndices(stats, query, indices, queryHints);
+    return gtStore.getIndexQueryStrategy().getIndices(stats, query, indices, adapter, queryHints);
   }
 
   public void remove(final SimpleFeature feature, final GeoWaveTransaction transaction)
