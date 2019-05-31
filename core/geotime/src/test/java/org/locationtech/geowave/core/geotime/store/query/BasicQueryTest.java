@@ -27,10 +27,10 @@ import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
@@ -64,9 +64,9 @@ public class BasicQueryTest {
                 df.parse("2017-02-22T12:00:00GMT-00:00").getTime(),
                 df.parse("2017-02-22T13:00:00GMT-00:00").getTime()),
             true);
-    Constraints constaints =
-        new Constraints(new ConstraintSet(TimeDefinition.class, constrainData));
-    final BasicQuery query = new BasicQuery(constaints, op);
+    ConstraintsByClass constaints =
+        new ConstraintsByClass(new ConstraintSet(TimeDefinition.class, constrainData));
+    final BasicQueryByClass query = new BasicQueryByClass(constaints, op);
 
     final CommonIndexedPersistenceEncoding[] data =
         new CommonIndexedPersistenceEncoding[] {

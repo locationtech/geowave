@@ -44,6 +44,7 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.CASSANDRA,
           // DYNAMODB takes too long
           // GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       options = {"enableSecondaryIndexing=true"})
@@ -58,6 +59,7 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
           // GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       options = {"enableSecondaryIndexing=true"},
@@ -129,6 +131,11 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
   @AfterClass
   public static void reportTest() {
     TestUtils.printEndOfTest(LOGGER, testName, startMillis);
+  }
+
+  @Test
+  public void testDistributedIngestAndQueryTemporal() throws Exception {
+    testIngestAndQuery(DimensionalityType.TEMPORAL);
   }
 
   @Test

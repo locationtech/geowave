@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.index.simple;
 
+import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 
 /**
@@ -20,6 +21,10 @@ public class SimpleLongIndexStrategy extends SimpleNumericIndexStrategy<Long> {
 
   public SimpleLongIndexStrategy() {
     super(Lexicoders.LONG);
+  }
+
+  public SimpleLongIndexStrategy(final NumericDimensionDefinition definition) {
+    super(Lexicoders.LONG, new NumericDimensionDefinition[] {definition});
   }
 
   @Override

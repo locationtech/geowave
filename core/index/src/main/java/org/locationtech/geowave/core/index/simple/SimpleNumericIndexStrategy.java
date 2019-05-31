@@ -42,15 +42,22 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
   private final NumericDimensionDefinition[] definitions;
 
   protected SimpleNumericIndexStrategy(final NumberLexicoder<T> lexicoder) {
-    this.lexicoder = lexicoder;
-    this.definitions =
+    this(
+        lexicoder,
         new NumericDimensionDefinition[] {
             new BasicDimensionDefinition(
                 lexicoder.getMinimumValue().doubleValue(),
-                lexicoder.getMaximumValue().doubleValue())};
+                lexicoder.getMaximumValue().doubleValue())});
   }
 
-  protected NumberLexicoder<T> getLexicoder() {
+  protected SimpleNumericIndexStrategy(
+      final NumberLexicoder<T> lexicoder,
+      final NumericDimensionDefinition[] definitions) {
+    this.lexicoder = lexicoder;
+    this.definitions = definitions;
+  }
+
+  public NumberLexicoder<T> getLexicoder() {
     return lexicoder;
   }
 

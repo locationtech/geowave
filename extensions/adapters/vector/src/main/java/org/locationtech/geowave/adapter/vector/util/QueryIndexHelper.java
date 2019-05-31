@@ -23,8 +23,8 @@ import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -196,7 +196,7 @@ public class QueryIndexHelper {
    * @param timeBoundsSet
    * @return
    */
-  public static Constraints composeTimeConstraints(
+  public static ConstraintsByClass composeTimeConstraints(
       final SimpleFeatureType featureType,
       final TimeDescriptors timeDescriptors,
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
@@ -206,7 +206,7 @@ public class QueryIndexHelper {
         TimeUtils.getTemporalConstraintsForDescriptors(timeDescriptors, timeBoundsSet);
     return (timeBounds != null) && !timeBounds.isEmpty()
         ? ExplicitSpatialTemporalQuery.createConstraints(timeBounds, false)
-        : new Constraints(getTimeConstraintsFromIndex(timeDescriptors, statsMap));
+        : new ConstraintsByClass(getTimeConstraintsFromIndex(timeDescriptors, statsMap));
   }
 
   /**
@@ -219,29 +219,30 @@ public class QueryIndexHelper {
    * @param timeBoundsSet
    * @return
    */
-  public static Constraints composeTimeBoundedConstraints(
+  public static ConstraintsByClass composeTimeBoundedConstraints(
       final SimpleFeatureType featureType,
       final TimeDescriptors timeDescriptors,
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
       final TemporalConstraintsSet timeBoundsSet) {
 
     if ((timeBoundsSet == null) || timeBoundsSet.isEmpty() || !timeDescriptors.hasTime()) {
-      return new Constraints();
+      return new ConstraintsByClass();
     }
 
     final TemporalConstraints boundsTemporalConstraints =
         TimeUtils.getTemporalConstraintsForDescriptors(timeDescriptors, timeBoundsSet);
 
     if (boundsTemporalConstraints.isEmpty()) {
-      return new Constraints();
+      return new ConstraintsByClass();
     }
 
-    final Constraints indexTimeConstraints =
-        new Constraints(QueryIndexHelper.getTimeConstraintsFromIndex(timeDescriptors, statsMap));
+    final ConstraintsByClass indexTimeConstraints =
+        new ConstraintsByClass(
+            QueryIndexHelper.getTimeConstraintsFromIndex(timeDescriptors, statsMap));
 
-    final Constraints boundsTimeConstraints =
+    final ConstraintsByClass boundsTimeConstraints =
         ExplicitSpatialTemporalQuery.createConstraints(boundsTemporalConstraints, false);
-    return (boundsTimeConstraints.matches(indexTimeConstraints)) ? new Constraints()
+    return (boundsTimeConstraints.matches(indexTimeConstraints)) ? new ConstraintsByClass()
         : boundsTimeConstraints;
   }
 
@@ -260,15 +261,15 @@ public class QueryIndexHelper {
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
       final Geometry jtsBounds) {
     if (jtsBounds == null) {
-      return new GeoConstraintsWrapper(new Constraints(), true, null);
+      return new GeoConstraintsWrapper(new ConstraintsByClass(), true, null);
     }
     final GeoConstraintsWrapper geoConstraints =
         GeometryUtils.basicGeoConstraintsWrapperFromGeometry(jtsBounds);
-    final Constraints statsConstraints =
-        new Constraints(getBBOXIndexConstraintsFromIndex(featureType, statsMap));
+    final ConstraintsByClass statsConstraints =
+        new ConstraintsByClass(getBBOXIndexConstraintsFromIndex(featureType, statsMap));
     if (geoConstraints.getConstraints().matches(statsConstraints)) {
       return new GeoConstraintsWrapper(
-          new Constraints(),
+          new ConstraintsByClass(),
           geoConstraints.isConstraintsMatchGeometry(),
           jtsBounds);
     }
@@ -286,14 +287,14 @@ public class QueryIndexHelper {
    * @param timeBoundsSet
    * @return
    */
-  public static Constraints composeConstraints(
+  public static ConstraintsByClass composeConstraints(
       final SimpleFeatureType featureType,
       final TimeDescriptors timeDescriptors,
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
       final Geometry jtsBounds,
       final TemporalConstraintsSet timeBoundsSet) {
 
-    final Constraints timeConstraints =
+    final ConstraintsByClass timeConstraints =
         composeTimeConstraints(featureType, timeDescriptors, statsMap, timeBoundsSet);
     final GeoConstraintsWrapper geoConstraints =
         composeGeometricConstraints(featureType, statsMap, jtsBounds);

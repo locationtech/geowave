@@ -158,7 +158,6 @@ public class RedisUtils {
   }
 
   private static byte[] longToBytes(long val) {
-
     final int radix = 1 << 8;
     final int mask = radix - 1;
     // we want to eliminate trailing 0's (ie. truncate the byte array by

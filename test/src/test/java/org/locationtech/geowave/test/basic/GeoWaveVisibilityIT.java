@@ -64,6 +64,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       options = {"enableVisibility=true", "enableSecondaryIndexing=false"})
@@ -105,7 +106,14 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
   @Test
   public void testIngestAndQueryMixedVisibilityRasters() throws IOException {
     final String coverageName = "testMixedVisibilityRasters";
-    final int tileSize = 64;
+    final int maxCellSize =
+        TestUtils.getTestEnvironment(dataStoreOptions.getType()).getMaxCellSize();
+    final int tileSize;
+    if (maxCellSize <= 64 * 1024) {
+      tileSize = 24;
+    } else {
+      tileSize = 64;
+    }
     final double westLon = 0;
     final double eastLon = 45;
     final double southLat = 0;
@@ -125,7 +133,14 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
   @Test
   public void testComplexVisibility() throws IOException {
     final String coverageName = "testComplexVisibility";
-    final int tileSize = 64;
+    final int maxCellSize =
+        TestUtils.getTestEnvironment(dataStoreOptions.getType()).getMaxCellSize();
+    final int tileSize;
+    if (maxCellSize <= 64 * 1024) {
+      tileSize = 24;
+    } else {
+      tileSize = 64;
+    }
     final double westLon = 0;
     final double eastLon = 45;
     final double southLat = 0;

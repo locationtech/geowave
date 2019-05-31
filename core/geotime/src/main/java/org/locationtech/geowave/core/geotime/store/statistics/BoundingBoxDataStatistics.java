@@ -20,8 +20,8 @@ import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatis
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
 import org.locationtech.jts.geom.Envelope;
 
 public abstract class BoundingBoxDataStatistics<T, B extends StatisticsQueryBuilder<Envelope, B>>

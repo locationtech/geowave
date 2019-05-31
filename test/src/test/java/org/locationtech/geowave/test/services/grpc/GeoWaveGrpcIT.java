@@ -54,6 +54,7 @@ import org.slf4j.LoggerFactory;
         GeoWaveStoreType.CASSANDRA,
         GeoWaveStoreType.DYNAMODB,
         GeoWaveStoreType.HBASE,
+        GeoWaveStoreType.KUDU,
         GeoWaveStoreType.REDIS,
         GeoWaveStoreType.ROCKSDB})
 public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {

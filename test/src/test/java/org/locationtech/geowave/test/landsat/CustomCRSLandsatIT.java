@@ -93,13 +93,15 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       namespace = "customcrs")
   protected DataStorePluginOptions dataStoreOptions;
 
   private static final String CUSTOM_REFERENCE_LANDSAT_IMAGE_PATH =
-      "src/test/resources/landsat/expected_custom.png";
+      TestUtils.isOracleJDK() ? "src/test/resources/landsat/expected_custom_oraclejdk.png"
+          : "src/test/resources/landsat/expected_custom.png";
   private static final int MIN_PATH = 198;
   private static final int MAX_PATH = 199;
   private static final int MIN_ROW = 36;
@@ -179,7 +181,7 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
     ingestOptions.setCreatePyramid(false);
     ingestOptions.setCreateHistogram(false);
     ingestOptions.setCoverageName("test");
-    ingestOptions.setTileSize(128);
+    ingestOptions.setTileSize(64);
     // crop to the specified bbox
     ingestOptions.setCropToSpatialConstraint(true);
     final RasterIngestTester runner =

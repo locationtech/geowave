@@ -27,12 +27,12 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
-			<version>1.11.281</version>
+			<version>${awssdk.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-core</artifactId>
-			<version>1.11.281</version>
+			<version>${awssdk.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

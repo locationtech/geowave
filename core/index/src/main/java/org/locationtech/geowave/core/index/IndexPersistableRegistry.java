@@ -13,6 +13,7 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.UnboundedDimensionDefinition;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
+import org.locationtech.geowave.core.index.sfc.BasicSFCIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset;
@@ -73,6 +74,7 @@ public class IndexPersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 130, SinglePartitionInsertionIds::new),
         new PersistableIdAndConstructor((short) 131, SimpleFloatIndexStrategy::new),
         new PersistableIdAndConstructor((short) 132, SimpleDoubleIndexStrategy::new),
-        new PersistableIdAndConstructor((short) 133, SimpleByteIndexStrategy::new),};
+        new PersistableIdAndConstructor((short) 133, SimpleByteIndexStrategy::new),
+        new PersistableIdAndConstructor((short) 134, BasicSFCIndexStrategy::new),};
   }
 }

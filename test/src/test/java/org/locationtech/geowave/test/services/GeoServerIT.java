@@ -101,6 +101,7 @@ public class GeoServerIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       namespace = testName)

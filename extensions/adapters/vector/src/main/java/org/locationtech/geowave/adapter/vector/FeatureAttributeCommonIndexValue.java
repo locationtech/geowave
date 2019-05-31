@@ -29,7 +29,6 @@ public class FeatureAttributeCommonIndexValue implements CommonIndexValue {
 
   @Override
   public boolean overlaps(final NumericDimensionField[] field, final NumericData[] rangeData) {
-    assert (field[0] instanceof FeatureAttributeCommonIndexValue);
     return (value != null)
         && (value.doubleValue() <= rangeData[0].getMax())
         && (value.doubleValue() >= rangeData[0].getMin());

@@ -16,6 +16,7 @@ import org.locationtech.geowave.mapreduce.splits.SplitsProviderIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicCustomCRSRasterIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
+import org.locationtech.geowave.test.basic.GeoWaveBasicTemporalVectorIT;
 import org.locationtech.geowave.test.basic.GeoWaveCustomCRSSpatialVectorIT;
 import org.locationtech.geowave.test.basic.GeoWaveGeometryPrecisionIT;
 import org.locationtech.geowave.test.basic.GeoWaveVectorSerializationIT;
@@ -49,6 +50,7 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 @SuiteClasses({
     GeoWaveVisibilityIT.class,
     GeoWaveCustomCRSSpatialVectorIT.class,
+    GeoWaveBasicTemporalVectorIT.class,
     GeoWaveBasicSpatialTemporalVectorIT.class,
     GeoWaveGeometryPrecisionIT.class,
     // TODO need to mock up S3

@@ -47,6 +47,8 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
+import org.locationtech.geowave.core.geotime.ingest.TemporalDimensionalityTypeProvider.TemporalIndexBuilder;
+import org.locationtech.geowave.core.geotime.ingest.TemporalOptions;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
@@ -72,6 +74,7 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
@@ -93,6 +96,7 @@ public class TestUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
 
   public static enum DimensionalityType {
+    TEMPORAL("temporal", DEFAULT_TEMPORAL_INDEX),
     SPATIAL("spatial", DEFAULT_SPATIAL_INDEX),
     SPATIAL_TEMPORAL("spatial_temporal", DEFAULT_SPATIAL_TEMPORAL_INDEX),
     ALL("spatial,spatial_temporal",
@@ -128,6 +132,7 @@ public class TestUtils {
   public static final String TEST_CASE_BASE = "data/";
 
   public static final Index DEFAULT_SPATIAL_INDEX = new SpatialIndexBuilder().createIndex();
+  public static final Index DEFAULT_TEMPORAL_INDEX = new TemporalIndexBuilder().createIndex();
   public static final Index DEFAULT_SPATIAL_TEMPORAL_INDEX =
       new SpatialTemporalIndexBuilder().createIndex();
   // CRS for Web Mercator
@@ -170,6 +175,11 @@ public class TestUtils {
     return VersionUtil.compareVersions(VersionInfo.getVersion(), "2.2.0") >= 0;
   }
 
+  public static boolean isOracleJDK() {
+    return (System.getProperty("java.vm.name") != null)
+        && System.getProperty("java.vm.name").contains("HotSpot");
+  }
+
   public static void testLocalIngest(
       final DataStorePluginOptions dataStore,
       final DimensionalityType dimensionalityType,
@@ -199,7 +209,7 @@ public class TestUtils {
       final String ingestFilePath,
       final String format,
       final int nthreads) throws Exception {
-    testLocalIngest(dataStore, dimensionalityType, null, ingestFilePath, format, nthreads);
+    testLocalIngest(dataStore, dimensionalityType, null, ingestFilePath, format, nthreads, true);
   }
 
   public static void testLocalIngest(
@@ -209,6 +219,17 @@ public class TestUtils {
       final String ingestFilePath,
       final String format,
       final int nthreads) throws Exception {
+    testLocalIngest(dataStore, dimensionalityType, crsCode, ingestFilePath, format, nthreads, true);
+  }
+
+  public static void testLocalIngest(
+      final DataStorePluginOptions dataStore,
+      final DimensionalityType dimensionalityType,
+      final String crsCode,
+      final String ingestFilePath,
+      final String format,
+      final int nthreads,
+      final boolean supportTimeRange) throws Exception {
 
     // ingest a shapefile (geotools type) directly into GeoWave using the
     // ingest framework's main method and pre-defined commandline arguments
@@ -229,6 +250,10 @@ public class TestUtils {
         } else {
           ((SpatialTemporalOptions) indexOption.getDimensionalityOptions()).setCrs(crsCode);
         }
+      }
+      if (indexOption.getDimensionalityOptions() instanceof TemporalOptions) {
+        ((TemporalOptions) indexOption.getDimensionalityOptions()).setNoTimeRanges(
+            !supportTimeRange);
       }
       indexOptions.add(indexOption);
     }
@@ -848,5 +873,14 @@ public class TestUtils {
   // Overload method with option to automatically generate assertion message.
   public static void assertStatusCode(final int expectedCode, final Response response) {
     assertStatusCode("REST call", expectedCode, response);
+  }
+
+  public static StoreTestEnvironment getTestEnvironment(final String type) {
+    for (final GeoWaveStoreType t : GeoWaveStoreType.values()) {
+      if (t.getTestEnvironment().getDataStoreFactory().getType().equals(type)) {
+        return t.getTestEnvironment();
+      }
+    }
+    return null;
   }
 }

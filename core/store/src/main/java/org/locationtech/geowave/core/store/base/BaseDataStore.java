@@ -307,10 +307,22 @@ public class BaseDataStore implements DataStore {
             || (sanitizedConstraints instanceof EverythingQuery))) {
       try {
         // just grab the values directly from the Data Index
-        final InternalDataAdapter<?>[] adapters = queryOptions.getAdaptersArray(adapterStore);
-
+        InternalDataAdapter<?>[] adapters = queryOptions.getAdaptersArray(adapterStore);
+        if (!queryOptions.isAllIndices()) {
+          final Set<Short> adapterIds =
+              new HashSet<>(
+                  Arrays.asList(
+                      ArrayUtils.toObject(
+                          queryOptions.getValidAdapterIds(
+                              internalAdapterStore,
+                              indexMappingStore))));
+          adapters =
+              Arrays.stream(adapters).filter(a -> adapterIds.contains(a.getAdapterId())).toArray(
+                  i -> new InternalDataAdapter<?>[i]);
+        }
         // TODO test whether aggregations work in this case
         for (final InternalDataAdapter<?> adapter : adapters) {
+
           RowReader<GeoWaveRow> rowReader;
           if (sanitizedConstraints instanceof DataIdQuery) {
             rowReader =

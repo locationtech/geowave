@@ -32,7 +32,9 @@ public class BasicSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
-          GeoWaveStoreType.DYNAMODB,
+          // TODO: DynamoDB disabled, because it takes abnormally long on this test (~500s)
+          // GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       options = {"enableSecondaryIndexing=true"})
@@ -49,6 +51,11 @@ public class BasicSecondaryIndexIT extends AbstractSecondaryIndexIT {
   @AfterClass
   public static void reportTest() {
     TestUtils.printEndOfTest(LOGGER, testName, startMillis);
+  }
+
+  @Test
+  public void testLocalIngestAndQueryTemporal() throws Exception {
+    testIngestAndQuery(DimensionalityType.TEMPORAL);
   }
 
   @Test

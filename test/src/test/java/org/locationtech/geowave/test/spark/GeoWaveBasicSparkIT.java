@@ -61,6 +61,7 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
           // TODO: Dynamo test takes too long to finish on Travis (>5 minutes)
           // GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
@@ -135,6 +136,43 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
         "polygon tornado tracks spatial query with spatial temporal index only",
         true);
     TestUtils.deleteAll(dataStore);
+
+    // test spatial temporal queries with temporal index for tornado tracks
+    TestUtils.testLocalIngest(
+        dataStore,
+        DimensionalityType.TEMPORAL,
+        TORNADO_TRACKS_SHAPEFILE_FILE,
+        1);
+    verifyQuery(
+        context,
+        TEST_BOX_TEMPORAL_FILTER_FILE,
+        TORNADO_TRACKS_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE,
+        "bounding box tornado tracks spatial-temporal query with temporal only index",
+        false);
+    verifyQuery(
+        context,
+        TEST_POLYGON_TEMPORAL_FILTER_FILE,
+        TORNADO_TRACKS_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE,
+        "polygon tornado tracks spatial-temporal query with temporal only index",
+        true);
+    TestUtils.deleteAll(dataStore);
+    // test spatial temporal queries with temporal index for hail points
+    TestUtils.testLocalIngest(dataStore, DimensionalityType.TEMPORAL, HAIL_SHAPEFILE_FILE, 1);
+    verifyQuery(
+        context,
+        TEST_BOX_TEMPORAL_FILTER_FILE,
+        HAIL_EXPECTED_BOX_TEMPORAL_FILTER_RESULTS_FILE,
+        "bounding box hail spatial-temporal query with temporal index only",
+        false);
+    verifyQuery(
+        context,
+        TEST_POLYGON_TEMPORAL_FILTER_FILE,
+        HAIL_EXPECTED_POLYGON_TEMPORAL_FILTER_RESULTS_FILE,
+        "polygon hail spatial-temporal query with temporal index only",
+        true);
+
+    TestUtils.deleteAll(dataStore);
+
     // ingest test points
     TestUtils.testLocalIngest(dataStore, DimensionalityType.ALL, HAIL_SHAPEFILE_FILE, 1);
     verifyQuery(

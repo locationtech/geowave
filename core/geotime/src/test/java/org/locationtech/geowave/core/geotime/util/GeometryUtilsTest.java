@@ -26,7 +26,8 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.index.IndexImpl;
+import org.locationtech.geowave.core.store.query.constraints.Constraints;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -34,7 +35,7 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 
 public class GeometryUtilsTest {
-  private float DELTA = 0;
+  private final float DELTA = 0;
   private Point point3D;
   private Point point2D;
 
@@ -115,7 +116,7 @@ public class GeometryUtilsTest {
                         new Coordinate(-9, -2)})});
     final Constraints constraints = GeometryUtils.basicConstraintsFromGeometry(multiPolygon);
     final List<MultiDimensionalNumericData> results =
-        constraints.getIndexConstraints(new ExampleNumericIndexStrategy());
+        constraints.getIndexConstraints(new IndexImpl(new ExampleNumericIndexStrategy(), null));
     assertEquals(2, results.size());
     assertTrue(Arrays.equals(new double[] {10, 30}, results.get(0).getMinValuesPerDimension()));
     assertTrue(Arrays.equals(new double[] {20, 40}, results.get(0).getMaxValuesPerDimension()));
@@ -249,7 +250,7 @@ public class GeometryUtilsTest {
     }
 
     @Override
-    public byte[][] getInsertionPartitionKeys(MultiDimensionalNumericData insertionData) {
+    public byte[][] getInsertionPartitionKeys(final MultiDimensionalNumericData insertionData) {
       // TODO Auto-generated method stub
       return null;
     }

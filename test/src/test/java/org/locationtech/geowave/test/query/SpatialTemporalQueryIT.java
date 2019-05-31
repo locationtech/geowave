@@ -53,7 +53,7 @@ import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -77,6 +77,7 @@ import org.slf4j.LoggerFactory;
         // HBase also seems to be up near the time limit, for now ignore HBase, but in the future we
         // should trim HBase timing elsewhere
         // GeoWaveStoreType.HBASE,
+        GeoWaveStoreType.KUDU,
         GeoWaveStoreType.REDIS,
         GeoWaveStoreType.ROCKSDB})
 public class SpatialTemporalQueryIT {
@@ -280,7 +281,7 @@ public class SpatialTemporalQueryIT {
           @Override
           public CloseableIterator<Index> getIndices(
               final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
-              final BasicQuery query,
+              final BasicQueryByClass query,
               final Index[] indices,
               final Map<QueryHint, Object> hints) {
             return new CloseableIteratorWrapper<>(new Closeable() {

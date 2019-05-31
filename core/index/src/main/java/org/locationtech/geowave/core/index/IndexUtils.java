@@ -12,9 +12,11 @@ import java.util.Arrays;
 import java.util.List;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
+import org.locationtech.geowave.core.index.lexicoder.NumberLexicoder;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.simple.SimpleNumericIndexStrategy;
 
 public class IndexUtils {
   public static MultiDimensionalNumericData getFullBounds(
@@ -151,6 +153,17 @@ public class IndexUtils {
   public static int getBitPositionOnSortKeyFromSubsamplingArray(
       final NumericIndexStrategy indexStrategy,
       final double[] maxResolutionSubsamplingPerDimension) {
+    if (indexStrategy instanceof SimpleNumericIndexStrategy) {
+      final NumberLexicoder<?> lexicoder =
+          ((SimpleNumericIndexStrategy) indexStrategy).getLexicoder();
+      // this may not work on floating point values
+      // pre-scale to minimize floating point round-off errors
+      final double minScaled =
+          lexicoder.getMinimumValue().doubleValue() / maxResolutionSubsamplingPerDimension[0];
+      final double maxScaled =
+          lexicoder.getMaximumValue().doubleValue() / maxResolutionSubsamplingPerDimension[0];
+      return (int) Math.round(Math.ceil(log2(maxScaled - minScaled)));
+    }
     return (int) Math.round(
         getDimensionalBitsUsed(indexStrategy, maxResolutionSubsamplingPerDimension));
   }
@@ -174,7 +187,7 @@ public class IndexUtils {
     final int extraBits = (bitPosition + 1) % 8;
 
     // If there was a remainder, add 1 to the number of bytes
-    boolean isRemainder = extraBits > 0;
+    final boolean isRemainder = extraBits > 0;
     if (isRemainder) {
       numBytes++;
     }
