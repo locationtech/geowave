@@ -261,65 +261,6 @@ public class RDDUtils {
             new GeoWaveOutputKey(typeName.value(), indexName.value()),
             gridCoverage)).saveAsNewAPIHadoopDataset(job.getConfiguration());
   }
-  // private static void writeRasterToGeoWave(
-  // final SparkContext sc,
-  // final Index index,
-  // final DataStorePluginOptions outputStoreOptions,
-  // final RasterDataAdapter adapter,
-  // final JavaRDD<GridCoverage> inputRDD) throws IOException {
-  //
-  // // setup the configuration and the output format
-  // final Configuration conf = new org.apache.hadoop.conf.Configuration(sc.hadoopConfiguration());
-  //
-  // GeoWaveOutputFormat.setStoreOptions(conf, outputStoreOptions);
-  // // GeoWaveOutputFormat.addIndex(conf, index);
-  // // GeoWaveOutputFormat.addDataAdapter(conf, adapter);
-  //
-  // // create the job
-  // // final Job job = new Job(conf);
-  // // job.setOutputKeyClass(GeoWaveOutputKey.class);
-  // // job.setOutputValueClass(GridCoverage.class);
-  // // job.setOutputFormatClass(GeoWaveOutputFormat.class);
-  // // broadcast string names
-  // // final ClassTag<String> stringTag = scala.reflect.ClassTag$.MODULE$.apply(String.class);
-  // final Map<String, String> configOptions = outputStoreOptions.getOptionsAsMap();
-  // final ClassTag<RasterDataAdapter> adapterTag =
-  // scala.reflect.ClassTag$.MODULE$.apply(RasterDataAdapter.class);
-  // final Broadcast<RasterDataAdapter> adapterBroadcast = sc.broadcast(adapter, adapterTag);
-  //
-  // // final ClassTag<Index> indexTag = scala.reflect.ClassTag$.MODULE$.apply(index.getClass());
-  // // final Broadcast<Index>indexBroadcast = sc.broadcast(index, indexTag);
-  //
-  // // final ClassTag<Map<String, String>> storeOptionsTag =
-  // // scala.reflect.ClassTag$.MODULE$.apply(options.getClass());
-  // // final Broadcast<String> indexName = sc.broadcast(index.getName(), stringTag);
-  // //
-  // // // map to a pair containing the output key and the output value
-  // // inputRDD.mapToPair(
-  // // gridCoverage -> new Tuple2<>(
-  // // new GeoWaveOutputKey(adapterBroadcast.value().getTypeName(), indexName.value()),
-  // // adapterBroadcast.value().createWritableSerializer().toWritable(
-  // // gridCoverage))).saveAsNewAPIHadoopDataset(job.getConfiguration());
-  // // broadcast string names
-  // // final ClassTag<String> stringTag = scala.reflect.ClassTag$.MODULE$.apply(String.class);
-  //// final String typeName = adapter.getTypeName();
-  // // final Broadcast<String> indexName = sc.broadcast(index.getName(), stringTag);
-  //
-  // // map to a pair containing the output key and the output value
-  // inputRDD.mapPartitions(it -> {
-  // final HadoopWritableSerializer<GridCoverage, GridCoverageWritable> serializer =
-  // adapterBroadcast.value().createWritableSerializer();
-  // return Iterators.transform(it, entry -> serializer.toWritable(entry));
-  // }, true).foreachPartition(it -> {
-  // final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
-  // final HadoopWritableSerializer<GridCoverage, GridCoverageWritable> serializer =
-  // adapterBroadcast.value().createWritableSerializer();
-  // try (Writer<GridCoverage> writer =
-  // dataStore.createWriter(adapterBroadcast.value().getTypeName())) {
-  // it.forEachRemaining(g -> writer.write(serializer.fromWritable(g)));
-  // }
-  // });
-  // }
 
   public static Broadcast<? extends NumericIndexStrategy> broadcastIndexStrategy(
       final SparkContext sc,
@@ -340,22 +281,4 @@ public class RDDUtils {
 
     writeRasterToGeoWave(sc, index, outputStoreOptions, adapter, inputRDD);
   }
-
-  // private static class ConvertToWritable implements
-  // FlatMapFunction<Iterator<GridCoverage>, GridCoverageWritable> {
-  // /**
-  // *
-  // */
-  // private static final long serialVersionUID = 1L;
-  // RasterDataAdapter adapter;
-  //
-  // public ConvertToWritable(final RasterDataAdapter adapter) {
-  // this.adapter = adapter;
-  // }
-  //
-  // @Override
-  // public Iterator<GridCoverageWritable> call(final Iterator<GridCoverage> it) throws Exception {
-  // }
-  //
-  // }
 }
