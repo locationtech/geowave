@@ -64,6 +64,7 @@ import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingTransform;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.writer.IndependentAdapterIndexWriter;
@@ -1314,13 +1315,19 @@ public class BaseDataStore implements DataStore {
           final InternalDataAdapter<?> adapter = it.next();
           for (final Index index : indexMappingStore.getIndicesForAdapter(
               adapter.getAdapterId()).getIndices(indexStore)) {
+            final boolean rowMerging = BaseDataStoreUtils.isRowMerging(adapter);
             final ReaderParamsBuilder bldr =
                 new ReaderParamsBuilder(
                     index,
                     adapterStore,
                     internalAdapterStore,
-                    GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
+                    rowMerging
+                        ? new GeoWaveRowMergingTransform(
+                            BaseDataStoreUtils.getRowMergingAdapter(adapter),
+                            adapter.getAdapterId())
+                        : GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
             bldr.adapterIds(new short[] {adapter.getAdapterId()});
+            bldr.isClientsideRowMerging(rowMerging);
             try (RowReader<GeoWaveRow> reader = baseOperations.createReader(bldr.build())) {
               try (RowWriter writer =
                   ((BaseDataStore) other).baseOperations.createWriter(index, adapter)) {

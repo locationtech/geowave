@@ -132,8 +132,7 @@ public class HBaseMetadataReader implements MetadataReader {
       return CellUtil.cloneValue(columnCells.get(0));
     }
 
-    return URLClassloaderUtils.toBinary(
-        HBaseUtils.getMergedStats(columnCells));
+    return URLClassloaderUtils.toBinary(HBaseUtils.getMergedStats(columnCells));
   }
 
   private byte[] getMergedStats(final Result result, final boolean clientsideStatsMerge) {

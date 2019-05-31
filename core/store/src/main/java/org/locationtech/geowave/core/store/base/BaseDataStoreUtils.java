@@ -696,6 +696,13 @@ public class BaseDataStoreUtils {
     return combineByIndex(result);
   }
 
+  public static RowMergingDataAdapter<?, ?> getRowMergingAdapter(final DataTypeAdapter<?> adapter) {
+    if (adapter instanceof InternalDataAdapter) {
+      return getRowMergingAdapter(((InternalDataAdapter) adapter).getAdapter());
+    }
+    return adapter instanceof RowMergingDataAdapter ? (RowMergingDataAdapter) adapter : null;
+  }
+
   public static boolean isRowMerging(final DataTypeAdapter<?> adapter) {
     if (adapter instanceof InternalDataAdapter) {
       return isRowMerging(((InternalDataAdapter) adapter).getAdapter());

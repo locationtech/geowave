@@ -79,9 +79,10 @@ public class KuduMetadataReader implements MetadataReader {
                 getVisibility(result),
                 result.getBinaryCopy(KuduMetadataField.GW_VALUE_KEY.getFieldName()))).iterator();
     CloseableIterator<GeoWaveMetadata> retVal = new CloseableIterator.Wrapper<>(temp);
-    return MetadataType.STATS.equals(metadataType) || MetadataType.INTERNAL_ADAPTER.equals(metadataType) 
-        ? new StatisticsRowIterator(retVal, query.getAuthorizations())
-        : retVal;
+    return MetadataType.STATS.equals(metadataType)
+        || MetadataType.INTERNAL_ADAPTER.equals(metadataType)
+            ? new StatisticsRowIterator(retVal, query.getAuthorizations())
+            : retVal;
   }
 
   private byte[] getVisibility(RowResult result) {
