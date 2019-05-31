@@ -79,8 +79,8 @@ public class AccumuloMetadataReader implements MetadataReader {
       // For stats w/ no server-side support, need to merge here
       if ((metadataType == MetadataType.STATS) && !options.isServerSideLibraryEnabled()) {
 
-        final HashMap<Text, Key> keyMap = new HashMap<>();
-        final HashMap<Text, InternalDataStatistics<?, ?, ?>> mergedDataMap = new HashMap<>();
+        // final HashMap<Text, Key> keyMap = new HashMap<>();
+        final HashMap<Key, InternalDataStatistics<?, ?, ?>> mergedDataMap = new HashMap<>();
         final Iterator<Entry<Key, Value>> it = scanner.iterator();
 
         while (it.hasNext()) {
@@ -88,22 +88,19 @@ public class AccumuloMetadataReader implements MetadataReader {
 
           final InternalDataStatistics<?, ?, ?> stats =
               (InternalDataStatistics<?, ?, ?>) PersistenceUtils.fromBinary(row.getValue().get());
-
-          if (keyMap.containsKey(row.getKey().getRow())) {
-            final InternalDataStatistics<?, ?, ?> mergedStats =
-                mergedDataMap.get(row.getKey().getRow());
+          row.getKey().setTimestamp(0);
+          final InternalDataStatistics<?, ?, ?> mergedStats = mergedDataMap.get(row.getKey());
+          if (mergedStats != null) {
             mergedStats.merge(stats);
           } else {
-            keyMap.put(row.getKey().getRow(), row.getKey());
-            mergedDataMap.put(row.getKey().getRow(), stats);
+            mergedDataMap.put(row.getKey(), stats);
           }
         }
 
         final List<GeoWaveMetadata> metadataList = new ArrayList();
-        for (final Entry<Text, Key> entry : keyMap.entrySet()) {
-          final Text rowId = entry.getKey();
-          final Key key = keyMap.get(rowId);
-          final InternalDataStatistics<?, ?, ?> mergedStats = mergedDataMap.get(rowId);
+        for (final Entry<Key, InternalDataStatistics<?, ?, ?>> entry : mergedDataMap.entrySet()) {
+          final Key key = entry.getKey();
+          final InternalDataStatistics<?, ?, ?> mergedStats = entry.getValue();
 
           metadataList.add(
               new GeoWaveMetadata(
