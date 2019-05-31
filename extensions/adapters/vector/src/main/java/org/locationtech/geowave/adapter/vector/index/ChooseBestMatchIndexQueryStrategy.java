@@ -128,4 +128,9 @@ public class ChooseBestMatchIndexQueryStrategy implements IndexQueryStrategySPI 
       public void close() {}
     };
   }
+
+  @Override
+  public boolean requiresStats() {
+    return true;
+  }
 }

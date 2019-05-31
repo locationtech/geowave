@@ -102,4 +102,9 @@ public class ChooseLocalityPreservingQueryStrategy implements IndexQueryStrategy
       public void close() {}
     };
   }
+
+  @Override
+  public boolean requiresStats() {
+    return false;
+  }
 }

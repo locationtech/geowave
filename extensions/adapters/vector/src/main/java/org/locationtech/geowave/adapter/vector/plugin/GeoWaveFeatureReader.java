@@ -163,18 +163,16 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
   }
 
   private BasicQueryByClass getQuery(
-      final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
       final Geometry jtsBounds,
       final TemporalConstraintsSet timeBounds) {
     final ConstraintsByClass timeConstraints =
         QueryIndexHelper.composeTimeBoundedConstraints(
             components.getAdapter().getFeatureType(),
             components.getAdapter().getTimeDescriptors(),
-            statsMap,
             timeBounds);
 
     final GeoConstraintsWrapper geoConstraints =
-        QueryIndexHelper.composeGeometricConstraints(getFeatureType(), statsMap, jtsBounds);
+        QueryIndexHelper.composeGeometricConstraints(getFeatureType(), jtsBounds);
 
     /**
      * NOTE: query to an index that requires a constraint and the constraint is missing equates to a
@@ -191,16 +189,18 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       final QueryIssuer issuer) {
 
     final List<CloseableIterator<SimpleFeature>> results = new ArrayList<>();
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap =
-        transaction.getDataStatistics();
 
-    final BasicQueryByClass query = getQuery(statsMap, jtsBounds, timeBounds);
+    final BasicQueryByClass query = getQuery(jtsBounds, timeBounds);
 
     boolean spatialOnly = false;
     if (this.query.getHints().containsKey(SubsampleProcess.SUBSAMPLE_ENABLED)
         && (Boolean) this.query.getHints().get(SubsampleProcess.SUBSAMPLE_ENABLED)) {
       spatialOnly = true;
     }
+    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap =
+        getComponents().getGTstore().getIndexQueryStrategy().requiresStats()
+            ? transaction.getDataStatistics()
+            : null;
     try (CloseableIterator<Index> indexIt =
         getComponents().getIndices(statsMap, query, spatialOnly)) {
       while (indexIt.hasNext()) {

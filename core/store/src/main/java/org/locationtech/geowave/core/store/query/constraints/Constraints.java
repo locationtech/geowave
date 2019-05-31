@@ -16,9 +16,7 @@ import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 
 public interface Constraints extends Persistable {
-
   List<MultiDimensionalNumericData> getIndexConstraints(Index index);
 
   List<QueryFilter> createFilters(Index index, BasicQuery parentQuery);
-
 }

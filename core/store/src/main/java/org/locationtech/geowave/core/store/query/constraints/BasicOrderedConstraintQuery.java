@@ -141,7 +141,6 @@ public class BasicOrderedConstraintQuery extends BasicQuery {
       }
       return true;
     }
-
   }
 
   public BasicOrderedConstraintQuery() {}
@@ -166,5 +165,10 @@ public class BasicOrderedConstraintQuery extends BasicQuery {
   public void fromBinary(final byte[] bytes) {
     constraints = new OrderedConstraints();
     constraints.fromBinary(bytes);
+  }
+
+  @Override
+  public boolean indexMustBeSpecified() {
+    return true;
   }
 }

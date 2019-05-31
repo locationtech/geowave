@@ -21,7 +21,9 @@ public interface IndexQueryStrategySPI {
     MAX_RANGE_DECOMPOSITION
   }
 
-  public CloseableIterator<Index> getIndices(
+  boolean requiresStats();
+
+  CloseableIterator<Index> getIndices(
       Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
       BasicQueryByClass query,
       Index[] indices,

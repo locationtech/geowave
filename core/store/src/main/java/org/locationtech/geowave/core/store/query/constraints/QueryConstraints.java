@@ -38,4 +38,14 @@ public interface QueryConstraints extends Persistable {
    * @return A multi-dimensional numeric data set that represents the constraints for the index
    */
   public List<MultiDimensionalNumericData> getIndexConstraints(Index index);
+
+  /**
+   * To simplify query constraints, this allows ofr the index to be tightly coupled with the
+   * constraints if true.
+   *
+   * @return A flag indicating that this query is specific to an index that must also be provided
+   */
+  default boolean indexMustBeSpecified() {
+    return false;
+  }
 }
