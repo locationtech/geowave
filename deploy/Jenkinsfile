@@ -2,28 +2,32 @@
 
 node ('master') {
     def maven = tool 'maven-3.5.2'
+
     stage('Parameterize') {
-    if(!params.overwrite_parameters || "${params.overwrite_parameters}" == "Yes") {
-      properties(
-        [
-          [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5']],
-          [$class: 'ParametersDefinitionProperty', parameterDefinitions: [
-            [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'maxar-geowave-rpms', description: 'Bucket for rpms'],
-            [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'maxar-geowave', description: 'Root GeoWave Bucket'],
-            [$class: 'StringParameterDefinition', name: 'notebook_bucket', defaultValue: 'maxar-geowave-notebooks', description: 'Bucket for notebooks'],
-            [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/maxar-geowave/3rd-party', description: 'URL to third party downloads directory (No trailing slash)'],
-            [$class: 'StringParameterDefinition', name: 'LOCAL_REPO_DIR', defaultValue: '/jenkins/gw-repo/snapshots', description: 'Path on the local filesystem to the repo'],
-            [$class: 'StringParameterDefinition', name: 'build_type', defaultValue: 'clean install', description: 'Maven build type. To publish to central change to deploy. Credentials must be added.'],
-            [$class: 'ChoiceParameterDefinition', name: 'overwrite_parameters', choices: 'No\nYes', description: 'Set to yes to reset parameters to defaults'],
-            ]
-          ],
-          disableConcurrentBuilds(),
-        ]
-      )
-      currentBuild.result = 'ABORTED'
-      error('Parameters Reset')
+      if(!params.overwrite_parameters || "${params.overwrite_parameters}" == "Yes") {
+        properties(
+          [
+            [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5']],
+            [$class: 'ParametersDefinitionProperty', parameterDefinitions: [
+              [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'maxar-geowave-rpms', description: 'Bucket for rpms'],
+              [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'maxar-geowave', description: 'Root GeoWave Bucket'],
+              [$class: 'StringParameterDefinition', name: 'notebook_bucket', defaultValue: 'maxar-geowave-notebooks', description: 'Bucket for notebooks'],
+              [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/maxar-geowave/3rd-party', description: 'URL to third party downloads directory (No trailing slash)'],
+              [$class: 'StringParameterDefinition', name: 'LOCAL_REPO_DIR', defaultValue: '/jenkins/gw-repo/snapshots', description: 'Path on the local filesystem to the repo'],
+              [$class: 'StringParameterDefinition', name: 'build_type', defaultValue: 'clean install', description: 'Maven build type. To publish to central change to deploy. Credentials must be added.'],
+              [$class: 'StringParameterDefinition', name: 'git_repo', defaultValue: 'https://github.com/scotlynhatt/geowave.git', description: 'Repo to clone'],
+              [$class: 'StringParameterDefinition', name: 'git_branch', defaultValue: 'devops/new-env-changes', description: 'Branch to build'],
+              [$class: 'ChoiceParameterDefinition', name: 'overwrite_parameters', choices: 'No\nYes', description: 'Set to yes to reset parameters to defaults'],
+              ]
+            ],
+            disableConcurrentBuilds(),
+            pipelineTriggers([cron('@daily')])
+          ]
+        )
+        currentBuild.result = 'ABORTED'
+        error('Parameters Reset')
+      }
     }
-  }
 
   // Setting java home for the withMaven block
   jdk = tool name: 'JDK18'
@@ -47,14 +51,9 @@ node ('master') {
     deleteDir()
   }
 
-  // Mark the code checkout 'stage'
-  // If using this pipeline script directly in a job, checkout using git command
   stage('Checkout'){
-    // Use the maven checkout in the pom
-    //checkout scm
-
-    // Checkout from gitHub directly
-    git 'https://github.com/locationtech/geowave.git'
+    // Checkout branch from github
+    git branch: "${params.git_branch}", url: "${params.git_repo}"
   }
   // Mark the create docker image 'stage'
   stage('Create Docker Image'){
@@ -91,18 +90,23 @@ node ('master') {
   }
 
   stage('Clean bucket and local space'){
-    //sh "deploy/scripts/clean-up.py ${env.WORKSPACE}"
-
+    // Local Cleanup
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/snapshots/geowave/*"
+    
+    // S3 Cleanup
+    sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
   }
 
   // Deploy to geowave-rpms
   stage('Deploying to S3'){
     def build_type = readFile('deploy/target/build-type.txt').trim()
     if ( build_type == "dev" ) {
-      echo 'Build type determined as Dev. Sync will delete content on s3.'
+      echo 'Build type determined as Dev. Sync will delete content on s3. First, copy the index rpm into place'
+      sh "cp ${params.LOCAL_REPO_DIR}/geowave-repo-dev-1.0-3.noarch.rpm snapshots/geowave/dev/noarch/geowave-repo-dev-1.0-3.noarch.rpm"
       sh "aws s3 sync ${params.LOCAL_REPO_DIR}/geowave/ s3://${params.rpm_bucket}/ --delete"
     } else if (build_type == "release" ) {
-      echo 'Build type determined as Release. Sync will not delete content on s3.'
+      echo 'Build type determined as Release. Sync will not delete content on s3. First, copy the index rpm into place'
+      sh "cp ${params.LOCAL_REPO_DIR}/geowave-repo-1.0-3.noarch.rpm snapshots/geowave/dev/noarch/geowave-repo-1.0-3.noarch.rpm"
       sh "aws s3 sync ${params.LOCAL_REPO_DIR}/geowave/ s3://${params.rpm_bucket}/"
     } else {
       error("ERROR: Could not determine build type. Unable to upload rpm's.")

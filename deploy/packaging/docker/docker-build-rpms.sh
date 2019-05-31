@@ -94,6 +94,7 @@ do
     export BUILD_ARGS="$build_args"
     
     $WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command clean
+
     docker run --rm $DOCKER_ARGS \
       -e WORKSPACE=/usr/src/geowave \
       -e BUILD_ARGS="$build_args" \
