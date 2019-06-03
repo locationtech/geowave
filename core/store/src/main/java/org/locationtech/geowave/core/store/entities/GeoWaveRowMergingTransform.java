@@ -2,7 +2,7 @@ package org.locationtech.geowave.core.store.entities;
 
 import java.io.IOException;
 import java.util.Iterator;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import javax.annotation.Nullable;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;

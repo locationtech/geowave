@@ -84,8 +84,6 @@ public class RocksDBReader<T> implements RowReader<T> {
           async);
     } else {
       final List<CloseableIterator<GeoWaveRow>> iterators = new ArrayList<>();
-      final boolean rowMerging =
-          DataStoreUtils.isMergingIteratorRequired(readerParams, client.isVisibilityEnabled());
       for (final short adapterId : readerParams.getAdapterIds()) {
         final Pair<Boolean, Boolean> groupByRowAndSortByTime =
             RocksDBUtils.isGroupByRowAndIsSortByTime(readerParams, adapterId);
@@ -95,19 +93,12 @@ public class RocksDBReader<T> implements RowReader<T> {
                 readerParams.getIndex().getName());
         final Stream<CloseableIterator<GeoWaveRow>> streamIt =
             RocksDBUtils.getPartitions(client.getSubDirectory(), indexNamePrefix).stream().map(
-                p -> {
-                  final CloseableIterator<GeoWaveRow> it =
-                      RocksDBUtils.getIndexTableFromPrefix(
-                          client,
-                          indexNamePrefix,
-                          adapterId,
-                          p.getBytes(),
-                          groupByRowAndSortByTime.getRight()).iterator();
-                  if (rowMerging) {
-                    return new CloseableIteratorWrapper<>(it, new GeoWaveRowMergingIterator(it));
-                  }
-                  return it;
-                });
+                p -> RocksDBUtils.getIndexTableFromPrefix(
+                    client,
+                    indexNamePrefix,
+                    adapterId,
+                    p.getBytes(),
+                    groupByRowAndSortByTime.getRight()).iterator());
         iterators.addAll(streamIt.collect(Collectors.toList()));
       }
       return wrapResults(new Closeable() {
