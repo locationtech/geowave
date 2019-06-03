@@ -89,7 +89,6 @@ import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.TypeConstraintQuery;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
-import org.locationtech.geowave.core.store.query.options.QueryAllIndices;
 import org.locationtech.geowave.core.store.util.NativeEntryIteratorWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -233,26 +232,8 @@ public class BaseDataStore implements DataStore {
     if (query == null) {
       query = (Query) QueryBuilder.newBuilder().build();
     }
-    final BaseQueryOptions queryOptions;
-    // all queries will use the same instance of the dedupe filter for
-    // client side filtering because the filter needs to be applied across
-    // indices
-
-    // if its a delete operation when secondary indexing is not used,
-    // selecting an index is not relevant and should be removed as an
-    // option and replaced with all indices
-    if (DeletionMode.DONT_DELETE.equals(delete) || baseOptions.isSecondaryIndexing()) {
-      queryOptions = new BaseQueryOptions(query, adapterStore, internalAdapterStore, scanCallback);
-    } else {
-      queryOptions =
-          new BaseQueryOptions(
-              query.getCommonQueryOptions(),
-              query.getDataTypeQueryOptions(),
-              new QueryAllIndices(),
-              adapterStore,
-              internalAdapterStore,
-              scanCallback);
-    }
+    final BaseQueryOptions queryOptions =
+        new BaseQueryOptions(query, adapterStore, internalAdapterStore, scanCallback);
     return internalQuery(query.getQueryConstraints(), queryOptions, delete);
   }
 
@@ -396,6 +377,10 @@ public class BaseDataStore implements DataStore {
       final boolean isAggregationAdapterIndexSpecific =
           (queryOptions.getAggregation() != null)
               && (queryOptions.getAggregation().getRight() instanceof AdapterAndIndexBasedAggregation);
+
+      // all queries will use the same instance of the dedupe filter for
+      // client side filtering because the filter needs to be applied across
+      // indices
       final DedupeFilter filter = new DedupeFilter();
       MemoryPersistentAdapterStore tempAdapterStore;
 
@@ -425,7 +410,7 @@ public class BaseDataStore implements DataStore {
         Map<Short, List<Index>> additionalIndicesToDelete = null;
         if (DeletionMode.DELETE_WITH_DUPLICATES.equals(deleteMode)
             && !deleteAllIndicesByConstraints) {
-          additionalIndicesToDelete = new HashMap<>();;
+          additionalIndicesToDelete = new HashMap<>();
           // we have to make sure to delete from the other indices if they exist
           // Map<Short, List<Index>> allIndicesToDelete = new HashMap<>();
           final List<Pair<Index, List<InternalDataAdapter<?>>>> allIndices =

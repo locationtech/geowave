@@ -645,10 +645,7 @@ public class BaseDataStoreUtils {
       final QueryConstraints query,
       final Function<T, ? extends DataTypeAdapter<?>> adapterLookup)
       throws IllegalArgumentException {
-    if (indexAdapterPairList.isEmpty()) {
-      return null;
-    }
-    if (indexAdapterPairList.size() == 1) {
+    if (indexAdapterPairList.size() <= 1) {
       return indexAdapterPairList;
     }
     if ((query != null) && query.indexMustBeSpecified()) {

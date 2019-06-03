@@ -236,7 +236,7 @@ public class BaseQueryOptions {
       final AdapterIndexMappingStore adapterIndexMappingStore,
       final IndexStore indexStore) throws IOException {
     return BaseDataStoreUtils.combineByIndex(
-        compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore));
+        compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, false));
   }
 
   public InternalDataAdapter<?>[] getAdaptersArray(final PersistentAdapterStore adapterStore)
@@ -288,7 +288,8 @@ public class BaseQueryOptions {
   private List<Pair<Index, InternalDataAdapter<?>>> compileIndicesForAdapters(
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
-      final IndexStore indexStore) throws IOException {
+      final IndexStore indexStore,
+      final boolean constrainToIndex) throws IOException {
     if ((adapterIds != null) && (adapterIds.length != 0)) {
       if ((adapters == null) || adapters.isEmpty()) {
         adapters = new ArrayList<>();
@@ -313,9 +314,9 @@ public class BaseQueryOptions {
     for (final InternalDataAdapter<?> adapter : adapters) {
       final AdapterToIndexMapping indices =
           adapterIndexMappingStore.getIndicesForAdapter(adapter.getAdapterId());
-      if (index != null) {
+      if ((index != null) && constrainToIndex) {
         result.add(Pair.of(index, adapter));
-      } else if ((indexName != null) && indices.contains(indexName)) {
+      } else if ((indexName != null) && indices.contains(indexName) && constrainToIndex) {
         if (index == null) {
           index = indexStore.getIndex(indexName);
           result.add(Pair.of(index, adapter));
@@ -459,7 +460,7 @@ public class BaseQueryOptions {
       final AdapterIndexMappingStore adapterIndexMappingStore,
       final IndexStore indexStore) throws IOException {
     return BaseDataStoreUtils.reduceIndicesAndGroupByIndex(
-        compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore));
+        compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, true));
   }
 
   public boolean isAllIndices() {
