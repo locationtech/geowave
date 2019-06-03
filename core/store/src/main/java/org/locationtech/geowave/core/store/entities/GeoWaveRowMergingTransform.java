@@ -2,7 +2,6 @@ package org.locationtech.geowave.core.store.entities;
 
 import java.io.IOException;
 import java.util.Iterator;
-import javax.annotation.Nullable;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
@@ -27,7 +26,7 @@ public class GeoWaveRowMergingTransform implements GeoWaveRowIteratorTransformer
   }
 
   @Override
-  public @Nullable Iterator<GeoWaveRow> apply(@Nullable final Iterator<GeoWaveRow> input) {
+  public Iterator<GeoWaveRow> apply(final Iterator<GeoWaveRow> input) {
     if (input != null) {
       return Iterators.transform(input, row -> {
         return DataStoreUtils.mergeSingleRowValues(row, rowTransform);
