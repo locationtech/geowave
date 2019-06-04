@@ -406,8 +406,9 @@ public class DataStoreUtils {
     return new ByteArray(buf.array());
   }
 
-  private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.getGeoWaveCharset());
-  private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.getGeoWaveCharset());
+  private static final byte[] OPEN_PAREN_BYTE = "(".getBytes(StringUtils.getGeoWaveCharset());
+  private static final byte[] MERGE_VIS_BYTES = ")&(".getBytes(StringUtils.getGeoWaveCharset());
+  private static final byte[] CLOSE_PAREN_BYTE = ")".getBytes(StringUtils.getGeoWaveCharset());
 
   public static byte[] mergeVisibilities(final byte vis1[], final byte vis2[]) {
     if ((vis1 == null) || (vis1.length == 0)) {
@@ -418,13 +419,18 @@ public class DataStoreUtils {
       return vis1;
     }
 
-    final ByteBuffer buffer = ByteBuffer.allocate(vis1.length + 3 + vis2.length);
-    buffer.putChar('(');
+    final ByteBuffer buffer =
+        ByteBuffer.allocate(
+            vis1.length
+                + OPEN_PAREN_BYTE.length
+                + MERGE_VIS_BYTES.length
+                + CLOSE_PAREN_BYTE.length
+                + vis2.length);
+    buffer.put(OPEN_PAREN_BYTE);
     buffer.put(vis1);
-    buffer.putChar(')');
-    buffer.put(BEG_AND_BYTE);
+    buffer.put(MERGE_VIS_BYTES);
     buffer.put(vis2);
-    buffer.put(END_AND_BYTE);
+    buffer.put(CLOSE_PAREN_BYTE);
     return buffer.array();
   }
 
