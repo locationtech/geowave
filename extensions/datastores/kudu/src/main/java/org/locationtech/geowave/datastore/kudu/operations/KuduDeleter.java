@@ -40,7 +40,6 @@ public class KuduDeleter implements RowDeleter {
       short adapterId = row.getAdapterId();
       byte[] sortKey = row.getSortKey();
       byte[] dataId = row.getDataId();
-      int numDuplicates = row.getNumberOfDuplicates();
       // Note: Kudu Java API requires specifying entire primary key in order to perform deletion,
       // but a part of the primary key (timestamp) is unknown, so we instead perform the
       // deletion using predicates on the known columns.
@@ -67,19 +66,9 @@ public class KuduDeleter implements RowDeleter {
                 dataId));
         preds.add(
             KuduPredicate.newComparisonPredicate(
-                schema.getColumn(KuduField.GW_NUM_DUPLICATES_KEY.getFieldName()),
-                KuduPredicate.ComparisonOp.EQUAL,
-                numDuplicates));
-        preds.add(
-            KuduPredicate.newComparisonPredicate(
                 schema.getColumn(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName()),
                 KuduPredicate.ComparisonOp.EQUAL,
                 value.getVisibility()));
-        preds.add(
-            KuduPredicate.newComparisonPredicate(
-                schema.getColumn(KuduField.GW_FIELD_MASK_KEY.getFieldName()),
-                KuduPredicate.ComparisonOp.EQUAL,
-                value.getFieldMask()));
         for (Delete delete : operations.getDeletions(table, preds, KuduRow::new)) {
           OperationResponse resp = session.apply(delete);
           if (resp.hasRowError()) {

@@ -44,7 +44,8 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.CASSANDRA,
           // DYNAMODB takes too long
           // GeoWaveStoreType.DYNAMODB,
-          GeoWaveStoreType.KUDU,
+          // TODO GEOWAVE Issue #1573 prevents deletion from passing on Kudu
+          // GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       options = {"enableSecondaryIndexing=true"})

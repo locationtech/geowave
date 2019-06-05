@@ -16,7 +16,6 @@ import org.apache.kudu.client.KuduScanner.KuduScannerBuilder;
 import org.apache.kudu.shaded.com.google.common.collect.Lists;
 import org.apache.kudu.client.RowResultIterator;
 import org.locationtech.geowave.core.index.ByteArray;
-import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Streams;
 import java.util.ArrayList;

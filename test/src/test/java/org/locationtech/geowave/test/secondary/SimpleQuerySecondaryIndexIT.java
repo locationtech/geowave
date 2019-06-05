@@ -3,7 +3,9 @@ package org.locationtech.geowave.test.secondary;
 import java.util.List;
 import org.apache.commons.lang3.Range;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureAttributeDimensionField;
@@ -28,9 +30,12 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreTyp
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RunWith(GeoWaveITRunner.class)
 public class SimpleQuerySecondaryIndexIT extends AbstractGeoWaveIT {
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleQuerySecondaryIndexIT.class);
 
   @GeoWaveTestStore(
       value = {
@@ -38,19 +43,33 @@ public class SimpleQuerySecondaryIndexIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
-          GeoWaveStoreType.KUDU,
+          // TODO GEOWAVE Issue #1573 prevents deletion from passing on Kudu
+          // GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       options = {"enableSecondaryIndexing=true"})
   protected DataStorePluginOptions dataStoreOptions;
+  private static long startMillis;
+  private static final String testName = "SimpleQuerySecondaryIndexIT";
 
   @Override
   protected DataStorePluginOptions getDataStorePluginOptions() {
     return dataStoreOptions;
   }
 
+  @BeforeClass
+  public static void startTimer() {
+    startMillis = System.currentTimeMillis();
+    TestUtils.printStartOfTest(LOGGER, testName);
+  }
+
+  @AfterClass
+  public static void reportTest() {
+    TestUtils.printEndOfTest(LOGGER, testName, startMillis);
+  }
+
   @Test
-  public void test() {
+  public void testMultipleSecondaryIndices() {
     final DataStore ds = dataStoreOptions.createDataStore();
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
     final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);

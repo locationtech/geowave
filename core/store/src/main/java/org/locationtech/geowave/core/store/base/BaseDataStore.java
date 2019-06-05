@@ -412,7 +412,6 @@ public class BaseDataStore implements DataStore {
             && !deleteAllIndicesByConstraints) {
           additionalIndicesToDelete = new HashMap<>();
           // we have to make sure to delete from the other indices if they exist
-          // Map<Short, List<Index>> allIndicesToDelete = new HashMap<>();
           final List<Pair<Index, List<InternalDataAdapter<?>>>> allIndices =
               queryOptions.getIndicesForAdapters(tempAdapterStore, indexMappingStore, indexStore);
           for (final Pair<Index, List<InternalDataAdapter<?>>> allPair : allIndices) {
