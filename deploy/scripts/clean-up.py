@@ -32,11 +32,10 @@ class CleanUp():
         # Information for builds to keep
         session = boto3.Session()
         creds = session.get_credentials()
-        region = session.region_name
-
         os.environ["AWS_ACCESS_KEY_ID"] = creds.access_key
         os.environ["AWS_SECRET_ACCESS_KEY"] = creds.secret_key
         os.environ["AWS_SESSION_TOKEN "] = creds.token
+        os.environ["AWS_DEFAULT_REGION"] = session.region_name
 
         # Delete everything older than 3 days
         self.date_threshhold = datetime.now() - timedelta(days=3)
