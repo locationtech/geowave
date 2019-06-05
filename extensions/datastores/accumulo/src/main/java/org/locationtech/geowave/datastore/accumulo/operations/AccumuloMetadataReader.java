@@ -82,48 +82,49 @@ public class AccumuloMetadataReader implements MetadataReader {
 
       // For stats w/ no server-side support, need to merge here
       if ((metadataType == MetadataType.STATS) && !options.isServerSideLibraryEnabled()) {
+        try {
+          // final HashMap<Text, Key> keyMap = new HashMap<>();
+          final HashMap<Pair<Text, Text>, InternalDataStatistics<?, ?, ?>> mergedDataMap =
+              new HashMap<>();
+          final Iterator<Entry<Key, Value>> it = scanner.iterator();
 
-        // final HashMap<Text, Key> keyMap = new HashMap<>();
-        final HashMap<Pair<Text, Text>, InternalDataStatistics<?, ?, ?>> mergedDataMap =
-            new HashMap<>();
-        final Iterator<Entry<Key, Value>> it = scanner.iterator();
+          while (it.hasNext()) {
+            final Entry<Key, Value> row = it.next();
 
-        while (it.hasNext()) {
-          final Entry<Key, Value> row = it.next();
-
-          final InternalDataStatistics<?, ?, ?> stats =
-              (InternalDataStatistics<?, ?, ?>) PersistenceUtils.fromBinary(row.getValue().get());
-          final Pair<Text, Text> rowCqPair =
-              ImmutablePair.of(row.getKey().getRow(), row.getKey().getColumnQualifier());
-          final InternalDataStatistics<?, ?, ?> mergedStats = mergedDataMap.get(rowCqPair);
-          stats.setVisibility(row.getKey().getColumnVisibility().getBytes());
-          if (mergedStats != null) {
-            mergedStats.merge(stats);
-            mergedStats.setVisibility(
-                DataStoreUtils.mergeVisibilities(
-                    mergedStats.getVisibility(),
-                    stats.getVisibility()));
-          } else {
-            mergedDataMap.put(rowCqPair, stats);
+            final InternalDataStatistics<?, ?, ?> stats =
+                (InternalDataStatistics<?, ?, ?>) PersistenceUtils.fromBinary(row.getValue().get());
+            final Pair<Text, Text> rowCqPair =
+                ImmutablePair.of(row.getKey().getRow(), row.getKey().getColumnQualifier());
+            final InternalDataStatistics<?, ?, ?> mergedStats = mergedDataMap.get(rowCqPair);
+            stats.setVisibility(row.getKey().getColumnVisibility().getBytes());
+            if (mergedStats != null) {
+              mergedStats.merge(stats);
+              mergedStats.setVisibility(
+                  DataStoreUtils.mergeVisibilities(
+                      mergedStats.getVisibility(),
+                      stats.getVisibility()));
+            } else {
+              mergedDataMap.put(rowCqPair, stats);
+            }
           }
+
+          final List<GeoWaveMetadata> metadataList = new ArrayList<>();
+          for (final Entry<Pair<Text, Text>, InternalDataStatistics<?, ?, ?>> entry : mergedDataMap.entrySet()) {
+            final Pair<Text, Text> key = entry.getKey();
+            final InternalDataStatistics<?, ?, ?> mergedStats = entry.getValue();
+
+            metadataList.add(
+                new GeoWaveMetadata(
+                    key.getLeft().getBytes(),
+                    key.getRight().getBytes(),
+                    mergedStats.getVisibility(),
+                    PersistenceUtils.toBinary(mergedStats)));
+          }
+
+          return new CloseableIterator.Wrapper<>(metadataList.iterator());
+        } finally {
+          scanner.close();
         }
-
-        final List<GeoWaveMetadata> metadataList = new ArrayList<>();
-        for (final Entry<Pair<Text, Text>, InternalDataStatistics<?, ?, ?>> entry : mergedDataMap.entrySet()) {
-          final Pair<Text, Text> key = entry.getKey();
-          final InternalDataStatistics<?, ?, ?> mergedStats = entry.getValue();
-
-          metadataList.add(
-              new GeoWaveMetadata(
-                  key.getLeft().getBytes(),
-                  key.getRight().getBytes(),
-                  mergedStats.getVisibility(),
-                  PersistenceUtils.toBinary(mergedStats)));
-        }
-
-        return new CloseableIteratorWrapper<>(
-            new ScannerClosableWrapper(scanner),
-            metadataList.iterator());
       }
 
       return new CloseableIteratorWrapper<>(

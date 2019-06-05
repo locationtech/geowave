@@ -8,9 +8,14 @@
  */
 package org.locationtech.geowave.datastore.kudu.operations;
 
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Streams;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Schema;
 import org.apache.kudu.client.AsyncKuduClient;
@@ -51,21 +56,16 @@ import org.locationtech.geowave.datastore.kudu.KuduMetadataRow.KuduMetadataField
 import org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
 import org.locationtech.geowave.datastore.kudu.PersistentKuduRow;
 import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
-import org.locationtech.geowave.datastore.kudu.util.ClientPool;
 import org.locationtech.geowave.datastore.kudu.util.AsyncClientPool;
+import org.locationtech.geowave.datastore.kudu.util.ClientPool;
 import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Streams;
 
 public class KuduOperations implements MapReduceDataStoreOperations {
   private static final Logger LOGGER = LoggerFactory.getLogger(KuduOperations.class);
@@ -101,7 +101,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public void deleteAll() throws Exception {
-    for (String table : client.getTablesList().getTablesList()) {
+    for (final String table : client.getTablesList(gwNamespace).getTablesList()) {
       client.deleteTable(table);
     }
   }
@@ -165,8 +165,8 @@ public class KuduOperations implements MapReduceDataStoreOperations {
     synchronized (CREATE_TABLE_MUTEX) {
       try {
         if (!metadataExists(metadataType)) {
-          List<ColumnSchema> columns = new ArrayList<>();
-          for (KuduMetadataField f : KuduMetadataField.values()) {
+          final List<ColumnSchema> columns = new ArrayList<>();
+          for (final KuduMetadataField f : KuduMetadataField.values()) {
             f.addColumn(columns);
           }
           client.createTable(
@@ -222,38 +222,38 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public void delete(final DataIndexReaderParams readerParams) {
-    byte[][] dataIds = readerParams.getDataIds();
-    short adapterId = readerParams.getAdapterId();
+    final byte[][] dataIds = readerParams.getDataIds();
+    final short adapterId = readerParams.getAdapterId();
     final String tableName = DataIndexUtils.DATA_ID_INDEX.getName();
-    KuduSession session = getSession();
+    final KuduSession session = getSession();
     try {
-      KuduTable table = getTable(tableName);
-      for (byte[] dataId : dataIds) {
-        Delete delete = table.newDelete();
-        KuduDataIndexRow row = new KuduDataIndexRow(dataId, adapterId, null);
+      final KuduTable table = getTable(tableName);
+      for (final byte[] dataId : dataIds) {
+        final Delete delete = table.newDelete();
+        final KuduDataIndexRow row = new KuduDataIndexRow(dataId, adapterId, null);
         row.populatePartialRowPrimaryKey(delete.getRow());
-        OperationResponse resp = session.apply(delete);
+        final OperationResponse resp = session.apply(delete);
         if (resp.hasRowError()) {
           LOGGER.error("Encountered error while deleting row: {}", resp.getRowError());
         }
       }
-    } catch (KuduException e) {
+    } catch (final KuduException e) {
       LOGGER.error("Encountered error while deleting row", e);
     } finally {
       try {
         session.close();
-      } catch (KuduException e) {
+      } catch (final KuduException e) {
         LOGGER.error("Encountered error while closing Kudu session", e);
       }
     }
   }
 
-  private boolean createIndexTable(final String indexName, int numPartitions) {
+  private boolean createIndexTable(final String indexName, final int numPartitions) {
     synchronized (CREATE_TABLE_MUTEX) {
       try {
         if (!indexExists(indexName)) {
-          List<ColumnSchema> columns = new ArrayList<>();
-          boolean isDataIndex = DataIndexUtils.isDataIndex(indexName);
+          final List<ColumnSchema> columns = new ArrayList<>();
+          final boolean isDataIndex = DataIndexUtils.isDataIndex(indexName);
           final String hashPartitionColumn;
           if (isDataIndex) {
             for (final KuduDataIndexField f : KuduDataIndexField.values()) {
@@ -290,8 +290,8 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       final GeoWaveRowIteratorTransformer<T> rowTransformer,
       final Predicate<GeoWaveRow> rowFilter,
       final boolean visibilityEnabled) throws KuduException {
-    KuduTable table = getTable(indexName);
-    return new KuduRangeRead<T>(
+    final KuduTable table = getTable(indexName);
+    return new KuduRangeRead<>(
         ranges,
         adapterIds,
         table,
@@ -308,19 +308,19 @@ public class KuduOperations implements MapReduceDataStoreOperations {
       final byte[][] dataIds,
       final Predicate<GeoWaveRow> rowFilter,
       final boolean visibilityEnabled) throws KuduException {
-    KuduTable table = getTable(indexName);
+    final KuduTable table = getTable(indexName);
     return new KuduDataIndexRead<>(adapterId, dataIds, table, this, visibilityEnabled, rowFilter);
   }
 
-  public KuduScannerBuilder getScannerBuilder(KuduTable table) {
+  public KuduScannerBuilder getScannerBuilder(final KuduTable table) {
     return client.newScannerBuilder(table);
   }
 
-  public AsyncKuduScannerBuilder getAsyncScannerBuilder(KuduTable table) {
+  public AsyncKuduScannerBuilder getAsyncScannerBuilder(final KuduTable table) {
     return asyncClient.newScannerBuilder(table);
   }
 
-  public KuduTable getTable(String tableName) throws KuduException {
+  public KuduTable getTable(final String tableName) throws KuduException {
     return client.openTable(getKuduQualifiedName(tableName));
   }
 
@@ -351,25 +351,25 @@ public class KuduOperations implements MapReduceDataStoreOperations {
   }
 
   public List<Delete> getDeletions(
-      KuduTable table,
-      List<KuduPredicate> predicates,
-      Function<RowResult, PersistentKuduRow> adapter) throws KuduException {
+      final KuduTable table,
+      final List<KuduPredicate> predicates,
+      final Function<RowResult, PersistentKuduRow> adapter) throws KuduException {
     // TODO: Kudu Java API does not support deleting with predicates, so we first perform a scan and
     // then perform individual row deletions with the full primary key. This is inefficient, because
     // we need to read in entire rows in order to perform deletions.
-    KuduScannerBuilder scannerBuilder = getScannerBuilder(table);
-    for (KuduPredicate pred : predicates) {
+    final KuduScannerBuilder scannerBuilder = getScannerBuilder(table);
+    for (final KuduPredicate pred : predicates) {
       scannerBuilder.addPredicate(pred);
     }
-    KuduScanner scanner = scannerBuilder.build();
-    List<RowResultIterator> allResults = new ArrayList<>();
+    final KuduScanner scanner = scannerBuilder.build();
+    final List<RowResultIterator> allResults = new ArrayList<>();
     while (scanner.hasMoreRows()) {
       allResults.add(scanner.nextRows());
     }
-    Iterator<Delete> deletions =
+    final Iterator<Delete> deletions =
         Streams.stream(Iterators.concat(allResults.iterator())).map(result -> {
-          PersistentKuduRow row = adapter.apply(result);
-          Delete delete = table.newDelete();
+          final PersistentKuduRow row = adapter.apply(result);
+          final Delete delete = table.newDelete();
           row.populatePartialRowPrimaryKey(delete.getRow());
           return delete;
         }).iterator();

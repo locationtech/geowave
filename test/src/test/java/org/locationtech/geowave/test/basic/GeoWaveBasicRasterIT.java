@@ -66,7 +66,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
-      namespace = "cpStore")
+      namespace = "cpRasterStore")
   protected DataStorePluginOptions cpDataStoreOptions;
   @GeoWaveTestStore(
       value = {

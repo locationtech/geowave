@@ -41,7 +41,7 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
-      namespace = "cpStore")
+      namespace = "cpVectorStore")
   protected DataStorePluginOptions cpDataStore;
   @GeoWaveTestStore(
       value = {

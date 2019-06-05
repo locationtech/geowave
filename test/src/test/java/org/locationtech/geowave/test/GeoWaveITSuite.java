@@ -62,9 +62,8 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
     DataIndexOnlyIT.class,
     MapReduceSecondaryIndexIT.class,
     VisibilitySecondaryIndexIT.class,
-    // // for now tests are taking too long in travis and landsatIT is a long
-    // test
-    // // LandsatIT.class,
+    // for now tests are taking too long in travis and landsatIT is a long test
+    // LandsatIT.class,
     // these also help shave off some time
     // DBScanIT.class,
     // GeoWaveNNIT.class,
