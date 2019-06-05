@@ -30,13 +30,14 @@ class CleanUp():
             sys.exit(1)
 
         # Information for builds to keep
-        self.session = boto3.Session()
-        self.creds = session.get_credentials()
-        self.region = session.region_name
+        session = boto3.Session()
+        creds = session.get_credentials()
+        region = session.region_name
 
-        self.aws_key = creds.access_key
-        self.aws_secret = creds.secret_key
-        self.aws_token = creds.token
+        os.environ["AWS_ACCESS_KEY_ID"] = creds.access_key
+        os.environ["AWS_SECRET_ACCESS_KEY"] = creds.secret_key
+        os.environ["AWS_SESSION_TOKEN "] = creds.token
+
         # Delete everything older than 3 days
         self.date_threshhold = datetime.now() - timedelta(days=3)
         self.rpm_bucket = os.environ['GEOWAVE_BUCKET']+'-rpms'
@@ -53,7 +54,7 @@ class CleanUp():
             build_type = None
         return build_type
 
-    def clean_bucket():
+    def clean_bucket(self):
         s3 = boto3.client('s3')
         resp = s3.list_objects_v2(Bucket=rpm_bucket)
 
@@ -67,7 +68,7 @@ class CleanUp():
 
                 date_time = datetime.strptime(artifact_date_str, "%Y%m%d%H%M%S")
 
-                if date_time < date_threshhold:
+                if date_time < self.date_threshhold:
                     s3.delete_object(Bucket=rpm_bucket, Key=key)
 
 if __name__ == "__main__":
