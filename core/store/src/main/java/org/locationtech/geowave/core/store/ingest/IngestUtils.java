@@ -1,8 +1,15 @@
+/**
+ * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package org.locationtech.geowave.core.store.ingest;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +20,7 @@ import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Lists;
 
 public class IngestUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(IngestUtils.class);
@@ -79,10 +87,7 @@ public class IngestUtils {
     if (urlHandlerList == null) {
       final Iterator<IngestUrlHandlerSpi> handlers =
           new SPIServiceRegistry(IngestUrlHandlerSpi.class).load(IngestUrlHandlerSpi.class);
-      urlHandlerList = new ArrayList<>();
-      while (handlers.hasNext()) {
-        urlHandlerList.add(handlers.next());
-      }
+      urlHandlerList = Lists.newArrayList(handlers);
     }
     for (final IngestUrlHandlerSpi h : urlHandlerList) {
       final Path path = h.handlePath(ingestUrl, configProperties);

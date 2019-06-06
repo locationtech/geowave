@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import org.locationtech.geowave.core.store.config.ConfigUtils;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
@@ -46,13 +47,9 @@ public class IngestFormatPluginRegistry implements LocalFileIngestPluginRegistry
 
   @Override
   public Map<String, LocalFileIngestPlugin<?>> getDefaultLocalIngestPlugins() {
-    final Map<String, LocalFileIngestPlugin<?>> retVal =
-        new HashMap<>(getPluginProviderRegistry().size());
-    for (final Entry<String, IngestFormatPluginProviderSpi<?, ?>> e : getPluginProviderRegistry().entrySet()) {
-      retVal.put(
-          e.getKey(),
-          e.getValue().createLocalFileIngestPlugin(e.getValue().createOptionsInstances()));
-    }
-    return retVal;
+    return getPluginProviderRegistry().entrySet().stream().collect(
+        Collectors.toMap(
+            Entry::getKey,
+            e -> e.getValue().createLocalFileIngestPlugin(e.getValue().createOptionsInstances())));
   }
 }
