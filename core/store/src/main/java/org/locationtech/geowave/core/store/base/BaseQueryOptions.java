@@ -225,16 +225,12 @@ public class BaseQueryOptions {
    * <p> DataStores are responsible for selecting a single adapter/index per query. For deletions,
    * the Data Stores are interested in all the associations.
    *
-   * @param adapterStore
-   * @param
-   * @param indexStore
-   * @return
-   * @throws IOException
+   * @return the set of adapter/index associations
    */
   public List<Pair<Index, List<InternalDataAdapter<?>>>> getIndicesForAdapters(
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
-      final IndexStore indexStore) throws IOException {
+      final IndexStore indexStore) {
     return BaseDataStoreUtils.combineByIndex(
         compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, false));
   }
@@ -289,7 +285,7 @@ public class BaseQueryOptions {
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
       final IndexStore indexStore,
-      final boolean constrainToIndex) throws IOException {
+      final boolean constrainToIndex) {
     if ((adapterIds != null) && (adapterIds.length != 0)) {
       if ((adapters == null) || adapters.isEmpty()) {
         adapters = new ArrayList<>();
@@ -416,19 +412,10 @@ public class BaseQueryOptions {
   }
 
   /**
-   * Return a set list adapter/index associations. If the adapters are not provided, then look up
-   * all of them. If the index is not provided, then look up all of them. The full set of
-   * adapter/index associations is reduced so that a single index is queried per adapter and the
-   * number indices queried is minimized.
+   * This will get all relevant adapter index pairs and then select the best index for each adapter
+   * given the constraint. Currently, it determines what is best by the index which can satisfy the
+   * most dimensions of the given constraint.
    *
-   * <p> DataStores are responsible for selecting a single adapter/index per query. For deletions,
-   * the Data Stores are interested in all the associations.
-   *
-   * @param adapterStore
-   * @param adapterIndexMappingStore
-   * @param indexStore
-   * @return
-   * @throws IOException
    */
   public List<Pair<Index, List<InternalDataAdapter<?>>>> getBestQueryIndicies(
       final PersistentAdapterStore adapterStore,
@@ -449,16 +436,11 @@ public class BaseQueryOptions {
    * <p> DataStores are responsible for selecting a single adapter/index per query. For deletions,
    * the Data Stores are interested in all the associations.
    *
-   * @param adapterStore
-   * @param adapterIndexMappingStore
-   * @param indexStore
-   * @return
-   * @throws IOException
    */
   private List<Pair<Index, List<InternalDataAdapter<?>>>> getAdaptersWithMinimalSetOfIndices(
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
-      final IndexStore indexStore) throws IOException {
+      final IndexStore indexStore) {
     return BaseDataStoreUtils.reduceIndicesAndGroupByIndex(
         compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, true));
   }
