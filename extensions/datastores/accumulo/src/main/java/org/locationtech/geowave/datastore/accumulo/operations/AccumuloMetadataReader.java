@@ -166,10 +166,5 @@ public class AccumuloMetadataReader implements MetadataReader {
           + WritableComparator.hashBytes(colFamily, colFamily.length)
           + WritableComparator.hashBytes(colQualifier, colQualifier.length);
     }
-
-    protected void mergeVisibilities(final byte[] visibility) {
-      colVisibility = DataStoreUtils.mergeVisibilities(colVisibility, visibility);
-    }
-
   }
 }

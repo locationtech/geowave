@@ -9,34 +9,25 @@
 package org.locationtech.geowave.analytic.spark;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.geotools.geometry.jts.JTS;
-import org.locationtech.geowave.adapter.raster.adapter.GridCoverageWritable;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.ScaledTemporalRange;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.locationtech.jts.geom.Envelope;
@@ -48,7 +39,6 @@ import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import jersey.repackaged.com.google.common.collect.Iterators;
 import scala.Tuple2;
 import scala.reflect.ClassTag;
 
@@ -230,11 +220,11 @@ public class RDDUtils {
             feat)).saveAsNewAPIHadoopDataset(job.getConfiguration());
   }
 
-  private static void writeRasterToGeoWave(
+  public static void writeRasterToGeoWave(
       final SparkContext sc,
       final Index index,
       final DataStorePluginOptions outputStoreOptions,
-      final DataTypeAdapter adapter,
+      final RasterDataAdapter adapter,
       final JavaRDD<GridCoverage> inputRDD) throws IOException {
 
     // setup the configuration and the output format
@@ -270,15 +260,5 @@ public class RDDUtils {
     final Broadcast<NumericIndexStrategy> broadcastStrategy =
         sc.broadcast(indexStrategy, indexClassTag);
     return broadcastStrategy;
-  }
-
-  public static void writeRasterRDDToGeoWave(
-      final SparkContext sc,
-      final Index index,
-      final DataStorePluginOptions outputStoreOptions,
-      final RasterDataAdapter adapter,
-      final JavaRDD<GridCoverage> inputRDD) throws IOException {
-
-    writeRasterToGeoWave(sc, index, outputStoreOptions, adapter, inputRDD);
   }
 }
