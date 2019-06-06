@@ -472,9 +472,12 @@ public class BaseDataStore implements DataStore {
                     && (additionalIndicesToDelete.get(adapter.getAdapterId()) != null)) {
                   delList.addCallback(
                       new DeleteOtherIndicesCallback<>(
-                          this,
+                          baseOperations,
                           adapter,
-                          additionalIndicesToDelete.get(adapter.getAdapterId())));
+                          additionalIndicesToDelete.get(adapter.getAdapterId()),
+                          adapterStore,
+                          internalAdapterStore,
+                          queryOptions.getAuthorizations()));
                 }
               }
               final Map<Short, Set<ByteArray>> internalDataIdsToDelete = dataIdsToDelete;

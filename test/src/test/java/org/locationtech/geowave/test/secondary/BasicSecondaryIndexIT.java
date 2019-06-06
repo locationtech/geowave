@@ -34,8 +34,7 @@ public class BasicSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.CASSANDRA,
           // TODO: DynamoDB disabled, because it takes abnormally long on this test (~500s)
           // GeoWaveStoreType.DYNAMODB,
-          //TODO   GEOWAVE Issue #1573 prevents deletion from passing on Kudu
-//          GeoWaveStoreType.KUDU,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       options = {"enableSecondaryIndexing=true"})

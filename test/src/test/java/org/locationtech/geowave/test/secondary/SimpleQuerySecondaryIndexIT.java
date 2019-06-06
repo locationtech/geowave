@@ -43,8 +43,7 @@ public class SimpleQuerySecondaryIndexIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
-          // TODO GEOWAVE Issue #1573 prevents deletion from passing on Kudu
-          // GeoWaveStoreType.KUDU,
+          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       options = {"enableSecondaryIndexing=true"})

@@ -306,7 +306,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
   @Override
   public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
     // TODO use QueryAndDeleteByRow with a synchronous reader (all kudu readers are async now)
-    //GEOWAVE Issue #1573
+    // GEOWAVE Issue #1573
     return MapReduceDataStoreOperations.super.createDeleter(readerParams);
   }
 
