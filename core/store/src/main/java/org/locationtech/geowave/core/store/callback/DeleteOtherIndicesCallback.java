@@ -54,7 +54,10 @@ public class DeleteOtherIndicesCallback<T> implements DeleteCallback<T, GeoWaveR
   }
 
   @Override
-  public void close() throws IOException {}
+  public void close() throws IOException {
+    rowDeleters.asMap().values().forEach(d -> d.close());
+    rowDeleters.invalidateAll();
+  }
 
   @Override
   public void entryDeleted(final T entry, final GeoWaveRow... rows) {

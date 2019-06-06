@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 @RunWith(GeoWaveITRunner.class)
 public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
-  private static final Logger LOGGER = LoggerFactory.getLogger(BasicSecondaryIndexIT.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataIndexOnlyIT.class);
 
   @GeoWaveTestStore(
       value = {
