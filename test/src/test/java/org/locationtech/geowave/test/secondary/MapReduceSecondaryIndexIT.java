@@ -59,6 +59,7 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
           // GeoWaveStoreType.DYNAMODB,
+          // TODO GEOWAVE Issue #1573 prevents deletion from passing on Kudu
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},

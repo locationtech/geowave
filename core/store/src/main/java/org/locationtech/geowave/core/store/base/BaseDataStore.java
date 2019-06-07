@@ -53,6 +53,7 @@ import org.locationtech.geowave.core.store.api.StatisticsQuery;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.callback.DeleteCallbackList;
+import org.locationtech.geowave.core.store.callback.DeleteOtherIndicesCallback;
 import org.locationtech.geowave.core.store.callback.DuplicateDeletionCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallbackList;
@@ -88,7 +89,6 @@ import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.TypeConstraintQuery;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
-import org.locationtech.geowave.core.store.query.options.QueryAllIndices;
 import org.locationtech.geowave.core.store.util.NativeEntryIteratorWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -232,25 +232,8 @@ public class BaseDataStore implements DataStore {
     if (query == null) {
       query = (Query) QueryBuilder.newBuilder().build();
     }
-    final BaseQueryOptions queryOptions;
-    // all queries will use the same instance of the dedupe filter for
-    // client side filtering because the filter needs to be applied across
-    // indices
-
-    // if its a delete operation, selecting an index is not relevant and should be removed as an
-    // option and replaced with all indices
-    if (DeletionMode.DONT_DELETE.equals(delete)) {
-      queryOptions = new BaseQueryOptions(query, adapterStore, internalAdapterStore, scanCallback);
-    } else {
-      queryOptions =
-          new BaseQueryOptions(
-              query.getCommonQueryOptions(),
-              query.getDataTypeQueryOptions(),
-              new QueryAllIndices(),
-              adapterStore,
-              internalAdapterStore,
-              scanCallback);
-    }
+    final BaseQueryOptions queryOptions =
+        new BaseQueryOptions(query, adapterStore, internalAdapterStore, scanCallback);
     return internalQuery(query.getQueryConstraints(), queryOptions, delete);
   }
 
@@ -295,7 +278,7 @@ public class BaseDataStore implements DataStore {
     final List<DataStoreCallbackManager> deleteCallbacks = new ArrayList<>();
     final Map<Short, Set<ByteArray>> dataIdsToDelete;
     if (DeletionMode.DELETE_WITH_DUPLICATES.equals(deleteMode)
-        && baseOptions.isSecondaryIndexing()) {
+        && (baseOptions.isSecondaryIndexing())) {
       dataIdsToDelete = new HashMap<>();
     } else {
       dataIdsToDelete = null;
@@ -394,6 +377,10 @@ public class BaseDataStore implements DataStore {
       final boolean isAggregationAdapterIndexSpecific =
           (queryOptions.getAggregation() != null)
               && (queryOptions.getAggregation().getRight() instanceof AdapterAndIndexBasedAggregation);
+
+      // all queries will use the same instance of the dedupe filter for
+      // client side filtering because the filter needs to be applied across
+      // indices
       final DedupeFilter filter = new DedupeFilter();
       MemoryPersistentAdapterStore tempAdapterStore;
 
@@ -403,16 +390,47 @@ public class BaseDataStore implements DataStore {
         // keep a list of adapters that have been queried, to only load an
         // adapter to be queried once
         final Set<Short> queriedAdapters = new HashSet<>();
+        // if its an ordered constraints then it is dependent on the index selected, if its
+        // secondary indexing its inefficient to delete by constraints
+        final boolean deleteAllIndicesByConstraints =
+            ((delete
+                && ((constraints == null) || !constraints.indexMustBeSpecified())
+                && !baseOptions.isSecondaryIndexing()));
         final List<Pair<Index, List<InternalDataAdapter<?>>>> indexAdapterPairList =
-            delete
+            (deleteAllIndicesByConstraints)
                 ? queryOptions.getIndicesForAdapters(
                     tempAdapterStore,
                     indexMappingStore,
                     indexStore)
-                : queryOptions.getAdaptersWithMinimalSetOfIndices(
+                : queryOptions.getBestQueryIndicies(
                     tempAdapterStore,
                     indexMappingStore,
-                    indexStore);
+                    indexStore,
+                    sanitizedConstraints);
+        Map<Short, List<Index>> additionalIndicesToDelete = null;
+        if (DeletionMode.DELETE_WITH_DUPLICATES.equals(deleteMode)
+            && !deleteAllIndicesByConstraints) {
+          additionalIndicesToDelete = new HashMap<>();
+          // we have to make sure to delete from the other indices if they exist
+          final List<Pair<Index, List<InternalDataAdapter<?>>>> allIndices =
+              queryOptions.getIndicesForAdapters(tempAdapterStore, indexMappingStore, indexStore);
+          for (final Pair<Index, List<InternalDataAdapter<?>>> allPair : allIndices) {
+            for (final Pair<Index, List<InternalDataAdapter<?>>> constraintPair : indexAdapterPairList) {
+              if (constraintPair.getKey().equals(allPair.getKey())) {
+                allPair.getRight().removeAll(constraintPair.getRight());
+                break;
+              }
+            }
+            for (final InternalDataAdapter<?> adapter : allPair.getRight()) {
+              List<Index> indicies = additionalIndicesToDelete.get(adapter.getAdapterId());
+              if (indicies == null) {
+                indicies = new ArrayList<>();
+                additionalIndicesToDelete.put(adapter.getAdapterId(), indicies);
+              }
+              indicies.add(allPair.getLeft());
+            }
+          }
+        }
         final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation =
             queryOptions.getAggregation();
         for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : indexAdapterPairList) {
@@ -450,6 +468,17 @@ public class BaseDataStore implements DataStore {
                 final DuplicateDeletionCallback<T> dupDeletionCallback =
                     new DuplicateDeletionCallback<>(this, adapter, index);
                 delList.addCallback(dupDeletionCallback);
+                if ((additionalIndicesToDelete != null)
+                    && (additionalIndicesToDelete.get(adapter.getAdapterId()) != null)) {
+                  delList.addCallback(
+                      new DeleteOtherIndicesCallback<>(
+                          baseOperations,
+                          adapter,
+                          additionalIndicesToDelete.get(adapter.getAdapterId()),
+                          adapterStore,
+                          internalAdapterStore,
+                          queryOptions.getAuthorizations()));
+                }
               }
               final Map<Short, Set<ByteArray>> internalDataIdsToDelete = dataIdsToDelete;
               queryOptions.setScanCallback(new ScanCallback<Object, GeoWaveRow>() {
@@ -566,7 +595,10 @@ public class BaseDataStore implements DataStore {
           c.close();
         }
         if ((dataIdsToDelete != null) && !dataIdsToDelete.isEmpty()) {
-          deleteFromDataIndex(dataIdsToDelete, queryOptions.getAuthorizations());
+          if (baseOptions.isSecondaryIndexing()) {
+            deleteFromDataIndex(dataIdsToDelete, queryOptions.getAuthorizations());
+          }
+
         }
       }
 

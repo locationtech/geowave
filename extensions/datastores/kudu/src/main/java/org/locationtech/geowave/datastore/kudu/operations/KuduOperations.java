@@ -42,6 +42,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
+import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
@@ -300,6 +301,13 @@ public class KuduOperations implements MapReduceDataStoreOperations {
         rowFilter,
         rowTransformer,
         rowMerging);
+  }
+
+  @Override
+  public <T> Deleter<T> createDeleter(final ReaderParams<T> readerParams) {
+    // TODO use QueryAndDeleteByRow with a synchronous reader (all kudu readers are async now)
+    // GEOWAVE Issue #1573
+    return MapReduceDataStoreOperations.super.createDeleter(readerParams);
   }
 
   public <T> KuduDataIndexRead<T> getKuduDataIndexRead(

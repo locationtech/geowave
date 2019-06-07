@@ -89,7 +89,8 @@ public class SplitsProvider {
         adapterStore,
         internalAdapterStore,
         adapterIndexMappingStore,
-        indexStore)) {
+        indexStore,
+        constraints)) {
       QueryConstraints indexAdapterConstraints;
       if (constraints instanceof AdapterAndIndexBasedQueryConstraints) {
         final List<Short> adapters = indexAdapterIdPair.getRight();

@@ -44,7 +44,7 @@ abstract public class AbstractRocksDBTable {
   private final Options readOptions;
   private final WriteOptions batchWriteOptions;
   protected final String subDirectory;
-  private boolean readerDirty = false;
+  protected boolean readerDirty = false;
   private boolean exists;
   protected final short adapterId;
   protected boolean visibilityEnabled;

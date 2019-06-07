@@ -16,13 +16,17 @@ import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.rocksdb.Options;
 import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksDB;
+import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
 import org.rocksdb.Slice;
 import org.rocksdb.WriteOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
 
 public class RocksDBIndexTable extends AbstractRocksDBTable {
+  private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBIndexTable.class);
   private long prevTime = Long.MAX_VALUE;
   private final boolean requiresTimestamp;
   private final byte[] partition;
@@ -49,6 +53,17 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
         batchSize);
     this.requiresTimestamp = requiresTimestamp;
     this.partition = partition;
+  }
+
+  public void delete(final byte[] sortKey, final byte[] dataId) {
+    final RocksDB db = getWriteDb();
+    try {
+      readerDirty = true;
+      final byte[] prefix = Bytes.concat(sortKey, dataId);
+      db.deleteRange(prefix, ByteArrayUtils.getNextPrefix(prefix));
+    } catch (final RocksDBException e) {
+      LOGGER.warn("Unable to delete by sort key and data ID", e);
+    }
   }
 
   public synchronized void add(

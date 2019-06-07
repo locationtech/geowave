@@ -10,7 +10,6 @@ package org.locationtech.geowave.datastore.kudu.operations;
 
 import org.apache.kudu.client.KuduSession;
 import org.apache.kudu.client.KuduTable;
-import org.apache.kudu.client.OperationResponse;
 import org.apache.kudu.client.RowError;
 import org.apache.kudu.client.KuduException;
 import org.apache.kudu.client.Insert;

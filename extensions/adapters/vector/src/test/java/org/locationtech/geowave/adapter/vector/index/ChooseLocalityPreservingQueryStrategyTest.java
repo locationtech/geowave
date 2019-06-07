@@ -11,7 +11,6 @@ package org.locationtech.geowave.adapter.vector.index;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import com.beust.jcommander.internal.Maps;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,6 +38,7 @@ import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.C
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.opengis.feature.simple.SimpleFeature;
+import com.beust.jcommander.internal.Maps;
 
 public class ChooseLocalityPreservingQueryStrategyTest {
   private static final double HOUR = 3600000;
@@ -205,6 +205,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
         stats,
         query,
         indices.toArray(new Index[indices.size()]),
+        null,
         Maps.newHashMap());
   }
 

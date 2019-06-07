@@ -118,15 +118,17 @@ public class RocksDBRowDeleter implements RowDeleter {
       if (key instanceof RocksDBRow) {
         deleteRow(table, (RocksDBRow) key);
       } else {
-        LOGGER.warn(
+        LOGGER.info(
             "Unable to convert scanned row into RocksDBRow for deletion.  Row is of type GeoWaveRowImpl.");
+        table.delete(key.getSortKey(), key.getDataId());
       }
     } else if (row instanceof RocksDBRow) {
       deleteRow(table, (RocksDBRow) row);
     } else {
-      LOGGER.warn(
+      LOGGER.info(
           "Unable to convert scanned row into RocksDBRow for deletion. Row is of type "
               + row.getClass());
+      table.delete(row.getSortKey(), row.getDataId());
     }
   }
 

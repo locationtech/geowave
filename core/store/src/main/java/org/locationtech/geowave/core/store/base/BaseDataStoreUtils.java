@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -25,15 +26,18 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
+import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
@@ -71,6 +75,8 @@ import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
+import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
@@ -628,21 +634,156 @@ public class BaseDataStoreUtils {
     return result;
   }
 
+  public static List<Pair<Index, List<InternalDataAdapter<?>>>> chooseBestIndex(
+      final List<Pair<Index, List<InternalDataAdapter<?>>>> indexAdapterPairList,
+      final QueryConstraints query) {
+    return chooseBestIndex(indexAdapterPairList, query, Function.identity());
+  }
+
+  public static <T> List<Pair<Index, List<T>>> chooseBestIndex(
+      final List<Pair<Index, List<T>>> indexAdapterPairList,
+      final QueryConstraints query,
+      final Function<T, ? extends DataTypeAdapter<?>> adapterLookup)
+      throws IllegalArgumentException {
+    if (indexAdapterPairList.size() <= 1) {
+      return indexAdapterPairList;
+    }
+    if ((query != null) && query.indexMustBeSpecified()) {
+      throw new IllegalArgumentException("Query constraint requires specifying exactly one index");
+    }
+    final Map<T, List<Index>> indicesPerAdapter = new HashMap<>();
+    for (final Pair<Index, List<T>> pair : indexAdapterPairList) {
+      for (final T adapter : pair.getRight()) {
+        List<Index> indicies = indicesPerAdapter.get(adapter);
+        if (indicies == null) {
+          indicies = new ArrayList<>();
+          indicesPerAdapter.put(adapter, indicies);
+        }
+        indicies.add(pair.getLeft());
+      }
+    }
+    final Map<Index, List<T>> retVal = new HashMap<>();
+    for (final Entry<T, List<Index>> e : indicesPerAdapter.entrySet()) {
+      final Index index =
+          query == null ? e.getValue().get(0)
+              : chooseBestIndex(
+                  e.getValue().toArray(new Index[0]),
+                  query,
+                  adapterLookup.apply(e.getKey()));
+      List<T> adapters = retVal.get(index);
+      if (adapters == null) {
+        adapters = new ArrayList<>();
+        retVal.put(index, adapters);
+      }
+      adapters.add(e.getKey());
+    }
+    return retVal.entrySet().stream().map(e -> Pair.of(e.getKey(), e.getValue())).collect(
+        Collectors.toList());
+  }
+
+  public static Index chooseBestIndex(
+      final Index[] indices,
+      final QueryConstraints query,
+      final DataTypeAdapter<?> adapter) {
+    final boolean isConstraintsAdapterIndexSpecific =
+        query instanceof AdapterAndIndexBasedQueryConstraints;
+    Index nextIdx = null;
+    int i = 0;
+
+    double bestIndexBitsUsed = -1;
+    int bestIndexDimensionCount = -1;
+    Index bestIdx = null;
+    while (i < indices.length) {
+      nextIdx = indices[i++];
+      if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) {
+        continue;
+      }
+
+      QueryConstraints adapterIndexConstraints;
+      if (isConstraintsAdapterIndexSpecific) {
+        adapterIndexConstraints =
+            ((AdapterAndIndexBasedQueryConstraints) query).createQueryConstraints(adapter, nextIdx);
+        if (adapterIndexConstraints == null) {
+          continue;
+        }
+      } else {
+        adapterIndexConstraints = query;
+      }
+      final List<MultiDimensionalNumericData> queryRanges =
+          adapterIndexConstraints.getIndexConstraints(nextIdx);
+      final int currentDimensionCount =
+          nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length;
+      if (IndexUtils.isFullTableScan(queryRanges)
+          || !queryRangeDimensionsMatch(currentDimensionCount, queryRanges)) {
+        // keep this is as a default in case all indices
+        // result in a full table scan
+        if (bestIdx == null) {
+          bestIdx = nextIdx;
+        }
+      } else {
+        double currentBitsUsed = 0;
+
+        if (currentDimensionCount >= bestIndexDimensionCount) {
+          for (final MultiDimensionalNumericData qr : queryRanges) {
+            final double[] dataRangePerDimension = new double[qr.getDimensionCount()];
+            for (int d = 0; d < dataRangePerDimension.length; d++) {
+              dataRangePerDimension[d] =
+                  qr.getMaxValuesPerDimension()[d] - qr.getMinValuesPerDimension()[d];
+            }
+            currentBitsUsed +=
+                IndexUtils.getDimensionalBitsUsed(
+                    nextIdx.getIndexStrategy(),
+                    dataRangePerDimension);
+          }
+
+          if ((currentDimensionCount > bestIndexDimensionCount)
+              || (currentBitsUsed > bestIndexBitsUsed)) {
+            bestIndexBitsUsed = currentBitsUsed;
+            bestIndexDimensionCount = currentDimensionCount;
+            bestIdx = nextIdx;
+          }
+        }
+      }
+    }
+    return bestIdx;
+  }
+
+  private static boolean queryRangeDimensionsMatch(
+      final int indexDimensions,
+      final List<MultiDimensionalNumericData> queryRanges) {
+    for (final MultiDimensionalNumericData qr : queryRanges) {
+      if (qr.getDimensionCount() != indexDimensions) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   public static List<Pair<Index, List<Short>>> getAdaptersWithMinimalSetOfIndices(
       final @Nullable String[] typeNames,
       final @Nullable String indexName,
       final TransientAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
-      final IndexStore indexStore) throws IOException {
-    return reduceIndicesAndGroupByIndex(
-        compileIndicesForAdapters(
-            typeNames,
-            indexName,
-            adapterStore,
-            internalAdapterStore,
-            adapterIndexMappingStore,
-            indexStore));
+      final IndexStore indexStore,
+      final QueryConstraints constraints) throws IOException {
+    return chooseBestIndex(
+        reduceIndicesAndGroupByIndex(
+            compileIndicesForAdapters(
+                typeNames,
+                indexName,
+                adapterStore,
+                internalAdapterStore,
+                adapterIndexMappingStore,
+                indexStore)),
+        constraints,
+        adapterId -> {
+          final String typeName = internalAdapterStore.getTypeName(adapterId);
+          if (typeName != null) {
+            return adapterStore.getAdapter(typeName);
+          }
+          return null;
+        });
   }
 
   private static List<Pair<Index, Short>> compileIndicesForAdapters(

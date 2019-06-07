@@ -33,6 +33,7 @@ import org.locationtech.geowave.test.query.SpatialTemporalQueryIT;
 import org.locationtech.geowave.test.secondary.BasicSecondaryIndexIT;
 import org.locationtech.geowave.test.secondary.DataIndexOnlyIT;
 import org.locationtech.geowave.test.secondary.MapReduceSecondaryIndexIT;
+import org.locationtech.geowave.test.secondary.SimpleQuerySecondaryIndexIT;
 import org.locationtech.geowave.test.secondary.VisibilitySecondaryIndexIT;
 import org.locationtech.geowave.test.services.ConfigServicesIT;
 import org.locationtech.geowave.test.services.FileUploadIT;
@@ -58,6 +59,7 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
     GeoWaveVectorSerializationIT.class,
     BasicKafkaIT.class,
     BasicMapReduceIT.class,
+    SimpleQuerySecondaryIndexIT.class,
     BasicSecondaryIndexIT.class,
     DataIndexOnlyIT.class,
     MapReduceSecondaryIndexIT.class,

@@ -483,7 +483,6 @@ public class QueryIndexHelperTest {
         QueryIndexHelper.composeTimeBoundedConstraints(
             rangeType,
             rangeTimeDescriptors,
-            statsMap,
             constraintsSet);
     final List<MultiDimensionalNumericData> nd =
         constraints.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
@@ -526,7 +525,6 @@ public class QueryIndexHelperTest {
         QueryIndexHelper.composeTimeBoundedConstraints(
             rangeType,
             rangeTimeDescriptors,
-            statsMap,
             constraintsSet2);
     final List<MultiDimensionalNumericData> nd2 =
         constraints2.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);

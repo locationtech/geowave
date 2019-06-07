@@ -8,17 +8,16 @@
  */
 package org.locationtech.geowave.adapter.vector.index;
 
-import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import org.locationtech.geowave.core.index.IndexUtils;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.opengis.feature.simple.SimpleFeature;
+import org.spark_project.guava.collect.Iterators;
 
 /**
  * This Query Strategy chooses the index that satisfies the most dimensions of the underlying query
@@ -37,90 +36,16 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements IndexQueryStrateg
   @Override
   public CloseableIterator<Index> getIndices(
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
-      final BasicQueryByClass query,
+      final QueryConstraints query,
       final Index[] indices,
+      final DataTypeAdapter<?> adapter,
       final Map<QueryHint, Object> hints) {
-    return new CloseableIterator<Index>() {
-      Index nextIdx = null;
-      boolean done = false;
-      int i = 0;
-
-      @Override
-      public boolean hasNext() {
-        double bestIndexBitsUsed = -1;
-        int bestIndexDimensionCount = -1;
-        Index bestIdx = null;
-        while (!done && (i < indices.length)) {
-          nextIdx = indices[i++];
-          if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) {
-            continue;
-          }
-          final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx);
-          final int currentDimensionCount =
-              nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length;
-          if (IndexUtils.isFullTableScan(queryRanges)
-              || !queryRangeDimensionsMatch(currentDimensionCount, queryRanges)) {
-            // keep this is as a default in case all indices
-            // result in a full table scan
-            if (bestIdx == null) {
-              bestIdx = nextIdx;
-            }
-          } else {
-            double currentBitsUsed = 0;
-
-            if (currentDimensionCount >= bestIndexDimensionCount) {
-              for (final MultiDimensionalNumericData qr : queryRanges) {
-                final double[] dataRangePerDimension = new double[qr.getDimensionCount()];
-                for (int d = 0; d < dataRangePerDimension.length; d++) {
-                  dataRangePerDimension[d] =
-                      qr.getMaxValuesPerDimension()[d] - qr.getMinValuesPerDimension()[d];
-                }
-                currentBitsUsed +=
-                    IndexUtils.getDimensionalBitsUsed(
-                        nextIdx.getIndexStrategy(),
-                        dataRangePerDimension);
-              }
-
-              if ((currentDimensionCount > bestIndexDimensionCount)
-                  || (currentBitsUsed > bestIndexBitsUsed)) {
-                bestIndexBitsUsed = currentBitsUsed;
-                bestIndexDimensionCount = currentDimensionCount;
-                bestIdx = nextIdx;
-              }
-            }
-          }
-        }
-        nextIdx = bestIdx;
-        done = true;
-        return nextIdx != null;
-      }
-
-      @Override
-      public Index next() throws NoSuchElementException {
-        if (nextIdx == null) {
-          throw new NoSuchElementException();
-        }
-        final Index returnVal = nextIdx;
-        nextIdx = null;
-        return returnVal;
-      }
-
-      @Override
-      public void remove() {}
-
-      @Override
-      public void close() {}
-    };
+    return new CloseableIterator.Wrapper<>(
+        Iterators.singletonIterator(BaseDataStoreUtils.chooseBestIndex(indices, query, adapter)));
   }
 
-  private static boolean queryRangeDimensionsMatch(
-      final int indexDimensions,
-      final List<MultiDimensionalNumericData> queryRanges) {
-    for (final MultiDimensionalNumericData qr : queryRanges) {
-      if (qr.getDimensionCount() != indexDimensions) {
-        return false;
-      }
-    }
-    return true;
+  @Override
+  public boolean requiresStats() {
+    return false;
   }
 }

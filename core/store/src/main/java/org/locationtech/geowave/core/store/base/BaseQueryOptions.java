@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.core.store.base;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,16 +22,15 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.IndexStore;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.options.AggregateTypeQueryOptions;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
@@ -44,6 +39,10 @@ import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 public class BaseQueryOptions {
   private static Logger LOGGER = LoggerFactory.getLogger(BaseQueryOptions.class);
@@ -226,18 +225,14 @@ public class BaseQueryOptions {
    * <p> DataStores are responsible for selecting a single adapter/index per query. For deletions,
    * the Data Stores are interested in all the associations.
    *
-   * @param adapterStore
-   * @param
-   * @param indexStore
-   * @return
-   * @throws IOException
+   * @return the set of adapter/index associations
    */
   public List<Pair<Index, List<InternalDataAdapter<?>>>> getIndicesForAdapters(
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
-      final IndexStore indexStore) throws IOException {
+      final IndexStore indexStore) {
     return BaseDataStoreUtils.combineByIndex(
-        compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore));
+        compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, false));
   }
 
   public InternalDataAdapter<?>[] getAdaptersArray(final PersistentAdapterStore adapterStore)
@@ -289,7 +284,8 @@ public class BaseQueryOptions {
   private List<Pair<Index, InternalDataAdapter<?>>> compileIndicesForAdapters(
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
-      final IndexStore indexStore) throws IOException {
+      final IndexStore indexStore,
+      final boolean constrainToIndex) {
     if ((adapterIds != null) && (adapterIds.length != 0)) {
       if ((adapters == null) || adapters.isEmpty()) {
         adapters = new ArrayList<>();
@@ -314,9 +310,9 @@ public class BaseQueryOptions {
     for (final InternalDataAdapter<?> adapter : adapters) {
       final AdapterToIndexMapping indices =
           adapterIndexMappingStore.getIndicesForAdapter(adapter.getAdapterId());
-      if (index != null) {
+      if ((index != null) && constrainToIndex) {
         result.add(Pair.of(index, adapter));
-      } else if ((indexName != null) && indices.contains(indexName)) {
+      } else if ((indexName != null) && indices.contains(indexName) && constrainToIndex) {
         if (index == null) {
           index = indexStore.getIndex(indexName);
           result.add(Pair.of(index, adapter));
@@ -416,6 +412,22 @@ public class BaseQueryOptions {
   }
 
   /**
+   * This will get all relevant adapter index pairs and then select the best index for each adapter
+   * given the constraint. Currently, it determines what is best by the index which can satisfy the
+   * most dimensions of the given constraint.
+   *
+   */
+  public List<Pair<Index, List<InternalDataAdapter<?>>>> getBestQueryIndicies(
+      final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore adapterIndexMappingStore,
+      final IndexStore indexStore,
+      final QueryConstraints query) throws IOException {
+    return BaseDataStoreUtils.chooseBestIndex(
+        getAdaptersWithMinimalSetOfIndices(adapterStore, adapterIndexMappingStore, indexStore),
+        query);
+  }
+
+  /**
    * Return a set list adapter/index associations. If the adapters are not provided, then look up
    * all of them. If the index is not provided, then look up all of them. The full set of
    * adapter/index associations is reduced so that a single index is queried per adapter and the
@@ -424,20 +436,13 @@ public class BaseQueryOptions {
    * <p> DataStores are responsible for selecting a single adapter/index per query. For deletions,
    * the Data Stores are interested in all the associations.
    *
-   * @param adapterStore
-   * @param adapterIndexMappingStore
-   * @param indexStore
-   * @return
-   * @throws IOException
    */
-  public List<Pair<Index, List<InternalDataAdapter<?>>>> getAdaptersWithMinimalSetOfIndices(
+  private List<Pair<Index, List<InternalDataAdapter<?>>>> getAdaptersWithMinimalSetOfIndices(
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
-      final IndexStore indexStore) throws IOException {
-    // TODO this probably doesn't have to use PrimaryIndex and should be
-    // sufficient to use index IDs
+      final IndexStore indexStore) {
     return BaseDataStoreUtils.reduceIndicesAndGroupByIndex(
-        compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore));
+        compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, true));
   }
 
   public boolean isAllIndices() {
