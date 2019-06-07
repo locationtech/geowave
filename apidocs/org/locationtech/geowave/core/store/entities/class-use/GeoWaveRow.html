@@ -664,22 +664,27 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">DeleteOtherIndicesCallback.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteOtherIndicesCallback.html#entryDeleted-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryDeleted</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteOtherIndicesCallback.html" title="type parameter in DeleteOtherIndicesCallback">T</a>&nbsp;entry,
+            <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">DeleteCallback.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">entryDeleted</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html" title="type parameter in DeleteCallback">T</a>&nbsp;entry,
             <a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallback.html" title="type parameter in DeleteCallback">R</a>...&nbsp;rows)</code>
 <div class="block">This will be called after an entry is successfully deleted with the row IDs that were used</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">DeleteCallbackList.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallbackList.html#entryDeleted-T-R...-">entryDeleted</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>&nbsp;entry,
             <a href="../../../../../../../org/locationtech/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">R</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestCallbackList.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallbackList.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallbackList.html" title="type parameter in IngestCallbackList">T</a>&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">IngestCallback.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html#entryIngested-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/callback/IngestCallback.html" title="type parameter in IngestCallback">T</a>&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>
@@ -758,6 +763,19 @@
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/entities/package-summary.html">org.locationtech.geowave.core.store.entities</a> that return types with arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRowMergingTransform.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowMergingTransform.html#apply-java.util.Iterator-">apply</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;input)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/entities/package-summary.html">org.locationtech.geowave.core.store.entities</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -767,6 +785,19 @@
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">MergeableGeoWaveRow.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/MergeableGeoWaveRow.html#shouldMerge-org.locationtech.geowave.core.store.entities.GeoWaveRow-">shouldMerge</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../org/locationtech/geowave/core/store/entities/package-summary.html">org.locationtech.geowave.core.store.entities</a> with type arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRowMergingTransform.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowMergingTransform.html#apply-java.util.Iterator-">apply</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;input)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -944,6 +975,11 @@
 <td class="colLast"><span class="typeNameLabel">RewritingMergingEntryIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/util/RewritingMergingEntryIterator.html#mergeSingleRowValues-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform-">mergeSingleRowValues</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;singleRow,
                     <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&nbsp;rowTransform)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DataStoreUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/util/DataStoreUtils.html#mergeSingleRowValues-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform-">mergeSingleRowValues</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;singleRow,
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&nbsp;rowTransform)</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
@@ -973,6 +1009,11 @@
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></code></td>
 <td class="colLast"><span class="typeNameLabel">RewritingMergingEntryIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/util/RewritingMergingEntryIterator.html#mergeSingleRowValues-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform-">mergeSingleRowValues</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;singleRow,
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&nbsp;rowTransform)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DataStoreUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/util/DataStoreUtils.html#mergeSingleRowValues-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform-">mergeSingleRowValues</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;singleRow,
                     <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in org.locationtech.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&nbsp;rowTransform)</code>&nbsp;</td>
 </tr>
 </tbody>

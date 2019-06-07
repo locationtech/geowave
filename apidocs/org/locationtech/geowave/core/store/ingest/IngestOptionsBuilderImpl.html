@@ -179,7 +179,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html#filter-java.util.function.Predicate-">filter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;filter)</code>
-<div class="block">Filter data prior to being ingesting using a Predicate</div>
+<div class="block">Filter data prior to being ingesting using a Predicate (if transform is provided, transform
+ will be applied before the filter)</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -191,8 +192,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html#formatOptions-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">formatOptions</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;formatOptions)</code>
-<div class="block">options that will be given to the ingest format plugin.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html#properties-java.util.Properties-">properties</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)</code>
+<div class="block">provide properties used for particular URL handlers</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -220,13 +221,6 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.api.IngestOptions.Builder">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#newBuilder--">newBuilder</a></code></li>
 </ul>
 </li>
 </ul>
@@ -274,26 +268,6 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#format-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-">format</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>format</code> - the format</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder</dd>
-</dl>
-</li>
-</ul>
-<a name="formatOptions-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>formatOptions</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;formatOptions(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;formatOptions)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#formatOptions-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">IngestOptions.Builder</a></code></span></div>
-<div class="block">options that will be given to the ingest format plugin. Each plugin may use a different type
- of options.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#formatOptions-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">formatOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>formatOptions</code> - the options for the format plugin</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder</dd>
 </dl>
@@ -385,7 +359,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <h4>filter</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;filter(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;filter)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#filter-java.util.function.Predicate-">IngestOptions.Builder</a></code></span></div>
-<div class="block">Filter data prior to being ingesting using a Predicate</div>
+<div class="block">Filter data prior to being ingesting using a Predicate (if transform is provided, transform
+ will be applied before the filter)</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#filter-java.util.function.Predicate-">filter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></dd>
@@ -430,6 +405,26 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/In
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#callback-org.locationtech.geowave.core.store.api.IngestOptions.IngestCallback-">callback</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>callback</code> - the callback</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this builder</dd>
+</dl>
+</li>
+</ul>
+<a name="properties-java.util.Properties-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>properties</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;&nbsp;properties(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#properties-java.util.Properties-">IngestOptions.Builder</a></code></span></div>
+<div class="block">provide properties used for particular URL handlers</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#properties-java.util.Properties-">properties</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>properties</code> - for URL handlers such as s3.endpoint.url=s3.amazonaws.com or
+        hdfs.defaultFS.url=sandbox.hortonworks.com:8020</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder</dd>
 </dl>

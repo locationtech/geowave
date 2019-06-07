@@ -992,6 +992,27 @@
 <ul class="blockList">
 <li class="blockList">
 <table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.analytic.spark.kde.<a href="org/locationtech/geowave/analytic/spark/kde/KDERunner.html" title="class in org.locationtech.geowave.analytic.spark.kde">KDERunner</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.analytic.spark.kde.KDERunner.NUM_BANDS">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/analytic/spark/kde/KDERunner.html#NUM_BANDS">NUM_BANDS</a></code></td>
+<td class="colLast"><code>3</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
 <caption><span>org.locationtech.geowave.cli.geoserver.<a href="org/locationtech/geowave/cli/geoserver/GeoServerConfig.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerConfig</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -1921,27 +1942,6 @@
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="org/locationtech/geowave/core/ingest/hdfs/mapreduce/AbstractMapReduceIngest.html#INGEST_PLUGIN_KEY">INGEST_PLUGIN_KEY</a></code></td>
 <td class="colLast"><code>"INGEST_PLUGIN"</code></td>
-</tr>
-</tbody>
-</table>
-</li>
-</ul>
-<ul class="blockList">
-<li class="blockList">
-<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>org.locationtech.geowave.core.ingest.local.<a href="org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html" title="class in org.locationtech.geowave.core.ingest.local">LocalFileIngestDriver</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th scope="col">Constant Field</th>
-<th class="colLast" scope="col">Value</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a name="org.locationtech.geowave.core.ingest.local.LocalFileIngestDriver.INGEST_BATCH_SIZE">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html#INGEST_BATCH_SIZE">INGEST_BATCH_SIZE</a></code></td>
-<td class="colLast"><code>50000</code></td>
 </tr>
 </tbody>
 </table>
@@ -6883,6 +6883,116 @@
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KdeCommandParametersProtos.html#TILESIZE_FIELD_NUMBER">TILESIZE_FIELD_NUMBER</a></code></td>
 <td class="colLast"><code>11</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.service.grpc.protobuf.<a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">KDESparkCommandParametersProtos</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.APPNAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#APPNAME_FIELD_NUMBER">APPNAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>2</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.COVERAGENAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#COVERAGENAME_FIELD_NUMBER">COVERAGENAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>13</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.CQLFILTER_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#CQLFILTER_FIELD_NUMBER">CQLFILTER_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>9</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.HOST_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#HOST_FIELD_NUMBER">HOST_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>7</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.INDEXNAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#INDEXNAME_FIELD_NUMBER">INDEXNAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>4</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.MASTER_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#MASTER_FIELD_NUMBER">MASTER_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>8</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.MAXLEVEL_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#MAXLEVEL_FIELD_NUMBER">MAXLEVEL_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>6</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.MAXSPLITS_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#MAXSPLITS_FIELD_NUMBER">MAXSPLITS_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>12</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.MINLEVEL_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#MINLEVEL_FIELD_NUMBER">MINLEVEL_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>5</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.MINSPLITS_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#MINSPLITS_FIELD_NUMBER">MINSPLITS_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>11</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.OUTPUTINDEX_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#OUTPUTINDEX_FIELD_NUMBER">OUTPUTINDEX_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>14</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.PARAMETERS_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#PARAMETERS_FIELD_NUMBER">PARAMETERS_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>1</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.TILESIZE_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#TILESIZE_FIELD_NUMBER">TILESIZE_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>3</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos.TYPENAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html#TYPENAME_FIELD_NUMBER">TYPENAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>10</code></td>
 </tr>
 </tbody>
 </table>

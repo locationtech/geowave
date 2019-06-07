@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -209,6 +209,13 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicOrderedConstraintQuery.html#indexMustBeSpecified--">indexMustBeSpecified</a></span>()</code>
+<div class="block">To simplify query constraints, this allows ofr the index to be tightly coupled with the
+ constraints if true.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicOrderedConstraintQuery.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -301,7 +308,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <a name="fromBinary-byte:A-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>fromBinary</h4>
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
@@ -312,6 +319,22 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/query/
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQuery</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="indexMustBeSpecified--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>indexMustBeSpecified</h4>
+<pre>public&nbsp;boolean&nbsp;indexMustBeSpecified()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html#indexMustBeSpecified--">QueryConstraints</a></code></span></div>
+<div class="block">To simplify query constraints, this allows ofr the index to be tightly coupled with the
+ constraints if true.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A flag indicating that this query is specific to an index that must also be provided</dd>
 </dl>
 </li>
 </ul>

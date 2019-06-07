@@ -90,6 +90,10 @@
 <td class="colFirst"><a href="#org.locationtech.geowave.adapter.raster.resize">org.locationtech.geowave.adapter.raster.resize</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.analytic.spark.resize">org.locationtech.geowave.analytic.spark.resize</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -108,7 +112,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ResizeCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/ResizeCommand.html#getOptions--">getOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ResizeMRCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/ResizeMRCommand.html#getOptions--">getOptions</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -121,7 +125,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">ResizeCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/ResizeCommand.html#setOptions-org.locationtech.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions-">setOptions</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ResizeMRCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/ResizeMRCommand.html#setOptions-org.locationtech.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions-">setOptions</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -150,9 +154,68 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#RasterTileResizeJobRunner-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions-">RasterTileResizeJobRunner</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html#RasterTileResizeJobRunner-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions-java.lang.String-java.lang.String-">RasterTileResizeJobRunner</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions,
                          <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
-                         <a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a>&nbsp;rasterResizeOptions)</code>&nbsp;</td>
+                         <a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a>&nbsp;rasterResizeOptions,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jobTrackerOrResourceManagerHostPort)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.analytic.spark.resize">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a> in <a href="../../../../../../../../org/locationtech/geowave/analytic/spark/resize/package-summary.html">org.locationtech.geowave.analytic.spark.resize</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../../org/locationtech/geowave/analytic/spark/resize/package-summary.html">org.locationtech.geowave.analytic.spark.resize</a> declared as <a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">RasterTileResizeSparkRunner.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/analytic/spark/resize/RasterTileResizeSparkRunner.html#rasterResizeOptions">rasterResizeOptions</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/analytic/spark/resize/package-summary.html">org.locationtech.geowave.analytic.spark.resize</a> that return <a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ResizeSparkCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/analytic/spark/resize/ResizeSparkCommand.html#getOptions--">getOptions</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/analytic/spark/resize/package-summary.html">org.locationtech.geowave.analytic.spark.resize</a> with parameters of type <a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">ResizeSparkCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/analytic/spark/resize/ResizeSparkCommand.html#setOptions-org.locationtech.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions-">setOptions</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a>&nbsp;options)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../../org/locationtech/geowave/analytic/spark/resize/package-summary.html">org.locationtech.geowave.analytic.spark.resize</a> with parameters of type <a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/analytic/spark/resize/RasterTileResizeSparkRunner.html#RasterTileResizeSparkRunner-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions-">RasterTileResizeSparkRunner</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions,
+                           <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
+                           <a href="../../../../../../../../org/locationtech/geowave/adapter/raster/operations/options/RasterTileResizeCommandLineOptions.html" title="class in org.locationtech.geowave.adapter.raster.operations.options">RasterTileResizeCommandLineOptions</a>&nbsp;rasterResizeOptions)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

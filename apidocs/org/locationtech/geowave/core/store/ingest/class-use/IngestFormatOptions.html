@@ -95,14 +95,6 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.api">org.locationtech.geowave.core.store.api</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.store.ingest">org.locationtech.geowave.core.store.ingest</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.format.avro">org.locationtech.geowave.format.avro</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -285,77 +277,6 @@
 <div class="block">This plugin will be used by the ingestion framework to read data from a local file system, and
  translate supported files into the data entries that will be written directly in GeoWave.</div>
 </td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="org.locationtech.geowave.core.store.api">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> that return <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IngestOptions.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html#getFormatOptions--">getFormatOptions</a></span>()</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="type parameter in IngestOptions.Builder">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">IngestOptions.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html#formatOptions-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">formatOptions</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;formatOptions)</code>
-<div class="block">options that will be given to the ingest format plugin.</div>
-</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html#IngestOptions-org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-int-java.lang.String-java.lang.String:A-java.util.function.Predicate-java.util.function.Function-org.locationtech.geowave.core.store.api.IngestOptions.IngestCallback-">IngestOptions</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="type parameter in IngestOptions">T</a>&gt;&nbsp;format,
-             <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;formatOptions,
-             int&nbsp;threads,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;fileExtensions,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Predicate.html?is-external=true" title="class or interface in java.util">java.util.function.Predicate</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="type parameter in IngestOptions">T</a>&gt;&nbsp;filter,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="type parameter in IngestOptions">T</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="type parameter in IngestOptions">T</a>&gt;&nbsp;transform,
-             <a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.IngestCallback.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.IngestCallback</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="type parameter in IngestOptions">T</a>&gt;&nbsp;callback)</code>
-<div class="block">Use the Builder to construct instead of this constructor.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="org.locationtech.geowave.core.store.ingest">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/package-summary.html">org.locationtech.geowave.core.store.ingest</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/package-summary.html">org.locationtech.geowave.core.store.ingest</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.Builder.html" title="interface in org.locationtech.geowave.core.store.api">IngestOptions.Builder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html" title="type parameter in IngestOptionsBuilderImpl">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">IngestOptionsBuilderImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestOptionsBuilderImpl.html#formatOptions-org.locationtech.geowave.core.store.ingest.IngestFormatOptions-">formatOptions</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/ingest/IngestFormatOptions.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestFormatOptions</a>&nbsp;formatOptions)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

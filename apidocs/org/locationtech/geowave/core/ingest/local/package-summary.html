@@ -83,53 +83,11 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>,R&gt;</td>
-<td class="colLast">
-<div class="block">This class can be sub-classed to handle recursing over a local directory structure and passing
- along the plugin specific handling of any supported file for a discovered plugin.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/IngestTask.html" title="class in org.locationtech.geowave.core.ingest.local">IngestTask</a></td>
-<td class="colLast">
-<div class="block">An IngestTask is a thread which listens to items from a blocking queue, and writes those items to
- IndexWriter objects obtained from LocalIngestRunData (where they are constructed but also cached
- from the DataStore object).</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestDriver.html" title="class in org.locationtech.geowave.core.ingest.local">LocalFileIngestDriver</a></td>
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestCLIDriver.html" title="class in org.locationtech.geowave.core.ingest.local">LocalFileIngestCLIDriver</a></td>
 <td class="colLast">
 <div class="block">This extends the local file driver to directly ingest data into GeoWave utilizing the
  LocalFileIngestPlugin's that are discovered by the system.</div>
 </td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html" title="class in org.locationtech.geowave.core.ingest.local">LocalIngestRunData</a></td>
-<td class="colLast">
-<div class="block">This class maintains a pool of index writers keyed by the primary index.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.local">LocalInputCommandLineOptions</a></td>
-<td class="colLast">
-<div class="block">This class encapsulates all of the options and parsed values specific to directing the ingestion
- framework to a local file system.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalInputCommandLineOptions.SplitConverter.html" title="class in org.locationtech.geowave.core.ingest.local">LocalInputCommandLineOptions.SplitConverter</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginFileVisitor.html" title="class in org.locationtech.geowave.core.ingest.local">LocalPluginFileVisitor</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>,R&gt;</td>
-<td class="colLast">
-<div class="block">This class is used by any local file driver to recurse a directory of files.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalPluginFileVisitor.PluginVisitor.html" title="class in org.locationtech.geowave.core.ingest.local">LocalPluginFileVisitor.PluginVisitor</a>&lt;P extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalPluginBase</a>&gt;</td>
-<td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
 </table>

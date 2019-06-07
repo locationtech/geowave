@@ -87,19 +87,19 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.ingest.local">org.locationtech.geowave.core.ingest.local</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.api">org.locationtech.geowave.core.store.api</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.base">org.locationtech.geowave.core.store.base</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.index.writer">org.locationtech.geowave.core.store.index.writer</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.core.store.ingest">org.locationtech.geowave.core.store.ingest</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -130,78 +130,6 @@
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></code></td>
 <td class="colLast"><span class="typeNameLabel">KafkaIngestRunData.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaIngestRunData.html#getIndexWriter-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index...-">getIndexWriter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
               <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;requiredIndices)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="org.locationtech.geowave.core.ingest.local">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a> in <a href="../../../../../../../org/locationtech/geowave/core/ingest/local/package-summary.html">org.locationtech.geowave.core.ingest.local</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/ingest/local/package-summary.html">org.locationtech.geowave.core.ingest.local</a> that return <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;?&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.IndexWriterFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#create-org.locationtech.geowave.core.ingest.local.LocalIngestRunData.TypeNameKeyWithIndices-">create</a></span>(org.locationtech.geowave.core.ingest.local.LocalIngestRunData.TypeNameKeyWithIndices&nbsp;adapterWithIndices)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></code></td>
-<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#getIndexWriter-java.lang.String-java.util.List-">getIndexWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;indices)</code>
-<div class="block">Return an index writer from the pool.</div>
-</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/ingest/local/package-summary.html">org.locationtech.geowave.core.ingest.local</a> that return types with arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.IndexWriterFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#wrap-org.locationtech.geowave.core.store.api.Writer-">wrap</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/ingest/local/package-summary.html">org.locationtech.geowave.core.ingest.local</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.html#releaseIndexWriter-java.lang.String-org.locationtech.geowave.core.store.api.Writer-">releaseIndexWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-                  <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer)</code>
-<div class="block">Return the index writer to the pool</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.IndexWriterFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#wrap-org.locationtech.geowave.core.store.api.Writer-">wrap</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Method parameters in <a href="../../../../../../../org/locationtech/geowave/core/ingest/local/package-summary.html">org.locationtech.geowave.core.ingest.local</a> with type arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.IndexWriterFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#destroyObject-org.locationtech.geowave.core.ingest.local.LocalIngestRunData.TypeNameKeyWithIndices-org.apache.commons.pool2.PooledObject-">destroyObject</a></span>(org.locationtech.geowave.core.ingest.local.LocalIngestRunData.TypeNameKeyWithIndices&nbsp;key,
-             org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&gt;&nbsp;p)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -311,6 +239,88 @@
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html#IndexCompositeWriter-org.locationtech.geowave.core.store.api.Writer:A-">IndexCompositeWriter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="type parameter in IndexCompositeWriter">T</a>&gt;[]&nbsp;writers)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.store.ingest">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/package-summary.html">org.locationtech.geowave.core.store.ingest</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/package-summary.html">org.locationtech.geowave.core.store.ingest</a> that return <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.IndexWriterFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalIngestRunData.IndexWriterFactory.html#create-org.locationtech.geowave.core.store.ingest.LocalIngestRunData.TypeNameKeyWithIndices-">create</a></span>(org.locationtech.geowave.core.store.ingest.LocalIngestRunData.TypeNameKeyWithIndices&nbsp;adapterWithIndices)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></code></td>
+<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalIngestRunData.html#getIndexWriter-java.lang.String-java.util.List-">getIndexWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;indices)</code>
+<div class="block">Return an index writer from the pool.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/package-summary.html">org.locationtech.geowave.core.store.ingest</a> that return types with arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.IndexWriterFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalIngestRunData.IndexWriterFactory.html#wrap-org.locationtech.geowave.core.store.api.Writer-">wrap</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/package-summary.html">org.locationtech.geowave.core.store.ingest</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalIngestRunData.html#releaseIndexWriter-java.lang.String-org.locationtech.geowave.core.store.api.Writer-">releaseIndexWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                  <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer)</code>
+<div class="block">Return the index writer to the pool</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.IndexWriterFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalIngestRunData.IndexWriterFactory.html#wrap-org.locationtech.geowave.core.store.api.Writer-">wrap</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><span class="typeNameLabel">BaseDataStoreIngestDriver.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/BaseDataStoreIngestDriver.html#write-org.locationtech.geowave.core.store.api.Writer-org.locationtech.geowave.core.store.ingest.GeoWaveData-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer,
+     <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;geowaveData)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><span class="typeNameLabel">AbstractLocalFileIngestDriver.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileIngestDriver.html#write-org.locationtech.geowave.core.store.api.Writer-org.locationtech.geowave.core.store.ingest.GeoWaveData-">write</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer,
+     <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;?&gt;&nbsp;geowaveData)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../org/locationtech/geowave/core/store/ingest/package-summary.html">org.locationtech.geowave.core.store.ingest</a> with type arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">LocalIngestRunData.IndexWriterFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/ingest/LocalIngestRunData.IndexWriterFactory.html#destroyObject-org.locationtech.geowave.core.store.ingest.LocalIngestRunData.TypeNameKeyWithIndices-org.apache.commons.pool2.PooledObject-">destroyObject</a></span>(org.locationtech.geowave.core.store.ingest.LocalIngestRunData.TypeNameKeyWithIndices&nbsp;key,
+             org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&gt;&nbsp;p)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

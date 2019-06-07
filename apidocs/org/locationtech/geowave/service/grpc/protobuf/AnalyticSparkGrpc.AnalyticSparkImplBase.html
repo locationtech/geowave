@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -165,15 +165,20 @@ implements io.grpc.BindableService</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AnalyticSparkGrpc.AnalyticSparkImplBase.html#kDESparkCommand-org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos-io.grpc.stub.StreamObserver-">kDESparkCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">KDESparkCommandParametersProtos</a>&nbsp;request,
+               io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;responseObserver)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AnalyticSparkGrpc.AnalyticSparkImplBase.html#kmeansSparkCommand-org.locationtech.geowave.service.grpc.protobuf.KmeansSparkCommandParametersProtos-io.grpc.stub.StreamObserver-">kmeansSparkCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/KmeansSparkCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">KmeansSparkCommandParametersProtos</a>&nbsp;request,
                   io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;responseObserver)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AnalyticSparkGrpc.AnalyticSparkImplBase.html#sparkSqlCommand-org.locationtech.geowave.service.grpc.protobuf.SparkSqlCommandParametersProtos-io.grpc.stub.StreamObserver-">sparkSqlCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SparkSqlCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SparkSqlCommandParametersProtos</a>&nbsp;request,
                io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;responseObserver)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AnalyticSparkGrpc.AnalyticSparkImplBase.html#spatialJoinCommand-org.locationtech.geowave.service.grpc.protobuf.SpatialJoinCommandParametersProtos-io.grpc.stub.StreamObserver-">spatialJoinCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SpatialJoinCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SpatialJoinCommandParametersProtos</a>&nbsp;request,
                   io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;responseObserver)</code>&nbsp;</td>
@@ -217,16 +222,6 @@ implements io.grpc.BindableService</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="kmeansSparkCommand-org.locationtech.geowave.service.grpc.protobuf.KmeansSparkCommandParametersProtos-io.grpc.stub.StreamObserver-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>kmeansSparkCommand</h4>
-<pre>public&nbsp;void&nbsp;kmeansSparkCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/KmeansSparkCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">KmeansSparkCommandParametersProtos</a>&nbsp;request,
-                               io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;responseObserver)</pre>
-</li>
-</ul>
 <a name="spatialJoinCommand-org.locationtech.geowave.service.grpc.protobuf.SpatialJoinCommandParametersProtos-io.grpc.stub.StreamObserver-">
 <!--   -->
 </a>
@@ -237,6 +232,16 @@ implements io.grpc.BindableService</pre>
                                io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;responseObserver)</pre>
 </li>
 </ul>
+<a name="kDESparkCommand-org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos-io.grpc.stub.StreamObserver-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>kDESparkCommand</h4>
+<pre>public&nbsp;void&nbsp;kDESparkCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">KDESparkCommandParametersProtos</a>&nbsp;request,
+                            io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;responseObserver)</pre>
+</li>
+</ul>
 <a name="sparkSqlCommand-org.locationtech.geowave.service.grpc.protobuf.SparkSqlCommandParametersProtos-io.grpc.stub.StreamObserver-">
 <!--   -->
 </a>
@@ -245,6 +250,16 @@ implements io.grpc.BindableService</pre>
 <h4>sparkSqlCommand</h4>
 <pre>public&nbsp;void&nbsp;sparkSqlCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/SparkSqlCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">SparkSqlCommandParametersProtos</a>&nbsp;request,
                             io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;responseObserver)</pre>
+</li>
+</ul>
+<a name="kmeansSparkCommand-org.locationtech.geowave.service.grpc.protobuf.KmeansSparkCommandParametersProtos-io.grpc.stub.StreamObserver-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>kmeansSparkCommand</h4>
+<pre>public&nbsp;void&nbsp;kmeansSparkCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/KmeansSparkCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">KmeansSparkCommandParametersProtos</a>&nbsp;request,
+                               io.grpc.stub.StreamObserver&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;responseObserver)</pre>
 </li>
 </ul>
 <a name="bindService--">

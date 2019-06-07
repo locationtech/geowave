@@ -99,7 +99,15 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.analytic.spark.kde.operations">org.locationtech.geowave.analytic.spark.kde.operations</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.analytic.spark.kmeans.operations">org.locationtech.geowave.analytic.spark.kmeans.operations</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.analytic.spark.resize">org.locationtech.geowave.analytic.spark.resize</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -204,11 +212,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeJobRunner.html" title="class in org.locationtech.geowave.adapter.raster.resize">RasterTileResizeJobRunner</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ResizeCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/operations/ResizeCommand.html#createRunner-org.locationtech.geowave.core.cli.api.OperationParams-">createRunner</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ResizeMRCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/operations/ResizeMRCommand.html#createRunner-org.locationtech.geowave.core.cli.api.OperationParams-">createRunner</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">ResizeCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/operations/ResizeCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ResizeMRCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/operations/ResizeMRCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -307,6 +315,28 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="org.locationtech.geowave.analytic.spark.kde.operations">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a> in <a href="../../../../../../../org/locationtech/geowave/analytic/spark/kde/operations/package-summary.html">org.locationtech.geowave.analytic.spark.kde.operations</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/analytic/spark/kde/operations/package-summary.html">org.locationtech.geowave.analytic.spark.kde.operations</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Void.html?is-external=true" title="class or interface in java.lang">Void</a></code></td>
+<td class="colLast"><span class="typeNameLabel">KDESparkCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/spark/kde/operations/KDESparkCommand.html#computeResults-org.locationtech.geowave.core.cli.api.OperationParams-">computeResults</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">KDESparkCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/spark/kde/operations/KDESparkCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.kmeans.operations">
 <!--   -->
 </a>
@@ -325,6 +355,28 @@
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">KmeansSparkCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/spark/kmeans/operations/KmeansSparkCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.analytic.spark.resize">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a> in <a href="../../../../../../../org/locationtech/geowave/analytic/spark/resize/package-summary.html">org.locationtech.geowave.analytic.spark.resize</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/analytic/spark/resize/package-summary.html">org.locationtech.geowave.analytic.spark.resize</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/analytic/spark/resize/RasterTileResizeSparkRunner.html" title="class in org.locationtech.geowave.analytic.spark.resize">RasterTileResizeSparkRunner</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ResizeSparkCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/spark/resize/ResizeSparkCommand.html#createRunner-org.locationtech.geowave.core.cli.api.OperationParams-">createRunner</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">ResizeSparkCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/spark/resize/ResizeSparkCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1098,47 +1150,51 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">RemoveStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/RemoveStatCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">RemoteCopyCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/RemoteCopyCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">RemoveStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/RemoveStatCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">ClearCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/ClearCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">CalculateStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/CalculateStatCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">ListTypesCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/ListTypesCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">CombineStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/CombineStatsCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>
 <div class="block">Prep the driver & run the operation.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">RemoveIndexCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/RemoveIndexCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">RecalculateStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/RecalculateStatsCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">RemoveTypeCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/RemoveTypeCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">ListStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/ListStatsCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">ListIndicesCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/ListIndicesCommand.html#execute-org.locationtech.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/AbstractStatsCommand.html#run-org.locationtech.geowave.core.cli.api.OperationParams-java.util.List-">run</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;params,
    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;parameters)</code>&nbsp;</td>

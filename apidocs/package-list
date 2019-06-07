@@ -56,8 +56,11 @@ org.locationtech.geowave.analytic.partitioner
 org.locationtech.geowave.analytic.sample
 org.locationtech.geowave.analytic.sample.function
 org.locationtech.geowave.analytic.spark
+org.locationtech.geowave.analytic.spark.kde
+org.locationtech.geowave.analytic.spark.kde.operations
 org.locationtech.geowave.analytic.spark.kmeans
 org.locationtech.geowave.analytic.spark.kmeans.operations
+org.locationtech.geowave.analytic.spark.resize
 org.locationtech.geowave.analytic.spark.sparksql
 org.locationtech.geowave.analytic.spark.sparksql.operations
 org.locationtech.geowave.analytic.spark.sparksql.udf

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -107,10 +107,19 @@ var activeTableTab = "activeTableTab";
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">RasterTileResizeHelper</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../serialized-form.html#org.locationtech.geowave.adapter.raster.resize.RasterTileResizeHelper">Serialized Form</a></dd>
+</dl>
 </li>
 </ul>
 </div>
@@ -130,6 +139,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#RasterTileResizeHelper-org.apache.hadoop.mapreduce.JobContext-">RasterTileResizeHelper</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#RasterTileResizeHelper-short-short-org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter-org.locationtech.geowave.core.store.api.Index-">RasterTileResizeHelper</a></span>(short&nbsp;oldAdapterId,
+                      short&nbsp;newAdapterId,
+                      <a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a>&nbsp;newAdapter,
+                      <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -159,7 +174,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getIndexName--">getIndexName</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>protected org.opengis.coverage.grid.GridCoverage</code></td>
+<td class="colFirst"><code>org.opengis.coverage.grid.GridCoverage</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getMergedCoverage-org.locationtech.geowave.mapreduce.input.GeoWaveInputKey-java.lang.Iterable-">getMergedCoverage</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
@@ -172,6 +187,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getNewDataId-org.opengis.coverage.grid.GridCoverage-">getNewDataId</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;coverage)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in org.locationtech.geowave.mapreduce">HadoopWritableSerializer</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/GridCoverageWritable.html" title="class in org.locationtech.geowave.adapter.raster.adapter">GridCoverageWritable</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getSerializer--">getSerializer</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#isOriginalCoverage-short-">isOriginalCoverage</a></span>(short&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
@@ -200,10 +219,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="RasterTileResizeHelper-org.apache.hadoop.mapreduce.JobContext-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>RasterTileResizeHelper</h4>
 <pre>public&nbsp;RasterTileResizeHelper(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
+</li>
+</ul>
+<a name="RasterTileResizeHelper-short-short-org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter-org.locationtech.geowave.core.store.api.Index-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RasterTileResizeHelper</h4>
+<pre>public&nbsp;RasterTileResizeHelper(short&nbsp;oldAdapterId,
+                              short&nbsp;newAdapterId,
+                              <a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a>&nbsp;newAdapter,
+                              <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 </li>
 </ul>
 </li>
@@ -238,15 +269,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getMergedCoverage</h4>
-<pre>protected&nbsp;org.opengis.coverage.grid.GridCoverage&nbsp;getMergedCoverage(<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
-                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)
-                                                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
-                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<pre>public&nbsp;org.opengis.coverage.grid.GridCoverage&nbsp;getMergedCoverage(<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
+                                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)
+                                                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
 </dl>
+</li>
+</ul>
+<a name="getSerializer--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSerializer</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in org.locationtech.geowave.mapreduce">HadoopWritableSerializer</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../org/locationtech/geowave/adapter/raster/adapter/GridCoverageWritable.html" title="class in org.locationtech.geowave.adapter.raster.adapter">GridCoverageWritable</a>&gt;&nbsp;getSerializer()</pre>
 </li>
 </ul>
 <a name="getNewAdapterId--">

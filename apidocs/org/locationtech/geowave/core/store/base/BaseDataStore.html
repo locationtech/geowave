@@ -350,17 +350,17 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.Index...-">ingest</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#ingest-java.lang.String-org.locationtech.geowave.core.store.api.Index...-">ingest</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath,
       <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)</code>
-<div class="block">Ingest from URL.</div>
+<div class="block">Ingest from path.</div>
 </td>
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">ingest</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#ingest-java.lang.String-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">ingest</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath,
       <a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="class in org.locationtech.geowave.core.store.api">IngestOptions</a>&lt;T&gt;&nbsp;options,
       <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)</code>
-<div class="block">Ingest from URL with options.</div>
+<div class="block">Ingest from path with options.</div>
 </td>
 </tr>
 <tr id="i23" class="rowColor">
@@ -944,54 +944,48 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 </dl>
 </li>
 </ul>
-<a name="ingest-java.net.URL-org.locationtech.geowave.core.store.api.Index...-">
+<a name="ingest-java.lang.String-org.locationtech.geowave.core.store.api.Index...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>ingest</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;ingest(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
-                       <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)
-                throws <a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.Index...-">DataStore</a></code></span></div>
-<div class="block">Ingest from URL. If this is a directory, this method will recursively search for valid files to
- ingest in the directory. This will iterate through registered IngestFormatPlugins to find one
- that works for a given file. The applicable ingest format plugin will choose the
+<pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;ingest(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath,
+                       <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.lang.String-org.locationtech.geowave.core.store.api.Index...-">DataStore</a></code></span></div>
+<div class="block">Ingest from path. If this is a directory, this method will recursively search for valid files
+ to ingest in the directory. This will iterate through registered IngestFormatPlugins to find
+ one that works for a given file. The applicable ingest format plugin will choose the
  DataTypeAdapter and may even use additional indices than the one provided.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.Index...-">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.lang.String-org.locationtech.geowave.core.store.api.Index...-">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>url</code> - The URL for data to read and ingest into this data store</dd>
+<dd><code>inputPath</code> - The path for data to read and ingest into this data store</dd>
 <dd><code>index</code> - The indexing approach to use.</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="ingest-java.net.URL-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">
+<a name="ingest-java.lang.String-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>ingest</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;ingest(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+<pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;ingest(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath,
                        <a href="../../../../../../org/locationtech/geowave/core/store/api/IngestOptions.html" title="class in org.locationtech.geowave.core.store.api">IngestOptions</a>&lt;T&gt;&nbsp;options,
-                       <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)
-                throws <a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">DataStore</a></code></span></div>
-<div class="block">Ingest from URL with options. If this is a directory, this method will recursively search for
+                       <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>...&nbsp;index)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.lang.String-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">DataStore</a></code></span></div>
+<div class="block">Ingest from path with options. If this is a directory, this method will recursively search for
  valid files to ingest in the directory. The applicable ingest format plugin will choose the
  DataTypeAdapter and may even use additional indices than the one provided.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.net.URL-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html#ingest-java.lang.String-org.locationtech.geowave.core.store.api.IngestOptions-org.locationtech.geowave.core.store.api.Index...-">ingest</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>url</code> - The URL for data to read and ingest into this data store</dd>
+<dd><code>inputPath</code> - The path for data to read and ingest into this data store</dd>
 <dd><code>options</code> - a set of available options for ingesting from a URL</dd>
 <dd><code>index</code> - The configuration information for the primary index to use.</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in org.locationtech.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></code></dd>
 </dl>
 </li>
 </ul>

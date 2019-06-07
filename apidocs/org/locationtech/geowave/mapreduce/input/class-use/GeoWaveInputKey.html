@@ -111,26 +111,30 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.analytic.spark.kde">org.locationtech.geowave.analytic.spark.kde</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.mapreduce">org.locationtech.geowave.mapreduce</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.mapreduce.copy">org.locationtech.geowave.mapreduce.copy</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.mapreduce.dedupe">org.locationtech.geowave.mapreduce.dedupe</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.mapreduce.input">org.locationtech.geowave.mapreduce.input</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.mapreduce.splits">org.locationtech.geowave.mapreduce.splits</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.test.spark">org.locationtech.geowave.test.spark</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -151,7 +155,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected org.opengis.coverage.grid.GridCoverage</code></td>
+<td class="colFirst"><code>org.opengis.coverage.grid.GridCoverage</code></td>
 <td class="colLast"><span class="typeNameLabel">RasterTileResizeHelper.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#getMergedCoverage-org.locationtech.geowave.mapreduce.input.GeoWaveInputKey-java.lang.Iterable-">getMergedCoverage</a></span>(<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
@@ -455,6 +459,18 @@
 <td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRDD.html#getRawRDD--">getRawRDD</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRasterRDD.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRasterRDD.html#getRawRDD--">getRawRDD</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDDLoader.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRDDLoader.html#loadRawRasterRDD-org.apache.spark.SparkContext-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.lang.String-java.lang.Integer-java.lang.Integer-">loadRawRasterRDD</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;minSplits,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxSplits)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">GeoWaveRDDLoader.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRDDLoader.html#loadRawRDD-org.apache.spark.SparkContext-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.analytic.spark.RDDOptions-">loadRawRDD</a></span>(org.apache.spark.SparkContext&nbsp;sc,
           <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
@@ -471,6 +487,10 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRasterRDD.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRasterRDD.html#setRawRDD-org.apache.spark.api.java.JavaPairRDD-">setRawRDD</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;&nbsp;rawRDD)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRDD.html#setRawRDD-org.apache.spark.api.java.JavaPairRDD-">setRawRDD</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;rawRDD)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -482,7 +502,28 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRasterRDD.html#GeoWaveRasterRDD-org.apache.spark.api.java.JavaPairRDD-">GeoWaveRasterRDD</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.coverage.grid.GridCoverage&gt;&nbsp;rawRDD)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/GeoWaveRDD.html#GeoWaveRDD-org.apache.spark.api.java.JavaPairRDD-">GeoWaveRDD</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;rawRDD)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.analytic.spark.kde">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a> in <a href="../../../../../../org/locationtech/geowave/analytic/spark/kde/package-summary.html">org.locationtech.geowave.analytic.spark.kde</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../org/locationtech/geowave/analytic/spark/kde/package-summary.html">org.locationtech.geowave.analytic.spark.kde</a> with type arguments of type <a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;scala.Tuple2&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">KDERunner.GeoWaveCellMapper.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/spark/kde/KDERunner.GeoWaveCellMapper.html#call-scala.Tuple2-">call</a></span>(scala.Tuple2&lt;<a href="../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;t)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

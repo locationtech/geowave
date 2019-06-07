@@ -91,63 +91,71 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.raster.resize">org.locationtech.geowave.adapter.raster.resize</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector">org.locationtech.geowave.adapter.vector</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.delete">org.locationtech.geowave.adapter.vector.delete</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.index">org.locationtech.geowave.adapter.vector.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.ingest">org.locationtech.geowave.adapter.vector.ingest</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.plugin">org.locationtech.geowave.adapter.vector.plugin</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.render">org.locationtech.geowave.adapter.vector.render</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.stats">org.locationtech.geowave.adapter.vector.stats</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.analytic">org.locationtech.geowave.analytic</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.analytic.clustering">org.locationtech.geowave.analytic.clustering</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.analytic.mapreduce">org.locationtech.geowave.analytic.mapreduce</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.analytic.mapreduce.kde">org.locationtech.geowave.analytic.mapreduce.kde</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.analytic.mapreduce.kde.compare">org.locationtech.geowave.analytic.mapreduce.kde.compare</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.analytic.mapreduce.operations.options">org.locationtech.geowave.analytic.mapreduce.operations.options</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.analytic.partitioner">org.locationtech.geowave.analytic.partitioner</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.analytic.spark">org.locationtech.geowave.analytic.spark</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.analytic.spark.kde">org.locationtech.geowave.analytic.spark.kde</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -489,6 +497,23 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.raster.resize">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> used by <a href="../../../../../../org/locationtech/geowave/adapter/raster/resize/package-summary.html">org.locationtech.geowave.adapter.raster.resize</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Index.html#org.locationtech.geowave.adapter.raster.resize">Index</a>
+<div class="block">An index represents how to efficiently store and retrieve data.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="org.locationtech.geowave.adapter.vector">
 <!--   -->
 </a>
@@ -544,6 +569,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/DataTypeAdapter.html#org.locationtech.geowave.adapter.vector.index">DataTypeAdapter</a>
+<div class="block">This interface should be implemented by any custom data type that must be stored in the GeoWave
+ index.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Index.html#org.locationtech.geowave.adapter.vector.index">Index</a>
 <div class="block">An index represents how to efficiently store and retrieve data.</div>
 </td>
@@ -789,13 +820,36 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/DataTypeAdapter.html#org.locationtech.geowave.analytic.spark">DataTypeAdapter</a>
+<div class="block">This interface should be implemented by any custom data type that must be stored in the GeoWave
+ index.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Index.html#org.locationtech.geowave.analytic.spark">Index</a>
 <div class="block">An index represents how to efficiently store and retrieve data.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Query.html#org.locationtech.geowave.analytic.spark">Query</a>
 <div class="block">This represent all the constraints and options available in a geowave query.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.analytic.spark.kde">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> used by <a href="../../../../../../org/locationtech/geowave/analytic/spark/kde/package-summary.html">org.locationtech.geowave.analytic.spark.kde</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Index.html#org.locationtech.geowave.analytic.spark.kde">Index</a>
+<div class="block">An index represents how to efficiently store and retrieve data.</div>
 </td>
 </tr>
 </tbody>
@@ -1081,18 +1135,9 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/DataTypeAdapter.html#org.locationtech.geowave.core.ingest.local">DataTypeAdapter</a>
-<div class="block">This interface should be implemented by any custom data type that must be stored in the GeoWave
- index.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Index.html#org.locationtech.geowave.core.ingest.local">Index</a>
 <div class="block">An index represents how to efficiently store and retrieve data.</div>
 </td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Writer.html#org.locationtech.geowave.core.ingest.local">Writer</a>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1530,31 +1575,39 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/DataStore.html#org.locationtech.geowave.core.store.ingest">DataStore</a>
+<div class="block">A DataStore can both ingest and query data based on persisted indices and data type adapters.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/DataTypeAdapter.html#org.locationtech.geowave.core.store.ingest">DataTypeAdapter</a>
 <div class="block">This interface should be implemented by any custom data type that must be stored in the GeoWave
  index.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Index.html#org.locationtech.geowave.core.store.ingest">Index</a>
 <div class="block">An index represents how to efficiently store and retrieve data.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/IngestOptions.html#org.locationtech.geowave.core.store.ingest">IngestOptions</a>
 <div class="block">When ingesting into a DataStore from a URL, this is a set of available options that can be
  provided.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/IngestOptions.Builder.html#org.locationtech.geowave.core.store.ingest">IngestOptions.Builder</a>
 <div class="block">A Builder to create IngestOptions</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/IngestOptions.IngestCallback.html#org.locationtech.geowave.core.store.ingest">IngestOptions.IngestCallback</a>
 <div class="block">An interface to get callbacks of ingest</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Writer.html#org.locationtech.geowave.core.store.ingest">Writer</a>&nbsp;</td>
 </tr>
 </tbody>
 </table>

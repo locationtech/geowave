@@ -650,6 +650,76 @@
 </ul>
 </li>
 <li class="blockList">
+<h2 title="Package">Package&nbsp;org.locationtech.geowave.adapter.raster.resize</h2>
+<ul class="blockList">
+<li class="blockList"><a name="org.locationtech.geowave.adapter.raster.resize.RasterTileResizeHelper">
+<!--   -->
+</a>
+<h3>Class <a href="org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html" title="class in org.locationtech.geowave.adapter.raster.resize">org.locationtech.geowave.adapter.raster.resize.RasterTileResizeHelper</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialization Methods</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>readObject</h4>
+<pre>private&nbsp;void&nbsp;readObject(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io">ObjectInputStream</a>&nbsp;aInputStream)
+                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a>,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+<li class="blockListLast">
+<h4>writeObject</h4>
+<pre>private&nbsp;void&nbsp;writeObject(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io">ObjectOutputStream</a>&nbsp;aOutputStream)
+                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>newAdapter</h4>
+<pre><a href="org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a> newAdapter</pre>
+</li>
+<li class="blockList">
+<h4>oldAdapterId</h4>
+<pre>short oldAdapterId</pre>
+</li>
+<li class="blockList">
+<h4>newAdapterId</h4>
+<pre>short newAdapterId</pre>
+</li>
+<li class="blockList">
+<h4>index</h4>
+<pre><a href="org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a> index</pre>
+</li>
+<li class="blockList">
+<h4>indexNames</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[] indexNames</pre>
+</li>
+<li class="blockListLast">
+<h4>serializer</h4>
+<pre><a href="org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in org.locationtech.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="type parameter in HadoopWritableSerializer">T</a>,<a href="org/locationtech/geowave/mapreduce/HadoopWritableSerializer.html" title="type parameter in HadoopWritableSerializer">W</a> extends org.apache.hadoop.io.Writable&gt; serializer</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
 <h2 title="Package">Package&nbsp;org.locationtech.geowave.adapter.vector</h2>
 <ul class="blockList">
 <li class="blockList"><a name="org.locationtech.geowave.adapter.vector.FeatureWritable">
@@ -1595,10 +1665,34 @@
 </li>
 </ul>
 </li>
+<li class="blockList"><a name="org.locationtech.geowave.analytic.spark.GeoWaveRasterRDD">
+<!--   -->
+</a>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/GeoWaveRasterRDD.html" title="class in org.locationtech.geowave.analytic.spark">org.locationtech.geowave.analytic.spark.GeoWaveRasterRDD</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>rawRDD</h4>
+<pre>org.apache.spark.api.java.JavaPairRDD&lt;K,V&gt; rawRDD</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="org.locationtech.geowave.analytic.spark.GeoWaveRDD">
 <!--   -->
 </a>
 <h3>Class <a href="org/locationtech/geowave/analytic/spark/GeoWaveRDD.html" title="class in org.locationtech.geowave.analytic.spark">org.locationtech.geowave.analytic.spark.GeoWaveRDD</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
 <ul class="blockList">
 <li class="blockList">
 <h3>Serialized Fields</h3>
@@ -1619,6 +1713,63 @@
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
 </dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;org.locationtech.geowave.analytic.spark.kde</h2>
+<ul class="blockList">
+<li class="blockList"><a name="org.locationtech.geowave.analytic.spark.kde.KDERunner.GeoWaveCellMapper">
+<!--   -->
+</a>
+<h3>Class <a href="org/locationtech/geowave/analytic/spark/kde/KDERunner.GeoWaveCellMapper.html" title="class in org.locationtech.geowave.analytic.spark.kde">org.locationtech.geowave.analytic.spark.kde.KDERunner.GeoWaveCellMapper</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>numXPosts</h4>
+<pre>int numXPosts</pre>
+</li>
+<li class="blockList">
+<h4>numYPosts</h4>
+<pre>int numYPosts</pre>
+</li>
+<li class="blockList">
+<h4>minX</h4>
+<pre>double minX</pre>
+</li>
+<li class="blockList">
+<h4>maxX</h4>
+<pre>double maxX</pre>
+</li>
+<li class="blockList">
+<h4>minY</h4>
+<pre>double minY</pre>
+</li>
+<li class="blockList">
+<h4>maxY</h4>
+<pre>double maxY</pre>
+</li>
+<li class="blockList">
+<h4>inputCrsCode</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> inputCrsCode</pre>
+</li>
+<li class="blockList">
+<h4>outputCrsCode</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> outputCrsCode</pre>
+</li>
+<li class="blockListLast">
+<h4>transform</h4>
+<pre>org.opengis.referencing.operation.MathTransform transform</pre>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -2161,31 +2312,6 @@
 </ul>
 </li>
 <li class="blockList">
-<h2 title="Package">Package&nbsp;org.locationtech.geowave.core.ingest.local</h2>
-<ul class="blockList">
-<li class="blockList"><a name="org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions">
-<!--   -->
-</a>
-<h3>Class <a href="org/locationtech/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.local">org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>extensions</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[] extensions</pre>
-</li>
-<li class="blockListLast">
-<h4>formats</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> formats</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList">
 <h2 title="Package">Package&nbsp;org.locationtech.geowave.core.ingest.spark</h2>
 <ul class="blockList">
 <li class="blockList"><a name="org.locationtech.geowave.core.ingest.spark.SparkIngestDriver">
@@ -2300,6 +2426,31 @@
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
 </dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;org.locationtech.geowave.core.store.ingest</h2>
+<ul class="blockList">
+<li class="blockList"><a name="org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions">
+<!--   -->
+</a>
+<h3>Class <a href="org/locationtech/geowave/core/store/ingest/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.ingest">org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>extensions</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[] extensions</pre>
+</li>
+<li class="blockListLast">
+<h4>formats</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> formats</pre>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -5062,6 +5213,86 @@
 <li class="blockList">
 <h4>cqlFilter_</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> cqlFilter_</pre>
+</li>
+<li class="blockList">
+<h4>outputIndex_</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> outputIndex_</pre>
+</li>
+<li class="blockListLast">
+<h4>memoizedIsInitialized</h4>
+<pre>byte memoizedIsInitialized</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos">
+<!--   -->
+</a>
+<h3>Class <a href="org/locationtech/geowave/service/grpc/protobuf/KDESparkCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos</a> extends com.google.protobuf.GeneratedMessageV3 implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>bitField0_</h4>
+<pre>int bitField0_</pre>
+</li>
+<li class="blockList">
+<h4>parameters_</h4>
+<pre>com.google.protobuf.LazyStringList parameters_</pre>
+</li>
+<li class="blockList">
+<h4>appName_</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> appName_</pre>
+</li>
+<li class="blockList">
+<h4>tileSize_</h4>
+<pre>int tileSize_</pre>
+</li>
+<li class="blockList">
+<h4>indexName_</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> indexName_</pre>
+</li>
+<li class="blockList">
+<h4>minLevel_</h4>
+<pre>int minLevel_</pre>
+</li>
+<li class="blockList">
+<h4>maxLevel_</h4>
+<pre>int maxLevel_</pre>
+</li>
+<li class="blockList">
+<h4>host_</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> host_</pre>
+</li>
+<li class="blockList">
+<h4>master_</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> master_</pre>
+</li>
+<li class="blockList">
+<h4>cqlFilter_</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> cqlFilter_</pre>
+</li>
+<li class="blockList">
+<h4>typeName_</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> typeName_</pre>
+</li>
+<li class="blockList">
+<h4>minSplits_</h4>
+<pre>int minSplits_</pre>
+</li>
+<li class="blockList">
+<h4>maxSplits_</h4>
+<pre>int maxSplits_</pre>
+</li>
+<li class="blockList">
+<h4>coverageName_</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> coverageName_</pre>
 </li>
 <li class="blockList">
 <h4>outputIndex_</h4>

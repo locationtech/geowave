@@ -98,6 +98,14 @@
 <td class="colFirst"><a href="#org.locationtech.geowave.adapter.raster.adapter.merge.nodata">org.locationtech.geowave.adapter.raster.adapter.merge.nodata</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.raster.resize">org.locationtech.geowave.adapter.raster.resize</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.analytic.spark">org.locationtech.geowave.analytic.spark</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -212,6 +220,47 @@
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/merge/nodata/NoDataMetadata.html" title="interface in org.locationtech.geowave.adapter.raster.adapter.merge.nodata">NoDataMetadata</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NoDataMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/merge/nodata/NoDataMergeStrategy.html#getMetadata-org.opengis.coverage.grid.GridCoverage-org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter-">getMetadata</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;tileGridCoverage,
            <a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a>&nbsp;dataAdapter)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.raster.resize">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a> in <a href="../../../../../../../org/locationtech/geowave/adapter/raster/resize/package-summary.html">org.locationtech.geowave.adapter.raster.resize</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/adapter/raster/resize/package-summary.html">org.locationtech.geowave.adapter.raster.resize</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/resize/RasterTileResizeHelper.html#RasterTileResizeHelper-short-short-org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter-org.locationtech.geowave.core.store.api.Index-">RasterTileResizeHelper</a></span>(short&nbsp;oldAdapterId,
+                      short&nbsp;newAdapterId,
+                      <a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a>&nbsp;newAdapter,
+                      <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.analytic.spark">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a> in <a href="../../../../../../../org/locationtech/geowave/analytic/spark/package-summary.html">org.locationtech.geowave.analytic.spark</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/analytic/spark/package-summary.html">org.locationtech.geowave.analytic.spark</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><span class="typeNameLabel">RDDUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/spark/RDDUtils.html#writeRasterToGeoWave-org.apache.spark.SparkContext-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter-org.apache.spark.api.java.JavaRDD-">writeRasterToGeoWave</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
+                    <a href="../../../../../../../org/locationtech/geowave/adapter/raster/adapter/RasterDataAdapter.html" title="class in org.locationtech.geowave.adapter.raster.adapter">RasterDataAdapter</a>&nbsp;adapter,
+                    org.apache.spark.api.java.JavaRDD&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;inputRDD)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

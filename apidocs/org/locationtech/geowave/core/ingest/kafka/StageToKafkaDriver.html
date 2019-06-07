@@ -75,7 +75,7 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.ingest.AbstractLocalFileDriver">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageKafkaData.html" title="class in org.locationtech.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.store.ingest">org.locationtech.geowave.core.store.ingest.AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageKafkaData.html" title="class in org.locationtech.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.core.ingest.kafka.StageToKafkaDriver&lt;T&gt;</li>
@@ -115,7 +115,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">StageToKafkaDriver&lt;T extends org.apache.avro.specific.SpecificRecordBase&gt;</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageKafkaData.html" title="class in org.locationtech.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</pre>
+extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.store.ingest">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageKafkaData.html" title="class in org.locationtech.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</pre>
 <div class="block">This class actually executes the staging of data to a Kafka topic based on the available type
  plugin providers that are discovered through SPI.</div>
 </li>
@@ -131,11 +131,11 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 </a>
 <h3>Field Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.ingest.AbstractLocalFileDriver">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.ingest.local.<a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html#localInput">localInput</a></code></li>
+<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.store.ingest">AbstractLocalFileDriver</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#configProperties">configProperties</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#localInput">localInput</a></code></li>
 </ul>
 </li>
 </ul>
@@ -151,9 +151,9 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageToKafkaDriver.html#StageToKafkaDriver-org.locationtech.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions-java.util.Map-org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions-">StageToKafkaDriver</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaProducerCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.kafka">KafkaProducerCommandLineOptions</a>&nbsp;kafkaOptions,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageToKafkaDriver.html#StageToKafkaDriver-org.locationtech.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions-java.util.Map-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-">StageToKafkaDriver</a></span>(<a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaProducerCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.kafka">KafkaProducerCommandLineOptions</a>&nbsp;kafkaOptions,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
-                  <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;localOptions)</code>&nbsp;</td>
+                  <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.ingest">LocalInputCommandLineOptions</a>&nbsp;localOptions)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -184,11 +184,11 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.ingest.AbstractLocalFileDriver">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.ingest.local.<a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html#processInput-java.lang.String-java.io.File-java.util.Map-R-">processInput</a></code></li>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.store.ingest">AbstractLocalFileDriver</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#checkIndexesAgainstProvider-java.lang.String-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-java.util.List-">checkIndexesAgainstProvider</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#getExtensions--">getExtensions</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#isCompatible-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions-">isCompatible</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#processInput-java.lang.String-java.io.File-java.util.Map-R-">processInput</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -211,7 +211,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="StageToKafkaDriver-org.locationtech.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions-java.util.Map-org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions-">
+<a name="StageToKafkaDriver-org.locationtech.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions-java.util.Map-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -219,7 +219,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <h4>StageToKafkaDriver</h4>
 <pre>public&nbsp;StageToKafkaDriver(<a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/KafkaProducerCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.kafka">KafkaProducerCommandLineOptions</a>&nbsp;kafkaOptions,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;&gt;&nbsp;ingestPlugins,
-                          <a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;localOptions)</pre>
+                          <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.ingest">LocalInputCommandLineOptions</a>&nbsp;localOptions)</pre>
 </li>
 </ul>
 </li>
@@ -242,7 +242,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
                            <a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageKafkaData.html" title="class in org.locationtech.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&nbsp;runData)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html#processFile-java.net.URL-java.lang.String-P-R-">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageKafkaData.html" title="class in org.locationtech.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#processFile-java.net.URL-java.lang.String-P-R-">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.store.ingest">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/ingest/avro/GeoWaveAvroFormatPlugin.html" title="interface in org.locationtech.geowave.core.ingest.avro">GeoWaveAvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/StageKafkaData.html" title="class in org.locationtech.geowave.core.ingest.kafka">StageKafkaData</a>&lt;?&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -310,7 +310,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/ingest/local/Ab
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.ingest.AbstractLocalFileDriver">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

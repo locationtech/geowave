@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -221,6 +221,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                int&nbsp;numYPosts)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#incrementPtFast-double-double-double-double-double-double-org.locationtech.geowave.analytic.mapreduce.kde.CellCounter-int-int-">incrementPtFast</a></span>(double&nbsp;x,
+               double&nbsp;y,
+               double&nbsp;minX,
+               double&nbsp;maxX,
+               double&nbsp;minY,
+               double&nbsp;maxY,
+               <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/CellCounter.html" title="interface in org.locationtech.geowave.analytic.mapreduce.kde">CellCounter</a>&nbsp;results,
+               int&nbsp;numXPosts,
+               int&nbsp;numYPosts)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>protected static double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#normalizeSumToOne-double:A-">normalizeSumToOne</a></span>(double[]&nbsp;kernel)</code>&nbsp;</td>
 </tr>
@@ -300,6 +312,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>incrementPtFast</h4>
 <pre>public static&nbsp;void&nbsp;incrementPtFast(double&nbsp;lat,
                                    double&nbsp;lon,
+                                   <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/CellCounter.html" title="interface in org.locationtech.geowave.analytic.mapreduce.kde">CellCounter</a>&nbsp;results,
+                                   int&nbsp;numXPosts,
+                                   int&nbsp;numYPosts)</pre>
+</li>
+</ul>
+<a name="incrementPtFast-double-double-double-double-double-double-org.locationtech.geowave.analytic.mapreduce.kde.CellCounter-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>incrementPtFast</h4>
+<pre>public static&nbsp;void&nbsp;incrementPtFast(double&nbsp;x,
+                                   double&nbsp;y,
+                                   double&nbsp;minX,
+                                   double&nbsp;maxX,
+                                   double&nbsp;minY,
+                                   double&nbsp;maxY,
                                    <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/CellCounter.html" title="interface in org.locationtech.geowave.analytic.mapreduce.kde">CellCounter</a>&nbsp;results,
                                    int&nbsp;numXPosts,
                                    int&nbsp;numYPosts)</pre>
