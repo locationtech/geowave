@@ -53,7 +53,7 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
     put(dataId, DataIndexUtils.serializeDataIndexValue(value, visibilityEnabled));
   }
 
-  public synchronized CloseableIterator<GeoWaveRow> dataIndexIterator(final byte[][] dataIds) {
+  public CloseableIterator<GeoWaveRow> dataIndexIterator(final byte[][] dataIds) {
     final RocksDB readDb = getReadDb();
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
@@ -74,7 +74,7 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
     return new CloseableIterator.Empty<>();
   }
 
-  public synchronized CloseableIterator<GeoWaveRow> dataIndexIterator(
+  public CloseableIterator<GeoWaveRow> dataIndexIterator(
       final byte[] startDataId,
       final byte[] endDataId) {
     final RocksDB readDb = getReadDb();

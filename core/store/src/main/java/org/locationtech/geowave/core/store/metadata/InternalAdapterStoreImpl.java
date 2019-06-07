@@ -104,7 +104,7 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
         return null;
       }
       typeName = StringUtils.stringFromBinary(it.next().getValue());
-      cache.put(typeName, adapterId);
+      cache.putIfAbsent(typeName, adapterId);
       return typeName;
     }
   }
@@ -142,7 +142,7 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
         return null;
       }
       final short adapterId = ByteArrayUtils.byteArrayToShort(it.next().getValue());
-      cache.put(typeName, adapterId);
+      cache.putIfAbsent(typeName, adapterId);
       return adapterId;
     }
   }
