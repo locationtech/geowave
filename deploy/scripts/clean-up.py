@@ -39,7 +39,7 @@ class CleanUp():
 
         # Delete everything older than 3 days
         self.date_threshhold = datetime.now() - timedelta(days=3)
-        self.rpm_bucket = os.environ['GEOWAVE_BUCKET']+'-rpms'
+        self.rpm_bucket = os.environ['rpm_bucket']
 
     def find_build_type(self):
         build_type_file = os.path.join(self.workspace_path, 'deploy', 'target', 'build-type.txt')
