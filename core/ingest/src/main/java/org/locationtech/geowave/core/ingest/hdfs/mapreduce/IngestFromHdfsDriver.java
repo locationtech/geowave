@@ -19,11 +19,11 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.ToolRunner;
-import org.locationtech.geowave.core.ingest.IngestUtils;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.core.store.ingest.DataAdapterProvider;
+import org.locationtech.geowave.core.store.ingest.IngestUtils;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,13 +47,13 @@ public class IngestFromHdfsDriver {
   private static ExecutorService singletonExecutor;
 
   public IngestFromHdfsDriver(
-      DataStorePluginOptions storeOptions,
-      List<IndexPluginOptions> indexOptions,
-      VisibilityOptions ingestOptions,
-      MapReduceCommandLineOptions mapReduceOptions,
-      Map<String, IngestFromHdfsPlugin<?, ?>> ingestPlugins,
-      String hdfsHostPort,
-      String basePath) {
+      final DataStorePluginOptions storeOptions,
+      final List<IndexPluginOptions> indexOptions,
+      final VisibilityOptions ingestOptions,
+      final MapReduceCommandLineOptions mapReduceOptions,
+      final Map<String, IngestFromHdfsPlugin<?, ?>> ingestPlugins,
+      final String hdfsHostPort,
+      final String basePath) {
     this.storeOptions = storeOptions;
     this.indexOptions = indexOptions;
     this.ingestOptions = ingestOptions;
@@ -71,10 +71,10 @@ public class IngestFromHdfsDriver {
   }
 
   private boolean checkIndexesAgainstProvider(
-      String providerName,
-      DataAdapterProvider<?> adapterProvider) {
+      final String providerName,
+      final DataAdapterProvider<?> adapterProvider) {
     boolean valid = true;
-    for (IndexPluginOptions option : indexOptions) {
+    for (final IndexPluginOptions option : indexOptions) {
       if (!IngestUtils.isCompatible(adapterProvider, option)) {
         // HP Fortify "Log Forging" false positive
         // What Fortify considers "user input" comes only
@@ -106,7 +106,7 @@ public class IngestFromHdfsDriver {
           LOGGER.error("HDFS base directory {} does not exist", hdfsBaseDirectory);
           return false;
         }
-        for (Entry<String, IngestFromHdfsPlugin<?, ?>> pluginProvider : ingestPlugins.entrySet()) {
+        for (final Entry<String, IngestFromHdfsPlugin<?, ?>> pluginProvider : ingestPlugins.entrySet()) {
           // if an appropriate sequence file does not exist, continue
 
           // TODO: we should probably clean up the type name to make
@@ -122,7 +122,7 @@ public class IngestFromHdfsDriver {
             continue;
           }
 
-          IngestFromHdfsPlugin<?, ?> ingestFromHdfsPlugin = pluginProvider.getValue();
+          final IngestFromHdfsPlugin<?, ?> ingestFromHdfsPlugin = pluginProvider.getValue();
           IngestWithReducer ingestWithReducer = null;
           IngestWithMapper ingestWithMapper = null;
 

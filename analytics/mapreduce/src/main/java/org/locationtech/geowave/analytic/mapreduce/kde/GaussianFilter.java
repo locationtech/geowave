@@ -64,7 +64,7 @@ public class GaussianFilter {
       final CellCounter results,
       final int numXPosts,
       final int numYPosts,
-      double contributionScaleFactor,
+      final double contributionScaleFactor,
       final ValueRange[] valueRangePerDimension) {
     incrementBBox(
         lon,
@@ -115,6 +115,45 @@ public class GaussianFilter {
     }
   }
 
+  public static void incrementPtFast(
+      final double x,
+      final double y,
+      final double minX,
+      final double maxX,
+      final double minY,
+      final double maxY,
+      final CellCounter results,
+      final int numXPosts,
+      final int numYPosts) {
+    final int numDimensions = 2;
+    final double[] binLocationPerDimension = new double[numDimensions];
+    final int[] binsPerDimension = new int[] {numXPosts, numYPosts};
+
+    final double spanX = (maxX - minX);
+    final double spanY = (maxY - minY);
+    binLocationPerDimension[0] = (((x - minX) / spanX) * binsPerDimension[0]);
+    binLocationPerDimension[1] = (((y - minY) / spanY) * binsPerDimension[1]);
+    final double[] gaussianKernel = getGaussianKernel(1, 3);
+    final int maxOffset = gaussianKernel.length / 2;
+    final List<int[]> offsets =
+        getOffsets(numDimensions, 0, new int[numDimensions], gaussianKernel, maxOffset);
+    for (final int[] offset : offsets) {
+      final double blur = getBlurFromOffset(offset, gaussianKernel, maxOffset);
+      final List<BinPositionAndContribution> positionsAndContributions =
+          getPositionsAndContributionPt(
+              numDimensions,
+              0,
+              binLocationPerDimension,
+              blur,
+              new int[numDimensions],
+              binsPerDimension,
+              offset);
+      for (final BinPositionAndContribution positionAndContribution : positionsAndContributions) {
+        results.increment(positionAndContribution.position, positionAndContribution.contribution);
+      }
+    }
+  }
+
   public static void incrementBBox(
       final double minX,
       final double maxX,
@@ -123,7 +162,7 @@ public class GaussianFilter {
       final CellCounter results,
       final int numXPosts,
       final int numYPosts,
-      double contributionScaleFactor,
+      final double contributionScaleFactor,
       final ValueRange[] valueRangePerDimension) {
     final int numDimensions = 2;
     final double[] minBinLocationPerDimension = new double[numDimensions];
@@ -214,7 +253,7 @@ public class GaussianFilter {
       final int[] currentOffsetsPerDimension,
       final double[] gaussianKernel,
       final int maxOffset) {
-    final List<int[]> offsets = new ArrayList<int[]>();
+    final List<int[]> offsets = new ArrayList<>();
     if (currentDimension == numDimensions) {
       offsets.add(currentOffsetsPerDimension.clone());
     } else {
@@ -252,7 +291,7 @@ public class GaussianFilter {
       final int[] finalIndexPerDimension,
       final int[] binsPerDimension,
       final int[] offset) {
-    final List<BinPositionAndContribution> positions = new ArrayList<BinPositionAndContribution>();
+    final List<BinPositionAndContribution> positions = new ArrayList<>();
     if (currentDimension == numDimensions) {
       positions.add(
           new BinPositionAndContribution(
@@ -287,7 +326,7 @@ public class GaussianFilter {
       final int[] finalIndexPerDimension,
       final int[] binsPerDimension,
       final int[] offset) {
-    final List<BinPositionAndContribution> positions = new ArrayList<BinPositionAndContribution>();
+    final List<BinPositionAndContribution> positions = new ArrayList<>();
     if (currentDimension == numDimensions) {
       positions.add(
           new BinPositionAndContribution(

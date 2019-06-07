@@ -18,8 +18,8 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.ingest.IngestUtils;
-import org.locationtech.geowave.core.ingest.IngestUtils.URLTYPE;
+import org.locationtech.geowave.core.ingest.URLIngestUtils;
+import org.locationtech.geowave.core.ingest.URLIngestUtils.URLTYPE;
 import org.locationtech.geowave.core.ingest.spark.SparkIngestDriver;
 
 public class DefaultGeoWaveAWSCredentialsProviderTest {
@@ -33,14 +33,14 @@ public class DefaultGeoWaveAWSCredentialsProviderTest {
         new S3Mock.Builder().withPort(8001).withFileBackend(
             temp.getAbsolutePath()).withInMemoryBackend().build();
     mockS3.start();
-    IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
+    URLIngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
     SparkIngestDriver sparkDriver = new SparkIngestDriver();
     S3FileSystem s3 = sparkDriver.initializeS3FS("s3://s3.amazonaws.com");
     s3.getClient().setEndpoint("http://127.0.0.1:8001");
     s3.getClient().createBucket("testbucket");
     s3.getClient().putObject("testbucket", "test", "content");
     try (Stream<Path> s =
-        Files.list(IngestUtils.setupS3FileSystem("s3://testbucket/", "s3://s3.amazonaws.com"))) {
+        Files.list(URLIngestUtils.setupS3FileSystem("s3://testbucket/", "s3://s3.amazonaws.com"))) {
       Assert.assertEquals(1, s.count());
     }
     mockS3.shutdown();

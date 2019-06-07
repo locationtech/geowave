@@ -8,10 +8,8 @@
  */
 package org.locationtech.geowave.core.store.api;
 
-import java.net.URL;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 
 /**
  * A DataStore can both ingest and query data based on persisted indices and data type adapters.
@@ -49,27 +47,26 @@ import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToA
 public interface DataStore {
 
   /**
-   * Ingest from URL. If this is a directory, this method will recursively search for valid files to
-   * ingest in the directory. This will iterate through registered IngestFormatPlugins to find one
-   * that works for a given file. The applicable ingest format plugin will choose the
+   * Ingest from path. If this is a directory, this method will recursively search for valid files
+   * to ingest in the directory. This will iterate through registered IngestFormatPlugins to find
+   * one that works for a given file. The applicable ingest format plugin will choose the
    * DataTypeAdapter and may even use additional indices than the one provided.
    *
-   * @param url The URL for data to read and ingest into this data store
+   * @param inputPath The path for data to read and ingest into this data store
    * @param index The indexing approach to use.
    */
-  <T> void ingest(URL url, Index... index) throws MismatchedIndexToAdapterMapping;
+  <T> void ingest(String inputPath, Index... index);
 
   /**
-   * Ingest from URL with options. If this is a directory, this method will recursively search for
+   * Ingest from path with options. If this is a directory, this method will recursively search for
    * valid files to ingest in the directory. The applicable ingest format plugin will choose the
    * DataTypeAdapter and may even use additional indices than the one provided.
    *
-   * @param url The URL for data to read and ingest into this data store
+   * @param inputPath The path for data to read and ingest into this data store
    * @param options a set of available options for ingesting from a URL
    * @param index The configuration information for the primary index to use.
    */
-  <T> void ingest(URL url, IngestOptions<T> options, Index... index)
-      throws MismatchedIndexToAdapterMapping;
+  <T> void ingest(String inputPath, IngestOptions<T> options, Index... index);
 
   /**
    * Returns all data in this data store that matches the query parameter. All data that matches the

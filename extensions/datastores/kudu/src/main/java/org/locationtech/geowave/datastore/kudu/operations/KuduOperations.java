@@ -102,7 +102,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
 
   @Override
   public void deleteAll() throws Exception {
-    for (final String table : client.getTablesList().getTablesList()) {
+    for (final String table : client.getTablesList(gwNamespace).getTablesList()) {
       client.deleteTable(table);
     }
   }

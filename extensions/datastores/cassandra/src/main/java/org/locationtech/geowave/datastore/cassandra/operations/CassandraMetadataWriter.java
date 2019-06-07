@@ -44,6 +44,7 @@ public class CassandraMetadataWriter implements MetadataWriter {
         insert.value(VISIBILITY_KEY, ByteBuffer.wrap(metadata.getVisibility()));
       }
     }
+
     insert.value(VALUE_KEY, ByteBuffer.wrap(metadata.getValue()));
     operations.getSession().execute(insert);
   }

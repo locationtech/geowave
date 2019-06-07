@@ -6,33 +6,39 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.adapter.raster.operations;
+package org.locationtech.geowave.analytic.spark.resize;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+import org.locationtech.geowave.adapter.raster.operations.RasterSection;
 import org.locationtech.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions;
-import org.locationtech.geowave.adapter.raster.resize.RasterTileResizeJobRunner;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
-@GeowaveOperation(name = "resize", parentOperation = RasterSection.class)
-@Parameters(commandDescription = "Resize Raster Tiles")
-public class ResizeCommand extends DefaultOperation implements Command {
+@GeowaveOperation(name = "resizespark", parentOperation = RasterSection.class)
+@Parameters(commandDescription = "Resize Raster Tiles in MapReduce")
+public class ResizeSparkCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<input store name> <output store name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
+
+  @Parameter(names = {"-n", "--name"}, description = "The spark application name")
+  private String appName = "RasterResizeRunner";
+
+  @Parameter(names = {"-ho", "--host"}, description = "The spark driver host")
+  private String host = "localhost";
+
+  @Parameter(names = {"-m", "--master"}, description = "The spark master designation")
+  private String master = "yarn";
 
   @ParametersDelegate
   private RasterTileResizeCommandLineOptions options = new RasterTileResizeCommandLineOptions();
@@ -43,10 +49,10 @@ public class ResizeCommand extends DefaultOperation implements Command {
 
   @Override
   public void execute(final OperationParams params) throws Exception {
-    createRunner(params).runJob();
+    createRunner(params).run();
   }
 
-  public RasterTileResizeJobRunner createRunner(final OperationParams params) {
+  public RasterTileResizeSparkRunner createRunner(final OperationParams params) {
     // Ensure we have all the required arguments
     if (parameters.size() != 2) {
       throw new ParameterException("Requires arguments: <input store name> <output store name>");
@@ -72,15 +78,12 @@ public class ResizeCommand extends DefaultOperation implements Command {
     }
     outputStoreOptions = outputStoreLoader.getDataStorePlugin();
 
-    if (options.getHdfsHostPort() == null) {
 
-      Properties configProperties = ConfigOptions.loadProperties(configFile);
-      String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
-      options.setHdfsHostPort(hdfsFSUrl);
-    }
-
-    RasterTileResizeJobRunner runner =
-        new RasterTileResizeJobRunner(inputStoreOptions, outputStoreOptions, options);
+    final RasterTileResizeSparkRunner runner =
+        new RasterTileResizeSparkRunner(inputStoreOptions, outputStoreOptions, options);
+    runner.setHost(host);
+    runner.setAppName(appName);
+    runner.setMaster(master);
     return runner;
   }
 
@@ -89,7 +92,7 @@ public class ResizeCommand extends DefaultOperation implements Command {
   }
 
   public void setParameters(final String inputStore, final String outputStore) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(inputStore);
     parameters.add(outputStore);
   }
@@ -108,5 +111,17 @@ public class ResizeCommand extends DefaultOperation implements Command {
 
   public DataStorePluginOptions getOutputStoreOptions() {
     return outputStoreOptions;
+  }
+
+  public void setAppName(String appName) {
+    this.appName = appName;
+  }
+
+  public void setHost(String host) {
+    this.host = host;
+  }
+
+  public void setMaster(String master) {
+    this.master = master;
   }
 }

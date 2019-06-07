@@ -10,7 +10,6 @@ package org.locationtech.geowave.core.store.base;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,7 +36,6 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
@@ -65,10 +63,12 @@ import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingTransform;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.writer.IndependentAdapterIndexWriter;
 import org.locationtech.geowave.core.store.index.writer.IndexCompositeWriter;
+import org.locationtech.geowave.core.store.ingest.BaseDataStoreIngestDriver;
 import org.locationtech.geowave.core.store.memory.MemoryPersistentAdapterStore;
 import org.locationtech.geowave.core.store.operations.DataIndexReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
@@ -961,77 +961,6 @@ public class BaseDataStore implements DataStore {
     }
   }
 
-  // public Statistics<?>[] getStatistics(
-  // @Nullable String typeName,
-  // String... authorizations ) {
-  // if (typeName == null) {
-  // try (CloseableIterator<InternalDataStatistics<?, ?,?>> it =
-  // (CloseableIterator) statisticsStore
-  // .getAllDataStatistics(
-  // authorizations)) {
-  // return Iterators
-  // .toArray(
-  // Iterators.transform(it,s -> new StatisticsImpl<>(result, statsType,
-  // statsId, typeName) ),
-  // InternalDataStatistics.class);
-  // }
-  // catch (final IOException e) {
-  // LOGGER
-  // .warn(
-  // "Unable to close statistics iterator",
-  // e);
-  // return new InternalDataStatistics[0];
-  // }
-  // }
-  // final Short internalAdapterId = internalAdapterStore
-  // .getAdapterId(
-  // typeName);
-  // if (internalAdapterId == null) {
-  // LOGGER
-  // .warn(
-  // "Unable to find adapter '" + typeName + "' for stats");
-  // return new InternalDataStatistics[0];
-  // }
-  // try (CloseableIterator<InternalDataStatistics<?,?,?>> it =
-  // (CloseableIterator) statisticsStore
-  // .getDataStatistics(
-  // internalAdapterId,
-  // authorizations)) {
-  // return Iterators
-  // .toArray(
-  // it,
-  // InternalDataStatistics.class);
-  // }
-  // catch (final IOException e) {
-  // LOGGER
-  // .warn(
-  // "Unable to close statistics iterator per adapter",
-  // e);
-  // return new InternalDataStatistics[0];
-  // }
-  // }
-  //
-  // public <R> R getStatisticsResult(
-  // String typeName,
-  // StatisticsType<R,?> statisticsType,
-  // String... authorizations ) {
-  //
-  // final Short internalAdapterId = internalAdapterStore
-  // .getAdapterId(
-  // typeName);
-  // if (internalAdapterId == null) {
-  // LOGGER
-  // .warn(
-  // "Unable to find adapter '" + typeName + "' for statistics");
-  // return null;
-  // }
-  // return (R) statisticsStore
-  // .getDataStatistics(
-  // internalAdapterId,
-  // statisticsType,
-  // authorizations);
-  // }
-
   @Override
   public Index[] getIndices() {
     return getIndices(null);
@@ -1180,16 +1109,26 @@ public class BaseDataStore implements DataStore {
   }
 
   @Override
-  public <T> void ingest(final URL url, final Index... index)
-      throws MismatchedIndexToAdapterMapping {
-    ingest(url, null, index);
+  public <T> void ingest(final String inputPath, final Index... index) {
+    ingest(inputPath, null, index);
   }
 
   @Override
-  public <T> void ingest(final URL url, final IngestOptions<T> options, final Index... index)
-      throws MismatchedIndexToAdapterMapping {
-    // TODO Issue #1442 likely need to move logic from LocalFileIngestDriver
-    // into core-store
+  public <T> void ingest(
+      final String inputPath,
+      final IngestOptions<T> options,
+      final Index... index) {
+    // Driver
+    final BaseDataStoreIngestDriver driver =
+        new BaseDataStoreIngestDriver(
+            this,
+            options == null ? IngestOptions.newBuilder().build() : options,
+            index);
+
+    // Execute
+    if (!driver.runOperation(inputPath, null)) {
+      throw new RuntimeException("Ingest failed to execute");
+    }
   }
 
   @Override
@@ -1346,15 +1285,20 @@ public class BaseDataStore implements DataStore {
           final InternalDataAdapter<?> adapter = it.next();
           for (final Index index : indexMappingStore.getIndicesForAdapter(
               adapter.getAdapterId()).getIndices(indexStore)) {
+            final boolean rowMerging = BaseDataStoreUtils.isRowMerging(adapter);
             final ReaderParamsBuilder bldr =
                 new ReaderParamsBuilder(
                     index,
                     adapterStore,
                     internalAdapterStore,
-                    GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
+                    rowMerging
+                        ? new GeoWaveRowMergingTransform(
+                            BaseDataStoreUtils.getRowMergingAdapter(adapter),
+                            adapter.getAdapterId())
+                        : GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
             bldr.adapterIds(new short[] {adapter.getAdapterId()});
-            try (RowReader<GeoWaveRow> reader =
-                ((BaseDataStore) other).baseOperations.createReader(bldr.build())) {
+            bldr.isClientsideRowMerging(rowMerging);
+            try (RowReader<GeoWaveRow> reader = baseOperations.createReader(bldr.build())) {
               try (RowWriter writer =
                   ((BaseDataStore) other).baseOperations.createWriter(index, adapter)) {
                 while (reader.hasNext()) {

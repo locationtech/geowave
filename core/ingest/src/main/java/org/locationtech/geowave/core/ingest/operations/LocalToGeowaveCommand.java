@@ -19,8 +19,7 @@ import java.util.Map;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.ingest.local.LocalFileIngestDriver;
-import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
+import org.locationtech.geowave.core.ingest.local.LocalFileIngestCLIDriver;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
@@ -28,6 +27,7 @@ import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
+import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 
 @GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class)
 @Parameters(
@@ -163,8 +163,8 @@ public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
         pluginFormats.createLocalIngestPlugins();
 
     // Driver
-    final LocalFileIngestDriver driver =
-        new LocalFileIngestDriver(
+    final LocalFileIngestCLIDriver driver =
+        new LocalFileIngestCLIDriver(
             inputStoreOptions,
             inputIndexOptions,
             ingestPlugins,

@@ -12,22 +12,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.BiFunction;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
-import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
-import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
@@ -71,7 +64,6 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
       final RowTransform rowTransform = getRowTransform(internalAdapterId, mergingAdapter);
 
       // This iterator expects a single GeoWaveRow w/ multiple fieldValues
-      // (HBase)
       nextResult = mergeSingleRowValues(nextResult, rowTransform);
     }
 
@@ -101,42 +93,7 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
   protected GeoWaveRow mergeSingleRowValues(
       final GeoWaveRow singleRow,
       final RowTransform rowTransform) {
-    if (singleRow.getFieldValues().length < 2) {
-      return singleRow;
-    }
-
-    // merge all values into a single value
-    Mergeable merged = null;
-
-    for (final GeoWaveValue fieldValue : singleRow.getFieldValues()) {
-      final Mergeable mergeable =
-          rowTransform.getRowAsMergeableObject(
-              singleRow.getAdapterId(),
-              new ByteArray(fieldValue.getFieldMask()),
-              fieldValue.getValue());
-
-      if (merged == null) {
-        merged = mergeable;
-      } else {
-        merged.merge(mergeable);
-      }
-    }
-
-    final GeoWaveValue[] mergedFieldValues =
-        new GeoWaveValue[] {
-            new GeoWaveValueImpl(
-                singleRow.getFieldValues()[0].getFieldMask(),
-                singleRow.getFieldValues()[0].getVisibility(),
-                rowTransform.getBinaryFromMergedObject(merged))};
-
-    return new GeoWaveRowImpl(
-        new GeoWaveKeyImpl(
-            singleRow.getDataId(),
-            singleRow.getAdapterId(),
-            singleRow.getPartitionKey(),
-            singleRow.getSortKey(),
-            singleRow.getNumberOfDuplicates()),
-        mergedFieldValues);
+    return DataStoreUtils.mergeSingleRowValues(singleRow, rowTransform);
   }
 
   @Override

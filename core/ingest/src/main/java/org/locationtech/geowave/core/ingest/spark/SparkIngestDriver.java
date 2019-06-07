@@ -37,12 +37,9 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.ingest.IngestUtils;
-import org.locationtech.geowave.core.ingest.IngestUtils.URLTYPE;
-import org.locationtech.geowave.core.ingest.local.LocalFileIngestDriver;
-import org.locationtech.geowave.core.ingest.local.LocalIngestRunData;
-import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
-import org.locationtech.geowave.core.ingest.local.LocalPluginFileVisitor.PluginVisitor;
+import org.locationtech.geowave.core.ingest.URLIngestUtils;
+import org.locationtech.geowave.core.ingest.URLIngestUtils.URLTYPE;
+import org.locationtech.geowave.core.ingest.local.LocalFileIngestCLIDriver;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -52,7 +49,11 @@ import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.ingest.IngestUtils;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
+import org.locationtech.geowave.core.store.ingest.LocalIngestRunData;
+import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
+import org.locationtech.geowave.core.store.ingest.LocalPluginFileVisitor.PluginVisitor;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import org.locationtech.geowave.mapreduce.s3.GeoWaveAmazonS3Factory;
 import org.slf4j.Logger;
@@ -99,7 +100,7 @@ public class SparkIngestDriver implements Serializable {
     if (isS3) {
 
       s3EndpointUrl = ConfigAWSCommand.getS3Url(configProperties);
-      inputPath = IngestUtils.setupS3FileSystem(basePath, s3EndpointUrl);
+      inputPath = URLIngestUtils.setupS3FileSystem(basePath, s3EndpointUrl);
     }
     // If input path is HDFS
     else if (isHDFS) {
@@ -261,8 +262,8 @@ public class SparkIngestDriver implements Serializable {
           Arrays.asList(pluginEntry.getValue().getDataAdapters(ingestOptions.getVisibility())));
     }
 
-    final LocalFileIngestDriver localIngestDriver =
-        new LocalFileIngestDriver(
+    final LocalFileIngestCLIDriver localIngestDriver =
+        new LocalFileIngestCLIDriver(
             inputStoreOptions,
             indexOptions,
             localFileIngestPlugins,
@@ -348,7 +349,7 @@ public class SparkIngestDriver implements Serializable {
   public S3FileSystem initializeS3FS(final String s3EndpointUrl) throws URISyntaxException {
 
     try {
-      IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
+      URLIngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
     } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
         | IllegalAccessException e1) {
       LOGGER.error("Error in setting up S3URLStreamHandler Factory", e1);
