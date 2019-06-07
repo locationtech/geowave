@@ -55,7 +55,7 @@ class CleanUp():
 
     def clean_bucket(self):
         s3 = boto3.client('s3')
-        resp = s3.list_objects_v2(Bucket=rpm_bucket)
+        resp = s3.list_objects_v2(Bucket=self.rpm_bucket)
 
         for obj in resp['Contents']:
             key = obj['Key']
@@ -68,7 +68,7 @@ class CleanUp():
                 date_time = datetime.strptime(artifact_date_str, "%Y%m%d%H%M%S")
 
                 if date_time < self.date_threshhold:
-                    s3.delete_object(Bucket=rpm_bucket, Key=key)
+                    s3.delete_object(Bucket=self.rpm_bucket, Key=key)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
