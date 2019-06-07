@@ -15,9 +15,11 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.rdd.RDD;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
+import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,6 +132,61 @@ public class GeoWaveRDDLoader {
             SimpleFeature.class);
 
     final JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd =
+        JavaPairRDD.fromJavaRDD(rdd.toJavaRDD());
+
+    return javaRdd;
+  }
+
+  public static JavaPairRDD<GeoWaveInputKey, GridCoverage> loadRawRasterRDD(
+      final SparkContext sc,
+      final DataStorePluginOptions storeOptions,
+      final String indexName,
+      final Integer minSplits,
+      final Integer maxSplits) throws IOException {
+    if (sc == null) {
+      LOGGER.error("Must supply a valid Spark Context. Please set SparkContext and try again.");
+      return null;
+    }
+
+    if (storeOptions == null) {
+      LOGGER.error("Must supply input store to load. Please set storeOptions and try again.");
+      return null;
+    }
+
+    final Configuration conf = new Configuration(sc.hadoopConfiguration());
+
+    GeoWaveInputFormat.setStoreOptions(conf, storeOptions);
+
+    if (indexName != null) {
+      GeoWaveInputFormat.setQuery(
+          conf,
+          QueryBuilder.newBuilder().indexName(indexName).build(),
+          storeOptions.createAdapterStore(),
+          storeOptions.createInternalAdapterStore(),
+          storeOptions.createIndexStore());
+    }
+    if (((minSplits != null) && (minSplits > -1)) || ((maxSplits != null) && (maxSplits > -1))) {
+      GeoWaveInputFormat.setMinimumSplitCount(conf, minSplits);
+      GeoWaveInputFormat.setMaximumSplitCount(conf, maxSplits);
+    } else {
+      final int defaultSplitsSpark = sc.getConf().getInt("spark.default.parallelism", -1);
+      // Attempt to grab default partition count for spark and split data
+      // along that.
+      // Otherwise just fallback to default according to index strategy
+      if (defaultSplitsSpark != -1) {
+        GeoWaveInputFormat.setMinimumSplitCount(conf, defaultSplitsSpark);
+        GeoWaveInputFormat.setMaximumSplitCount(conf, defaultSplitsSpark);
+      }
+    }
+
+    final RDD<Tuple2<GeoWaveInputKey, GridCoverage>> rdd =
+        sc.newAPIHadoopRDD(
+            conf,
+            GeoWaveInputFormat.class,
+            GeoWaveInputKey.class,
+            GridCoverage.class);
+
+    final JavaPairRDD<GeoWaveInputKey, GridCoverage> javaRdd =
         JavaPairRDD.fromJavaRDD(rdd.toJavaRDD());
 
     return javaRdd;

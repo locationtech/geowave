@@ -27,24 +27,24 @@ public class KuduMetadataWriter implements MetadataWriter {
   private final KuduSession session;
   private final String tableName;
 
-  public KuduMetadataWriter(KuduOperations operations, MetadataType metadataType) {
+  public KuduMetadataWriter(final KuduOperations operations, final MetadataType metadataType) {
     this.operations = operations;
-    this.session = operations.getSession();
-    this.tableName = operations.getMetadataTableName(metadataType);
+    session = operations.getSession();
+    tableName = operations.getMetadataTableName(metadataType);
   }
 
   @Override
   public void write(final GeoWaveMetadata metadata) {
     try {
-      Insert insert = operations.getTable(tableName).newInsert();
-      PartialRow partialRow = insert.getRow();
-      KuduMetadataRow row = new KuduMetadataRow(metadata);
+      final Insert insert = operations.getTable(tableName).newInsert();
+      final PartialRow partialRow = insert.getRow();
+      final KuduMetadataRow row = new KuduMetadataRow(metadata);
       row.populatePartialRow(partialRow);
-      OperationResponse resp = session.apply(insert);
+      final OperationResponse resp = session.apply(insert);
       if (resp.hasRowError()) {
         LOGGER.error("Encountered error while writing metadata: {}", resp.getRowError());
       }
-    } catch (KuduException e) {
+    } catch (final KuduException e) {
       LOGGER.error("Kudu error when writing metadata", e);
     }
   }
@@ -57,11 +57,11 @@ public class KuduMetadataWriter implements MetadataWriter {
         LOGGER.error(
             "Got {} pending errors while flushing Kudu MetadataWriter session",
             session.countPendingErrors());
-        for (RowError err : session.getPendingErrors().getRowErrors()) {
+        for (final RowError err : session.getPendingErrors().getRowErrors()) {
           LOGGER.error("{}", err);
         }
       }
-    } catch (KuduException e) {
+    } catch (final KuduException e) {
       LOGGER.error("Encountered error while flushing MetadataWriter Kudu session", e);
     }
   }

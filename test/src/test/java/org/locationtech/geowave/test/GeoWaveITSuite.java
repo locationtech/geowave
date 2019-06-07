@@ -62,16 +62,14 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
     DataIndexOnlyIT.class,
     MapReduceSecondaryIndexIT.class,
     VisibilitySecondaryIndexIT.class,
-    // // for now tests are taking too long in travis and landsatIT is a long
-    // test
-    // // LandsatIT.class,
+    // for now tests are taking too long in travis and landsatIT is a long test
+    // LandsatIT.class,
     // these also help shave off some time
     // DBScanIT.class,
     // GeoWaveNNIT.class,
     CustomCRSLandsatIT.class,
     GeoWaveBasicRasterIT.class,
     GeoWaveBasicCustomCRSRasterIT.class,
-    CustomCRSKDERasterResizeIT.class,
     BulkIngestInputGenerationIT.class,
     AttributesSubsetQueryIT.class,
     SpatialTemporalQueryIT.class,
@@ -83,6 +81,8 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
     GeoWaveSparkSpatialJoinIT.class,
     GeoServerIT.class,
     GeoServerIngestIT.class,
+    // has to be after SparkEnvironment usage
+    CustomCRSKDERasterResizeIT.class,
     GeoWaveGrpcIT.class,
     ConfigServicesIT.class,
     RemoteIT.class,

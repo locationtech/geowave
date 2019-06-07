@@ -36,7 +36,7 @@ public class VisibilityExpression {
   public static boolean evaluate(String expression, Set<String> auths) {
     String trimmed = expression.replaceAll("\\s+", "");
     try {
-      return expressionCache.get(trimmed).evalutate(auths);
+      return expressionCache.get(trimmed).evaluate(auths);
     } catch (ExecutionException e) {
       throw new RuntimeException(e.getCause());
     }
@@ -120,13 +120,13 @@ public class VisibilityExpression {
   }
 
   private abstract static class VisibilityNode {
-    public abstract boolean evalutate(Set<String> auths);
+    public abstract boolean evaluate(Set<String> auths);
   }
 
   private static class NoAuthNode extends VisibilityNode {
 
     @Override
-    public boolean evalutate(Set<String> auths) {
+    public boolean evaluate(Set<String> auths) {
       return true;
     }
   }
@@ -139,7 +139,7 @@ public class VisibilityExpression {
     }
 
     @Override
-    public boolean evalutate(Set<String> auths) {
+    public boolean evaluate(Set<String> auths) {
       return auths.contains(value);
     }
   }
@@ -154,8 +154,8 @@ public class VisibilityExpression {
     }
 
     @Override
-    public boolean evalutate(Set<String> auths) {
-      return left.evalutate(auths) && right.evalutate(auths);
+    public boolean evaluate(Set<String> auths) {
+      return left.evaluate(auths) && right.evaluate(auths);
     }
   }
 
@@ -169,8 +169,8 @@ public class VisibilityExpression {
     }
 
     @Override
-    public boolean evalutate(Set<String> auths) {
-      return left.evalutate(auths) || right.evalutate(auths);
+    public boolean evaluate(Set<String> auths) {
+      return left.evaluate(auths) || right.evaluate(auths);
     }
   }
 }

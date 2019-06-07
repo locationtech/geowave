@@ -35,7 +35,7 @@ public class GridCoverageWritable implements Writable {
   private double maxY;
   private CoordinateReferenceSystem crs;
 
-  protected GridCoverageWritable() {}
+  public GridCoverageWritable() {}
 
   public GridCoverageWritable(
       final RasterTile rasterTile,

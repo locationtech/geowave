@@ -93,14 +93,12 @@ public class RocksDBReader<T> implements RowReader<T> {
                 readerParams.getIndex().getName());
         final Stream<CloseableIterator<GeoWaveRow>> streamIt =
             RocksDBUtils.getPartitions(client.getSubDirectory(), indexNamePrefix).stream().map(
-                p -> {
-                  return RocksDBUtils.getIndexTableFromPrefix(
-                      client,
-                      indexNamePrefix,
-                      adapterId,
-                      p.getBytes(),
-                      groupByRowAndSortByTime.getRight()).iterator();
-                });
+                p -> RocksDBUtils.getIndexTableFromPrefix(
+                    client,
+                    indexNamePrefix,
+                    adapterId,
+                    p.getBytes(),
+                    groupByRowAndSortByTime.getRight()).iterator());
         iterators.addAll(streamIt.collect(Collectors.toList()));
       }
       return wrapResults(new Closeable() {

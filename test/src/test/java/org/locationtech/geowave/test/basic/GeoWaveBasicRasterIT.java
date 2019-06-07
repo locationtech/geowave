@@ -65,6 +65,17 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
+          GeoWaveStoreType.ROCKSDB},
+      namespace = "cpRasterStore")
+  protected DataStorePluginOptions cpDataStoreOptions;
+  @GeoWaveTestStore(
+      value = {
+          GeoWaveStoreType.ACCUMULO,
+          GeoWaveStoreType.BIGTABLE,
+          GeoWaveStoreType.CASSANDRA,
+          GeoWaveStoreType.DYNAMODB,
+          GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;
 
@@ -107,7 +118,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
     final int maxCellSize =
         TestUtils.getTestEnvironment(dataStoreOptions.getType()).getMaxCellSize();
     final int tileSize;
-    if (maxCellSize <= 64 * 1024) {
+    if (maxCellSize <= (64 * 1024)) {
       tileSize = 24;
     } else {
       tileSize = 32;
@@ -119,6 +130,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
     final int numBands = 8;
     final int numRasters = 4;
 
+    TestUtils.deleteAll(cpDataStoreOptions);
     ingestGeneralPurpose(
         coverageName,
         tileSize,
@@ -130,21 +142,10 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
         numRasters,
         new SummingMergeStrategy());
 
-    // Verify correct results
-    queryGeneralPurpose(
-        coverageName,
-        tileSize,
-        westLon,
-        eastLon,
-        southLat,
-        northLat,
-        numBands,
-        numRasters,
-        new SummingExpectedValue());
-
-    final DataStoreOperations operations = dataStoreOptions.createDataStoreOperations();
-    final PersistentAdapterStore adapterStore = dataStoreOptions.createAdapterStore();
-    final InternalAdapterStore internalAdapterStore = dataStoreOptions.createInternalAdapterStore();
+    final DataStoreOperations operations = cpDataStoreOptions.createDataStoreOperations();
+    final PersistentAdapterStore adapterStore = cpDataStoreOptions.createAdapterStore();
+    final InternalAdapterStore internalAdapterStore =
+        cpDataStoreOptions.createInternalAdapterStore();
     final short[] adapterIds = new short[1];
     adapterIds[0] = internalAdapterStore.getAdapterId(coverageName);
     final ReaderParams<GeoWaveRow> params =
@@ -162,19 +163,18 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
       // Assert that the values for the row are not merged.
       // If server side libraries are enabled, the merging will be done
       // there.
-      if (!dataStoreOptions.getFactoryOptions().getStoreOptions().isServerSideLibraryEnabled()) {
+      if (!cpDataStoreOptions.getFactoryOptions().getStoreOptions().isServerSideLibraryEnabled()) {
         assertEquals(numRasters, row.getFieldValues().length);
       }
 
       assertFalse(reader.hasNext());
     }
-
     operations.mergeData(
         TestUtils.DEFAULT_SPATIAL_INDEX,
         adapterStore,
         internalAdapterStore,
-        dataStoreOptions.createAdapterIndexMappingStore(),
-        dataStoreOptions.getFactoryOptions().getStoreOptions().getMaxRangeDecomposition());
+        cpDataStoreOptions.createAdapterIndexMappingStore(),
+        cpDataStoreOptions.getFactoryOptions().getStoreOptions().getMaxRangeDecomposition());
 
     // Make sure the row was merged
     try (RowReader<GeoWaveRow> reader = operations.createReader(params)) {
@@ -187,6 +187,22 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
 
       assertFalse(reader.hasNext());
     }
+
+    cpDataStoreOptions.createDataStore().copyTo(dataStoreOptions.createDataStore());
+    TestUtils.deleteAll(cpDataStoreOptions);
+    // Verify correct results
+    queryGeneralPurpose(
+        coverageName,
+        tileSize,
+        westLon,
+        eastLon,
+        southLat,
+        northLat,
+        numBands,
+        numRasters,
+        new SummingExpectedValue());
+
+
 
     // Verify results are still correct
     queryGeneralPurpose(
@@ -208,7 +224,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
     final int maxCellSize =
         TestUtils.getTestEnvironment(dataStoreOptions.getType()).getMaxCellSize();
     final int tileSize;
-    if (maxCellSize <= 64 * 1024) {
+    if (maxCellSize <= (64 * 1024)) {
       tileSize = 24;
     } else {
       tileSize = 64; // 256 fails on bigtable exceeding maximum size
@@ -239,7 +255,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
     final int sumAndAveragingNumRasters = 15;
     final int noDataTileSize;
     final int summingTileSize;
-    if (maxCellSize <= 64 * 1024) {
+    if (maxCellSize <= (64 * 1024)) {
       noDataTileSize = 24;
       summingTileSize = 24;
     } else {
@@ -252,6 +268,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
     final double southLat = -47.8125;
     final double northLat = -45;
 
+    TestUtils.deleteAll(cpDataStoreOptions);
     ingestGeneralPurpose(
         summingCoverageName,
         summingTileSize,
@@ -281,6 +298,8 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
         eastLon,
         southLat,
         northLat);
+    cpDataStoreOptions.createDataStore().copyTo(dataStoreOptions.createDataStore());
+    TestUtils.deleteAll(cpDataStoreOptions);
 
     queryGeneralPurpose(
         summingCoverageName,
@@ -292,7 +311,6 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
         summingNumBands,
         summingNumRasters,
         new SummingExpectedValue());
-
     queryNoDataMergeStrategy(noDataCoverageName, noDataTileSize);
     queryGeneralPurpose(
         sumAndAveragingCoverageName,
@@ -315,7 +333,10 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
       final double eastLon,
       final double southLat,
       final double northLat) throws IOException {
+    TestUtils.deleteAll(cpDataStoreOptions);
     ingestNoDataMergeStrategy(coverageName, tileSize, westLon, eastLon, southLat, northLat);
+    cpDataStoreOptions.createDataStore().copyTo(dataStoreOptions.createDataStore());
+    TestUtils.deleteAll(cpDataStoreOptions);
     queryNoDataMergeStrategy(coverageName, tileSize);
   }
 
@@ -386,7 +407,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
       final double southLat,
       final double northLat) throws IOException {
     final int numBands = 8;
-    final DataStore dataStore = dataStoreOptions.createDataStore();
+    final DataStore dataStore = cpDataStoreOptions.createDataStore();
     final RasterDataAdapter adapter =
         RasterUtils.createDataAdapterTypeDouble(
             coverageName,
@@ -430,7 +451,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
       final RasterTileMergeStrategy<?> mergeStrategy) throws IOException {
 
     // just ingest a number of rasters
-    final DataStore dataStore = dataStoreOptions.createDataStore();
+    final DataStore dataStore = cpDataStoreOptions.createDataStore();
     final RasterDataAdapter adapter =
         RasterUtils.createDataAdapterTypeDouble(coverageName, numBands, tileSize, mergeStrategy);
     dataStore.addType(adapter, TestUtils.DEFAULT_SPATIAL_INDEX);

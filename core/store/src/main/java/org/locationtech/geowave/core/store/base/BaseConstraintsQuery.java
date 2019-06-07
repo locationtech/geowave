@@ -52,7 +52,7 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
 
   public final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
   public final List<MultiDimensionalNumericData> constraints;
-  public final List<QueryFilter> distributableFilters;
+  public List<QueryFilter> distributableFilters;
 
   public final IndexMetaData[] indexMetaData;
   private final Index index;
@@ -188,6 +188,12 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
         if (!clientFilters.isEmpty()) {
           final QueryFilter f = clientFilters.get(clientFilters.size() - 1);
           if (f instanceof DedupeFilter) {
+            // in case the list is immutable or null we need to create a new mutable list
+            if (distributableFilters != null) {
+              distributableFilters = new ArrayList<>(distributableFilters);
+            } else {
+              distributableFilters = new ArrayList<>();
+            }
             distributableFilters.add(f);
             LOGGER.warn(
                 "Aggregating results when duplicates exist in the table may result in duplicate aggregation");

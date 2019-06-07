@@ -10,7 +10,12 @@ package org.locationtech.geowave.datastore.hbase.operations;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NavigableMap;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
@@ -29,7 +34,6 @@ import org.locationtech.geowave.datastore.hbase.util.HBaseUtils.ScannerClosableW
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.Iterators;
 
 public class HBaseMetadataReader implements MetadataReader {
   private static final Logger LOGGER = LoggerFactory.getLogger(HBaseMetadataReader.class);
@@ -76,29 +80,34 @@ public class HBaseMetadataReader implements MetadataReader {
       }
       final Iterable<Result> rS =
           operations.getScannedResults(scanner, operations.getMetadataTableName(metadataType));
-      final Iterator<Result> it = rS.iterator();
       final Iterator<GeoWaveMetadata> transformedIt =
-          Iterators.transform(it, new com.google.common.base.Function<Result, GeoWaveMetadata>() {
-            @Override
-            public GeoWaveMetadata apply(final Result result) {
-              byte[] resultantCQ;
-              if (columnQualifier == null) {
-                final NavigableMap<byte[], byte[]> familyMap = result.getFamilyMap(columnFamily);
-                if ((familyMap != null) && !familyMap.isEmpty()) {
-                  resultantCQ = familyMap.firstKey();
-                } else {
-                  resultantCQ = new byte[0];
+          StreamSupport.stream(rS.spliterator(), false).flatMap(result -> {
+            byte[] resultantCQ;
+            if (columnQualifier == null) {
+              final NavigableMap<byte[], byte[]> familyMap = result.getFamilyMap(columnFamily);
+              if ((familyMap != null) && !familyMap.isEmpty()) {
+                if (familyMap.size() > 1) {
+                  return familyMap.keySet().stream().map(
+                      key -> new GeoWaveMetadata(
+                          result.getRow(),
+                          key,
+                          null,
+                          getMergedStats(result, clientsideStatsMerge, columnFamily, key)));
                 }
+                resultantCQ = familyMap.firstKey();
               } else {
-                resultantCQ = columnQualifier;
+                resultantCQ = new byte[0];
               }
-              return new GeoWaveMetadata(
-                  result.getRow(),
-                  resultantCQ,
-                  null,
-                  getMergedStats(result, clientsideStatsMerge));
+            } else {
+              resultantCQ = columnQualifier;
             }
-          });
+            return Stream.of(
+                new GeoWaveMetadata(
+                    result.getRow(),
+                    resultantCQ,
+                    null,
+                    getMergedStats(result, clientsideStatsMerge)));
+          }).iterator();
       if (rS instanceof ResultScanner) {
         return new CloseableIteratorWrapper<>(
             new ScannerClosableWrapper((ResultScanner) rS),
@@ -111,6 +120,19 @@ public class HBaseMetadataReader implements MetadataReader {
       LOGGER.warn("GeoWave metadata table not found", e);
     }
     return new CloseableIterator.Wrapper<>(Collections.emptyIterator());
+  }
+
+  private byte[] getMergedStats(
+      final Result result,
+      final boolean clientsideStatsMerge,
+      final byte[] columnFamily,
+      final byte[] columnQualifier) {
+    List<Cell> columnCells = result.getColumnCells(columnFamily, columnQualifier);
+    if ((columnCells.size() == 1)) {
+      return CellUtil.cloneValue(columnCells.get(0));
+    }
+
+    return URLClassloaderUtils.toBinary(HBaseUtils.getMergedStats(columnCells));
   }
 
   private byte[] getMergedStats(final Result result, final boolean clientsideStatsMerge) {

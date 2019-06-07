@@ -33,7 +33,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.filter.text.ecql.ECQL;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
-import org.locationtech.geowave.adapter.raster.operations.ResizeCommand;
+import org.locationtech.geowave.adapter.raster.operations.ResizeMRCommand;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.analytic.mapreduce.operations.KdeCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
@@ -117,8 +117,10 @@ public class KDEJobRunner extends Configured implements Tool {
 
     Index inputPrimaryIndex = null;
     final Index[] idxArray = inputDataStoreOptions.createDataStore().getIndices();
-    for (Index idx : idxArray) {
-      if (idx != null) {
+    for (final Index idx : idxArray) {
+      if ((idx != null)
+          && ((kdeCommandLineOptions.getIndexName() == null)
+              || kdeCommandLineOptions.getIndexName().equals(idx.getName()))) {
         inputPrimaryIndex = idx;
         break;
       }
@@ -356,7 +358,7 @@ public class KDEJobRunner extends Configured implements Tool {
         // delegate to resize command to wrap it up with the correctly
         // requested tile size
 
-        final ResizeCommand resizeCommand = new ResizeCommand();
+        final ResizeMRCommand resizeCommand = new ResizeMRCommand();
         final File configFile = File.createTempFile("temp-config", null);
         final ManualOperationParams params = new ManualOperationParams();
 
@@ -374,8 +376,8 @@ public class KDEJobRunner extends Configured implements Tool {
         resizeCommand.getOptions().setInputCoverageName(kdeCoverageName);
         resizeCommand.getOptions().setMinSplits(kdeCommandLineOptions.getMinSplits());
         resizeCommand.getOptions().setMaxSplits(kdeCommandLineOptions.getMaxSplits());
-        resizeCommand.getOptions().setHdfsHostPort(kdeCommandLineOptions.getHdfsHostPort());
-        resizeCommand.getOptions().setJobTrackerOrResourceManHostPort(
+        resizeCommand.setHdfsHostPort(kdeCommandLineOptions.getHdfsHostPort());
+        resizeCommand.setJobTrackerOrResourceManHostPort(
             kdeCommandLineOptions.getJobTrackerOrResourceManHostPort());
         resizeCommand.getOptions().setOutputCoverageName(kdeCommandLineOptions.getCoverageName());
 

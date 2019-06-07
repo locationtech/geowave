@@ -26,7 +26,7 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.mapreduce.copy.StoreCopyJobRunner;
 
-@GeowaveOperation(name = "copy", parentOperation = RemoteSection.class)
+@GeowaveOperation(name = "mrcopy", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Copy a data store")
 public class CopyCommand extends DefaultOperation implements Command {
   @Parameter(description = "<input store name> <output store name>")

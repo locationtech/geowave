@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.clustering.KMeans;
@@ -82,6 +83,9 @@ public class KMeansRunner {
       try {
         jar =
             KMeansRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        if (!FilenameUtils.isExtension(jar.toLowerCase(), "jar")) {
+          jar = "";
+        }
       } catch (final URISyntaxException e) {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }
