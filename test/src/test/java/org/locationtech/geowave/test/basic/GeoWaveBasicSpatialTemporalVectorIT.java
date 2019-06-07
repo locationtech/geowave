@@ -15,12 +15,16 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.locationtech.geowave.core.store.api.IngestOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataOptions;
+import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestFormat;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,18 +75,18 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
   @Test
   public void testIngestAndQuerySpatialTemporalPointsAndLines() throws Exception {
     // ingest both lines and points
-    TestUtils.testLocalIngest(
-        dataStore,
-        DimensionalityType.SPATIAL_TEMPORAL,
+    final IngestOptions.Builder<SimpleFeature> builder = IngestOptions.newBuilder();
+    dataStore.createDataStore().ingest(
         HAIL_SHAPEFILE_FILE,
-        NUM_THREADS);
-
+        builder.threads(NUM_THREADS).format(
+            new GeoToolsVectorDataStoreIngestFormat().createLocalFileIngestPlugin(
+                new GeoToolsVectorDataOptions())).build(),
+        DimensionalityType.SPATIAL_TEMPORAL.getDefaultIndices());
     if (!POINTS_ONLY) {
-      TestUtils.testLocalIngest(
-          dataStore,
-          DimensionalityType.SPATIAL_TEMPORAL,
+      dataStore.createDataStore().ingest(
           TORNADO_TRACKS_SHAPEFILE_FILE,
-          NUM_THREADS);
+          IngestOptions.newBuilder().threads(NUM_THREADS).build(),
+          DimensionalityType.SPATIAL_TEMPORAL.getDefaultIndices());
     }
 
     try {

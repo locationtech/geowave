@@ -10,6 +10,10 @@
 	<name>GeoWave Store</name>
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-cli</artifactId>
 			<version>${project.version}</version>

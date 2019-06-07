@@ -6,22 +6,10 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.geotime.index.dimension;
+package org.locationtech.geowave.core.store.ingest;
 
-import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
+import java.util.Map;
 
-public class SimpleTimeDefinition extends BasicDimensionDefinition {
-
-  public SimpleTimeDefinition() {
-    super(Long.MIN_VALUE, Long.MAX_VALUE);
-  }
-
-  @Override
-  public byte[] toBinary() {
-    return new byte[0];
-  }
-
-  @Override
-  public void fromBinary(final byte[] bytes) {}
-
+public interface LocalFileIngestPluginRegistrySpi {
+  Map<String, LocalFileIngestPlugin<?>> getDefaultLocalIngestPlugins();
 }
