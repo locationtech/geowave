@@ -62,11 +62,14 @@ class CleanUp():
             if key.endswith('.rpm') and key.startswith('dev/'):
                 if 'SRPMS' in key:
                     artifact_date_str = os.path.basename(key).split('.')[2].split('-')[1]
-                else: 
+                else:
                     artifact_date_str = os.path.basename(key).split('.')[3]
-
-                date_time = datetime.strptime(artifact_date_str, "%Y%m%d%H%M%S")
-
+                    
+                try:
+                    date_time = datetime.strptime(artifact_date_str, "%Y%m%d%H%M%S")
+                except ValueError:
+                        print("Incorrect date format, skipping")
+                        
                 if date_time < self.date_threshhold:
                     s3.delete_object(Bucket=self.rpm_bucket, Key=key)
 
