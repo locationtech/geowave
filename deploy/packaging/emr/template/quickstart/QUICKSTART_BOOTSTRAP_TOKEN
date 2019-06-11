@@ -1,22 +1,22 @@
 if is_master ; then
 	if [ ! -f /mnt/geowave-env.sh ]; then
-		aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/quickstart/geowave-env.sh /mnt/geowave-env.sh
+		aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/quickstart/geowave-env.sh /mnt/geowave-env.sh
 	fi
 	source /mnt/geowave-env.sh
 	if [ ! -f /mnt/KDEColorMap.sld ]; then
-		aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/quickstart/KDEColorMap.sld  /mnt/KDEColorMap.sld 
+		aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/quickstart/KDEColorMap.sld  /mnt/KDEColorMap.sld 
 	fi
 
 	if [ ! -f /mnt/SubsamplePoints.sld ]; then
-        aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/quickstart/SubsamplePoints.sld /mnt/SubsamplePoints.sld
+        aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/quickstart/SubsamplePoints.sld /mnt/SubsamplePoints.sld
 	fi
 
 	if [ ! -f /mnt/setup-geoserver-geowave-workspace.sh ]; then
-		aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/quickstart/setup-geoserver-geowave-workspace.sh /mnt/setup-geoserver-geowave-workspace.sh
+		aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/quickstart/setup-geoserver-geowave-workspace.sh /mnt/setup-geoserver-geowave-workspace.sh
 	fi
 
 	if [ ! -f /mnt/ingest-and-kde-gdelt.sh ]; then
-		aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/quickstart/$DATASTORE_TOKEN/ingest-and-kde-gdelt.sh /mnt/ingest-and-kde-gdelt.sh
+		aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/quickstart/$DATASTORE_TOKEN/ingest-and-kde-gdelt.sh /mnt/ingest-and-kde-gdelt.sh
 	fi
 	chmod 755 /mnt/*.sh
 	cd /mnt;./ingest-and-kde-gdelt.sh

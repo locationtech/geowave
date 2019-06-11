@@ -113,7 +113,7 @@ printf "\nexport HOSTNAME=$HOSTNAME" | sudo tee --append $ZEPPELIN_ENV > /dev/nu
 
 #TODO REPLACE WITH FINAL JAR LOCATION
 # Download geowave jar and install at correct location
-aws s3 cp s3://geowave-jupyter/geowave-deploy-accumulo17.jar /mnt/tmp/geowave-deploy-accumulo17.jar
+aws s3 cp s3://GEOWAVE_NOTEBOOKS_BUCKET_TOKEN/geowave-deploy-accumulo17.jar /mnt/tmp/geowave-deploy-accumulo17.jar
 mkdir $HOME/backup/
 sudo mv $GEOWAVE_INSTALL $HOME/backup/
 sudo mv /mnt/tmp/geowave-deploy-accumulo17.jar $GEOWAVE_INSTALL

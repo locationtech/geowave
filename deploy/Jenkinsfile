@@ -1,7 +1,7 @@
 #!groovy 
 
 node ('master') {
-    def maven = tool 'maven-3.5.2'
+    def maven = tool 'maven'
 
     stage('Parameterize') {
       if(!params.overwrite_parameters || "${params.overwrite_parameters}" == "Yes") {
@@ -74,7 +74,7 @@ node ('master') {
     """
     }
     withMaven(
-      maven: 'maven-3.5.2',
+      maven: 'maven',
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
       mavenOpts: "-Xmx2g -Xms1g",
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
@@ -88,7 +88,7 @@ node ('master') {
         sh "deploy/packaging/docker/docker-build-rpms.sh"
     }
   }
-
+  
   stage('Clean bucket and local space'){
     // Local Cleanup
     sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/snapshots/geowave/*"
@@ -96,17 +96,25 @@ node ('master') {
     // S3 Cleanup
     sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
   }
+  
+  stage("Generate EMR Scripts") {
+    withEnv(["GEOWAVE_BUCKET=${ params.cache_bucket }"]) {
+        def build_type = readFile('deploy/target/build-type.txt').trim()
+        def version  = readFile('deploy/target/version.txt').trim()
+        sh "deploy/packaging/emr/generate-emr-scripts.sh --build-type ${build_type} --version ${version} --workspace ${env.WORKSPACE} --bucket ${GEOWAVE_BUCKET}"
+    }
+  }
 
   // Deploy to geowave-rpms
   stage('Deploying to S3'){
     def build_type = readFile('deploy/target/build-type.txt').trim()
     if ( build_type == "dev" ) {
-      echo 'Build type determined as Dev. Sync will delete content on s3. First, copy the index rpm into place'
-      sh "cp ${params.LOCAL_REPO_DIR}/geowave-repo-dev-1.0-3.noarch.rpm snapshots/geowave/dev/noarch/geowave-repo-dev-1.0-3.noarch.rpm"
+      echo 'Build type determined as Dev. Sync will delete content on s3.'
+      sh "sudo cp ${params.LOCAL_REPO_DIR}/geowave-repo-dev-1.0-3.noarch.rpm ${params.LOCAL_REPO_DIR}/geowave/dev/noarch/geowave-repo-dev-1.0-3.noarch.rpm"
       sh "aws s3 sync ${params.LOCAL_REPO_DIR}/geowave/ s3://${params.rpm_bucket}/ --delete"
     } else if (build_type == "release" ) {
-      echo 'Build type determined as Release. Sync will not delete content on s3. First, copy the index rpm into place'
-      sh "cp ${params.LOCAL_REPO_DIR}/geowave-repo-1.0-3.noarch.rpm snapshots/geowave/dev/noarch/geowave-repo-1.0-3.noarch.rpm"
+      echo 'Build type determined as Release. Sync will not delete content on s3.'
+      sh "sudo cp ${params.LOCAL_REPO_DIR}/geowave-repo-1.0-3.noarch.rpm ${params.LOCAL_REPO_DIR}/geowave/dev/noarch/geowave-repo-1.0-3.noarch.rpm"
       sh "aws s3 sync ${params.LOCAL_REPO_DIR}/geowave/ s3://${params.rpm_bucket}/"
     } else {
       error("ERROR: Could not determine build type. Unable to upload rpm's.")
@@ -130,5 +138,9 @@ node ('master') {
     } else {
       error("ERROR: Could not determine build type. Unable to upload maven cache")
     }
+  }
+  
+  stage("Local cleanup") {
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/snapshots/geowave/*"
   }
 }
