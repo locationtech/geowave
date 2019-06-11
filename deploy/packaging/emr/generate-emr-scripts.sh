@@ -31,13 +31,13 @@ then
 	GEOWAVE_REPO_RPM_TOKEN=geowave-repo-dev-1.0-3.noarch.rpm
 	GEOWAVE_VERSION_URL_TOKEN=latest
 	GEOWAVE_REPO_NAME_TOKEN=geowave-dev
-	GEOWAVE_REPO_BASE_URL_TOKEN=http://s3.amazonaws.com/geowave-rpms/dev/noarch/
+	GEOWAVE_REPO_BASE_URL_TOKEN=http://s3.amazonaws.com/maxar-geowave-rpms/dev/noarch/
 else
 	#its a release
 	GEOWAVE_REPO_RPM_TOKEN=geowave-repo-1.0-3.noarch.rpm
 	GEOWAVE_VERSION_URL_TOKEN="${ARGS[version]}"
 	GEOWAVE_REPO_NAME_TOKEN=geowave
-	GEOWAVE_REPO_BASE_URL_TOKEN=http://s3.amazonaws.com/geowave-rpms/release/noarch/
+	GEOWAVE_REPO_BASE_URL_TOKEN=http://s3.amazonaws.com/maxar-geowave-rpms/release/noarch/
 fi
 TARGET_ROOT=${ARGS[workspace]}/deploy/packaging/emr/generated
 TEMPLATE_ROOT=${ARGS[workspace]}/deploy/packaging/emr/template
