@@ -46,6 +46,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCoun
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
@@ -53,7 +54,7 @@ import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -281,13 +282,19 @@ public class SpatialTemporalQueryIT {
           @Override
           public CloseableIterator<Index> getIndices(
               final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
-              final BasicQueryByClass query,
+              final QueryConstraints query,
               final Index[] indices,
+              final DataTypeAdapter<?> adapter,
               final Map<QueryHint, Object> hints) {
             return new CloseableIteratorWrapper<>(new Closeable() {
               @Override
               public void close() throws IOException {}
             }, Collections.singleton(currentGeotoolsIndex).iterator());
+          }
+
+          @Override
+          public boolean requiresStats() {
+            return false;
           }
         };
       }

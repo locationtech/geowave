@@ -76,7 +76,16 @@ public class RedisRowDeleter implements RowDeleter {
                     indexName,
                     row.getPartitionKey()),
                 row.getAdapterId()));
-    Arrays.stream(((GeoWaveRedisRow) row).getPersistedRows()).forEach(r -> set.remove(r));
+    if (row instanceof GeoWaveRedisRow) {
+      Arrays.stream(((GeoWaveRedisRow) row).getPersistedRows()).forEach(r -> set.remove(r));
+    } else {
+      Arrays.stream(row.getFieldValues()).forEach(
+          v -> set.remove(
+              new GeoWaveRedisPersistedRow(
+                  (short) row.getNumberOfDuplicates(),
+                  row.getDataId(),
+                  v)));
+    }
   }
 
   @Override

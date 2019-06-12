@@ -17,9 +17,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
-import org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver;
-import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.ingest.AbstractLocalFileDriver;
+import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

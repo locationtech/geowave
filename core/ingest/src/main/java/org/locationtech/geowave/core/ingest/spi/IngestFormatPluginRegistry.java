@@ -11,18 +11,22 @@ package org.locationtech.geowave.core.ingest.spi;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import org.locationtech.geowave.core.store.config.ConfigUtils;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPluginRegistrySpi;
 
-public class IngestFormatPluginRegistry {
+public class IngestFormatPluginRegistry implements LocalFileIngestPluginRegistrySpi {
 
   private static Map<String, IngestFormatPluginProviderSpi<?, ?>> pluginProviderRegistry = null;
 
-  private IngestFormatPluginRegistry() {}
+  public IngestFormatPluginRegistry() {}
 
   @SuppressWarnings("rawtypes")
   private static void initPluginProviderRegistry() {
-    pluginProviderRegistry = new HashMap<String, IngestFormatPluginProviderSpi<?, ?>>();
+    pluginProviderRegistry = new HashMap<>();
     final Iterator<IngestFormatPluginProviderSpi> pluginProviders =
         new SPIServiceRegistry(IngestFormatPluginRegistry.class).load(
             IngestFormatPluginProviderSpi.class);
@@ -39,5 +43,13 @@ public class IngestFormatPluginRegistry {
       initPluginProviderRegistry();
     }
     return pluginProviderRegistry;
+  }
+
+  @Override
+  public Map<String, LocalFileIngestPlugin<?>> getDefaultLocalIngestPlugins() {
+    return getPluginProviderRegistry().entrySet().stream().collect(
+        Collectors.toMap(
+            Entry::getKey,
+            e -> e.getValue().createLocalFileIngestPlugin(e.getValue().createOptionsInstances())));
   }
 }

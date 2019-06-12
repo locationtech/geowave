@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -68,6 +69,9 @@ public class SqlQueryRunner {
       try {
         jar =
             SqlQueryRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        if (!FilenameUtils.isExtension(jar.toLowerCase(), "jar")) {
+          jar = "";
+        }
       } catch (final URISyntaxException e) {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }

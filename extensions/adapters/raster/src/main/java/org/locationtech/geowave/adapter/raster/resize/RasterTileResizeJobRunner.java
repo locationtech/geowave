@@ -16,7 +16,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
-import org.locationtech.geowave.adapter.raster.operations.ResizeCommand;
+import org.locationtech.geowave.adapter.raster.operations.ResizeMRCommand;
 import org.locationtech.geowave.adapter.raster.operations.options.RasterTileResizeCommandLineOptions;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
@@ -51,15 +51,21 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
 
   private final DataStorePluginOptions inputStoreOptions;
   private final DataStorePluginOptions outputStoreOptions;
+  private final String hdfsHostPort;
+  private final String jobTrackerOrResourceManagerHostPort;
   protected RasterTileResizeCommandLineOptions rasterResizeOptions;
 
   public RasterTileResizeJobRunner(
       final DataStorePluginOptions inputStoreOptions,
       final DataStorePluginOptions outputStoreOptions,
-      final RasterTileResizeCommandLineOptions rasterResizeOptions) {
+      final RasterTileResizeCommandLineOptions rasterResizeOptions,
+      final String hdfsHostPort,
+      final String jobTrackerOrResourceManagerHostPort) {
     this.inputStoreOptions = inputStoreOptions;
     this.outputStoreOptions = outputStoreOptions;
     this.rasterResizeOptions = rasterResizeOptions;
+    this.hdfsHostPort = hdfsHostPort;
+    this.jobTrackerOrResourceManagerHostPort = jobTrackerOrResourceManagerHostPort;
   }
 
   /** Main method to execute the MapReduce analytic. */
@@ -70,8 +76,8 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
       setConf(conf);
     }
     GeoWaveConfiguratorBase.setRemoteInvocationParams(
-        rasterResizeOptions.getHdfsHostPort(),
-        rasterResizeOptions.getJobTrackerOrResourceManHostPort(),
+        hdfsHostPort,
+        jobTrackerOrResourceManagerHostPort,
         conf);
     conf.set(OLD_TYPE_NAME_KEY, rasterResizeOptions.getInputCoverageName());
     conf.set(NEW_TYPE_NAME_KEY, rasterResizeOptions.getOutputCoverageName());
@@ -181,14 +187,6 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
       LOGGER.error("Error waiting for map reduce tile resize job: ", ex);
     }
 
-    final CloseableIterator<Object> obj =
-        outputStoreOptions.createDataStore().query(
-            QueryBuilder.newBuilder().addTypeName(
-                rasterResizeOptions.getOutputCoverageName()).indexName(index.getName()).build());
-    while (obj.hasNext()) {
-      obj.next();
-    }
-
     return retVal ? 0 : 1;
   }
 
@@ -196,7 +194,7 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
     final ConfigOptions opts = new ConfigOptions();
     final OperationParser parser = new OperationParser();
     parser.addAdditionalObject(opts);
-    final ResizeCommand command = new ResizeCommand();
+    final ResizeMRCommand command = new ResizeMRCommand();
     final CommandLineOperationParams params = parser.parse(command, args);
     opts.prepare(params);
     final int res = ToolRunner.run(new Configuration(), command.createRunner(params), args);

@@ -222,7 +222,6 @@ public class QueryIndexHelper {
   public static ConstraintsByClass composeTimeBoundedConstraints(
       final SimpleFeatureType featureType,
       final TimeDescriptors timeDescriptors,
-      final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
       final TemporalConstraintsSet timeBoundsSet) {
 
     if ((timeBoundsSet == null) || timeBoundsSet.isEmpty() || !timeDescriptors.hasTime()) {
@@ -236,14 +235,9 @@ public class QueryIndexHelper {
       return new ConstraintsByClass();
     }
 
-    final ConstraintsByClass indexTimeConstraints =
-        new ConstraintsByClass(
-            QueryIndexHelper.getTimeConstraintsFromIndex(timeDescriptors, statsMap));
-
     final ConstraintsByClass boundsTimeConstraints =
         ExplicitSpatialTemporalQuery.createConstraints(boundsTemporalConstraints, false);
-    return (boundsTimeConstraints.matches(indexTimeConstraints)) ? new ConstraintsByClass()
-        : boundsTimeConstraints;
+    return boundsTimeConstraints;
   }
 
   /**
@@ -258,21 +252,12 @@ public class QueryIndexHelper {
    */
   public static GeoConstraintsWrapper composeGeometricConstraints(
       final SimpleFeatureType featureType,
-      final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
       final Geometry jtsBounds) {
     if (jtsBounds == null) {
       return new GeoConstraintsWrapper(new ConstraintsByClass(), true, null);
     }
     final GeoConstraintsWrapper geoConstraints =
         GeometryUtils.basicGeoConstraintsWrapperFromGeometry(jtsBounds);
-    final ConstraintsByClass statsConstraints =
-        new ConstraintsByClass(getBBOXIndexConstraintsFromIndex(featureType, statsMap));
-    if (geoConstraints.getConstraints().matches(statsConstraints)) {
-      return new GeoConstraintsWrapper(
-          new ConstraintsByClass(),
-          geoConstraints.isConstraintsMatchGeometry(),
-          jtsBounds);
-    }
     return geoConstraints;
   }
 
@@ -293,11 +278,10 @@ public class QueryIndexHelper {
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
       final Geometry jtsBounds,
       final TemporalConstraintsSet timeBoundsSet) {
-
     final ConstraintsByClass timeConstraints =
         composeTimeConstraints(featureType, timeDescriptors, statsMap, timeBoundsSet);
     final GeoConstraintsWrapper geoConstraints =
-        composeGeometricConstraints(featureType, statsMap, jtsBounds);
+        composeGeometricConstraints(featureType, jtsBounds);
     return timeConstraints.merge(geoConstraints.getConstraints());
   }
 }

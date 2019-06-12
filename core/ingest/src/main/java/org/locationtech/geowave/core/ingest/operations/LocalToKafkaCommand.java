@@ -21,9 +21,9 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions;
 import org.locationtech.geowave.core.ingest.kafka.StageToKafkaDriver;
-import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
+import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 
 @GeowaveOperation(name = "localToKafka", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Stage supported files in local file system to a Kafka topic")

@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
 import org.apache.spark.sql.SparkSession;
@@ -191,6 +192,9 @@ public class SpatialJoinRunner implements Serializable {
       try {
         jar =
             SpatialJoinRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        if (!FilenameUtils.isExtension(jar.toLowerCase(), "jar")) {
+          jar = "";
+        }
       } catch (final URISyntaxException e) {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }

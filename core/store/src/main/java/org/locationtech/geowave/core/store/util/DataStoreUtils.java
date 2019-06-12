@@ -26,6 +26,7 @@ import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
+import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
@@ -40,6 +41,7 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
+import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
@@ -54,9 +56,12 @@ import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibili
 import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
+import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
+import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.flatten.FlattenedDataSet;
 import org.locationtech.geowave.core.store.flatten.FlattenedFieldInfo;
@@ -401,8 +406,9 @@ public class DataStoreUtils {
     return new ByteArray(buf.array());
   }
 
-  private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.getGeoWaveCharset());
-  private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.getGeoWaveCharset());
+  private static final byte[] OPEN_PAREN_BYTE = "(".getBytes(StringUtils.getGeoWaveCharset());
+  private static final byte[] MERGE_VIS_BYTES = ")&(".getBytes(StringUtils.getGeoWaveCharset());
+  private static final byte[] CLOSE_PAREN_BYTE = ")".getBytes(StringUtils.getGeoWaveCharset());
 
   public static byte[] mergeVisibilities(final byte vis1[], final byte vis2[]) {
     if ((vis1 == null) || (vis1.length == 0)) {
@@ -413,13 +419,18 @@ public class DataStoreUtils {
       return vis1;
     }
 
-    final ByteBuffer buffer = ByteBuffer.allocate(vis1.length + 3 + vis2.length);
-    buffer.putChar('(');
+    final ByteBuffer buffer =
+        ByteBuffer.allocate(
+            vis1.length
+                + OPEN_PAREN_BYTE.length
+                + MERGE_VIS_BYTES.length
+                + CLOSE_PAREN_BYTE.length
+                + vis2.length);
+    buffer.put(OPEN_PAREN_BYTE);
     buffer.put(vis1);
-    buffer.putChar(')');
-    buffer.put(BEG_AND_BYTE);
+    buffer.put(MERGE_VIS_BYTES);
     buffer.put(vis2);
-    buffer.put(END_AND_BYTE);
+    buffer.put(CLOSE_PAREN_BYTE);
     return buffer.array();
   }
 
@@ -440,6 +451,47 @@ public class DataStoreUtils {
       }
     }
     return true;
+  }
+
+  public static GeoWaveRow mergeSingleRowValues(
+      final GeoWaveRow singleRow,
+      final RowTransform rowTransform) {
+    if (singleRow.getFieldValues().length < 2) {
+      return singleRow;
+    }
+
+    // merge all values into a single value
+    Mergeable merged = null;
+
+    for (final GeoWaveValue fieldValue : singleRow.getFieldValues()) {
+      final Mergeable mergeable =
+          rowTransform.getRowAsMergeableObject(
+              singleRow.getAdapterId(),
+              new ByteArray(fieldValue.getFieldMask()),
+              fieldValue.getValue());
+
+      if (merged == null) {
+        merged = mergeable;
+      } else {
+        merged.merge(mergeable);
+      }
+    }
+
+    final GeoWaveValue[] mergedFieldValues =
+        new GeoWaveValue[] {
+            new GeoWaveValueImpl(
+                singleRow.getFieldValues()[0].getFieldMask(),
+                singleRow.getFieldValues()[0].getVisibility(),
+                rowTransform.getBinaryFromMergedObject(merged))};
+
+    return new GeoWaveRowImpl(
+        new GeoWaveKeyImpl(
+            singleRow.getDataId(),
+            singleRow.getAdapterId(),
+            singleRow.getPartitionKey(),
+            singleRow.getSortKey(),
+            singleRow.getNumberOfDuplicates()),
+        mergedFieldValues);
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})

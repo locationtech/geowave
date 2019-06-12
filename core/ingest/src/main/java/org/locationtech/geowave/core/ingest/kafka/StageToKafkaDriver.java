@@ -16,9 +16,9 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
-import org.locationtech.geowave.core.ingest.local.AbstractLocalFileDriver;
-import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.ingest.AbstractLocalFileDriver;
+import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

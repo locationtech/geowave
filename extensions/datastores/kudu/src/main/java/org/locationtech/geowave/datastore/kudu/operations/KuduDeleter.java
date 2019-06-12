@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package org.locationtech.geowave.datastore.kudu.operations;
 
 import org.apache.kudu.Schema;
@@ -40,7 +48,6 @@ public class KuduDeleter implements RowDeleter {
       short adapterId = row.getAdapterId();
       byte[] sortKey = row.getSortKey();
       byte[] dataId = row.getDataId();
-      int numDuplicates = row.getNumberOfDuplicates();
       // Note: Kudu Java API requires specifying entire primary key in order to perform deletion,
       // but a part of the primary key (timestamp) is unknown, so we instead perform the
       // deletion using predicates on the known columns.
@@ -67,19 +74,9 @@ public class KuduDeleter implements RowDeleter {
                 dataId));
         preds.add(
             KuduPredicate.newComparisonPredicate(
-                schema.getColumn(KuduField.GW_NUM_DUPLICATES_KEY.getFieldName()),
-                KuduPredicate.ComparisonOp.EQUAL,
-                numDuplicates));
-        preds.add(
-            KuduPredicate.newComparisonPredicate(
                 schema.getColumn(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName()),
                 KuduPredicate.ComparisonOp.EQUAL,
                 value.getVisibility()));
-        preds.add(
-            KuduPredicate.newComparisonPredicate(
-                schema.getColumn(KuduField.GW_FIELD_MASK_KEY.getFieldName()),
-                KuduPredicate.ComparisonOp.EQUAL,
-                value.getFieldMask()));
         for (Delete delete : operations.getDeletions(table, preds, KuduRow::new)) {
           OperationResponse resp = session.apply(delete);
           if (resp.hasRowError()) {

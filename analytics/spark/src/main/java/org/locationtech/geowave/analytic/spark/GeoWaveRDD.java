@@ -14,6 +14,10 @@ import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class GeoWaveRDD implements Serializable {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private JavaPairRDD<GeoWaveInputKey, SimpleFeature> rawRDD = null;
 
   public GeoWaveRDD() {}
@@ -26,7 +30,7 @@ public class GeoWaveRDD implements Serializable {
     return rawRDD;
   }
 
-  public void setRawRDD(JavaPairRDD<GeoWaveInputKey, SimpleFeature> rawRDD) {
+  public void setRawRDD(final JavaPairRDD<GeoWaveInputKey, SimpleFeature> rawRDD) {
     this.rawRDD = rawRDD;
   }
 

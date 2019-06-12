@@ -23,8 +23,8 @@ import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.StageToHdfsDriver;
-import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "localToHdfs", parentOperation = IngestSection.class)

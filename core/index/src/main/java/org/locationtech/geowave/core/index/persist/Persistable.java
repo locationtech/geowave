@@ -18,8 +18,8 @@ public interface Persistable {
    *
    * @return an array of bytes representing a binary stream representation of the object.
    */
-  public byte[] toBinary();
+  byte[] toBinary();
 
   /** Convert a stream of binary bytes to fields and data within an object. */
-  public void fromBinary(byte[] bytes);
+  void fromBinary(byte[] bytes);
 }

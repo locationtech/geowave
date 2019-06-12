@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.ingest.local;
+package org.locationtech.geowave.core.store.ingest;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +22,6 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.locationtech.geowave.core.store.ingest.LocalPluginBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

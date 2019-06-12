@@ -169,6 +169,7 @@ public class ChooseBestMatchIndexQueryStrategyTest {
             new SpatialTemporalIndexBuilder().createIndex(),
             new SpatialIndexBuilder().createIndex(),
             IMAGE_CHIP_INDEX2},
+        null,
         Maps.newHashMap());
   }
 

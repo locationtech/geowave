@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.store.util.DataStoreUtils;
 /** This callback finds the duplicates for each scanned entry, and deletes them by insertion ID */
 public class DuplicateDeletionCallback<T> implements DeleteCallback<T, GeoWaveRow>, Closeable {
   private final BaseDataStore dataStore;
-  private final InternalDataAdapter adapter;
+  private final InternalDataAdapter<?> adapter;
   private final Index index;
   private final Map<ByteArray, Set<InsertionIdData>> insertionIdsNotYetDeletedByDataId;
 
@@ -38,7 +38,7 @@ public class DuplicateDeletionCallback<T> implements DeleteCallback<T, GeoWaveRo
 
   public DuplicateDeletionCallback(
       final BaseDataStore store,
-      final InternalDataAdapter adapter,
+      final InternalDataAdapter<?> adapter,
       final Index index) {
     this.adapter = adapter;
     this.index = index;

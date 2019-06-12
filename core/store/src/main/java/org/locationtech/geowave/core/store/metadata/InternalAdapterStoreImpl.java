@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.store.metadata;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Iterators;
 import java.io.IOException;
 import org.apache.commons.lang.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -27,6 +24,9 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Iterators;
 
 /**
  * This class will persist Adapter Internal Adapter Mappings within an Accumulo table for GeoWave
@@ -86,7 +86,7 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
         LOGGER.warn(
             "Adapter ID '"
                 + adapterId
-                + "' not found. '"
+                + "' not found. INTERNAL_ADAPTER '"
                 + AbstractGeoWavePersistence.METADATA_TABLE
                 + "' table does not exist");
       }
@@ -104,7 +104,7 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
         return null;
       }
       typeName = StringUtils.stringFromBinary(it.next().getValue());
-      cache.put(typeName, adapterId);
+      cache.putIfAbsent(typeName, adapterId);
       return typeName;
     }
   }
@@ -126,10 +126,9 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
         LOGGER.warn(
             "Adapter '"
                 + typeName
-                + "' not found. '"
+                + "' not found. INTERNAL_ADAPTER '"
                 + AbstractGeoWavePersistence.METADATA_TABLE
                 + "' table does not exist");
-        getReader(warnIfNotExist);
       }
       return null;
     }
@@ -143,7 +142,7 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
         return null;
       }
       final short adapterId = ByteArrayUtils.byteArrayToShort(it.next().getValue());
-      cache.put(typeName, adapterId);
+      cache.putIfAbsent(typeName, adapterId);
       return adapterId;
     }
   }

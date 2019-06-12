@@ -133,19 +133,23 @@ public class BatchIndexRetrievalImpl implements BatchDataIndexRetrieval {
       CompletableFuture.supplyAsync(() -> getData(adapterId, internalDataIds)).whenComplete(
           (values, ex) -> {
             if (values != null) {
-              int i = 0;
-              while (values.hasNext() && (i < internalSuppliers.length)) {
-                // the iterator has to be in order
-                internalSuppliers[i++].complete(values.next());
-              }
-              if (values.hasNext()) {
-                LOGGER.warn("There are more data index results than expected");
-              } else if (i < internalSuppliers.length) {
-                LOGGER.warn("There are less data index results than expected");
-                while (i < internalSuppliers.length) {
-                  // there should be exactly as many results as suppliers so this shouldn't happen
-                  internalSuppliers[i++].complete(null);
+              try {
+                int i = 0;
+                while (values.hasNext() && (i < internalSuppliers.length)) {
+                  // the iterator has to be in order
+                  internalSuppliers[i++].complete(values.next());
                 }
+                if (values.hasNext()) {
+                  LOGGER.warn("There are more data index results than expected");
+                } else if (i < internalSuppliers.length) {
+                  LOGGER.warn("There are less data index results than expected");
+                  while (i < internalSuppliers.length) {
+                    // there should be exactly as many results as suppliers so this shouldn't happen
+                    internalSuppliers[i++].complete(null);
+                  }
+                }
+              } finally {
+                values.close();
               }
             } else if (ex != null) {
               LOGGER.warn("Unable to retrieve from data index", ex);
