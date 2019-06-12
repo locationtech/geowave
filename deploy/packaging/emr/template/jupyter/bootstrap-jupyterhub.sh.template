@@ -54,15 +54,16 @@ fi
 aws s3 sync s3://GEOWAVE_NOTEBOOKS_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ /usr/local/notebooks/
 
 # Grab pre-spawn script for properly hooking new users into system.
-sudo aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/pre-spawn.sh /srv/jupyterhub/
+sudo aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/jupyter/pre-spawn.sh /srv/jupyterhub/
 sudo chmod +x /srv/jupyterhub/pre-spawn.sh
 
 # Download hub configuration file
-sudo su root -c "aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/jupyterhub_config.py /etc/jupyterhub/"
+sudo su root -c "aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/jupyter/jupyterhub_config.py /etc/jupyterhub/"
 
 # Download latest conda to root install location
 sudo su root -c "source /tmp/install-conda.sh /opt/miniconda.sh /opt/conda/"
 
+# TODO find pyspark lib defined below
 sudo su root -c "aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-${GEOWAVE_VER}.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz"
 
 echo bootstrap_conda.sh completed. PATH now: $PATH
