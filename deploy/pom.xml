@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
@@ -44,16 +46,6 @@
 			</resource>
 		</resources>
 		<plugins>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2.1</version>
-				<configuration>
-					<descriptors>
-						<descriptor>src/main/assembly/assembly${container.extension}.xml</descriptor>
-					</descriptors>
-					<finalName>${project.build.finalName}${container.extension}</finalName>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -233,7 +225,8 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Main-Class>org.locationtech.geowave.core.cli.GeoWaveMain</Main-Class>
 												<Specification-Title>GeoWave</Specification-Title>
@@ -244,18 +237,22 @@
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jaiext</resource>
 										</transformer>
 									</transformers>
@@ -269,6 +266,67 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>build-installer-main</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-analytic-api</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>3.1.1</version>
+						<configuration>
+							<finalName>installer-main</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptorRefs>
+								<descriptorRef>default-installer-main</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+						<executions>
+							<execution>
+								<id>make-assembly</id> <!-- this is used for inheritance merges -->
+								<phase>package</phase> <!-- bind to the packaging phase -->
+								<goals>
+									<goal>single</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.locationtech.geowave</groupId>
+								<artifactId>geowave-dev-resources</artifactId>
+								<version>1.5</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.install4j</groupId>
+						<artifactId>install4j-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>compile-installers</id>
+								<phase>package</phase>
+								<goals>
+									<goal>compile</goal>
+								</goals>
+								<configuration>
+									<release>${project.version}</release>
+									<destination>${project.build.directory}/install4j-output</destination>
+									<projectFile>${project.basedir}/packaging/standalone/standalone-installer.install4j</projectFile>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 		<profile>
 			<id>geotools-container-singlejar</id>
 			<properties>
@@ -389,7 +447,8 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Specification-Title>GeoWave-Tools</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
@@ -399,18 +458,22 @@
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jaiext</resource>
 										</transformer>
 									</transformers>
@@ -467,7 +530,8 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Specification-Title>GeoWave-Accumulo</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
@@ -477,19 +541,23 @@
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jaiext</resource>
 										</transformer>
 									</transformers>
@@ -547,7 +615,8 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Specification-Title>GeoWave-HBase</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
@@ -557,19 +626,23 @@
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jaiext</resource>
 										</transformer>
 									</transformers>
@@ -619,7 +692,8 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Specification-Title>GeoWave-C++</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
@@ -629,19 +703,23 @@
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jaiext</resource>
 										</transformer>
 									</transformers>

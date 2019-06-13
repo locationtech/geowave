@@ -13,8 +13,8 @@ import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.datastore.hbase.cli.config.HBaseOptions;
-import org.locationtech.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
+import org.locationtech.geowave.datastore.hbase.config.HBaseOptions;
+import org.locationtech.geowave.datastore.hbase.config.HBaseRequiredOptions;
 import org.locationtech.geowave.datastore.hbase.operations.HBaseOperations;
 
 public class HBaseDataStoreFactory extends BaseDataStoreFactory {

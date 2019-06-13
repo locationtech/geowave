@@ -23,7 +23,10 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
 public class RedisOptions extends StoreFactoryOptions {
-  @Parameter(names = "--address", required = true, description = "The address to connect to.")
+  @Parameter(
+      names = {"--address", "-a"},
+      required = true,
+      description = "The address to connect to, such as redis://127.0.0.1:6379")
   private String address;
 
   @Parameter(

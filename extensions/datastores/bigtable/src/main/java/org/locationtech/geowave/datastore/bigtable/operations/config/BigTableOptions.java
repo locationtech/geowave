@@ -16,7 +16,7 @@ import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.bigtable.BigTableStoreFactoryFamily;
-import org.locationtech.geowave.datastore.hbase.cli.config.HBaseOptions;
+import org.locationtech.geowave.datastore.hbase.config.HBaseOptions;
 
 public class BigTableOptions extends StoreFactoryOptions {
   public static final String DEFAULT_PROJECT_ID = "geowave-bigtable-project-id";

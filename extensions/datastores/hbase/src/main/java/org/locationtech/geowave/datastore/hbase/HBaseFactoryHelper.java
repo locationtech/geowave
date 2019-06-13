@@ -12,7 +12,7 @@ import java.io.IOException;
 import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
+import org.locationtech.geowave.datastore.hbase.config.HBaseRequiredOptions;
 import org.locationtech.geowave.datastore.hbase.operations.HBaseOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

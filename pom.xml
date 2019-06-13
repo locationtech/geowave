@@ -97,7 +97,8 @@
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g -Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
+		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
+			-Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
 		<spotbugs.version>3.1.10</spotbugs.version>
 		<spotbugs.omitVisitors>MutableStaticFields,FindReturnRef</spotbugs.omitVisitors>
 		<spotbugs.effort>Max</spotbugs.effort>
@@ -949,7 +950,7 @@
 						<dependency>
 							<groupId>org.locationtech.geowave</groupId>
 							<artifactId>geowave-dev-resources</artifactId>
-							<version>1.4</version>
+							<version>1.5</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -1248,7 +1249,7 @@
 					<dependency>
 						<groupId>org.locationtech.geowave</groupId>
 						<artifactId>geowave-dev-resources</artifactId>
-						<version>1.4</version>
+						<version>1.5</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -1334,6 +1335,42 @@
 		</plugins>
 	</reporting>
 	<profiles>
+		<profile>
+			<id>build-installer-plugin</id>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<artifactId>maven-assembly-plugin</artifactId>
+							<version>3.1.1</version>
+							<configuration>
+								<finalName>installer-plugin</finalName>
+								<appendAssemblyId>false</appendAssemblyId>
+								<descriptorRefs>
+									<descriptorRef>default-installer-plugin</descriptorRef>
+								</descriptorRefs>
+							</configuration>
+							<executions>
+								<execution>
+									<id>make-assembly</id> <!-- this is used for inheritance merges -->
+									<phase>package</phase> <!-- bind to the packaging phase -->
+									<goals>
+										<goal>single</goal>
+									</goals>
+								</execution>
+							</executions>
+							<dependencies>
+								<dependency>
+									<groupId>org.locationtech.geowave</groupId>
+									<artifactId>geowave-dev-resources</artifactId>
+									<version>1.5</version>
+								</dependency>
+							</dependencies>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
 		<!-- skip all code quality tools if specified -->
 		<profile>
 			<id>skip-code-quality</id>

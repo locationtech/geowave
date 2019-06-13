@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>geowave-extension-parent</artifactId>
+		<groupId>org.locationtech.geowave</groupId>
+		<relativePath>../../</relativePath>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>geowave-cli-redis-embed</artifactId>
+	<name>GeoWave Redis Embedded Server</name>
+	<description>Geowave Redis Embedded Server</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-datastore-redis</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.kstyrc</groupId>
+			<artifactId>embedded-redis</artifactId>
+			<version>0.6</version>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>build-installer-plugin</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

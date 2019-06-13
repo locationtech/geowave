@@ -278,22 +278,14 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-testing-util</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.hbase</groupId>
-					<artifactId>hbase-client</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>hsqldb</groupId>
-					<artifactId>hsqldb</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-cli-hbase-embed</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-protocol</artifactId>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-cli-accumulo-embed</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>

@@ -14,7 +14,6 @@ public class AccumuloOperationProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
       new Class<?>[] {
           AccumuloSection.class,
-          AccumuloRunServerCommand.class,
           PreSplitPartitionIdCommand.class,
           SplitEqualIntervalCommand.class,
           SplitNumRecordsCommand.class,

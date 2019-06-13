@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.core.store.server.ServerOpHelper;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
-import org.locationtech.geowave.datastore.hbase.cli.config.HBaseOptions;
+import org.locationtech.geowave.datastore.hbase.config.HBaseOptions;
 import org.locationtech.geowave.datastore.hbase.operations.HBaseOperations;
 import org.locationtech.geowave.datastore.hbase.server.RowMergingServerOp;
 import org.locationtech.geowave.datastore.hbase.server.RowMergingVisibilityServerOp;

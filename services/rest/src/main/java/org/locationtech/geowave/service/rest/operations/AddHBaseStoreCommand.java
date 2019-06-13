@@ -23,7 +23,7 @@ import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
 import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
+import org.locationtech.geowave.datastore.hbase.config.HBaseRequiredOptions;
 
 @GeowaveOperation(name = "addstore/hbase", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
