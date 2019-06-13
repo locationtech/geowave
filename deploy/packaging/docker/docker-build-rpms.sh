@@ -60,6 +60,7 @@ $WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command clean
 docker run $DOCKER_ARGS --rm \
   -e WORKSPACE=/usr/src/geowave \
   -e MAVEN_OPTS="-Xmx1500m" \
+  -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
   -v $DOCKER_ROOT:/root \
   -v $WORKSPACE:/usr/src/geowave \
   locationtech/geowave-centos7-java8-build \
@@ -70,6 +71,7 @@ docker run $DOCKER_ARGS --rm \
   -e WORKSPACE=/usr/src/geowave \
   -e BUILD_SUFFIX="common" \
   -e TIME_TAG="$TIME_TAG" \
+  -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
   -v $DOCKER_ROOT:/root \
   -v $WORKSPACE:/usr/src/geowave \
   locationtech/geowave-centos7-rpm-build \
@@ -81,6 +83,7 @@ docker run $DOCKER_ARGS --rm \
   -e LOCAL_REPO_DIR=/usr/src/repo \
   -e LOCK_DIR=/usr/src/lock \
   -e TIME_TAG="$TIME_TAG" \
+  -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
   -v $DOCKER_ROOT:/root \
   -v $WORKSPACE:/usr/src/geowave \
   -v $LOCAL_REPO_DIR:/usr/src/repo \
@@ -99,6 +102,7 @@ do
       -e WORKSPACE=/usr/src/geowave \
       -e BUILD_ARGS="$build_args" \
       -e MAVEN_OPTS="-Xmx1500m" \
+      -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
       -v $DOCKER_ROOT:/root \
       -v $WORKSPACE:/usr/src/geowave \
       locationtech/geowave-centos7-java8-build \
@@ -110,6 +114,7 @@ do
       -e BUILD_ARGS="$build_args" \
       -e BUILD_SUFFIX="vendor" \
       -e TIME_TAG="$TIME_TAG" \
+      -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
       -v $DOCKER_ROOT:/root \
       -v $WORKSPACE:/usr/src/geowave \
       -v $LOCAL_REPO_DIR:/usr/src/repo \
@@ -121,6 +126,7 @@ do
       -e WORKSPACE=/usr/src/geowave \
       -e BUILD_ARGS="$build_args" \
       -e TIME_TAG="$TIME_TAG" \
+      -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
       -v $WORKSPACE:/usr/src/geowave \
       locationtech/geowave-centos7-rpm-build \
       /bin/bash -c \
@@ -132,6 +138,7 @@ do
       -e LOCAL_REPO_DIR=/usr/src/repo \
       -e LOCK_DIR=/usr/src/lock \
       -e TIME_TAG="$TIME_TAG" \
+      -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
       -v $DOCKER_ROOT:/root \
       -v $WORKSPACE:/usr/src/geowave \
       -v $LOCAL_REPO_DIR:/usr/src/repo \
