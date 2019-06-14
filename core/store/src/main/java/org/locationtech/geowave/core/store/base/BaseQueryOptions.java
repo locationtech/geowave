@@ -235,8 +235,7 @@ public class BaseQueryOptions {
         compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, false));
   }
 
-  public InternalDataAdapter<?>[] getAdaptersArray(final PersistentAdapterStore adapterStore)
-      throws IOException {
+  public InternalDataAdapter<?>[] getAdaptersArray(final PersistentAdapterStore adapterStore) {
     if ((adapterIds != null) && (adapterIds.length != 0)) {
       if ((adapters == null) || adapters.isEmpty()) {
         adapters = new ArrayList<>();
@@ -318,13 +317,24 @@ public class BaseQueryOptions {
           result.add(Pair.of(index, adapter));
         }
       } else if (indices.isNotEmpty()) {
+
+        boolean noIndices = true;
         for (final String name : indices.getIndexNames()) {
           final Index pIndex = indexStore.getIndex(name);
           // this could happen if persistent was turned off
           if (pIndex != null) {
+            noIndices = false;
             result.add(Pair.of(pIndex, adapter));
           }
         }
+        if (noIndices) {
+          // always at least add a null index to hint upstream callers that no index satisfies the
+          // given adapter
+          result.add(Pair.of(null, adapter));
+        }
+      } else { // always at least add a null index to hint upstream callers that no index satisfies
+               // the given adapter
+        result.add(Pair.of(null, adapter));
       }
     }
     return result;
@@ -421,7 +431,7 @@ public class BaseQueryOptions {
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
       final IndexStore indexStore,
-      final QueryConstraints query) throws IOException {
+      final QueryConstraints query) {
     return BaseDataStoreUtils.chooseBestIndex(
         getAdaptersWithMinimalSetOfIndices(adapterStore, adapterIndexMappingStore, indexStore),
         query);
