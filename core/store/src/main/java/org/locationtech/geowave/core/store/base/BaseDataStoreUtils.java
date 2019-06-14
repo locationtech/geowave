@@ -609,7 +609,15 @@ public class BaseDataStoreUtils {
 
       @Override
       public int compare(final Pair<Index, T> o1, final Pair<Index, T> o2) {
-
+        if (o1.getKey() == null) {
+          if (o2.getKey() == null) {
+            return 0;
+          }
+          return 1;
+        }
+        if (o2.getKey() == null) {
+          return -1;
+        }
         return o1.getKey().getName().compareTo(o1.getKey().getName());
       }
     });
@@ -621,7 +629,10 @@ public class BaseDataStoreUtils {
     List<T> valueSet = new ArrayList<>();
     Pair<Index, T> last = null;
     for (final Pair<Index, T> item : input) {
-      if ((last != null) && !last.getKey().getName().equals(item.getKey().getName())) {
+      if ((last != null)
+          && (item.getKey() != null)
+          && ((last.getKey() == null)
+              || !last.getKey().getName().equals(item.getKey().getName()))) {
         result.add(Pair.of(last.getLeft(), valueSet));
         valueSet = new ArrayList<>();
       }

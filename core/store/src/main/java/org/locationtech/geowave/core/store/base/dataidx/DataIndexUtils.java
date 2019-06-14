@@ -190,6 +190,51 @@ public class DataIndexUtils {
     return null;
   }
 
+  public static void delete(
+      final DataStoreOperations operations,
+      final PersistentAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
+      final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
+      final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+      final String[] additionalAuthorizations,
+      final short adapterId,
+      final byte[]... dataIds) {
+    final DataIndexReaderParams readerParams =
+        new DataIndexReaderParamsBuilder<>(
+            adapterStore,
+            internalAdapterStore).additionalAuthorizations(
+                additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
+                    adapterId).dataIds(dataIds).fieldSubsets(fieldSubsets).aggregation(
+                        aggregation).build();
+    operations.delete(readerParams);
+  }
+
+  public static void delete(
+      final DataStoreOperations operations,
+      final PersistentAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
+      final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
+      final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+      final String[] additionalAuthorizations,
+      final short adapterId,
+      final byte[] startDataId,
+      final byte[] endDataId) {
+    // TODO within the datastores delete by range is not supported (the deletion logic expect Data
+    // IDs to be non-null within reader params and deletions don't have logic for handling ranges
+
+    // GEOWAVE Issue #1575 documents this
+
+    LOGGER.warn("Deletion by Data ID Range is currently unsupported.  See Github Issue #1575.");
+    // final DataIndexReaderParams readerParams =
+    // new DataIndexReaderParamsBuilder<>(
+    // adapterStore,
+    // internalAdapterStore).additionalAuthorizations(
+    // additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
+    // adapterId).dataIdsByRange(startDataId, endDataId).fieldSubsets(
+    // fieldSubsets).aggregation(aggregation).build();
+    // operations.delete(readerParams);
+  }
+
   public static RowReader<GeoWaveRow> getRowReader(
       final DataStoreOperations operations,
       final PersistentAdapterStore adapterStore,
