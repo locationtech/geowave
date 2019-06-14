@@ -21,11 +21,55 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>
+			<artifactId>accumulo-core</artifactId>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.thrift</groupId>
+					<artifactId>libthrift</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.htrace</groupId>
+					<artifactId>htrace-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.accumulo</groupId>
+			<artifactId>accumulo-fate</artifactId>
+			<version>${accumulo.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.accumulo</groupId>
+			<artifactId>accumulo-start</artifactId>
+			<version>${accumulo.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.thrift</groupId>
+			<artifactId>libthrift</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.accumulo</groupId>
 			<artifactId>accumulo-minicluster</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.accumulo</groupId>
 					<artifactId>accumulo-monitor</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.accumulo</groupId>
+					<artifactId>accumulo-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.accumulo</groupId>
+					<artifactId>accumulo-fate</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.accumulo</groupId>
+					<artifactId>accumulo-start</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -34,6 +78,14 @@
 				<exclusion>
 					<artifactId>jersey-core</artifactId>
 					<groupId>com.sun.jersey</groupId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.thrift</groupId>
+					<artifactId>libthrift</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.htrace</groupId>
+					<artifactId>htrace-core</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

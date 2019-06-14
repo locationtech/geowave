@@ -55,28 +55,4 @@
 			</build>
 		</profile>
 	</profiles>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<executions>
-					<execution>
-						<id>install-gdal</id>
-						<phase>generate-test-resources</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<mainClass>org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal</mainClass>
-					<arguments>
-						<argument>${gdal.dir}</argument>
-					</arguments>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

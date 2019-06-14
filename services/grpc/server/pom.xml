@@ -36,18 +36,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-accumulo</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-hbase</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-adapter-vector</artifactId>
 			<version>${project.version}</version>
 		</dependency>

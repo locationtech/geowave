@@ -13,6 +13,7 @@ import io.grpc.BindableService;
 import io.grpc.stub.StreamObserver;
 import java.io.File;
 import java.util.Map;
+import org.locationtech.geowave.analytic.spark.kde.operations.KDESparkCommand;
 import org.locationtech.geowave.analytic.spark.kmeans.operations.KmeansSparkCommand;
 import org.locationtech.geowave.analytic.spark.sparksql.operations.SparkSqlCommand;
 import org.locationtech.geowave.analytic.spark.spatial.operations.SpatialJoinCommand;
@@ -23,6 +24,7 @@ import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import org.locationtech.geowave.service.grpc.protobuf.AnalyticSparkGrpc;
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos;
+import org.locationtech.geowave.service.grpc.protobuf.KDESparkCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.KmeansSparkCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.SparkSqlCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.SpatialJoinCommandParametersProtos;
@@ -38,6 +40,31 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
   @Override
   public BindableService getBindableService() {
     return (BindableService) this;
+  }
+
+  @Override
+  public void kDESparkCommand(
+      KDESparkCommandParametersProtos request,
+      StreamObserver<VoidResponseProtos> responseObserver) {
+    KDESparkCommand cmd = new KDESparkCommand();
+    Map<FieldDescriptor, Object> m = request.getAllFields();
+    GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
+
+    final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
+    final OperationParams params = new ManualOperationParams();
+    params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
+
+    cmd.prepare(params);
+    LOGGER.info("Executing KDESparkCommand...");
+    try {
+      cmd.computeResults(params);
+      VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
+      responseObserver.onNext(resp);
+      responseObserver.onCompleted();
+
+    } catch (final Exception e) {
+      LOGGER.error("Exception encountered executing command", e);
+    }
   }
 
   @Override

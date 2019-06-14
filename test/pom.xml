@@ -532,30 +532,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<executions>
-					<execution>
-						<id>install-gdal-IT</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<mainClass>org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal</mainClass>
-					<arguments>
-						<argument>${gdal.dir}</argument>
-					</arguments>
-				</configuration>
-			</plugin>
-			<!-- <plugin> <groupId>com.google.cloud.bigtable</groupId> <artifactId>bigtable-emulator-maven-plugin</artifactId> 
-				<version>1.0.0</version> <executions> <execution> <goals> <goal>start</goal> 
-				<goal>stop</goal> </goals> <configuration> <propertyName>bigtable.emulator.endpoint</propertyName> 
-				</configuration> </execution> </executions> </plugin> -->
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>2.18.1</version>

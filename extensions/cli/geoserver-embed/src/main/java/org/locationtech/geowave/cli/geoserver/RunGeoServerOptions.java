@@ -34,8 +34,8 @@ public class RunGeoServerOptions {
 
   @Parameter(
       names = {"--directory", "-d"},
-      description = "The directory to use for geoserver. Default is './lib/embedded-geoserver/geoserver'")
-  private String directory = "./lib/embedded-geoserver/geoserver";
+      description = "The directory to use for geoserver. Default is './lib/services/third-party/embedded-geoserver/geoserver'")
+  private String directory = "./lib/services/third-party/embedded-geoserver/geoserver";
 
   protected static final int ACCEPT_QUEUE_SIZE = 100;
   protected static final int MAX_IDLE_TIME = (int) TimeUnit.HOURS.toMillis(1);
