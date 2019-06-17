@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.Supplier;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
@@ -42,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.Iterators;
-import com.google.inject.Provider;
 
 public class HBaseReader<T> implements RowReader<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(HBaseReader.class);
@@ -52,7 +52,7 @@ public class HBaseReader<T> implements RowReader<T> {
   protected final HBaseOperations operations;
   private final boolean clientSideRowMerging;
   private final GeoWaveRowIteratorTransformer<T> rowTransformer;
-  private final Provider<Scan> scanProvider;
+  private final Supplier<Scan> scanProvider;
 
   protected Closeable scanner = null;
   private Iterator<T> scanIt;
@@ -342,7 +342,7 @@ public class HBaseReader<T> implements RowReader<T> {
     return multiScanner;
   }
 
-  private Provider<Scan> createScanProvider(
+  private Supplier<Scan> createScanProvider(
       final RangeReaderParams<T> readerParams,
       final HBaseOperations operations,
       final boolean clientSideRowMerging) {
@@ -380,7 +380,7 @@ public class HBaseReader<T> implements RowReader<T> {
         }
       }
     }
-    return new Provider<Scan>() {
+    return new Supplier<Scan>() {
 
       @Override
       public Scan get() {
