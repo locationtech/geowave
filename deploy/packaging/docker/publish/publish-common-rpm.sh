@@ -66,8 +66,8 @@ if command -v aws >/dev/null 2>&1 ; then
 		aws s3 rm --recursive s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/docs/ --quiet
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/target/site/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/docs/ --quiet
 		echo '###### Cleaning and copying scripts to S3'
-		${WORKSPACE}/deploy/packaging/emr/generate-emr-scripts.sh --buildtype ${BUILD_TYPE} --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE}
-		${WORKSPACE}/deploy/packaging/sandbox/generate-sandbox-scripts.sh --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE}
+		${WORKSPACE}/deploy/packaging/emr/generate-emr-scripts.sh --buildtype ${BUILD_TYPE} --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE} --bucket ${GEOWAVE_BUCKET}
+		${WORKSPACE}/deploy/packaging/sandbox/generate-sandbox-scripts.sh --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE} --bucket ${GEOWAVE_BUCKET}
 		aws s3 rm --recursive s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/ --quiet
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/emr/generated/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/emr/ --quiet
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/sandbox/generated/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/sandbox/ --quiet

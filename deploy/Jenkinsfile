@@ -96,14 +96,6 @@ node ('master') {
     // S3 Cleanup
     sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
   }
-  
-  stage("Generate EMR Scripts") {
-    withEnv(["GEOWAVE_BUCKET=${ params.cache_bucket }"]) {
-        def build_type = readFile('deploy/target/build-type.txt').trim()
-        def version  = readFile('deploy/target/version.txt').trim()
-        sh "deploy/packaging/emr/generate-emr-scripts.sh --build-type ${build_type} --version ${version} --workspace ${env.WORKSPACE} --bucket ${GEOWAVE_BUCKET}"
-    }
-  }
 
   // Deploy to geowave-rpms
   stage('Deploying to S3'){
