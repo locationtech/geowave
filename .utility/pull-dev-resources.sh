@@ -1,7 +1,8 @@
 #!/bin/bash
 # Don't set -e in case the S3 pull fails
 set -v
-version=${DEV_RESOURCES_VERSION:=1.5-${version}.jar..."
+version=${DEV_RESOURCES_VERSION:=1.5}
+echo -e "Pull or build dev-resources-${version}.jar..."
 
 if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ]; then
 	# Pull dev-resources jar from S3
