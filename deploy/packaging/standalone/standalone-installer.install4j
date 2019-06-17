@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="7.0.10" transformSequenceNumber="7">
-  <directoryPresets config="../../../extensions/formats/geotools-vector/target" />
-  <application name="GeoWave" distributionSourceDir="" applicationId="5520-1479-3644-9667" mediaDir="../../target/install4j-output" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="geowave" publisher="" publisherWeb="" version="1.0.0" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="54e94e574843f5f8" javaMinVersion="1.8" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <directoryPresets config="../../../target" />
+  <application name="GeoWave" distributionSourceDir="" applicationId="5520-1479-3644-9667" mediaDir="../../target/install4j-output" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="geowave" publisher="" publisherWeb="" version="1.0.0" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="54e94e574843f5f8" javaMinVersion="1.8" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -48,7 +48,6 @@
       <mountPoint id="171" root="" location="lib/utilities/geoserver" mode="755" />
       <mountPoint id="172" root="" location="lib/utilities/landsat8" mode="755" />
       <mountPoint id="173" root="" location="lib/utilities/sentinel2" mode="755" />
-      <mountPoint id="174" root="" location="lib/utilities/gdal" mode="755" />
       <mountPoint id="175" root="" location="lib/analytics" mode="755" />
       <mountPoint id="176" root="" location="lib/analytics/spark" mode="755" />
       <mountPoint id="177" root="" location="lib/analytics/mapreduce" mode="755" />
@@ -64,6 +63,8 @@
       <mountPoint id="196" root="" location="lib/services/third-party/embedded-accumulo" mode="755" />
       <mountPoint id="197" root="" location="lib/services/grpc" mode="755" />
       <mountPoint id="198" root="" location="lib/services/rest" mode="755" />
+      <mountPoint id="340" root="" location="examples" mode="755" />
+      <mountPoint id="341" root="" location="docs" mode="755" />
     </mountPoints>
     <entries>
       <dirEntry mountPoint="71" file="../../target/installer-main" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-main" excludeSuffixes="" dirMode="755" overrideDirMode="false">
@@ -129,9 +130,6 @@
       <dirEntry mountPoint="173" file="../../../extensions/cli/sentinel2/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
-      <dirEntry mountPoint="174" file="../../../extensions/adapters/raster/target/gdal" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="gdal" excludeSuffixes="" dirMode="755" overrideDirMode="false">
-        <exclude />
-      </dirEntry>
       <dirEntry mountPoint="176" file="../../../analytics/spark/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
@@ -159,6 +157,18 @@
       <dirEntry mountPoint="197" file="../../../services/grpc/server/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
+      <dirEntry mountPoint="340" file="../../../examples" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="examples" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude>
+          <entry location="java-api/.classpath" fileType="regular" />
+          <entry location="java-api/.project" fileType="regular" />
+          <entry location="java-api/.settings" fileType="regular" />
+          <entry location="java-api/src/test" fileType="regular" />
+          <entry location="java-api/target" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="341" file="../../../target/site" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="site" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
     </entries>
     <components>
       <component name="Core" id="59" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="false" downloadable="false" hidden="true">
@@ -172,12 +182,16 @@
       </component>
       <component name="Documentation" id="114" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
         <description />
-        <include all="false" />
+        <include all="false">
+          <entry location="docs" fileType="regular" />
+        </include>
         <dependencies />
       </component>
       <component name="Examples" id="121" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
         <description />
-        <include all="false" />
+        <include all="false">
+          <entry location="examples" fileType="regular" />
+        </include>
         <dependencies />
       </component>
       <folder name="Utilities" id="133" customizedId="" displayDescription="false" hideHelpButton="false" expanded="true">

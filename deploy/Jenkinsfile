@@ -9,14 +9,14 @@ node ('master') {
           [
             [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5']],
             [$class: 'ParametersDefinitionProperty', parameterDefinitions: [
-              [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'maxar-geowave-rpms', description: 'Bucket for rpms'],
-              [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'maxar-geowave', description: 'Root GeoWave Bucket'],
-              [$class: 'StringParameterDefinition', name: 'notebook_bucket', defaultValue: 'maxar-geowave-notebooks', description: 'Bucket for notebooks'],
-              [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/maxar-geowave/3rd-party', description: 'URL to third party downloads directory (No trailing slash)'],
+              [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'geowave-rpms', description: 'Bucket for rpms'],
+              [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'geowave', description: 'Root GeoWave Bucket'],
+              [$class: 'StringParameterDefinition', name: 'notebook_bucket', defaultValue: 'geowave-notebooks', description: 'Bucket for notebooks'],
+              [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/geowave/third-party-downloads', description: 'URL to third party downloads directory (No trailing slash)'],
               [$class: 'StringParameterDefinition', name: 'LOCAL_REPO_DIR', defaultValue: '/jenkins/gw-repo/snapshots', description: 'Path on the local filesystem to the repo'],
               [$class: 'StringParameterDefinition', name: 'build_type', defaultValue: 'clean install', description: 'Maven build type. To publish to central change to deploy. Credentials must be added.'],
-              [$class: 'StringParameterDefinition', name: 'git_repo', defaultValue: 'https://github.com/scotlynhatt/geowave.git', description: 'Repo to clone'],
-              [$class: 'StringParameterDefinition', name: 'git_branch', defaultValue: 'devops/new-env-changes', description: 'Branch to build'],
+              [$class: 'StringParameterDefinition', name: 'git_repo', defaultValue: 'https://github.com/locationtech/geowave.git', description: 'Repo to clone'],
+              [$class: 'StringParameterDefinition', name: 'git_branch', defaultValue: 'master', description: 'Branch to build'],
               [$class: 'ChoiceParameterDefinition', name: 'overwrite_parameters', choices: 'No\nYes', description: 'Set to yes to reset parameters to defaults'],
               ]
             ],

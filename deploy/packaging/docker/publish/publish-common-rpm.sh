@@ -71,7 +71,10 @@ if command -v aws >/dev/null 2>&1 ; then
 		aws s3 rm --recursive s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/ --quiet
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/emr/generated/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/emr/ --quiet
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/sandbox/generated/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/sandbox/ --quiet
-
+		if [[ -d ${WORKSPACE}/deploy/target/install4j-output ]]; then
+			echo '###### Copying standalone installers to S3'
+			aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/target/install4j-output/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/standalone-installers/ --quiet
+        fi 
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/examples/data/notebooks/ s3://${GEOWAVE_BUCKET}-notebooks/${GEOWAVE_VERSION_URL}/notebooks/ --quiet
 
 		# Copy built pyspark package to lib directory

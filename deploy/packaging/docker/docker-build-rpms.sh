@@ -28,7 +28,7 @@ BUILD_ARGS_MATRIX=${ARGS[buildargsmatrix]}
 DOCKER_ARGS=${ARGS[dockerargs]}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TIME_TAG=$(date +"%Y%m%d%H%M")
-SKIP_EXTRA="-Dfindbugs.skip -Dformatter.skip -DskipTests"
+SKIP_EXTRA="-Dspotbugs.skip -Dformatter.skip -DskipTests"
 cd "$SCRIPT_DIR/../../.."
 WORKSPACE="$(pwd)"
 DOCKER_ROOT=$WORKSPACE/docker-root
@@ -60,6 +60,7 @@ $WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command clean
 docker run $DOCKER_ARGS --rm \
   -e WORKSPACE=/usr/src/geowave \
   -e MAVEN_OPTS="-Xmx1500m" \
+  -e INSTALL4J_HOME="$INSTALL4J_HOME" \
   -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
   -v $DOCKER_ROOT:/root \
   -v $WORKSPACE:/usr/src/geowave \
