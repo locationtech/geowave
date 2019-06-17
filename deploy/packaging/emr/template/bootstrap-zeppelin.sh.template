@@ -14,7 +14,7 @@ GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
 
 #I've externalized commands into library functions for clarity, download and source
 if [ ! -f /tmp/configure-zeppelin.sh ]; then
-        aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/zeppelin/configure-zeppelin.sh /tmp/configure-zeppelin.sh
+        aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/zeppelin/configure-zeppelin.sh /tmp/configure-zeppelin.sh
 fi
 source /tmp/configure-zeppelin.sh
 

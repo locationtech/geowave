@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureAttributeDimensionField;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.simple.SimpleDoubleIndexStrategy;
 import org.locationtech.geowave.core.index.simple.SimpleLongIndexStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -76,6 +77,114 @@ public class SimpleQuerySecondaryIndexIT extends AbstractGeoWaveIT {
   }
 
   @Test
+  public void testNoSecondaryIndices() {
+    final DataStore ds = dataStoreOptions.createDataStore();
+    final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
+    final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
+    final List<SimpleFeature> features =
+        SimpleIngest.getGriddedFeatures(new SimpleFeatureBuilder(sft), 1234);
+    ds.addType(fda);
+    int totalFeatures = 0;
+    int ingestedFeatures = 0;
+    try (Writer<SimpleFeature> writer = ds.createWriter(fda.getTypeName())) {
+      for (final SimpleFeature feat : features) {
+        if ((totalFeatures % 5) == 0) {
+          // just write 20 percent of the grid
+          writer.write(feat);
+          ingestedFeatures++;
+        }
+        totalFeatures++;
+      }
+    }
+    try (CloseableIterator<SimpleFeature> it =
+        ds.query(
+            VectorQueryBuilder.newBuilder().addTypeName(sft.getTypeName()).constraints(
+                VectorQueryBuilder.newBuilder().constraintsFactory().dataIds(
+                    StringUtils.stringToBinary(Integer.toString(1234)))).build())) {
+      Assert.assertTrue(it.hasNext());
+    }
+    Assert.assertTrue(
+        ds.delete(
+            VectorQueryBuilder.newBuilder().addTypeName(sft.getTypeName()).constraints(
+                VectorQueryBuilder.newBuilder().constraintsFactory().dataIds(
+                    StringUtils.stringToBinary(Integer.toString(1234)))).build()));
+    try (CloseableIterator<SimpleFeature> it =
+        ds.query(
+            VectorQueryBuilder.newBuilder().addTypeName(sft.getTypeName()).constraints(
+                VectorQueryBuilder.newBuilder().constraintsFactory().dataIds(
+                    StringUtils.stringToBinary(Integer.toString(1234)))).build())) {
+      Assert.assertFalse(it.hasNext());
+    }
+    Assert.assertTrue(
+        ds.delete(
+            VectorQueryBuilder.newBuilder().addTypeName(sft.getTypeName()).constraints(
+                VectorQueryBuilder.newBuilder().constraintsFactory().dataIds(
+                    StringUtils.stringToBinary(Integer.toString(1239)))).build()));
+    try (CloseableIterator<SimpleFeature> it =
+        ds.query(
+            VectorQueryBuilder.newBuilder().addTypeName(sft.getTypeName()).constraints(
+                VectorQueryBuilder.newBuilder().constraintsFactory().dataIds(
+                    StringUtils.stringToBinary(Integer.toString(1239)))).build())) {
+      Assert.assertFalse(it.hasNext());
+    }
+    try (CloseableIterator<SimpleFeature> it =
+        ds.query(VectorQueryBuilder.newBuilder().addTypeName(sft.getTypeName()).build())) {
+      int count = 0;
+      while (it.hasNext()) {
+        it.next();
+        count++;
+      }
+      Assert.assertEquals(ingestedFeatures - 2, count);
+    }
+
+    // TODO within the datastores delete by range is not supported (the deletion logic expect Data
+    // IDs to be non-null within reader params and deletions don't have logic for handling ranges
+
+    // GEOWAVE Issue #1575 documents this
+    //@formatter:off
+//    try (CloseableIterator<SimpleFeature> it =
+//        ds.query(
+//            VectorQueryBuilder.newBuilder().addTypeName(sft.getTypeName()).constraints(
+//                VectorQueryBuilder.newBuilder().constraintsFactory().dataIdsByRange(
+//                    StringUtils.stringToBinary(Integer.toString(1234)),
+//                    StringUtils.stringToBinary(Integer.toString(1249)))).build())) {
+//      int count = 0;
+//      while (it.hasNext()) {
+//        it.next();
+//        count++;
+//      }
+    //there would be 4 but 2 were already delete individually
+//      Assert.assertEquals(2, count);
+//    }
+//    Assert.assertTrue(
+//        ds.delete(
+//            VectorQueryBuilder.newBuilder().addTypeName(sft.getTypeName()).constraints(
+//                VectorQueryBuilder.newBuilder().constraintsFactory().dataIdsByRange(
+//                    StringUtils.stringToBinary(Integer.toString(1234)),
+//                    StringUtils.stringToBinary(Integer.toString(1249)))).build()));
+//    try (CloseableIterator<SimpleFeature> it =
+//        ds.query(
+//            VectorQueryBuilder.newBuilder().addTypeName(sft.getTypeName()).constraints(
+//                VectorQueryBuilder.newBuilder().constraintsFactory().dataIdsByRange(
+//                    StringUtils.stringToBinary(Integer.toString(1234)),
+//                    StringUtils.stringToBinary(Integer.toString(1249)))).build())) {
+//      Assert.assertFalse(it.hasNext());
+//    }
+//    try (CloseableIterator<SimpleFeature> it =
+//        ds.query(VectorQueryBuilder.newBuilder().addTypeName(sft.getTypeName()).build())) {
+//      int count = 0;
+//      while (it.hasNext()) {
+//        it.next();
+//        count++;
+//      }
+    //this would include 2 from individual deletion and 2 from range deletion
+//      Assert.assertEquals(ingestedFeatures - 4, count);
+//    }
+    //@formatter:on
+    ds.deleteAll();
+  }
+
+  // @Test
   public void testMultipleSecondaryIndices() {
     final DataStore ds = dataStoreOptions.createDataStore();
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
@@ -155,5 +264,6 @@ public class SimpleQuerySecondaryIndexIT extends AbstractGeoWaveIT {
       }
       Assert.assertTrue(count > 1);
     }
+    ds.deleteAll();
   }
 }

@@ -24,17 +24,17 @@ is_master() {
 
 # I've externalized commands into library functions for clarity, download and source
 if [ ! -f /tmp/create-configure-kernel.sh ]; then
-	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/create-configure-kernel.sh /tmp/create-configure-kernel.sh
+	aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/create-configure-kernel.sh /tmp/create-configure-kernel.sh
 	sudo chmod +x /tmp/create-configure-kernel.sh
 fi
 
 if [ ! -f /tmp/install-conda.sh ]; then
-	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/install-conda.sh /tmp/install-conda.sh
+	aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/install-conda.sh /tmp/install-conda.sh
 	sudo chmod +x /tmp/install-conda.sh
 fi
 
 if [ ! -f /tmp/gw-base.yml ]; then
-	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/gw-base.yml /tmp/gw-base.yml
+	aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/gw-base.yml /tmp/gw-base.yml
 fi
 
 
@@ -51,19 +51,20 @@ if [ ! -f "$RUN_FLAG" ]; then
 fi
 
 # Download example notebooks from s3
-aws s3 sync s3://geowave-notebooks/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ /usr/local/notebooks/
+aws s3 sync s3://GEOWAVE_NOTEBOOKS_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ /usr/local/notebooks/
 
 # Grab pre-spawn script for properly hooking new users into system.
-sudo aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/pre-spawn.sh /srv/jupyterhub/
+sudo aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/jupyter/pre-spawn.sh /srv/jupyterhub/
 sudo chmod +x /srv/jupyterhub/pre-spawn.sh
 
 # Download hub configuration file
-sudo su root -c "aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/jupyterhub_config.py /etc/jupyterhub/"
+sudo su root -c "aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/jupyter/jupyterhub_config.py /etc/jupyterhub/"
 
 # Download latest conda to root install location
 sudo su root -c "source /tmp/install-conda.sh /opt/miniconda.sh /opt/conda/"
 
-sudo su root -c "aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-${GEOWAVE_VER}.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz"
+# TODO find pyspark lib defined below
+sudo su root -c "aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-${GEOWAVE_VER}.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz"
 
 echo bootstrap_conda.sh completed. PATH now: $PATH
 echo Performing pixiedust and jupyter kernel setup.

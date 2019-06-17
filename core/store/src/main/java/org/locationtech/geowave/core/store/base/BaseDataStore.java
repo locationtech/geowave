@@ -283,11 +283,12 @@ public class BaseDataStore implements DataStore {
     } else {
       dataIdsToDelete = null;
     }
-    if (!delete
-        && baseOptions.isSecondaryIndexing()
-        && ((sanitizedConstraints instanceof DataIdQuery)
-            || (sanitizedConstraints instanceof DataIdRangeQuery)
-            || (sanitizedConstraints instanceof EverythingQuery))) {
+    final boolean dataIdIndexIsBest =
+        baseOptions.isSecondaryIndexing()
+            && ((sanitizedConstraints instanceof DataIdQuery)
+                || (sanitizedConstraints instanceof DataIdRangeQuery)
+                || (sanitizedConstraints instanceof EverythingQuery));
+    if (!delete && dataIdIndexIsBest) {
       try {
         // just grab the values directly from the Data Index
         InternalDataAdapter<?>[] adapters = queryOptions.getAdaptersArray(adapterStore);
@@ -384,205 +385,251 @@ public class BaseDataStore implements DataStore {
       final DedupeFilter filter = new DedupeFilter();
       MemoryPersistentAdapterStore tempAdapterStore;
 
-      try {
-        tempAdapterStore =
-            new MemoryPersistentAdapterStore(queryOptions.getAdaptersArray(adapterStore));
-        // keep a list of adapters that have been queried, to only load an
-        // adapter to be queried once
-        final Set<Short> queriedAdapters = new HashSet<>();
-        // if its an ordered constraints then it is dependent on the index selected, if its
-        // secondary indexing its inefficient to delete by constraints
-        final boolean deleteAllIndicesByConstraints =
-            ((delete
-                && ((constraints == null) || !constraints.indexMustBeSpecified())
-                && !baseOptions.isSecondaryIndexing()));
-        final List<Pair<Index, List<InternalDataAdapter<?>>>> indexAdapterPairList =
-            (deleteAllIndicesByConstraints)
-                ? queryOptions.getIndicesForAdapters(
-                    tempAdapterStore,
-                    indexMappingStore,
-                    indexStore)
-                : queryOptions.getBestQueryIndicies(
-                    tempAdapterStore,
-                    indexMappingStore,
-                    indexStore,
-                    sanitizedConstraints);
-        Map<Short, List<Index>> additionalIndicesToDelete = null;
-        if (DeletionMode.DELETE_WITH_DUPLICATES.equals(deleteMode)
-            && !deleteAllIndicesByConstraints) {
-          additionalIndicesToDelete = new HashMap<>();
-          // we have to make sure to delete from the other indices if they exist
-          final List<Pair<Index, List<InternalDataAdapter<?>>>> allIndices =
-              queryOptions.getIndicesForAdapters(tempAdapterStore, indexMappingStore, indexStore);
-          for (final Pair<Index, List<InternalDataAdapter<?>>> allPair : allIndices) {
-            for (final Pair<Index, List<InternalDataAdapter<?>>> constraintPair : indexAdapterPairList) {
-              if (constraintPair.getKey().equals(allPair.getKey())) {
-                allPair.getRight().removeAll(constraintPair.getRight());
-                break;
-              }
+      tempAdapterStore =
+          new MemoryPersistentAdapterStore(queryOptions.getAdaptersArray(adapterStore));
+      // keep a list of adapters that have been queried, to only load an
+      // adapter to be queried once
+      final Set<Short> queriedAdapters = new HashSet<>();
+      // if its an ordered constraints then it is dependent on the index selected, if its
+      // secondary indexing its inefficient to delete by constraints
+      final boolean deleteAllIndicesByConstraints =
+          ((delete
+              && ((constraints == null) || !constraints.indexMustBeSpecified())
+              && !baseOptions.isSecondaryIndexing()));
+      final List<Pair<Index, List<InternalDataAdapter<?>>>> indexAdapterPairList =
+          (deleteAllIndicesByConstraints)
+              ? queryOptions.getIndicesForAdapters(tempAdapterStore, indexMappingStore, indexStore)
+              : queryOptions.getBestQueryIndicies(
+                  tempAdapterStore,
+                  indexMappingStore,
+                  indexStore,
+                  sanitizedConstraints);
+      Map<Short, List<Index>> additionalIndicesToDelete = null;
+      if (DeletionMode.DELETE_WITH_DUPLICATES.equals(deleteMode)
+          && !deleteAllIndicesByConstraints) {
+        additionalIndicesToDelete = new HashMap<>();
+        // we have to make sure to delete from the other indices if they exist
+        final List<Pair<Index, List<InternalDataAdapter<?>>>> allIndices =
+            queryOptions.getIndicesForAdapters(tempAdapterStore, indexMappingStore, indexStore);
+        for (final Pair<Index, List<InternalDataAdapter<?>>> allPair : allIndices) {
+          for (final Pair<Index, List<InternalDataAdapter<?>>> constraintPair : indexAdapterPairList) {
+            if (((constraintPair.getKey() == null) && (allPair.getKey() == null))
+                || constraintPair.getKey().equals(allPair.getKey())) {
+              allPair.getRight().removeAll(constraintPair.getRight());
+              break;
             }
-            for (final InternalDataAdapter<?> adapter : allPair.getRight()) {
-              List<Index> indicies = additionalIndicesToDelete.get(adapter.getAdapterId());
-              if (indicies == null) {
-                indicies = new ArrayList<>();
-                additionalIndicesToDelete.put(adapter.getAdapterId(), indicies);
-              }
-              indicies.add(allPair.getLeft());
+          }
+          for (final InternalDataAdapter<?> adapter : allPair.getRight()) {
+            List<Index> indicies = additionalIndicesToDelete.get(adapter.getAdapterId());
+            if (indicies == null) {
+              indicies = new ArrayList<>();
+              additionalIndicesToDelete.put(adapter.getAdapterId(), indicies);
             }
+            indicies.add(allPair.getLeft());
           }
         }
-        final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation =
-            queryOptions.getAggregation();
-        for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : indexAdapterPairList) {
-          final List<Short> adapterIdsToQuery = new ArrayList<>();
-          // this only needs to be done once per index, not once per
-          // adapter
-          boolean queriedAllAdaptersByPrefix = false;
-          // maintain a set of data IDs if deleting using secondary indexing
-          for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
-            if (delete) {
-              final DataStoreCallbackManager callbackCache =
-                  new DataStoreCallbackManager(
-                      statisticsStore,
-                      queriedAdapters.add(adapter.getAdapterId()));
-
-              // the duplicate deletion callback utilizes insertion id
-              // query to clean up the dupes, in this case we do not
-              // want the stats to change
-              if (!(constraints instanceof InsertionIdQuery)) {
-                callbackCache.setPersistStats(baseOptions.isPersistDataStatistics());
+      }
+      final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation =
+          queryOptions.getAggregation();
+      for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : indexAdapterPairList) {
+        if (indexAdapterPair.getKey() == null) {
+          // this indicates there are no indices that satisfy this set of adapters
+          // we can still satisfy it with the data ID index if its available for certain types of
+          // queries
+          if (dataIdIndexIsBest) {
+            // and in fact this must be a deletion operation otherwise it would have been caught in
+            // prior logic for !delete
+            for (final InternalDataAdapter<?> adapter : indexAdapterPair.getRight()) {
+              if (sanitizedConstraints instanceof DataIdQuery) {
+                DataIndexUtils.delete(
+                    baseOperations,
+                    adapterStore,
+                    internalAdapterStore,
+                    queryOptions.getFieldIdsAdapterPair(),
+                    queryOptions.getAggregation(),
+                    queryOptions.getAuthorizations(),
+                    adapter.getAdapterId(),
+                    ((DataIdQuery) sanitizedConstraints).getDataIds());
+              } else if (sanitizedConstraints instanceof DataIdRangeQuery) {
+                DataIndexUtils.delete(
+                    baseOperations,
+                    adapterStore,
+                    internalAdapterStore,
+                    queryOptions.getFieldIdsAdapterPair(),
+                    queryOptions.getAggregation(),
+                    queryOptions.getAuthorizations(),
+                    adapter.getAdapterId(),
+                    ((DataIdRangeQuery) sanitizedConstraints).getStartDataIdInclusive(),
+                    ((DataIdRangeQuery) sanitizedConstraints).getEndDataIdInclusive());
               } else {
-                callbackCache.setPersistStats(false);
+                DataIndexUtils.delete(
+                    baseOperations,
+                    adapterStore,
+                    internalAdapterStore,
+                    queryOptions.getFieldIdsAdapterPair(),
+                    queryOptions.getAggregation(),
+                    queryOptions.getAuthorizations(),
+                    adapter.getAdapterId());
               }
-
-              deleteCallbacks.add(callbackCache);
-              final ScanCallback callback = queryOptions.getScanCallback();
-
-              final Index index = indexAdapterPair.getLeft();
-              if (deleteMode == DeletionMode.DELETE_WITH_DUPLICATES) {
-                final DeleteCallbackList<T, GeoWaveRow> delList =
-                    (DeleteCallbackList<T, GeoWaveRow>) callbackCache.getDeleteCallback(
-                        adapter,
-                        index);
-
-                final DuplicateDeletionCallback<T> dupDeletionCallback =
-                    new DuplicateDeletionCallback<>(this, adapter, index);
-                delList.addCallback(dupDeletionCallback);
-                if ((additionalIndicesToDelete != null)
-                    && (additionalIndicesToDelete.get(adapter.getAdapterId()) != null)) {
-                  delList.addCallback(
-                      new DeleteOtherIndicesCallback<>(
-                          baseOperations,
-                          adapter,
-                          additionalIndicesToDelete.get(adapter.getAdapterId()),
-                          adapterStore,
-                          internalAdapterStore,
-                          queryOptions.getAuthorizations()));
-                }
-              }
-              final Map<Short, Set<ByteArray>> internalDataIdsToDelete = dataIdsToDelete;
-              queryOptions.setScanCallback(new ScanCallback<Object, GeoWaveRow>() {
-
-                @Override
-                public void entryScanned(final Object entry, final GeoWaveRow row) {
-                  if (callback != null) {
-                    callback.entryScanned(entry, row);
-                  }
-                  if (internalDataIdsToDelete != null) {
-                    final ByteArray dataId = new ByteArray(row.getDataId());
-                    Set<ByteArray> currentDataIdsToDelete =
-                        internalDataIdsToDelete.get(row.getAdapterId());
-                    if (currentDataIdsToDelete == null) {
-                      currentDataIdsToDelete = Collections.synchronizedSet(new HashSet<>());
-                      internalDataIdsToDelete.put(row.getAdapterId(), currentDataIdsToDelete);
-                    }
-                    currentDataIdsToDelete.add(dataId);
-                  }
-                  callbackCache.getDeleteCallback(adapter, index).entryDeleted(entry, row);
-                }
-              });
             }
-            QueryConstraints adapterIndexConstraints;
-            if (isConstraintsAdapterIndexSpecific) {
-              adapterIndexConstraints =
-                  ((AdapterAndIndexBasedQueryConstraints) sanitizedConstraints).createQueryConstraints(
-                      adapter,
-                      indexAdapterPair.getLeft());
-              if (adapterIndexConstraints == null) {
-                continue;
-              }
-            } else {
-              adapterIndexConstraints = sanitizedConstraints;
-            }
-            if (isAggregationAdapterIndexSpecific) {
-              queryOptions.setAggregation(
-                  ((AdapterAndIndexBasedAggregation) aggregation.getRight()).createAggregation(
-                      adapter,
-                      indexAdapterPair.getLeft()),
-                  aggregation.getLeft());
-            }
-            if (adapterIndexConstraints instanceof InsertionIdQuery) {
-              queryOptions.setLimit(-1);
-              results.add(
-                  queryInsertionId(
-                      adapter,
-                      indexAdapterPair.getLeft(),
-                      (InsertionIdQuery) adapterIndexConstraints,
-                      filter,
-                      queryOptions,
-                      tempAdapterStore,
-                      delete));
-              continue;
-            } else if (adapterIndexConstraints instanceof PrefixIdQuery) {
-              if (!queriedAllAdaptersByPrefix) {
-                final PrefixIdQuery prefixIdQuery = (PrefixIdQuery) adapterIndexConstraints;
-                results.add(
-                    queryRowPrefix(
-                        indexAdapterPair.getLeft(),
-                        prefixIdQuery.getPartitionKey(),
-                        prefixIdQuery.getSortKeyPrefix(),
-                        queryOptions,
-                        indexAdapterPair.getRight(),
-                        tempAdapterStore,
-                        delete));
-                queriedAllAdaptersByPrefix = true;
-              }
-              continue;
-            } else if (isConstraintsAdapterIndexSpecific || isAggregationAdapterIndexSpecific) {
-              // can't query multiple adapters in the same scan
-              results.add(
-                  queryConstraints(
-                      Collections.singletonList(adapter.getAdapterId()),
-                      indexAdapterPair.getLeft(),
-                      adapterIndexConstraints,
-                      filter,
-                      queryOptions,
-                      tempAdapterStore,
-                      delete));
-              continue;
-            }
-            // finally just add it to a list to query multiple adapters
-            // in on scan
-            adapterIdsToQuery.add(adapter.getAdapterId());
+          } else {
+            final String[] typeNames =
+                indexAdapterPair.getRight().stream().map(a -> a.getAdapter().getTypeName()).toArray(
+                    k -> new String[k]);
+            LOGGER.warn(
+                "Data types '"
+                    + ArrayUtils.toString(typeNames)
+                    + "' do not have an index that satisfies the query");
           }
-          // supports querying multiple adapters in a single index
-          // in one query instance (one scanner) for efficiency
-          if (adapterIdsToQuery.size() > 0) {
+
+          continue;
+        }
+        final List<Short> adapterIdsToQuery = new ArrayList<>();
+        // this only needs to be done once per index, not once per
+        // adapter
+        boolean queriedAllAdaptersByPrefix = false;
+        // maintain a set of data IDs if deleting using secondary indexing
+        for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
+          if (delete) {
+            final DataStoreCallbackManager callbackCache =
+                new DataStoreCallbackManager(
+                    statisticsStore,
+                    queriedAdapters.add(adapter.getAdapterId()));
+
+            // the duplicate deletion callback utilizes insertion id
+            // query to clean up the dupes, in this case we do not
+            // want the stats to change
+            if (!(constraints instanceof InsertionIdQuery)) {
+              callbackCache.setPersistStats(baseOptions.isPersistDataStatistics());
+            } else {
+              callbackCache.setPersistStats(false);
+            }
+
+            deleteCallbacks.add(callbackCache);
+            final ScanCallback callback = queryOptions.getScanCallback();
+
+            final Index index = indexAdapterPair.getLeft();
+            if (deleteMode == DeletionMode.DELETE_WITH_DUPLICATES) {
+              final DeleteCallbackList<T, GeoWaveRow> delList =
+                  (DeleteCallbackList<T, GeoWaveRow>) callbackCache.getDeleteCallback(
+                      adapter,
+                      index);
+
+              final DuplicateDeletionCallback<T> dupDeletionCallback =
+                  new DuplicateDeletionCallback<>(this, adapter, index);
+              delList.addCallback(dupDeletionCallback);
+              if ((additionalIndicesToDelete != null)
+                  && (additionalIndicesToDelete.get(adapter.getAdapterId()) != null)) {
+                delList.addCallback(
+                    new DeleteOtherIndicesCallback<>(
+                        baseOperations,
+                        adapter,
+                        additionalIndicesToDelete.get(adapter.getAdapterId()),
+                        adapterStore,
+                        internalAdapterStore,
+                        queryOptions.getAuthorizations()));
+              }
+            }
+            final Map<Short, Set<ByteArray>> internalDataIdsToDelete = dataIdsToDelete;
+            queryOptions.setScanCallback(new ScanCallback<Object, GeoWaveRow>() {
+
+              @Override
+              public void entryScanned(final Object entry, final GeoWaveRow row) {
+                if (callback != null) {
+                  callback.entryScanned(entry, row);
+                }
+                if (internalDataIdsToDelete != null) {
+                  final ByteArray dataId = new ByteArray(row.getDataId());
+                  Set<ByteArray> currentDataIdsToDelete =
+                      internalDataIdsToDelete.get(row.getAdapterId());
+                  if (currentDataIdsToDelete == null) {
+                    currentDataIdsToDelete = Collections.synchronizedSet(new HashSet<>());
+                    internalDataIdsToDelete.put(row.getAdapterId(), currentDataIdsToDelete);
+                  }
+                  currentDataIdsToDelete.add(dataId);
+                }
+                callbackCache.getDeleteCallback(adapter, index).entryDeleted(entry, row);
+              }
+            });
+          }
+          QueryConstraints adapterIndexConstraints;
+          if (isConstraintsAdapterIndexSpecific) {
+            adapterIndexConstraints =
+                ((AdapterAndIndexBasedQueryConstraints) sanitizedConstraints).createQueryConstraints(
+                    adapter,
+                    indexAdapterPair.getLeft());
+            if (adapterIndexConstraints == null) {
+              continue;
+            }
+          } else {
+            adapterIndexConstraints = sanitizedConstraints;
+          }
+          if (isAggregationAdapterIndexSpecific) {
+            queryOptions.setAggregation(
+                ((AdapterAndIndexBasedAggregation) aggregation.getRight()).createAggregation(
+                    adapter,
+                    indexAdapterPair.getLeft()),
+                aggregation.getLeft());
+          }
+          if (adapterIndexConstraints instanceof InsertionIdQuery) {
+            queryOptions.setLimit(-1);
             results.add(
-                queryConstraints(
-                    adapterIdsToQuery,
+                queryInsertionId(
+                    adapter,
                     indexAdapterPair.getLeft(),
-                    sanitizedConstraints,
+                    (InsertionIdQuery) adapterIndexConstraints,
                     filter,
                     queryOptions,
                     tempAdapterStore,
                     delete));
+            continue;
+          } else if (adapterIndexConstraints instanceof PrefixIdQuery) {
+            if (!queriedAllAdaptersByPrefix) {
+              final PrefixIdQuery prefixIdQuery = (PrefixIdQuery) adapterIndexConstraints;
+              results.add(
+                  queryRowPrefix(
+                      indexAdapterPair.getLeft(),
+                      prefixIdQuery.getPartitionKey(),
+                      prefixIdQuery.getSortKeyPrefix(),
+                      queryOptions,
+                      indexAdapterPair.getRight(),
+                      tempAdapterStore,
+                      delete));
+              queriedAllAdaptersByPrefix = true;
+            }
+            continue;
+          } else if (isConstraintsAdapterIndexSpecific || isAggregationAdapterIndexSpecific) {
+            // can't query multiple adapters in the same scan
+            results.add(
+                queryConstraints(
+                    Collections.singletonList(adapter.getAdapterId()),
+                    indexAdapterPair.getLeft(),
+                    adapterIndexConstraints,
+                    filter,
+                    queryOptions,
+                    tempAdapterStore,
+                    delete));
+            continue;
           }
+          // finally just add it to a list to query multiple adapters
+          // in on scan
+          adapterIdsToQuery.add(adapter.getAdapterId());
         }
-
-      } catch (final IOException e1) {
-        LOGGER.error("Failed to resolve adapter or index for query", e1);
+        // supports querying multiple adapters in a single index
+        // in one query instance (one scanner) for efficiency
+        if (adapterIdsToQuery.size() > 0) {
+          results.add(
+              queryConstraints(
+                  adapterIdsToQuery,
+                  indexAdapterPair.getLeft(),
+                  sanitizedConstraints,
+                  filter,
+                  queryOptions,
+                  tempAdapterStore,
+                  delete));
+        }
       }
+
     }
     return new CloseableIteratorWrapper<>(new Closeable() {
 
