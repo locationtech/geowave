@@ -22,12 +22,14 @@ trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm && exit' ERR
 GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
 BUILD_TYPE=$(cat $WORKSPACE/deploy/target/build-type.txt)
 GEOWAVE_VERSION_URL=$(cat $WORKSPACE/deploy/target/version-url.txt)
+
 echo "---------------------------------------------------------------"
 echo "         Publishing GeoWave Common RPMs"
 echo "GEOWAVE_VERSION=${GEOWAVE_VERSION}"
 echo "GEOWAVE_VERSION_URL=${GEOWAVE_VERSION_URL}"
 echo "BUILD_TYPE=${BUILD_TYPE}"
 echo "TIME_TAG=${TIME_TAG}"
+echo "GEOWAVE_BUCKET=${GEOWAVE_BUCKET}"
 echo "---------------------------------------------------------------"
 
 
@@ -61,19 +63,19 @@ rpm2cpio *.rpm | cpio -idmv
 if command -v aws >/dev/null 2>&1 ; then
 	if [[ ! -z "$GEOWAVE_VERSION_URL" ]]; then
 		echo '###### Cleaning and copying documentation to S3'
-		aws s3 rm --recursive s3://geowave/${GEOWAVE_VERSION_URL}/docs/ --quiet
-		aws s3 cp --acl public-read --recursive ${WORKSPACE}/target/site/ s3://geowave/${GEOWAVE_VERSION_URL}/docs/ --quiet
+		aws s3 rm --recursive s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/docs/ --quiet
+		aws s3 cp --acl public-read --recursive ${WORKSPACE}/target/site/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/docs/ --quiet
 		echo '###### Cleaning and copying scripts to S3'
 		${WORKSPACE}/deploy/packaging/emr/generate-emr-scripts.sh --buildtype ${BUILD_TYPE} --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE}
 		${WORKSPACE}/deploy/packaging/sandbox/generate-sandbox-scripts.sh --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE}
-		aws s3 rm --recursive s3://geowave/${GEOWAVE_VERSION_URL}/scripts/ --quiet
-		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/emr/generated/ s3://geowave/${GEOWAVE_VERSION_URL}/scripts/emr/ --quiet
-		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/sandbox/generated/ s3://geowave/${GEOWAVE_VERSION_URL}/scripts/sandbox/ --quiet
+		aws s3 rm --recursive s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/ --quiet
+		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/emr/generated/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/emr/ --quiet
+		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/sandbox/generated/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/sandbox/ --quiet
 
-		aws s3 cp --acl public-read --recursive ${WORKSPACE}/examples/data/notebooks/ s3://geowave-notebooks/${GEOWAVE_VERSION_URL}/notebooks/ --quiet
+		aws s3 cp --acl public-read --recursive ${WORKSPACE}/examples/data/notebooks/ s3://${GEOWAVE_BUCKET}-notebooks/${GEOWAVE_VERSION_URL}/notebooks/ --quiet
 
 		# Copy built pyspark package to lib directory
-		aws s3 cp --acl public-read ${WORKSPACE}/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz s3://geowave/${GEOWAVE_VERSION_URL}/lib/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
+		aws s3 cp --acl public-read ${WORKSPACE}/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/lib/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
 	else
 		echo '###### Skipping publish to S3: GEOWAVE_VERSION_URL not defined'
 	fi
