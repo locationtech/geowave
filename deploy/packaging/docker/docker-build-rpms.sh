@@ -14,7 +14,8 @@
 #
 # Source all our reusable functionality, argument is the location of this script.
 trap 'chmod -R 777 $WORKSPACE && exit' ERR
-
+echo "INSTALL4J_HOME=${INSTALL4J_HOME}"
+echo "GEOWAVE_BUCKET=${GEOWAVE_BUCKET}"
 echo '###### Build Variables'
 declare -A ARGS
 while [ $# -gt 0 ]; do
