@@ -61,7 +61,7 @@ if [[ ! -f $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION
     mv $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION_STR}.tar.gz $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
 fi
 
-if [[ -v ${INSTALL4J_HOME}]]
+if [[! -z ${INSTALL4J_HOME}]]; then
     # Build standalone installer
     echo '###### Building standalone installer'
     mvn package -P build-installer-plugin $BUILD_ARGS "$@"

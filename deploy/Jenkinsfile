@@ -17,6 +17,7 @@ node ('master') {
               [$class: 'StringParameterDefinition', name: 'build_type', defaultValue: 'clean install', description: 'Maven build type. To publish to central change to deploy. Credentials must be added.'],
               [$class: 'StringParameterDefinition', name: 'git_repo', defaultValue: 'https://github.com/locationtech/geowave.git', description: 'Repo to clone'],
               [$class: 'StringParameterDefinition', name: 'git_branch', defaultValue: 'master', description: 'Branch to build'],
+              [$class: 'ChoiceParameterDefinition', name: 'install4j_home', defaultValue: '/opt/install4j7/', description: 'Home directory of install4j, required if building standalone installers'],
               [$class: 'ChoiceParameterDefinition', name: 'overwrite_parameters', choices: 'No\nYes', description: 'Set to yes to reset parameters to defaults'],
               ]
             ],
@@ -84,7 +85,7 @@ node ('master') {
 
   // Mark the build artifacts 'stage'....
   stage('Build and Publish RPMs'){
-    withEnv(["LOCAL_REPO_DIR=${ params.LOCAL_REPO_DIR }","GEOWAVE_BUCKET=${ params.cache_bucket }"]) {
+    withEnv(["LOCAL_REPO_DIR=${ params.LOCAL_REPO_DIR }","GEOWAVE_BUCKET=${ params.cache_bucket }","INSTALL4J_HOME=${ params.install4j_home }"]) {
         sh "deploy/packaging/docker/docker-build-rpms.sh"
     }
   }
