@@ -76,6 +76,12 @@ public class HBaseMiniCluster {
         System.setProperty("test.build.data.basedirectory", hbaseDataDir);
         conf.setBoolean("hbase.online.schema.update.enable", true);
         conf.setBoolean("hbase.defaults.for.version.skip", true);
+        conf.setIfUnset("hbase.root.dir", hbaseDataDir);
+        if (zookeeper != null && zookeeper.contains(":")) {
+          conf.setIfUnset("zookeeper.host", zookeeper.split(":")[0]);
+          conf.setIfUnset("zookeeper.host", zookeeper.split(":")[1]);
+          conf.setIfUnset("zookeeper.connection.string", zookeeper);
+        }
         final boolean enableVisibility = (auths != null) && !auths.isEmpty();
         if (enableVisibility) {
           conf.set("hbase.superuser", "admin");

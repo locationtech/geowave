@@ -25,12 +25,12 @@ public class RunHBaseServer extends DefaultOperation implements Command {
   private static final Logger LOGGER = LoggerFactory.getLogger(RunHBaseServer.class);
 
   @ParametersDelegate
-  private final RunHBaseServerOptions options = new RunHBaseServerOptions();
+  private RunHBaseServerOptions options = new RunHBaseServerOptions();
 
   @Parameter(
       names = {"--interactive", "-i"},
       description = "Whether to prompt for user input to end the process")
-  private final boolean interactive = false;
+  private boolean interactive = false;
 
   /**
    * Prep the driver & run the operation.
@@ -39,22 +39,27 @@ public class RunHBaseServer extends DefaultOperation implements Command {
   public void execute(final OperationParams params) {
 
     HBaseMiniCluster cluster = null;
+    ZookeeperMiniCluster zkCluster = null;
     try {
+      zkCluster = ZookeeperMiniCluster.getInstance(options.getLibDir(), options.getZkDataDir());
+      zkCluster.setup();
       cluster = options.getMiniCluster();
-
       cluster.setup();
       if (interactive) {
         System.out.println("hit any key to shutdown ..");
         System.in.read();
         System.out.println("Shutting down!");
         cluster.tearDown();
+        zkCluster.tearDown();
       } else {
         final HBaseMiniCluster stopCluster = cluster;
+        final ZookeeperMiniCluster stopZkCluster = zkCluster;
         Runtime.getRuntime().addShutdownHook(new Thread() {
           @Override
           public void run() {
             try {
               stopCluster.tearDown();
+              stopZkCluster.tearDown();
             } catch (final Exception e) {
               LOGGER.warn("Unable to shutdown hbase", e);
               System.out.println("Error shutting down hbase.");
@@ -74,6 +79,7 @@ public class RunHBaseServer extends DefaultOperation implements Command {
       if (cluster != null) {
         try {
           cluster.tearDown();
+          zkCluster.tearDown();
         } catch (final Exception e1) {
           LOGGER.error("Unable to stop the HBase server", e1);
         }

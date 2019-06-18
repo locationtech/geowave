@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 public class AccumuloMiniCluster {
   private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloMiniCluster.class);
-  protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
 
   protected static boolean isYarn() {
     return VersionUtil.compareVersions(VersionInfo.getVersion(), "2.2.0") >= 0;

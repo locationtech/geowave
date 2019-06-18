@@ -30,12 +30,11 @@
 				<exclude>org.apache.hadoop:hadoop-mapreduce-client-app</exclude>
 				<exclude>org.apache.hadoop:hadoop-mapreduce-client-core</exclude>
 				<exclude>org.apache.hadoop:hadoop-mapreduce-client-common</exclude>
-				<exclude>org.apache.hadoop:hadoop-mapreduce-client-jobclient</exclude>
+				<exclude>org.apache.hadoop:hadoop-mapreduce-client-jobclient:jar:</exclude>
 				<exclude>org.apache.hadoop:hadoop-yarn-api</exclude>
 				<exclude>org.apache.hadoop:hadoop-yarn-client</exclude>
 				<exclude>org.apache.hadoop:hadoop-yarn-common</exclude>
 				<exclude>org.apache.hadoop:hadoop-yarn-server-common</exclude>
-				<exclude>org.apache.hbase:hbase-server</exclude>
 				<exclude>org.apache.spark:spark-core*</exclude>
 				<exclude>org.apache.spark:spark-sql*</exclude>
 				<exclude>org.apache.spark:spark-tags*</exclude>

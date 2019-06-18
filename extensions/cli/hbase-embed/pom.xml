@@ -37,6 +37,51 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-protocol</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-minikdc</artifactId>
+			<version>${hadoop.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-protocol-ldap</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-jdbm-partition</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-protocol-shared</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-core-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-mavibot-partition</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-protocol-kerberos</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.directory.api</groupId>
+					<artifactId>api-all</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>
+						apacheds-interceptor-kerberos
+					</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-ldif-partition</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>

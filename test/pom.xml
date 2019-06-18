@@ -350,21 +350,6 @@
 			<version>0.6</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-minikdc</artifactId>
-			<version>${hadoop.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.directory.server</groupId>
-					<artifactId>apacheds-protocol-ldap</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.directory.server</groupId>
-					<artifactId>apacheds-jdbm-partition</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>cassandra-maven-plugin</artifactId>
 			<version>3.6</version>
