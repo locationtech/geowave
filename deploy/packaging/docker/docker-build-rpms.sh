@@ -55,16 +55,18 @@ if [[ ! -d $DOCKER_ROOT ]]; then
   echo "WARNING: The docker-root directory did not exist. Creating now." 
   mkdir $DOCKER_ROOT
 fi
-
+if [ ! -z ${INSTALL4J_HOME} ]; then
+    INSTALL4J_HOME=/opt/install4j7
+fi
 $WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command clean
 
 docker run $DOCKER_ARGS --rm \
   -e WORKSPACE=/usr/src/geowave \
   -e MAVEN_OPTS="-Xmx1500m" \
-  -e INSTALL4J_HOME="$INSTALL4J_HOME" \
   -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
   -v $DOCKER_ROOT:/root \
   -v $WORKSPACE:/usr/src/geowave \
+  -v $INSTALL4J_HOME:/opt/install4j7 \
   locationtech/geowave-centos7-java8-build \
   /bin/bash -c \
   "cd \$WORKSPACE && deploy/packaging/docker/build-src/build-geowave-common.sh $SKIP_EXTRA"

@@ -19,7 +19,6 @@ trap 'chmod -R 777 $WORKSPACE && exit' ERR
 
 echo "---------------------------------------------------------------"
 echo "         Building GeoWave Common"
-echo "INSTALL4J_HOME=${INSTALL4J_HOME}"
 echo "---------------------------------------------------------------"
 mkdir -p $WORKSPACE/deploy/target
 GEOWAVE_VERSION_STR="$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec)"
@@ -60,13 +59,10 @@ if [[ ! -f $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION
     mvn package -am -pl analytics/pyspark -P python -Dpython.executable=python3.6 $BUILD_ARGS "$@"
     mv $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION_STR}.tar.gz $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
 fi
-if [ ! -z ${INSTALL4J_HOME} ]; then
-    INSTALL4J_HOME=/opt/install4j7
-fi
-if [ -d ${INSTALL4J_HOME} ]; then
+if [ -d /opt/install4j7 ]; then
     # Build standalone installer
     echo '###### Building standalone installer'
     mvn package -P build-installer-plugin $BUILD_ARGS "$@"
-    mvn package -pl deploy -P build-installer-main -Dinstall4j.home=${INSTALL4J_HOME} $BUILD_ARGS "$@"
+    mvn package -pl deploy -P build-installer-main -Dinstall4j.home=/opt/install4j7 $BUILD_ARGS "$@"
 fi
 
