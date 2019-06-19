@@ -86,8 +86,8 @@ node ('master') {
   // Mark the build artifacts 'stage'....
   stage('Build and Publish RPMs'){
     withEnv(["INSTALL4J_HOME=${params.install4j_home}", "LOCAL_REPO_DIR=${ params.LOCAL_REPO_DIR }","GEOWAVE_BUCKET=${ params.cache_bucket }"]) {
-    	sh "echo "INSTALL4J_HOME=${INSTALL4J_HOME}""
-    	sh "echo "params.install4j_home=${params.install4j_home}""
+    	sh "echo 'INSTALL4J_HOME=${INSTALL4J_HOME}'"
+    	sh "echo 'params.install4j_home=${params.install4j_home}'"
         sh "deploy/packaging/docker/docker-build-rpms.sh"
     }
   }
