@@ -16,6 +16,7 @@
 trap 'chmod -R 777 $WORKSPACE && exit' ERR
 echo "INSTALL4J_HOME=${INSTALL4J_HOME}"
 echo "GEOWAVE_BUCKET=${GEOWAVE_BUCKET}"
+echo "GEOWAVE_RPM_BUCKET=${GEOWAVE_RPM_BUCKET}"
 echo '###### Build Variables'
 declare -A ARGS
 while [ $# -gt 0 ]; do
@@ -99,6 +100,7 @@ docker run $DOCKER_ARGS --rm \
   -e LOCK_DIR=/usr/src/lock \
   -e TIME_TAG="$TIME_TAG" \
   -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
+  -e GEOWAVE_RPM_BUCKET="$GEOWAVE_RPM_BUCKET" \
   -v $DOCKER_ROOT:/root \
   -v $WORKSPACE:/usr/src/geowave \
   -v $LOCAL_REPO_DIR:/usr/src/repo \

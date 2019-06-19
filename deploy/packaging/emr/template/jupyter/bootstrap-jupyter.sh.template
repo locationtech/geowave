@@ -23,16 +23,16 @@ is_master() {
 
 # I've externalized commands into library functions for clarity, download and source
 if [ ! -f /tmp/create-configure-kernel.sh ]; then
-	aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/jupyter/create-configure-kernel.sh /tmp/create-configure-kernel.sh
+	aws s3 cp s3://$GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/create-configure-kernel.sh /tmp/create-configure-kernel.sh
 fi
 
 if [ ! -f /tmp/install-conda.sh ]; then
-	aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/jupyter/install-conda.sh /tmp/install-conda.sh
+	aws s3 cp s3://$GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/install-conda.sh /tmp/install-conda.sh
 	sudo chmod +x /tmp/install-conda.sh
 fi
 
 if [ ! -f /tmp/gw-base.yml ]; then
-	aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/jupyter/gw-base.yml /tmp/gw-base.yml
+	aws s3 cp s3://$GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/gw-base.yml /tmp/gw-base.yml
 fi
 
 # The EMR customize hooks run _before_ everything else, so Spark is not yet ready
@@ -48,9 +48,9 @@ if [ ! -f "$RUN_FLAG" ]; then
 fi
 
 # Download example notebooks from s3
-aws s3 sync s3://GEOWAVE_NOTEBOOK_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ $HOME/notebooks/
+aws s3 sync s3://$GEOWAVE_NOTEBOOK_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ $HOME/notebooks/
 
-aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-${GEOWAVE_VER}.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz
+aws s3 cp s3://$GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-${GEOWAVE_VER}.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz
 
 source /tmp/install-conda.sh
 

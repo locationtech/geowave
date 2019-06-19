@@ -11,7 +11,7 @@
 #!/bin/bash
 #
 # This will take the template and generate a set of scripts, replacing tokens appropriately
-# required parameters are --buildtype (dev or release), --version, --workspace, and --bucket
+# required parameters are --buildtype (dev or release), --version, --workspace, --rpmbucket, and --bucket
 DATASTORES=(
 	"accumulo"
 	"hbase"
@@ -31,13 +31,13 @@ then
 	GEOWAVE_REPO_RPM_TOKEN=geowave-repo-dev-1.0-3.noarch.rpm
 	GEOWAVE_VERSION_URL_TOKEN=latest
 	GEOWAVE_REPO_NAME_TOKEN=geowave-dev
-	GEOWAVE_REPO_BASE_URL_TOKEN=http://s3.amazonaws.com/${ARGS[bucket]}/dev/noarch/
+	GEOWAVE_REPO_BASE_URL_TOKEN=http://s3.amazonaws.com/${ARGS[rpmbucket]}/dev/noarch/
 else
 	#its a release
 	GEOWAVE_REPO_RPM_TOKEN=geowave-repo-1.0-3.noarch.rpm
 	GEOWAVE_VERSION_URL_TOKEN="${ARGS[version]}"
 	GEOWAVE_REPO_NAME_TOKEN=geowave
-	GEOWAVE_REPO_BASE_URL_TOKEN=http://s3.amazonaws.com/${ARGS[bucket]}/release/noarch/
+	GEOWAVE_REPO_BASE_URL_TOKEN=http://s3.amazonaws.com/${ARGS[rpmbucket]}/release/noarch/
 fi
 
 GEOWAVE_BUCKET_TOKEN=${ARGS[bucket]}
@@ -67,7 +67,7 @@ cp $SLD_DIR/*.sld $TARGET_ROOT/quickstart
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-geowave.sh
 sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-geowave.sh
 sed -i -e s/'$GEOWAVE_REPO_RPM_TOKEN'/${GEOWAVE_REPO_RPM_TOKEN}/g $TEMPLATE_ROOT/bootstrap-geowave.sh
-sed -i "s/GEOWAVE_BUCKET_TOKEN/${GEOWAVE_BUCKET_TOKEN}/g" $TEMPLATE_ROOT/bootstrap-geowave.sh
+sed -i -e s/'$GEOWAVE_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}/g $TEMPLATE_ROOT/bootstrap-geowave.sh
 
 sed -i -e s~'$GEOWAVE_REPO_BASE_URL_TOKEN'~${GEOWAVE_REPO_BASE_URL_TOKEN}~g $TEMPLATE_ROOT/geowave-install-lib.sh
 sed -i -e s/'$GEOWAVE_REPO_NAME_TOKEN'/${GEOWAVE_REPO_NAME_TOKEN}/g $TEMPLATE_ROOT/geowave-install-lib.sh
@@ -77,21 +77,23 @@ sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TARGET_ROOT/quickstart/
 # replacing tokens for jupyter bootstrap scripts
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
 sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
-sed -i "s/GEOWAVE_BUCKET_TOKEN/${GEOWAVE_BUCKET_TOKEN}/g" $TEMPLATE_ROOT/bootstrap-jupyter.sh
-sed -i "s/GEOWAVE_NOTEBOOKS_BUCKET_TOKEN/${GEOWAVE_BUCKET_TOKEN}-notebooks/g" $TEMPLATE_ROOT/bootstrap-jupyter.sh
+sed -i -e s/'$GEOWAVE_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
+sed -i -e s/'$GEOWAVE_NOTEBOOKS_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}-notebooks/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
 
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/create-configure-kernel.sh
 
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-jupyterhub.sh
 sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-jupyterhub.sh
-sed -i -e s/'GEOWAVE_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}/g $TEMPLATE_ROOT/bootstrap-jupyterhub.sh
-sed -i "s/GEOWAVE_NOTEBOOKS_BUCKET_TOKEN/${GEOWAVE_BUCKET_TOKEN}-notebooks/g" $TEMPLATE_ROOT/bootstrap-jupyterhub.sh
+sed -i -e s/'$GEOWAVE_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}/g $TEMPLATE_ROOT/bootstrap-jupyterhub.sh
+sed -i -e s/'$GEOWAVE_NOTEBOOKS_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}-notebooks/g $TEMPLATE_ROOT/bootstrap-jupyterhub.sh
 
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-zeppelin.sh
 sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-zeppelin.sh
-sed -i "s/GEOWAVE_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}/g" $TEMPLATE_ROOT/bootstrap-zeppelin.sh
-sed -i "s/GEOWAVE_NOTEBOOKS_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}-notebooks/g" $TEMPLATE_ROOT/configure-zeppelin.sh
+sed -i -e s/'$GEOWAVE_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}/g $TEMPLATE_ROOT/bootstrap-zeppelin.sh
+sed -i -e s/'$GEOWAVE_NOTEBOOKS_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}-notebooks/g $TEMPLATE_ROOT/configure-zeppelin.sh
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/configure-zeppelin.sh
+sed -i -e s/'$GEOWAVE_REPO_RPM_TOKEN'/${ARGS[rpmbucket]}/g $TEMPLATE_ROOT/configure-zeppelin.sh
+
 
 for datastore in "${DATASTORES[@]}"
 do

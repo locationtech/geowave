@@ -36,7 +36,7 @@ GEOSERVER_MEMORY="-Xmx1g"
 
 # I've externalized commands into library functions for clarity, download and source
 if [ ! -f /tmp/geowave-install-lib.sh ]; then
-	aws s3 cp s3://GEOWAVE_BUCKET_TOKEN/$DATASTORE_TOKEN/geowave-install-lib.sh /tmp/geowave-install-lib.sh
+	aws s3 cp s3://$GEOWAVE_BUCKET_TOKEN/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/$DATASTORE_TOKEN/geowave-install-lib.sh /tmp/geowave-install-lib.sh
 fi
 source /tmp/geowave-install-lib.sh
 
