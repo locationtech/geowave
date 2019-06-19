@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.analytic.spark.kmeans.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,12 +25,16 @@ import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.jts.util.Stopwatch;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "kmeansspark", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "KMeans Clustering via Spark ML")
 public class KmeansSparkCommand extends ServiceEnabledCommand<Void> implements Command {
   @Parameter(description = "<input storename> <output storename>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private KMeansSparkOptions kMeansSparkOptions = new KMeansSparkOptions();
@@ -55,7 +55,7 @@ public class KmeansSparkCommand extends ServiceEnabledCommand<Void> implements C
   }
 
   @Override
-  public Void computeResults(OperationParams params) throws Exception {
+  public Void computeResults(final OperationParams params) throws Exception {
     final String inputStoreName = parameters.get(0);
     final String outputStoreName = parameters.get(1);
 
@@ -126,7 +126,7 @@ public class KmeansSparkCommand extends ServiceEnabledCommand<Void> implements C
   }
 
   public void setParameters(final String storeName) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(storeName);
   }
 

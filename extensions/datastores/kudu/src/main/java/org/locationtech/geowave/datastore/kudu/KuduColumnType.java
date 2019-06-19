@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.datastore.kudu;
 
+import java.util.List;
+import java.util.function.BiConsumer;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Type;
-import java.util.List;
-import java.util.function.BiConsumer;
 
 public enum KuduColumnType {
   PARTITION_KEY((final List<ColumnSchema> c, final Pair<String, Type> f) -> c.add(

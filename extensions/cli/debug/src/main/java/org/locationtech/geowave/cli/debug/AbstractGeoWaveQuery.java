@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.cli.debug;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.cli.ParseException;
@@ -28,12 +26,14 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 public abstract class AbstractGeoWaveQuery extends DefaultOperation implements Command {
   private static Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveQuery.class);
 
   @Parameter(description = "<storename>")
-  private final List<String> parameters = new ArrayList<>();
+  private List<String> parameters = new ArrayList<>();
 
   @Parameter(names = "--indexName", description = "The name of the index (optional)")
   private String indexName;
@@ -42,7 +42,7 @@ public abstract class AbstractGeoWaveQuery extends DefaultOperation implements C
   private String typeName;
 
   @Parameter(names = "--debug", description = "Print out additional info for debug purposes")
-  private final boolean debug = false;
+  private boolean debug = false;
 
   @Override
   public void execute(final OperationParams params) throws ParseException {

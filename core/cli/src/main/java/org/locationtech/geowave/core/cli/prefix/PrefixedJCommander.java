@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.prefix;
 
-import com.beust.jcommander.IDefaultProvider;
-import com.beust.jcommander.JCommander;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,6 +17,8 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.IDefaultProvider;
+import com.beust.jcommander.JCommander;
 
 /**
  * This special JCommander instance does two things: 1. It initializes special Prefixed argument
@@ -63,7 +63,7 @@ public class PrefixedJCommander extends JCommander {
       // HP Fortify "Access Specifier Manipulation"
       // This field is being modified by trusted code,
       // in a way that is not influenced by user input
-      Field commandsField = JCommander.class.getDeclaredField("m_commands");
+      final Field commandsField = JCommander.class.getDeclaredField("m_commands");
       commandsField.setAccessible(true);
       childCommanders = (Map<Object, JCommander>) commandsField.get(this);
     } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
@@ -89,11 +89,11 @@ public class PrefixedJCommander extends JCommander {
       initializer.initialize(this);
     }
 
-    JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+    final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
 
     // And these are the input to the translator!
     if (prefixedObjects != null) {
-      for (Object obj : prefixedObjects) {
+      for (final Object obj : prefixedObjects) {
         translator.addObject(obj);
       }
     }
@@ -101,7 +101,7 @@ public class PrefixedJCommander extends JCommander {
     translationMap = translator.translate();
     translationMap.createFacadeObjects();
 
-    for (Object obj : translationMap.getObjects()) {
+    for (final Object obj : translationMap.getObjects()) {
       addObject(obj);
     }
 
@@ -110,19 +110,19 @@ public class PrefixedJCommander extends JCommander {
   }
 
   @Override
-  public void addCommand(String name, Object object, String... aliases) {
+  public void addCommand(final String name, final Object object, final String... aliases) {
     super.addCommand(name, new Object(), aliases);
 
     // Super annoying. Can't control creation of JCommander objects, so
     // just replace it.
 
-    Iterator<Entry<Object, JCommander>> iter = childCommanders.entrySet().iterator();
+    final Iterator<Entry<Object, JCommander>> iter = childCommanders.entrySet().iterator();
     Entry<Object, JCommander> last = null;
     while (iter.hasNext()) {
       last = iter.next();
     }
 
-    PrefixedJCommander comm = new PrefixedJCommander();
+    final PrefixedJCommander comm = new PrefixedJCommander();
     comm.setProgramName(name, aliases);
     comm.setDefaultProvider(defaultProvider);
     comm.setAcceptUnknownOptions(allowUnknown);
@@ -138,7 +138,7 @@ public class PrefixedJCommander extends JCommander {
   }
 
   @Override
-  public void parse(String... args) {
+  public void parse(final String... args) {
     createMap();
     if (validate) {
       super.parse(args);
@@ -153,23 +153,23 @@ public class PrefixedJCommander extends JCommander {
    * all children. This is because of bug #267 in JCommander.
    */
   @Override
-  public void parseWithoutValidation(String... args) {
+  public void parseWithoutValidation(final String... args) {
     throw new NotImplementedException("Do not use this method.  Use setValidate()");
   }
 
   @Override
-  public void setDefaultProvider(IDefaultProvider defaultProvider) {
+  public void setDefaultProvider(final IDefaultProvider defaultProvider) {
     super.setDefaultProvider(defaultProvider);
     this.defaultProvider = defaultProvider;
   }
 
   @Override
-  public void setAcceptUnknownOptions(boolean allowUnknown) {
+  public void setAcceptUnknownOptions(final boolean allowUnknown) {
     super.setAcceptUnknownOptions(allowUnknown);
     this.allowUnknown = allowUnknown;
   }
 
-  public void setValidate(boolean validate) {
+  public void setValidate(final boolean validate) {
     this.validate = validate;
   }
 
@@ -177,11 +177,11 @@ public class PrefixedJCommander extends JCommander {
     return prefixedObjects;
   }
 
-  public void addPrefixedObject(Object object) {
-    if (this.prefixedObjects == null) {
-      this.prefixedObjects = new ArrayList<>();
+  public void addPrefixedObject(final Object object) {
+    if (prefixedObjects == null) {
+      prefixedObjects = new ArrayList<>();
     }
-    this.prefixedObjects.add(object);
+    prefixedObjects.add(object);
   }
 
   public JCommanderTranslationMap getTranslationMap() {
@@ -192,7 +192,7 @@ public class PrefixedJCommander extends JCommander {
     return initializer;
   }
 
-  public void setInitializer(PrefixedJCommanderInitializer initializer) {
+  public void setInitializer(final PrefixedJCommanderInitializer initializer) {
     this.initializer = initializer;
   }
 

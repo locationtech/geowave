@@ -52,24 +52,29 @@ public class QuerySingleIndex implements IndexQueryOptions {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((indexName == null) ? 0 : indexName.hashCode());
+    result = (prime * result) + ((indexName == null) ? 0 : indexName.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    QuerySingleIndex other = (QuerySingleIndex) obj;
+    }
+    final QuerySingleIndex other = (QuerySingleIndex) obj;
     if (indexName == null) {
-      if (other.indexName != null)
+      if (other.indexName != null) {
         return false;
-    } else if (!indexName.equals(other.indexName))
+      }
+    } else if (!indexName.equals(other.indexName)) {
       return false;
+    }
     return true;
   }
 }

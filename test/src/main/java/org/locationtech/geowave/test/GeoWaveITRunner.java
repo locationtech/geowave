@@ -114,7 +114,7 @@ public class GeoWaveITRunner extends Suite {
         nameBldr.append(" (").append(e.getKey()).append("=").append(e.getValue().toString()).append(
             ")");
       }
-      if (profileOptions != null && profileOptions.length > 0) {
+      if ((profileOptions != null) && (profileOptions.length > 0)) {
         nameBldr.append("; options=").append("\"" + String.join(",", profileOptions) + "\"");
       }
       nameSuffix = nameBldr.toString();
@@ -127,8 +127,7 @@ public class GeoWaveITRunner extends Suite {
 
     private Object createTestUsingFieldInjection() throws IllegalAccessException, SecurityException,
         NoSuchFieldException, GeoWaveITException, InstantiationException {
-      final Set<Pair<Field, GeoWaveTestStore>> fieldsAndStorePairs =
-          new HashSet<Pair<Field, GeoWaveTestStore>>();
+      final Set<Pair<Field, GeoWaveTestStore>> fieldsAndStorePairs = new HashSet<>();
       if (typeIsAnnotated()) {
         final GeoWaveTestStore store =
             getTestClass().getJavaClass().getAnnotation(GeoWaveTestStore.class);
@@ -156,7 +155,7 @@ public class GeoWaveITRunner extends Suite {
         }
         for (final FrameworkField field : annotatedFields) {
           fieldsAndStorePairs.add(
-              new ImmutablePair<Field, GeoWaveTestStore>(
+              new ImmutablePair<>(
                   field.getField(),
                   field.getField().getAnnotation(GeoWaveTestStore.class)));
         }
@@ -229,8 +228,8 @@ public class GeoWaveITRunner extends Suite {
 
   private static final List<Runner> NO_RUNNERS = Collections.<Runner>emptyList();
 
-  private final List<Runner> runners = new ArrayList<Runner>();
-  private final Set<GeoWaveStoreType> storeTypes = new HashSet<GeoWaveStoreType>();
+  private final List<Runner> runners = new ArrayList<>();
+  private final Set<GeoWaveStoreType> storeTypes = new HashSet<>();
   private final TestEnvironment[] testEnvs;
 
   /** Only called reflectively. Do not use programmatically. */
@@ -249,7 +248,7 @@ public class GeoWaveITRunner extends Suite {
   private void createRunnersForDataStores()
       throws InitializationError, SecurityException, GeoWaveITException {
     final GeoWaveStoreRunnerConfig emptyConfig = new GeoWaveStoreRunnerConfig();
-    List<GeoWaveStoreRunnerConfig> configs = new ArrayList<GeoWaveStoreRunnerConfig>();
+    List<GeoWaveStoreRunnerConfig> configs = new ArrayList<>();
 
     String storeTypeProp = System.getenv(STORE_TYPE_ENVIRONMENT_VARIABLE_NAME);
     if (!TestUtils.isSet(storeTypeProp)) {
@@ -352,7 +351,7 @@ public class GeoWaveITRunner extends Suite {
   private Set<String> getDataStoreOptionFieldsForTypeAnnotation()
       throws SecurityException, GeoWaveITException {
     final Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
-    final Set<String> dataStoreOptionFields = new HashSet<String>();
+    final Set<String> dataStoreOptionFields = new HashSet<>();
     for (final Field field : fields) {
       if (field.getType().isAssignableFrom(DataStorePluginOptions.class)) {
         dataStoreOptionFields.add(field.getName());
@@ -375,7 +374,7 @@ public class GeoWaveITRunner extends Suite {
       throw new GeoWaveITException(
           MessageFormat.format("{0} must have at least one GeoWaveStoreType", field.getName()));
     }
-    final List<GeoWaveStoreRunnerConfig> newConfigs = new ArrayList<GeoWaveStoreRunnerConfig>();
+    final List<GeoWaveStoreRunnerConfig> newConfigs = new ArrayList<>();
     for (final GeoWaveStoreRunnerConfig config : currentConfigs) {
       for (final GeoWaveStoreType type : types) {
         newConfigs.add(new GeoWaveStoreRunnerConfig(config, field.getName(), type));
@@ -395,7 +394,7 @@ public class GeoWaveITRunner extends Suite {
   }
 
   private TestEnvironment[] getTestEnvironments() throws NullPointerException {
-    final Set<Environment> environments = new HashSet<Environment>();
+    final Set<Environment> environments = new HashSet<>();
     final Environments es = getTestClass().getJavaClass().getAnnotation(Environments.class);
     if (es != null) {
       final Environment[] envs = es.value();
@@ -465,13 +464,13 @@ public class GeoWaveITRunner extends Suite {
     private final Map<String, GeoWaveStoreType> fieldNameStoreTypePair;
 
     public GeoWaveStoreRunnerConfig() {
-      fieldNameStoreTypePair = new HashMap<String, GeoWaveStoreType>();
+      fieldNameStoreTypePair = new HashMap<>();
     }
 
     public GeoWaveStoreRunnerConfig(
         final GeoWaveStoreType storeType,
         final Set<String> fieldNames) {
-      fieldNameStoreTypePair = new HashMap<String, GeoWaveStoreType>();
+      fieldNameStoreTypePair = new HashMap<>();
       for (final String fieldName : fieldNames) {
         fieldNameStoreTypePair.put(fieldName, storeType);
       }
@@ -482,10 +481,9 @@ public class GeoWaveITRunner extends Suite {
         final String name,
         final GeoWaveStoreType type) {
       if ((previousConfig == null) || (previousConfig.fieldNameStoreTypePair == null)) {
-        fieldNameStoreTypePair = new HashMap<String, GeoWaveStoreType>();
+        fieldNameStoreTypePair = new HashMap<>();
       } else {
-        fieldNameStoreTypePair =
-            new HashMap<String, GeoWaveStoreType>(previousConfig.fieldNameStoreTypePair);
+        fieldNameStoreTypePair = new HashMap<>(previousConfig.fieldNameStoreTypePair);
       }
       fieldNameStoreTypePair.put(name, type);
     }
@@ -504,12 +502,10 @@ public class GeoWaveITRunner extends Suite {
   private static class TestEnvironmentDependencyTree {
     // just keep a two-way mapping although I think we only need to traverse
     // in one direction
-    Map<TestEnvironment, Set<TestEnvironment>> dependenciesMapping =
-        new LinkedHashMap<TestEnvironment, Set<TestEnvironment>>();
-    Map<TestEnvironment, Set<TestEnvironment>> requirementsMapping =
-        new LinkedHashMap<TestEnvironment, Set<TestEnvironment>>();
-    Set<TestEnvironment> independentEnvironments = new LinkedHashSet<TestEnvironment>();
-    Set<TestEnvironment> visitedEnvs = new LinkedHashSet<TestEnvironment>();
+    Map<TestEnvironment, Set<TestEnvironment>> dependenciesMapping = new LinkedHashMap<>();
+    Map<TestEnvironment, Set<TestEnvironment>> requirementsMapping = new LinkedHashMap<>();
+    Set<TestEnvironment> independentEnvironments = new LinkedHashSet<>();
+    Set<TestEnvironment> visitedEnvs = new LinkedHashSet<>();
 
     private TestEnvironmentDependencyTree() {}
 
@@ -524,13 +520,13 @@ public class GeoWaveITRunner extends Suite {
           for (final TestEnvironment requiredEnv : env.getDependentEnvironments()) {
             Set<TestEnvironment> dependentSet = dependenciesMapping.get(requiredEnv);
             if (dependentSet == null) {
-              dependentSet = new HashSet<TestEnvironment>();
+              dependentSet = new HashSet<>();
               dependenciesMapping.put(requiredEnv, dependentSet);
             }
             dependentSet.add(env);
             Set<TestEnvironment> requiredSet = requirementsMapping.get(env);
             if (requiredSet == null) {
-              requiredSet = new HashSet<TestEnvironment>();
+              requiredSet = new HashSet<>();
               requirementsMapping.put(env, requiredSet);
             }
             requiredSet.add(requiredEnv);
@@ -543,7 +539,7 @@ public class GeoWaveITRunner extends Suite {
     private TestEnvironment[] getOrderedTestEnvironments() {
       final TestEnvironment[] retVal = new TestEnvironment[visitedEnvs.size()];
       int i = 0;
-      final Set<TestEnvironment> testsAddedToArray = new HashSet<TestEnvironment>();
+      final Set<TestEnvironment> testsAddedToArray = new HashSet<>();
       for (final TestEnvironment e : independentEnvironments) {
         retVal[i++] = e;
         testsAddedToArray.add(e);

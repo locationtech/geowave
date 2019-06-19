@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.api;
 
-import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -20,6 +19,7 @@ import org.locationtech.geowave.core.cli.operations.config.security.utils.Securi
 import org.locationtech.geowave.core.cli.spi.DefaultConfigProviderSpi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
 
 /**
  * The default operation prevents implementors from having to implement the 'prepare' function, if

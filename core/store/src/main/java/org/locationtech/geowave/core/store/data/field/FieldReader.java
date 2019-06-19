@@ -25,7 +25,7 @@ public interface FieldReader<FieldType> extends Function<byte[], FieldType> {
    */
   public FieldType readField(byte[] fieldData);
 
-  public default FieldType readField(byte[] fieldData, byte serializationVersion) {
+  public default FieldType readField(final byte[] fieldData, final byte serializationVersion) {
     return readField(fieldData);
   }
 

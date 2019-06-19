@@ -52,7 +52,7 @@ public class KMeansIterationsJobRunner<T> implements MapReduceJobRunner, Indepen
   protected CentroidManager<T> constructCentroidManager(
       final Configuration config,
       final PropertyManagement runTimeProperties) throws IOException {
-    return new CentroidManagerGeoWave<T>(runTimeProperties);
+    return new CentroidManagerGeoWave<>(runTimeProperties);
   }
 
   public void setInputFormatConfiguration(final FormatConfiguration inputFormatConfiguration) {
@@ -153,7 +153,7 @@ public class KMeansIterationsJobRunner<T> implements MapReduceJobRunner, Indepen
       final CentroidManager<T> centroidManager,
       final DistanceFn<T> distanceFunction) {
     double distance = 0;
-    final List<String> deletionKeys = new ArrayList<String>();
+    final List<String> deletionKeys = new ArrayList<>();
 
     // sort by id and then by iteration
     Collections.sort(centroids, new Comparator<AnalyticItemWrapper<T>>() {
@@ -209,7 +209,7 @@ public class KMeansIterationsJobRunner<T> implements MapReduceJobRunner, Indepen
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(
         Arrays.asList(
             new ParameterEnum<?>[] {

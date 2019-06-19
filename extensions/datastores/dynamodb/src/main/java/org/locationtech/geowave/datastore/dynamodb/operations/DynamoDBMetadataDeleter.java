@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.QueryRequest;
-import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +15,9 @@ import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
 
 public class DynamoDBMetadataDeleter implements MetadataDeleter {
   private static final Logger LOGGER = Logger.getLogger(DynamoDBMetadataDeleter.class);
@@ -57,8 +57,8 @@ public class DynamoDBMetadataDeleter implements MetadataDeleter {
                 new AttributeValue().withB(ByteBuffer.wrap(metadata.getPrimaryId())));
 
     final QueryResult queryResult = operations.getClient().query(queryRequest);
-    for (Map<String, AttributeValue> entry : queryResult.getItems()) {
-      Map<String, AttributeValue> key = new HashMap<>();
+    for (final Map<String, AttributeValue> entry : queryResult.getItems()) {
+      final Map<String, AttributeValue> key = new HashMap<>();
       key.put(
           DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
           entry.get(DynamoDBOperations.METADATA_PRIMARY_ID_KEY));

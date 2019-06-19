@@ -59,7 +59,7 @@ public abstract class AbstractMainParam<T> implements RestFieldValue<T> {
     // necessary, has been review and judged to be safe
     listMainParamField.setAccessible(true);
     List<String> currentValue = (List<String>) listMainParamField.get(instance);
-    if (currentValue == null || currentValue.size() == 0) {
+    if ((currentValue == null) || (currentValue.size() == 0)) {
       currentValue = new ArrayList<>(totalMainParams);
       for (int i = 0; i < totalMainParams; i++) {
         currentValue.add("");
@@ -72,6 +72,7 @@ public abstract class AbstractMainParam<T> implements RestFieldValue<T> {
 
   protected abstract String valueToString(T value);
 
+  @Override
   public Field getField() {
     return this.listMainParamField;
   }

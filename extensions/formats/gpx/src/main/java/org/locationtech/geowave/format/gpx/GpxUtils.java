@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.format.gpx;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -42,6 +41,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This is a convenience class for performing common GPX static utility methods such as schema

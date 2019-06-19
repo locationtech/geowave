@@ -32,14 +32,14 @@ public enum IdentityAmplification {
   private String value;
 
   IdentityAmplification() {
-    this.value = IdentityAmplification.values()[0].toString();
+    value = IdentityAmplification.values()[0].toString();
   }
 
   IdentityAmplification(final String value) {
     this.value = value;
   }
 
-  public static IdentityAmplification fromString(String value) {
+  public static IdentityAmplification fromString(final String value) {
     for (final IdentityAmplification item : IdentityAmplification.values()) {
       if (item.toString().equals(value)) {
         return item;

@@ -55,14 +55,14 @@ public enum IffMode {
   private String value;
 
   IffMode() {
-    this.value = IffMode.values()[0].toString();
+    value = IffMode.values()[0].toString();
   }
 
   IffMode(final String value) {
     this.value = value;
   }
 
-  public static IffMode fromString(String value) {
+  public static IffMode fromString(final String value) {
     for (final IffMode item : IffMode.values()) {
       if (item.toString().equals(value)) {
         return item;

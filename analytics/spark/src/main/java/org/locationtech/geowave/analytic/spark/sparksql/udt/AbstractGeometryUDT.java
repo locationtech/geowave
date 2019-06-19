@@ -23,6 +23,11 @@ import org.locationtech.jts.io.ParseException;
 
 /** Created by jwileczek on 7/20/18. */
 public abstract class AbstractGeometryUDT<T extends Geometry> extends UserDefinedType<T> {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
   public DataType sqlType() {
     return new StructType(
@@ -35,21 +40,21 @@ public abstract class AbstractGeometryUDT<T extends Geometry> extends UserDefine
   }
 
   @Override
-  public InternalRow serialize(T obj) {
-    byte[] bytes = new TWKBWriter().write(obj);
-    InternalRow returnRow = new GenericInternalRow(bytes.length);
+  public InternalRow serialize(final T obj) {
+    final byte[] bytes = new TWKBWriter().write(obj);
+    final InternalRow returnRow = new GenericInternalRow(bytes.length);
     returnRow.update(0, bytes);
     return returnRow;
   }
 
   @Override
-  public T deserialize(Object datum) {
+  public T deserialize(final Object datum) {
     T geom = null;
-    InternalRow row = (InternalRow) datum;
-    byte[] bytes = row.getBinary(0);
+    final InternalRow row = (InternalRow) datum;
+    final byte[] bytes = row.getBinary(0);
     try {
       geom = (T) new TWKBReader().read(bytes);
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       e.printStackTrace();
     }
     return geom;

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -8,24 +8,6 @@
  */
 package org.locationtech.geowave.datastore.kudu.operations;
 
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.datastore.kudu.KuduDataIndexRow;
-import org.locationtech.geowave.datastore.kudu.KuduDataIndexRow.KuduDataIndexField;
-import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
-import org.apache.kudu.Schema;
-import org.apache.kudu.client.KuduScanner;
-import org.apache.kudu.client.KuduPredicate;
-import org.apache.kudu.client.KuduPredicate.ComparisonOp;
-import org.apache.kudu.client.KuduTable;
-import org.apache.kudu.client.RowResult;
-import org.apache.kudu.client.KuduScanner.KuduScannerBuilder;
-import org.apache.kudu.shaded.com.google.common.collect.Lists;
-import org.apache.kudu.client.RowResultIterator;
-import org.locationtech.geowave.core.index.ByteArray;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Streams;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,6 +17,24 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import org.apache.kudu.Schema;
+import org.apache.kudu.client.KuduPredicate;
+import org.apache.kudu.client.KuduPredicate.ComparisonOp;
+import org.apache.kudu.client.KuduScanner;
+import org.apache.kudu.client.KuduScanner.KuduScannerBuilder;
+import org.apache.kudu.client.KuduTable;
+import org.apache.kudu.client.RowResult;
+import org.apache.kudu.client.RowResultIterator;
+import org.apache.kudu.shaded.com.google.common.collect.Lists;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.datastore.kudu.KuduDataIndexRow;
+import org.locationtech.geowave.datastore.kudu.KuduDataIndexRow.KuduDataIndexField;
+import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Streams;
 
 public class KuduDataIndexRead<T> {
   private final Schema schema;
@@ -108,7 +108,7 @@ public class KuduDataIndexRead<T> {
       tmpStream = tmpStream.filter(filter);
     }
 
-    return new CloseableIteratorWrapper<T>(() -> {
+    return new CloseableIteratorWrapper<>(() -> {
     }, (Iterator<T>) tmpStream.iterator());
   }
 }

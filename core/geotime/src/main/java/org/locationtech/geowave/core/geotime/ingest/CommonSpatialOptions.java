@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.core.geotime.ingest;
 
-import com.beust.jcommander.Parameter;
 import javax.annotation.Nullable;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeOptions;
+import com.beust.jcommander.Parameter;
 
 public abstract class CommonSpatialOptions implements DimensionalityTypeOptions {
   @Parameter(
@@ -32,15 +32,15 @@ public abstract class CommonSpatialOptions implements DimensionalityTypeOptions 
       description = "If specified, geometry will be encoded losslessly.  Uses more disk space.")
   protected boolean fullGeometryPrecision = false;
 
-  public void setCrs(String crs) {
+  public void setCrs(final String crs) {
     this.crs = crs;
   }
 
   public void setGeometryPrecision(final @Nullable Integer geometryPrecision) {
     if (geometryPrecision == null) {
-      this.fullGeometryPrecision = true;
+      fullGeometryPrecision = true;
     } else {
-      this.fullGeometryPrecision = false;
+      fullGeometryPrecision = false;
       this.geometryPrecision = geometryPrecision;
     }
   }

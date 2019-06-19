@@ -8,20 +8,20 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "addlayer", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer layer from the given GeoWave store")
@@ -48,7 +48,7 @@ public class GeoServerAddLayerCommand extends GeoServerCommand<String> {
   private String style = null;
 
   @Parameter(description = "<GeoWave store name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String gwStore = null;
 
@@ -100,7 +100,7 @@ public class GeoServerAddLayerCommand extends GeoServerCommand<String> {
       final JSONObject jsonResponse = JSONObject.fromObject(addLayerResponse.getEntity());
       return "Add GeoServer layer for '" + gwStore + ": OK : " + jsonResponse.toString(2);
     }
-    String errorMessage =
+    final String errorMessage =
         "Error adding GeoServer layer for store '"
             + gwStore
             + "': "

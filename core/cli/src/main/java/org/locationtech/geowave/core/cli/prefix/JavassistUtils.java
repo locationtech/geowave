@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
@@ -25,8 +27,6 @@ import javassist.bytecode.ConstPool;
 import javassist.bytecode.Descriptor;
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.MemberValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * These functions make it less of a pain to deal with Javassist. There's one to find methods, and
@@ -56,21 +56,21 @@ public class JavassistUtils {
    * @return
    */
   public static AnnotationsAttribute cloneAnnotationsAttribute(
-      ConstPool constPool,
-      AnnotationsAttribute attr,
-      ElementType validElementType) {
+      final ConstPool constPool,
+      final AnnotationsAttribute attr,
+      final ElementType validElementType) {
 
     // We can use system class loader here because the annotations for
     // Target
     // are part of the Java System.
-    ClassLoader cl = ClassLoader.getSystemClassLoader();
+    final ClassLoader cl = ClassLoader.getSystemClassLoader();
 
-    AnnotationsAttribute attrNew =
+    final AnnotationsAttribute attrNew =
         new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
 
     if (attr != null) {
-      for (Annotation annotation : attr.getAnnotations()) {
-        Annotation newAnnotation = new Annotation(annotation.getTypeName(), constPool);
+      for (final Annotation annotation : attr.getAnnotations()) {
+        final Annotation newAnnotation = new Annotation(annotation.getTypeName(), constPool);
 
         // If this must target a certain type of field, then ensure we
         // only
@@ -80,11 +80,11 @@ public class JavassistUtils {
         Class<?> annoClass;
         try {
           annoClass = cl.loadClass(annotation.getTypeName());
-          Target target = annoClass.getAnnotation(Target.class);
-          if (target != null && !Arrays.asList(target.value()).contains(validElementType)) {
+          final Target target = annoClass.getAnnotation(Target.class);
+          if ((target != null) && !Arrays.asList(target.value()).contains(validElementType)) {
             continue;
           }
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
           // Cannot apply this annotation because its type cannot be
           // found.
           LOGGER.error("Cannot apply this annotation because it's type cannot be found", e);
@@ -96,8 +96,8 @@ public class JavassistUtils {
         // For this, a member value would be "names" which would be a
         // StringMemberValue
         if (annotation.getMemberNames() != null) {
-          for (Object memberName : annotation.getMemberNames()) {
-            MemberValue memberValue = annotation.getMemberValue((String) memberName);
+          for (final Object memberName : annotation.getMemberNames()) {
+            final MemberValue memberValue = annotation.getMemberValue((String) memberName);
             if (memberValue != null) {
               newAnnotation.addMemberValue((String) memberName, memberValue);
             }
@@ -117,18 +117,18 @@ public class JavassistUtils {
    * @return
    * @throws NotFoundException
    */
-  public static CtMethod findMethod(CtClass clz, Method m) throws NotFoundException {
-    ClassPool pool = ClassPool.getDefault();
-    Class<?>[] paramTypes = m.getParameterTypes();
-    List<CtClass> paramTypesCtClass = new ArrayList<CtClass>();
-    for (Class<?> claz : paramTypes) {
+  public static CtMethod findMethod(final CtClass clz, final Method m) throws NotFoundException {
+    final ClassPool pool = ClassPool.getDefault();
+    final Class<?>[] paramTypes = m.getParameterTypes();
+    final List<CtClass> paramTypesCtClass = new ArrayList<>();
+    for (final Class<?> claz : paramTypes) {
       paramTypesCtClass.add(pool.get(claz.getName()));
     }
-    String desc =
+    final String desc =
         Descriptor.ofMethod(
             pool.get(m.getReturnType().getName()),
             paramTypesCtClass.toArray(new CtClass[] {}));
-    CtMethod method = clz.getMethod(m.getName(), desc);
+    final CtMethod method = clz.getMethod(m.getName(), desc);
     return method;
   }
 
@@ -138,14 +138,14 @@ public class JavassistUtils {
    * @param oldClass
    * @param newClass
    */
-  public static void copyClassAnnotations(CtClass oldClass, CtClass newClass) {
+  public static void copyClassAnnotations(final CtClass oldClass, final CtClass newClass) {
     // Load the existing annotations attributes
-    AnnotationsAttribute classAnnotations =
+    final AnnotationsAttribute classAnnotations =
         (AnnotationsAttribute) oldClass.getClassFile().getAttribute(
             AnnotationsAttribute.visibleTag);
 
     // Clone them
-    AnnotationsAttribute copyClassAttribute =
+    final AnnotationsAttribute copyClassAttribute =
         JavassistUtils.cloneAnnotationsAttribute(
             newClass.getClassFile2().getConstPool(),
             classAnnotations,
@@ -163,13 +163,13 @@ public class JavassistUtils {
    * @param method
    * @param field
    */
-  public static void copyMethodAnnotationsToField(CtMethod method, CtField field) {
+  public static void copyMethodAnnotationsToField(final CtMethod method, final CtField field) {
     // Load the existing annotations attributes
-    AnnotationsAttribute methodAnnotations =
+    final AnnotationsAttribute methodAnnotations =
         (AnnotationsAttribute) method.getMethodInfo().getAttribute(AnnotationsAttribute.visibleTag);
 
     // Clone them
-    AnnotationsAttribute copyMethodAttribute =
+    final AnnotationsAttribute copyMethodAttribute =
         JavassistUtils.cloneAnnotationsAttribute(
             field.getFieldInfo2().getConstPool(),
             methodAnnotations,
@@ -204,7 +204,7 @@ public class JavassistUtils {
    */
   public static CtClass generateEmptyClass() {
     // Create the class, so we can start adding the new facade fields to it.
-    ClassPool pool = ClassPool.getDefault();
+    final ClassPool pool = ClassPool.getDefault();
     return pool.makeClass(getNextUniqueClassName());
   }
 }

@@ -79,8 +79,8 @@ public interface Time extends Persistable, CommonIndexValue {
     @Override
     public boolean overlaps(final NumericDimensionField[] field, final NumericData[] rangeData) {
       assert (field[0] instanceof TimeField);
-      long t0 = (long) Math.ceil(rangeData[0].getMax()) - this.startTime;
-      long t1 = this.endTime - (long) Math.floor(rangeData[0].getMin());
+      final long t0 = (long) Math.ceil(rangeData[0].getMax()) - startTime;
+      final long t1 = endTime - (long) Math.floor(rangeData[0].getMin());
       return Math.abs(t0 - t1) <= (t0 + t1);
     }
   }
@@ -132,8 +132,8 @@ public interface Time extends Persistable, CommonIndexValue {
     @Override
     public boolean overlaps(final NumericDimensionField[] field, final NumericData[] rangeData) {
       assert (field[0] instanceof TimeField);
-      return (long) Math.floor(rangeData[0].getMin()) <= this.time
-          && (long) Math.ceil(rangeData[0].getMax()) >= this.time;
+      return ((long) Math.floor(rangeData[0].getMin()) <= time)
+          && ((long) Math.ceil(rangeData[0].getMax()) >= time);
     }
   }
 

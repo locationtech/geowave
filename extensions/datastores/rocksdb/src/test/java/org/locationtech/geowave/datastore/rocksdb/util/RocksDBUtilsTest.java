@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -15,10 +15,10 @@ public class RocksDBUtilsTest {
 
   @Test
   public void testGetTableName() {
-    String nullPartitionKeyName = RocksDBUtils.getTableName("prefix-null", null);
+    final String nullPartitionKeyName = RocksDBUtils.getTableName("prefix-null", null);
     assertEquals("prefix-null", nullPartitionKeyName);
 
-    String emptyPartitionKeyName = RocksDBUtils.getTableName("prefix-empty", new byte[] {});
+    final String emptyPartitionKeyName = RocksDBUtils.getTableName("prefix-empty", new byte[] {});
     assertEquals("prefix-empty", emptyPartitionKeyName);
   }
 

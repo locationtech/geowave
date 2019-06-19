@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.prefix;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,12 +15,15 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.annotations.PrefixParameter;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class JCommanderPrefixTranslatorTest {
-  private JCommander prepareCommander(JCommanderTranslationMap map) {
-    JCommander commander = new JCommander();
+  private JCommander prepareCommander(final JCommanderTranslationMap map) {
+    final JCommander commander = new JCommander();
     map.createFacadeObjects();
-    for (Object obj : map.getObjects()) {
+    for (final Object obj : map.getObjects()) {
       commander.addObject(obj);
     }
     return commander;
@@ -31,21 +31,21 @@ public class JCommanderPrefixTranslatorTest {
 
   @Test
   public void testNullDelegate() {
-    JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+    final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
     translator.addObject(new NullDelegate());
-    JCommander commander = prepareCommander(translator.translate());
+    final JCommander commander = prepareCommander(translator.translate());
     commander.parse();
   }
 
   @Test
   public void testMapDelegatesPrefix() {
-    JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
-    Arguments args = new Arguments();
+    final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+    final Arguments args = new Arguments();
     args.argChildren.put("abc", new ArgumentChildren());
     args.argChildren.put("def", new ArgumentChildren());
     translator.addObject(args);
-    JCommanderTranslationMap map = translator.translate();
-    JCommander commander = prepareCommander(map);
+    final JCommanderTranslationMap map = translator.translate();
+    final JCommander commander = prepareCommander(map);
     commander.parse("--abc.arg", "5", "--def.arg", "blah");
     map.transformToOriginal();
     Assert.assertEquals("5", args.argChildren.get("abc").arg);
@@ -54,13 +54,13 @@ public class JCommanderPrefixTranslatorTest {
 
   @Test
   public void testCollectionDelegatesPrefix() {
-    JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
-    ArgumentsCollection args = new ArgumentsCollection();
+    final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+    final ArgumentsCollection args = new ArgumentsCollection();
     args.argChildren.add(new ArgumentChildren());
     args.argChildren.add(new ArgumentChildrenOther());
     translator.addObject(args);
-    JCommanderTranslationMap map = translator.translate();
-    JCommander commander = prepareCommander(map);
+    final JCommanderTranslationMap map = translator.translate();
+    final JCommander commander = prepareCommander(map);
     commander.parse("--arg", "5", "--arg2", "blah");
     map.transformToOriginal();
     Assert.assertEquals("5", ((ArgumentChildren) args.argChildren.get(0)).arg);
@@ -69,11 +69,11 @@ public class JCommanderPrefixTranslatorTest {
 
   @Test
   public void testPrefixParameter() {
-    JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
-    PrefixedArguments args = new PrefixedArguments();
+    final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+    final PrefixedArguments args = new PrefixedArguments();
     translator.addObject(args);
-    JCommanderTranslationMap map = translator.translate();
-    JCommander commander = prepareCommander(map);
+    final JCommanderTranslationMap map = translator.translate();
+    final JCommander commander = prepareCommander(map);
     commander.parse("--abc.arg", "5", "--arg", "blah");
     map.transformToOriginal();
     Assert.assertEquals("5", args.child.arg);
@@ -83,7 +83,7 @@ public class JCommanderPrefixTranslatorTest {
   public static class PrefixedArguments {
     @ParametersDelegate
     @PrefixParameter(prefix = "abc")
-    private ArgumentChildren child = new ArgumentChildren();
+    private final ArgumentChildren child = new ArgumentChildren();
 
     @Parameter(names = "--arg")
     private String blah;
@@ -91,17 +91,17 @@ public class JCommanderPrefixTranslatorTest {
 
   public static class NullDelegate {
     @ParametersDelegate
-    private ArgumentChildren value = null;
+    private final ArgumentChildren value = null;
   }
 
   public static class ArgumentsCollection {
     @ParametersDelegate
-    private List<Object> argChildren = new ArrayList<Object>();
+    private final List<Object> argChildren = new ArrayList<>();
   }
 
   public static class Arguments {
     @ParametersDelegate
-    private Map<String, ArgumentChildren> argChildren = new HashMap<String, ArgumentChildren>();
+    private final Map<String, ArgumentChildren> argChildren = new HashMap<>();
   }
 
   public static class ArgumentChildren {

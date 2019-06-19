@@ -59,7 +59,7 @@ public class MemoryIndexStore implements IndexStore {
   }
 
   @Override
-  public void removeIndex(String indexName) {
+  public void removeIndex(final String indexName) {
     if (indexExists(indexName)) {
       indexMap.remove(indexName);
     }

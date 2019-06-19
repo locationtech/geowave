@@ -96,7 +96,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
     final int maxCellSize =
         TestUtils.getTestEnvironment(dataStoreOptions.getType()).getMaxCellSize();
     final int tileSize;
-    if (maxCellSize <= 64 * 1024) {
+    if (maxCellSize <= (64 * 1024)) {
       tileSize = 24;
     } else {
       tileSize = 64; // 256 fails on bigtable exceeding maximum size
@@ -127,7 +127,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
     final int sumAndAveragingNumRasters = 15;
     final int noDataTileSize;
     final int summingTileSize;
-    if (maxCellSize <= 64 * 1024) {
+    if (maxCellSize <= (64 * 1024)) {
       noDataTileSize = 24;
       summingTileSize = 24;
     } else {

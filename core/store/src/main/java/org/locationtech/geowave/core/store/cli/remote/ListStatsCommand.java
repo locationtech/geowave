@@ -8,16 +8,9 @@
  */
 package org.locationtech.geowave.core.store.cli.remote;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.OperationParams;
@@ -31,6 +24,13 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 import org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "liststats", parentOperation = RemoteSection.class)
 @Parameters(
@@ -43,7 +43,7 @@ public class ListStatsCommand extends AbstractStatsCommand<String> implements Co
   private String typeName = "";
 
   @Parameter(description = "<store name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String retValue = "";
 
@@ -116,7 +116,7 @@ public class ListStatsCommand extends AbstractStatsCommand<String> implements Co
   }
 
   public void setParameters(final String storeName, final String adapterName) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(storeName);
     if (adapterName != null) {
       parameters.add(adapterName);

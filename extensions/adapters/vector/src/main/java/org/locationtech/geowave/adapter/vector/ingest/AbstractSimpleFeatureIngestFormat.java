@@ -19,8 +19,8 @@ public abstract class AbstractSimpleFeatureIngestFormat<I> implements
     IngestFormatPluginProviderSpi<I, SimpleFeature> {
   protected final SimpleFeatureIngestOptions myOptions = new SimpleFeatureIngestOptions();
 
-  private AbstractSimpleFeatureIngestPlugin<I> getInstance(IngestFormatOptions options) {
-    AbstractSimpleFeatureIngestPlugin<I> myInstance = newPluginInstance(options);
+  private AbstractSimpleFeatureIngestPlugin<I> getInstance(final IngestFormatOptions options) {
+    final AbstractSimpleFeatureIngestPlugin<I> myInstance = newPluginInstance(options);
     myInstance.setFilterProvider(myOptions.getCqlFilterOptionProvider());
     myInstance.setTypeNameProvider(myOptions.getTypeNameOptionProvider());
     myInstance.setSerializationFormatProvider(myOptions.getSerializationFormatOptionProvider());
@@ -33,19 +33,19 @@ public abstract class AbstractSimpleFeatureIngestFormat<I> implements
 
   @Override
   public GeoWaveAvroFormatPlugin<I, SimpleFeature> createAvroFormatPlugin(
-      IngestFormatOptions options) {
+      final IngestFormatOptions options) {
     return getInstance(options);
   }
 
   @Override
   public IngestFromHdfsPlugin<I, SimpleFeature> createIngestFromHdfsPlugin(
-      IngestFormatOptions options) {
+      final IngestFormatOptions options) {
     return getInstance(options);
   }
 
   @Override
   public LocalFileIngestPlugin<SimpleFeature> createLocalFileIngestPlugin(
-      IngestFormatOptions options) {
+      final IngestFormatOptions options) {
     return getInstance(options);
   }
 

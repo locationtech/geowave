@@ -9,14 +9,14 @@
 package org.locationtech.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 public abstract class AbstractDataStatistics<T, R, B extends StatisticsQueryBuilder<R, B>>
     implements
@@ -119,6 +119,7 @@ public abstract class AbstractDataStatistics<T, R, B extends StatisticsQueryBuil
     return buffer;
   }
 
+  @Override
   @SuppressWarnings("unchecked")
   public InternalDataStatistics<T, R, B> duplicate() {
     return (InternalDataStatistics<T, R, B>) PersistenceUtils.fromBinary(

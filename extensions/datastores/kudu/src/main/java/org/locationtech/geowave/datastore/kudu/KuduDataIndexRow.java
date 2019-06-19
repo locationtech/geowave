@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.datastore.kudu;
 
+import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Type;
@@ -16,7 +17,6 @@ import org.apache.kudu.client.RowResult;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import java.util.List;
 
 public class KuduDataIndexRow implements PersistentKuduRow {
 
@@ -51,13 +51,16 @@ public class KuduDataIndexRow implements PersistentKuduRow {
     }
   }
 
-  public KuduDataIndexRow(byte[] partitionKey, short adapterId, byte[] value) {
+  public KuduDataIndexRow(final byte[] partitionKey, final short adapterId, final byte[] value) {
     this.partitionKey = partitionKey;
     this.adapterId = adapterId;
     this.value = value;
   }
 
-  public KuduDataIndexRow(GeoWaveRow row, GeoWaveValue value, boolean isVisibilityEnabled) {
+  public KuduDataIndexRow(
+      final GeoWaveRow row,
+      final GeoWaveValue value,
+      final boolean isVisibilityEnabled) {
     this(
         row.getDataId(),
         row.getAdapterId(),
@@ -73,18 +76,20 @@ public class KuduDataIndexRow implements PersistentKuduRow {
   }
 
   @Override
-  public void populatePartialRow(PartialRow partialRow) {
+  public void populatePartialRow(final PartialRow partialRow) {
     populatePartialRowPrimaryKey(partialRow);
     partialRow.addBinary(KuduDataIndexField.GW_VALUE_KEY.getFieldName(), value);
   }
 
   @Override
-  public void populatePartialRowPrimaryKey(PartialRow partialRow) {
+  public void populatePartialRowPrimaryKey(final PartialRow partialRow) {
     partialRow.addBinary(KuduDataIndexField.GW_PARTITION_ID_KEY.getFieldName(), partitionKey);
     partialRow.addShort(KuduDataIndexField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
   }
 
-  public static GeoWaveRow deserializeDataIndexRow(RowResult row, boolean isVisibilityEnabled) {
+  public static GeoWaveRow deserializeDataIndexRow(
+      final RowResult row,
+      final boolean isVisibilityEnabled) {
     return DataIndexUtils.deserializeDataIndexRow(
         row.getBinaryCopy(KuduDataIndexField.GW_PARTITION_ID_KEY.getFieldName()),
         row.getShort(KuduDataIndexField.GW_ADAPTER_ID_KEY.getFieldName()),

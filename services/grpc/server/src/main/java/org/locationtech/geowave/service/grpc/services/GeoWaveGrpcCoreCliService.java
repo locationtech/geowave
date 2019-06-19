@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.service.grpc.services;
 
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import io.grpc.BindableService;
-import io.grpc.stub.StreamObserver;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,6 +25,9 @@ import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.M
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import io.grpc.BindableService;
+import io.grpc.stub.StreamObserver;
 
 public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWaveGrpcServiceSpi {
   private static final Logger LOGGER =
@@ -35,16 +35,16 @@ public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWav
 
   @Override
   public BindableService getBindableService() {
-    return (BindableService) this;
+    return this;
   }
 
   @Override
   public void setCommand(
-      org.locationtech.geowave.service.grpc.protobuf.SetCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.SetCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    SetCommand cmd = new SetCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final SetCommand cmd = new SetCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -57,8 +57,9 @@ public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWav
     try {
       final Object result = cmd.computeResults(params);
       String strResponseProtos = "";
-      if (result != null)
+      if (result != null) {
         strResponseProtos = result.toString();
+      }
       final StringResponseProtos resp =
           StringResponseProtos.newBuilder().setResponseValue(strResponseProtos).build();
       responseObserver.onNext(resp);
@@ -71,11 +72,11 @@ public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWav
 
   @Override
   public void listCommand(
-      org.locationtech.geowave.service.grpc.protobuf.ListCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.MapStringStringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.ListCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.MapStringStringResponseProtos> responseObserver) {
 
-    ListCommand cmd = new ListCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final ListCommand cmd = new ListCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -86,11 +87,11 @@ public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWav
 
     LOGGER.info("Executing ListCommand...");
     try {
-      final Map<String, String> post_result = new HashMap<String, String>();
+      final Map<String, String> post_result = new HashMap<>();
       final Map<String, Object> result = cmd.computeResults(params);
       final Iterator<Entry<String, Object>> it = result.entrySet().iterator();
       while (it.hasNext()) {
-        Map.Entry<String, Object> pair = (Map.Entry<String, Object>) it.next();
+        final Map.Entry<String, Object> pair = it.next();
         post_result.put(pair.getKey().toString(), pair.getValue().toString());
       }
       final MapStringStringResponseProtos resp =

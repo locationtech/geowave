@@ -21,13 +21,14 @@ public abstract class ExceptionHandlingTransformingIterator extends Transforming
       LoggerFactory.getLogger(ExceptionHandlingTransformingIterator.class);
 
   @Override
-  protected final void transformRange(SortedKeyValueIterator<Key, Value> input, KVBuffer output)
-      throws IOException {
+  protected final void transformRange(
+      final SortedKeyValueIterator<Key, Value> input,
+      final KVBuffer output) throws IOException {
     try {
       transformRangeInternal(input, output);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw e;
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Exception while transforming range", e);
       throw new IOException(e);
     }

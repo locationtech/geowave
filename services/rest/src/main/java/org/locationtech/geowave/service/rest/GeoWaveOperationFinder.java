@@ -21,7 +21,7 @@ public class GeoWaveOperationFinder extends Finder {
 
   public GeoWaveOperationFinder(
       final ServiceEnabledCommand<?> operation,
-      String defaultConfigFile) {
+      final String defaultConfigFile) {
     this.operation = operation;
     this.defaultConfigFile = defaultConfigFile;
   }

@@ -38,7 +38,7 @@ import org.locationtech.geowave.analytic.param.StoreParameters;
 public class KMeansSingleSampleJobRunner<T> extends MapReduceJobController implements
     ClusteringRunner {
   final KSamplerJobRunner sampleSetsRunner = new KSamplerJobRunner();
-  final KMeansIterationsJobRunner<T> kmeansJobRunner = new KMeansIterationsJobRunner<T>();
+  final KMeansIterationsJobRunner<T> kmeansJobRunner = new KMeansIterationsJobRunner<>();
 
   private int currentZoomLevel = 1;
 
@@ -98,7 +98,7 @@ public class KMeansSingleSampleJobRunner<T> extends MapReduceJobController imple
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(kmeansJobRunner.getParameters());
     params.addAll(
         Arrays.asList(

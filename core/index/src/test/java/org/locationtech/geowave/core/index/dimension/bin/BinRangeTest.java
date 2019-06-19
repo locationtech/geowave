@@ -16,12 +16,12 @@ public class BinRangeTest {
 
   private final double MINIMUM_RANGE = 20;
   private final double MAXIMUM_RANGE = 100;
-  private double DELTA = 1e-15;
+  private final double DELTA = 1e-15;
 
   @Test
   public void testBinRangeValues() {
 
-    BinRange binRange = new BinRange(MINIMUM_RANGE, MAXIMUM_RANGE);
+    final BinRange binRange = new BinRange(MINIMUM_RANGE, MAXIMUM_RANGE);
 
     Assert.assertEquals(MINIMUM_RANGE, binRange.getNormalizedMin(), DELTA);
     Assert.assertEquals(MAXIMUM_RANGE, binRange.getNormalizedMax(), DELTA);
@@ -36,7 +36,7 @@ public class BinRangeTest {
     final byte[] binID = ByteBuffer.allocate(4).putInt(binIdValue).array();
     final boolean fullExtent = true;
 
-    BinRange binRange = new BinRange(binID, MINIMUM_RANGE, MAXIMUM_RANGE, fullExtent);
+    final BinRange binRange = new BinRange(binID, MINIMUM_RANGE, MAXIMUM_RANGE, fullExtent);
 
     Assert.assertEquals(MINIMUM_RANGE, binRange.getNormalizedMin(), DELTA);
     Assert.assertEquals(MAXIMUM_RANGE, binRange.getNormalizedMax(), DELTA);

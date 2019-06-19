@@ -44,12 +44,12 @@ public class ByteBufferBackedInputStream extends InputStream {
   }
 
   @Override
-  public int read(byte[] bytes) throws IOException {
+  public int read(final byte[] bytes) throws IOException {
     if (!buf.hasRemaining()) {
       return -1;
     }
 
-    int len = Math.min(bytes.length, buf.remaining());
+    final int len = Math.min(bytes.length, buf.remaining());
     buf.get(bytes, 0, len);
     return len;
   }
@@ -60,7 +60,7 @@ public class ByteBufferBackedInputStream extends InputStream {
   }
 
   @Override
-  public long skip(long len) throws IOException {
+  public long skip(final long len) throws IOException {
     buf.get(new byte[(int) len]);
     return len;
   }

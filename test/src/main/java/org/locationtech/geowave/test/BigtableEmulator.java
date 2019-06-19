@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.test;
 
-import com.google.common.io.ByteStreams;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -38,6 +37,7 @@ import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.slf4j.LoggerFactory;
+import com.google.common.io.ByteStreams;
 
 public class BigtableEmulator {
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(BigtableEmulator.class);

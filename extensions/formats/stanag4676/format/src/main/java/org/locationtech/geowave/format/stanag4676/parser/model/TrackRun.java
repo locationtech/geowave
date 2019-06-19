@@ -23,14 +23,14 @@ public class TrackRun {
   private String sourceFilename;
   private Long sourceGmtiMissionUid;
   private UUID sourceGmtiMissionUuid;
-  private List<TrackRunParameter> parameters = new ArrayList<TrackRunParameter>();
-  private List<NATO4676Message> messages = new ArrayList<NATO4676Message>();
+  private List<TrackRunParameter> parameters = new ArrayList<>();
+  private List<NATO4676Message> messages = new ArrayList<>();
 
   public Long getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(final Long id) {
     this.id = id;
   }
 
@@ -38,7 +38,7 @@ public class TrackRun {
     return uuid;
   }
 
-  public void setUuid(UUID uuid) {
+  public void setUuid(final UUID uuid) {
     this.uuid = uuid;
   }
 
@@ -46,7 +46,7 @@ public class TrackRun {
     return algorithm;
   }
 
-  public void setAlgorithm(String algorithm) {
+  public void setAlgorithm(final String algorithm) {
     this.algorithm = algorithm;
   }
 
@@ -54,7 +54,7 @@ public class TrackRun {
     return algorithmVersion;
   }
 
-  public void setAlgorithmVersion(String algorithmVersion) {
+  public void setAlgorithmVersion(final String algorithmVersion) {
     this.algorithmVersion = algorithmVersion;
   }
 
@@ -62,7 +62,7 @@ public class TrackRun {
     return runDate;
   }
 
-  public void setRunDate(long runDate) {
+  public void setRunDate(final long runDate) {
     this.runDate = runDate;
   }
 
@@ -70,7 +70,7 @@ public class TrackRun {
     return userId;
   }
 
-  public void setUserId(String userId) {
+  public void setUserId(final String userId) {
     this.userId = userId;
   }
 
@@ -78,7 +78,7 @@ public class TrackRun {
     return comment;
   }
 
-  public void setComment(String comment) {
+  public void setComment(final String comment) {
     this.comment = comment;
   }
 
@@ -86,7 +86,7 @@ public class TrackRun {
     return sourceGmtiMissionUid;
   }
 
-  public void setSourceGmtiMissionUid(Long sourceGmtiMissionUid) {
+  public void setSourceGmtiMissionUid(final Long sourceGmtiMissionUid) {
     this.sourceGmtiMissionUid = sourceGmtiMissionUid;
   }
 
@@ -94,7 +94,7 @@ public class TrackRun {
     return sourceGmtiMissionUuid;
   }
 
-  public void setSourceGmtiMissionUuid(UUID sourceGmtiMissionUuid) {
+  public void setSourceGmtiMissionUuid(final UUID sourceGmtiMissionUuid) {
     this.sourceGmtiMissionUuid = sourceGmtiMissionUuid;
   }
 
@@ -102,7 +102,7 @@ public class TrackRun {
     return parameters;
   }
 
-  public void setParameters(List<TrackRunParameter> parameters) {
+  public void setParameters(final List<TrackRunParameter> parameters) {
     this.parameters = parameters;
   }
 
@@ -110,43 +110,43 @@ public class TrackRun {
     return messages;
   }
 
-  public void setMessages(List<NATO4676Message> messages) {
+  public void setMessages(final List<NATO4676Message> messages) {
     this.messages = messages;
   }
 
-  public void addParameter(TrackRunParameter param) {
-    if (this.parameters == null) {
-      this.parameters = new ArrayList<TrackRunParameter>();
+  public void addParameter(final TrackRunParameter param) {
+    if (parameters == null) {
+      parameters = new ArrayList<>();
     }
-    this.parameters.add(param);
+    parameters.add(param);
   }
 
-  public void addParameter(String name, String value) {
+  public void addParameter(final String name, final String value) {
     addParameter(new TrackRunParameter(name, value));
   }
 
   public void clearParameters() {
-    if (this.parameters == null) {
-      this.parameters = new ArrayList<TrackRunParameter>();
+    if (parameters == null) {
+      parameters = new ArrayList<>();
     }
-    this.parameters.clear();
+    parameters.clear();
   }
 
-  public void addMessage(NATO4676Message message) {
-    if (this.messages == null) {
-      this.messages = new ArrayList<NATO4676Message>();
+  public void addMessage(final NATO4676Message message) {
+    if (messages == null) {
+      messages = new ArrayList<>();
     }
-    this.messages.add(message);
+    messages.add(message);
   }
 
   public void clearMessages() {
-    if (this.messages == null) {
-      this.messages = new ArrayList<NATO4676Message>();
+    if (messages == null) {
+      messages = new ArrayList<>();
     }
-    this.messages.clear();
+    messages.clear();
   }
 
-  public void setSourceFilename(String sourceFilename) {
+  public void setSourceFilename(final String sourceFilename) {
     this.sourceFilename = sourceFilename;
   }
 

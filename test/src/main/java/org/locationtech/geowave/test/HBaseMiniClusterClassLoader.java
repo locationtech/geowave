@@ -62,24 +62,25 @@ public class HBaseMiniClusterClassLoader extends URLClassLoader {
   }
 
   /** Creates a JarClassLoader that loads classes from the given paths. */
-  public HBaseMiniClusterClassLoader(ClassLoader parent) {
+  public HBaseMiniClusterClassLoader(final ClassLoader parent) {
     super(new URL[] {}, parent);
     // search for JAR files in the given directory
-    FileFilter jarFilter = new FileFilter() {
-      public boolean accept(File pathname) {
+    final FileFilter jarFilter = new FileFilter() {
+      @Override
+      public boolean accept(final File pathname) {
         return pathname.getName().endsWith(".jar");
       }
     };
 
     // create URL for each JAR file found
-    File[] jarFiles = new File("target/hbase/lib").listFiles(jarFilter);
+    final File[] jarFiles = new File("target/hbase/lib").listFiles(jarFilter);
 
     if (null != jarFiles) {
 
       for (int i = 0; i < jarFiles.length; i++) {
         try {
           addURL(jarFiles[i].toURI().toURL());
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
           throw new RuntimeException("Could not get URL for JAR file: " + jarFiles[i], e);
         }
       }
@@ -90,14 +91,14 @@ public class HBaseMiniClusterClassLoader extends URLClassLoader {
               new File("target/hbase/lib"),
               HBaseMiniClusterClassLoader.class);
       addURL(new File(jarPath).toURI().toURL());
-    } catch (IOException e1) {
+    } catch (final IOException e1) {
       // TODO Auto-generated catch block
       e1.printStackTrace();
     }
   }
 
   @Override
-  public Class<?> loadClass(String name) throws ClassNotFoundException {
+  public Class<?> loadClass(final String name) throws ClassNotFoundException {
     if (isClassExempt(name, null)) {
       return getParent().loadClass(name);
     }
@@ -111,11 +112,11 @@ public class HBaseMiniClusterClassLoader extends URLClassLoader {
         // Try to find this class using the URLs passed to this
         // ClassLoader
         clasz = findClass(name);
-      } catch (ClassNotFoundException e) {
+      } catch (final ClassNotFoundException e) {
         // Class not found using this ClassLoader, so delegate to parent
         try {
           clasz = getParent().loadClass(name);
-        } catch (ClassNotFoundException e2) {
+        } catch (final ClassNotFoundException e2) {
           // Class not found in this ClassLoader or in the parent
           // ClassLoader
           // Log some debug output before re-throwing
@@ -133,15 +134,15 @@ public class HBaseMiniClusterClassLoader extends URLClassLoader {
    * @param name the name of the class to test.
    * @return true if the class should *not* be loaded by this ClassLoader; false otherwise.
    */
-  protected boolean isClassExempt(String name, String[] includedClassPrefixes) {
+  protected boolean isClassExempt(final String name, final String[] includedClassPrefixes) {
     if (includedClassPrefixes != null) {
-      for (String clsName : includedClassPrefixes) {
+      for (final String clsName : includedClassPrefixes) {
         if (name.startsWith(clsName)) {
           return false;
         }
       }
     }
-    for (String exemptPrefix : CLASS_PREFIX_EXEMPTIONS) {
+    for (final String exemptPrefix : CLASS_PREFIX_EXEMPTIONS) {
       if (name.startsWith(exemptPrefix)) {
         return true;
       }

@@ -36,7 +36,7 @@ public class TrackPointDetail {
     return location;
   }
 
-  public void setLocation(GeodeticPosition location) {
+  public void setLocation(final GeodeticPosition location) {
     this.location = location;
   }
 
@@ -44,7 +44,7 @@ public class TrackPointDetail {
     return velocityX;
   }
 
-  public void setVelocityX(Double velocityX) {
+  public void setVelocityX(final Double velocityX) {
     this.velocityX = velocityX;
   }
 
@@ -52,7 +52,7 @@ public class TrackPointDetail {
     return velocityY;
   }
 
-  public void setVelocityY(Double velocityY) {
+  public void setVelocityY(final Double velocityY) {
     this.velocityY = velocityY;
   }
 
@@ -60,7 +60,7 @@ public class TrackPointDetail {
     return velocityZ;
   }
 
-  public void setVelocityZ(Double velocityZ) {
+  public void setVelocityZ(final Double velocityZ) {
     this.velocityZ = velocityZ;
   }
 
@@ -68,7 +68,7 @@ public class TrackPointDetail {
     return accelerationX;
   }
 
-  public void setAccelerationX(Double accelerationX) {
+  public void setAccelerationX(final Double accelerationX) {
     this.accelerationX = accelerationX;
   }
 
@@ -76,7 +76,7 @@ public class TrackPointDetail {
     return accelerationY;
   }
 
-  public void setAccelerationY(Double accelerationY) {
+  public void setAccelerationY(final Double accelerationY) {
     this.accelerationY = accelerationY;
   }
 
@@ -84,7 +84,7 @@ public class TrackPointDetail {
     return accelerationZ;
   }
 
-  public void setAccelerationZ(Double accelerationZ) {
+  public void setAccelerationZ(final Double accelerationZ) {
     this.accelerationZ = accelerationZ;
   }
 
@@ -92,7 +92,7 @@ public class TrackPointDetail {
     return covarianceMatrix;
   }
 
-  public void setCovarianceMatrix(CovarianceMatrix covarianceMatrix) {
+  public void setCovarianceMatrix(final CovarianceMatrix covarianceMatrix) {
     this.covarianceMatrix = covarianceMatrix;
   }
 }

@@ -15,9 +15,9 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 public class BasicDimensionDefinitionTest {
 
-  private double MINIMUM = 20;
-  private double MAXIMUM = 100;
-  private double DELTA = 1e-15;
+  private final double MINIMUM = 20;
+  private final double MAXIMUM = 100;
+  private final double DELTA = 1e-15;
 
   @Test
   public void testNormalizeMidValue() {
@@ -74,7 +74,7 @@ public class BasicDimensionDefinitionTest {
     final double maxRange = 50;
     final int binCount = 1;
 
-    BinRange[] binRange = getNormalizedRangesUsingBounds(minRange, maxRange);
+    final BinRange[] binRange = getNormalizedRangesUsingBounds(minRange, maxRange);
 
     Assert.assertEquals(binCount, binRange.length);
   }
@@ -85,7 +85,7 @@ public class BasicDimensionDefinitionTest {
     final double minRange = 1;
     final double maxRange = 150;
 
-    BinRange[] binRange = getNormalizedRangesUsingBounds(minRange, maxRange);
+    final BinRange[] binRange = getNormalizedRangesUsingBounds(minRange, maxRange);
 
     Assert.assertEquals(MINIMUM, binRange[0].getNormalizedMin(), DELTA);
     Assert.assertEquals(MAXIMUM, binRange[0].getNormalizedMax(), DELTA);

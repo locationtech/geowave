@@ -45,11 +45,11 @@ import org.opengis.feature.simple.SimpleFeature;
  */
 public class KMeansParallelJobRunner extends MapReduceJobController implements ClusteringRunner {
   final SampleMultipleSetsJobRunner<SimpleFeature> sampleSetsRunner =
-      new SampleMultipleSetsJobRunner<SimpleFeature>();
+      new SampleMultipleSetsJobRunner<>();
   final StripWeakCentroidsRunner<SimpleFeature> stripWeakCentroidsRunner =
-      new StripWeakCentroidsRunner<SimpleFeature>();
+      new StripWeakCentroidsRunner<>();
   final KMeansIterationsJobRunner<SimpleFeature> kmeansJobRunner =
-      new KMeansIterationsJobRunner<SimpleFeature>();
+      new KMeansIterationsJobRunner<>();
 
   private int currentZoomLevel = 1;
 
@@ -123,7 +123,7 @@ public class KMeansParallelJobRunner extends MapReduceJobController implements C
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(kmeansJobRunner.getParameters());
     params.addAll(sampleSetsRunner.getParameters());
     // while override

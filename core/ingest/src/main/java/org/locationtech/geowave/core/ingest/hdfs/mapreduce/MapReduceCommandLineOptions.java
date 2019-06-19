@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.core.ingest.hdfs.mapreduce;
 
+import java.util.List;
+import org.apache.hadoop.conf.Configuration;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.IParameterSplitter;
 import com.google.common.collect.Lists;
-import java.util.List;
-import org.apache.hadoop.conf.Configuration;
 
 /**
  * This class encapsulates all of the options and parsed values specific to setting up the GeoWave
@@ -42,7 +42,7 @@ public class MapReduceCommandLineOptions {
     return jobTrackerHostPort;
   }
 
-  public void setJobTrackerHostPort(String jobTrackerHostPort) {
+  public void setJobTrackerHostPort(final String jobTrackerHostPort) {
     this.jobTrackerHostPort = jobTrackerHostPort;
   }
 
@@ -50,7 +50,7 @@ public class MapReduceCommandLineOptions {
     return resourceManager;
   }
 
-  public void setResourceManager(String resourceManager) {
+  public void setResourceManager(final String resourceManager) {
     this.resourceManager = resourceManager;
   }
 
@@ -58,14 +58,14 @@ public class MapReduceCommandLineOptions {
     return jobTrackerHostPort == null ? resourceManager : jobTrackerHostPort;
   }
 
-  public void setConfigurationProperties(List<String> configurationProperties) {
+  public void setConfigurationProperties(final List<String> configurationProperties) {
     this.configurationProperties = configurationProperties;
   }
 
-  public void applyConfigurationProperties(Configuration conf) {
+  public void applyConfigurationProperties(final Configuration conf) {
     if (configurationProperties != null) {
-      for (String property : configurationProperties) {
-        String[] kvp = property.split("=");
+      for (final String property : configurationProperties) {
+        final String[] kvp = property.split("=");
         if (kvp.length != 2) {
           throw new IllegalArgumentException("Unable to use configuration property: " + property);
         }
@@ -77,7 +77,7 @@ public class MapReduceCommandLineOptions {
   public static class NoSplitter implements IParameterSplitter {
 
     @Override
-    public List<String> split(String value) {
+    public List<String> split(final String value) {
       return Lists.newArrayList(value);
     }
   }

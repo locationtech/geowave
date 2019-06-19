@@ -15,16 +15,16 @@ import org.apache.commons.lang3.StringUtils;
 public class ListMainParam extends AbstractMainParam<List> {
 
   public ListMainParam(
-      int ordinal,
-      int totalMainParams,
-      Field listMainParamField,
-      RestField<List> delegateField,
-      Object instance) {
+      final int ordinal,
+      final int totalMainParams,
+      final Field listMainParamField,
+      final RestField<List> delegateField,
+      final Object instance) {
     super(ordinal, totalMainParams, listMainParamField, delegateField, instance);
   }
 
   @Override
-  protected String valueToString(List value) {
+  protected String valueToString(final List value) {
     return StringUtils.join(value, ',');
   }
 }

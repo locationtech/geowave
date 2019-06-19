@@ -45,8 +45,8 @@ public class GeoWaveKeyImpl implements GeoWaveKey {
     this.compositeInsertionId = compositeInsertionId;
     final ByteBuffer buf = ByteBuffer.wrap(compositeInsertionId, offset, length);
     buf.position(buf.limit() - 1);
-    final int numberOfDuplicates = VarintUtils.readUnsignedIntReversed(buf);
-    final int dataIdLength = VarintUtils.readUnsignedIntReversed(buf);
+    final int numberOfDuplicates = Math.min(VarintUtils.readUnsignedIntReversed(buf), buf.limit());
+    final int dataIdLength = Math.min(VarintUtils.readUnsignedIntReversed(buf), buf.limit());
     final byte[] dataId = new byte[dataIdLength];
     buf.position((buf.position() - dataIdLength) + 1);
     buf.get(dataId);

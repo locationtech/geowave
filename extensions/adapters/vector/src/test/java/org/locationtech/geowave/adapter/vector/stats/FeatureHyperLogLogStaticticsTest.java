@@ -88,8 +88,8 @@ public class FeatureHyperLogLogStaticticsTest {
   @Test
   public void test() {
 
-    final Set<String> firstSet = new HashSet<String>();
-    final Set<String> secondSet = new HashSet<String>();
+    final Set<String> firstSet = new HashSet<>();
+    final Set<String> secondSet = new HashSet<>();
     final FeatureHyperLogLogStatistics stat =
         new FeatureHyperLogLogStatistics((short) -1, "pid", 16);
 

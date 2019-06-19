@@ -8,15 +8,6 @@
  */
 package org.locationtech.geowave.datastore.accumulo.minicluster;
 
-/**
- * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- *
- * <p> See the NOTICE file distributed with this work for additional information regarding copyright
- * ownership. All rights reserved. This program and the accompanying materials are made available
- * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
- * available at http://www.apache.org/licenses/LICENSE-2.0.txt
- */
-import com.google.common.io.Files;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 import org.apache.accumulo.core.conf.Property;
@@ -27,6 +18,15 @@ import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+/**
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
+import com.google.common.io.Files;
 
 public class AccumuloMiniCluster {
   private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloMiniCluster.class);

@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.cli.debug;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
@@ -22,6 +20,8 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "clientCql", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "cql client-side, primarily useful for consistency checking")
@@ -48,7 +48,7 @@ public class ClientSideCQLQuery extends AbstractGeoWaveQuery {
       final String indexName,
       final DataStore dataStore,
       final boolean debug,
-      DataStorePluginOptions pluginOptions) {
+      final DataStorePluginOptions pluginOptions) {
     getFilter();
 
     long count = 0;

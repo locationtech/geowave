@@ -19,6 +19,11 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 public class SimpleFeatureGeometryExtractor extends EmptyDimensionExtractor<SimpleFeature>
     implements
     DimensionExtractor<SimpleFeature> {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
   public Geometry getGeometry(final SimpleFeature anObject) {
     final FeatureGeometryHandler handler =
@@ -58,7 +63,7 @@ public class SimpleFeatureGeometryExtractor extends EmptyDimensionExtractor<Simp
   }
 
   @Override
-  public String getGroupID(SimpleFeature anObject) {
+  public String getGroupID(final SimpleFeature anObject) {
     final Object v = anObject.getAttribute("GroupID");
     return v == null ? null : v.toString();
   }

@@ -26,14 +26,14 @@ public class TrackEvent {
   private Security security;
   private String comment;
   private String missionId;
-  private TreeMap<Long, TrackPoint> points = new TreeMap<Long, TrackPoint>();
-  private TreeMap<Long, MotionEventPoint> motionEvents = new TreeMap<Long, MotionEventPoint>();
-  private List<TrackIdentity> identities = new ArrayList<TrackIdentity>();
-  private List<TrackClassification> classifications = new ArrayList<TrackClassification>();
-  private List<TrackManagement> managements = new ArrayList<TrackManagement>();
-  private List<MotionImagery> motionImages = new ArrayList<MotionImagery>();
+  private TreeMap<Long, TrackPoint> points = new TreeMap<>();
+  private TreeMap<Long, MotionEventPoint> motionEvents = new TreeMap<>();
+  private List<TrackIdentity> identities = new ArrayList<>();
+  private List<TrackClassification> classifications = new ArrayList<>();
+  private List<TrackManagement> managements = new ArrayList<>();
+  private List<MotionImagery> motionImages = new ArrayList<>();
   // private ESMInfo esm;
-  private List<LineageRelation> trackRelations = new ArrayList<LineageRelation>();
+  private List<LineageRelation> trackRelations = new ArrayList<>();
   private ExerciseIndicator exerciseIndicator;
   private SimulationIndicator simulationIndicator;
   private Track track;
@@ -131,7 +131,7 @@ public class TrackEvent {
    */
   public void addPoint(final TrackPoint point) {
     if (points == null) {
-      points = new TreeMap<Long, TrackPoint>();
+      points = new TreeMap<>();
     }
     points.put(point.eventTime, point);
     if (track != null) {
@@ -146,7 +146,7 @@ public class TrackEvent {
    */
   public void addMotionPoint(final MotionEventPoint point) {
     if (motionEvents == null) {
-      motionEvents = new TreeMap<Long, MotionEventPoint>();
+      motionEvents = new TreeMap<>();
     }
     motionEvents.put(point.eventTime, point);
     // if(motionEvents != null) {
@@ -176,7 +176,7 @@ public class TrackEvent {
    */
   public void addIdentity(final TrackIdentity identity) {
     if (identities == null) {
-      identities = new ArrayList<TrackIdentity>();
+      identities = new ArrayList<>();
     }
     identities.add(identity);
     if (track != null) {
@@ -204,7 +204,7 @@ public class TrackEvent {
    */
   public void addClassification(final TrackClassification classification) {
     if (classifications == null) {
-      classifications = new ArrayList<TrackClassification>();
+      classifications = new ArrayList<>();
     }
     classifications.add(classification);
     if (track != null) {
@@ -232,7 +232,7 @@ public class TrackEvent {
    */
   public void addManagement(final TrackManagement management) {
     if (managements == null) {
-      managements = new ArrayList<TrackManagement>();
+      managements = new ArrayList<>();
     }
     managements.add(management);
     if (track != null) {
@@ -260,7 +260,7 @@ public class TrackEvent {
    */
   public void addMotionImagery(final MotionImagery image) {
     if (motionImages == null) {
-      motionImages = new ArrayList<MotionImagery>();
+      motionImages = new ArrayList<>();
     }
     motionImages.add(image);
     if (track != null) {
@@ -288,7 +288,7 @@ public class TrackEvent {
    */
   public void addTrackRelation(final LineageRelation relation) {
     if (trackRelations == null) {
-      trackRelations = new ArrayList<LineageRelation>();
+      trackRelations = new ArrayList<>();
     }
     trackRelations.add(relation);
     if (track != null) {

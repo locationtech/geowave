@@ -31,7 +31,7 @@ public class GeoLifeUtils {
     }
   };
 
-  public static Date parseDate(String source) throws ParseException {
+  public static Date parseDate(final String source) throws ParseException {
     return dateFormat.get().parse(source);
   }
 

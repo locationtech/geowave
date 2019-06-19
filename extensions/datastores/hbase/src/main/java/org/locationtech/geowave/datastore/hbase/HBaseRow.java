@@ -29,15 +29,15 @@ public class HBaseRow implements GeoWaveRow {
     // that is parsed)?
     key = new GeoWaveKeyImpl(result.getRow(), partitionKeyLength);
 
-    NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> rowMapping =
+    final NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> rowMapping =
         result.getMap();
-    List<GeoWaveValue> fieldValueList = new ArrayList();
+    final List<GeoWaveValue> fieldValueList = new ArrayList();
 
     for (final Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> cfEntry : rowMapping.entrySet()) {
       for (final Entry<byte[], NavigableMap<Long, byte[]>> cqEntry : cfEntry.getValue().entrySet()) {
-        for (Entry<Long, byte[]> cqEntryValue : cqEntry.getValue().entrySet()) {
-          byte[] byteValue = cqEntryValue.getValue();
-          byte[] qualifier = cqEntry.getKey();
+        for (final Entry<Long, byte[]> cqEntryValue : cqEntry.getValue().entrySet()) {
+          final byte[] byteValue = cqEntryValue.getValue();
+          final byte[] qualifier = cqEntry.getKey();
 
           fieldValueList.add(new GeoWaveValueImpl(qualifier, null, byteValue));
         }
@@ -47,7 +47,7 @@ public class HBaseRow implements GeoWaveRow {
     fieldValues = new GeoWaveValue[fieldValueList.size()];
     int i = 0;
 
-    for (GeoWaveValue gwValue : fieldValueList) {
+    for (final GeoWaveValue gwValue : fieldValueList) {
       fieldValues[i++] = gwValue;
     }
   }

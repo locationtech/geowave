@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterators;
 import java.awt.RenderingHints.Key;
 import java.io.IOException;
 import java.io.Serializable;
@@ -29,6 +27,8 @@ import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 
 /**
  * This factory is injected by GeoTools using Java SPI and is used to expose GeoWave as a DataStore
@@ -48,7 +48,7 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
 
   public static final String DISPLAY_NAME_PREFIX = "GeoWave Datastore - ";
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTDataStoreFactory.class);
-  private final List<DataStoreCacheEntry> dataStoreCache = new ArrayList<DataStoreCacheEntry>();
+  private final List<DataStoreCacheEntry> dataStoreCache = new ArrayList<>();
   private final StoreFactoryFamilySpi geowaveStoreFactoryFamily;
   private static Boolean isAvailable = null;
 
@@ -165,7 +165,7 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
           geowaveStoreFactoryFamily,
           dataStoreParams,
           originalParams);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.info("unable to process params as GeoWave datastore", e);
       return false;
     }

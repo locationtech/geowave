@@ -21,9 +21,9 @@ public abstract class ExceptionHandlingSkippingIterator extends SkippingIterator
   protected final void consume() throws IOException {
     try {
       consumeInternal();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw e;
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Exception while initializing skipping iterator", e);
       throw new IOException(e);
     }

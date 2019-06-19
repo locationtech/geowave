@@ -26,12 +26,12 @@ public class TWKBUtils {
   public static final byte MAX_EXTENDED_PRECISION = 3;
   public static final byte MIN_EXTENDED_PRECISION = -4;
 
-  public static int zigZagEncode(int value) {
+  public static int zigZagEncode(final int value) {
     return (value << 1) ^ (value >> 31);
   }
 
-  public static int zigZagDecode(int value) {
-    int temp = (((value << 31) >> 31) ^ value) >> 1;
+  public static int zigZagDecode(final int value) {
+    final int temp = (((value << 31) >> 31) ^ value) >> 1;
     return temp ^ (value & (1 << 31));
   }
 }

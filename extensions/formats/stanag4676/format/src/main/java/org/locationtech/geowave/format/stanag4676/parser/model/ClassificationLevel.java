@@ -20,14 +20,14 @@ public enum ClassificationLevel {
   private String value;
 
   ClassificationLevel() {
-    this.value = "TOP_SECRET";
+    value = "TOP_SECRET";
   }
 
   ClassificationLevel(final String value) {
     this.value = value;
   }
 
-  public static ClassificationLevel fromString(String value) {
+  public static ClassificationLevel fromString(final String value) {
     for (final ClassificationLevel item : ClassificationLevel.values()) {
       if (item.toString().equals(value)) {
         return item;

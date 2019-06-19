@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.datastore.bigtable;
 
-import com.google.cloud.bigtable.hbase.BigtableConfiguration;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.client.Connection;
+import com.google.cloud.bigtable.hbase.BigtableConfiguration;
 
 public class BigTableConnectionPool {
   private static BigTableConnectionPool singletonInstance;
@@ -25,12 +25,12 @@ public class BigTableConnectionPool {
     return singletonInstance;
   }
 
-  private final Map<String, Connection> connectorCache = new HashMap<String, Connection>();
+  private final Map<String, Connection> connectorCache = new HashMap<>();
   private static final String HBASE_CONFIGURATION_TIMEOUT = "timeout";
 
   public synchronized Connection getConnection(final String projectId, final String instanceId)
       throws IOException {
-    String key = projectId + "_" + instanceId;
+    final String key = projectId + "_" + instanceId;
     Connection connection = connectorCache.get(key);
     if (connection == null) {
       final Configuration config = BigtableConfiguration.configure(projectId, instanceId);

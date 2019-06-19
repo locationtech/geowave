@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.remote;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +30,9 @@ import org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOp
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "calcstat", parentOperation = RemoteSection.class)
 @Parameters(

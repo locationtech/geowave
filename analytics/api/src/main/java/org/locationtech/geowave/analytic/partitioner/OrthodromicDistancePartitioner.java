@@ -46,6 +46,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import si.uom.SI;
+import tec.uom.se.unit.Units;
 
 /*
  * Calculates distance use orthodromic distance to calculate the bounding box around each point.
@@ -160,7 +161,7 @@ public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T> im
         new double[] {
             distancePerDimension[longDimensionPosition],
             distancePerDimension[latDimensionPosition]},
-        geometricDistanceUnit == null ? SI.METRE : geometricDistanceUnit,
+        geometricDistanceUnit == null ? Units.METRE : geometricDistanceUnit,
         coordinate);
   }
 
@@ -214,7 +215,7 @@ public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T> im
   }
 
   @Override
-  public void initialize(ScopedJobConfiguration config) throws IOException {
+  public void initialize(final ScopedJobConfiguration config) throws IOException {
 
     crsName = config.getString(GlobalParameters.Global.CRS_ID, "EPSG:4326");
     try {
@@ -238,14 +239,14 @@ public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T> im
     final String distanceUnit =
         config.getString(PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT, "m");
 
-    this.geometricDistanceUnit = (Unit<Length>) GeometryUtils.lookup(distanceUnit);
+    this.geometricDistanceUnit = GeometryUtils.lookup(distanceUnit);
 
     super.initialize(config);
   }
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(super.getParameters());
     params.addAll(
         Arrays.asList(

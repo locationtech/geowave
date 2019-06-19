@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +16,10 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.io.IOUtils;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "setls", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Set GeoServer Layer Style")
@@ -31,10 +31,10 @@ public class GeoServerSetLayerStyleCommand extends GeoServerCommand<String> {
   }
 
   @Parameter(names = {"-sn", "--styleName"}, required = true, description = "style name")
-  private final String styleName = null;
+  private String styleName = null;
 
   @Parameter(description = "<layer name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String layerName = null;
 
@@ -57,7 +57,7 @@ public class GeoServerSetLayerStyleCommand extends GeoServerCommand<String> {
       final String style = IOUtils.toString((InputStream) setLayerStyleResponse.getEntity());
       return "Set style for GeoServer layer '" + layerName + ": OK" + style;
     }
-    String errorMessage =
+    final String errorMessage =
         "Error setting style for GeoServer layer '"
             + layerName
             + "': "

@@ -15,7 +15,7 @@ public class DistanceProfile<CONTEXT_TYPE> {
 
   public DistanceProfile() {}
 
-  public DistanceProfile(double distance, CONTEXT_TYPE context) {
+  public DistanceProfile(final double distance, final CONTEXT_TYPE context) {
     super();
     this.distance = distance;
     this.context = context;
@@ -25,7 +25,7 @@ public class DistanceProfile<CONTEXT_TYPE> {
     return distance;
   }
 
-  public void setDistance(double distance) {
+  public void setDistance(final double distance) {
     this.distance = distance;
   }
 
@@ -34,7 +34,7 @@ public class DistanceProfile<CONTEXT_TYPE> {
     return context;
   }
 
-  public void setContext(CONTEXT_TYPE context) {
+  public void setContext(final CONTEXT_TYPE context) {
     this.context = context;
   }
 

@@ -30,7 +30,7 @@ public class DateSerializationProvider implements FieldSerializationProviderSpi<
 
   protected static class DateReader implements FieldReader<Date> {
     @Override
-    public Date readField(byte[] fieldData) {
+    public Date readField(final byte[] fieldData) {
       if ((fieldData == null) || (fieldData.length == 0)) {
         return null;
       }
@@ -38,7 +38,7 @@ public class DateSerializationProvider implements FieldSerializationProviderSpi<
     }
 
     @Override
-    public Date readField(byte[] fieldData, byte serializationVersion) {
+    public Date readField(final byte[] fieldData, final byte serializationVersion) {
       if ((fieldData == null) || (fieldData.length == 0)) {
         return null;
       }

@@ -69,7 +69,7 @@ public class SpatialJoinCmdOptions {
     return appName;
   }
 
-  public void setAppName(String appName) {
+  public void setAppName(final String appName) {
     this.appName = appName;
   }
 
@@ -77,7 +77,7 @@ public class SpatialJoinCmdOptions {
     return host;
   }
 
-  public void setHost(String host) {
+  public void setHost(final String host) {
     this.host = host;
   }
 
@@ -85,7 +85,7 @@ public class SpatialJoinCmdOptions {
     return master;
   }
 
-  public void setMaster(String master) {
+  public void setMaster(final String master) {
     this.master = master;
   }
 
@@ -93,7 +93,7 @@ public class SpatialJoinCmdOptions {
     return partCount;
   }
 
-  public void setPartCount(Integer partCount) {
+  public void setPartCount(final Integer partCount) {
     this.partCount = partCount;
   }
 
@@ -101,7 +101,7 @@ public class SpatialJoinCmdOptions {
     return leftAdapterTypeName;
   }
 
-  public void setLeftAdapterTypeName(String leftAdapterTypeName) {
+  public void setLeftAdapterTypeName(final String leftAdapterTypeName) {
     this.leftAdapterTypeName = leftAdapterTypeName;
   }
 
@@ -109,7 +109,7 @@ public class SpatialJoinCmdOptions {
     return rightAdapterTypeName;
   }
 
-  public void setRightAdapterTypeName(String rightAdapterTypeName) {
+  public void setRightAdapterTypeName(final String rightAdapterTypeName) {
     this.rightAdapterTypeName = rightAdapterTypeName;
   }
 
@@ -117,7 +117,7 @@ public class SpatialJoinCmdOptions {
     return predicate;
   }
 
-  public void setPredicate(String predicate) {
+  public void setPredicate(final String predicate) {
     this.predicate = predicate;
   }
 
@@ -125,7 +125,7 @@ public class SpatialJoinCmdOptions {
     return radius;
   }
 
-  public void setRadius(Double radius) {
+  public void setRadius(final Double radius) {
     this.radius = radius;
   }
 
@@ -133,7 +133,7 @@ public class SpatialJoinCmdOptions {
     return outLeftAdapterTypeName;
   }
 
-  public void setOutputLeftAdapterTypeName(String outLeftAdapterTypeName) {
+  public void setOutputLeftAdapterTypeName(final String outLeftAdapterTypeName) {
     this.outLeftAdapterTypeName = outLeftAdapterTypeName;
   }
 
@@ -141,7 +141,7 @@ public class SpatialJoinCmdOptions {
     return outRightAdapterTypeName;
   }
 
-  public void setOutputRightAdapterTypeName(String outRightAdapterTypeName) {
+  public void setOutputRightAdapterTypeName(final String outRightAdapterTypeName) {
     this.outRightAdapterTypeName = outRightAdapterTypeName;
   }
 
@@ -149,7 +149,7 @@ public class SpatialJoinCmdOptions {
     return negativeTest;
   }
 
-  public void setNegativeTest(boolean negativeTest) {
+  public void setNegativeTest(final boolean negativeTest) {
     this.negativeTest = negativeTest;
   }
 }

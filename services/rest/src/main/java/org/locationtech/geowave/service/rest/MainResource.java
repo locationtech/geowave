@@ -42,7 +42,7 @@ public class MainResource extends ServerResource {
         routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
       }
 
-      if (userName != null && !userName.equals("")) {
+      if ((userName != null) && !userName.equals("")) {
         output =
             "<b>Welcome "
                 + userName
@@ -53,7 +53,7 @@ public class MainResource extends ServerResource {
       } else {
         output = routeStringBuilder.toString();
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Error listing resources", e);
     }
     return output;

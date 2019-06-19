@@ -66,23 +66,23 @@ public class CopyCommandOptions {
     return numReducers;
   }
 
-  public void setHdfsHostPort(String hdfsHostPort) {
+  public void setHdfsHostPort(final String hdfsHostPort) {
     this.hdfsHostPort = hdfsHostPort;
   }
 
-  public void setJobTrackerOrResourceManHostPort(String jobTrackerOrResourceManHostPort) {
+  public void setJobTrackerOrResourceManHostPort(final String jobTrackerOrResourceManHostPort) {
     this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
   }
 
-  public void setMinSplits(Integer minSplits) {
+  public void setMinSplits(final Integer minSplits) {
     this.minSplits = minSplits;
   }
 
-  public void setMaxSplits(Integer maxSplits) {
+  public void setMaxSplits(final Integer maxSplits) {
     this.maxSplits = maxSplits;
   }
 
-  public void setNumReducers(Integer numReducers) {
+  public void setNumReducers(final Integer numReducers) {
     this.numReducers = numReducers;
   }
 }

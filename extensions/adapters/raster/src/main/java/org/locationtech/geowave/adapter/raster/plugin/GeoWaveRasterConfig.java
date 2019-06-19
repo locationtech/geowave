@@ -12,7 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 import javax.media.jai.Interpolation;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -41,8 +45,7 @@ import org.xml.sax.SAXException;
 
 public class GeoWaveRasterConfig {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveRasterConfig.class);
-  private static final Map<String, GeoWaveRasterConfig> CONFIG_CACHE =
-      new Hashtable<String, GeoWaveRasterConfig>();
+  private static final Map<String, GeoWaveRasterConfig> CONFIG_CACHE = new Hashtable<>();
 
   protected static enum ConfigParameter {
     // the following two are optional parameters that will override the
@@ -113,9 +116,10 @@ public class GeoWaveRasterConfig {
     if (authProviderName != null) {
       final Iterator<AuthorizationFactorySPI> authIt = getAuthorizationFactoryList();
       while (authIt.hasNext()) {
-        AuthorizationFactorySPI authFactory = authIt.next();
-        if (authProviderName.equals(authFactory.toString()))
+        final AuthorizationFactorySPI authFactory = authIt.next();
+        if (authProviderName.equals(authFactory.toString())) {
           return authFactory;
+        }
       }
     }
     return new EmptyAuthorizationFactory();
@@ -129,7 +133,7 @@ public class GeoWaveRasterConfig {
     if (authorizationURL != null) {
       try {
         return new URL(authorizationURL.toString());
-      } catch (MalformedURLException e) {
+      } catch (final MalformedURLException e) {
         LOGGER.warn("Accumulo Plugin: malformed Authorization Service URL " + authorizationURL, e);
       }
     }
@@ -184,7 +188,7 @@ public class GeoWaveRasterConfig {
       // HP Fortify "XML External Entity Injection" fix.
       // These lines are the recommended fix for
       // protecting a Java DocumentBuilderFactory from XXE.
-      String DISALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
+      final String DISALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
       dbf.setFeature(DISALLOW_DOCTYPE_DECL, true);
 
       final DocumentBuilder db = dbf.newDocumentBuilder();
@@ -194,7 +198,7 @@ public class GeoWaveRasterConfig {
       in.close();
 
       final NodeList children = dom.getChildNodes().item(0).getChildNodes();
-      final Map<String, String> configParams = new HashMap<String, String>();
+      final Map<String, String> configParams = new HashMap<>();
       for (int i = 0; i < children.getLength(); i++) {
         final Node child = children.item(i);
         configParams.put(child.getNodeName(), child.getTextContent());
@@ -206,7 +210,7 @@ public class GeoWaveRasterConfig {
   private static void parseParamsIntoRasterConfig(
       final GeoWaveRasterConfig result,
       final Map<String, String> params) {
-    final Map<String, String> storeParams = new HashMap<String, String>(params);
+    final Map<String, String> storeParams = new HashMap<>(params);
     // isolate just the dynamic store params
     for (final ConfigParameter param : ConfigParameter.values()) {
       storeParams.remove(param.getConfigName());

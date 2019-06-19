@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin;
 
-import com.google.common.collect.Lists;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
@@ -59,6 +58,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.Name;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Lists;
 
 public class GeoWaveGTDataStore extends ContentDataStore {
   /** Package logger */

@@ -16,9 +16,9 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 public class InternalAdapterStoreFactory extends BaseStoreFactory<InternalAdapterStore> {
 
   public InternalAdapterStoreFactory(
-      String typeName,
-      String description,
-      StoreFactoryHelper helper) {
+      final String typeName,
+      final String description,
+      final StoreFactoryHelper helper) {
     super(typeName, description, helper);
   }
 

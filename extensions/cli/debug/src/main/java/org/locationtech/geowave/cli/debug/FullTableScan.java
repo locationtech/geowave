@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.cli.debug;
 
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -17,6 +16,7 @@ import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "fullscan", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "fulltable scan")
@@ -30,7 +30,7 @@ public class FullTableScan extends AbstractGeoWaveQuery {
       final String indexName,
       final DataStore dataStore,
       final boolean debug,
-      DataStorePluginOptions pluginOptions) {
+      final DataStorePluginOptions pluginOptions) {
     long count = 0;
     try (final CloseableIterator<Object> it =
         dataStore.query(

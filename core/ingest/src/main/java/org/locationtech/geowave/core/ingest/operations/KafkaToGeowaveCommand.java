@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +25,17 @@ import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "kafkaToGW", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Subscribe to a Kafka topic and ingest into GeoWave")
 public class KafkaToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
   @Parameter(description = "<store name> <comma delimited index/group list>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private VisibilityOptions ingestOptions = new VisibilityOptions();
@@ -100,7 +100,7 @@ public class KafkaToGeowaveCommand extends ServiceEnabledCommand<Void> {
   }
 
   public void setParameters(final String storeName, final String commaSeparatedIndexes) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(storeName);
     parameters.add(commaSeparatedIndexes);
   }

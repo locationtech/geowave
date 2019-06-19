@@ -83,14 +83,14 @@ public enum SymbolicSpectralRange {
   private String value;
 
   SymbolicSpectralRange() {
-    this.value = SymbolicSpectralRange.values()[0].toString();
+    value = SymbolicSpectralRange.values()[0].toString();
   }
 
   SymbolicSpectralRange(final String value) {
     this.value = value;
   }
 
-  public static SymbolicSpectralRange fromString(String value) {
+  public static SymbolicSpectralRange fromString(final String value) {
     for (final SymbolicSpectralRange item : SymbolicSpectralRange.values()) {
       if (item.toString().equals(value)) {
         return item;

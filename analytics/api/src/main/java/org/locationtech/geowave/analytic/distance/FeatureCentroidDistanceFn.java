@@ -40,10 +40,12 @@ public class FeatureCentroidDistanceFn implements DistanceFn<SimpleFeature> {
     this.coordinateDistanceFunction = coordinateDistanceFunction;
   }
 
-  private Geometry getGeometry(SimpleFeature x) {
-    for (Object attr : x.getAttributes())
-      if (attr instanceof Geometry)
+  private Geometry getGeometry(final SimpleFeature x) {
+    for (final Object attr : x.getAttributes()) {
+      if (attr instanceof Geometry) {
         return (Geometry) attr;
+      }
+    }
     return (Geometry) x.getDefaultGeometry();
   }
 

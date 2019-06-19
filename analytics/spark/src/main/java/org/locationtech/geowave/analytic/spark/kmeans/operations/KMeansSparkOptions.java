@@ -68,7 +68,7 @@ public class KMeansSparkOptions {
     return appName;
   }
 
-  public void setAppName(String appName) {
+  public void setAppName(final String appName) {
     this.appName = appName;
   }
 
@@ -76,7 +76,7 @@ public class KMeansSparkOptions {
     return host;
   }
 
-  public void setHost(String host) {
+  public void setHost(final String host) {
     this.host = host;
   }
 
@@ -84,7 +84,7 @@ public class KMeansSparkOptions {
     return master;
   }
 
-  public void setMaster(String master) {
+  public void setMaster(final String master) {
     this.master = master;
   }
 
@@ -92,7 +92,7 @@ public class KMeansSparkOptions {
     return numClusters;
   }
 
-  public void setNumClusters(Integer numClusters) {
+  public void setNumClusters(final Integer numClusters) {
     this.numClusters = numClusters;
   }
 
@@ -100,7 +100,7 @@ public class KMeansSparkOptions {
     return numIterations;
   }
 
-  public void setNumIterations(Integer numIterations) {
+  public void setNumIterations(final Integer numIterations) {
     this.numIterations = numIterations;
   }
 
@@ -108,7 +108,7 @@ public class KMeansSparkOptions {
     return epsilon;
   }
 
-  public void setEpsilon(Double epsilon) {
+  public void setEpsilon(final Double epsilon) {
     this.epsilon = epsilon;
   }
 
@@ -116,7 +116,7 @@ public class KMeansSparkOptions {
     return useTime;
   }
 
-  public void setUseTime(Boolean useTime) {
+  public void setUseTime(final Boolean useTime) {
     this.useTime = useTime;
   }
 
@@ -124,7 +124,7 @@ public class KMeansSparkOptions {
     return generateHulls;
   }
 
-  public void setGenerateHulls(Boolean generateHulls) {
+  public void setGenerateHulls(final Boolean generateHulls) {
     this.generateHulls = generateHulls;
   }
 
@@ -132,7 +132,7 @@ public class KMeansSparkOptions {
     return computeHullData;
   }
 
-  public void setComputeHullData(Boolean computeHullData) {
+  public void setComputeHullData(final Boolean computeHullData) {
     this.computeHullData = computeHullData;
   }
 
@@ -140,7 +140,7 @@ public class KMeansSparkOptions {
     return cqlFilter;
   }
 
-  public void setCqlFilter(String cqlFilter) {
+  public void setCqlFilter(final String cqlFilter) {
     this.cqlFilter = cqlFilter;
   }
 
@@ -148,7 +148,7 @@ public class KMeansSparkOptions {
     return typeName;
   }
 
-  public void setTypeName(String typeName) {
+  public void setTypeName(final String typeName) {
     this.typeName = typeName;
   }
 
@@ -156,7 +156,7 @@ public class KMeansSparkOptions {
     return minSplits;
   }
 
-  public void setMinSplits(Integer minSplits) {
+  public void setMinSplits(final Integer minSplits) {
     this.minSplits = minSplits;
   }
 
@@ -164,7 +164,7 @@ public class KMeansSparkOptions {
     return maxSplits;
   }
 
-  public void setMaxSplits(Integer maxSplits) {
+  public void setMaxSplits(final Integer maxSplits) {
     this.maxSplits = maxSplits;
   }
 
@@ -172,7 +172,7 @@ public class KMeansSparkOptions {
     return centroidTypeName;
   }
 
-  public void setCentroidTypeName(String centroidTypeName) {
+  public void setCentroidTypeName(final String centroidTypeName) {
     this.centroidTypeName = centroidTypeName;
   }
 
@@ -180,7 +180,7 @@ public class KMeansSparkOptions {
     return hullTypeName;
   }
 
-  public void setHullTypeName(String hullTypeName) {
+  public void setHullTypeName(final String hullTypeName) {
     this.hullTypeName = hullTypeName;
   }
 }

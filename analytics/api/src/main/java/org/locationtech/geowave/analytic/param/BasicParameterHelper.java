@@ -18,6 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BasicParameterHelper implements ParameterHelper<Object> {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   static final Logger LOGGER = LoggerFactory.getLogger(BasicParameterHelper.class);
   private final ParameterEnum<?> parent;
   private final Class<Object> baseClass;
@@ -121,10 +125,10 @@ public class BasicParameterHelper implements ParameterHelper<Object> {
   @Override
   public void setValue(final PropertyManagement propertyManagement, final Object value) {
     Object storeValue = value;
-    if (this.isClass && value instanceof String) {
+    if (isClass && (value instanceof String)) {
       try {
         storeValue = Class.forName(value.toString());
-      } catch (ClassNotFoundException e) {
+      } catch (final ClassNotFoundException e) {
         LOGGER.error("Class " + value.toString() + " for property " + parent + " is not found", e);
       }
     }

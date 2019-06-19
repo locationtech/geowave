@@ -22,7 +22,6 @@ import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstant
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_PASS;
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_PROVIDER;
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_TYPE;
-import com.beust.jcommander.ParameterException;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -57,8 +56,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
@@ -77,6 +74,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import com.beust.jcommander.ParameterException;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class GeoServerRestClient {
   private static GeoServerRestClient SINGLETON_INSTANCE;

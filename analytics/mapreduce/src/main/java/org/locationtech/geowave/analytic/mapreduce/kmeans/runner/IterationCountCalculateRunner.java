@@ -52,7 +52,7 @@ public class IterationCountCalculateRunner<T> implements MapReduceJobRunner {
 
   private int getIterations(final PropertyManagement propertyManagement) throws IOException {
 
-    final CentroidManager<T> centroidManager = new CentroidManagerGeoWave<T>(propertyManagement);
+    final CentroidManager<T> centroidManager = new CentroidManagerGeoWave<>(propertyManagement);
 
     final AtomicInteger resultHolder = new AtomicInteger(0);
 

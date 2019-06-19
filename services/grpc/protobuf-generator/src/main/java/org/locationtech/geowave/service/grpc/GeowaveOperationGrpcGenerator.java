@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.service.grpc;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -27,6 +25,8 @@ import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class GeowaveOperationGrpcGenerator {
   private static final Logger LOGGER =
@@ -55,10 +55,11 @@ public class GeowaveOperationGrpcGenerator {
 
   public static void main(final String[] args) {
 
-    if (args.length > 0)
+    if (args.length > 0) {
       outputBasePath = args[0];
+    }
 
-    GeowaveOperationGrpcGenerator g = new GeowaveOperationGrpcGenerator();
+    final GeowaveOperationGrpcGenerator g = new GeowaveOperationGrpcGenerator();
     try {
       g.parseOperationsForApiRoutes();
     } catch (NoSuchMethodException | SecurityException e) {
@@ -75,15 +76,14 @@ public class GeowaveOperationGrpcGenerator {
    */
   public void parseOperationsForApiRoutes() throws NoSuchMethodException, SecurityException {
 
-    final HashMap<String, ArrayList<String>> rpcs = new HashMap<String, ArrayList<String>>();
-    final HashMap<String, ArrayList<String>> rpcInputMessages =
-        new HashMap<String, ArrayList<String>>();
-    final HashMap<String, String> retMessages = new HashMap<String, String>();
+    final HashMap<String, ArrayList<String>> rpcs = new HashMap<>();
+    final HashMap<String, ArrayList<String>> rpcInputMessages = new HashMap<>();
+    final HashMap<String, String> retMessages = new HashMap<>();
 
     Set<Class<? extends ServiceEnabledCommand>> t = null;
     try {
       t = new Reflections("org.locationtech.geowave").getSubTypesOf(ServiceEnabledCommand.class);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.debug(e.getMessage());
     }
 
@@ -105,12 +105,13 @@ public class GeowaveOperationGrpcGenerator {
             // this special case is specifically for CoreMapreduce
             // (which is packaged as ..geowave.mapreduce for some
             // reason)
-            if (packageToks[i + 2].equalsIgnoreCase("operations"))
+            if (packageToks[i + 2].equalsIgnoreCase("operations")) {
               serviceName = "Core" + WordUtils.capitalize(packageToks[i + 1]);
-            else
+            } else {
               serviceName =
                   WordUtils.capitalize(packageToks[i + 1])
                       + WordUtils.capitalize(packageToks[i + 2]);
+            }
             if (!rpcs.containsKey(serviceName)) {
               rpcs.put(serviceName, new ArrayList<String>());
               rpcInputMessages.put(serviceName, new ArrayList<String>());
@@ -141,8 +142,9 @@ public class GeowaveOperationGrpcGenerator {
           } catch (final Exception e) {
             continue;
           } finally {
-            if (success)
+            if (success) {
               break;
+            }
             parentClass = parentClass.getSuperclass();
           }
         }
@@ -154,10 +156,11 @@ public class GeowaveOperationGrpcGenerator {
           responseName = responseName.replaceAll(" ", "") + "ResponseProtos";
           // if the return type is void we need to return an
           // empty message
-          if (retType.equalsIgnoreCase("void"))
+          if (retType.equalsIgnoreCase("void")) {
             retType = "\nmessage " + responseName + " { }";
-          else
+          } else {
             retType = "\nmessage " + responseName + " { " + retType + " responseValue = 1; }";
+          }
           retMessages.put(retType, retType);
         }
 
@@ -191,11 +194,10 @@ public class GeowaveOperationGrpcGenerator {
     // write out all the service files
     Iterator it = rpcs.entrySet().iterator();
     while (it.hasNext()) {
-      HashMap.Entry pair = (HashMap.Entry) it.next();
+      final HashMap.Entry pair = (HashMap.Entry) it.next();
       final String currServiceName = (String) pair.getKey();
-      ArrayList<String> rpcList = (ArrayList<String>) pair.getValue();
-      ArrayList<String> rpcInputMessageList =
-          (ArrayList<String>) rpcInputMessages.get(currServiceName);
+      final ArrayList<String> rpcList = (ArrayList<String>) pair.getValue();
+      final ArrayList<String> rpcInputMessageList = rpcInputMessages.get(currServiceName);
 
       final String serviceFilename =
           outputBasePath + "/src/main/protobuf/GeoWave" + pair.getKey() + ".proto";
@@ -237,7 +239,7 @@ public class GeowaveOperationGrpcGenerator {
       }
     }
 
-    String serviceReturnFilename =
+    final String serviceReturnFilename =
         outputBasePath + "/src/main/protobuf/GeoWaveReturnTypesProtos.proto";
     Writer serviceReturnWriter = null;
     try {
@@ -256,7 +258,7 @@ public class GeowaveOperationGrpcGenerator {
 
         it = retMessages.entrySet().iterator();
         while (it.hasNext()) {
-          HashMap.Entry pair = (HashMap.Entry) it.next();
+          final HashMap.Entry pair = (HashMap.Entry) it.next();
           serviceReturnWriter.write((String) pair.getValue());
         }
       }
@@ -267,19 +269,20 @@ public class GeowaveOperationGrpcGenerator {
     }
   }
 
-  public String processOperation(final Class<?> operation, ProcessOperationResult pr)
+  public String processOperation(final Class<?> operation, final ProcessOperationResult pr)
       throws IOException {
 
-    Field[] fields = operation.getDeclaredFields();
+    final Field[] fields = operation.getDeclaredFields();
 
     for (int i = 0; i < fields.length; i++) {
       if (fields[i].isAnnotationPresent(Parameter.class)) {
 
-        String type = GeoWaveGrpcOperationParser.getGrpcType(fields[i].getType());
+        final String type = GeoWaveGrpcOperationParser.getGrpcType(fields[i].getType());
         pr.message += "\n\t" + type;
         if (type.equalsIgnoreCase("repeated")) {
-          ParameterizedType parameterizedType = (ParameterizedType) fields[i].getGenericType();
-          Type actualType = parameterizedType.getActualTypeArguments()[0];
+          final ParameterizedType parameterizedType =
+              (ParameterizedType) fields[i].getGenericType();
+          final Type actualType = parameterizedType.getActualTypeArguments()[0];
           pr.message += " " + GeoWaveGrpcOperationParser.getGrpcType(actualType.getClass());
         }
         pr.message += " " + fields[i].getName() + " = " + pr.currFieldPosition + ";";
@@ -293,11 +296,11 @@ public class GeowaveOperationGrpcGenerator {
     return "";
   }
 
-  public static void safeClose(Writer writer) {
+  public static void safeClose(final Writer writer) {
     if (writer != null) {
       try {
         writer.close();
-      } catch (IOException e) {
+      } catch (final IOException e) {
         LOGGER.error("Encountered exception while trying to close file stream", e);
       }
     }

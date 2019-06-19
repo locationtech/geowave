@@ -25,16 +25,16 @@ public class AsyncOperationStatusResource extends ServerResource {
   @Get("json")
   public Representation getStatus(final Representation request) {
 
-    RestOperationStatusMessage status = new RestOperationStatusMessage();
+    final RestOperationStatusMessage status = new RestOperationStatusMessage();
     ConcurrentHashMap<String, Future<?>> opStatuses = null;
-    String id = getQueryValue("id");
+    final String id = getQueryValue("id");
     try {
       // look up the operation status
       opStatuses =
-          (ConcurrentHashMap<String, Future<?>>) this.getApplication().getContext().getAttributes().get(
+          (ConcurrentHashMap<String, Future<?>>) getApplication().getContext().getAttributes().get(
               "asyncOperationStatuses");
       if (opStatuses.get(id) != null) {
-        Future<?> future = opStatuses.get(id);
+        final Future<?> future = opStatuses.get(id);
 
         if (future.isDone()) {
           status.status = RestOperationStatusMessage.StatusType.COMPLETE;
@@ -44,19 +44,20 @@ public class AsyncOperationStatusResource extends ServerResource {
         } else {
           status.status = RestOperationStatusMessage.StatusType.RUNNING;
         }
-        return new JacksonRepresentation<RestOperationStatusMessage>(status);
+        return new JacksonRepresentation<>(status);
       }
     } catch (final Exception e) {
       LOGGER.error("Error exception: ", e);
       status.status = RestOperationStatusMessage.StatusType.ERROR;
       status.message = "exception occurred";
       status.data = e;
-      if (opStatuses != null)
+      if (opStatuses != null) {
         opStatuses.remove(id);
-      return new JacksonRepresentation<RestOperationStatusMessage>(status);
+      }
+      return new JacksonRepresentation<>(status);
     }
     status.status = RestOperationStatusMessage.StatusType.ERROR;
     status.message = "no operation found for ID: " + id;
-    return new JacksonRepresentation<RestOperationStatusMessage>(status);
+    return new JacksonRepresentation<>(status);
   }
 }

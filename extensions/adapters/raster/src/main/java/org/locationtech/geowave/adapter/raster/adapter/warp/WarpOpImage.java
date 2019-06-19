@@ -17,10 +17,6 @@
  */
 package org.locationtech.geowave.adapter.raster.adapter.warp;
 
-import com.sun.media.jai.util.ImageUtil;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.geosolutions.jaiext.iterators.RandomIterFactory;
-import it.geosolutions.jaiext.range.Range;
 import java.awt.Rectangle;
 import java.awt.image.DataBuffer;
 import java.awt.image.RenderedImage;
@@ -35,6 +31,10 @@ import javax.media.jai.RasterAccessor;
 import javax.media.jai.RasterFormatTag;
 import javax.media.jai.Warp;
 import javax.media.jai.iterator.RandomIter;
+import com.sun.media.jai.util.ImageUtil;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import it.geosolutions.jaiext.iterators.RandomIterFactory;
+import it.geosolutions.jaiext.range.Range;
 
 /**
  * This is code entirely intended to get around an issue on line 265 of WarpOpImage in jai-ext. The
@@ -47,16 +47,16 @@ import javax.media.jai.iterator.RandomIter;
 public abstract class WarpOpImage extends it.geosolutions.jaiext.warp.WarpOpImage {
 
   public WarpOpImage(
-      RenderedImage source,
-      ImageLayout layout,
-      Map<?, ?> configuration,
-      boolean cobbleSources,
-      BorderExtender extender,
-      Interpolation interp,
-      Warp warp,
-      double[] backgroundValues,
-      ROI roi,
-      Range noData) {
+      final RenderedImage source,
+      final ImageLayout layout,
+      final Map<?, ?> configuration,
+      final boolean cobbleSources,
+      final BorderExtender extender,
+      final Interpolation interp,
+      final Warp warp,
+      final double[] backgroundValues,
+      final ROI roi,
+      final Range noData) {
     super(
         source,
         layout,
@@ -74,6 +74,7 @@ public abstract class WarpOpImage extends it.geosolutions.jaiext.warp.WarpOpImag
    * Warps a rectangle. If ROI is present, the intersection between ROI and tile bounds is
    * calculated; The result ROI will be used for calculations inside the computeRect() method.
    */
+  @Override
   protected void computeRect(
       final PlanarImage[] sources,
       final WritableRaster dest,
@@ -91,7 +92,7 @@ public abstract class WarpOpImage extends it.geosolutions.jaiext.warp.WarpOpImag
     // If a ROI is present, then only the part contained inside the current
     // tile bounds is taken.
     if (hasROI) {
-      Rectangle srcRectExpanded = mapDestRect(destRect, 0);
+      final Rectangle srcRectExpanded = mapDestRect(destRect, 0);
       // The tile dimension is extended for avoiding border errors
       srcRectExpanded.setRect(
           srcRectExpanded.getMinX() - leftPad,
@@ -107,7 +108,7 @@ public abstract class WarpOpImage extends it.geosolutions.jaiext.warp.WarpOpImag
           if (!roi.intersects(srcRectExpanded)) {
             roiDisjointTile = true;
           } else {
-            PlanarImage roiIMG = getImage();
+            final PlanarImage roiIMG = getImage();
             roiIter = RandomIterFactory.create(roiIMG, null, TILE_CACHED, ARRAY_CALC);
           }
         }

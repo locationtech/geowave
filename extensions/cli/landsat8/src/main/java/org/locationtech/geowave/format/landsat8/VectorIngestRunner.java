@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.format.landsat8;
 
-import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -28,6 +27,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
 
 public class VectorIngestRunner extends AnalyzeRunner {
 

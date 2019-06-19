@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.cli.osm.osmfeature;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -21,30 +19,32 @@ import org.locationtech.geowave.cli.osm.osmfeature.types.attributes.AttributeDef
 import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureDefinition;
 import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureDefinitionSet;
 import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class FeatureConfigParser {
-  public void parseConfig(InputStream configStream) throws IOException {
+  public void parseConfig(final InputStream configStream) throws IOException {
 
-    ObjectMapper om = new ObjectMapper();
+    final ObjectMapper om = new ObjectMapper();
 
-    JsonNode rootNode = om.readTree(configStream);
+    final JsonNode rootNode = om.readTree(configStream);
 
-    JsonNode tables = rootNode.path("tables");
+    final JsonNode tables = rootNode.path("tables");
 
-    Iterator<Map.Entry<String, JsonNode>> nodeIterator = tables.fields();
+    final Iterator<Map.Entry<String, JsonNode>> nodeIterator = tables.fields();
     while (nodeIterator.hasNext()) {
-      Map.Entry<String, JsonNode> feature = nodeIterator.next();
-      FeatureDefinition fd = parseFeature(feature.getKey(), feature.getValue());
+      final Map.Entry<String, JsonNode> feature = nodeIterator.next();
+      final FeatureDefinition fd = parseFeature(feature.getKey(), feature.getValue());
       FeatureDefinitionSet.Features.add(fd);
     }
   }
 
-  private static FeatureDefinition parseFeature(String name, JsonNode node) {
-    FeatureDefinition fd = new FeatureDefinition();
+  private static FeatureDefinition parseFeature(final String name, final JsonNode node) {
+    final FeatureDefinition fd = new FeatureDefinition();
     fd.name = name;
-    Iterator<Map.Entry<String, JsonNode>> featureIterator = node.fields();
+    final Iterator<Map.Entry<String, JsonNode>> featureIterator = node.fields();
     while (featureIterator.hasNext()) {
-      Map.Entry<String, JsonNode> props = featureIterator.next();
+      final Map.Entry<String, JsonNode> props = featureIterator.next();
       switch (props.getKey()) {
         case "fields": {
           parseFields(props.getValue(), fd);
@@ -96,13 +96,13 @@ public class FeatureConfigParser {
     return fd;
   }
 
-  private static void parseFilters(JsonNode node, FeatureDefinition fd) {
-    Iterator<Map.Entry<String, JsonNode>> filterIter = node.fields();
+  private static void parseFilters(final JsonNode node, final FeatureDefinition fd) {
+    final Iterator<Map.Entry<String, JsonNode>> filterIter = node.fields();
     while (filterIter.hasNext()) {
-      Map.Entry<String, JsonNode> filterKVP = filterIter.next();
-      Map<String, List<String>> filter = new HashMap<>();
-      List<String> filterVals = new ArrayList<>();
-      for (JsonNode filterVal : filterKVP.getValue()) {
+      final Map.Entry<String, JsonNode> filterKVP = filterIter.next();
+      final Map<String, List<String>> filter = new HashMap<>();
+      final List<String> filterVals = new ArrayList<>();
+      for (final JsonNode filterVal : filterKVP.getValue()) {
         filterVals.add(filterVal.asText());
       }
       filter.put(filterKVP.getKey(), filterVals);
@@ -110,12 +110,12 @@ public class FeatureConfigParser {
     }
   }
 
-  private static void parseMapping(JsonNode node, FeatureDefinition fd) {
-    Iterator<Map.Entry<String, JsonNode>> mappingIter = node.fields();
+  private static void parseMapping(final JsonNode node, final FeatureDefinition fd) {
+    final Iterator<Map.Entry<String, JsonNode>> mappingIter = node.fields();
     while (mappingIter.hasNext()) {
-      Map.Entry<String, JsonNode> mapKVP = mappingIter.next();
+      final Map.Entry<String, JsonNode> mapKVP = mappingIter.next();
       final List<String> mapValues = new ArrayList<>();
-      for (JsonNode mapVal : mapKVP.getValue()) {
+      for (final JsonNode mapVal : mapKVP.getValue()) {
         mapValues.add(mapVal.asText());
       }
       fd.mappings.put(mapKVP.getKey(), mapValues);
@@ -123,17 +123,17 @@ public class FeatureConfigParser {
     }
   }
 
-  private static void parseSubMappings(JsonNode node, FeatureDefinition fd) {
-    Iterator<Map.Entry<String, JsonNode>> mappingsIter = node.fields();
+  private static void parseSubMappings(final JsonNode node, final FeatureDefinition fd) {
+    final Iterator<Map.Entry<String, JsonNode>> mappingsIter = node.fields();
     while (mappingsIter.hasNext()) {
-      Map.Entry<String, JsonNode> mappingsKVP = mappingsIter.next();
-      for (JsonNode mapping : mappingsKVP.getValue()) {
-        Iterator<Map.Entry<String, JsonNode>> mappIter = mapping.fields();
+      final Map.Entry<String, JsonNode> mappingsKVP = mappingsIter.next();
+      for (final JsonNode mapping : mappingsKVP.getValue()) {
+        final Iterator<Map.Entry<String, JsonNode>> mappIter = mapping.fields();
         while (mappIter.hasNext()) {
-          Map.Entry<String, JsonNode> mappKVP = mappIter.next();
+          final Map.Entry<String, JsonNode> mappKVP = mappIter.next();
           final Map<String, List<String>> submapping = new HashMap<>();
           final List<String> submappingValues = new ArrayList<>();
-          for (JsonNode subMapVal : mappKVP.getValue()) {
+          for (final JsonNode subMapVal : mappKVP.getValue()) {
             submappingValues.add(subMapVal.asText());
           }
           submapping.put(mappKVP.getKey(), submappingValues);
@@ -147,12 +147,12 @@ public class FeatureConfigParser {
     }
   }
 
-  private static void parseFields(JsonNode node, FeatureDefinition fd) {
-    for (JsonNode attr : node) {
-      Iterator<Map.Entry<String, JsonNode>> fieldIterator = attr.fields();
+  private static void parseFields(final JsonNode node, final FeatureDefinition fd) {
+    for (final JsonNode attr : node) {
+      final Iterator<Map.Entry<String, JsonNode>> fieldIterator = attr.fields();
       final AttributeDefinition ad = new AttributeDefinition();
       while (fieldIterator.hasNext()) {
-        Map.Entry<String, JsonNode> field = fieldIterator.next();
+        final Map.Entry<String, JsonNode> field = fieldIterator.next();
         switch (field.getKey()) {
           case "type": {
             ad.type = field.getValue().asText();
@@ -167,11 +167,11 @@ public class FeatureConfigParser {
             break;
           }
           case "args": {
-            Iterator<Map.Entry<String, JsonNode>> argsIterator = field.getValue().fields();
+            final Iterator<Map.Entry<String, JsonNode>> argsIterator = field.getValue().fields();
             while (argsIterator.hasNext()) {
-              Map.Entry<String, JsonNode> arg = argsIterator.next();
-              List<String> allArgs = new ArrayList<>();
-              for (JsonNode item : arg.getValue()) {
+              final Map.Entry<String, JsonNode> arg = argsIterator.next();
+              final List<String> allArgs = new ArrayList<>();
+              for (final JsonNode item : arg.getValue()) {
                 allArgs.add(item.asText());
               }
               ad.args.put(arg.getKey(), allArgs);

@@ -10,6 +10,7 @@ package org.locationtech.geowave.adapter.vector.plugin.lock;
 
 import org.geotools.data.LockingManager;
 import org.geotools.data.Transaction;
+import org.geotools.data.shapefile.index.LockManager;
 
 /**
  * An extension to {@link LockManager} to support requesting a lock on a specific feature under a

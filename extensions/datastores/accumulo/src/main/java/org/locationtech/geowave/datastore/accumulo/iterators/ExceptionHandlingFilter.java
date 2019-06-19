@@ -19,10 +19,10 @@ import org.apache.accumulo.core.iterators.Filter;
 public abstract class ExceptionHandlingFilter extends Filter {
 
   @Override
-  public final boolean accept(Key k, Value v) {
+  public final boolean accept(final Key k, final Value v) {
     try {
       return acceptInternal(k, v);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new WrappingFilterException("Exception in filter.", e);
     }
   }
@@ -33,17 +33,19 @@ public abstract class ExceptionHandlingFilter extends Filter {
   public void next() throws IOException {
     try {
       super.next();
-    } catch (WrappingFilterException e) {
+    } catch (final WrappingFilterException e) {
       throw new IOException(e.getCause());
     }
   }
 
   @Override
-  public void seek(Range range, Collection<ByteSequence> columnFamilies, boolean inclusive)
-      throws IOException {
+  public void seek(
+      final Range range,
+      final Collection<ByteSequence> columnFamilies,
+      final boolean inclusive) throws IOException {
     try {
       super.seek(range, columnFamilies, inclusive);
-    } catch (WrappingFilterException e) {
+    } catch (final WrappingFilterException e) {
       throw new IOException(e.getCause());
     }
   }
@@ -51,7 +53,7 @@ public abstract class ExceptionHandlingFilter extends Filter {
   private static class WrappingFilterException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public WrappingFilterException(String message, Exception e) {
+    public WrappingFilterException(final String message, final Exception e) {
       super(message, e);
     }
   }

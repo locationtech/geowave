@@ -188,13 +188,13 @@ public class CustomCRSKDERasterResizeIT {
                 decimalDegreesPerCellMinLevel * (cellOriginYMinLevel + numCellsMinLevel)});
 
     final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
-    String geomField =
+    final String geomField =
         ((FeatureDataAdapter) inputDataStorePluginOptions.createDataStore().getTypes()[0]).getFeatureType().getGeometryDescriptor().getLocalName();
-    Envelope cqlEnv =
+    final Envelope cqlEnv =
         JTS.transform(
             new Envelope(155.12, 155.17, 16.07, 16.12),
             CRS.findMathTransform(CRS.decode("EPSG:4326"), CRS.decode("EPSG:4901"), true));
-    String cqlStr =
+    final String cqlStr =
         String.format(
             "BBOX(%s, %f, %f, %f, %f)",
             geomField,

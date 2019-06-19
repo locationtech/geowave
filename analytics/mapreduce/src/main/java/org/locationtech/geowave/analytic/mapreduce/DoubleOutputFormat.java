@@ -51,6 +51,6 @@ public class DoubleOutputFormat<K, V> extends FileOutputFormat<K, V> {
     final FileSystem fs = file.getFileSystem(conf);
 
     final FSDataOutputStream fileOut = fs.create(file, false);
-    return new DoubleRecordWriter<K, V>(fileOut);
+    return new DoubleRecordWriter<>(fileOut);
   }
 }

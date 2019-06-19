@@ -33,8 +33,7 @@ import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class KMeansParallelInitializeTest {
-  final KMeansParallelInitialize<SimpleFeature> initializer =
-      new KMeansParallelInitialize<SimpleFeature>();
+  final KMeansParallelInitialize<SimpleFeature> initializer = new KMeansParallelInitialize<>();
   final SimpleFeatureItemWrapperFactory itemFactory = new SimpleFeatureItemWrapperFactory();
 
   @Before
@@ -85,15 +84,15 @@ public class KMeansParallelInitializeTest {
         return (arg0ToCorner - arg1ToCorner) < 0 ? -1 : 1;
       }
     });
-    final List<AnalyticItemWrapper<SimpleFeature>> itemSet =
-        new ArrayList<AnalyticItemWrapper<SimpleFeature>>();
-    for (SimpleFeature feature : pointSet)
+    final List<AnalyticItemWrapper<SimpleFeature>> itemSet = new ArrayList<>();
+    for (final SimpleFeature feature : pointSet) {
       itemSet.add(itemFactory.create(feature));
+    }
     final Pair<List<CentroidPairing<SimpleFeature>>, List<AnalyticItemWrapper<SimpleFeature>>> result =
         initializer.runLocal(itemSet);
     assertTrue(result.getRight().size() >= 5);
     assertTrue(isMonotonic((StatsMap) initializer.getStats()));
-    for (AnalyticItemWrapper<SimpleFeature> centroid : result.getRight()) {
+    for (final AnalyticItemWrapper<SimpleFeature> centroid : result.getRight()) {
       System.out.println(
           centroid.getWrappedItem().toString() + " = " + centroid.getAssociationCount());
     }

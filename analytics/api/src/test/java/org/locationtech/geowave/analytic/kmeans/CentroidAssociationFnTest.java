@@ -21,24 +21,18 @@ import org.locationtech.geowave.analytic.distance.DistanceFn;
 
 public class CentroidAssociationFnTest {
 
-  private static Set<CentroidPairing<Long>> expectedPairings = new HashSet<CentroidPairing<Long>>();
+  private static Set<CentroidPairing<Long>> expectedPairings = new HashSet<>();
   private static double expectedCost = 0;
 
   static {
     expectedPairings.add(
-        new CentroidPairing<Long>(new LongCentroid(10, "", 0), new LongCentroid(345, "", 0), 335));
+        new CentroidPairing<>(new LongCentroid(10, "", 0), new LongCentroid(345, "", 0), 335));
     expectedPairings.add(
-        new CentroidPairing<Long>(
-            new LongCentroid(1000, "", 0),
-            new LongCentroid(764, "", 0),
-            236));
+        new CentroidPairing<>(new LongCentroid(1000, "", 0), new LongCentroid(764, "", 0), 236));
     expectedPairings.add(
-        new CentroidPairing<Long>(new LongCentroid(10, "", 0), new LongCentroid(89, "", 0), 79));
+        new CentroidPairing<>(new LongCentroid(10, "", 0), new LongCentroid(89, "", 0), 79));
     expectedPairings.add(
-        new CentroidPairing<Long>(
-            new LongCentroid(1000, "", 0),
-            new LongCentroid(900, "", 0),
-            100));
+        new CentroidPairing<>(new LongCentroid(1000, "", 0), new LongCentroid(900, "", 0), 100));
     for (final CentroidPairing<Long> pairing : expectedPairings) {
       expectedCost += pairing.getDistance();
     }
@@ -46,7 +40,7 @@ public class CentroidAssociationFnTest {
 
   @Test
   public void test() {
-    final CentroidAssociationFn<Long> fn = new CentroidAssociationFn<Long>();
+    final CentroidAssociationFn<Long> fn = new CentroidAssociationFn<>();
     fn.setDistanceFunction(new DistanceFn<Long>() {
       /** */
       private static final long serialVersionUID = 1L;

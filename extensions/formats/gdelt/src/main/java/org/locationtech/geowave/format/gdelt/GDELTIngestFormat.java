@@ -26,7 +26,7 @@ public class GDELTIngestFormat extends AbstractSimpleFeatureIngestFormat<AvroWho
 
   @Override
   protected AbstractSimpleFeatureIngestPlugin<AvroWholeFile> newPluginInstance(
-      IngestFormatOptions options) {
+      final IngestFormatOptions options) {
     return new GDELTIngestPlugin(dataSchemaOptionProvider);
   }
 

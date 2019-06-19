@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -8,6 +8,8 @@
  */
 package org.locationtech.geowave.datastore.kudu.operations;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.kudu.Schema;
 import org.apache.kudu.client.Delete;
 import org.apache.kudu.client.KuduException;
@@ -20,11 +22,9 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.datastore.kudu.KuduRow;
+import org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
-import java.util.List;
-import static org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
 
 public class KuduDeleter implements RowDeleter {
   private static final Logger LOGGER = LoggerFactory.getLogger(KuduWriter.class);
@@ -35,23 +35,23 @@ public class KuduDeleter implements RowDeleter {
   public KuduDeleter(final KuduOperations operations, final String tableName) {
     this.operations = operations;
     this.tableName = tableName;
-    this.session = operations.getSession();
+    session = operations.getSession();
   }
 
   @Override
   public void delete(final GeoWaveRow row) {
     try {
-      KuduTable table = operations.getTable(tableName);
-      Schema schema = table.getSchema();
-      List<KuduPredicate> preds = new ArrayList<>();
-      byte[] partitionKey = row.getPartitionKey();
-      short adapterId = row.getAdapterId();
-      byte[] sortKey = row.getSortKey();
-      byte[] dataId = row.getDataId();
+      final KuduTable table = operations.getTable(tableName);
+      final Schema schema = table.getSchema();
+      final List<KuduPredicate> preds = new ArrayList<>();
+      final byte[] partitionKey = row.getPartitionKey();
+      final short adapterId = row.getAdapterId();
+      final byte[] sortKey = row.getSortKey();
+      final byte[] dataId = row.getDataId();
       // Note: Kudu Java API requires specifying entire primary key in order to perform deletion,
       // but a part of the primary key (timestamp) is unknown, so we instead perform the
       // deletion using predicates on the known columns.
-      for (GeoWaveValue value : row.getFieldValues()) {
+      for (final GeoWaveValue value : row.getFieldValues()) {
         preds.add(
             KuduPredicate.newComparisonPredicate(
                 schema.getColumn(KuduField.GW_PARTITION_ID_KEY.getFieldName()),
@@ -77,14 +77,14 @@ public class KuduDeleter implements RowDeleter {
                 schema.getColumn(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName()),
                 KuduPredicate.ComparisonOp.EQUAL,
                 value.getVisibility()));
-        for (Delete delete : operations.getDeletions(table, preds, KuduRow::new)) {
-          OperationResponse resp = session.apply(delete);
+        for (final Delete delete : operations.getDeletions(table, preds, KuduRow::new)) {
+          final OperationResponse resp = session.apply(delete);
           if (resp.hasRowError()) {
             LOGGER.error("Encountered error while deleting row: {}", resp.getRowError());
           }
         }
       }
-    } catch (KuduException e) {
+    } catch (final KuduException e) {
       LOGGER.error("Encountered error while deleting row", e);
     }
   }
@@ -97,11 +97,11 @@ public class KuduDeleter implements RowDeleter {
         LOGGER.error(
             "Got {} pending errors while flushing Kudu session",
             session.countPendingErrors());
-        for (RowError err : session.getPendingErrors().getRowErrors()) {
+        for (final RowError err : session.getPendingErrors().getRowErrors()) {
           LOGGER.error("{}", err);
         }
       }
-    } catch (KuduException e) {
+    } catch (final KuduException e) {
       LOGGER.error("Encountered error while flushing Kudu session", e);
     }
   }
@@ -111,7 +111,7 @@ public class KuduDeleter implements RowDeleter {
     flush();
     try {
       session.close();
-    } catch (KuduException e) {
+    } catch (final KuduException e) {
       LOGGER.error("Encountered error while closing Kudu session", e);
     }
   }

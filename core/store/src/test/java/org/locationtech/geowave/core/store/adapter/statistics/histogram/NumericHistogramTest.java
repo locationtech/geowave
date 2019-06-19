@@ -23,7 +23,7 @@ public class NumericHistogramTest {
   public void testIngest() {
 
     for (long i = 0; i < 10000; i++) {
-      double v = 2500 + (r.nextDouble() * 99998.0);
+      final double v = 2500 + (r.nextDouble() * 99998.0);
       stats.add(v);
       stats2.add(v);
     }

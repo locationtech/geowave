@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.cli.osm.mapreduce.Convert.OsmProvider;
 
-import com.google.common.base.Joiner;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +46,7 @@ import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.Polygon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Joiner;
 
 public class OsmProvider {
 

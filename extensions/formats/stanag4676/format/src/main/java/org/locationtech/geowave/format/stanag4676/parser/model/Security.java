@@ -19,7 +19,7 @@ public class Security {
     return classification;
   }
 
-  public void setClassification(ClassificationLevel classification) {
+  public void setClassification(final ClassificationLevel classification) {
     this.classification = classification;
   }
 
@@ -27,7 +27,7 @@ public class Security {
     return policyName;
   }
 
-  public void setPolicyName(String policyName) {
+  public void setPolicyName(final String policyName) {
     this.policyName = policyName;
   }
 
@@ -35,7 +35,7 @@ public class Security {
     return controlSystem;
   }
 
-  public void setControlSystem(String controlSystem) {
+  public void setControlSystem(final String controlSystem) {
     this.controlSystem = controlSystem;
   }
 
@@ -43,7 +43,7 @@ public class Security {
     return dissemination;
   }
 
-  public void setDissemination(String dissemination) {
+  public void setDissemination(final String dissemination) {
     this.dissemination = dissemination;
   }
 
@@ -51,7 +51,7 @@ public class Security {
     return releasability;
   }
 
-  public void setReleasability(String releasability) {
+  public void setReleasability(final String releasability) {
     this.releasability = releasability;
   }
 }

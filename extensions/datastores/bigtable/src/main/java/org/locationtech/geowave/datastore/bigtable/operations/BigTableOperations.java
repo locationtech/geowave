@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.datastore.bigtable.operations;
 
-import com.google.cloud.bigtable.hbase.BigtableRegionLocator;
-import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,6 +20,8 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.datastore.bigtable.BigTableConnectionPool;
 import org.locationtech.geowave.datastore.bigtable.operations.config.BigTableOptions;
 import org.locationtech.geowave.datastore.hbase.operations.HBaseOperations;
+import com.google.cloud.bigtable.hbase.BigtableRegionLocator;
+import com.google.common.collect.Sets;
 
 public class BigTableOperations extends HBaseOperations {
   private final HashSet<String> tableCache = Sets.newHashSet();

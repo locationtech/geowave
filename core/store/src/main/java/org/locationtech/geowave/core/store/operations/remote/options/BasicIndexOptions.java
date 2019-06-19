@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.core.store.operations.remote.options;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
+import com.beust.jcommander.Parameter;
 
 public class BasicIndexOptions {
 
@@ -32,7 +32,7 @@ public class BasicIndexOptions {
     return nameOverride;
   }
 
-  public void setNameOverride(String nameOverride) {
+  public void setNameOverride(final String nameOverride) {
     this.nameOverride = nameOverride;
   }
 
@@ -40,7 +40,7 @@ public class BasicIndexOptions {
     return numPartitions;
   }
 
-  public void setNumPartitions(int numPartitions) {
+  public void setNumPartitions(final int numPartitions) {
     this.numPartitions = numPartitions;
   }
 
@@ -48,7 +48,7 @@ public class BasicIndexOptions {
     return partitionStrategy;
   }
 
-  public void setPartitionStrategy(PartitionStrategy partitionStrategy) {
+  public void setPartitionStrategy(final PartitionStrategy partitionStrategy) {
     this.partitionStrategy = partitionStrategy;
   }
 }

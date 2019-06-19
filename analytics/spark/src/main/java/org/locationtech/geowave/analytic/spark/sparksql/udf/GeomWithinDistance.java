@@ -12,16 +12,21 @@ import org.locationtech.jts.geom.Geometry;
 
 public class GeomWithinDistance extends GeomFunction {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private double radius;
 
   public GeomWithinDistance() {
     radius = 0.01;
   }
 
-  public GeomWithinDistance(double radius) {
+  public GeomWithinDistance(final double radius) {
     this.radius = radius;
   }
 
+  @Override
   public double getBufferAmount() {
     return radius;
   }
@@ -30,12 +35,12 @@ public class GeomWithinDistance extends GeomFunction {
     return radius;
   }
 
-  public void setRadius(double radius) {
+  public void setRadius(final double radius) {
     this.radius = radius;
   }
 
   @Override
-  public boolean apply(Geometry geom1, Geometry geom2) {
+  public boolean apply(final Geometry geom1, final Geometry geom2) {
     return geom1.distance(geom2) <= radius;
   }
 }

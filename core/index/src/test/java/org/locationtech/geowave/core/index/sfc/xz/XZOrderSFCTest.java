@@ -21,23 +21,23 @@ public class XZOrderSFCTest {
 
   @Test
   public void testIndex() {
-    double[] values = {42, 43, 57, 59};
+    final double[] values = {42, 43, 57, 59};
     // TODO Meaningful examination of results?
     Assert.assertNotNull(createSFC().getId(values));
   }
 
   @Test
   public void testRangeDecomposition() {
-    NumericRange longBounds = new NumericRange(19.0, 21.0);
-    NumericRange latBounds = new NumericRange(33.0, 34.0);
-    NumericData[] dataPerDimension = {longBounds, latBounds};
-    MultiDimensionalNumericData query = new BasicNumericDataset(dataPerDimension);
+    final NumericRange longBounds = new NumericRange(19.0, 21.0);
+    final NumericRange latBounds = new NumericRange(33.0, 34.0);
+    final NumericData[] dataPerDimension = {longBounds, latBounds};
+    final MultiDimensionalNumericData query = new BasicNumericDataset(dataPerDimension);
     // TODO Meaningful examination of results?
     Assert.assertNotNull(createSFC().decomposeRangeFully(query));
   }
 
   private XZOrderSFC createSFC() {
-    SFCDimensionDefinition[] dimensions =
+    final SFCDimensionDefinition[] dimensions =
         {
             new SFCDimensionDefinition(new BasicDimensionDefinition(-180.0, 180.0), 32),
             new SFCDimensionDefinition(new BasicDimensionDefinition(-90.0, 90.0), 32)};

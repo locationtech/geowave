@@ -35,17 +35,16 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
       LoggerFactory.getLogger(MultiAdapterServerMergeStrategy.class);
   // the purpose for these maps instead of a list of samplemodel and adapter
   // ID pairs is to allow for multiple adapters to share the same sample model
-  protected Map<Integer, SampleModel> sampleModels = new HashMap<Integer, SampleModel>();
-  public Map<Short, Integer> adapterIdToSampleModelKey = new HashMap<Short, Integer>();
+  protected Map<Integer, SampleModel> sampleModels = new HashMap<>();
+  public Map<Short, Integer> adapterIdToSampleModelKey = new HashMap<>();
 
-  public Map<Integer, RasterTileMergeStrategy<T>> childMergeStrategies =
-      new HashMap<Integer, RasterTileMergeStrategy<T>>();
-  public Map<Short, Integer> adapterIdToChildMergeStrategyKey = new HashMap<Short, Integer>();
+  public Map<Integer, RasterTileMergeStrategy<T>> childMergeStrategies = new HashMap<>();
+  public Map<Short, Integer> adapterIdToChildMergeStrategyKey = new HashMap<>();
 
   public MultiAdapterServerMergeStrategy() {}
 
   public MultiAdapterServerMergeStrategy(
-      SingleAdapterServerMergeStrategy singleAdapterMergeStrategy) {
+      final SingleAdapterServerMergeStrategy singleAdapterMergeStrategy) {
     sampleModels.put(0, singleAdapterMergeStrategy.sampleModel);
     adapterIdToSampleModelKey.put(singleAdapterMergeStrategy.internalAdapterId, 0);
     childMergeStrategies.put(0, singleAdapterMergeStrategy.mergeStrategy);
@@ -105,7 +104,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
     for (final Entry<Integer, T> sampleModelEntry : otherValues.entrySet()) {
       if (!thisValues.containsValue(sampleModelEntry.getValue())) {
         // we need to add this sample model
-        final List<Short> adapterIds = new ArrayList<Short>();
+        final List<Short> adapterIds = new ArrayList<>();
         // find all adapter IDs associated with this sample
         // model
         for (final Entry<Short, Integer> adapterIdEntry : otherAdapterIdToValueKeys.entrySet()) {
@@ -177,15 +176,16 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
   @Override
   public byte[] toBinary() {
     int byteCount = 0;
-    final List<byte[]> sampleModelBinaries = new ArrayList<byte[]>();
-    final List<Integer> sampleModelKeys = new ArrayList<Integer>();
+    final List<byte[]> sampleModelBinaries = new ArrayList<>();
+    final List<Integer> sampleModelKeys = new ArrayList<>();
     int successfullySerializedModels = 0;
     int successfullySerializedModelAdapters = 0;
-    final Set<Integer> successfullySerializedModelIds = new HashSet<Integer>();
+    final Set<Integer> successfullySerializedModelIds = new HashSet<>();
     for (final Entry<Integer, SampleModel> entry : sampleModels.entrySet()) {
       final SampleModel sampleModel = entry.getValue();
       try {
-        byte[] sampleModelBinary = SampleModelPersistenceUtils.getSampleModelBinary(sampleModel);
+        final byte[] sampleModelBinary =
+            SampleModelPersistenceUtils.getSampleModelBinary(sampleModel);
         byteCount += sampleModelBinary.length;
         byteCount += VarintUtils.unsignedIntByteLength(sampleModelBinary.length);
         byteCount += VarintUtils.unsignedIntByteLength(entry.getKey());
@@ -208,11 +208,11 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
     }
     byteCount += VarintUtils.unsignedIntByteLength(successfullySerializedModelAdapters);
 
-    final List<byte[]> mergeStrategyBinaries = new ArrayList<byte[]>();
-    final List<Integer> mergeStrategyKeys = new ArrayList<Integer>();
+    final List<byte[]> mergeStrategyBinaries = new ArrayList<>();
+    final List<Integer> mergeStrategyKeys = new ArrayList<>();
     int successfullySerializedMergeStrategies = 0;
     int successfullySerializedMergeAdapters = 0;
-    final Set<Integer> successfullySerializedMergeIds = new HashSet<Integer>();
+    final Set<Integer> successfullySerializedMergeIds = new HashSet<>();
     for (final Entry<Integer, RasterTileMergeStrategy<T>> entry : childMergeStrategies.entrySet()) {
       final RasterTileMergeStrategy<T> mergeStrategy = entry.getValue();
       final byte[] mergeStrategyBinary = PersistenceUtils.toBinary(mergeStrategy);
@@ -273,7 +273,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int sampleModelSize = VarintUtils.readUnsignedInt(buf);
-    sampleModels = new HashMap<Integer, SampleModel>(sampleModelSize);
+    sampleModels = new HashMap<>(sampleModelSize);
     for (int i = 0; i < sampleModelSize; i++) {
       final byte[] sampleModelBinary =
           ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
@@ -291,7 +291,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
       }
     }
     final int sampleModelAdapterIdSize = VarintUtils.readUnsignedInt(buf);
-    adapterIdToSampleModelKey = new HashMap<Short, Integer>(sampleModelAdapterIdSize);
+    adapterIdToSampleModelKey = new HashMap<>(sampleModelAdapterIdSize);
     for (int i = 0; i < sampleModelAdapterIdSize; i++) {
       adapterIdToSampleModelKey.put(
           VarintUtils.readUnsignedShort(buf),
@@ -299,7 +299,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
     }
 
     final int mergeStrategySize = VarintUtils.readUnsignedInt(buf);
-    childMergeStrategies = new HashMap<Integer, RasterTileMergeStrategy<T>>(mergeStrategySize);
+    childMergeStrategies = new HashMap<>(mergeStrategySize);
     for (int i = 0; i < mergeStrategySize; i++) {
       final byte[] mergeStrategyBinary =
           ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
@@ -319,7 +319,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
       }
     }
     final int mergeStrategyAdapterIdSize = VarintUtils.readUnsignedInt(buf);
-    adapterIdToChildMergeStrategyKey = new HashMap<Short, Integer>(mergeStrategyAdapterIdSize);
+    adapterIdToChildMergeStrategyKey = new HashMap<>(mergeStrategyAdapterIdSize);
     for (int i = 0; i < mergeStrategyAdapterIdSize; i++) {
       adapterIdToChildMergeStrategyKey.put(
           VarintUtils.readUnsignedShort(buf),

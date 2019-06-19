@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.cli.osm.operations.options;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,6 +16,9 @@ import java.util.regex.Pattern;
 import org.locationtech.geowave.cli.osm.accumulo.osmschema.Constants;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class OSMIngestCommandArgs {
 
@@ -60,7 +60,7 @@ public class OSMIngestCommandArgs {
     return jobName;
   }
 
-  public void setJobName(String jobName) {
+  public void setJobName(final String jobName) {
     this.jobName = jobName;
   }
 
@@ -68,7 +68,7 @@ public class OSMIngestCommandArgs {
     return mapperType;
   }
 
-  public void setMapperType(String mapperType) {
+  public void setMapperType(final String mapperType) {
     this.mapperType = mapperType;
   }
 
@@ -76,7 +76,7 @@ public class OSMIngestCommandArgs {
     return mappingFile;
   }
 
-  public void setMappingFile(String mappingFile) {
+  public void setMappingFile(final String mappingFile) {
     this.mappingFile = mappingFile;
   }
 
@@ -84,7 +84,7 @@ public class OSMIngestCommandArgs {
     return hdfsBasePath;
   }
 
-  public void setHdfsBasePath(String hdfsBasePath) {
+  public void setHdfsBasePath(final String hdfsBasePath) {
     this.hdfsBasePath = hdfsBasePath;
   }
 
@@ -92,7 +92,7 @@ public class OSMIngestCommandArgs {
     return nameNode;
   }
 
-  public void setNameNode(String nameNode) {
+  public void setNameNode(final String nameNode) {
     this.nameNode = nameNode;
   }
 
@@ -100,7 +100,7 @@ public class OSMIngestCommandArgs {
     return osmNamespace;
   }
 
-  public void setOsmNamespace(String osmNamespace) {
+  public void setOsmNamespace(final String osmNamespace) {
     this.osmNamespace = osmNamespace;
   }
 
@@ -108,7 +108,7 @@ public class OSMIngestCommandArgs {
     return osmTableName;
   }
 
-  public void setOsmTableName(String osmTableName) {
+  public void setOsmTableName(final String osmTableName) {
     this.osmTableName = osmTableName;
   }
 
@@ -130,14 +130,14 @@ public class OSMIngestCommandArgs {
 
   public void processMappingFile() throws IOException {
     if (mappingFile != null) {
-      File f = new File(mappingFile);
+      final File f = new File(mappingFile);
       if (f.exists()) {
         mappingContents = new String(Files.readAllBytes(Paths.get(mappingFile)), Constants.CHARSET);
       }
     }
   }
 
-  public void setMappingContents(String content) {
+  public void setMappingContents(final String content) {
     mappingContents = content;
   }
 
@@ -146,15 +146,15 @@ public class OSMIngestCommandArgs {
   }
 
   public String serializeToString() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append(osmNamespace).append(separator).append(visibilityOptions.getVisibility()).append(
         separator).append(hdfsBasePath).append(separator).append(jobName).append(separator).append(
             mapperType);
     return sb.toString();
   }
 
-  public void deserializeFromString(String ser) {
-    String[] settings = ser.split(Pattern.quote(separator));
+  public void deserializeFromString(final String ser) {
+    final String[] settings = ser.split(Pattern.quote(separator));
     osmNamespace = settings[0];
     visibilityOptions.setVisibility(settings[1]);
     hdfsBasePath = settings[2];
@@ -1057,7 +1057,7 @@ public class OSMIngestCommandArgs {
 
   public static class UpperCaseConverter implements IStringConverter<String> {
     @Override
-    public String convert(String value) {
+    public String convert(final String value) {
       return value.toUpperCase();
     }
   }

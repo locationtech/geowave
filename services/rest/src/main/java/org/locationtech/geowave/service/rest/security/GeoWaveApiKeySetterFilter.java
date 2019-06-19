@@ -28,11 +28,13 @@ public class GeoWaveApiKeySetterFilter extends GenericFilterBean {
    * "apiKey"
    */
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-      throws IOException, ServletException {
+  public void doFilter(
+      final ServletRequest request,
+      final ServletResponse response,
+      final FilterChain chain) throws IOException, ServletException {
 
     try {
-      final ServletContext servletContext = this.getServletContext();
+      final ServletContext servletContext = getServletContext();
       final ApplicationContext ac =
           WebApplicationContextUtils.getWebApplicationContext(servletContext);
       final GeoWaveBaseApiKeyDB apiKeyDB = (GeoWaveBaseApiKeyDB) ac.getBean("apiKeyDB");
@@ -43,7 +45,7 @@ public class GeoWaveApiKeySetterFilter extends GenericFilterBean {
         servletContext.setAttribute("userName", userAndKeyToks[0]);
         servletContext.setAttribute("apiKey", userAndKeyToks[1]);
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       return;
     } finally {
       chain.doFilter(request, response);

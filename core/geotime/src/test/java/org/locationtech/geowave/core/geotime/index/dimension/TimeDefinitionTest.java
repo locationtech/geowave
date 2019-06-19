@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.index.dimension.bin.BinningStrategy;
 
 public class TimeDefinitionTest {
 
-  private double DELTA = 1e-15;
+  private final double DELTA = 1e-15;
 
   @Before
   public void setTimezoneToGMT() {
@@ -38,7 +38,7 @@ public class TimeDefinitionTest {
     calendar.set(Calendar.SECOND, 59);
     calendar.set(Calendar.MILLISECOND, 999);
 
-    BinningStrategy bin = getStrategyByUnit(Unit.DAY);
+    final BinningStrategy bin = getStrategyByUnit(Unit.DAY);
 
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
@@ -63,7 +63,7 @@ public class TimeDefinitionTest {
     calendar.set(Calendar.SECOND, 59);
     calendar.set(Calendar.MILLISECOND, 999);
 
-    BinningStrategy bin = getStrategyByUnit(Unit.MONTH);
+    final BinningStrategy bin = getStrategyByUnit(Unit.MONTH);
 
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
@@ -88,7 +88,7 @@ public class TimeDefinitionTest {
     calendar.set(Calendar.SECOND, 0);
     calendar.set(Calendar.MILLISECOND, 0);
 
-    BinningStrategy bin = getStrategyByUnit(Unit.MONTH);
+    final BinningStrategy bin = getStrategyByUnit(Unit.MONTH);
 
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
@@ -114,7 +114,7 @@ public class TimeDefinitionTest {
     calendar.set(Calendar.SECOND, 59);
     calendar.set(Calendar.MILLISECOND, 999);
 
-    BinningStrategy bin = getStrategyByUnit(Unit.YEAR);
+    final BinningStrategy bin = getStrategyByUnit(Unit.YEAR);
 
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
@@ -136,7 +136,7 @@ public class TimeDefinitionTest {
     calendar.set(Calendar.SECOND, 59);
     calendar.set(Calendar.MILLISECOND, 999);
 
-    BinningStrategy bin = getStrategyByUnit(Unit.HOUR);
+    final BinningStrategy bin = getStrategyByUnit(Unit.HOUR);
 
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
@@ -166,7 +166,7 @@ public class TimeDefinitionTest {
     calendar.set(Calendar.SECOND, 59);
     calendar.set(Calendar.MILLISECOND, 999);
 
-    BinningStrategy bin = getStrategyByUnit(Unit.MINUTE);
+    final BinningStrategy bin = getStrategyByUnit(Unit.MINUTE);
 
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
@@ -200,7 +200,7 @@ public class TimeDefinitionTest {
     calendar.set(Calendar.SECOND, 59);
     calendar.set(Calendar.MILLISECOND, 999);
 
-    BinningStrategy bin = getStrategyByUnit(Unit.DECADE);
+    final BinningStrategy bin = getStrategyByUnit(Unit.DECADE);
 
     Assert.assertEquals(expectedMin, bin.getBinMin(), DELTA);
     Assert.assertEquals(expectedMax, bin.getBinMax(), DELTA);
@@ -216,7 +216,7 @@ public class TimeDefinitionTest {
     final double expectedMin = 0.0;
     final double expectedMax = 604799999.0;
 
-    BinningStrategy bin = getStrategyByUnit(Unit.WEEK);
+    final BinningStrategy bin = getStrategyByUnit(Unit.WEEK);
 
     final Calendar calendar = Calendar.getInstance();
 
@@ -234,7 +234,7 @@ public class TimeDefinitionTest {
         DELTA);
   }
 
-  private BinningStrategy getStrategyByUnit(Unit unit) {
+  private BinningStrategy getStrategyByUnit(final Unit unit) {
     return new TimeDefinition(unit).getBinningStrategy();
   }
 }

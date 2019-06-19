@@ -26,9 +26,9 @@ public class GeoWaveITSuiteRunner extends Suite {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveITSuiteRunner.class);
 
   @Override
-  protected Statement withAfterClasses(Statement statement) {
+  protected Statement withAfterClasses(final Statement statement) {
     try {
-      Statement newStatement = super.withAfterClasses(statement);
+      final Statement newStatement = super.withAfterClasses(statement);
       final Method tearDownMethod = GeoWaveITSuiteRunner.class.getDeclaredMethod("tearDown");
       tearDownMethod.setAccessible(true);
       return new RunAfters(
@@ -50,7 +50,7 @@ public class GeoWaveITSuiteRunner extends Suite {
   }
 
   @Override
-  protected void runChild(Runner runner, RunNotifier notifier) {
+  protected void runChild(final Runner runner, final RunNotifier notifier) {
     // this is kinda a hack but the intent is to ensure that each individual
     // test is able to tear down the environment *after* the
     // suite.tearDown() method is called, in general the child runner

@@ -56,14 +56,14 @@ public class ComparisonCellData implements WritableComparable<ComparisonCellData
   }
 
   @Override
-  public boolean equals(Object val) {
+  public boolean equals(final Object val) {
     if (!(val instanceof ComparisonCellData)) {
       return false;
     }
     if (val == this) {
       return true;
     }
-    return this.compareTo((ComparisonCellData) val) == 0;
+    return compareTo((ComparisonCellData) val) == 0;
   }
 
   @Override

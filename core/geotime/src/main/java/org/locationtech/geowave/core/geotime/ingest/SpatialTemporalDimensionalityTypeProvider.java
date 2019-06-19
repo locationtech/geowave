@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.ingest;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.ParameterException;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +42,8 @@ import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.ParameterException;
 
 public class SpatialTemporalDimensionalityTypeProvider implements
     DimensionalityTypeProviderSpi<SpatialTemporalOptions> {
@@ -97,7 +97,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
     CoordinateReferenceSystem crs = null;
     boolean isDefaultCRS;
     String crsCode = null;
-    Integer geometryPrecision = options.getGeometryPrecision();
+    final Integer geometryPrecision = options.getGeometryPrecision();
 
     if ((options.crs == null)
         || options.crs.isEmpty()

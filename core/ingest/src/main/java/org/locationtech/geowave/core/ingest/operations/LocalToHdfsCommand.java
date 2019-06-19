@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +22,17 @@ import org.locationtech.geowave.core.ingest.hdfs.StageToHdfsDriver;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "localToHdfs", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Stage supported files in local file system to HDFS")
 public class LocalToHdfsCommand extends ServiceEnabledCommand<Void> {
 
   @Parameter(description = "<file or directory> <path to base directory to write to>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   // This helper is used to load the list of format SPI plugins that will be
   // used
@@ -72,7 +72,7 @@ public class LocalToHdfsCommand extends ServiceEnabledCommand<Void> {
   }
 
   public void setParameters(final String fileOrDirectory, final String hdfsPath) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(fileOrDirectory);
     parameters.add(hdfsPath);
   }
@@ -101,9 +101,9 @@ public class LocalToHdfsCommand extends ServiceEnabledCommand<Void> {
           "Requires arguments: <file or directory> <path to base directory to write to>");
     }
     // Config file
-    File configFile = getGeoWaveConfigFile(params);
-    Properties configProperties = ConfigOptions.loadProperties(configFile);
-    String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
+    final File configFile = getGeoWaveConfigFile(params);
+    final Properties configProperties = ConfigOptions.loadProperties(configFile);
+    final String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
     final String inputPath = parameters.get(0);
     final String basePath = parameters.get(1);
 

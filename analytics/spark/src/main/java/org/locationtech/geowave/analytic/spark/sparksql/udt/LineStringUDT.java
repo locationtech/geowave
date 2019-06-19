@@ -12,6 +12,11 @@ import org.locationtech.jts.geom.LineString;
 
 /** Created by jwileczek on 7/20/18. */
 public class LineStringUDT extends AbstractGeometryUDT<LineString> {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
   public Class<LineString> userClass() {
     return LineString.class;

@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +23,15 @@ import org.locationtech.geowave.core.store.cli.remote.options.IndexGroupPluginOp
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "addindexgrp", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create an index group for usage in GeoWave")
 public class AddIndexGroupCommand extends ServiceEnabledCommand<String> {
   @Parameter(description = "<name> <comma separated list of indexes>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AddIndexGroupCommand.class);
 
@@ -96,9 +96,9 @@ public class AddIndexGroupCommand extends ServiceEnabledCommand<String> {
     if (!ConfigOptions.writeProperties(propFile, existingProps)) {
       throw new WritePropertiesException("Write failure");
     }
-    StringBuilder builder = new StringBuilder();
-    for (Object key : existingProps.keySet()) {
-      String[] split = key.toString().split("\\.");
+    final StringBuilder builder = new StringBuilder();
+    for (final Object key : existingProps.keySet()) {
+      final String[] split = key.toString().split("\\.");
       if (split.length > 1) {
         if (split[1].equals(parameters.get(0))) {
           builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
@@ -121,7 +121,7 @@ public class AddIndexGroupCommand extends ServiceEnabledCommand<String> {
   }
 
   public void setParameters(final String name, final String commaSeparatedIndexes) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(name);
     parameters.add(commaSeparatedIndexes);
   }

@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.adapter.vector.ingest;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import com.beust.jcommander.Parameter;
 
 public class TypeNameOptionProvider implements Persistable {
   @Parameter(

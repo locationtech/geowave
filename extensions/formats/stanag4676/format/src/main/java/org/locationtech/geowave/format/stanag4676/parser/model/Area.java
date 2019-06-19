@@ -21,30 +21,31 @@ public class Area {
    * circle, the first being the center of the circle and the second being a point along the
    * circumference. The radius of the circle would be the distance between the two points.
    */
-  public List<GeodeticPosition> points = new ArrayList<GeodeticPosition>();
+  public List<GeodeticPosition> points = new ArrayList<>();
 
   public List<GeodeticPosition> getPoints() {
-    return this.points;
+    return points;
   }
 
-  public void setPoints(List<GeodeticPosition> points) {
+  public void setPoints(final List<GeodeticPosition> points) {
     this.points = points;
   }
 
   public Polygon getPolygon() {
     Polygon polygon = null;
     if (points.size() > 2) {
-      Coordinate[] coords = new Coordinate[points.size() + 1];
+      final Coordinate[] coords = new Coordinate[points.size() + 1];
       int c = 0;
-      for (GeodeticPosition pos : points) {
-        Coordinate coord = new Coordinate(pos.longitude, pos.latitude);
+      for (final GeodeticPosition pos : points) {
+        final Coordinate coord = new Coordinate(pos.longitude, pos.latitude);
         coords[c] = coord;
         // Make sure the polygon is closed
-        if (c == 0)
+        if (c == 0) {
           coords[points.size()] = coord;
+        }
         c++;
       }
-      GeometryFactory gf = new GeometryFactory();
+      final GeometryFactory gf = new GeometryFactory();
       polygon = gf.createPolygon(coords);
     }
     return polygon;

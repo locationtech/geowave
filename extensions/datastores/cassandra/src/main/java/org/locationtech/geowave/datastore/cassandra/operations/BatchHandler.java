@@ -8,18 +8,18 @@
  */
 package org.locationtech.geowave.datastore.cassandra.operations;
 
-import com.datastax.driver.core.BatchStatement;
-import com.datastax.driver.core.BatchStatement.Type;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import com.datastax.driver.core.BatchStatement;
+import com.datastax.driver.core.BatchStatement.Type;
+import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Statement;
 
 public class BatchHandler {
   protected final Session session;
-  private Type type = Type.UNLOGGED;
+  private final Type type = Type.UNLOGGED;
   protected final Map<ByteArray, BatchStatement> batches = new HashMap<>();
 
   public BatchHandler(final Session session) {
@@ -27,7 +27,7 @@ public class BatchHandler {
   }
 
   protected BatchStatement addStatement(final GeoWaveRow row, final Statement statement) {
-    ByteArray partition = new ByteArray(row.getPartitionKey());
+    final ByteArray partition = new ByteArray(row.getPartitionKey());
     BatchStatement tokenBatch = batches.get(partition);
 
     if (tokenBatch == null) {

@@ -42,7 +42,7 @@ public class GeoObjectDimensionValues implements Persistable {
     this.z = z;
     values = extraDimensions;
     this.distance = distance;
-    this.count = 1;
+    count = 1;
   }
 
   public void add(final GeoObjectDimensionValues association) {
@@ -130,7 +130,7 @@ public class GeoObjectDimensionValues implements Persistable {
   }
 
   @Override
-  public void fromBinary(byte[] bytes) {
+  public void fromBinary(final byte[] bytes) {
     final ByteBuffer b = ByteBuffer.wrap(bytes);
     count = VarintUtils.readUnsignedLong(b);
     x = b.getDouble();

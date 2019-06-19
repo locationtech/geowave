@@ -38,40 +38,42 @@ public class FacebookAccessTokenConverter extends DefaultAccessTokenConverter {
    *
    * @param userTokenConverter the userTokenConverter to set
    */
-  public final void setUserTokenConverter(UserAuthenticationConverter userTokenConverter) {}
+  @Override
+  public final void setUserTokenConverter(final UserAuthenticationConverter userTokenConverter) {}
 
-  public void setDefaultAuthorities(String[] defaultAuthorities) {
+  public void setDefaultAuthorities(final String[] defaultAuthorities) {
     this.defaultAuthorities =
         AuthorityUtils.commaSeparatedStringToAuthorityList(
             StringUtils.arrayToCommaDelimitedString(defaultAuthorities));
   }
 
-  public OAuth2Authentication extractAuthentication(Map<String, ?> map) {
-    Map<String, String> parameters = new HashMap<>();
-    Set<String> scope = parseScopes(map);
-    Object principal = map.get("name");
-    Authentication user =
+  @Override
+  public OAuth2Authentication extractAuthentication(final Map<String, ?> map) {
+    final Map<String, String> parameters = new HashMap<>();
+    final Set<String> scope = parseScopes(map);
+    final Object principal = map.get("name");
+    final Authentication user =
         new UsernamePasswordAuthenticationToken(principal, "N/A", defaultAuthorities);
-    String clientId = (String) map.get(CLIENT_ID);
+    final String clientId = (String) map.get(CLIENT_ID);
     parameters.put(CLIENT_ID, clientId);
-    Set<String> resourceIds =
+    final Set<String> resourceIds =
         new LinkedHashSet<>(
             map.containsKey(AUD) ? (Collection<String>) map.get(AUD)
                 : Collections.<String>emptySet());
-    OAuth2Request request =
+    final OAuth2Request request =
         new OAuth2Request(parameters, clientId, null, true, scope, resourceIds, null, null, null);
     return new OAuth2Authentication(request, user);
   }
 
-  private Set<String> parseScopes(Map<String, ?> map) {
+  private Set<String> parseScopes(final Map<String, ?> map) {
     // Parse scopes by comma
-    Object scopeAsObject = map.containsKey(SCOPE) ? map.get(SCOPE) : EMPTY;
-    Set<String> scope = new LinkedHashSet<>();
+    final Object scopeAsObject = map.containsKey(SCOPE) ? map.get(SCOPE) : EMPTY;
+    final Set<String> scope = new LinkedHashSet<>();
     if (String.class.isAssignableFrom(scopeAsObject.getClass())) {
-      String scopeAsString = (String) scopeAsObject;
+      final String scopeAsString = (String) scopeAsObject;
       Collections.addAll(scope, scopeAsString.split(","));
     } else if (Collection.class.isAssignableFrom(scopeAsObject.getClass())) {
-      Collection<String> scopes = (Collection<String>) scopeAsObject;
+      final Collection<String> scopes = (Collection<String>) scopeAsObject;
       scope.addAll(scopes);
     }
     return scope;

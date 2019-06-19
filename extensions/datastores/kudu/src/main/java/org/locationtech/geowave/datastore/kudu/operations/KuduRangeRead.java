@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.datastore.kudu.operations;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,9 +25,9 @@ import org.apache.kudu.Schema;
 import org.apache.kudu.client.AsyncKuduScanner;
 import org.apache.kudu.client.AsyncKuduScanner.AsyncKuduScannerBuilder;
 import org.apache.kudu.client.KuduPredicate;
+import org.apache.kudu.client.KuduPredicate.ComparisonOp;
 import org.apache.kudu.client.KuduTable;
 import org.apache.kudu.client.RowResultIterator;
-import org.apache.kudu.client.KuduPredicate.ComparisonOp;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -40,7 +38,6 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import org.locationtech.geowave.core.store.util.RowConsumer;
 import org.locationtech.geowave.datastore.kudu.KuduRow;
 import org.locationtech.geowave.datastore.kudu.KuduRow.KuduField;
-import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Streams;
@@ -92,7 +89,7 @@ public class KuduRangeRead<T> {
         KuduPredicate.newInListPredicate(
             schema.getColumn(KuduField.GW_ADAPTER_ID_KEY.getFieldName()),
             Arrays.asList(ArrayUtils.toObject(adapterIds)));
-    if (ranges != null && !ranges.isEmpty()) {
+    if ((ranges != null) && !ranges.isEmpty()) {
       for (final SinglePartitionQueryRanges r : ranges) {
         byte[] partitionKey = r.getPartitionKey();
         if (partitionKey == null) {
@@ -214,13 +211,13 @@ public class KuduRangeRead<T> {
       }
     }
 
-    QueryErrback errBack = new QueryErrback();
+    final QueryErrback errBack = new QueryErrback();
 
     // callback class
     class QueryCallback implements Callback<Deferred<Object>, RowResultIterator> {
       @Override
-      public Deferred<Object> call(RowResultIterator rs) {
-        if (rs == null || isCanceled.get()) {
+      public Deferred<Object> call(final RowResultIterator rs) {
+        if ((rs == null) || isCanceled.get()) {
           checkFinalize(scanner, semaphore, resultQueue, queryCount);
           return Deferred.fromResult(null);
         }

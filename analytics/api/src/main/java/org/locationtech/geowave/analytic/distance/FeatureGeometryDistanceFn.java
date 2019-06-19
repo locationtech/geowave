@@ -56,7 +56,7 @@ public class FeatureGeometryDistanceFn implements DistanceFn<SimpleFeature> {
     final Geometry xGeo = getGeometry(x);
     final Geometry yGeo = getGeometry(y);
     final DistanceOp op = new DistanceOp(xGeo, yGeo);
-    Coordinate[] points = op.nearestPoints();
+    final Coordinate[] points = op.nearestPoints();
     return coordinateDistanceFunction.measure(points[0], points[1]);
   }
 }

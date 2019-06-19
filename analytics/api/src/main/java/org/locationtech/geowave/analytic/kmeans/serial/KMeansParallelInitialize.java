@@ -20,9 +20,9 @@ import org.locationtech.geowave.analytic.sample.SampleNotification;
 import org.locationtech.geowave.analytic.sample.Sampler;
 
 public class KMeansParallelInitialize<T> {
-  private CentroidAssociationFn<T> centroidAssociationFn = new CentroidAssociationFn<T>();
+  private CentroidAssociationFn<T> centroidAssociationFn = new CentroidAssociationFn<>();
   private double psi = 5.0;
-  private final Sampler<T> sampler = new Sampler<T>();
+  private final Sampler<T> sampler = new Sampler<>();
   private AnalyticItemWrapperFactory<T> centroidFactory;
   private final AnalyticStats stats = new StatsMap();
 
@@ -63,10 +63,10 @@ public class KMeansParallelInitialize<T> {
 
     stats.reset();
 
-    final List<AnalyticItemWrapper<T>> sampleSet = new ArrayList<AnalyticItemWrapper<T>>();
+    final List<AnalyticItemWrapper<T>> sampleSet = new ArrayList<>();
     sampleSet.add(pointSet.iterator().next());
 
-    final List<CentroidPairing<T>> pairingSet = new ArrayList<CentroidPairing<T>>();
+    final List<CentroidPairing<T>> pairingSet = new ArrayList<>();
 
     final AssociationNotification<T> assocFn = new AssociationNotification<T>() {
       @Override

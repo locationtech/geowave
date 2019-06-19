@@ -40,10 +40,9 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends Mapper<LongWritable, 
   private final Index index =
       new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
   private final VisibilityWriter<SimpleFeature> visibilityWriter =
-      new UniformVisibilityWriter<SimpleFeature>(
-          new UnconstrainedVisibilityHandler<SimpleFeature, Object>());
+      new UniformVisibilityWriter<>(new UnconstrainedVisibilityHandler<SimpleFeature, Object>());
   private final AccumuloKeyValuePairGenerator<SimpleFeature> generator =
-      new AccumuloKeyValuePairGenerator<SimpleFeature>(
+      new AccumuloKeyValuePairGenerator<>(
           // this is not the most robust way to assign an internal adapter ID
           // but is simple and will work in a majority of cases
           new InternalDataAdapterWrapper<>(

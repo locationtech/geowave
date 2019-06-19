@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.render;
 
-import com.aol.cyclops.data.async.Queue;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +26,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.aol.cyclops.data.async.Queue;
 
 public class DistributedRenderAggregation implements
     Aggregation<DistributedRenderOptions, DistributedRenderResult, SimpleFeature> {

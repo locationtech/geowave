@@ -21,25 +21,25 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
-import si.uom.SI;
+import tec.uom.se.unit.Units;
 
 public class GeometryCalculationsTest {
 
   @Test
   public void test() throws NoSuchAuthorityCodeException, FactoryException, TransformException {
-    CoordinateReferenceSystem crs = CRS.decode("EPSG:4326", true);
+    final CoordinateReferenceSystem crs = CRS.decode("EPSG:4326", true);
 
-    GeometryCalculations calculator = new GeometryCalculations(crs);
+    final GeometryCalculations calculator = new GeometryCalculations(crs);
     List<Geometry> geos =
         calculator.buildSurroundingGeometries(
             new double[] {50000, 50000},
-            SI.METRE,
+            Units.METRE,
             new Coordinate(30, 30));
     assertEquals(1, geos.size());
     Geometry geo = geos.get(0);
     double lastDist = Double.NaN;
     Coordinate lastCoord = null;
-    for (Coordinate coord : geo.getCoordinates()) {
+    for (final Coordinate coord : geo.getCoordinates()) {
       if (lastCoord != null) {
         final double dist = JTS.orthodromicDistance(lastCoord, coord, crs);
         // scaling on the globe...so not perfect square
@@ -62,17 +62,17 @@ public class GeometryCalculationsTest {
     geos =
         calculator.buildSurroundingGeometries(
             new double[] {100000, 100000},
-            SI.METRE,
+            Units.METRE,
             new Coordinate(179.9999999996, 0));
     assertEquals(2, geos.size());
     geo = geos.get(0);
     envelope = geo.getEnvelopeInternal();
-    assertTrue(envelope.getMaxX() < -179 && envelope.getMaxX() > -180);
+    assertTrue((envelope.getMaxX() < -179) && (envelope.getMaxX() > -180));
     assertEquals(-180.0, envelope.getMinX(), 0.0000001);
 
     geo = geos.get(1);
     envelope = geo.getEnvelopeInternal();
-    assertTrue(envelope.getMinX() < 180 && envelope.getMinX() > 179);
+    assertTrue((envelope.getMinX() < 180) && (envelope.getMinX() > 179));
     assertEquals(180.0, envelope.getMaxX(), 0.0000001);
   }
 }

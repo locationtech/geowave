@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.datastore.cassandra.util;
 
-import com.datastax.driver.core.PreparedStatement;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import com.datastax.driver.core.PreparedStatement;
 
 public class KeyspaceStatePool {
   private static KeyspaceStatePool singletonInstance;
@@ -24,8 +24,7 @@ public class KeyspaceStatePool {
     return singletonInstance;
   }
 
-  private final Map<Pair<String, String>, KeyspaceState> keyspaceStateCache =
-      new HashMap<Pair<String, String>, KeyspaceState>();
+  private final Map<Pair<String, String>, KeyspaceState> keyspaceStateCache = new HashMap<>();
 
   protected KeyspaceStatePool() {}
 

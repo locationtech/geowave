@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.stats;
 
-import com.clearspring.analytics.stream.frequency.CountMinSketch;
-import com.clearspring.analytics.stream.frequency.FrequencyMergeException;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -21,6 +19,8 @@ import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsTyp
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.feature.simple.SimpleFeature;
+import com.clearspring.analytics.stream.frequency.CountMinSketch;
+import com.clearspring.analytics.stream.frequency.FrequencyMergeException;
 
 /**
  * Maintains an estimate of how may of each attribute value occurs in a set of data.

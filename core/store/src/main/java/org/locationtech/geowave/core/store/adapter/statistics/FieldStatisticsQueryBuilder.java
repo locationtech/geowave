@@ -12,7 +12,8 @@ public class FieldStatisticsQueryBuilder<R> extends
     StatisticsQueryBuilderImpl<R, FieldStatisticsQueryBuilder<R>> {
   private String fieldName;
 
-  public FieldStatisticsQueryBuilder(StatisticsType<R, FieldStatisticsQueryBuilder<R>> statsType) {
+  public FieldStatisticsQueryBuilder(
+      final StatisticsType<R, FieldStatisticsQueryBuilder<R>> statsType) {
     this.statsType = statsType;
   }
 

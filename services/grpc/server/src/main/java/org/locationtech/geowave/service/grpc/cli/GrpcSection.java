@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.service.grpc.cli;
 
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "grpc", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(commandDescription = "Commands to start/stop/restart gRPC services")

@@ -34,10 +34,10 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
     this(null);
   }
 
-  protected SpatialField(@Nullable Integer geometryPrecision) {
+  protected SpatialField(@Nullable final Integer geometryPrecision) {
     geometryReader = new GeometryWrapperReader(geometryPrecision);
     geometryWriter = new GeometryWrapperWriter(geometryPrecision);
-    this.fieldName = GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME;
+    fieldName = GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME;
     this.geometryPrecision = geometryPrecision;
   }
 
@@ -134,7 +134,7 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
     if (geometryPrecision == null) {
       buf.put(Byte.MAX_VALUE);
     } else {
-      buf.put((byte) this.geometryPrecision.intValue());
+      buf.put((byte) geometryPrecision.intValue());
     }
     return buf.array();
   }
@@ -148,7 +148,7 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
     final byte[] dimensionBinary = new byte[buf.remaining() - 1];
     buf.get(dimensionBinary);
     baseDefinition = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dimensionBinary);
-    byte precision = buf.get();
+    final byte precision = buf.get();
     if (precision == Byte.MAX_VALUE) {
       geometryPrecision = null;
     } else {

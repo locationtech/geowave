@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin.visibility;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.ObjectStreamException;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
@@ -19,6 +18,7 @@ import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Describes which attribute in a feature contains the visibility constraints, interpreted by a

@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.locationtech.geowave.core.cli.VersionUtils;
@@ -18,6 +15,9 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "geowave")
 @Parameters(commandDescription = "This is the top level section.")

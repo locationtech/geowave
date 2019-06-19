@@ -22,7 +22,7 @@ public class GeoLifeIngestFormat extends AbstractSimpleFeatureIngestFormat<AvroW
 
   @Override
   protected AbstractSimpleFeatureIngestPlugin<AvroWholeFile> newPluginInstance(
-      IngestFormatOptions options) {
+      final IngestFormatOptions options) {
     return new GeoLifeIngestPlugin();
   }
 

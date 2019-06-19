@@ -16,12 +16,12 @@ package org.locationtech.geowave.core.cli.converters;
  */
 public class RequiredFieldConverter extends GeoWaveBaseConverter<String> {
 
-  public RequiredFieldConverter(String optionName) {
+  public RequiredFieldConverter(final String optionName) {
     super(optionName);
   }
 
   @Override
-  public String convert(String value) {
+  public String convert(final String value) {
     return value;
   }
 

@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.datastore.cassandra.operations;
 
-import com.datastax.driver.core.querybuilder.Delete;
-import com.datastax.driver.core.querybuilder.Delete.Where;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import com.datastax.driver.core.querybuilder.Delete;
+import com.datastax.driver.core.querybuilder.Delete.Where;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 
 public class CassandraMetadataDeleter implements MetadataDeleter {
   private final CassandraOperations operations;

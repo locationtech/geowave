@@ -27,10 +27,10 @@ public class GeometryWrapperTest {
 
   @Test
   public void testLatitutde() {
-    NumericDimensionField[] fields =
+    final NumericDimensionField[] fields =
         new NumericDimensionField[] {new LatitudeField(GeometryUtils.MAX_GEOMETRY_PRECISION)};
 
-    Geometry geo =
+    final Geometry geo =
         factory.createLineString(
             new Coordinate[] {
                 new Coordinate(-99.22, 33.75000000000001), // notice
@@ -42,7 +42,7 @@ public class GeometryWrapperTest {
             // notice that this gets tiled as 33.75
             });
 
-    GeometryWrapper wrapper = new GeometryWrapper(geo);
+    final GeometryWrapper wrapper = new GeometryWrapper(geo);
 
     NumericRange rangeData = new NumericRange(33.7442334433, 33.75 + (1E-10d));
     assertTrue(wrapper.overlaps(fields, new NumericData[] {rangeData}));
@@ -57,10 +57,10 @@ public class GeometryWrapperTest {
 
   @Test
   public void testLongitude() {
-    NumericDimensionField[] fields =
+    final NumericDimensionField[] fields =
         new NumericDimensionField[] {new LongitudeField(GeometryUtils.MAX_GEOMETRY_PRECISION)};
 
-    Geometry geo =
+    final Geometry geo =
         factory.createLineString(
             new Coordinate[] {
                 new Coordinate(-99.22, 33.75000000000001), // notice
@@ -72,7 +72,7 @@ public class GeometryWrapperTest {
             // notice that this gets tiled as 33.75
             });
 
-    GeometryWrapper wrapper = new GeometryWrapper(geo);
+    final GeometryWrapper wrapper = new GeometryWrapper(geo);
 
     NumericRange rangeData = new NumericRange(-99.15 - (1E-10d), -99.140348473);
     assertTrue(wrapper.overlaps(fields, new NumericData[] {rangeData}));

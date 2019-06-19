@@ -12,6 +12,11 @@ import java.io.Serializable;
 
 public class JoinOptions implements Serializable {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   public static enum BuildSide {
     LEFT, RIGHT;
   }
@@ -21,15 +26,15 @@ public class JoinOptions implements Serializable {
 
   public JoinOptions() {}
 
-  public JoinOptions(boolean negativeTest) {
-    this.negativePredicate = negativeTest;
+  public JoinOptions(final boolean negativeTest) {
+    negativePredicate = negativeTest;
   }
 
   public boolean isNegativePredicate() {
     return negativePredicate;
   }
 
-  public void setNegativePredicate(boolean negativePredicate) {
+  public void setNegativePredicate(final boolean negativePredicate) {
     this.negativePredicate = negativePredicate;
   }
 
@@ -37,7 +42,7 @@ public class JoinOptions implements Serializable {
     return joinBuildSide;
   }
 
-  public void setJoinBuildSide(BuildSide joinBuildSide) {
+  public void setJoinBuildSide(final BuildSide joinBuildSide) {
     this.joinBuildSide = joinBuildSide;
   }
 }

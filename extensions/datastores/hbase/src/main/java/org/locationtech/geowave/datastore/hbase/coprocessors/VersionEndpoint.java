@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.coprocessors;
 
-import com.google.protobuf.RpcCallback;
-import com.google.protobuf.RpcController;
-import com.google.protobuf.Service;
 import java.io.IOException;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
@@ -19,6 +16,9 @@ import org.locationtech.geowave.core.cli.VersionUtils;
 import org.locationtech.geowave.datastore.hbase.query.protobuf.VersionProtosServer.VersionRequest;
 import org.locationtech.geowave.datastore.hbase.query.protobuf.VersionProtosServer.VersionResponse;
 import org.locationtech.geowave.datastore.hbase.query.protobuf.VersionProtosServer.VersionService;
+import com.google.protobuf.RpcCallback;
+import com.google.protobuf.RpcController;
+import com.google.protobuf.Service;
 
 public class VersionEndpoint extends VersionService implements Coprocessor, CoprocessorService {
   @Override

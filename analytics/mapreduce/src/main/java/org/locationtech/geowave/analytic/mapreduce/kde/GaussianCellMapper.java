@@ -68,7 +68,7 @@ public class GaussianCellMapper extends
         LOGGER.warn("Unable to parse CQL filter", e);
       }
     }
-    levelStoreMap = new HashMap<Integer, LevelStore>();
+    levelStoreMap = new HashMap<>();
 
     for (int level = maxLevel; level >= minLevel; level--) {
       final int numXPosts = (int) Math.pow(2, level + 1) * KDEJobRunner.TILE_SIZE;
@@ -111,14 +111,14 @@ public class GaussianCellMapper extends
                       CRS.decode(inputCrsCode, true),
                       CRS.decode(outputCrsCode, true),
                       true);
-            } catch (FactoryException e) {
+            } catch (final FactoryException e) {
               LOGGER.error("Unable to decode " + inputCrsCode + " CRS", e);
               throw new RuntimeException("Unable to initialize " + inputCrsCode + " object", e);
             }
           }
 
           try {
-            Geometry transformedGeometry = JTS.transform((Geometry) geomObj, transform);
+            final Geometry transformedGeometry = JTS.transform((Geometry) geomObj, transform);
             pt = transformedGeometry.getCentroid();
           } catch (MismatchedDimensionException | TransformException e) {
             LOGGER.warn(

@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +15,8 @@ import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 
 public class DynamoDBMetadataWriter implements MetadataWriter {
   private static final Logger LOGGER = LoggerFactory.getLogger(DynamoDBMetadataWriter.class);
@@ -43,7 +43,7 @@ public class DynamoDBMetadataWriter implements MetadataWriter {
       map.put(
           DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
           new AttributeValue().withB(ByteBuffer.wrap(metadata.getSecondaryId())));
-      if (metadata.getVisibility() != null && metadata.getVisibility().length > 0) {
+      if ((metadata.getVisibility() != null) && (metadata.getVisibility().length > 0)) {
         map.put(
             DynamoDBOperations.METADATA_VISIBILITY_KEY,
             new AttributeValue().withB(ByteBuffer.wrap(metadata.getVisibility())));

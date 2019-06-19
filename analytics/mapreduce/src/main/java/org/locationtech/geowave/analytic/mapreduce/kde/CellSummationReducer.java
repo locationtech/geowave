@@ -18,7 +18,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 public class CellSummationReducer extends
     Reducer<LongWritable, DoubleWritable, DoubleWritable, LongWritable> {
-  private final Map<Long, Double> maxPerLevel = new HashMap<Long, Double>();
+  private final Map<Long, Double> maxPerLevel = new HashMap<>();
   protected int minLevel;
   protected int maxLevel;
   protected int numLevels;

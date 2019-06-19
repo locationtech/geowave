@@ -108,12 +108,12 @@ public class StoreCopyIT extends AbstractGeoWaveBasicVectorIT {
       // Set up the copy command
       final CopyCommand command = new CopyCommand();
 
-      File configFile = File.createTempFile("test_stats", null);
-      ManualOperationParams params = new ManualOperationParams();
+      final File configFile = File.createTempFile("test_stats", null);
+      final ManualOperationParams params = new ManualOperationParams();
 
       params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
 
-      AddStoreCommand addStore = new AddStoreCommand();
+      final AddStoreCommand addStore = new AddStoreCommand();
       addStore.setParameters("test-store-in");
       addStore.setPluginOptions(inputDataStorePluginOptions);
       addStore.execute(params);

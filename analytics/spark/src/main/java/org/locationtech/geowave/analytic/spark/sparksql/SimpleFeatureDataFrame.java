@@ -63,9 +63,9 @@ public class SimpleFeatureDataFrame {
     return rowRDD;
   }
 
-  public Dataset<Row> getDataFrame(GeoWaveRDD pairRDD) {
+  public Dataset<Row> getDataFrame(final GeoWaveRDD pairRDD) {
     if (rowRDD == null) {
-      SimpleFeatureMapper mapper = new SimpleFeatureMapper(schema);
+      final SimpleFeatureMapper mapper = new SimpleFeatureMapper(schema);
 
       rowRDD = pairRDD.getRawRDD().values().map(mapper);
     }
@@ -77,7 +77,7 @@ public class SimpleFeatureDataFrame {
     return dataFrame;
   }
 
-  public Dataset<Row> resetDataFrame(GeoWaveRDD pairRDD) {
+  public Dataset<Row> resetDataFrame(final GeoWaveRDD pairRDD) {
     rowRDD = null;
     dataFrame = null;
 

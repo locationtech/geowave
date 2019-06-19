@@ -101,10 +101,10 @@ public class BinnedNumericDataset implements MultiDimensionalNumericData {
   }
 
   private static void generatePermutations(
-      BinRange[][] binRangesPerDimension,
-      List<BinnedNumericDataset> result,
-      int dimension,
-      BinnedNumericDataset current) {
+      final BinRange[][] binRangesPerDimension,
+      final List<BinnedNumericDataset> result,
+      final int dimension,
+      final BinnedNumericDataset current) {
     if (dimension == binRangesPerDimension.length) {
       result.add(current);
       return;

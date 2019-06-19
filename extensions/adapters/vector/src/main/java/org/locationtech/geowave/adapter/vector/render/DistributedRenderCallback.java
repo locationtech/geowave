@@ -50,8 +50,8 @@ public class DistributedRenderCallback extends GetMapCallbackAdapter {
       final FeatureTypeStyle style = layerStyle.featureTypeStyles().get(0);
       // check if their is a DistributedRender rendering
       // transformation
-      if (style instanceof ProcessFunction
-          && style.getTransformation() != null
+      if ((style instanceof ProcessFunction)
+          && (style.getTransformation() != null)
           && (((ProcessFunction) style.getTransformation()).getName() != null)
           && ((ProcessFunction) style.getTransformation()).getName().equals(
               DistributedRenderProcess.PROCESS_NAME)) {

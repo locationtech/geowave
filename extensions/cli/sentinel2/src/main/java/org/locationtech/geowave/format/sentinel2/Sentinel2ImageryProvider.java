@@ -27,7 +27,6 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
-import net.sf.json.JSONObject;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geojson.geom.GeometryJSON;
@@ -44,6 +43,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.sf.json.JSONObject;
 
 /** Defines a provider of Sentinel2 imagery. */
 public abstract class Sentinel2ImageryProvider {
@@ -54,13 +54,12 @@ public abstract class Sentinel2ImageryProvider {
   // Available classes implementing Sentinel2 imagery providers.
   private static final Class<?>[] PROVIDER_CLASSES =
       new Class<?>[] {TheiaImageryProvider.class, AmazonImageryProvider.class};
-  private static final Map<String, Sentinel2ImageryProvider> PROVIDERS =
-      new HashMap<String, Sentinel2ImageryProvider>();
+  private static final Map<String, Sentinel2ImageryProvider> PROVIDERS = new HashMap<>();
 
   static {
-    for (Class<?> clazz : PROVIDER_CLASSES) {
+    for (final Class<?> clazz : PROVIDER_CLASSES) {
       try {
-        Sentinel2ImageryProvider provider = (Sentinel2ImageryProvider) clazz.newInstance();
+        final Sentinel2ImageryProvider provider = (Sentinel2ImageryProvider) clazz.newInstance();
         if (provider.isAvailable()) {
           PROVIDERS.put(provider.providerName().toUpperCase(), provider);
         }
@@ -76,28 +75,28 @@ public abstract class Sentinel2ImageryProvider {
   }
 
   /** Returns the Sentinel2 provider with the specified name. */
-  public static Sentinel2ImageryProvider getProvider(String providerName) {
+  public static Sentinel2ImageryProvider getProvider(final String providerName) {
     return PROVIDERS.get(providerName.toUpperCase());
   }
 
   /** Converts a JSONArray to an Iterator<SimpleFeature> instance. */
   protected static class JSONFeatureIterator implements Iterator<SimpleFeature> {
-    private Sentinel2ImageryProvider provider;
-    private SimpleFeatureType featureType;
-    private Iterator<?> iterator;
+    private final Sentinel2ImageryProvider provider;
+    private final SimpleFeatureType featureType;
+    private final Iterator<?> iterator;
     private JSONObject currentObject;
 
     public JSONFeatureIterator(
-        Sentinel2ImageryProvider provider,
-        SimpleFeatureType featureType,
-        Iterator<?> iterator) {
+        final Sentinel2ImageryProvider provider,
+        final SimpleFeatureType featureType,
+        final Iterator<?> iterator) {
       this.provider = provider;
       this.featureType = featureType;
       this.iterator = iterator;
     }
 
     public JSONObject currentObject() {
-      return this.currentObject;
+      return currentObject;
     }
 
     @Override
@@ -107,7 +106,7 @@ public abstract class Sentinel2ImageryProvider {
 
     @Override
     public SimpleFeature next() {
-      final JSONObject jsonObject = this.currentObject = (JSONObject) this.iterator.next();
+      final JSONObject jsonObject = currentObject = (JSONObject) iterator.next();
 
       final String id = jsonObject.getString("id");
       final JSONObject properties = (JSONObject) jsonObject.get("properties");
@@ -123,10 +122,10 @@ public abstract class Sentinel2ImageryProvider {
 
       // Fill Geometry
       try {
-        Geometry geometry = new GeometryJSON().read(jsonObject.get("geometry").toString());
+        final Geometry geometry = new GeometryJSON().read(jsonObject.get("geometry").toString());
         geometry.setSRID(4326);
         feature.setDefaultGeometry(geometry);
-      } catch (IOException e) {
+      } catch (final IOException e) {
         LOGGER.warn("Unable to read geometry '" + e.getMessage() + "'");
       }
 
@@ -147,7 +146,7 @@ public abstract class Sentinel2ImageryProvider {
           value =
               binding == Date.class ? DateUtilities.parseISO(value.toString())
                   : Converters.convert(value, binding);
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
           LOGGER.warn("Unable to convert attribute '" + e.getMessage() + "'");
           value = null;
         }
@@ -202,7 +201,7 @@ public abstract class Sentinel2ImageryProvider {
 
   /** Load CAs from a custom certs file. */
   protected static boolean applyCustomCertsFile(
-      HttpsURLConnection connection,
+      final HttpsURLConnection connection,
       final File customCertsFile) throws GeneralSecurityException, IOException {
     if (customCertsFile.exists()) {
       try {

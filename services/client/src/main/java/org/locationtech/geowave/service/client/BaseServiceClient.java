@@ -22,7 +22,7 @@ public class BaseServiceClient {
     this(baseUrl, null, null);
   }
 
-  public BaseServiceClient(final String baseUrl, String user, String password) {
+  public BaseServiceClient(final String baseUrl, final String user, final String password) {
 
     baseService =
         WebResourceFactory.newResource(

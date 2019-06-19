@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.core.index.sfc.hilbert;
 
-import com.google.uzaygezen.core.CompactHilbertCurve;
 import java.math.BigInteger;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import com.google.uzaygezen.core.CompactHilbertCurve;
 
 /**
  * This interface is used to abstract the details of operations used by the hilbert space filling

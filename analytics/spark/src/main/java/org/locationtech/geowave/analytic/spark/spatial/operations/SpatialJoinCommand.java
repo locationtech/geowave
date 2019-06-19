@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.analytic.spark.spatial.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,22 +26,26 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "spatialjoin", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "Spatial Join using Spark ")
 public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
   @Parameter(description = "<left storename> <right storename> <output storename>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
-  private SpatialJoinCmdOptions spatialJoinOptions = new SpatialJoinCmdOptions();
+  private final SpatialJoinCmdOptions spatialJoinOptions = new SpatialJoinCmdOptions();
 
   DataStorePluginOptions leftDataStore = null;
   DataStorePluginOptions rightDataStore = null;
   DataStorePluginOptions outputDataStore = null;
 
   @Override
-  public void execute(OperationParams params) throws Exception {
+  public void execute(final OperationParams params) throws Exception {
     // Ensure we have all the required arguments
     if (parameters.size() != 3) {
       throw new ParameterException(
@@ -55,7 +55,7 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
   }
 
   @Override
-  public Void computeResults(OperationParams params) throws Exception {
+  public Void computeResults(final OperationParams params) throws Exception {
     final String leftStoreName = parameters.get(0);
     final String rightStoreName = parameters.get(1);
     final String outputStoreName = parameters.get(2);
@@ -65,15 +65,15 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
 
     // Attempt to load stores.
     if (leftDataStore == null) {
-      leftDataStore = this.loadStore(leftStoreName, configFile);
+      leftDataStore = loadStore(leftStoreName, configFile);
     }
 
     if (rightDataStore == null) {
-      rightDataStore = this.loadStore(rightStoreName, configFile);
+      rightDataStore = loadStore(rightStoreName, configFile);
     }
 
     if (outputDataStore == null) {
-      outputDataStore = this.loadStore(outputStoreName, configFile);
+      outputDataStore = loadStore(outputStoreName, configFile);
     }
 
     // Save a reference to the output store in the property management.
@@ -85,14 +85,14 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
     converter.readProperties(spatialJoinOptions);
 
     // TODO: Create GeomPredicate function from name
-    UDFNameAndConstructor udfFunc =
+    final UDFNameAndConstructor udfFunc =
         UDFRegistrySPI.findFunctionByName(spatialJoinOptions.getPredicate());
     if (udfFunc == null) {
       throw new ParameterException(
           "UDF function matching " + spatialJoinOptions.getPredicate() + " not found.");
     }
 
-    GeomFunction predicate = udfFunc.getPredicateConstructor().get();
+    final GeomFunction predicate = udfFunc.getPredicateConstructor().get();
 
     // Special case for distance function since it takes a scalar radius.
     if (predicate instanceof GeomWithinDistance) {
@@ -134,7 +134,7 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
     return null;
   }
 
-  private DataStorePluginOptions loadStore(String storeName, File configFile) {
+  private DataStorePluginOptions loadStore(final String storeName, final File configFile) {
     final StoreLoader storeLoader = new StoreLoader(storeName);
     if (!storeLoader.loadFromConfig(configFile)) {
       throw new ParameterException("Cannot find left store: " + storeLoader.getStoreName());

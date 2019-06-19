@@ -17,7 +17,6 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
-import org.apache.accumulo.core.iterators.SkippingIterator;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.system.InterruptibleIterator;
 import org.apache.hadoop.io.Text;
@@ -130,8 +129,8 @@ public class FixedCardinalitySkippingIterator extends ExceptionHandlingSkippingI
   private void reseek(final Key key) throws IOException {
     if (range.afterEndKey(key)) {
       if (!columnFamilies.isEmpty()) {
-        ByteSequence cf = columnFamilies.iterator().next();
-        Key endKeyWithCf = new Key(range.getEndKey().getRow(), new Text(cf.toArray()));
+        final ByteSequence cf = columnFamilies.iterator().next();
+        final Key endKeyWithCf = new Key(range.getEndKey().getRow(), new Text(cf.toArray()));
         range = new Range(endKeyWithCf, true, endKeyWithCf, range.isEndKeyInclusive());
       } else {
         range = new Range(range.getEndKey(), true, range.getEndKey(), range.isEndKeyInclusive());

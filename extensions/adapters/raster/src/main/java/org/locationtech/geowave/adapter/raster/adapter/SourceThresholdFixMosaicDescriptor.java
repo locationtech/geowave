@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.adapter.raster.adapter;
 
-import com.sun.media.jai.opimage.MosaicRIF;
 import javax.media.jai.JAI;
 import javax.media.jai.OperationRegistry;
 import javax.media.jai.ParameterListDescriptor;
 import javax.media.jai.ParameterListDescriptorImpl;
 import javax.media.jai.PropertyGenerator;
 import javax.media.jai.operator.MosaicDescriptor;
+import com.sun.media.jai.opimage.MosaicRIF;
 
 /**
  * this is a workaround because GeoTools resampling will force the source threshold to be 1.0 on

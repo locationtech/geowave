@@ -12,8 +12,13 @@ import org.apache.spark.sql.api.java.UDF2;
 import org.locationtech.jts.geom.Geometry;
 
 public class GeomDistance implements UDF2<Geometry, Geometry, Double> {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
-  public Double call(Geometry leftGeom, Geometry rightGeom) throws Exception {
+  public Double call(final Geometry leftGeom, final Geometry rightGeom) throws Exception {
     return leftGeom.distance(rightGeom);
   }
 }

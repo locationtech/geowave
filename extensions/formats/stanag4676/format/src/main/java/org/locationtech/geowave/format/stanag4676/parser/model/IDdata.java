@@ -16,7 +16,7 @@ public class IDdata {
     return stationId;
   }
 
-  public void setStationId(String stationId) {
+  public void setStationId(final String stationId) {
     this.stationId = stationId;
   }
 
@@ -24,7 +24,7 @@ public class IDdata {
     return nationality;
   }
 
-  public void setNationality(String nationality) {
+  public void setNationality(final String nationality) {
     this.nationality = nationality;
   }
 }

@@ -44,7 +44,7 @@ public class UnboundedDimensionDefinition extends BasicDimensionDefinition {
   }
 
   @Override
-  public NumericRange getDenormalizedRange(BinRange range) {
+  public NumericRange getDenormalizedRange(final BinRange range) {
     return binningStrategy.getDenormalizedRanges(range);
   }
 

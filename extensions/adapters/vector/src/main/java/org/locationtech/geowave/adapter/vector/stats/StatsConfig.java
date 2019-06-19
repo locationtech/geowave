@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.adapter.vector.stats;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.io.Serializable;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public interface StatsConfig<T> extends Serializable, Persistable {

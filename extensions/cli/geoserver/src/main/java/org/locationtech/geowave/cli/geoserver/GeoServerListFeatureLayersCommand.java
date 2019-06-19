@@ -8,14 +8,14 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
+import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import net.sf.json.JSONObject;
-import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
-import org.locationtech.geowave.core.cli.api.OperationParams;
 
 @GeowaveOperation(name = "listfl", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "List GeoServer feature layers")
@@ -46,7 +46,7 @@ public class GeoServerListFeatureLayersCommand extends GeoServerCommand<String> 
       final JSONObject listObj = JSONObject.fromObject(listLayersResponse.getEntity());
       return "\nGeoServer layer list: " + listObj.toString(2);
     }
-    String errorMessage =
+    final String errorMessage =
         "Error getting GeoServer layer list: "
             + listLayersResponse.readEntity(String.class)
             + "\nGeoServer Response Code = "

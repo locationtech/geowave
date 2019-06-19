@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +24,10 @@ import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "kde", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "Kernel Density Estimate")
@@ -35,7 +35,7 @@ public class KdeCommand extends ServiceEnabledCommand<Void> {
   private static final Logger LOGGER = LoggerFactory.getLogger(KdeCommand.class);
 
   @Parameter(description = "<input storename> <output storename>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private KDECommandLineOptions kdeOptions = new KDECommandLineOptions();
@@ -82,7 +82,7 @@ public class KdeCommand extends ServiceEnabledCommand<Void> {
     outputStoreOptions = outputStoreLoader.getDataStorePlugin();
 
     if ((kdeOptions.getOutputIndex() != null) && !kdeOptions.getOutputIndex().trim().isEmpty()) {
-      String outputIndex = kdeOptions.getOutputIndex();
+      final String outputIndex = kdeOptions.getOutputIndex();
 
       // Load the Indices
       final IndexLoader indexLoader = new IndexLoader(outputIndex);
@@ -123,7 +123,7 @@ public class KdeCommand extends ServiceEnabledCommand<Void> {
   }
 
   public void setParameters(final String inputStore, final String outputStore) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(inputStore);
     parameters.add(outputStore);
   }
@@ -148,7 +148,7 @@ public class KdeCommand extends ServiceEnabledCommand<Void> {
     return outputIndexOptions;
   }
 
-  public void setOutputIndexOptions(List<IndexPluginOptions> outputIndexOptions) {
+  public void setOutputIndexOptions(final List<IndexPluginOptions> outputIndexOptions) {
     this.outputIndexOptions = outputIndexOptions;
   }
 

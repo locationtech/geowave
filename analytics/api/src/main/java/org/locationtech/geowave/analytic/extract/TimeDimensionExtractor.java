@@ -17,15 +17,19 @@ import org.opengis.feature.type.AttributeDescriptor;
 /** A default implementation that averages all time attributes. */
 public class TimeDimensionExtractor extends SimpleFeatureGeometryExtractor implements
     DimensionExtractor<SimpleFeature> {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private static final String[] TIME_NAME = new String[] {"time"};
 
   @Override
-  public double[] getDimensions(SimpleFeature anObject) {
-    double[] timeVal = new double[1];
+  public double[] getDimensions(final SimpleFeature anObject) {
+    final double[] timeVal = new double[1];
     double count = 0.0;
-    for (AttributeDescriptor attr : anObject.getFeatureType().getAttributeDescriptors()) {
+    for (final AttributeDescriptor attr : anObject.getFeatureType().getAttributeDescriptors()) {
       if (TimeUtils.isTemporal(attr.getType().getClass())) {
-        Object o = anObject.getAttribute(attr.getName());
+        final Object o = anObject.getAttribute(attr.getName());
         count += 1.0;
         if (o instanceof Date) {
           timeVal[0] += ((Date) o).getTime();

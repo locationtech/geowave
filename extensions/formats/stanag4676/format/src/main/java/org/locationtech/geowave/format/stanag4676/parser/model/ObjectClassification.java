@@ -95,14 +95,14 @@ public enum ObjectClassification {
   private String value;
 
   ObjectClassification() {
-    this.value = ObjectClassification.values()[0].toString();
+    value = ObjectClassification.values()[0].toString();
   }
 
   ObjectClassification(final String value) {
     this.value = value;
   }
 
-  public static ObjectClassification fromString(String value) {
+  public static ObjectClassification fromString(final String value) {
     for (final ObjectClassification item : ObjectClassification.values()) {
       if (item.toString().equals(value)) {
         return item;

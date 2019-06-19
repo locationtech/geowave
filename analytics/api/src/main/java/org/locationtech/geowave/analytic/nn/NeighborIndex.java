@@ -19,11 +19,10 @@ import org.locationtech.geowave.core.index.ByteArray;
  * @param <NNTYPE>
  */
 public class NeighborIndex<NNTYPE> {
-  private final Map<ByteArray, NeighborList<NNTYPE>> index =
-      new HashMap<ByteArray, NeighborList<NNTYPE>>();
+  private final Map<ByteArray, NeighborList<NNTYPE>> index = new HashMap<>();
   private final NeighborListFactory<NNTYPE> listFactory;
 
-  private final NullList<NNTYPE> nullList = new NullList<NNTYPE>();
+  private final NullList<NNTYPE> nullList = new NullList<>();
 
   public NeighborIndex(final NeighborListFactory<NNTYPE> listFactory) {
     super();
@@ -42,7 +41,7 @@ public class NeighborIndex<NNTYPE> {
    * @param node
    * @return
    */
-  public NeighborList<NNTYPE> init(ByteArray id, NNTYPE value) {
+  public NeighborList<NNTYPE> init(final ByteArray id, final NNTYPE value) {
     NeighborList<NNTYPE> neighbors = index.get(id);
     if (neighbors == null) {
       neighbors = listFactory.buildNeighborList(id, value);
@@ -53,10 +52,10 @@ public class NeighborIndex<NNTYPE> {
 
   public void add(
       final DistanceProfile<?> distanceProfile,
-      ByteArray centerId,
-      NNTYPE centerValue,
-      ByteArray neighborId,
-      NNTYPE neighborValue,
+      final ByteArray centerId,
+      final NNTYPE centerValue,
+      final ByteArray neighborId,
+      final NNTYPE neighborValue,
       final boolean addReciprical) {
     this.addToList(distanceProfile, centerId, centerValue, neighborId, neighborValue);
     if (addReciprical) {
@@ -70,10 +69,10 @@ public class NeighborIndex<NNTYPE> {
 
   private void addToList(
       final DistanceProfile<?> distanceProfile,
-      ByteArray centerId,
-      NNTYPE centerValue,
-      ByteArray neighborId,
-      NNTYPE neighborValue) {
+      final ByteArray centerId,
+      final NNTYPE centerValue,
+      final ByteArray neighborId,
+      final NNTYPE neighborValue) {
     NeighborList<NNTYPE> neighbors = index.get(centerId);
     if (neighbors == null) {
       neighbors = listFactory.buildNeighborList(centerId, centerValue);

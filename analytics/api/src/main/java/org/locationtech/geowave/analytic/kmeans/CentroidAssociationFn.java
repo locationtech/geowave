@@ -31,8 +31,7 @@ public class CentroidAssociationFn<T> {
       final AnalyticItemWrapper<T> point,
       final Iterable<AnalyticItemWrapper<T>> targetSet,
       final AssociationNotification<T> associationNotification) {
-    final CentroidPairing<T> pairing =
-        new CentroidPairing<T>(null, point, Double.POSITIVE_INFINITY);
+    final CentroidPairing<T> pairing = new CentroidPairing<>(null, point, Double.POSITIVE_INFINITY);
     for (final AnalyticItemWrapper<T> y : targetSet) {
       final double distance = distanceFunction.measure(point.getWrappedItem(), y.getWrappedItem());
       if (distance < pairing.getDistance()) {

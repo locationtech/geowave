@@ -10,11 +10,16 @@ package org.locationtech.geowave.core.cli.exceptions;
 
 public class TargetNotFoundException extends Exception {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   public TargetNotFoundException() {
     super();
   }
 
-  public TargetNotFoundException(String message) {
+  public TargetNotFoundException(final String message) {
     super(message);
   }
 }

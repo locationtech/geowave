@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.adapter.raster.plugin.gdal;
 
-import it.geosolutions.imageio.plugins.geotiff.GeoTiffImageReaderSpi;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverageio.BaseGridFormatFactorySPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import it.geosolutions.imageio.plugins.geotiff.GeoTiffImageReaderSpi;
 
 public class GDALGeoTiffFormatFactory extends BaseGridFormatFactorySPI {
   private static final Logger LOGGER = LoggerFactory.getLogger(GDALGeoTiffFormatFactory.class);

@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.format.sentinel2.theia;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,8 +25,6 @@ import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.geotools.coverage.grid.GridCoverage2D;
@@ -49,6 +43,12 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /** Sentinel2 imagery provider for the Theia repository. See: https://theia.cnes.fr */
 public class TheiaImageryProvider extends Sentinel2ImageryProvider {
@@ -173,23 +173,23 @@ public class TheiaImageryProvider extends Sentinel2ImageryProvider {
       final JSONObject response = JSONObject.fromObject(geoJson);
       final JSONArray features = response.getJSONArray("features");
 
-      SimpleFeatureTypeBuilder typeBuilder = sceneFeatureTypeBuilder();
-      SimpleFeatureType type = typeBuilder.buildFeatureType();
+      final SimpleFeatureTypeBuilder typeBuilder = sceneFeatureTypeBuilder();
+      final SimpleFeatureType type = typeBuilder.buildFeatureType();
 
       class TheiaJSONFeatureIterator extends JSONFeatureIterator {
         public TheiaJSONFeatureIterator(
-            Sentinel2ImageryProvider provider,
-            SimpleFeatureType featureType,
-            Iterator<?> iterator) {
+            final Sentinel2ImageryProvider provider,
+            final SimpleFeatureType featureType,
+            final Iterator<?> iterator) {
           super(provider, featureType, iterator);
         }
 
         @Override
         public SimpleFeature next() {
-          SimpleFeature feature = super.next();
+          final SimpleFeature feature = super.next();
           JSONObject jsonObject = null;
 
-          if (feature != null && (jsonObject = super.currentObject()) != null) {
+          if ((feature != null) && ((jsonObject = super.currentObject()) != null)) {
             final JSONObject properties = (JSONObject) jsonObject.get("properties");
 
             final String entityId = jsonObject.getString("id");
@@ -401,7 +401,7 @@ public class TheiaImageryProvider extends Sentinel2ImageryProvider {
 
     if (fileList != null) {
       for (final String name : fileList) {
-        File temp = new File(file.getAbsolutePath() + File.separatorChar + name);
+        final File temp = new File(file.getAbsolutePath() + File.separatorChar + name);
 
         if (temp.isDirectory()
             && name.toUpperCase(Locale.ENGLISH).startsWith(productId.toUpperCase(Locale.ENGLISH))) {
@@ -412,7 +412,7 @@ public class TheiaImageryProvider extends Sentinel2ImageryProvider {
           // A more succinct one is also available here:
           // 'http://www.cesbio.ups-tlse.fr/multitemp/?page_id=8352'
           //
-          File geotiffFile =
+          final File geotiffFile =
               new File(
                   file.getAbsolutePath()
                       + File.separatorChar

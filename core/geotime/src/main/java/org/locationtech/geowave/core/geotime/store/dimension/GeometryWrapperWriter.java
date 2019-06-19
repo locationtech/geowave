@@ -16,11 +16,11 @@ public class GeometryWrapperWriter implements FieldWriter<Object, GeometryWrappe
 
   private Integer geometryPrecision = null;
 
-  public GeometryWrapperWriter(@Nullable Integer geometryPrecision) {
+  public GeometryWrapperWriter(@Nullable final Integer geometryPrecision) {
     this.geometryPrecision = geometryPrecision;
   }
 
-  public void setPrecision(@Nullable Integer geometryPrecision) {
+  public void setPrecision(@Nullable final Integer geometryPrecision) {
     this.geometryPrecision = geometryPrecision;
   }
 

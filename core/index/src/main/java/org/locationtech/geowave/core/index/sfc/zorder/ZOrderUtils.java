@@ -103,10 +103,10 @@ public class ZOrderUtils {
     for (int d = 0; d < numDimensions; d++) {
       bitSets[d] = getBits(normalizedValues[d], 0, 1, bitsPerDimension);
     }
-    int usedBits = bitsPerDimension * numDimensions;
-    int usedBytes = (int) Math.ceil(usedBits / 8.0);
-    int bitsetLength = (usedBytes * 8);
-    int bitOffset = bitsetLength - usedBits;
+    final int usedBits = bitsPerDimension * numDimensions;
+    final int usedBytes = (int) Math.ceil(usedBits / 8.0);
+    final int bitsetLength = (usedBytes * 8);
+    final int bitOffset = bitsetLength - usedBits;
     // round up to a bitset divisible by 8
     final BitSet combinedBitSet = new BitSet(bitsetLength);
     int j = bitOffset;
@@ -116,7 +116,7 @@ public class ZOrderUtils {
       }
     }
     final byte[] littleEndianBytes = combinedBitSet.toByteArray();
-    byte[] retVal = swapEndianFormat(littleEndianBytes);
+    final byte[] retVal = swapEndianFormat(littleEndianBytes);
     if (retVal.length < usedBytes) {
       return Arrays.copyOf(retVal, usedBytes);
     }

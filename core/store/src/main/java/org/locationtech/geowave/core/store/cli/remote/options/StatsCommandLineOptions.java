@@ -26,15 +26,15 @@ public class StatsCommandLineOptions {
     return authorizations;
   }
 
-  public void setAuthorizations(String authorizations) {
+  public void setAuthorizations(final String authorizations) {
     this.authorizations = authorizations;
   }
 
   public boolean getJsonFormatFlag() {
-    return this.jsonFormatFlag;
+    return jsonFormatFlag;
   }
 
-  public void setJsonFormatFlag(boolean jsonFormatFlag) {
+  public void setJsonFormatFlag(final boolean jsonFormatFlag) {
     this.jsonFormatFlag = jsonFormatFlag;
   }
 }

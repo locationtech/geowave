@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -20,6 +16,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "addstyle", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer style")
@@ -57,7 +57,7 @@ public class GeoServerAddStyleCommand extends GeoServerCommand<String> {
           || (addStyleResponse.getStatus() == Status.CREATED.getStatusCode())) {
         return "Add style for '" + gwStyle + "' on GeoServer: OK";
       }
-      String errorMessage =
+      final String errorMessage =
           "Error adding style for '"
               + gwStyle
               + "' on GeoServer"

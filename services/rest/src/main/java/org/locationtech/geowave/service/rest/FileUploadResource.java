@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.service.rest;
 
-import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +27,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
 
 /** ServerResource to handle uploading files. Uses restlet fileupload. */
 public class FileUploadResource extends ServerResource {
@@ -44,7 +44,7 @@ public class FileUploadResource extends ServerResource {
    */
   @Post
   public Representation accept(final Representation entity) throws Exception {
-    RestOperationStatusMessage status = new RestOperationStatusMessage();
+    final RestOperationStatusMessage status = new RestOperationStatusMessage();
     try {
       if (isMediaType(entity, MediaType.MULTIPART_FORM_DATA)) {
         // 1/ Create a factory for disk-based file items
@@ -60,7 +60,7 @@ public class FileUploadResource extends ServerResource {
         if (fileList.size() != 1) {
           throw new ParameterException("Operation requires exactly one file.");
         }
-        FileItem item = fileList.get(0);
+        final FileItem item = fileList.get(0);
         // 3/ Request is parsed by the handler which generates a
         // list of FileItems
         final String tempDir = System.getProperty("java.io.tmpdir");
@@ -82,8 +82,7 @@ public class FileUploadResource extends ServerResource {
       rm.status = RestOperationStatusMessage.StatusType.ERROR;
       rm.message = e.getMessage();
       setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-      final JacksonRepresentation<RestOperationStatusMessage> rep =
-          new JacksonRepresentation<RestOperationStatusMessage>(rm);
+      final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<>(rm);
       return rep;
     } catch (final BadRequestException e) {
       LOGGER.error("Entered an error handling a request.", e);
@@ -91,8 +90,7 @@ public class FileUploadResource extends ServerResource {
       rm.status = RestOperationStatusMessage.StatusType.ERROR;
       rm.message = e.getMessage();
       setStatus(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
-      final JacksonRepresentation<RestOperationStatusMessage> rep =
-          new JacksonRepresentation<RestOperationStatusMessage>(rm);
+      final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<>(rm);
       return rep;
     } catch (final Exception e) {
       LOGGER.error("Entered an error handling a request.", e);
@@ -101,14 +99,13 @@ public class FileUploadResource extends ServerResource {
       rm.message = "exception occurred";
       rm.data = e;
       setStatus(Status.SERVER_ERROR_INTERNAL);
-      final JacksonRepresentation<RestOperationStatusMessage> rep =
-          new JacksonRepresentation<RestOperationStatusMessage>(rm);
+      final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<>(rm);
       return rep;
     }
-    return new JacksonRepresentation<RestOperationStatusMessage>(status);
+    return new JacksonRepresentation<>(status);
   }
 
-  private boolean isMediaType(Representation entity, MediaType desiredType) {
+  private boolean isMediaType(final Representation entity, final MediaType desiredType) {
     if (entity == null) {
       return false;
     }
@@ -123,7 +120,7 @@ public class FileUploadResource extends ServerResource {
     } else {
       try {
         uuid = UUID.fromString(provided);
-      } catch (IllegalArgumentException e) {
+      } catch (final IllegalArgumentException e) {
         throw new ResourceException(
             Status.CLIENT_ERROR_BAD_REQUEST,
             String.format("'%s' must be a valid UUID", KEY_BATCH_UUID));

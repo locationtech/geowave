@@ -26,14 +26,14 @@ public enum TrackerType {
   private String value;
 
   TrackerType() {
-    this.value = TrackStatus.values()[0].toString();
+    value = TrackStatus.values()[0].toString();
   }
 
   TrackerType(final String value) {
     this.value = value;
   }
 
-  public static TrackerType fromString(String value) {
+  public static TrackerType fromString(final String value) {
     for (final TrackerType item : TrackerType.values()) {
       if (item.toString().equals(value)) {
         return item;

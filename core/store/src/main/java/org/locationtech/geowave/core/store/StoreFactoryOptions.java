@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.store;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -21,6 +18,9 @@ import org.locationtech.geowave.core.cli.utils.PropertiesUtils;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 /** This interface doesn't actually do anything, is just used for tracking during development. */
 public abstract class StoreFactoryOptions {
@@ -35,7 +35,7 @@ public abstract class StoreFactoryOptions {
 
   public StoreFactoryOptions() {}
 
-  public StoreFactoryOptions(String geowaveNamespace) {
+  public StoreFactoryOptions(final String geowaveNamespace) {
     this.geowaveNamespace = geowaveNamespace;
   }
 
@@ -67,22 +67,22 @@ public abstract class StoreFactoryOptions {
    *
    * @throws Exception
    */
-  public void validatePluginOptions(Properties properties) throws ParameterException {
+  public void validatePluginOptions(final Properties properties) throws ParameterException {
     LOGGER.trace("ENTER :: validatePluginOptions()");
-    PropertiesUtils propsUtils = new PropertiesUtils(properties);
-    boolean defaultEchoEnabled =
+    final PropertiesUtils propsUtils = new PropertiesUtils(properties);
+    final boolean defaultEchoEnabled =
         propsUtils.getBoolean(Constants.CONSOLE_DEFAULT_ECHO_ENABLED_KEY, false);
-    boolean passwordEchoEnabled =
+    final boolean passwordEchoEnabled =
         propsUtils.getBoolean(Constants.CONSOLE_PASSWORD_ECHO_ENABLED_KEY, defaultEchoEnabled);
     LOGGER.debug(
         "Default console echo is {}, Password console echo is {}",
         new Object[] {
             defaultEchoEnabled ? "enabled" : "disabled",
             passwordEchoEnabled ? "enabled" : "disabled"});
-    for (Field field : this.getClass().getDeclaredFields()) {
-      for (Annotation annotation : field.getAnnotations()) {
+    for (final Field field : this.getClass().getDeclaredFields()) {
+      for (final Annotation annotation : field.getAnnotations()) {
         if (annotation.annotationType() == Parameter.class) {
-          Parameter parameter = (Parameter) annotation;
+          final Parameter parameter = (Parameter) annotation;
           if (JCommanderParameterUtils.isRequired(parameter)) {
             field.setAccessible(true); // HPFortify
             // "Access Specifier Manipulation"
@@ -103,16 +103,16 @@ public abstract class StoreFactoryOptions {
                         + ": "
                         + parameter.description());
                 JCommander.getConsole().print("Enter value for [" + field.getName() + "]: ");
-                boolean echoEnabled =
+                final boolean echoEnabled =
                     JCommanderParameterUtils.isPassword(parameter) ? passwordEchoEnabled
                         : defaultEchoEnabled;
                 char[] password = JCommander.getConsole().readPassword(echoEnabled);
-                String strPassword = new String(password);
+                final String strPassword = new String(password);
                 password = null;
 
                 if (!"".equals(strPassword.trim())) {
                   value =
-                      (strPassword != null && !"".equals(strPassword.trim())) ? strPassword.trim()
+                      ((strPassword != null) && !"".equals(strPassword.trim())) ? strPassword.trim()
                           : null;
                 }
                 if (value == null) {
@@ -122,7 +122,7 @@ public abstract class StoreFactoryOptions {
                   field.set(this, value);
                 }
               }
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
               LOGGER.error(
                   "An error occurred validating plugin options for ["
                       + this.getClass().getName()

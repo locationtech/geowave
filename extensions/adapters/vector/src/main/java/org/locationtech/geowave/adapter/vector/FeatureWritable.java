@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector;
 
-import com.clearspring.analytics.util.Varint;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
@@ -32,6 +31,7 @@ import org.locationtech.jts.io.ParseException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import com.clearspring.analytics.util.Varint;
 
 /**
  * This class is used by FeatureDataAdapter to persist SimpleFeature and its SimpleFeatureType. The
@@ -43,7 +43,7 @@ import org.opengis.feature.type.AttributeDescriptor;
  */
 public class FeatureWritable implements Writable, java.io.Serializable {
   private static final Map<Pair<String, String>, SimpleFeatureType> FeatureTypeCache =
-      new ConcurrentHashMap<Pair<String, String>, SimpleFeatureType>();
+      new ConcurrentHashMap<>();
   /** */
   private static final long serialVersionUID = 286616522680871139L;
 
@@ -65,14 +65,14 @@ public class FeatureWritable implements Writable, java.io.Serializable {
     return feature;
   }
 
-  public void setFeature(SimpleFeature feature) {
+  public void setFeature(final SimpleFeature feature) {
     this.feature = feature;
   }
 
   @Override
   public void readFields(final DataInput input) throws IOException {
     try {
-      String ns = input.readUTF();
+      final String ns = input.readUTF();
       featureType =
           FeatureDataUtils.decodeType(
               "-".equals(ns) ? "" : ns,
@@ -233,19 +233,20 @@ public class FeatureWritable implements Writable, java.io.Serializable {
     }
   }
 
-  private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-    this.write(out);
+  private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
+    write(out);
   }
 
-  private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-    this.readFields(in);
+  private void readObject(final java.io.ObjectInputStream in)
+      throws IOException, ClassNotFoundException {
+    readFields(in);
   }
 
   public static final void clearCache() {
     FeatureTypeCache.clear();
   }
 
-  public static final void cache(SimpleFeatureType featureType) {
+  public static final void cache(final SimpleFeatureType featureType) {
     final Pair<String, String> id =
         Pair.of(
             featureType.getName().getNamespaceURI() == null ? ""

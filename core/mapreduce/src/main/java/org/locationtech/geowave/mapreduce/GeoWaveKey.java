@@ -41,7 +41,7 @@ public abstract class GeoWaveKey implements WritableComparable<GeoWaveKey>, java
 
   @Override
   public int compareTo(final GeoWaveKey o) {
-    byte[] internalAdapterIdBytes = ByteArrayUtils.shortToByteArray(adapterId);
+    final byte[] internalAdapterIdBytes = ByteArrayUtils.shortToByteArray(adapterId);
     return WritableComparator.compareBytes(
         internalAdapterIdBytes,
         0,
@@ -55,24 +55,29 @@ public abstract class GeoWaveKey implements WritableComparable<GeoWaveKey>, java
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((adapterId == null) ? 0 : adapterId.hashCode());
+    result = (prime * result) + ((adapterId == null) ? 0 : adapterId.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    GeoWaveKey other = (GeoWaveKey) obj;
+    }
+    final GeoWaveKey other = (GeoWaveKey) obj;
     if (adapterId == null) {
-      if (other.adapterId != null)
+      if (other.adapterId != null) {
         return false;
-    } else if (!adapterId.equals(other.adapterId))
+      }
+    } else if (!adapterId.equals(other.adapterId)) {
       return false;
+    }
     return true;
   }
 

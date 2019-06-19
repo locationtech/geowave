@@ -46,7 +46,7 @@ public class KafkaProducerCommandLineOptions extends KafkaCommandLineOptions {
     return metadataBrokerList;
   }
 
-  public void setMetadataBrokerList(String metadataBrokerList) {
+  public void setMetadataBrokerList(final String metadataBrokerList) {
     this.metadataBrokerList = metadataBrokerList;
   }
 
@@ -54,7 +54,7 @@ public class KafkaProducerCommandLineOptions extends KafkaCommandLineOptions {
     return requestRequiredAcks;
   }
 
-  public void setRequestRequiredAcks(String requestRequiredAcks) {
+  public void setRequestRequiredAcks(final String requestRequiredAcks) {
     this.requestRequiredAcks = requestRequiredAcks;
   }
 
@@ -62,7 +62,7 @@ public class KafkaProducerCommandLineOptions extends KafkaCommandLineOptions {
     return producerType;
   }
 
-  public void setProducerType(String producerType) {
+  public void setProducerType(final String producerType) {
     this.producerType = producerType;
   }
 
@@ -70,7 +70,7 @@ public class KafkaProducerCommandLineOptions extends KafkaCommandLineOptions {
     return serializerClass;
   }
 
-  public void setSerializerClass(String serializerClass) {
+  public void setSerializerClass(final String serializerClass) {
     this.serializerClass = serializerClass;
   }
 
@@ -78,7 +78,7 @@ public class KafkaProducerCommandLineOptions extends KafkaCommandLineOptions {
     return retryBackoffMs;
   }
 
-  public void setRetryBackoffMs(String retryBackoffMs) {
+  public void setRetryBackoffMs(final String retryBackoffMs) {
     this.retryBackoffMs = retryBackoffMs;
   }
 }

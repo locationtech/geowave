@@ -54,7 +54,7 @@ import org.slf4j.Logger;
  * @param <T>
  */
 public class NestedGroupCentroidAssignment<T> {
-  private final CentroidAssociationFn<T> associationdFunction = new CentroidAssociationFn<T>();
+  private final CentroidAssociationFn<T> associationdFunction = new CentroidAssociationFn<>();
   private final CentroidManager<T> centroidManager;
   private final int endZoomLevel;
   private final String parentBatchID;
@@ -89,7 +89,7 @@ public class NestedGroupCentroidAssignment<T> {
             DistanceFn.class,
             FeatureCentroidDistanceFn.class);
     this.associationdFunction.setDistanceFunction(distanceFunction);
-    centroidManager = new CentroidManagerGeoWave<T>(context, scope);
+    centroidManager = new CentroidManagerGeoWave<>(context, scope);
   }
 
   /**
@@ -121,7 +121,7 @@ public class NestedGroupCentroidAssignment<T> {
   }
 
   public static Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(CentroidManagerGeoWave.getParameters());
 
     params.addAll(

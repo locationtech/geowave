@@ -8,15 +8,15 @@
  */
 package org.locationtech.geowave.service.rest;
 
-import com.beust.jcommander.Parameters;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import java.util.List;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.service.rest.field.RestField;
 import org.locationtech.geowave.service.rest.field.RestFieldFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameters;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 public class SwaggerOperationParser<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerOperationParser.class);

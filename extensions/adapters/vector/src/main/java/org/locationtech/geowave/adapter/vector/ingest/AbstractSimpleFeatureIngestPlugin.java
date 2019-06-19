@@ -8,14 +8,12 @@
  */
 package org.locationtech.geowave.adapter.vector.ingest;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 import org.apache.commons.lang.ArrayUtils;
-import org.locationtech.geowave.adapter.vector.GeoWaveAvroFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
+import org.locationtech.geowave.adapter.vector.GeoWaveAvroFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -33,6 +31,8 @@ import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 
 public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
     LocalFileIngestPlugin<SimpleFeature>,

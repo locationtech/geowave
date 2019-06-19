@@ -80,7 +80,7 @@ public class BitmaskUtilsTest {
 
     // generate composite bitmask for 3 bitmasks and ensure correctness
     final byte[] bitmask =
-        BitmaskUtils.generateCompositeBitmask(new TreeSet<Integer>(Arrays.asList(0, 1, 2)));
+        BitmaskUtils.generateCompositeBitmask(new TreeSet<>(Arrays.asList(0, 1, 2)));
     Assert.assertTrue(BitSet.valueOf(bitmask).equals(composite_0_1_2));
   }
 

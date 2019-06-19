@@ -28,7 +28,7 @@ public abstract class GeoWaveBaseApiKeyDB implements Serializable, ServletContex
   public abstract String getCurrentUserAndKey();
 
   @Override
-  public void setServletContext(ServletContext servletContext) {
+  public void setServletContext(final ServletContext servletContext) {
     this.servletContext = servletContext;
   }
 }

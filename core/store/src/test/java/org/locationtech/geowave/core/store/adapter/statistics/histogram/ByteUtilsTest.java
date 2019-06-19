@@ -16,10 +16,10 @@ public class ByteUtilsTest {
   @Test
   public void test() {
 
-    double oneTwo = ByteUtils.toDouble("12".getBytes());
-    double oneOneTwo = ByteUtils.toDouble("112".getBytes());
-    double oneThree = ByteUtils.toDouble("13".getBytes());
-    double oneOneThree = ByteUtils.toDouble("113".getBytes());
+    final double oneTwo = ByteUtils.toDouble("12".getBytes());
+    final double oneOneTwo = ByteUtils.toDouble("112".getBytes());
+    final double oneThree = ByteUtils.toDouble("13".getBytes());
+    final double oneOneThree = ByteUtils.toDouble("113".getBytes());
     assertTrue(oneTwo > oneOneTwo);
     assertTrue(oneThree > oneTwo);
     assertTrue(oneOneTwo < oneOneThree);

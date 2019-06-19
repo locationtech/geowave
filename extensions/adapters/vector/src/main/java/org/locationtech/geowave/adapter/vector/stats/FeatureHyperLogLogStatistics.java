@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.stats;
 
-import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
-import com.clearspring.analytics.stream.cardinality.HyperLogLogPlus;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -26,6 +24,8 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
+import com.clearspring.analytics.stream.cardinality.HyperLogLogPlus;
 
 /**
  * Hyperloglog provides an estimated cardinality of the number of unique values for an attribute.
@@ -185,7 +185,7 @@ public class FeatureHyperLogLogStatistics extends
 
     @Override
     public byte[] toBinary() {
-      ByteBuffer buffer = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(precision));
+      final ByteBuffer buffer = ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(precision));
       VarintUtils.writeUnsignedInt(precision, buffer);
       return buffer.array();
     }

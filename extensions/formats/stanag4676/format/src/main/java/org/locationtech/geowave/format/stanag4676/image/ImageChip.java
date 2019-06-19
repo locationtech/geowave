@@ -12,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

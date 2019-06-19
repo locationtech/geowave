@@ -16,7 +16,7 @@ public class TrackRunParameter {
 
   public TrackRunParameter() {}
 
-  public TrackRunParameter(String name, String value) {
+  public TrackRunParameter(final String name, final String value) {
     this.name = name;
     this.value = value;
   }
@@ -25,7 +25,7 @@ public class TrackRunParameter {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(final Long id) {
     this.id = id;
   }
 
@@ -33,7 +33,7 @@ public class TrackRunParameter {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
@@ -41,7 +41,7 @@ public class TrackRunParameter {
     return value;
   }
 
-  public void setValue(String value) {
+  public void setValue(final String value) {
     this.value = value;
   }
 }

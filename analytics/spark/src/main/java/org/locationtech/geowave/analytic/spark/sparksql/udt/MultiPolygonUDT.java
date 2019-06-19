@@ -12,6 +12,11 @@ import org.locationtech.jts.geom.MultiPolygon;
 
 /** Created by jwileczek on 7/20/18. */
 public class MultiPolygonUDT extends AbstractGeometryUDT<MultiPolygon> {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
   public Class<MultiPolygon> userClass() {
     return MultiPolygon.class;

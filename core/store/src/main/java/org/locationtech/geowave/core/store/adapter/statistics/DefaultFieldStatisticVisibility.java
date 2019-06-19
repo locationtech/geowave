@@ -24,9 +24,9 @@ import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
  */
 public class DefaultFieldStatisticVisibility<T> implements EntryVisibilityHandler<T> {
   private static List<GeoWaveValue> getAllVisibilities(final GeoWaveRow... kvs) {
-    List<GeoWaveValue> retVal = new ArrayList<>();
-    for (GeoWaveRow kv : kvs) {
-      for (GeoWaveValue v : kv.getFieldValues()) {
+    final List<GeoWaveValue> retVal = new ArrayList<>();
+    for (final GeoWaveRow kv : kvs) {
+      for (final GeoWaveValue v : kv.getFieldValues()) {
         retVal.add(v);
       }
     }
@@ -35,13 +35,13 @@ public class DefaultFieldStatisticVisibility<T> implements EntryVisibilityHandle
 
   @Override
   public byte[] getVisibility(final T entry, final GeoWaveRow... kvs) {
-    List<GeoWaveValue> allVis = getAllVisibilities(kvs);
+    final List<GeoWaveValue> allVis = getAllVisibilities(kvs);
     if (allVis.size() == 1) {
       return allVis.get(0).getVisibility();
     }
     int lowestOrdinal = Integer.MAX_VALUE;
     byte[] lowestOrdinalVisibility = null;
-    for (GeoWaveValue v : allVis) {
+    for (final GeoWaveValue v : allVis) {
       final int pos = BitmaskUtils.getLowestFieldPosition(v.getFieldMask());
       if (pos == 0) {
         return v.getVisibility();

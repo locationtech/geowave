@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.core.cli.prefix;
 
-import com.beust.jcommander.Parameterized;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import org.locationtech.geowave.core.cli.Constants;
 import org.locationtech.geowave.core.cli.utils.JCommanderParameterUtils;
+import com.beust.jcommander.Parameterized;
 
 /**
  * This helper class is just a tuple that allows us to keep track of the parameters, their
@@ -29,15 +29,15 @@ public class TranslationEntry {
   private final AnnotatedElement member;
 
   protected TranslationEntry(
-      Parameterized param,
-      Object object,
-      String prefix,
-      AnnotatedElement member) {
+      final Parameterized param,
+      final Object object,
+      final String prefix,
+      final AnnotatedElement member) {
     this.param = param;
     this.object = object;
     this.prefix = prefix;
     this.member = member;
-    this.prefixedNames = addPrefixToNames();
+    prefixedNames = addPrefixToNames();
   }
 
   public Parameterized getParam() {
@@ -76,18 +76,19 @@ public class TranslationEntry {
     // check to see if a description key is specified. If so, perform a
     // lookup in the GeoWave labels properties for a description to use
     // in place of the command line instance
-    if (getParam().getParameter() != null && getParam().getParameter().descriptionKey() != null) {
+    if ((getParam().getParameter() != null)
+        && (getParam().getParameter().descriptionKey() != null)) {
       String descriptionKey = getParam().getParameter().descriptionKey();
-      if (descriptionKey != null && !"".equals(descriptionKey.trim())) {
+      if ((descriptionKey != null) && !"".equals(descriptionKey.trim())) {
         descriptionKey = descriptionKey.trim();
         description = getDescriptionFromResourceBundle(descriptionKey);
       }
     } else if (getParam().isDynamicParameter()
-        && getParam().getWrappedParameter() != null
-        && getParam().getWrappedParameter().getDynamicParameter() != null) {
+        && (getParam().getWrappedParameter() != null)
+        && (getParam().getWrappedParameter().getDynamicParameter() != null)) {
       String descriptionKey =
           getParam().getWrappedParameter().getDynamicParameter().descriptionKey();
-      if (descriptionKey != null && !"".equals(descriptionKey.trim())) {
+      if ((descriptionKey != null) && !"".equals(descriptionKey.trim())) {
         descriptionKey = descriptionKey.trim();
         description = getDescriptionFromResourceBundle(descriptionKey);
       }
@@ -95,8 +96,9 @@ public class TranslationEntry {
 
     // if no description is set from GeoWave labels properties, use the one
     // set from the field parameter annotation definition
-    if (description == null || "".equals(description.trim())) {
-      if (getParam().getParameter() != null && getParam().getParameter().description() != null) {
+    if ((description == null) || "".equals(description.trim())) {
+      if ((getParam().getParameter() != null)
+          && (getParam().getParameter().description() != null)) {
         description = getParam().getParameter().description();
       } else if (getParam().isDynamicParameter()) {
         description = getParam().getWrappedParameter().getDynamicParameter().description();
@@ -115,18 +117,18 @@ public class TranslationEntry {
   private String getDescriptionFromResourceBundle(final String descriptionKey) {
     String description = "";
     final String bundleName = Constants.GEOWAVE_DESCRIPTIONS_BUNDLE_NAME;
-    Locale locale = Locale.getDefault();
+    final Locale locale = Locale.getDefault();
     final String defaultResourcePath = bundleName + ".properties";
     final String localeResourcePath = bundleName + "_" + locale.toString() + ".properties";
-    if (this.getClass().getResource("/" + defaultResourcePath) != null
-        || this.getClass().getResource("/" + localeResourcePath) != null) {
+    if ((this.getClass().getResource("/" + defaultResourcePath) != null)
+        || (this.getClass().getResource("/" + localeResourcePath) != null)) {
 
       // associate the default locale to the base properties, rather than
       // the standard resource bundle requiring a separate base
       // properties (GeoWaveLabels.properties) and a
       // default-locale-specific properties
       // (GeoWaveLabels_en_US.properties)
-      ResourceBundle resourceBundle =
+      final ResourceBundle resourceBundle =
           ResourceBundle.getBundle(
               bundleName,
               locale,
@@ -193,7 +195,7 @@ public class TranslationEntry {
    * @return
    */
   public boolean hasValue() {
-    Object value = getParam().get(getObject());
+    final Object value = getParam().get(getObject());
     return value != null;
   }
 
@@ -220,15 +222,15 @@ public class TranslationEntry {
     } else {
       names = param.getWrappedParameter().names();
     }
-    String[] newNames = new String[names.length];
+    final String[] newNames = new String[names.length];
     for (int i = 0; i < names.length; i++) {
       String item = names[i];
-      char subPrefix = item.charAt(0);
+      final char subPrefix = item.charAt(0);
       int j = 0;
-      while (j < item.length() && item.charAt(j) == subPrefix) {
+      while ((j < item.length()) && (item.charAt(j) == subPrefix)) {
         j++;
       }
-      String prePrefix = item.substring(0, j);
+      final String prePrefix = item.substring(0, j);
       item = item.substring(j);
       newNames[i] =
           String.format(
@@ -247,10 +249,10 @@ public class TranslationEntry {
    * @param names
    * @return
    */
-  private String getLongestParam(String[] names) {
+  private String getLongestParam(final String[] names) {
     String longest = null;
-    for (String name : names) {
-      if (longest == null || name.length() > longest.length()) {
+    for (final String name : names) {
+      if ((longest == null) || (name.length() > longest.length())) {
         longest = name;
       }
     }
@@ -264,7 +266,7 @@ public class TranslationEntry {
    * @param str
    * @return
    */
-  private String trimNonAlphabetic(String str) {
+  private String trimNonAlphabetic(final String str) {
     int i = 0;
     for (i = 0; i < str.length(); i++) {
       if (Character.isAlphabetic(str.charAt(i))) {

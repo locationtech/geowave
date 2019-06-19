@@ -42,10 +42,10 @@ public class ZookeeperTestEnvironment implements TestEnvironment {
       if (!TestUtils.isSet(zookeeper)) {
 
         try {
-          ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
-          ClassLoader hbaseMiniClusterCl = HBaseMiniClusterClassLoader.getInstance(prevCl);
+          final ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
+          final ClassLoader hbaseMiniClusterCl = HBaseMiniClusterClassLoader.getInstance(prevCl);
           Thread.currentThread().setContextClassLoader(hbaseMiniClusterCl);
-          Configuration conf =
+          final Configuration conf =
               (Configuration) Class.forName(
                   "org.apache.hadoop.hbase.HBaseConfiguration",
                   true,
@@ -66,7 +66,7 @@ public class ZookeeperTestEnvironment implements TestEnvironment {
           LOGGER.error("Exception starting zookeeperLocalCluster: " + e, e);
           Assert.fail();
         }
-        Object zkCluster =
+        final Object zkCluster =
             zookeeperLocalCluster.getClass().getMethod("getZkCluster").invoke(
                 zookeeperLocalCluster);
         zookeeper =

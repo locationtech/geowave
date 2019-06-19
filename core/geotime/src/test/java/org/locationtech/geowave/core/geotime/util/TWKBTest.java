@@ -44,7 +44,7 @@ public class TWKBTest {
 
   @Test
   public void testReadWritePoint() throws ParseException {
-    Point point = factory.createPoint(new Coordinate(12.13281248321, -1518.375));
+    final Point point = factory.createPoint(new Coordinate(12.13281248321, -1518.375));
     Point expected = factory.createPoint(new Coordinate(12.1328125, -1518.375)); // maximum
     // precision is 7
     // decimal digits
@@ -76,7 +76,7 @@ public class TWKBTest {
 
   @Test
   public void testReadWriteLine() throws ParseException {
-    LineString line =
+    final LineString line =
         factory.createLineString(
             new Coordinate[] {
                 new Coordinate(12.13281248321, -1518.375),
@@ -131,7 +131,7 @@ public class TWKBTest {
 
   @Test
   public void testReadWritePolygon() throws ParseException {
-    Polygon poly =
+    final Polygon poly =
         factory.createPolygon(
             factory.createLinearRing(
                 new Coordinate[] {
@@ -271,7 +271,7 @@ public class TWKBTest {
 
   @Test
   public void testReadWriteMultiPoint() throws ParseException {
-    MultiPoint points =
+    final MultiPoint points =
         factory.createMultiPoint(
             new Point[] {
                 factory.createPoint(new Coordinate(12.13281248321, -1518.375)),
@@ -326,7 +326,7 @@ public class TWKBTest {
 
   @Test
   public void testReadWriteMultiLineString() throws ParseException {
-    MultiLineString line =
+    final MultiLineString line =
         factory.createMultiLineString(
             new LineString[] {
                 factory.createLineString(
@@ -432,7 +432,7 @@ public class TWKBTest {
 
   @Test
   public void testReadWriteMultiPolygon() throws ParseException {
-    MultiPolygon multiPoly =
+    final MultiPolygon multiPoly =
         factory.createMultiPolygon(
             new Polygon[] {
                 factory.createPolygon(
@@ -627,7 +627,7 @@ public class TWKBTest {
 
   @Test
   public void testReadWriteGeometryCollection() throws ParseException {
-    GeometryCollection geoms =
+    final GeometryCollection geoms =
         factory.createGeometryCollection(
             new Geometry[] {
                 factory.createPolygon(

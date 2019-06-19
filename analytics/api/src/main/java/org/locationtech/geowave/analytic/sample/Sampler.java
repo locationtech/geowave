@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.analytic.sample;
 
-import com.google.common.collect.Maps;
 import java.util.Collection;
 import java.util.SortedMap;
 import org.locationtech.geowave.analytic.clustering.CentroidPairing;
+import com.google.common.collect.Maps;
 
 public class Sampler<T> {
   private int sampleSize = 1;

@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.datastore.cassandra.config;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
+import com.beust.jcommander.Parameter;
 
 public class CassandraOptions extends BaseDataStoreOptions {
   @Parameter(names = "--batchWriteSize", description = "The number of inserts in a batch write.")

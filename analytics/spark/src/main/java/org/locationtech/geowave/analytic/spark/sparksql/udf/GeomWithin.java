@@ -11,8 +11,13 @@ package org.locationtech.geowave.analytic.spark.sparksql.udf;
 import org.locationtech.jts.geom.Geometry;
 
 public class GeomWithin extends GeomFunction {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
-  public boolean apply(Geometry geom1, Geometry geom2) {
+  public boolean apply(final Geometry geom1, final Geometry geom2) {
     return geom1.within(geom2);
   }
 }

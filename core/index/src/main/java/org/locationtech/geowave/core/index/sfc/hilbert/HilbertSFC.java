@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.index.sfc.hilbert;
 
-import com.google.uzaygezen.core.CompactHilbertCurve;
-import com.google.uzaygezen.core.MultiDimensionalSpec;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -24,6 +22,8 @@ import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import com.google.uzaygezen.core.CompactHilbertCurve;
+import com.google.uzaygezen.core.MultiDimensionalSpec;
 
 /** * Implementation of a Compact Hilbert space filling curve */
 public class HilbertSFC implements SpaceFillingCurve {
@@ -113,7 +113,7 @@ public class HilbertSFC implements SpaceFillingCurve {
 
   protected void init(final SFCDimensionDefinition[] dimensionDefs) {
 
-    final List<Integer> bitsPerDimension = new ArrayList<Integer>();
+    final List<Integer> bitsPerDimension = new ArrayList<>();
     totalPrecision = 0;
     for (final SFCDimensionDefinition dimension : dimensionDefs) {
       bitsPerDimension.add(dimension.getBitsOfPrecision());
@@ -230,7 +230,7 @@ public class HilbertSFC implements SpaceFillingCurve {
 
   @Override
   public byte[] toBinary() {
-    final List<byte[]> dimensionDefBinaries = new ArrayList<byte[]>(dimensionDefinitions.length);
+    final List<byte[]> dimensionDefBinaries = new ArrayList<>(dimensionDefinitions.length);
     int bufferLength = 0;
     for (final SFCDimensionDefinition sfcDimension : dimensionDefinitions) {
       final byte[] sfcDimensionBinary = PersistenceUtils.toBinary(sfcDimension);

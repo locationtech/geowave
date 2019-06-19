@@ -21,7 +21,7 @@ public class FeatureConfigParserTest {
 
   @Test
   public void testFeatureConfigParser() throws IOException {
-    FeatureConfigParser fcp = new FeatureConfigParser();
+    final FeatureConfigParser fcp = new FeatureConfigParser();
 
     try (FileInputStream fis = new FileInputStream(new File(TEST_DATA_CONFIG))) {
       fcp.parseConfig(fis);

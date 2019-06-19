@@ -18,7 +18,7 @@ public class Stanag4676ImageryChipApplication extends Application {
 
   @Override
   public Set<Class<?>> getClasses() {
-    final Set<Class<?>> classes = new HashSet<Class<?>>();
+    final Set<Class<?>> classes = new HashSet<>();
     classes.add(
         org.locationtech.geowave.types.stanag4676.service.rest.Stanag4676ImageryChipService.class);
     return classes;

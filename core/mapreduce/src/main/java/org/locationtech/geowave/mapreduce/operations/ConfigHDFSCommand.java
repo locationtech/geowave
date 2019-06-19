@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.mapreduce.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -19,6 +16,9 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "hdfs", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a local configuration for HDFS")
@@ -33,12 +33,12 @@ public class ConfigHDFSCommand extends ServiceEnabledCommand<Void> {
   private static final String HDFS_DEFAULTFS_URL = HDFS_DEFAULTFS_PREFIX + ".url";
 
   @Parameter(description = "<HDFS DefaultFS URL>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String url = null;
 
   @Override
-  public boolean prepare(OperationParams params) {
+  public boolean prepare(final OperationParams params) {
     boolean retval = true;
     retval |= super.prepare(params);
 
@@ -46,11 +46,11 @@ public class ConfigHDFSCommand extends ServiceEnabledCommand<Void> {
   }
 
   @Override
-  public void execute(OperationParams params) throws Exception {
+  public void execute(final OperationParams params) throws Exception {
     computeResults(params);
   }
 
-  public static String getHdfsUrl(Properties configProperties) {
+  public static String getHdfsUrl(final Properties configProperties) {
     String hdfsFSUrl = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
 
     if (hdfsFSUrl == null) {
@@ -64,19 +64,19 @@ public class ConfigHDFSCommand extends ServiceEnabledCommand<Void> {
     return hdfsFSUrl;
   }
 
-  public void setHdfsUrlParameter(String hdfsFsUrl) {
-    parameters = new ArrayList<String>();
+  public void setHdfsUrlParameter(final String hdfsFsUrl) {
+    parameters = new ArrayList<>();
     parameters.add(hdfsFsUrl);
   }
 
   @Override
-  public Void computeResults(OperationParams params) throws Exception {
+  public Void computeResults(final OperationParams params) throws Exception {
     if (parameters.size() != 1) {
       throw new ParameterException(
           "Requires argument: <HDFS DefaultFS URL> (HDFS hostname:port or namenode HA nameservice, eg: sandbox.hortonworks.com:8020 )");
     }
     url = parameters.get(0);
-    Properties existingProps = getGeoWaveConfigProperties(params);
+    final Properties existingProps = getGeoWaveConfigProperties(params);
 
     // all switches are optional
     if (url != null) {

@@ -22,7 +22,7 @@ public class HBaseMergingFilter extends FilterBase {
   public HBaseMergingFilter() {}
 
   public static HBaseMergingFilter parseFrom(final byte[] pbBytes) throws DeserializationException {
-    HBaseMergingFilter mergingFilter = new HBaseMergingFilter();
+    final HBaseMergingFilter mergingFilter = new HBaseMergingFilter();
 
     return mergingFilter;
   }
@@ -35,19 +35,19 @@ public class HBaseMergingFilter extends FilterBase {
 
   /** Handle the entire row at one time */
   @Override
-  public void filterRowCells(List<Cell> rowCells) throws IOException {
+  public void filterRowCells(final List<Cell> rowCells) throws IOException {
     if (!rowCells.isEmpty()) {
       if (rowCells.size() > 1) {
         try {
-          Cell firstCell = rowCells.get(0);
-          byte[] singleRow = CellUtil.cloneRow(firstCell);
-          byte[] singleFam = CellUtil.cloneFamily(firstCell);
-          byte[] singleQual = CellUtil.cloneQualifier(firstCell);
+          final Cell firstCell = rowCells.get(0);
+          final byte[] singleRow = CellUtil.cloneRow(firstCell);
+          final byte[] singleFam = CellUtil.cloneFamily(firstCell);
+          final byte[] singleQual = CellUtil.cloneQualifier(firstCell);
 
           Mergeable mergedValue = null;
-          for (Cell cell : rowCells) {
-            byte[] byteValue = CellUtil.cloneValue(cell);
-            Mergeable value = (Mergeable) URLClassloaderUtils.fromBinary(byteValue);
+          for (final Cell cell : rowCells) {
+            final byte[] byteValue = CellUtil.cloneValue(cell);
+            final Mergeable value = (Mergeable) URLClassloaderUtils.fromBinary(byteValue);
 
             if (mergedValue != null) {
               mergedValue.merge(value);
@@ -56,7 +56,7 @@ public class HBaseMergingFilter extends FilterBase {
             }
           }
 
-          Cell singleCell =
+          final Cell singleCell =
               CellUtil.createCell(
                   singleRow,
                   singleFam,
@@ -67,7 +67,7 @@ public class HBaseMergingFilter extends FilterBase {
 
           rowCells.clear();
           rowCells.add(singleCell);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           throw new IOException("Exception in filter", e);
         }
       }
@@ -76,7 +76,7 @@ public class HBaseMergingFilter extends FilterBase {
 
   /** Don't do anything special here, since we're only interested in whole rows */
   @Override
-  public ReturnCode filterKeyValue(Cell cell) throws IOException {
+  public ReturnCode filterKeyValue(final Cell cell) throws IOException {
     return ReturnCode.INCLUDE;
   }
 }

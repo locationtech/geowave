@@ -32,7 +32,7 @@ public class GeoWaveRasterReaderState {
   }
 
   /** @param axisSwap the boolean value to set */
-  public void setAxisSwap(boolean axisSwap) {
+  public void setAxisSwap(final boolean axisSwap) {
     this.axisSwap = axisSwap;
   }
 
@@ -42,7 +42,7 @@ public class GeoWaveRasterReaderState {
   }
 
   /** @param requestedEnvelope the requestedEnvelope to set */
-  public void setRequestedEnvelope(GeneralEnvelope requestedEnvelope) {
+  public void setRequestedEnvelope(final GeneralEnvelope requestedEnvelope) {
     this.requestedEnvelope = requestedEnvelope;
   }
 
@@ -52,7 +52,7 @@ public class GeoWaveRasterReaderState {
   }
 
   /** @param requestEnvelopeXformed the requestEnvelopeXformed to set */
-  public void setRequestEnvelopeXformed(GeneralEnvelope requestEnvelopeXformed) {
+  public void setRequestEnvelopeXformed(final GeneralEnvelope requestEnvelopeXformed) {
     this.requestEnvelopeXformed = requestEnvelopeXformed;
   }
 }

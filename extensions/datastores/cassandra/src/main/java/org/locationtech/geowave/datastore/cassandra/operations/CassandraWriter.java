@@ -32,14 +32,14 @@ public class CassandraWriter implements RowWriter {
   }
 
   @Override
-  public void write(GeoWaveRow[] rows) {
+  public void write(final GeoWaveRow[] rows) {
     for (final GeoWaveRow row : rows) {
       write(row);
     }
   }
 
   @Override
-  public void write(GeoWaveRow row) {
+  public void write(final GeoWaveRow row) {
     synchronized (MUTEX) {
       if (batchedWrite == null) {
         batchedWrite = operations.getBatchedWrite(tableName);

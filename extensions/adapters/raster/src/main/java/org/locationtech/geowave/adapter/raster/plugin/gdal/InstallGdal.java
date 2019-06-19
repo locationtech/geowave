@@ -47,8 +47,8 @@ public class InstallGdal {
     }
 
     if (gdalDir.exists() && gdalDir.isDirectory()) {
-      File[] files = gdalDir.listFiles();
-      if (files != null && files.length > 1) {
+      final File[] files = gdalDir.listFiles();
+      if ((files != null) && (files.length > 1)) {
         return;
       } else {
         LOGGER.error(
@@ -138,7 +138,7 @@ public class InstallGdal {
   }
 
   private static boolean isWindows() {
-    String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
+    final String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
     return (OS.indexOf("win") > -1);
   }
 }

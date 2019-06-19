@@ -342,6 +342,6 @@ public class MemoryDataStoreTest {
     }
 
     @Override
-    public void fromBinary(byte[] bytes) {}
+    public void fromBinary(final byte[] bytes) {}
   }
 }

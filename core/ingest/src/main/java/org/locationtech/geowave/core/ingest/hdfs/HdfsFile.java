@@ -39,17 +39,21 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implem
   public HdfsFile() {}
 
   /** All-args constructor. */
-  public HdfsFile(java.nio.ByteBuffer originalFile, java.lang.CharSequence originalFilePath) {
+  public HdfsFile(
+      final java.nio.ByteBuffer originalFile,
+      final java.lang.CharSequence originalFilePath) {
     this.originalFile = originalFile;
     this.originalFilePath = originalFilePath;
   }
 
+  @Override
   public org.apache.avro.Schema getSchema() {
     return SCHEMA$;
   }
 
   // Used by DatumWriter. Applications should not call.
-  public java.lang.Object get(int field$) {
+  @Override
+  public java.lang.Object get(final int field$) {
     switch (field$) {
       case 0:
         return originalFile;
@@ -61,8 +65,9 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implem
   }
 
   // Used by DatumReader. Applications should not call.
+  @Override
   @SuppressWarnings(value = "unchecked")
-  public void put(int field$, java.lang.Object value$) {
+  public void put(final int field$, final java.lang.Object value$) {
     switch (field$) {
       case 0:
         originalFile = (java.nio.ByteBuffer) value$;
@@ -83,8 +88,8 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implem
   /**
    * Sets the value of the 'originalFile' field. Original file data * @param value the value to set.
    */
-  public void setOriginalFile(java.nio.ByteBuffer value) {
-    this.originalFile = value;
+  public void setOriginalFile(final java.nio.ByteBuffer value) {
+    originalFile = value;
   }
 
   /** Gets the value of the 'originalFilePath' field. Original file path */
@@ -96,8 +101,8 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implem
    * Sets the value of the 'originalFilePath' field. Original file path * @param value the value to
    * set.
    */
-  public void setOriginalFilePath(java.lang.CharSequence value) {
-    this.originalFilePath = value;
+  public void setOriginalFilePath(final java.lang.CharSequence value) {
+    originalFilePath = value;
   }
 
   /** Creates a new HdfsFile RecordBuilder */
@@ -107,13 +112,13 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implem
 
   /** Creates a new HdfsFile RecordBuilder by copying an existing Builder */
   public static org.locationtech.geowave.core.ingest.hdfs.HdfsFile.Builder newBuilder(
-      org.locationtech.geowave.core.ingest.hdfs.HdfsFile.Builder other) {
+      final org.locationtech.geowave.core.ingest.hdfs.HdfsFile.Builder other) {
     return new org.locationtech.geowave.core.ingest.hdfs.HdfsFile.Builder(other);
   }
 
   /** Creates a new HdfsFile RecordBuilder by copying an existing HdfsFile instance */
   public static org.locationtech.geowave.core.ingest.hdfs.HdfsFile.Builder newBuilder(
-      org.locationtech.geowave.core.ingest.hdfs.HdfsFile other) {
+      final org.locationtech.geowave.core.ingest.hdfs.HdfsFile other) {
     return new org.locationtech.geowave.core.ingest.hdfs.HdfsFile.Builder(other);
   }
 
@@ -131,27 +136,27 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implem
     }
 
     /** Creates a Builder by copying an existing Builder */
-    private Builder(org.locationtech.geowave.core.ingest.hdfs.HdfsFile.Builder other) {
+    private Builder(final org.locationtech.geowave.core.ingest.hdfs.HdfsFile.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.originalFile)) {
-        this.originalFile = data().deepCopy(fields()[0].schema(), other.originalFile);
+        originalFile = data().deepCopy(fields()[0].schema(), other.originalFile);
         fieldSetFlags()[0] = true;
       }
       if (isValidValue(fields()[1], other.originalFilePath)) {
-        this.originalFilePath = data().deepCopy(fields()[1].schema(), other.originalFilePath);
+        originalFilePath = data().deepCopy(fields()[1].schema(), other.originalFilePath);
         fieldSetFlags()[1] = true;
       }
     }
 
     /** Creates a Builder by copying an existing HdfsFile instance */
-    private Builder(org.locationtech.geowave.core.ingest.hdfs.HdfsFile other) {
+    private Builder(final org.locationtech.geowave.core.ingest.hdfs.HdfsFile other) {
       super(org.locationtech.geowave.core.ingest.hdfs.HdfsFile.SCHEMA$);
       if (isValidValue(fields()[0], other.originalFile)) {
-        this.originalFile = data().deepCopy(fields()[0].schema(), other.originalFile);
+        originalFile = data().deepCopy(fields()[0].schema(), other.originalFile);
         fieldSetFlags()[0] = true;
       }
       if (isValidValue(fields()[1], other.originalFilePath)) {
-        this.originalFilePath = data().deepCopy(fields()[1].schema(), other.originalFilePath);
+        originalFilePath = data().deepCopy(fields()[1].schema(), other.originalFilePath);
         fieldSetFlags()[1] = true;
       }
     }
@@ -163,9 +168,9 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implem
 
     /** Sets the value of the 'originalFile' field */
     public org.locationtech.geowave.core.ingest.hdfs.HdfsFile.Builder setOriginalFile(
-        java.nio.ByteBuffer value) {
+        final java.nio.ByteBuffer value) {
       validate(fields()[0], value);
-      this.originalFile = value;
+      originalFile = value;
       fieldSetFlags()[0] = true;
       return this;
     }
@@ -189,9 +194,9 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implem
 
     /** Sets the value of the 'originalFilePath' field */
     public org.locationtech.geowave.core.ingest.hdfs.HdfsFile.Builder setOriginalFilePath(
-        java.lang.CharSequence value) {
+        final java.lang.CharSequence value) {
       validate(fields()[1], value);
-      this.originalFilePath = value;
+      originalFilePath = value;
       fieldSetFlags()[1] = true;
       return this;
     }
@@ -211,15 +216,14 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implem
     @Override
     public HdfsFile build() {
       try {
-        HdfsFile record = new HdfsFile();
+        final HdfsFile record = new HdfsFile();
         record.originalFile =
-            fieldSetFlags()[0] ? this.originalFile
-                : (java.nio.ByteBuffer) defaultValue(fields()[0]);
+            fieldSetFlags()[0] ? originalFile : (java.nio.ByteBuffer) defaultValue(fields()[0]);
         record.originalFilePath =
-            fieldSetFlags()[1] ? this.originalFilePath
+            fieldSetFlags()[1] ? originalFilePath
                 : (java.lang.CharSequence) defaultValue(fields()[1]);
         return record;
-      } catch (Exception e) {
+      } catch (final Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
       }
     }

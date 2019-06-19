@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.util;
 
+import java.util.Iterator;
+import java.util.Map;
+import org.apache.commons.collections4.iterators.LazyIteratorChain;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
-import java.util.Iterator;
-import java.util.Map;
-import org.apache.commons.collections4.iterators.LazyIteratorChain;
 
 public class LazyPaginatedQuery extends LazyIteratorChain<Map<String, AttributeValue>> {
   private QueryResult currentResult;

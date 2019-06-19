@@ -82,10 +82,8 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
   protected void init(
       final List<? extends IndexFieldHandler<T, ? extends CommonIndexValue, Object>> indexFieldHandlers,
       final Object defaultIndexHandlerData) {
-    fieldNameMatchingFieldHandlers =
-        new HashMap<String, IndexFieldHandler<T, ? extends CommonIndexValue, Object>>();
-    typeMatchingFieldHandlers =
-        new HashMap<Class<?>, IndexFieldHandler<T, ? extends CommonIndexValue, Object>>();
+    fieldNameMatchingFieldHandlers = new HashMap<>();
+    typeMatchingFieldHandlers = new HashMap<>();
 
     // --------------------------------------------------------------------
     // split out the dimension-matching index handlers from the
@@ -148,14 +146,13 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
    */
   protected List<IndexFieldHandler<T, ? extends CommonIndexValue, Object>> getDefaultTypeMatchingHandlers(
       final Object defaultIndexHandlerData) {
-    return new ArrayList<IndexFieldHandler<T, ? extends CommonIndexValue, Object>>();
+    return new ArrayList<>();
   }
 
   @Override
   public AdapterPersistenceEncoding encode(final T entry, final CommonIndexModel indexModel) {
-    final PersistentDataset<CommonIndexValue> indexData =
-        new MultiFieldPersistentDataset<CommonIndexValue>();
-    final Set<String> nativeFieldsInIndex = new HashSet<String>();
+    final PersistentDataset<CommonIndexValue> indexData = new MultiFieldPersistentDataset<>();
+    final Set<String> nativeFieldsInIndex = new HashSet<>();
 
     for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 
@@ -176,7 +173,7 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
       nativeFieldsInIndex.addAll(Arrays.asList(fieldHandler.getNativeFieldNames()));
     }
 
-    final PersistentDataset<Object> extendedData = new MultiFieldPersistentDataset<Object>();
+    final PersistentDataset<Object> extendedData = new MultiFieldPersistentDataset<>();
 
     // now for the other data
     if (nativeFieldHandlers != null) {
@@ -214,7 +211,7 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
           }
           continue;
         }
-        String fieldName = dimension.getFieldName();
+        final String fieldName = dimension.getFieldName();
         final CommonIndexValue value = data.getCommonData().getValue(fieldName);
         if (value == null) {
           continue;
@@ -264,7 +261,7 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
     // is that the data adapter can re-create it by some other means
 
     // use a linked hashset to maintain order and ensure no duplication
-    final Set<Persistable> persistables = new LinkedHashSet<Persistable>();
+    final Set<Persistable> persistables = new LinkedHashSet<>();
     for (final NativeFieldHandler<T, Object> nativeHandler : nativeFieldHandlers) {
       if (nativeHandler instanceof Persistable) {
         persistables.add((Persistable) nativeHandler);
@@ -305,9 +302,8 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
       return;
     }
     final List<IndexFieldHandler<T, CommonIndexValue, Object>> indexFieldHandlers =
-        new ArrayList<IndexFieldHandler<T, CommonIndexValue, Object>>();
-    final List<NativeFieldHandler<T, Object>> nativeFieldHandlers =
-        new ArrayList<NativeFieldHandler<T, Object>>();
+        new ArrayList<>();
+    final List<NativeFieldHandler<T, Object>> nativeFieldHandlers = new ArrayList<>();
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int defaultTypeDataBinaryLength = VarintUtils.readUnsignedInt(buf);
     Object defaultTypeData = null;

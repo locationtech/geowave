@@ -12,7 +12,7 @@ import java.util.Properties;
 import org.locationtech.geowave.core.cli.spi.DefaultConfigProviderSpi;
 
 public class HBaseDatastoreDefaultConfigProvider implements DefaultConfigProviderSpi {
-  private Properties configProperties = new Properties();
+  private final Properties configProperties = new Properties();
 
   /** Create the properties for the config-properties file */
   private void setProperties() {

@@ -49,7 +49,7 @@ public class SimpleParallelDecoder<T> extends ParallelDecoder<T> {
               }
             }
           }
-        } catch (Exception e) {
+        } catch (final Exception e) {
           setDecodeException(e);
         }
         isTerminating = true;

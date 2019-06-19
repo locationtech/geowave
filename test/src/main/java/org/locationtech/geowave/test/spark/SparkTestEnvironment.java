@@ -32,7 +32,7 @@ public class SparkTestEnvironment implements TestEnvironment {
   @Override
   public void setup() throws Exception {
     if (defaultSession == null) {
-      SparkConf addonOptions = new SparkConf();
+      final SparkConf addonOptions = new SparkConf();
       addonOptions.setMaster("local[*]");
       addonOptions.setAppName("CoreGeoWaveSparkITs");
       defaultSession = GeoWaveSparkConf.createDefaultSession(addonOptions);

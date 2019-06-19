@@ -118,7 +118,7 @@ public class StatsConfigurationCollection implements java.io.Serializable, Persi
       for (final Entry<String, StatsConfigurationCollection> e : attConfig.entrySet()) {
         final byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
         final byte[] confBytes = PersistenceUtils.toBinary(e.getValue());
-        int entrySize =
+        final int entrySize =
             VarintUtils.unsignedIntByteLength(keyBytes.length)
                 + keyBytes.length
                 + VarintUtils.unsignedIntByteLength(confBytes.length)

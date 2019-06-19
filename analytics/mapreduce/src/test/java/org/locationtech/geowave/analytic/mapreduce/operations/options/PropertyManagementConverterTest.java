@@ -17,10 +17,10 @@ public class PropertyManagementConverterTest {
 
   @Test
   public void testConverter() throws Exception {
-    PropertyManagement propMgmt = new PropertyManagement();
-    PropertyManagementConverter conv = new PropertyManagementConverter(propMgmt);
+    final PropertyManagement propMgmt = new PropertyManagement();
+    final PropertyManagementConverter conv = new PropertyManagementConverter(propMgmt);
 
-    DBScanOptions opts = new DBScanOptions();
+    final DBScanOptions opts = new DBScanOptions();
     opts.setGlobalBatchId("some-value");
 
     conv.readProperties(opts);

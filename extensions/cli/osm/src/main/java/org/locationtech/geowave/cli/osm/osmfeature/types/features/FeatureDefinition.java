@@ -25,7 +25,7 @@ public class FeatureDefinition {
   private static final String WILDCARD_ATTRIBUTE = "__any__";
 
   public String getMappingName() {
-    for (AttributeDefinition ad : attributes) {
+    for (final AttributeDefinition ad : attributes) {
       if (ad.type.equals("mapping_value")) {
         return ad.name;
       }
@@ -34,7 +34,7 @@ public class FeatureDefinition {
   }
 
   public AttributeDefinition getMappingAttribute() {
-    for (AttributeDefinition ad : attributes) {
+    for (final AttributeDefinition ad : attributes) {
       if (ad.type.equals("mapping_value")) {
         return ad;
       }
@@ -43,7 +43,7 @@ public class FeatureDefinition {
   }
 
   public String getQualifiedSubMappings() {
-    for (AttributeDefinition ad : attributes) {
+    for (final AttributeDefinition ad : attributes) {
       if (ad.type.equals("mapping_key")) {
         return ad.name;
       }
@@ -52,7 +52,7 @@ public class FeatureDefinition {
   }
 
   public AttributeDefinition getSubMappingAttribute() {
-    for (AttributeDefinition ad : attributes) {
+    for (final AttributeDefinition ad : attributes) {
       if (ad.type.equals("mapping_key")) {
         return ad;
       }
@@ -60,8 +60,8 @@ public class FeatureDefinition {
     return null;
   }
 
-  public boolean isMappedValue(String val) {
-    for (Map.Entry<String, List<String>> map : mappings.entrySet()) {
+  public boolean isMappedValue(final String val) {
+    for (final Map.Entry<String, List<String>> map : mappings.entrySet()) {
       if (map.getValue().contains(WILDCARD_ATTRIBUTE) || map.getValue().contains(val)) {
         return true;
       }
@@ -69,10 +69,10 @@ public class FeatureDefinition {
     return false;
   }
 
-  public String getSubMappingClass(String key, String val) {
-    for (Map.Entry<String, List<Map<String, List<String>>>> m : subMappings.entrySet()) {
-      for (Map<String, List<String>> m2 : m.getValue()) {
-        for (Map.Entry<String, List<String>> m3 : m2.entrySet()) {
+  public String getSubMappingClass(final String key, final String val) {
+    for (final Map.Entry<String, List<Map<String, List<String>>>> m : subMappings.entrySet()) {
+      for (final Map<String, List<String>> m2 : m.getValue()) {
+        for (final Map.Entry<String, List<String>> m3 : m2.entrySet()) {
           if (m3.getKey().equals(key)) {
             if (m3.getValue().contains(WILDCARD_ATTRIBUTE) || m3.getValue().contains(val)) {
               return m3.getKey();

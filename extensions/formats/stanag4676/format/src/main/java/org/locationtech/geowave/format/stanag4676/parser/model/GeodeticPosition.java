@@ -14,13 +14,16 @@ public class GeodeticPosition extends Position {
     elevation = 0.0;
   }
 
-  public GeodeticPosition(double latitudeDegrees, double longitudeDegrees) {
+  public GeodeticPosition(final double latitudeDegrees, final double longitudeDegrees) {
     latitude = latitudeDegrees;
     longitude = longitudeDegrees;
     elevation = 0.0;
   }
 
-  public GeodeticPosition(double latitudeDegrees, double longitudeDegrees, double elevationMeters) {
+  public GeodeticPosition(
+      final double latitudeDegrees,
+      final double longitudeDegrees,
+      final double elevationMeters) {
     latitude = latitudeDegrees;
     longitude = longitudeDegrees;
     elevation = elevationMeters;

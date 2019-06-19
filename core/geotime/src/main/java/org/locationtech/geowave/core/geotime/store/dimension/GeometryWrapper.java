@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.core.geotime.store.dimension;
 
-import com.google.common.math.DoubleMath;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
+import com.google.common.math.DoubleMath;
 
 /**
  * This class wraps JTS geometry with visibility so that it can be used within GeoWave as a

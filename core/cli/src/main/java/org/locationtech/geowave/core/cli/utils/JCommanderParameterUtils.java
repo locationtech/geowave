@@ -9,31 +9,31 @@
 /** */
 package org.locationtech.geowave.core.cli.utils;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.Parameter;
 import java.lang.reflect.Constructor;
 import org.locationtech.geowave.core.cli.converters.GeoWaveBaseConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
 
 /** */
 public class JCommanderParameterUtils {
   private static Logger LOGGER = LoggerFactory.getLogger(JCommanderParameterUtils.class);
 
-  public static boolean isPassword(Parameter parameter) {
+  public static boolean isPassword(final Parameter parameter) {
     boolean isPassword = false;
     if (parameter != null) {
       Class<?> superClass = null;
-      Class<? extends IStringConverter<?>> converterClass = parameter.converter();
+      final Class<? extends IStringConverter<?>> converterClass = parameter.converter();
       if (converterClass != null) {
         superClass = converterClass.getSuperclass();
-        while (superClass != null && superClass != GeoWaveBaseConverter.class) {
+        while ((superClass != null) && (superClass != GeoWaveBaseConverter.class)) {
           superClass = superClass.getSuperclass();
         }
       }
 
-      if (superClass != null && superClass.equals(GeoWaveBaseConverter.class)) {
-        GeoWaveBaseConverter<?> converter = getParameterBaseConverter(parameter);
+      if ((superClass != null) && superClass.equals(GeoWaveBaseConverter.class)) {
+        final GeoWaveBaseConverter<?> converter = getParameterBaseConverter(parameter);
         if (converter != null) {
           isPassword = isPassword || converter.isPassword();
         }
@@ -43,12 +43,12 @@ public class JCommanderParameterUtils {
     return isPassword;
   }
 
-  public static boolean isRequired(Parameter parameter) {
+  public static boolean isRequired(final Parameter parameter) {
     boolean isRequired = false;
     if (parameter != null) {
-      if (parameter.converter() != null
+      if ((parameter.converter() != null)
           && parameter.converter().getSuperclass().equals(GeoWaveBaseConverter.class)) {
-        GeoWaveBaseConverter<?> converter = getParameterBaseConverter(parameter);
+        final GeoWaveBaseConverter<?> converter = getParameterBaseConverter(parameter);
         if (converter != null) {
           isRequired = isRequired || converter.isRequired();
         }
@@ -58,14 +58,14 @@ public class JCommanderParameterUtils {
     return isRequired;
   }
 
-  private static GeoWaveBaseConverter<?> getParameterBaseConverter(Parameter parameter) {
+  private static GeoWaveBaseConverter<?> getParameterBaseConverter(final Parameter parameter) {
     GeoWaveBaseConverter<?> converter = null;
     try {
-      Constructor<?> ctor = parameter.converter().getConstructor(String.class);
+      final Constructor<?> ctor = parameter.converter().getConstructor(String.class);
       if (ctor != null) {
         converter = (GeoWaveBaseConverter<?>) ctor.newInstance(new Object[] {""});
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error(
           "An error occurred getting converter from parameter: " + e.getLocalizedMessage(),
           e);

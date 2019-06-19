@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.service.grpc.cli;
 
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
@@ -16,6 +15,7 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "stop", parentOperation = GrpcSection.class)
 @Parameters(commandDescription = "terminates the GeoWave grpc server")

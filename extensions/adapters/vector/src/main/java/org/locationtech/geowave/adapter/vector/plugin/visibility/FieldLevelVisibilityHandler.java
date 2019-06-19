@@ -25,7 +25,7 @@ public abstract class FieldLevelVisibilityHandler<T, CommonIndexValue> implement
 
   private final String visibilityAttribute;
   private final String fieldName;
-  private FieldVisibilityHandler<T, Object> defaultFieldVisiblityHandler;
+  private final FieldVisibilityHandler<T, Object> defaultFieldVisiblityHandler;
 
   /**
    * Used when acting with an Index adaptor as a visibility handler. This
@@ -57,10 +57,13 @@ public abstract class FieldLevelVisibilityHandler<T, CommonIndexValue> implement
   public abstract byte[] translateVisibility(final Object visibilityObject, final String fieldName);
 
   @Override
-  public byte[] getVisibility(T rowValue, String fieldName, CommonIndexValue fieldValue) {
+  public byte[] getVisibility(
+      final T rowValue,
+      final String fieldName,
+      final CommonIndexValue fieldValue) {
 
-    SimpleFeature feature = (SimpleFeature) rowValue;
-    Object visibilityAttributeValue = feature.getAttribute(this.visibilityAttribute);
+    final SimpleFeature feature = (SimpleFeature) rowValue;
+    final Object visibilityAttributeValue = feature.getAttribute(this.visibilityAttribute);
     final byte[] result =
         visibilityAttributeValue != null ? translateVisibility(visibilityAttributeValue, fieldName)
             : null;

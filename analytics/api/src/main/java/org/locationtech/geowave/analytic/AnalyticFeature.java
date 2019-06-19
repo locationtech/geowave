@@ -94,7 +94,7 @@ public class AnalyticFeature {
       for (final String extraDim : extraNumericDimensions) {
         builder.add(extraDim, Double.class);
       }
-      FeatureDataAdapter adapter = new FeatureDataAdapter(builder.buildFeatureType());
+      final FeatureDataAdapter adapter = new FeatureDataAdapter(builder.buildFeatureType());
       // TODO any consumers of this method will not be able to utilize
       // custom CRS
       adapter.init(new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));

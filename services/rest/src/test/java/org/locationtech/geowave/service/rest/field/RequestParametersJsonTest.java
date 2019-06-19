@@ -8,7 +8,8 @@
  */
 package org.locationtech.geowave.service.rest.field;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,23 +28,23 @@ public class RequestParametersJsonTest {
 
   private JSONObject testJSON;
 
-  private int testNumber = 42;
-  private String testKey = "foo";
-  private String testString = "bar";
-  private List<String> testList = new ArrayList<String>(Arrays.asList("bar", "baz"));
-  private String[] testArray = {"foo", "bar"};
+  private final int testNumber = 42;
+  private final String testKey = "foo";
+  private final String testString = "bar";
+  private final List<String> testList = new ArrayList<>(Arrays.asList("bar", "baz"));
+  private final String[] testArray = {"foo", "bar"};
 
-  private Representation mockedJsonRequest(String jsonString) throws IOException {
-    Representation request = mockedRequest(MediaType.APPLICATION_JSON);
+  private Representation mockedJsonRequest(final String jsonString) throws IOException {
+    final Representation request = mockedRequest(MediaType.APPLICATION_JSON);
 
     Mockito.when(request.getText()).thenReturn(jsonString);
 
     return request;
   }
 
-  private Representation mockedRequest(MediaType mediaType) {
+  private Representation mockedRequest(final MediaType mediaType) {
 
-    Representation request = Mockito.mock(Representation.class);
+    final Representation request = Mockito.mock(Representation.class);
 
     Mockito.when(request.getMediaType()).thenReturn(mediaType);
 
@@ -58,7 +59,7 @@ public class RequestParametersJsonTest {
 
   @Test
   public void instantiationSuccessfulWithJson() throws Exception {
-    Representation request = mockedJsonRequest("{}");
+    final Representation request = mockedJsonRequest("{}");
 
     classUnderTest = new RequestParametersJson(request);
   }
@@ -67,7 +68,7 @@ public class RequestParametersJsonTest {
   public void getValueReturnsJsonString() throws Exception {
     testJSON = new JSONObject();
     testJSON.put(testKey, testString);
-    Representation request = mockedJsonRequest(testJSON.toString());
+    final Representation request = mockedJsonRequest(testJSON.toString());
     classUnderTest = new RequestParametersJson(request);
 
     assertEquals(testString, classUnderTest.getValue(testKey));
@@ -78,7 +79,7 @@ public class RequestParametersJsonTest {
     testJSON = new JSONObject();
 
     testJSON.put(testKey, testString);
-    Representation request = mockedJsonRequest(testJSON.toString());
+    final Representation request = mockedJsonRequest(testJSON.toString());
     classUnderTest = new RequestParametersJson(request);
 
     assertEquals(testString, classUnderTest.getString(testKey));
@@ -89,7 +90,7 @@ public class RequestParametersJsonTest {
     testJSON = new JSONObject();
 
     testJSON.put(testKey, testList);
-    Representation request = mockedJsonRequest(testJSON.toString());
+    final Representation request = mockedJsonRequest(testJSON.toString());
     classUnderTest = new RequestParametersJson(request);
 
     assertEquals(testList, classUnderTest.getList(testKey));
@@ -100,7 +101,7 @@ public class RequestParametersJsonTest {
     testJSON = new JSONObject();
 
     testJSON.put(testKey, testArray);
-    Representation request = mockedJsonRequest(testJSON.toString());
+    final Representation request = mockedJsonRequest(testJSON.toString());
     classUnderTest = new RequestParametersJson(request);
 
     assertArrayEquals(testArray, classUnderTest.getArray(testKey));
@@ -111,7 +112,7 @@ public class RequestParametersJsonTest {
     testJSON = new JSONObject();
 
     testJSON.put(testKey, testNumber);
-    Representation request = mockedJsonRequest(testJSON.toString());
+    final Representation request = mockedJsonRequest(testJSON.toString());
     classUnderTest = new RequestParametersJson(request);
 
     assertEquals(testNumber, classUnderTest.getValue(testKey));

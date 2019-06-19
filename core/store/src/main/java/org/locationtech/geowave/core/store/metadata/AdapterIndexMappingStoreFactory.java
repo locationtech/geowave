@@ -16,9 +16,9 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 public class AdapterIndexMappingStoreFactory extends BaseStoreFactory<AdapterIndexMappingStore> {
 
   public AdapterIndexMappingStoreFactory(
-      String typeName,
-      String description,
-      StoreFactoryHelper helper) {
+      final String typeName,
+      final String description,
+      final StoreFactoryHelper helper) {
     super(typeName, description, helper);
   }
 

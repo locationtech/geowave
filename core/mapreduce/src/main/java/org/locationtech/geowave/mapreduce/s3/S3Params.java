@@ -13,7 +13,7 @@ public class S3Params {
   private final String bucket;
   private final String key;
 
-  S3Params(String bucket, String key) {
+  S3Params(final String bucket, final String key) {
     this.bucket = bucket;
     this.key = key;
   }

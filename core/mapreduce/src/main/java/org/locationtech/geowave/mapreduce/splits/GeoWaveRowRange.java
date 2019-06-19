@@ -13,7 +13,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 import org.apache.hadoop.io.Writable;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 
 public class GeoWaveRowRange implements Writable {

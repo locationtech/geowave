@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "analyze", parentOperation = Sentinel2Section.class)
 @Parameters(

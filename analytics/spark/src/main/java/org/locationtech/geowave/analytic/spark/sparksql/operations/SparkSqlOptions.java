@@ -50,19 +50,19 @@ public class SparkSqlOptions {
     return master;
   }
 
-  public void setAppName(String name) {
+  public void setAppName(final String name) {
     appName = name;
   }
 
-  public void setHost(String h) {
+  public void setHost(final String h) {
     host = h;
   }
 
-  public void setMaster(String m) {
+  public void setMaster(final String m) {
     master = m;
   }
 
-  public void setOutputStoreName(String outputStoreName) {
+  public void setOutputStoreName(final String outputStoreName) {
     this.outputStoreName = outputStoreName;
   }
 
@@ -70,7 +70,7 @@ public class SparkSqlOptions {
     return showResults;
   }
 
-  public void setShowResults(int showResults) {
+  public void setShowResults(final int showResults) {
     this.showResults = showResults;
   }
 
@@ -78,7 +78,7 @@ public class SparkSqlOptions {
     return outputTypeName;
   }
 
-  public void setOutputTypeName(String outputTypeName) {
+  public void setOutputTypeName(final String outputTypeName) {
     this.outputTypeName = outputTypeName;
   }
 
@@ -86,7 +86,7 @@ public class SparkSqlOptions {
     return csvOutputFile;
   }
 
-  public void setCsvOutputFile(String csvOutputFile) {
+  public void setCsvOutputFile(final String csvOutputFile) {
     this.csvOutputFile = csvOutputFile;
   }
 }

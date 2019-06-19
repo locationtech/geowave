@@ -17,10 +17,8 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.Combiner;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
-import org.apache.commons.lang3.SerializationException;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;
@@ -39,7 +37,7 @@ public class MergingCombiner extends Combiner {
       final IteratorEnvironment env) throws IOException {
     // the original may be unmodifiable so we need to create a modifiable
     // clone
-    Map<String, String> modifiableOptions = new HashMap<>(options);
+    final Map<String, String> modifiableOptions = new HashMap<>(options);
     modifiableOptions.put(COLUMNS_OPTION, getColumnOptionValue(options));
     super.init(source, modifiableOptions, env);
   }
@@ -75,11 +73,11 @@ public class MergingCombiner extends Combiner {
 
   protected Mergeable getMergeable(final Key key, final byte[] binary) {
     try {
-      Persistable persistable = URLClassloaderUtils.fromBinary(binary);
+      final Persistable persistable = URLClassloaderUtils.fromBinary(binary);
       if (persistable instanceof Mergeable) {
         return (Mergeable) persistable;
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Unable to deserialize row.", e);
     }
     return null;

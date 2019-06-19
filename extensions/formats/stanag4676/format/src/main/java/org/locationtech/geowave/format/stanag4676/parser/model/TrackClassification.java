@@ -29,7 +29,7 @@ public class TrackClassification extends TrackItem {
     return classification;
   }
 
-  public void setClassification(ObjectClassification classification) {
+  public void setClassification(final ObjectClassification classification) {
     this.classification = classification;
   }
 
@@ -37,7 +37,7 @@ public class TrackClassification extends TrackItem {
     return credibility;
   }
 
-  public void setCredibility(ClassificationCredibility credibility) {
+  public void setCredibility(final ClassificationCredibility credibility) {
     this.credibility = credibility;
   }
 
@@ -45,7 +45,7 @@ public class TrackClassification extends TrackItem {
     return numObjects;
   }
 
-  public void setNumObjects(int numObjects) {
+  public void setNumObjects(final int numObjects) {
     this.numObjects = numObjects;
   }
 }

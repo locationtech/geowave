@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.kde;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.mapreduce.operations.HdfsHostPortConverter;
+import com.beust.jcommander.Parameter;
 
 public class KDECommandLineOptions {
   @Parameter(
@@ -65,7 +65,7 @@ public class KDECommandLineOptions {
     return outputIndex;
   }
 
-  public void setOutputIndex(String outputIndex) {
+  public void setOutputIndex(final String outputIndex) {
     this.outputIndex = outputIndex;
   }
 
@@ -115,47 +115,47 @@ public class KDECommandLineOptions {
     return cqlFilter;
   }
 
-  public void setFeatureType(String featureType) {
+  public void setFeatureType(final String featureType) {
     this.featureType = featureType;
   }
 
-  public void setIndexId(String indexId) {
-    this.indexName = indexId;
+  public void setIndexId(final String indexId) {
+    indexName = indexId;
   }
 
-  public void setMinLevel(Integer minLevel) {
+  public void setMinLevel(final Integer minLevel) {
     this.minLevel = minLevel;
   }
 
-  public void setMaxLevel(Integer maxLevel) {
+  public void setMaxLevel(final Integer maxLevel) {
     this.maxLevel = maxLevel;
   }
 
-  public void setMinSplits(Integer minSplits) {
+  public void setMinSplits(final Integer minSplits) {
     this.minSplits = minSplits;
   }
 
-  public void setMaxSplits(Integer maxSplits) {
+  public void setMaxSplits(final Integer maxSplits) {
     this.maxSplits = maxSplits;
   }
 
-  public void setCoverageName(String coverageName) {
+  public void setCoverageName(final String coverageName) {
     this.coverageName = coverageName;
   }
 
-  public void setHdfsHostPort(String hdfsHostPort) {
+  public void setHdfsHostPort(final String hdfsHostPort) {
     this.hdfsHostPort = hdfsHostPort;
   }
 
-  public void setJobTrackerOrResourceManHostPort(String jobTrackerOrResourceManHostPort) {
+  public void setJobTrackerOrResourceManHostPort(final String jobTrackerOrResourceManHostPort) {
     this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
   }
 
-  public void setTileSize(Integer tileSize) {
+  public void setTileSize(final Integer tileSize) {
     this.tileSize = tileSize;
   }
 
-  public void setCqlFilter(String cqlFilter) {
+  public void setCqlFilter(final String cqlFilter) {
     this.cqlFilter = cqlFilter;
   }
 }

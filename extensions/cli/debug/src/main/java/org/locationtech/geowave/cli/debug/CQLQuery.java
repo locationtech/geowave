@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.cli.debug;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
@@ -21,6 +19,8 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "serverCql", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "cql server-side")
@@ -31,7 +31,7 @@ public class CQLQuery extends AbstractGeoWaveQuery {
   private String cqlStr;
 
   @Parameter(names = {"--useAggregation", "-agg"}, description = "Compute count on the server side")
-  private final Boolean useAggregation = Boolean.FALSE;
+  private Boolean useAggregation = Boolean.FALSE;
 
   @Override
   protected long runQuery(
@@ -40,7 +40,7 @@ public class CQLQuery extends AbstractGeoWaveQuery {
       final String indexName,
       final DataStore dataStore,
       final boolean debug,
-      DataStorePluginOptions pluginOptions) {
+      final DataStorePluginOptions pluginOptions) {
     long count = 0;
     if (useAggregation) {
       final VectorAggregationQueryBuilder<Persistable, Long> bldr =

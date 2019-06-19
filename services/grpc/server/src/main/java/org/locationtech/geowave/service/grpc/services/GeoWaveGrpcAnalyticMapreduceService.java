@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.service.grpc.services;
 
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import io.grpc.BindableService;
-import io.grpc.stub.StreamObserver;
 import java.io.File;
 import java.util.Map;
 import org.locationtech.geowave.analytic.mapreduce.operations.DBScanCommand;
@@ -28,6 +25,9 @@ import org.locationtech.geowave.service.grpc.protobuf.KdeCommandParametersProtos
 import org.locationtech.geowave.service.grpc.protobuf.NearestNeighborCommandParametersProtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import io.grpc.BindableService;
+import io.grpc.stub.StreamObserver;
 
 public class GeoWaveGrpcAnalyticMapreduceService extends
     AnalyticMapreduceGrpc.AnalyticMapreduceImplBase implements
@@ -37,15 +37,15 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 
   @Override
   public BindableService getBindableService() {
-    return (BindableService) this;
+    return this;
   }
 
   @Override
   public void kdeCommand(
-      KdeCommandParametersProtos request,
-      StreamObserver<VoidResponseProtos> responseObserver) {
-    KdeCommand cmd = new KdeCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+      final KdeCommandParametersProtos request,
+      final StreamObserver<VoidResponseProtos> responseObserver) {
+    final KdeCommand cmd = new KdeCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -61,7 +61,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
     LOGGER.info("Executing KdeCommand...");
     try {
 
-      VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -72,10 +72,10 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 
   @Override
   public void dBScanCommand(
-      DBScanCommandParametersProtos request,
-      StreamObserver<VoidResponseProtos> responseObserver) {
-    DBScanCommand cmd = new DBScanCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+      final DBScanCommandParametersProtos request,
+      final StreamObserver<VoidResponseProtos> responseObserver) {
+    final DBScanCommand cmd = new DBScanCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -86,7 +86,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
     LOGGER.info("Executing DBScanCommand...");
     try {
       cmd.computeResults(params);
-      VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -97,10 +97,10 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 
   @Override
   public void nearestNeighborCommand(
-      NearestNeighborCommandParametersProtos request,
-      StreamObserver<VoidResponseProtos> responseObserver) {
-    NearestNeighborCommand cmd = new NearestNeighborCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+      final NearestNeighborCommandParametersProtos request,
+      final StreamObserver<VoidResponseProtos> responseObserver) {
+    final NearestNeighborCommand cmd = new NearestNeighborCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -111,7 +111,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
     LOGGER.info("Executing NearestNeighborCommand...");
     try {
       cmd.computeResults(params);
-      VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.raster.adapter.merge;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.image.SampleModel;
 import java.nio.ByteBuffer;
 import java.util.Map;
@@ -22,6 +21,7 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
     ServerMergeStrategy,

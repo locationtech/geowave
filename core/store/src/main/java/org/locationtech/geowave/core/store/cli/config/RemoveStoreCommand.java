@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.core.store.cli.config;
 
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "rmstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Remove store from Geowave configuration")

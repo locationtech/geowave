@@ -29,7 +29,7 @@ public class SimpleFeatureSerializationProvider {
   public static class WholeFeatureReader implements FieldReader<byte[][]> {
     SimpleFeatureType type;
 
-    public WholeFeatureReader(SimpleFeatureType type) {
+    public WholeFeatureReader(final SimpleFeatureType type) {
       super();
       this.type = type;
     }
@@ -40,15 +40,15 @@ public class SimpleFeatureSerializationProvider {
         return null;
       }
       final ByteBuffer input = ByteBuffer.wrap(fieldData);
-      int attrCnt = type.getAttributeCount();
-      byte[][] retVal = new byte[attrCnt][];
+      final int attrCnt = type.getAttributeCount();
+      final byte[][] retVal = new byte[attrCnt][];
       for (int i = 0; i < attrCnt; i++) {
-        int byteLength = VarintUtils.readSignedInt(input);
+        final int byteLength = VarintUtils.readSignedInt(input);
         if (byteLength < 0) {
           retVal[i] = null;
           continue;
         }
-        byte[] fieldValue = ByteArrayUtils.safeRead(input, byteLength);
+        final byte[] fieldValue = ByteArrayUtils.safeRead(input, byteLength);
         retVal[i] = fieldValue;
       }
       return retVal;
@@ -65,11 +65,11 @@ public class SimpleFeatureSerializationProvider {
       if (fieldValue == null) {
         return new byte[] {};
       }
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      final ByteArrayOutputStream baos = new ByteArrayOutputStream();
       final DataOutputStream output = new DataOutputStream(baos);
 
       try {
-        for (Object attr : fieldValue) {
+        for (final Object attr : fieldValue) {
           ByteBuffer lengthBytes;
           if (attr == null) {
             lengthBytes = ByteBuffer.allocate(VarintUtils.signedIntByteLength(-1));
@@ -78,15 +78,15 @@ public class SimpleFeatureSerializationProvider {
 
             continue;
           }
-          FieldWriter writer = FieldUtils.getDefaultWriterForClass(attr.getClass());
-          byte[] binary = writer.writeField(attr);
+          final FieldWriter writer = FieldUtils.getDefaultWriterForClass(attr.getClass());
+          final byte[] binary = writer.writeField(attr);
           lengthBytes = ByteBuffer.allocate(VarintUtils.signedIntByteLength(binary.length));
           VarintUtils.writeSignedInt(binary.length, lengthBytes);
           output.write(lengthBytes.array());
           output.write(binary);
         }
         output.close();
-      } catch (IOException e) {
+      } catch (final IOException e) {
         LOGGER.error("Unable to write to output", e);
       }
       return baos.toByteArray();

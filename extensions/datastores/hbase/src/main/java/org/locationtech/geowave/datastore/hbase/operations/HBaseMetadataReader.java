@@ -127,7 +127,7 @@ public class HBaseMetadataReader implements MetadataReader {
       final boolean clientsideStatsMerge,
       final byte[] columnFamily,
       final byte[] columnQualifier) {
-    List<Cell> columnCells = result.getColumnCells(columnFamily, columnQualifier);
+    final List<Cell> columnCells = result.getColumnCells(columnFamily, columnQualifier);
     if ((columnCells.size() == 1)) {
       return CellUtil.cloneValue(columnCells.get(0));
     }

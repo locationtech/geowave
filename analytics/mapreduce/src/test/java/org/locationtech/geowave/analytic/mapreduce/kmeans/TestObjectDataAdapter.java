@@ -63,7 +63,8 @@ public class TestObjectDataAdapter extends AbstractDataAdapter<TestObject> imple
         public void fromBinary(final byte[] bytes) {}
 
         @Override
-        public CommonIndexValue toIndexValue(PersistentDataset<Object> adapterPersistenceEncoding) {
+        public CommonIndexValue toIndexValue(
+            final PersistentDataset<Object> adapterPersistenceEncoding) {
           return new GeometryWrapper(
               (Geometry) adapterPersistenceEncoding.getValue(GEOM),
               new byte[0]);

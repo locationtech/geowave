@@ -12,7 +12,7 @@ import org.locationtech.geowave.core.cli.converters.GeoWaveBaseConverter;
 
 /** This class will ensure that the hdfs parameter is in the correct format. */
 public class HdfsHostPortConverter extends GeoWaveBaseConverter<String> {
-  public HdfsHostPortConverter(String optionName) {
+  public HdfsHostPortConverter(final String optionName) {
     super(optionName);
   }
 

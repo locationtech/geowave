@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.mapreduce.dedupe;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +29,8 @@ import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.mapreduce.AbstractGeoWaveJobRunner;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 /**
  * This class can run a basic job to query GeoWave, deduplicating results, and writing the final set
@@ -39,7 +39,7 @@ import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
  */
 public class GeoWaveDedupeJobRunner extends AbstractGeoWaveJobRunner {
 
-  public GeoWaveDedupeJobRunner(DataStorePluginOptions dataStoreOptions) {
+  public GeoWaveDedupeJobRunner(final DataStorePluginOptions dataStoreOptions) {
     super(dataStoreOptions);
   }
 
@@ -92,15 +92,15 @@ public class GeoWaveDedupeJobRunner extends AbstractGeoWaveJobRunner {
 
   public static void main(final String[] args) throws Exception {
 
-    ConfigOptions opts = new ConfigOptions();
-    MainParameterHolder holder = new MainParameterHolder();
+    final ConfigOptions opts = new ConfigOptions();
+    final MainParameterHolder holder = new MainParameterHolder();
 
-    OperationParser parser = new OperationParser();
+    final OperationParser parser = new OperationParser();
     parser.addAdditionalObject(opts);
     parser.addAdditionalObject(holder);
 
     // Second round to get everything else.
-    CommandLineOperationParams params = parser.parse(args);
+    final CommandLineOperationParams params = parser.parse(args);
 
     // Set the datastore plugin
     if (holder.getMainParameter().size() == 0) {
@@ -110,7 +110,7 @@ public class GeoWaveDedupeJobRunner extends AbstractGeoWaveJobRunner {
     // Load the params for config file.
     opts.prepare(params);
 
-    StoreLoader loader = new StoreLoader(holder.getMainParameter().get(0));
+    final StoreLoader loader = new StoreLoader(holder.getMainParameter().get(0));
     loader.loadFromConfig((File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT));
 
     final int res =
@@ -123,7 +123,7 @@ public class GeoWaveDedupeJobRunner extends AbstractGeoWaveJobRunner {
 
   public static class MainParameterHolder {
     @Parameter
-    private List<String> mainParameter = new ArrayList<String>();
+    private final List<String> mainParameter = new ArrayList<>();
 
     public List<String> getMainParameter() {
       return mainParameter;

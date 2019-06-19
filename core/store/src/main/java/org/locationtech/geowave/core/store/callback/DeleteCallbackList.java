@@ -22,7 +22,7 @@ public class DeleteCallbackList<T, R extends GeoWaveRow> implements
     this.callbacks = callbacks;
   }
 
-  public void addCallback(DeleteCallback<T, R> c) {
+  public void addCallback(final DeleteCallback<T, R> c) {
     this.callbacks.add(c);
   }
 

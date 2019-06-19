@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.operations;
 
-import com.beust.jcommander.internal.Lists;
-import com.google.common.base.Throwables;
-import com.google.inject.Provider;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
@@ -37,6 +34,9 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.operations.ParallelDecoder;
 import org.locationtech.geowave.datastore.hbase.HBaseRow;
+import com.beust.jcommander.internal.Lists;
+import com.google.common.base.Throwables;
+import com.google.inject.Provider;
 
 /**
  * HBase implementation of {@link ParallelDecoder} that creates a scanner for every
@@ -54,11 +54,11 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
   private final int partitionKeyLength;
 
   public HBaseParallelDecoder(
-      GeoWaveRowIteratorTransformer<T> rowTransformer,
-      Provider<Scan> scanProvider,
-      HBaseOperations operations,
-      List<ByteArrayRange> ranges,
-      int partitionKeyLength) {
+      final GeoWaveRowIteratorTransformer<T> rowTransformer,
+      final Provider<Scan> scanProvider,
+      final HBaseOperations operations,
+      final List<ByteArrayRange> ranges,
+      final int partitionKeyLength) {
     super(rowTransformer);
     this.scanProvider = scanProvider;
     this.operations = operations;
@@ -66,27 +66,27 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
     this.partitionKeyLength = partitionKeyLength;
   }
 
-  public void setFilter(Filter filter) {
+  public void setFilter(final Filter filter) {
     this.filter = filter;
   }
 
-  public void setTableName(TableName tableName) {
+  public void setTableName(final TableName tableName) {
     this.tableName = tableName;
   }
 
   @Override
   protected List<RowProvider> getRowProviders() throws Exception {
-    List<RowProvider> scanners = Lists.newLinkedList();
-    RegionLocator locator = operations.getRegionLocator(tableName);
-    List<HRegionLocation> regionLocations = locator.getAllRegionLocations();
+    final List<RowProvider> scanners = Lists.newLinkedList();
+    final RegionLocator locator = operations.getRegionLocator(tableName);
+    final List<HRegionLocation> regionLocations = locator.getAllRegionLocations();
     Collections.shuffle(regionLocations);
     locator.close();
 
-    if (ranges == null || ranges.isEmpty()) {
+    if ((ranges == null) || ranges.isEmpty()) {
       // make a task for each region location
-      for (HRegionLocation regionLocation : regionLocations) {
-        HRegionInfo regionInfo = regionLocation.getRegionInfo();
-        Scan regionScan = scanProvider.get();
+      for (final HRegionLocation regionLocation : regionLocations) {
+        final HRegionInfo regionInfo = regionLocation.getRegionInfo();
+        final Scan regionScan = scanProvider.get();
         regionScan.setFilter(filter);
         regionScan.setStartRow(
             regionInfo.getStartKey().length == 0 ? new byte[] {0} : regionInfo.getStartKey());
@@ -113,32 +113,32 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
       // Divide all ranges into their respective regions
       // for regions with multiple ranges, create a MultiRowRangeFilter
       // create a runnable task to scan each region with ranges
-      List<Pair<byte[], byte[]>> unprocessedRanges = Lists.newLinkedList();
-      for (ByteArrayRange byteArrayRange : ranges) {
+      final List<Pair<byte[], byte[]>> unprocessedRanges = Lists.newLinkedList();
+      for (final ByteArrayRange byteArrayRange : ranges) {
         if (byteArrayRange.getStart() != null) {
-          byte[] startRow = byteArrayRange.getStart();
+          final byte[] startRow = byteArrayRange.getStart();
           byte[] stopRow;
           if (!byteArrayRange.isSingleValue()) {
             stopRow = ByteArrayUtils.getNextPrefix(byteArrayRange.getEnd());
           } else {
             stopRow = ByteArrayUtils.getNextPrefix(byteArrayRange.getStart());
           }
-          unprocessedRanges.add(new Pair<byte[], byte[]>(startRow, stopRow));
+          unprocessedRanges.add(new Pair<>(startRow, stopRow));
         }
       }
 
-      for (HRegionLocation regionLocation : regionLocations) {
-        HRegionInfo regionInfo = regionLocation.getRegionInfo();
-        List<RowRange> regionRanges = Lists.newLinkedList();
-        Iterator<Pair<byte[], byte[]>> rangeIterator = unprocessedRanges.iterator();
+      for (final HRegionLocation regionLocation : regionLocations) {
+        final HRegionInfo regionInfo = regionLocation.getRegionInfo();
+        final List<RowRange> regionRanges = Lists.newLinkedList();
+        final Iterator<Pair<byte[], byte[]>> rangeIterator = unprocessedRanges.iterator();
         while (rangeIterator.hasNext()) {
-          Pair<byte[], byte[]> byteArrayRange = rangeIterator.next();
+          final Pair<byte[], byte[]> byteArrayRange = rangeIterator.next();
           byte[] startRow = byteArrayRange.getFirst();
           byte[] stopRow = byteArrayRange.getSecond();
-          if ((regionInfo.getEndKey().length == 0
-              || Bytes.compareTo(startRow, regionInfo.getEndKey()) <= 0)
-              && (regionInfo.getStartKey().length == 0
-                  || Bytes.compareTo(stopRow, regionInfo.getStartKey()) > 0)) {
+          if (((regionInfo.getEndKey().length == 0)
+              || (Bytes.compareTo(startRow, regionInfo.getEndKey()) <= 0))
+              && ((regionInfo.getStartKey().length == 0)
+                  || (Bytes.compareTo(stopRow, regionInfo.getStartKey()) > 0))) {
             boolean partial = false;
             if (!regionInfo.containsRow(startRow)) {
               startRow = regionInfo.getStartKey();
@@ -156,14 +156,14 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
             regionRanges.add(rowRange);
           }
         }
-        Scan regionScan = scanProvider.get();
+        final Scan regionScan = scanProvider.get();
         if (regionRanges.size() == 1) {
           regionScan.setFilter(filter);
           regionScan.setStartRow(regionRanges.get(0).getStartRow());
           regionScan.setStopRow(regionRanges.get(0).getStopRow());
         } else if (regionRanges.size() > 1) {
 
-          Filter rowRangeFilter =
+          final Filter rowRangeFilter =
               new MultiRowRangeFilter(MultiRowRangeFilter.sortAndMerge(regionRanges));
           if (filter != null) {
             regionScan.setFilter(new FilterList(rowRangeFilter, filter));
@@ -198,10 +198,10 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
     private Iterator<Result> resultsIterator;
 
     public HBaseScanner(
-        Connection connection,
-        TableName tableName,
-        Scan sourceScanner,
-        int partitionKeyLength) {
+        final Connection connection,
+        final TableName tableName,
+        final Scan sourceScanner,
+        final int partitionKeyLength) {
       this.connection = connection;
       this.tableName = tableName;
       this.sourceScanner = sourceScanner;
@@ -230,7 +230,7 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
         table = connection.getTable(tableName);
         baseResults = table.getScanner(sourceScanner);
         resultsIterator = baseResults.iterator();
-      } catch (IOException e) {
+      } catch (final IOException e) {
         Throwables.propagate(e);
       }
     }

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -8,6 +8,10 @@
  */
 package org.locationtech.geowave.datastore.redis.util;
 
+import static org.junit.Assert.assertEquals;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,10 +20,6 @@ import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.IntegerCodec;
 import org.redisson.client.protocol.ScoredEntry;
 import redis.embedded.RedisServer;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import static org.junit.Assert.assertEquals;
 
 public class RedisScoredSetWrapperTest {
 
@@ -94,7 +94,7 @@ public class RedisScoredSetWrapperTest {
     }
   }
 
-  private <V> long rangeLength(Iterator<ScoredEntry<V>> entryRange) {
+  private <V> long rangeLength(final Iterator<ScoredEntry<V>> entryRange) {
     long numEntries = 0;
     while (entryRange.hasNext()) {
       entryRange.next();
@@ -110,14 +110,14 @@ public class RedisScoredSetWrapperTest {
    * @param setName
    * @param numEntries
    */
-  private void assertPutGet(String setName, int numEntries) {
+  private void assertPutGet(final String setName, final int numEntries) {
     // Insertion performance degrades at larger batch sizes
     final int MAX_BATCH_SIZE = 100000;
-    RScoredSortedSet<Integer> set = client.getScoredSortedSet(setName, IntegerCodec.INSTANCE);
-    Map<Integer, Double> allEntries = new HashMap<>();
+    final RScoredSortedSet<Integer> set = client.getScoredSortedSet(setName, IntegerCodec.INSTANCE);
+    final Map<Integer, Double> allEntries = new HashMap<>();
     for (int batchOffset = 0; batchOffset < numEntries; batchOffset += MAX_BATCH_SIZE) {
-      Map<Integer, Double> batchEntries = new HashMap<>();
-      for (int i = 0; i < MAX_BATCH_SIZE && batchOffset + i < numEntries; ++i) {
+      final Map<Integer, Double> batchEntries = new HashMap<>();
+      for (int i = 0; (i < MAX_BATCH_SIZE) && ((batchOffset + i) < numEntries); ++i) {
         batchEntries.put(batchOffset + i, (double) batchOffset + i);
       }
       set.addAll(batchEntries);
@@ -127,13 +127,13 @@ public class RedisScoredSetWrapperTest {
     // Check that all inserted entries are returned upon retrieval
     try (RedisScoredSetWrapper<Integer> wrapper =
         new RedisScoredSetWrapper<>(client, setName, IntegerCodec.INSTANCE)) {
-      Iterator<ScoredEntry<Integer>> results = wrapper.entryRange(0, true, numEntries, false);
+      final Iterator<ScoredEntry<Integer>> results = wrapper.entryRange(0, true, numEntries, false);
       while (results.hasNext()) {
-        ScoredEntry<Integer> entry = results.next();
+        final ScoredEntry<Integer> entry = results.next();
         assertEquals(allEntries.remove(entry.getValue()), entry.getScore(), 1e-3);
       }
       assertEquals(0, allEntries.size());
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new RuntimeException(e);
     }
   }

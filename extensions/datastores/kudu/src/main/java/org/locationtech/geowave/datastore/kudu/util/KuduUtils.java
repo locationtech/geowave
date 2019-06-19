@@ -25,21 +25,23 @@ public class KuduUtils {
   public static int KUDU_DEFAULT_BUCKETS = 2;
   public static int KUDU_DEFAULT_REPLICAS = 1;
 
-  public static void executeQuery(KuduScanner scanner, List<RowResultIterator> results) {
+  public static void executeQuery(
+      final KuduScanner scanner,
+      final List<RowResultIterator> results) {
     try {
       while (scanner.hasMoreRows()) {
-        RowResultIterator rows = scanner.nextRows();
+        final RowResultIterator rows = scanner.nextRows();
         if (rows == null) {
           break;
         }
         results.add(rows);
       }
-    } catch (KuduException e) {
+    } catch (final KuduException e) {
       LOGGER.error("Error when reading rows", e);
     } finally {
       try {
         scanner.close();
-      } catch (KuduException e) {
+      } catch (final KuduException e) {
         LOGGER.error("Error while closing Kudu scanner", e);
       }
     }

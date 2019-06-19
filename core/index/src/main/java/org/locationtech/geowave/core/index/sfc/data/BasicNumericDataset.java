@@ -120,7 +120,7 @@ public class BasicNumericDataset implements MultiDimensionalNumericData {
   @Override
   public byte[] toBinary() {
     int totalBytes = VarintUtils.unsignedIntByteLength(dataPerDimension.length);
-    final List<byte[]> serializedData = new ArrayList<byte[]>();
+    final List<byte[]> serializedData = new ArrayList<>();
     for (final NumericData data : dataPerDimension) {
       final byte[] binary = PersistenceUtils.toBinary(data);
       totalBytes += (binary.length + VarintUtils.unsignedIntByteLength(binary.length));

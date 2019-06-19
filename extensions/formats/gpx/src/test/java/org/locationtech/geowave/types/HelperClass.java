@@ -15,9 +15,9 @@ import java.util.Set;
 /** */
 public class HelperClass {
 
-  public static <T> Set<String> buildSet(Map<String, ValidateObject<T>> expectedResults) {
-    HashSet<String> set = new HashSet<String>();
-    for (String key : expectedResults.keySet()) {
+  public static <T> Set<String> buildSet(final Map<String, ValidateObject<T>> expectedResults) {
+    final HashSet<String> set = new HashSet<>();
+    for (final String key : expectedResults.keySet()) {
       set.add(key);
     }
     return set;

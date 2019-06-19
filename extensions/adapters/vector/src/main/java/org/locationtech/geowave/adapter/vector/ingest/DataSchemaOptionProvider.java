@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.adapter.vector.ingest;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
+import com.beust.jcommander.Parameter;
 
 public class DataSchemaOptionProvider implements Persistable, IngestFormatOptions {
   @Parameter(

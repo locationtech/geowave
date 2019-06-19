@@ -15,11 +15,11 @@ public class FieldStatisticsType<R> extends StatisticsType<R, FieldStatisticsQue
     super();
   }
 
-  public FieldStatisticsType(byte[] id) {
+  public FieldStatisticsType(final byte[] id) {
     super(id);
   }
 
-  public FieldStatisticsType(String id) {
+  public FieldStatisticsType(final String id) {
     super(id);
   }
 
