@@ -14,7 +14,7 @@
 #
 # Source all our reusable functionality, argument is the location of this script.
 trap 'chmod -R 777 $WORKSPACE && exit' ERR
-echo "INSTALL4J_HOME=${INSTALL4J_HOME}"
+echo "INSTALL4J_HOME=$INSTALL4J_HOME"
 echo "GEOWAVE_BUCKET=${GEOWAVE_BUCKET}"
 echo '###### Build Variables'
 declare -A ARGS
@@ -56,7 +56,7 @@ if [[ ! -d $DOCKER_ROOT ]]; then
   mkdir $DOCKER_ROOT
 fi
 
-if [ ! -z $INSTALL4J_HOME ]; then
+if [ -n $INSTALL4J_HOME ]; then
     echo "Setting INSTALL4J_HOME=${INSTALL4J_HOME}"
     INSTALL4J_HOME=/opt/install4j7
 else
