@@ -62,7 +62,6 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.HBASE,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStore;
@@ -73,7 +72,6 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.HBASE,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB},
       namespace = "badDataStore")
