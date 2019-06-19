@@ -56,6 +56,7 @@ if [[ ! -d $DOCKER_ROOT ]]; then
   mkdir $DOCKER_ROOT
 fi
 if [ ! -z ${INSTALL4J_HOME} ]; then
+    echo "Setting INSTALL4J_HOME=${INSTALL4J_HOME}"
     INSTALL4J_HOME=/opt/install4j7
 fi
 $WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command clean
