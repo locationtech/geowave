@@ -136,6 +136,6 @@ node ('master') {
   }
   
   stage("Local cleanup") {
-    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/snapshots/geowave/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/*"
   }
 }
