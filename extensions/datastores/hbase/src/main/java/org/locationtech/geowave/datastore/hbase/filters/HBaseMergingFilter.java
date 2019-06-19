@@ -38,34 +38,38 @@ public class HBaseMergingFilter extends FilterBase {
   public void filterRowCells(List<Cell> rowCells) throws IOException {
     if (!rowCells.isEmpty()) {
       if (rowCells.size() > 1) {
-        Cell firstCell = rowCells.get(0);
-        byte[] singleRow = CellUtil.cloneRow(firstCell);
-        byte[] singleFam = CellUtil.cloneFamily(firstCell);
-        byte[] singleQual = CellUtil.cloneQualifier(firstCell);
+        try {
+          Cell firstCell = rowCells.get(0);
+          byte[] singleRow = CellUtil.cloneRow(firstCell);
+          byte[] singleFam = CellUtil.cloneFamily(firstCell);
+          byte[] singleQual = CellUtil.cloneQualifier(firstCell);
 
-        Mergeable mergedValue = null;
-        for (Cell cell : rowCells) {
-          byte[] byteValue = CellUtil.cloneValue(cell);
-          Mergeable value = (Mergeable) URLClassloaderUtils.fromBinary(byteValue);
+          Mergeable mergedValue = null;
+          for (Cell cell : rowCells) {
+            byte[] byteValue = CellUtil.cloneValue(cell);
+            Mergeable value = (Mergeable) URLClassloaderUtils.fromBinary(byteValue);
 
-          if (mergedValue != null) {
-            mergedValue.merge(value);
-          } else {
-            mergedValue = value;
+            if (mergedValue != null) {
+              mergedValue.merge(value);
+            } else {
+              mergedValue = value;
+            }
           }
+
+          Cell singleCell =
+              CellUtil.createCell(
+                  singleRow,
+                  singleFam,
+                  singleQual,
+                  System.currentTimeMillis(),
+                  KeyValue.Type.Put.getCode(),
+                  URLClassloaderUtils.toBinary(mergedValue));
+
+          rowCells.clear();
+          rowCells.add(singleCell);
+        } catch (Exception e) {
+          throw new IOException("Exception in filter", e);
         }
-
-        Cell singleCell =
-            CellUtil.createCell(
-                singleRow,
-                singleFam,
-                singleQual,
-                System.currentTimeMillis(),
-                KeyValue.Type.Put.getCode(),
-                URLClassloaderUtils.toBinary(mergedValue));
-
-        rowCells.clear();
-        rowCells.add(singleCell);
       }
     }
   }

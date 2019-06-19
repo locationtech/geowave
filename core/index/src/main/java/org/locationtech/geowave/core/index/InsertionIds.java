@@ -178,8 +178,7 @@ public class InsertionIds implements Persistable {
       partitionKeys = new ArrayList<>(size);
       for (int i = 0; i < size; i++) {
         final int length = VarintUtils.readUnsignedInt(buf);
-        final byte[] pBytes = new byte[length];
-        buf.get(pBytes);
+        final byte[] pBytes = ByteArrayUtils.safeRead(buf, length);
         final SinglePartitionInsertionIds pId = new SinglePartitionInsertionIds();
         pId.fromBinary(pBytes);
         partitionKeys.add(pId);

@@ -446,13 +446,11 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
     orderedSfcs = new SpaceFillingCurve[numSfcs];
     baseDefinitions = new NumericDimensionDefinition[numDimensions];
     for (int i = 0; i < numSfcs; i++) {
-      final byte[] sfc = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(sfc);
+      final byte[] sfc = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       orderedSfcs[i] = (SpaceFillingCurve) PersistenceUtils.fromBinary(sfc);
     }
     for (int i = 0; i < numDimensions; i++) {
-      final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(dim);
+      final byte[] dim = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       baseDefinitions[i] = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dim);
     }
     final Builder<Integer, Byte> bimapBuilder = ImmutableBiMap.builder();

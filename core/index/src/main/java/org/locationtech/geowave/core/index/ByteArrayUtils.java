@@ -60,6 +60,35 @@ public class ByteArrayUtils {
   }
 
   /**
+   * Throw an exception if the requested length is longer than the remaining buffer size.
+   *
+   * @param buffer the byte buffer
+   * @param length the number of bytes to read
+   */
+  public static void verifyBufferSize(final ByteBuffer buffer, final int length) {
+    if (length > buffer.remaining()) {
+      throw new GeoWaveSerializationException(
+          "Tried to read more data than was available in buffer.");
+    }
+  }
+
+  /**
+   * Read bytes from the buffer, but only if the buffer's remaining length supports it.
+   *
+   * @param buffer the byte buffer
+   * @param length the number of bytes to read
+   * @return the bytes that were read
+   */
+  public static byte[] safeRead(final ByteBuffer buffer, final int length) {
+    verifyBufferSize(buffer, length);
+    final byte[] readBytes = new byte[length];
+    if (length > 0) {
+      buffer.get(readBytes);
+    }
+    return readBytes;
+  }
+
+  /**
    * Combine 2 arrays into one large array. If both are not null it will append id2 to id1 and the
    * result will be of length id1.length + id2.length
    *

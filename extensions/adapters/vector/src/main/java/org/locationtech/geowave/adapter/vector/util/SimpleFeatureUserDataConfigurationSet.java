@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -229,14 +230,12 @@ public class SimpleFeatureUserDataConfigurationSet implements java.io.Serializab
         new HashMap<>(entrySize);
     for (int i = 0; i < entrySize; i++) {
       int keySize = VarintUtils.readUnsignedInt(buf);
-      byte[] keyBytes = new byte[keySize];
-      buf.get(keyBytes);
+      byte[] keyBytes = ByteArrayUtils.safeRead(buf, keySize);
       String key = StringUtils.stringFromBinary(keyBytes);
       int numConfigs = VarintUtils.readUnsignedInt(buf);
       List<SimpleFeatureUserDataConfiguration> confList = new ArrayList<>(numConfigs);
       for (int c = 0; c < numConfigs; c++) {
-        byte[] entryBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-        buf.get(entryBytes);
+        byte[] entryBytes = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
         confList.add((SimpleFeatureUserDataConfiguration) PersistenceUtils.fromBinary(entryBytes));
       }
       internalConfigurations.put(key, confList);

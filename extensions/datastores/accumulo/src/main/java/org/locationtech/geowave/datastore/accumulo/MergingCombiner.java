@@ -17,11 +17,17 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.Combiner;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
+import org.apache.commons.lang3.SerializationException;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MergingCombiner extends Combiner {
+  private static final Logger LOGGER = LoggerFactory.getLogger(MergingCombiner.class);
   // this is "columns" because it is mimicing the behavior of
   // org.apache.accumulo.core.iterators.Combiner.setColumns()
   private static final String COLUMNS_OPTION = "columns";
@@ -47,8 +53,9 @@ public class MergingCombiner extends Combiner {
   @Override
   public Value reduce(final Key key, final Iterator<Value> iter) {
     Mergeable currentMergeable = null;
+    Value val = null;
     while (iter.hasNext()) {
-      final Value val = iter.next();
+      val = iter.next();
       // hopefully its never the case that null stastics are stored,
       // but just in case, check
       final Mergeable mergeable = getMergeable(key, val.get());
@@ -63,11 +70,19 @@ public class MergingCombiner extends Combiner {
     if (currentMergeable != null) {
       return new Value(getBinary(currentMergeable));
     }
-    return super.getTopValue();
+    return val;
   }
 
   protected Mergeable getMergeable(final Key key, final byte[] binary) {
-    return (Mergeable) URLClassloaderUtils.fromBinary(binary);
+    try {
+      Persistable persistable = URLClassloaderUtils.fromBinary(binary);
+      if (persistable instanceof Mergeable) {
+        return (Mergeable) persistable;
+      }
+    } catch (Exception e) {
+      LOGGER.error("Unable to deserialize row.", e);
+    }
+    return null;
   }
 
   protected byte[] getBinary(final Mergeable mergeable) {

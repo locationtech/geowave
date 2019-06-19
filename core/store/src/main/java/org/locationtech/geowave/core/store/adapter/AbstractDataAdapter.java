@@ -17,6 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -308,10 +309,11 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
     final List<NativeFieldHandler<T, Object>> nativeFieldHandlers =
         new ArrayList<NativeFieldHandler<T, Object>>();
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    final byte[] defaultTypeDataBinary = new byte[VarintUtils.readUnsignedInt(buf)];
+    final int defaultTypeDataBinaryLength = VarintUtils.readUnsignedInt(buf);
     Object defaultTypeData = null;
-    if (defaultTypeDataBinary.length > 0) {
-      buf.get(defaultTypeDataBinary);
+    if (defaultTypeDataBinaryLength > 0) {
+      final byte[] defaultTypeDataBinary =
+          ByteArrayUtils.safeRead(buf, defaultTypeDataBinaryLength);
       defaultTypeData = defaultTypeDataFromBinary(defaultTypeDataBinary);
     }
 

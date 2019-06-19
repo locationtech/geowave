@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.Resolution;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -74,8 +75,7 @@ public class OverviewStatistics extends
     synchronized (this) {
       resolutions = new Resolution[resLength];
       for (int i = 0; i < resolutions.length; i++) {
-        final byte[] resBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-        buf.get(resBytes);
+        final byte[] resBytes = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
         resolutions[i] = (Resolution) PersistenceUtils.fromBinary(resBytes);
       }
     }

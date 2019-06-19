@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.query;
 
 import java.nio.ByteBuffer;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -98,26 +99,29 @@ public abstract class BaseQuery<T, O extends DataTypeQueryOptions<T>> implements
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    final byte[] commonQueryOptionsBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    if (commonQueryOptionsBinary.length == 0) {
+    final int commonQueryOptionsBinaryLength = VarintUtils.readUnsignedInt(buf);
+    if (commonQueryOptionsBinaryLength == 0) {
       commonQueryOptions = null;
     } else {
-      buf.get(commonQueryOptionsBinary);
+      final byte[] commonQueryOptionsBinary =
+          ByteArrayUtils.safeRead(buf, commonQueryOptionsBinaryLength);
       commonQueryOptions =
           (CommonQueryOptions) PersistenceUtils.fromBinary(commonQueryOptionsBinary);
     }
-    final byte[] dataTypeQueryOptionsBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    if (dataTypeQueryOptionsBinary.length == 0) {
+    final int dataTypeQueryOptionsBinaryLength = VarintUtils.readUnsignedInt(buf);
+    if (dataTypeQueryOptionsBinaryLength == 0) {
       dataTypeQueryOptions = null;
     } else {
-      buf.get(dataTypeQueryOptionsBinary);
+      final byte[] dataTypeQueryOptionsBinary =
+          ByteArrayUtils.safeRead(buf, dataTypeQueryOptionsBinaryLength);
       dataTypeQueryOptions = (O) PersistenceUtils.fromBinary(dataTypeQueryOptionsBinary);
     }
-    final byte[] indexQueryOptionsBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    if (indexQueryOptionsBinary.length == 0) {
+    final int indexQueryOptionsBinaryLength = VarintUtils.readUnsignedInt(buf);
+    if (indexQueryOptionsBinaryLength == 0) {
       indexQueryOptions = null;
     } else {
-      buf.get(indexQueryOptionsBinary);
+      final byte[] indexQueryOptionsBinary =
+          ByteArrayUtils.safeRead(buf, indexQueryOptionsBinaryLength);
       indexQueryOptions = (IndexQueryOptions) PersistenceUtils.fromBinary(indexQueryOptionsBinary);
     }
     final byte[] queryConstraintsBinary = new byte[buf.remaining()];
@@ -133,43 +137,54 @@ public abstract class BaseQuery<T, O extends DataTypeQueryOptions<T>> implements
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((commonQueryOptions == null) ? 0 : commonQueryOptions.hashCode());
+    result = (prime * result) + ((commonQueryOptions == null) ? 0 : commonQueryOptions.hashCode());
     result =
-        prime * result + ((dataTypeQueryOptions == null) ? 0 : dataTypeQueryOptions.hashCode());
-    result = prime * result + ((indexQueryOptions == null) ? 0 : indexQueryOptions.hashCode());
-    result = prime * result + ((queryConstraints == null) ? 0 : queryConstraints.hashCode());
+        (prime * result) + ((dataTypeQueryOptions == null) ? 0 : dataTypeQueryOptions.hashCode());
+    result = (prime * result) + ((indexQueryOptions == null) ? 0 : indexQueryOptions.hashCode());
+    result = (prime * result) + ((queryConstraints == null) ? 0 : queryConstraints.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    BaseQuery other = (BaseQuery) obj;
+    }
+    final BaseQuery other = (BaseQuery) obj;
     if (commonQueryOptions == null) {
-      if (other.commonQueryOptions != null)
+      if (other.commonQueryOptions != null) {
         return false;
-    } else if (!commonQueryOptions.equals(other.commonQueryOptions))
+      }
+    } else if (!commonQueryOptions.equals(other.commonQueryOptions)) {
       return false;
+    }
     if (dataTypeQueryOptions == null) {
-      if (other.dataTypeQueryOptions != null)
+      if (other.dataTypeQueryOptions != null) {
         return false;
-    } else if (!dataTypeQueryOptions.equals(other.dataTypeQueryOptions))
+      }
+    } else if (!dataTypeQueryOptions.equals(other.dataTypeQueryOptions)) {
       return false;
+    }
     if (indexQueryOptions == null) {
-      if (other.indexQueryOptions != null)
+      if (other.indexQueryOptions != null) {
         return false;
-    } else if (!indexQueryOptions.equals(other.indexQueryOptions))
+      }
+    } else if (!indexQueryOptions.equals(other.indexQueryOptions)) {
       return false;
+    }
     if (queryConstraints == null) {
-      if (other.queryConstraints != null)
+      if (other.queryConstraints != null) {
         return false;
-    } else if (!queryConstraints.equals(other.queryConstraints))
+      }
+    } else if (!queryConstraints.equals(other.queryConstraints)) {
       return false;
+    }
     return true;
   }
 }

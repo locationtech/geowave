@@ -37,6 +37,7 @@ import org.geotools.styling.SLDParser;
 import org.geotools.styling.SLDTransformer;
 import org.geotools.styling.Style;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -526,8 +527,7 @@ public class DistributedRenderOptions implements Persistable {
     mapWidth = VarintUtils.readUnsignedInt(buf);
     mapHeight = VarintUtils.readUnsignedInt(buf);
     if (crsStored) {
-      final byte[] wktBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(wktBinary);
+      final byte[] wktBinary = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       final String wkt = StringUtils.stringFromBinary(wktBinary);
       try {
         crs = CRS.parseWKT(wkt);
@@ -549,8 +549,8 @@ public class DistributedRenderOptions implements Persistable {
       interpolationOrdinals = Collections.emptyList();
     }
     if (paletteStored) {
-      final byte[] colorModelBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(colorModelBinary);
+      final byte[] colorModelBinary =
+          ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       try {
         final ByteArrayInputStream bais = new ByteArrayInputStream(colorModelBinary);
         final ObjectInputStream ois = new ObjectInputStream(bais);
@@ -592,8 +592,7 @@ public class DistributedRenderOptions implements Persistable {
       bgColor = null;
     }
     if (styleStored) {
-      final byte[] styleBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(styleBinary);
+      final byte[] styleBinary = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       final SLDParser parser =
           new SLDParser(
               CommonFactoryFinder.getStyleFactory(null),

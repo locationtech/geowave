@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
@@ -108,8 +109,7 @@ public class FeatureHyperLogLogStatistics extends
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buffer = super.binaryBuffer(bytes);
-    final byte[] data = new byte[VarintUtils.readUnsignedInt(buffer)];
-    buffer.get(data);
+    final byte[] data = ByteArrayUtils.safeRead(buffer, VarintUtils.readUnsignedInt(buffer));
     try {
       loglog = HyperLogLogPlus.Builder.build(data);
     } catch (final IOException e) {

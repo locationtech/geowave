@@ -31,6 +31,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
@@ -638,20 +639,20 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
     }
     // deserialize the feature type
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    final byte[] typeNameBytes = new byte[VarintUtils.readUnsignedInt(buf)];
+    final int typeNameByteLength = VarintUtils.readUnsignedInt(buf);
+    final int indexCrsByteLength = VarintUtils.readUnsignedInt(buf);
+    final int namespaceByteLength = VarintUtils.readUnsignedInt(buf);
 
-    final byte[] indexCrsBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-    final byte[] namespaceBytes = new byte[VarintUtils.readUnsignedInt(buf)];
+    final int attrByteLength = VarintUtils.readUnsignedInt(buf);
+    final int axisByteLength = VarintUtils.readUnsignedInt(buf);
+    final int encodedTypeByteLength = VarintUtils.readUnsignedInt(buf);
 
-    final byte[] attrBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-    final byte[] axisBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-    final byte[] encodedTypeBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(typeNameBytes);
-    buf.get(indexCrsBytes);
-    buf.get(namespaceBytes);
-    buf.get(attrBytes);
-    buf.get(axisBytes);
-    buf.get(encodedTypeBytes);
+    final byte[] typeNameBytes = ByteArrayUtils.safeRead(buf, typeNameByteLength);
+    final byte[] indexCrsBytes = ByteArrayUtils.safeRead(buf, indexCrsByteLength);
+    final byte[] namespaceBytes = ByteArrayUtils.safeRead(buf, namespaceByteLength);
+    final byte[] attrBytes = ByteArrayUtils.safeRead(buf, attrByteLength);
+    final byte[] axisBytes = ByteArrayUtils.safeRead(buf, axisByteLength);
+    final byte[] encodedTypeBytes = ByteArrayUtils.safeRead(buf, encodedTypeByteLength);
 
     final String typeName = StringUtils.stringFromBinary(typeNameBytes);
     String namespace = StringUtils.stringFromBinary(namespaceBytes);

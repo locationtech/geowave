@@ -16,7 +16,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 /**
@@ -83,8 +85,7 @@ public class PartitionStatistics<T> extends
       if (partitionKeySize > 0) {
         final int numPartitions = buffer.remaining() / partitionKeySize;
         for (int i = 0; i < numPartitions; i++) {
-          final byte[] partition = new byte[partitionKeySize];
-          buffer.get(partition);
+          final byte[] partition = ByteArrayUtils.safeRead(buffer, partitionKeySize);
           partitions.add(new ByteArray(partition));
         }
       }

@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.index;
 
 import java.nio.ByteBuffer;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -29,14 +30,17 @@ public class IndexImpl implements Index {
     this.indexModel = indexModel;
   }
 
+  @Override
   public NumericIndexStrategy getIndexStrategy() {
     return indexStrategy;
   }
 
+  @Override
   public CommonIndexModel getIndexModel() {
     return indexModel;
   }
 
+  @Override
   public String getName() {
     return indexStrategy.getId() + "_" + indexModel.getId();
   }
@@ -80,8 +84,7 @@ public class IndexImpl implements Index {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int indexStrategyLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] indexStrategyBinary = new byte[indexStrategyLength];
-    buf.get(indexStrategyBinary);
+    final byte[] indexStrategyBinary = ByteArrayUtils.safeRead(buf, indexStrategyLength);
 
     indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(indexStrategyBinary);
 

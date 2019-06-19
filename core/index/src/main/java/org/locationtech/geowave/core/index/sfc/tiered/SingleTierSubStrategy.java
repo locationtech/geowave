@@ -204,12 +204,10 @@ public class SingleTierSubStrategy implements NumericIndexStrategy {
     tier = buf.get();
     final int numDimensions = VarintUtils.readUnsignedInt(buf);
     baseDefinitions = new NumericDimensionDefinition[numDimensions];
-    final byte[] sfcBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(sfcBinary);
+    final byte[] sfcBinary = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
     sfc = (SpaceFillingCurve) PersistenceUtils.fromBinary(sfcBinary);
     for (int i = 0; i < numDimensions; i++) {
-      final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(dim);
+      final byte[] dim = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       baseDefinitions[i] = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dim);
     }
   }

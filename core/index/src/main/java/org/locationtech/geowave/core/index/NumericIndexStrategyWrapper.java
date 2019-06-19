@@ -49,8 +49,7 @@ public class NumericIndexStrategyWrapper implements NumericIndexStrategy {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int idBinaryLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] idBinary = new byte[idBinaryLength];
-    buf.get(idBinary);
+    final byte[] idBinary = ByteArrayUtils.safeRead(buf, idBinaryLength);
     final byte[] delegateBinary = new byte[buf.remaining()];
     buf.get(delegateBinary);
     id = StringUtils.stringFromBinary(idBinary);

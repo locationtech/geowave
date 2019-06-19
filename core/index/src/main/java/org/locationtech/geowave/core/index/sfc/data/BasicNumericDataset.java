@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 
@@ -140,8 +141,7 @@ public class BasicNumericDataset implements MultiDimensionalNumericData {
     final int numDimensions = VarintUtils.readUnsignedInt(buf);
     dataPerDimension = new NumericData[numDimensions];
     for (int d = 0; d < numDimensions; d++) {
-      final byte[] binary = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(binary);
+      final byte[] binary = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       dataPerDimension[d] = (NumericData) PersistenceUtils.fromBinary(binary);
     }
   }

@@ -14,6 +14,7 @@ import org.geotools.filter.text.ecql.ECQL;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.FilterToCQLTool;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -143,8 +144,7 @@ public class CQLQueryFilter implements QueryFilter {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int filterBytesLength = VarintUtils.readUnsignedInt(buf);
     if (filterBytesLength > 0) {
-      final byte[] filterBytes = new byte[filterBytesLength];
-      buf.get(filterBytes);
+      final byte[] filterBytes = ByteArrayUtils.safeRead(buf, filterBytesLength);
       final String cql = StringUtils.stringFromBinary(filterBytes);
       try {
         filter = ECQL.toFilter(cql);
@@ -158,8 +158,7 @@ public class CQLQueryFilter implements QueryFilter {
 
     final int adapterBytesLength = buf.remaining();
     if (adapterBytesLength > 0) {
-      final byte[] adapterBytes = new byte[adapterBytesLength];
-      buf.get(adapterBytes);
+      final byte[] adapterBytes = ByteArrayUtils.safeRead(buf, adapterBytesLength);
 
       try {
         adapter = (GeotoolsFeatureDataAdapter) PersistenceUtils.fromBinary(adapterBytes);

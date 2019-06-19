@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 import java.nio.ByteBuffer;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -109,13 +110,11 @@ public abstract class AbstractDataStatistics<T, R, B extends StatisticsQueryBuil
     final ByteBuffer buffer = ByteBuffer.wrap(bytes);
     adapterId = VarintUtils.readUnsignedShort(buffer);
     final int typeLength = VarintUtils.readUnsignedInt(buffer);
-    final int extenedIdLength = VarintUtils.readUnsignedInt(buffer);
-    final byte typeBytes[] = new byte[typeLength];
-    buffer.get(typeBytes);
+    final int extendedIdLength = VarintUtils.readUnsignedInt(buffer);
+    final byte typeBytes[] = ByteArrayUtils.safeRead(buffer, typeLength);
     statisticsType = new BaseStatisticsType();
     statisticsType.fromBinary(typeBytes);
-    final byte[] extendedIdBytes = new byte[extenedIdLength];
-    buffer.get(extendedIdBytes);
+    final byte[] extendedIdBytes = ByteArrayUtils.safeRead(buffer, extendedIdLength);
     extendedId = StringUtils.stringFromBinary(extendedIdBytes);
     return buffer;
   }

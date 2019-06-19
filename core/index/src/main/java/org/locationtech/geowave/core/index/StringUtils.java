@@ -95,8 +95,7 @@ public class StringUtils {
     final String[] result = new String[count];
     for (int i = 0; i < count; i++) {
       final int size = VarintUtils.readUnsignedInt(buf);
-      final byte[] strBytes = new byte[size];
-      buf.get(strBytes);
+      final byte[] strBytes = ByteArrayUtils.safeRead(buf, size);
       result[i] = new String(strBytes, getGeoWaveCharset());
     }
     return result;

@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.index.temporal;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
@@ -98,8 +99,7 @@ public class DateRangeFilter implements QueryFilter {
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer bb = ByteBuffer.wrap(bytes);
-    final byte[] fieldNameBytes = new byte[VarintUtils.readUnsignedInt(bb)];
-    bb.get(fieldNameBytes);
+    final byte[] fieldNameBytes = ByteArrayUtils.safeRead(bb, VarintUtils.readUnsignedInt(bb));
     fieldName = StringUtils.stringFromBinary(fieldNameBytes);
     start = new Date(VarintUtils.readTime(bb));
     end = new Date(VarintUtils.readTime(bb));

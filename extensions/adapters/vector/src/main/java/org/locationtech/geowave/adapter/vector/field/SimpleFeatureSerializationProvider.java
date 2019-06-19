@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -47,8 +48,7 @@ public class SimpleFeatureSerializationProvider {
           retVal[i] = null;
           continue;
         }
-        byte[] fieldValue = new byte[byteLength];
-        input.get(fieldValue);
+        byte[] fieldValue = ByteArrayUtils.safeRead(input, byteLength);
         retVal[i] = fieldValue;
       }
       return retVal;

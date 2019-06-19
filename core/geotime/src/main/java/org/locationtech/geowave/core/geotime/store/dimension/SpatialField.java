@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.geotime.store.dimension;
 
 import java.nio.ByteBuffer;
 import javax.annotation.Nullable;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -142,8 +143,7 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int fieldNameLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] fieldNameBytes = new byte[fieldNameLength];
-    buf.get(fieldNameBytes);
+    final byte[] fieldNameBytes = ByteArrayUtils.safeRead(buf, fieldNameLength);
     fieldName = StringUtils.stringFromBinary(fieldNameBytes);
     final byte[] dimensionBinary = new byte[buf.remaining() - 1];
     buf.get(dimensionBinary);

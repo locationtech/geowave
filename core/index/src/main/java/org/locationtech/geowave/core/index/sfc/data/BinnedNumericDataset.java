@@ -178,8 +178,7 @@ public class BinnedNumericDataset implements MultiDimensionalNumericData {
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    binId = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(binId);
+    binId = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
 
     final byte[] indexRangesBinary = new byte[buf.remaining()];
     buf.get(indexRangesBinary);

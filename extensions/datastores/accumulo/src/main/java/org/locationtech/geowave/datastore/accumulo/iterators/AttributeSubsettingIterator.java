@@ -22,7 +22,6 @@ import org.apache.accumulo.core.data.PartialKey;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
-import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -30,7 +29,7 @@ import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
-public class AttributeSubsettingIterator extends TransformingIterator {
+public class AttributeSubsettingIterator extends ExceptionHandlingTransformingIterator {
   private static final int ITERATOR_PRIORITY = QueryFilterIterator.QUERY_ITERATOR_PRIORITY + 1;
   private static final String ITERATOR_NAME = "ATTRIBUTE_SUBSETTING_ITERATOR";
 
@@ -45,7 +44,7 @@ public class AttributeSubsettingIterator extends TransformingIterator {
   }
 
   @Override
-  protected void transformRange(
+  protected void transformRangeInternal(
       final SortedKeyValueIterator<Key, Value> input,
       final KVBuffer output) throws IOException {
     while (input.hasTop()) {

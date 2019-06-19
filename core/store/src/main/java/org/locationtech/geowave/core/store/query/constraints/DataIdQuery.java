@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
@@ -67,12 +68,11 @@ public class DataIdQuery implements QueryConstraints {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int length = VarintUtils.readUnsignedInt(buf);
+    ByteArrayUtils.verifyBufferSize(buf, length);
     final byte[][] dataIds = new byte[length][];
     for (int i = 0; i < length; i++) {
       final int iLength = VarintUtils.readUnsignedInt(buf);
-      final byte[] dataIdBinary = new byte[iLength];
-      buf.get(dataIdBinary);
-      dataIds[i] = dataIdBinary;
+      dataIds[i] = ByteArrayUtils.safeRead(buf, iLength);;
     }
     this.dataIds = dataIds;
   }

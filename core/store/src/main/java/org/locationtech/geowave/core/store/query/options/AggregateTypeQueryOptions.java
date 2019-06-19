@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.query.options;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -66,11 +67,11 @@ public class AggregateTypeQueryOptions<P extends Persistable, R, T> implements
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    final byte[] typeNamesBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-    if (typeNamesBytes.length == 0) {
+    final int typeNamesBytesLength = VarintUtils.readUnsignedInt(buf);
+    if (typeNamesBytesLength == 0) {
       typeNames = new String[0];
     } else {
-      buf.get(typeNamesBytes);
+      final byte[] typeNamesBytes = ByteArrayUtils.safeRead(buf, typeNamesBytesLength);
       typeNames = StringUtils.stringsFromBinary(typeNamesBytes);
     }
     final byte[] aggregationBytes = new byte[buf.remaining()];
@@ -86,27 +87,33 @@ public class AggregateTypeQueryOptions<P extends Persistable, R, T> implements
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((aggregation == null) ? 0 : aggregation.hashCode());
-    result = prime * result + Arrays.hashCode(typeNames);
+    result = (prime * result) + ((aggregation == null) ? 0 : aggregation.hashCode());
+    result = (prime * result) + Arrays.hashCode(typeNames);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    AggregateTypeQueryOptions other = (AggregateTypeQueryOptions) obj;
+    }
+    final AggregateTypeQueryOptions other = (AggregateTypeQueryOptions) obj;
     if (aggregation == null) {
-      if (other.aggregation != null)
+      if (other.aggregation != null) {
         return false;
-    } else if (!aggregation.equals(other.aggregation))
+      }
+    } else if (!aggregation.equals(other.aggregation)) {
       return false;
-    if (!Arrays.equals(typeNames, other.typeNames))
+    }
+    if (!Arrays.equals(typeNames, other.typeNames)) {
       return false;
+    }
     return true;
   }
 }

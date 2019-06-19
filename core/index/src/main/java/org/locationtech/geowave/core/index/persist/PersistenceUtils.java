@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,8 +108,8 @@ public class PersistenceUtils {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int size = VarintUtils.readUnsignedInt(buf);
     for (int i = 0; i < size; i++) {
-      final byte[] persistableBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(persistableBinary);
+      final byte[] persistableBinary =
+          ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       persistables.add(fromBinary(persistableBinary));
     }
     return persistables;

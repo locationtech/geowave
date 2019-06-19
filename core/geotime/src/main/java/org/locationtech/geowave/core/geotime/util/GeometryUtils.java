@@ -38,6 +38,7 @@ import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionX;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionY;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
+import org.locationtech.geowave.core.index.GeoWaveSerializationException;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -345,9 +346,8 @@ public class GeometryUtils {
       }
       return new TWKBReader().read(binary);
     } catch (final ParseException e) {
-      LOGGER.warn("Unable to deserialize geometry data", e);
+      throw new GeoWaveSerializationException("Unable to deserialize geometry data", e);
     }
-    return null;
   }
 
   /**
@@ -365,6 +365,7 @@ public class GeometryUtils {
         return new WKBReader().read(binary);
       } catch (final ParseException e) {
         LOGGER.warn("Unable to deserialize geometry data", e);
+        throw new GeoWaveSerializationException(e);
       }
     }
 

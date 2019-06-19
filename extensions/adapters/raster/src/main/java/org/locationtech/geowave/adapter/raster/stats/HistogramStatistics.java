@@ -30,6 +30,7 @@ import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.Resolution;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -123,24 +124,22 @@ public class HistogramStatistics extends
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = super.binaryBuffer(bytes);
-    final byte[] configBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(configBinary);
+    final byte[] configBinary = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
     histogramConfig = (HistogramConfig) PersistenceUtils.fromBinary(configBinary);
     final int numEntries = VarintUtils.readUnsignedInt(buf);
+    ByteArrayUtils.verifyBufferSize(buf, numEntries);
     for (int i = 0; i < numEntries; i++) {
       final int keyLength = VarintUtils.readUnsignedInt(buf);
       Resolution key = null;
       if (keyLength > 0) {
-        final byte[] keyBytes = new byte[keyLength];
-        buf.get(keyBytes);
+        final byte[] keyBytes = ByteArrayUtils.safeRead(buf, keyLength);
         key = (Resolution) PersistenceUtils.fromBinary(keyBytes);
       }
       final int valueLength = VarintUtils.readUnsignedInt(buf);
       javax.media.jai.Histogram histogram = null;
       if (valueLength > 0) {
 
-        final byte[] valueBytes = new byte[valueLength];
-        buf.get(valueBytes);
+        final byte[] valueBytes = ByteArrayUtils.safeRead(buf, valueLength);
         ObjectInputStream ois;
         try {
           ois = new ObjectInputStream(new ByteArrayInputStream(valueBytes));

@@ -255,8 +255,7 @@ public class HilbertSFC implements SpaceFillingCurve {
     final int numDimensions = VarintUtils.readUnsignedInt(buf);
     dimensionDefinitions = new SFCDimensionDefinition[numDimensions];
     for (int i = 0; i < numDimensions; i++) {
-      final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(dim);
+      final byte[] dim = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       dimensionDefinitions[i] = (SFCDimensionDefinition) PersistenceUtils.fromBinary(dim);
     }
     init(dimensionDefinitions);
