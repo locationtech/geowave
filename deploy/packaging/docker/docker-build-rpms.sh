@@ -55,10 +55,15 @@ if [[ ! -d $DOCKER_ROOT ]]; then
   echo "WARNING: The docker-root directory did not exist. Creating now." 
   mkdir $DOCKER_ROOT
 fi
-if [ ! -z ${INSTALL4J_HOME} ]; then
+
+if [ ! -z $INSTALL4J_HOME ]; then
     echo "Setting INSTALL4J_HOME=${INSTALL4J_HOME}"
     INSTALL4J_HOME=/opt/install4j7
+else
+    echo "Install4j Set INSTALL4J_HOME=${INSTALL4J_HOME}"
+    INSTALL4J_HOME=/opt/install4j7
 fi
+
 $WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command clean
 
 docker run $DOCKER_ARGS --rm \
