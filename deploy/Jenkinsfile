@@ -82,7 +82,19 @@ node ('master') {
       sh "mvn ${params.build_type} -DskipTests -Dspotbugs.skip -Dformatter.skip"
      }
   }
-
+    
+  stage('Clean bucket and local space'){
+    // Local Cleanup - cleanup all but noarch directories
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev-jars/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release-jars/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev/SRPMS/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/SRPMS/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev/TARBALL/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/TARBALL/*"
+    // S3 Cleanup
+    sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
+  }
+  
   // Mark the build artifacts 'stage'....
   stage('Build and Publish RPMs'){
     withEnv(["INSTALL4J_HOME=${ params.install4j_home }","LOCAL_REPO_DIR=${ params.LOCAL_REPO_DIR }","GEOWAVE_RPM_BUCKET=${ params.rpm_bucket }","GEOWAVE_BUCKET=${ params.cache_bucket }"]) {
@@ -92,27 +104,17 @@ node ('master') {
     }
   }
   
-  stage('Clean bucket and local space'){
-    // Local Cleanup
-    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/*"
-    
-    // S3 Cleanup
-    sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
-  }
-
   // Deploy to geowave-rpms
   stage('Deploying to S3'){
     def build_type = readFile('deploy/target/build-type.txt').trim()
     if ( build_type == "dev" ) {
       echo 'Build type determined as Dev.'
-      sh "sudo cp ${params.LOCAL_REPO_DIR}/geowave-repo-dev-1.0-3.noarch.rpm ${params.LOCAL_REPO_DIR}/geowave/dev/noarch/geowave-repo-dev-1.0-3.noarch.rpm"
-      sh "aws s3 cp --acl public-read --recursive ${params.LOCAL_REPO_DIR}/geowave/dev/ s3://${params.rpm_bucket}/dev/"
-      sh "aws s3 cp --acl public-read --recursive ${params.LOCAL_REPO_DIR}/geowave/dev-jars/ s3://${params.rpm_bucket}/dev-jars/"
+      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/dev/ s3://${params.rpm_bucket}/dev/"
+      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/dev-jars/ s3://${params.rpm_bucket}/dev-jars/"
     } else if (build_type == "release" ) {
-      echo 'Build type determined as Release. Sync will not delete content on s3.'
-      sh "sudo cp ${params.LOCAL_REPO_DIR}/geowave-repo-1.0-3.noarch.rpm ${params.LOCAL_REPO_DIR}/geowave/dev/noarch/geowave-repo-1.0-3.noarch.rpm"
-      sh "aws s3 cp --acl public-read --recursive ${params.LOCAL_REPO_DIR}/geowave/release/ s3://${params.rpm_bucket}/release/"
-      sh "aws s3 cp --acl public-read --recursive ${params.LOCAL_REPO_DIR}/geowave/release-jars/ s3://${params.rpm_bucket}/release-jars/"
+      echo 'Build type determined as Release.'
+      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/release/ s3://${params.rpm_bucket}/release/"
+      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/release-jars/ s3://${params.rpm_bucket}/release-jars/"
     } else {
       error("ERROR: Could not determine build type. Unable to upload rpm's.")
     }
@@ -138,6 +140,11 @@ node ('master') {
   }
   
   stage("Local cleanup") {
-    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev-jars/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release-jars/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev/SRPMS/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/SRPMS/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev/TARBALL/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/TARBALL/*"
   }
 }

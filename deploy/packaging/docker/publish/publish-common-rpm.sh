@@ -80,6 +80,10 @@ if command -v aws >/dev/null 2>&1 ; then
 
 		# Copy built pyspark package to lib directory
 		aws s3 cp --acl public-read ${WORKSPACE}/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/lib/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
+		
+		echo '###### Cleaning and copying documentation to S3'
+		
+        aws s3 sync s3://${GEOWAVE_RPM_BUCKET}/${BUILD_TYPE}/${ARGS[arch]}/ ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/${ARGS[arch]}/ --delete
 	else
 		echo '###### Skipping publish to S3: GEOWAVE_VERSION_URL not defined'
 	fi
