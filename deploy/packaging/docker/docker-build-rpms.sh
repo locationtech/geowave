@@ -57,17 +57,17 @@ if [[ ! -d $DOCKER_ROOT ]]; then
   mkdir $DOCKER_ROOT
 fi
 
-if [ -n $INSTALL4J_HOME ]; then
+if [ -z $INSTALL4J_HOME ]; then
     echo "Setting INSTALL4J_HOME=/opt/install4j7"
     INSTALL4J_HOME=/opt/install4j7
 fi
 
-if [ -n $GEOWAVE_RPM_BUCKET ]; then
+if [ -z $GEOWAVE_RPM_BUCKET ]; then
     echo "Setting GEOWAVE_RPM_BUCKET=geowave-rpms"
     GEOWAVE_RPM_BUCKET=geowave-rpms
 fi
 
-if [ -n $GEOWAVE_BUCKET ]; then
+if [ -z $GEOWAVE_BUCKET ]; then
     echo "Setting GEOWAVE_BUCKET=${INSTALL4J_HOME}"
     GEOWAVE_BUCKET=geowave
 fi
