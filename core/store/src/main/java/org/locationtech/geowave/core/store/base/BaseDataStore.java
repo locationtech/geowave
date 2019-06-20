@@ -149,10 +149,10 @@ public class BaseDataStore implements DataStore {
 
   private <T> Writer<T> createWriter(
       final InternalDataAdapter<T> adapter,
-      final boolean writeToDataIndex,
+      final boolean writingOriginalData,
       final Index... indices) {
     final boolean secondaryIndex =
-        writeToDataIndex
+        writingOriginalData
             && baseOptions.isSecondaryIndexing()
             && DataIndexUtils.adapterSupportsDataIndex(adapter);
     final Writer<T>[] writers = new Writer[secondaryIndex ? indices.length + 1 : indices.length];
@@ -175,7 +175,9 @@ public class BaseDataStore implements DataStore {
       callbackManager.setPersistStats(baseOptions.isPersistDataStatistics());
 
       final List<IngestCallback<T>> callbacks =
-          Collections.singletonList(callbackManager.getIngestCallback(adapter, index));
+          writingOriginalData
+              ? Collections.singletonList(callbackManager.getIngestCallback(adapter, index))
+              : Collections.emptyList();
 
       final IngestCallbackList<T> callbacksList = new IngestCallbackList<>(callbacks);
       writers[i] =
