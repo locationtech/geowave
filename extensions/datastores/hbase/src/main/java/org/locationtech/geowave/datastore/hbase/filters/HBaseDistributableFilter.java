@@ -314,38 +314,34 @@ public class HBaseDistributableFilter extends FilterBase {
   protected FlattenedUnreadData aggregateFieldData(
       final Cell cell,
       final PersistentDataset<CommonIndexValue> commonData) throws IOException {
-    try {
-      final byte[] qualBuf = CellUtil.cloneQualifier(cell);
-      final byte[] valBuf = CellUtil.cloneValue(cell);
+    final byte[] qualBuf = CellUtil.cloneQualifier(cell);
+    final byte[] valBuf = CellUtil.cloneValue(cell);
 
-      final FlattenedDataSet dataSet =
-          DataStoreUtils.decomposeFlattenedFields(
-              qualBuf,
-              valBuf,
-              null,
-              commonIndexFieldIds.size() - 1);
+    final FlattenedDataSet dataSet =
+        DataStoreUtils.decomposeFlattenedFields(
+            qualBuf,
+            valBuf,
+            null,
+            commonIndexFieldIds.size() - 1);
 
-      final List<FlattenedFieldInfo> fieldInfos = dataSet.getFieldsRead();
-      for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
-        final int ordinal = fieldInfo.getFieldPosition();
+    final List<FlattenedFieldInfo> fieldInfos = dataSet.getFieldsRead();
+    for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
+      final int ordinal = fieldInfo.getFieldPosition();
 
-        if (ordinal < commonIndexFieldIds.size()) {
-          final String commonIndexFieldName = commonIndexFieldIds.get(ordinal);
-          final FieldReader<? extends CommonIndexValue> reader =
-              model.getReader(commonIndexFieldName);
-          if (reader != null) {
-            final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
-            commonData.addValue(commonIndexFieldName, fieldValue);
-          } else {
-            LOGGER.error("Could not find reader for common index field: " + commonIndexFieldName);
-          }
+      if (ordinal < commonIndexFieldIds.size()) {
+        final String commonIndexFieldName = commonIndexFieldIds.get(ordinal);
+        final FieldReader<? extends CommonIndexValue> reader =
+            model.getReader(commonIndexFieldName);
+        if (reader != null) {
+          final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
+          commonData.addValue(commonIndexFieldName, fieldValue);
+        } else {
+          LOGGER.error("Could not find reader for common index field: " + commonIndexFieldName);
         }
       }
-
-      return dataSet.getFieldsDeferred();
-    } catch (final Exception e) {
-      throw new IOException("Exception while aggregating field data", e);
     }
+
+    return dataSet.getFieldsDeferred();
   }
 
   public int getPartitionKeyLength() {
