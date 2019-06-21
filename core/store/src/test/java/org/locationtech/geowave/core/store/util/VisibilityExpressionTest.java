@@ -12,9 +12,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import com.google.common.collect.Sets;
 import java.text.ParseException;
 import org.junit.Test;
+import com.google.common.collect.Sets;
 
 public class VisibilityExpressionTest {
   @Test
@@ -99,7 +99,7 @@ public class VisibilityExpressionTest {
     try {
       VisibilityExpression.evaluate(EXPRESSION1, Sets.newHashSet("a"));
       fail();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       // Expected
       assertTrue(e.getCause() instanceof ParseException);
       assertEquals(
@@ -110,7 +110,7 @@ public class VisibilityExpressionTest {
     try {
       VisibilityExpression.evaluate(EXPRESSION2, Sets.newHashSet("a"));
       fail();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       // Expected
       assertTrue(e.getCause() instanceof ParseException);
       assertEquals(
@@ -121,7 +121,7 @@ public class VisibilityExpressionTest {
     try {
       VisibilityExpression.evaluate(EXPRESSION3, Sets.newHashSet("a"));
       fail();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       // Expected
       assertTrue(e.getCause() instanceof ParseException);
       assertEquals("Multiple sequential operators.", e.getCause().getMessage());
@@ -130,7 +130,7 @@ public class VisibilityExpressionTest {
     try {
       VisibilityExpression.evaluate(EXPRESSION4, Sets.newHashSet("a"));
       fail();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       // Expected
       assertTrue(e.getCause() instanceof ParseException);
       assertEquals("Multiple sequential operands with no operator.", e.getCause().getMessage());
@@ -139,7 +139,7 @@ public class VisibilityExpressionTest {
     try {
       VisibilityExpression.evaluate(EXPRESSION5, Sets.newHashSet("a"));
       fail();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       // Expected
       assertTrue(e.getCause() instanceof ParseException);
       assertEquals("Operator found with no left operand.", e.getCause().getMessage());
@@ -148,7 +148,7 @@ public class VisibilityExpressionTest {
     try {
       VisibilityExpression.evaluate(EXPRESSION6, Sets.newHashSet("a"));
       fail();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       // Expected
       assertTrue(e.getCause() instanceof ParseException);
       assertEquals("Operator found with no right operand.", e.getCause().getMessage());

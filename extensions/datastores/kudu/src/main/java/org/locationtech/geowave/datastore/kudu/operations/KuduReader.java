@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -8,7 +8,10 @@
  */
 package org.locationtech.geowave.datastore.kudu.operations;
 
-import com.google.common.collect.Sets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import org.apache.kudu.client.KuduException;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -25,10 +28,7 @@ import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import com.google.common.collect.Sets;
 
 public class KuduReader<T> implements RowReader<T> {
   private final ReaderParams<T> readerParams;
@@ -70,9 +70,9 @@ public class KuduReader<T> implements RowReader<T> {
   }
 
   public KuduReader(
-      RecordReaderParams recordReaderParams,
-      KuduOperations operations,
-      boolean visibilityEnabled) {
+      final RecordReaderParams recordReaderParams,
+      final KuduOperations operations,
+      final boolean visibilityEnabled) {
     this.readerParams = null;
     this.recordReaderParams = recordReaderParams;
     this.dataIndexReaderParams = null;
@@ -105,8 +105,8 @@ public class KuduReader<T> implements RowReader<T> {
   protected void initDataIndexScanner() {
     final byte[][] dataIds;
     if (dataIndexReaderParams.getDataIds() == null) {
-      if (dataIndexReaderParams.getStartInclusiveDataId() != null
-          || dataIndexReaderParams.getEndInclusiveDataId() != null) {
+      if ((dataIndexReaderParams.getStartInclusiveDataId() != null)
+          || (dataIndexReaderParams.getEndInclusiveDataId() != null)) {
         final List<byte[]> intermediaries = new ArrayList<>();
         ByteArrayUtils.addAllIntermediaryByteArrays(
             intermediaries,

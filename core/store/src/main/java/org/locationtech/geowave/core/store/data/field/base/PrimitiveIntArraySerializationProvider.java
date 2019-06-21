@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.data.field.base;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
@@ -35,7 +36,8 @@ public class PrimitiveIntArraySerializationProvider implements
         return null;
       }
       final ByteBuffer buff = ByteBuffer.wrap(fieldData);
-      int count = VarintUtils.readUnsignedInt(buff);
+      final int count = VarintUtils.readUnsignedInt(buff);
+      ByteArrayUtils.verifyBufferSize(buff, count);
       final int[] result = new int[count];
       for (int i = 0; i < count; i++) {
         result[i] = VarintUtils.readSignedInt(buff);

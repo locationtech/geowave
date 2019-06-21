@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -117,7 +118,7 @@ public class StatsConfigurationCollection implements java.io.Serializable, Persi
       for (final Entry<String, StatsConfigurationCollection> e : attConfig.entrySet()) {
         final byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
         final byte[] confBytes = PersistenceUtils.toBinary(e.getValue());
-        int entrySize =
+        final int entrySize =
             VarintUtils.unsignedIntByteLength(keyBytes.length)
                 + keyBytes.length
                 + VarintUtils.unsignedIntByteLength(confBytes.length)
@@ -146,11 +147,9 @@ public class StatsConfigurationCollection implements java.io.Serializable, Persi
       final Map<String, StatsConfigurationCollection> internalAttConfig = new HashMap<>(entrySize);
       for (int i = 0; i < entrySize; i++) {
         final int keySize = VarintUtils.readUnsignedInt(buf);
-        final byte[] keyBytes = new byte[keySize];
-        buf.get(keyBytes);
+        final byte[] keyBytes = ByteArrayUtils.safeRead(buf, keySize);
         final String key = StringUtils.stringFromBinary(keyBytes);
-        final byte[] entryBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-        buf.get(entryBytes);
+        final byte[] entryBytes = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
 
         internalAttConfig.put(
             key,

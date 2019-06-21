@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.format.geotools.vector;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.adapter.vector.ingest.CQLFilterOptionProvider;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 import org.locationtech.geowave.format.geotools.vector.retyping.date.DateFieldOptionProvider;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class GeoToolsVectorDataOptions implements IngestFormatOptions {
 
@@ -36,7 +36,7 @@ public class GeoToolsVectorDataOptions implements IngestFormatOptions {
     return cqlFilterOptionProvider;
   }
 
-  public void setCqlFilterOptionProvider(CQLFilterOptionProvider cqlFilterOptionProvider) {
+  public void setCqlFilterOptionProvider(final CQLFilterOptionProvider cqlFilterOptionProvider) {
     this.cqlFilterOptionProvider = cqlFilterOptionProvider;
   }
 
@@ -44,7 +44,7 @@ public class GeoToolsVectorDataOptions implements IngestFormatOptions {
     return dateFieldOptionProvider;
   }
 
-  public void setDateFieldOptionProvider(DateFieldOptionProvider dateFieldOptionProvider) {
+  public void setDateFieldOptionProvider(final DateFieldOptionProvider dateFieldOptionProvider) {
     this.dateFieldOptionProvider = dateFieldOptionProvider;
   }
 
@@ -52,7 +52,7 @@ public class GeoToolsVectorDataOptions implements IngestFormatOptions {
     return featureTypeNames;
   }
 
-  public void setFeatureTypeNames(List<String> featureTypeNames) {
+  public void setFeatureTypeNames(final List<String> featureTypeNames) {
     this.featureTypeNames = featureTypeNames;
   }
 }

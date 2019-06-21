@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -123,10 +124,10 @@ public class BasicIndexModel implements CommonIndexModel {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int numDimensions = VarintUtils.readUnsignedInt(buf);
+    ByteArrayUtils.verifyBufferSize(buf, numDimensions);
     dimensions = new NumericDimensionField[numDimensions];
     for (int i = 0; i < numDimensions; i++) {
-      final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(dim);
+      final byte[] dim = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       dimensions[i] = (NumericDimensionField<?>) PersistenceUtils.fromBinary(dim);
     }
     init(dimensions);

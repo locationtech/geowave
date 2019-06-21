@@ -13,15 +13,15 @@ import org.junit.Test;
 
 public class NumericRangeTest {
 
-  private double MINIMUM = 20;
-  private double MAXIMUM = 100;
-  private double CENTROID = 60;
-  private double DELTA = 1e-15;
+  private final double MINIMUM = 20;
+  private final double MAXIMUM = 100;
+  private final double CENTROID = 60;
+  private final double DELTA = 1e-15;
 
   @Test
   public void testNumericRangeValues() {
 
-    NumericRange numericRange = new NumericRange(MINIMUM, MAXIMUM);
+    final NumericRange numericRange = new NumericRange(MINIMUM, MAXIMUM);
 
     Assert.assertEquals(MINIMUM, numericRange.getMin(), DELTA);
     Assert.assertEquals(MAXIMUM, numericRange.getMax(), DELTA);

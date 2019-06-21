@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.adapter.raster.adapter;
 
-import com.sun.media.jai.util.PropertyGeneratorImpl;
 import java.awt.image.RenderedImage;
 import java.awt.image.renderable.ParameterBlock;
 import javax.media.jai.RenderedOp;
 import org.geotools.resources.coverage.CoverageUtilities;
+import com.sun.media.jai.util.PropertyGeneratorImpl;
 
 public class MosaicPropertyGenerator extends PropertyGeneratorImpl {
 

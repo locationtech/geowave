@@ -15,7 +15,7 @@ public class MotionEventPoint extends TrackPoint {
     return eventEndTime;
   }
 
-  public void setEndTime(long eventEndTime) {
+  public void setEndTime(final long eventEndTime) {
     this.eventEndTime = eventEndTime;
   }
 }

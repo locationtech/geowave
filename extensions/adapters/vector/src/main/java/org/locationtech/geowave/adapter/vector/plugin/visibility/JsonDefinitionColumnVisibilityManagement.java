@@ -8,14 +8,14 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin.visibility;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Iterator;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Object defining visibility is a json structure where each attribute defines the visibility for a
@@ -40,16 +40,16 @@ public class JsonDefinitionColumnVisibilityManagement<T> implements
   private static class JsonDefinitionFieldLevelVisibilityHandler<T, CommonIndexValue> extends
       FieldLevelVisibilityHandler<T, CommonIndexValue> {
     public JsonDefinitionFieldLevelVisibilityHandler(
-        String fieldName,
-        FieldVisibilityHandler<T, Object> fieldVisiblityHandler,
-        String visibilityAttribute) {
+        final String fieldName,
+        final FieldVisibilityHandler<T, Object> fieldVisiblityHandler,
+        final String visibilityAttribute) {
       super(fieldName, fieldVisiblityHandler, visibilityAttribute);
     }
 
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public byte[] translateVisibility(Object visibilityObject, String fieldName) {
+    public byte[] translateVisibility(final Object visibilityObject, final String fieldName) {
       if (visibilityObject == null) {
         return null;
       }
@@ -105,7 +105,7 @@ public class JsonDefinitionColumnVisibilityManagement<T> implements
       final String fieldName,
       final FieldVisibilityHandler<T, Object> defaultHandler,
       final String visibilityAttributeName) {
-    return new JsonDefinitionFieldLevelVisibilityHandler<T, Object>(
+    return new JsonDefinitionFieldLevelVisibilityHandler<>(
         fieldName,
         defaultHandler,
         visibilityAttributeName);

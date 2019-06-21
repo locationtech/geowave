@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -72,8 +72,8 @@ public class KuduStoreTestEnvironment extends StoreTestEnvironment {
   }
 
   @Override
-  protected void initOptions(StoreFactoryOptions options) {
-    KuduRequiredOptions kuduOptions = (KuduRequiredOptions) options;
+  protected void initOptions(final StoreFactoryOptions options) {
+    final KuduRequiredOptions kuduOptions = (KuduRequiredOptions) options;
     kuduOptions.setKuduMaster("127.0.0.1:7051");
   }
 

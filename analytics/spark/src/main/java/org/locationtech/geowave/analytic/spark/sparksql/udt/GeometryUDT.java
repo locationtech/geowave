@@ -14,16 +14,21 @@ import org.locationtech.jts.geom.Geometry;
 /** Created by jwileczek on 7/20/18. */
 public class GeometryUDT extends AbstractGeometryUDT<Geometry> {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
-  public boolean acceptsType(DataType dataType) {
+  public boolean acceptsType(final DataType dataType) {
     return super.acceptsType(dataType)
-        || dataType.getClass() == GeometryUDT.class
-        || dataType.getClass() == PointUDT.class
-        || dataType.getClass() == LineStringUDT.class
-        || dataType.getClass() == PolygonUDT.class
-        || dataType.getClass() == MultiLineStringUDT.class
-        || dataType.getClass() == MultiPointUDT.class
-        || dataType.getClass() == MultiPolygonUDT.class;
+        || (dataType.getClass() == GeometryUDT.class)
+        || (dataType.getClass() == PointUDT.class)
+        || (dataType.getClass() == LineStringUDT.class)
+        || (dataType.getClass() == PolygonUDT.class)
+        || (dataType.getClass() == MultiLineStringUDT.class)
+        || (dataType.getClass() == MultiPointUDT.class)
+        || (dataType.getClass() == MultiPolygonUDT.class);
   }
 
   @Override

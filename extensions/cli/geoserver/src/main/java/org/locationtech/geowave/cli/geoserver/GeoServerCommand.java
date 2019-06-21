@@ -32,7 +32,7 @@ public abstract class GeoServerCommand<T> extends ServiceEnabledCommand<T> {
     return true;
   }
 
-  public boolean isDuplicate(Response response, String errorMessage)
+  public boolean isDuplicate(final Response response, final String errorMessage)
       throws TargetNotFoundException {
     if (errorMessage.toLowerCase().contains("already exists")) {
       return true;
@@ -40,7 +40,7 @@ public abstract class GeoServerCommand<T> extends ServiceEnabledCommand<T> {
     return false;
   }
 
-  public T handleError(Response response, String errorMessage) throws Exception {
+  public T handleError(final Response response, final String errorMessage) throws Exception {
     if (isDuplicate(response, errorMessage)) {
       throw new DuplicateEntryException(errorMessage);
     }

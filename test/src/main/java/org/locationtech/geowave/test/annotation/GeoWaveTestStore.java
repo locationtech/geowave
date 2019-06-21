@@ -17,10 +17,10 @@ import org.locationtech.geowave.test.BigtableStoreTestEnvironment;
 import org.locationtech.geowave.test.CassandraStoreTestEnvironment;
 import org.locationtech.geowave.test.DynamoDBStoreTestEnvironment;
 import org.locationtech.geowave.test.HBaseStoreTestEnvironment;
+import org.locationtech.geowave.test.KuduStoreTestEnvironment;
 import org.locationtech.geowave.test.RedisStoreTestEnvironment;
 import org.locationtech.geowave.test.RocksDBStoreTestEnvironment;
 import org.locationtech.geowave.test.StoreTestEnvironment;
-import org.locationtech.geowave.test.KuduStoreTestEnvironment;
 import org.locationtech.geowave.test.TestUtils;
 
 /**

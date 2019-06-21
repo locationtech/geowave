@@ -8,16 +8,17 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin.visibility;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.ObjectStreamException;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Describes which attribute in a feature contains the visibility constraints, interpreted by a
@@ -195,19 +196,17 @@ public class VisibilityConfiguration implements SimpleFeatureUserDataConfigurati
 
   @Override
   public void fromBinary(final byte[] bytes) {
-    byte[] attributeBytes;
-    final byte[] managerClassBytes;
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    attributeBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-    if (attributeBytes.length > 0) {
-      buf.get(attributeBytes);
+    final int attributeBytesLength = VarintUtils.readUnsignedInt(buf);
+    if (attributeBytesLength > 0) {
+      final byte[] attributeBytes = ByteArrayUtils.safeRead(buf, attributeBytesLength);
       attributeName = StringUtils.stringFromBinary(attributeBytes);
     } else {
       attributeName = null;
     }
-    managerClassBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-    if (managerClassBytes.length > 0) {
-      buf.get(managerClassBytes);
+    final int managerClassBytesLength = VarintUtils.readUnsignedInt(buf);
+    if (managerClassBytesLength > 0) {
+      final byte[] managerClassBytes = ByteArrayUtils.safeRead(buf, managerClassBytesLength);
       managerClassName = StringUtils.stringFromBinary(managerClassBytes);
     } else {
       managerClassName = null;

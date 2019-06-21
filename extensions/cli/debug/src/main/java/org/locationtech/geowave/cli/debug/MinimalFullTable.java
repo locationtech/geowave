@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.cli.debug;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -37,6 +34,9 @@ import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations
 import org.locationtech.geowave.datastore.hbase.HBaseStoreFactoryFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "fullscanMinimal", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "full table scan without any iterators or deserialization")
@@ -44,7 +44,7 @@ public class MinimalFullTable extends DefaultOperation implements Command {
   private static Logger LOGGER = LoggerFactory.getLogger(MinimalFullTable.class);
 
   @Parameter(description = "<storename>")
-  private final List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @Parameter(names = "--indexId", required = true, description = "The name of the index (optional)")
   private String indexId;

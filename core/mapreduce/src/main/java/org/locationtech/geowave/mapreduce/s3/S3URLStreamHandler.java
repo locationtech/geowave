@@ -16,7 +16,7 @@ import java.net.URLStreamHandler;
 public class S3URLStreamHandler extends URLStreamHandler {
 
   @Override
-  protected URLConnection openConnection(URL url) throws IOException {
+  protected URLConnection openConnection(final URL url) throws IOException {
     return new S3URLConnection(url);
   }
 }

@@ -9,8 +9,6 @@
 package org.locationtech.geowave.test.osm;
 
 import java.io.File;
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
@@ -32,6 +30,8 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreTyp
 import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.MAP_REDUCE})
@@ -51,7 +51,7 @@ public class MapReduceIT {
 
   @BeforeClass
   public static void setupTestData() throws ZipException {
-    ZipFile data = new ZipFile(new File(TEST_DATA_ZIP_RESOURCE_PATH));
+    final ZipFile data = new ZipFile(new File(TEST_DATA_ZIP_RESOURCE_PATH));
     data.extractAll(TEST_DATA_BASE_DIR);
   }
 
@@ -62,30 +62,30 @@ public class MapReduceIT {
     // tablet
     // servers, for whatever reason, using the
     // miniAccumuloConfig.setMemory() function.
-    MapReduceTestEnvironment mrEnv = MapReduceTestEnvironment.getInstance();
+    final MapReduceTestEnvironment mrEnv = MapReduceTestEnvironment.getInstance();
 
     // TODO: for now this only works with accumulo, generalize the data
     // store usage
-    AccumuloStoreTestEnvironment accumuloEnv = AccumuloStoreTestEnvironment.getInstance();
+    final AccumuloStoreTestEnvironment accumuloEnv = AccumuloStoreTestEnvironment.getInstance();
 
-    String hdfsPath = mrEnv.getHdfsBaseDirectory() + "/osm_stage/";
+    final String hdfsPath = mrEnv.getHdfsBaseDirectory() + "/osm_stage/";
 
-    StageOSMToHDFSCommand stage = new StageOSMToHDFSCommand();
+    final StageOSMToHDFSCommand stage = new StageOSMToHDFSCommand();
     stage.setParameters(TEST_DATA_BASE_DIR, hdfsPath);
     stage.execute(mrEnv.getOperationParams());
 
-    Connector conn =
+    final Connector conn =
         new ZooKeeperInstance(
             accumuloEnv.getAccumuloInstance(),
             accumuloEnv.getZookeeper()).getConnector(
                 accumuloEnv.getAccumuloUser(),
                 new PasswordToken(accumuloEnv.getAccumuloPassword()));
-    Authorizations auth = new Authorizations(new String[] {"public"});
+    final Authorizations auth = new Authorizations(new String[] {"public"});
     conn.securityOperations().changeUserAuthorizations(accumuloEnv.getAccumuloUser(), auth);
-    IngestOSMToGeoWaveCommand ingest = new IngestOSMToGeoWaveCommand();
+    final IngestOSMToGeoWaveCommand ingest = new IngestOSMToGeoWaveCommand();
     ingest.setParameters(hdfsPath, "test-store");
 
-    AddStoreCommand addStore = new AddStoreCommand();
+    final AddStoreCommand addStore = new AddStoreCommand();
     addStore.setParameters("test-store");
     addStore.setPluginOptions(dataStoreOptions);
     addStore.execute(mrEnv.getOperationParams());

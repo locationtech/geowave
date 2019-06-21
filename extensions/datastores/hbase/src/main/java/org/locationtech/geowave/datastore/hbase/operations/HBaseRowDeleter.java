@@ -43,7 +43,7 @@ public class HBaseRowDeleter implements RowDeleter {
   @Override
   public void delete(final GeoWaveRow row) {
 
-    byte[] rowBytes = GeoWaveKey.getCompositeId(row);
+    final byte[] rowBytes = GeoWaveKey.getCompositeId(row);
     final Delete delete = new Delete(rowBytes);
     // we use a hashset of row IDs so that we can retain multiple versions
     // (otherwise timestamps will be applied on the server side in
@@ -59,7 +59,7 @@ public class HBaseRowDeleter implements RowDeleter {
         }
       }
       deleter.mutate(delete);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.warn("Unable to delete row", e);
     }
   }
@@ -69,7 +69,7 @@ public class HBaseRowDeleter implements RowDeleter {
     try {
       deleter.flush();
       duplicateRowTracker.clear();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.warn("Unable to flush deleter.", e);
     }
   }

@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.UUID;
 
 public class MemoryTransactionsAllocator implements TransactionsAllocator {
-  private final LinkedList<String> lockPaths = new LinkedList<String>();
+  private final LinkedList<String> lockPaths = new LinkedList<>();
 
   public MemoryTransactionsAllocator() {
     super();

@@ -86,7 +86,7 @@ public class URLClassloaderUtils {
 
   public static void initClassLoader() throws MalformedURLException {
     synchronized (MUTEX) {
-      ClassLoader myCl = URLClassloaderUtils.class.getClassLoader();
+      final ClassLoader myCl = URLClassloaderUtils.class.getClassLoader();
       if (initializedClassLoaders.contains(myCl)) {
         return;
       }

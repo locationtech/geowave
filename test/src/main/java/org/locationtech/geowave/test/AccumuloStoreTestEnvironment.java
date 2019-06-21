@@ -61,7 +61,7 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
   protected String accumuloPassword;
   protected MiniAccumuloClusterImpl miniAccumulo;
 
-  private final List<Process> cleanup = new ArrayList<Process>();
+  private final List<Process> cleanup = new ArrayList<>();
 
   private AccumuloStoreTestEnvironment() {}
 
@@ -200,7 +200,7 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
         LOGGER.warn("Unable to stop mini accumulo instance", e);
       }
     }
-    if (!KEEP_LOGS && TEMP_DIR != null) {
+    if (!KEEP_LOGS && (TEMP_DIR != null)) {
       try {
         // sleep because mini accumulo processes still have a
         // hold on the log files and there is no hook to get

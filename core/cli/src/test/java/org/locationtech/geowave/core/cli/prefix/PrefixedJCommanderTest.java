@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.prefix;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +15,14 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.annotations.PrefixParameter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class PrefixedJCommanderTest {
 
   @Test
   public void testAddCommand() {
-    PrefixedJCommander prefixedJCommander = new PrefixedJCommander();
+    final PrefixedJCommander prefixedJCommander = new PrefixedJCommander();
 
     prefixedJCommander.addCommand("abc", (Object) "hello, world", "a");
     prefixedJCommander.addCommand("def", (Object) "goodbye, world", "b");
@@ -32,19 +32,19 @@ public class PrefixedJCommanderTest {
 
   @Test
   public void testNullDelegate() {
-    PrefixedJCommander commander = new PrefixedJCommander();
-    NullDelegate nullDelegate = new NullDelegate();
+    final PrefixedJCommander commander = new PrefixedJCommander();
+    final NullDelegate nullDelegate = new NullDelegate();
     commander.addPrefixedObject(nullDelegate);
     commander.parse();
   }
 
   @Test
   public void testMapDelegatesPrefix() {
-    Arguments args = new Arguments();
+    final Arguments args = new Arguments();
     args.argChildren.put("abc", new ArgumentChildren());
     args.argChildren.put("def", new ArgumentChildren());
 
-    PrefixedJCommander commander = new PrefixedJCommander();
+    final PrefixedJCommander commander = new PrefixedJCommander();
     commander.addPrefixedObject(args);
     commander.parse("--abc.arg", "5", "--def.arg", "blah");
 
@@ -54,11 +54,11 @@ public class PrefixedJCommanderTest {
 
   @Test
   public void testCollectionDelegatesPrefix() {
-    ArgumentsCollection args = new ArgumentsCollection();
+    final ArgumentsCollection args = new ArgumentsCollection();
     args.argChildren.add(new ArgumentChildren());
     args.argChildren.add(new ArgumentChildrenOther());
 
-    PrefixedJCommander commander = new PrefixedJCommander();
+    final PrefixedJCommander commander = new PrefixedJCommander();
     commander.addPrefixedObject(args);
 
     commander.parse("--arg", "5", "--arg2", "blah");
@@ -69,8 +69,8 @@ public class PrefixedJCommanderTest {
 
   @Test
   public void testPrefixParameter() {
-    PrefixedArguments args = new PrefixedArguments();
-    PrefixedJCommander commander = new PrefixedJCommander();
+    final PrefixedArguments args = new PrefixedArguments();
+    final PrefixedJCommander commander = new PrefixedJCommander();
     commander.addPrefixedObject(args);
 
     commander.parse("--abc.arg", "5", "--arg", "blah");
@@ -81,18 +81,18 @@ public class PrefixedJCommanderTest {
 
   @Test
   public void testAddGetPrefixedObjects() {
-    PrefixedArguments args = new PrefixedArguments();
-    PrefixedJCommander commander = new PrefixedJCommander();
+    final PrefixedArguments args = new PrefixedArguments();
+    final PrefixedJCommander commander = new PrefixedJCommander();
     commander.addPrefixedObject(args);
     Assert.assertTrue(
         commander.getPrefixedObjects().contains(args)
-            && commander.getPrefixedObjects().size() == 1);
+            && (commander.getPrefixedObjects().size() == 1));
   }
 
   private static class PrefixedArguments {
     @ParametersDelegate
     @PrefixParameter(prefix = "abc")
-    private ArgumentChildren child = new ArgumentChildren();
+    private final ArgumentChildren child = new ArgumentChildren();
 
     @Parameter(names = "--arg")
     private String blah;
@@ -100,17 +100,17 @@ public class PrefixedJCommanderTest {
 
   private static class NullDelegate {
     @ParametersDelegate
-    private ArgumentChildren value = null;
+    private final ArgumentChildren value = null;
   }
 
   private static class ArgumentsCollection {
     @ParametersDelegate
-    private List<Object> argChildren = new ArrayList<Object>();
+    private final List<Object> argChildren = new ArrayList<>();
   }
 
   private static class Arguments {
     @ParametersDelegate
-    private Map<String, ArgumentChildren> argChildren = new HashMap<String, ArgumentChildren>();
+    private final Map<String, ArgumentChildren> argChildren = new HashMap<>();
   }
 
   private static class ArgumentChildren {

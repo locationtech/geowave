@@ -19,8 +19,8 @@ public class MissionSummary {
   private long startTime;
   private long endTime;
 
-  private List<MissionFrame> frames = new ArrayList<MissionFrame>();
-  private List<ObjectClassification> classifications = new ArrayList<ObjectClassification>();
+  private List<MissionFrame> frames = new ArrayList<>();
+  private List<ObjectClassification> classifications = new ArrayList<>();
 
   /** @return the missionId */
   public String getMissionId() {
@@ -28,7 +28,7 @@ public class MissionSummary {
   }
 
   /** @param missionId the missionId to set */
-  public void setMissionId(String missionId) {
+  public void setMissionId(final String missionId) {
     this.missionId = missionId;
   }
 
@@ -46,7 +46,7 @@ public class MissionSummary {
    *
    * @param name
    */
-  public void setName(String name) {
+  public void setName(final String name) {
     this.name = name;
   }
 
@@ -64,7 +64,7 @@ public class MissionSummary {
    *
    * @param security
    */
-  public void setSecurity(String security) {
+  public void setSecurity(final String security) {
     this.security = security;
   }
 
@@ -82,7 +82,7 @@ public class MissionSummary {
    *
    * @param frames the list of frames which comprise this mission
    */
-  public void setFrames(List<MissionFrame> frames) {
+  public void setFrames(final List<MissionFrame> frames) {
     this.frames = frames;
   }
 
@@ -91,11 +91,11 @@ public class MissionSummary {
    *
    * @param frame the MissionFrame to add
    */
-  public void addFrame(MissionFrame frame) {
-    if (this.frames == null) {
-      this.frames = new ArrayList<MissionFrame>();
+  public void addFrame(final MissionFrame frame) {
+    if (frames == null) {
+      frames = new ArrayList<>();
     }
-    this.frames.add(frame);
+    frames.add(frame);
   }
 
   /**
@@ -107,7 +107,7 @@ public class MissionSummary {
     return classifications;
   }
 
-  public void setClassifications(List<ObjectClassification> classifications) {
+  public void setClassifications(final List<ObjectClassification> classifications) {
     this.classifications = classifications;
   }
 
@@ -116,11 +116,11 @@ public class MissionSummary {
    *
    * @param classification {@link ObjectClassification}
    */
-  public void addClassification(ObjectClassification classification) {
-    if (this.classifications == null) {
-      this.classifications = new ArrayList<ObjectClassification>();
+  public void addClassification(final ObjectClassification classification) {
+    if (classifications == null) {
+      classifications = new ArrayList<>();
     }
-    this.classifications.add(classification);
+    classifications.add(classification);
   }
 
   /** @return the startTime */
@@ -129,7 +129,7 @@ public class MissionSummary {
   }
 
   /** @param startTime the startTime to set */
-  public void setStartTime(long startTime) {
+  public void setStartTime(final long startTime) {
     this.startTime = startTime;
   }
 
@@ -139,7 +139,7 @@ public class MissionSummary {
   }
 
   /** @param endTime the endTime to set */
-  public void setEndTime(long endTime) {
+  public void setEndTime(final long endTime) {
     this.endTime = endTime;
   }
 
@@ -149,7 +149,7 @@ public class MissionSummary {
   }
 
   /** @param coverageArea the coverageArea to set */
-  public void setCoverageArea(Area coverageArea) {
+  public void setCoverageArea(final Area coverageArea) {
     this.coverageArea = coverageArea;
   }
 }

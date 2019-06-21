@@ -36,11 +36,11 @@ public class DateFieldRetypingSource extends AbstractFieldRetypingSource {
     this.typeIn = typeIn;
     this.fieldNameToTimestampFormat = fieldNameToTimestampFormat;
 
-    this.fieldToFormatObjMap = new ThreadLocal<Map<String, SimpleDateFormat>>() {
+    fieldToFormatObjMap = new ThreadLocal<Map<String, SimpleDateFormat>>() {
       @Override
       protected Map<String, SimpleDateFormat> initialValue() {
         final Map<String, SimpleDateFormat> localFieldToFormat = new HashMap<>();
-        for (Entry<String, String> entry : fieldNameToTimestampFormat.entrySet()) {
+        for (final Entry<String, String> entry : fieldNameToTimestampFormat.entrySet()) {
           localFieldToFormat.put(entry.getKey(), new SimpleDateFormat(entry.getValue()));
         }
         return localFieldToFormat;
@@ -49,14 +49,14 @@ public class DateFieldRetypingSource extends AbstractFieldRetypingSource {
   }
 
   @Override
-  public Object retypeAttributeValue(Object value, Name attributeName) {
+  public Object retypeAttributeValue(final Object value, final Name attributeName) {
     Object outValue = value;
     final String localName = attributeName.getLocalPart();
     final SimpleDateFormat formatForName = fieldToFormatObjMap.get().get(localName);
-    if (value != null && formatForName != null) {
+    if ((value != null) && (formatForName != null)) {
       try {
         outValue = formatForName.parse(value.toString());
-      } catch (ParseException e) {
+      } catch (final ParseException e) {
         LOGGER.error("Failed to parse: " + localName + ": " + value.toString());
       }
     }
@@ -67,13 +67,13 @@ public class DateFieldRetypingSource extends AbstractFieldRetypingSource {
   public SimpleFeatureType getRetypedSimpleFeatureType() {
     debugType("IN", typeIn);
 
-    SimpleFeatureTypeBuilder typeOutBuilder = new SimpleFeatureTypeBuilder();
+    final SimpleFeatureTypeBuilder typeOutBuilder = new SimpleFeatureTypeBuilder();
 
     // Manually set the basics and replace the date fields
     typeOutBuilder.setCRS(typeIn.getCoordinateReferenceSystem());
     typeOutBuilder.setDescription(typeIn.getDescription());
     typeOutBuilder.setName(typeIn.getName());
-    for (AttributeDescriptor att : typeIn.getAttributeDescriptors()) {
+    for (final AttributeDescriptor att : typeIn.getAttributeDescriptors()) {
       if (fieldNameToTimestampFormat.containsKey(att.getLocalName())) {
         typeOutBuilder.add(att.getLocalName(), Date.class);
       } else {
@@ -101,7 +101,7 @@ public class DateFieldRetypingSource extends AbstractFieldRetypingSource {
   }
 
   @Override
-  public String getFeatureId(SimpleFeature original) {
+  public String getFeatureId(final SimpleFeature original) {
     // We don't need to do much, we're not changing the ID
     return original.getID();
   }
@@ -110,7 +110,7 @@ public class DateFieldRetypingSource extends AbstractFieldRetypingSource {
     if (LOGGER.isDebugEnabled()) {
       final StringBuilder logBuilder = new StringBuilder();
       logBuilder.append("Type: " + typeLabel);
-      for (AttributeDescriptor propDef : type.getAttributeDescriptors()) {
+      for (final AttributeDescriptor propDef : type.getAttributeDescriptors()) {
         logBuilder.append(
             "\nField: "
                 + propDef.getLocalName()

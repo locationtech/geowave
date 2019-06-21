@@ -14,7 +14,6 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypePro
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;

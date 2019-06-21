@@ -23,7 +23,7 @@ public class GeomFunctionRegistry implements Serializable {
   private static GeomDistance geomDistanceInstance = new GeomDistance();
   private static GeomFromWKT geomWKTInstance = new GeomFromWKT();
 
-  public static void registerGeometryFunctions(SparkSession spark) {
+  public static void registerGeometryFunctions(final SparkSession spark) {
 
     // Distance UDF is only exception to GeomFunction interface since it
     // returns Double
@@ -32,10 +32,10 @@ public class GeomFunctionRegistry implements Serializable {
     spark.udf().register("GeomFromWKT", geomWKTInstance, GeoWaveSpatialEncoders.geometryUDT);
 
     // Register all UDF functions from RegistrySPI
-    UDFNameAndConstructor[] supportedUDFs = UDFRegistrySPI.getSupportedUDFs();
+    final UDFNameAndConstructor[] supportedUDFs = UDFRegistrySPI.getSupportedUDFs();
     for (int iUDF = 0; iUDF < supportedUDFs.length; iUDF += 1) {
-      UDFNameAndConstructor udf = supportedUDFs[iUDF];
-      GeomFunction funcInstance = udf.getPredicateConstructor().get();
+      final UDFNameAndConstructor udf = supportedUDFs[iUDF];
+      final GeomFunction funcInstance = udf.getPredicateConstructor().get();
 
       spark.udf().register(funcInstance.getRegisterName(), funcInstance, DataTypes.BooleanType);
     }

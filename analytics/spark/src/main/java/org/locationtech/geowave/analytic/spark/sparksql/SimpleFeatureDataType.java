@@ -14,7 +14,7 @@ public class SimpleFeatureDataType {
   private final DataType dataType;
   private final boolean isGeom;
 
-  public SimpleFeatureDataType(DataType dataType, boolean isGeom) {
+  public SimpleFeatureDataType(final DataType dataType, final boolean isGeom) {
     this.dataType = dataType;
     this.isGeom = isGeom;
   }

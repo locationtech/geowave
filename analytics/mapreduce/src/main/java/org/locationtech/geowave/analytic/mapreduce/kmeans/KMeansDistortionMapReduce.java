@@ -124,7 +124,7 @@ public class KMeansDistortionMapReduce {
 
       try {
         nestedGroupCentroidAssigner =
-            new NestedGroupCentroidAssignment<Object>(
+            new NestedGroupCentroidAssignment<>(
                 context,
                 KMeansDistortionMapReduce.class,
                 KMeansDistortionMapReduce.LOGGER);
@@ -245,7 +245,7 @@ public class KMeansDistortionMapReduce {
 
       try {
         centroidManager =
-            new CentroidManagerGeoWave<Object>(
+            new CentroidManagerGeoWave<>(
                 context,
                 KMeansDistortionMapReduce.class,
                 KMeansDistortionMapReduce.LOGGER);

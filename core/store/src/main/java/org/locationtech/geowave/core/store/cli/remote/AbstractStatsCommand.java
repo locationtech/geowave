@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.remote;
 
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.IOException;
 import java.util.List;
 import org.locationtech.geowave.core.cli.api.OperationParams;
@@ -23,6 +21,8 @@ import org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOp
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.ParametersDelegate;
 
 /** Common methods for dumping, manipulating and calculating stats. */
 public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
@@ -52,7 +52,7 @@ public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
     if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
-    DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    final DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
     try {
       // Various stores needed
@@ -62,7 +62,7 @@ public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
         final InternalAdapterStore internalAdapterStore =
             inputStoreOptions.createInternalAdapterStore();
         final Short adapterId = internalAdapterStore.getAdapterId(typeName);
-        InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+        final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
         if (adapter != null) {
           performStatsCommand(inputStoreOptions, adapter, statsOptions);
         } else {
@@ -70,7 +70,7 @@ public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
           // adapters
           LOGGER.error("Unknown adapter " + adapterId);
           final StringBuffer buffer = new StringBuffer();
-          for (String t : internalAdapterStore.getTypeNames()) {
+          for (final String t : internalAdapterStore.getTypeNames()) {
             buffer.append(t).append(' ');
           }
           LOGGER.info("Available data types: " + buffer.toString());

@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class FeatureDefinitionSet {
   public static final List<String> GeneralizedFeatures =
       Collections.unmodifiableList(new ArrayList<String>());
-  public static final List<FeatureDefinition> Features = (new ArrayList<FeatureDefinition>());
+  public static final List<FeatureDefinition> Features = (new ArrayList<>());
   public static final Map<String, FeatureDataAdapter> featureAdapters =
       new HashMap(new HashMap<String, FeatureDataAdapter>());
   public static final Map<String, SimpleFeatureType> featureTypes =
@@ -41,21 +41,21 @@ public class FeatureDefinitionSet {
   private static boolean initialized = false;
   private static final Logger LOGGER = LoggerFactory.getLogger(FeatureDefinitionSet.class);
 
-  public static void initialize(String configFile) {
+  public static void initialize(final String configFile) {
     synchronized (MUTEX) {
       if (!initialized) {
-        FeatureConfigParser fcp = new FeatureConfigParser();
-        ByteArrayInputStream bais =
+        final FeatureConfigParser fcp = new FeatureConfigParser();
+        final ByteArrayInputStream bais =
             new ByteArrayInputStream(configFile.getBytes(StringUtils.getGeoWaveCharset()));
         try {
           fcp.parseConfig(bais);
-        } catch (IOException e) {
+        } catch (final IOException e) {
           LOGGER.error("Unable to parse config file string", e);
         } finally {
           IOUtils.closeQuietly(bais);
         }
 
-        for (FeatureDefinition fd : Features) {
+        for (final FeatureDefinition fd : Features) {
           parseFeatureDefinition(fd);
         }
 
@@ -64,7 +64,7 @@ public class FeatureDefinitionSet {
     }
   }
 
-  private static void parseFeatureDefinition(FeatureDefinition fd) {
+  private static void parseFeatureDefinition(final FeatureDefinition fd) {
     final SimpleFeatureTypeBuilder sftb = new SimpleFeatureTypeBuilder();
     sftb.setName(fd.name);
     final AttributeTypeBuilder atb = new AttributeTypeBuilder();
@@ -87,8 +87,8 @@ public class FeatureDefinitionSet {
     // }
     // }
     // sftb.add(atb.binding(geomClass).nillable(false).buildDescriptor("geometry"));
-    for (AttributeDefinition ad : fd.attributes) {
-      AttributeType at = AttributeTypes.getAttributeType(ad.type);
+    for (final AttributeDefinition ad : fd.attributes) {
+      final AttributeType at = AttributeTypes.getAttributeType(ad.type);
       if (ad.name == null) {
         System.out.println("yo");
       }
@@ -98,14 +98,15 @@ public class FeatureDefinitionSet {
                 normalizeOsmNames(ad.name)));
       }
     }
-    SimpleFeatureType sft = sftb.buildFeatureType();
+    final SimpleFeatureType sft = sftb.buildFeatureType();
     featureTypes.put(fd.name, sft);
     featureAdapters.put(fd.name, new FeatureDataAdapter(sft));
   }
 
-  public static String normalizeOsmNames(String name) {
-    if (name == null)
+  public static String normalizeOsmNames(final String name) {
+    if (name == null) {
       return null;
+    }
 
     return name.trim().toLowerCase(Locale.ENGLISH).replace(":", "_");
   }

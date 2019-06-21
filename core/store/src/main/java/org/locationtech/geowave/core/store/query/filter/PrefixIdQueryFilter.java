@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.query.filter;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -54,8 +55,7 @@ public class PrefixIdQueryFilter implements QueryFilter {
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    partitionKey = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(partitionKey);
+    partitionKey = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
     sortKeyPrefix = new byte[buf.remaining()];
     buf.get(sortKeyPrefix);
   }

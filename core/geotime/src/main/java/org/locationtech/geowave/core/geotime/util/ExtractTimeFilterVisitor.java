@@ -82,7 +82,7 @@ import org.opengis.temporal.Position;
  * range.
  */
 public class ExtractTimeFilterVisitor extends NullFilterVisitor {
-  private final List<String[]> validParamRanges = new LinkedList<String[]>();
+  private final List<String[]> validParamRanges = new LinkedList<>();
 
   private boolean approximation = false;
 
@@ -274,7 +274,7 @@ public class ExtractTimeFilterVisitor extends NullFilterVisitor {
         } else {
           // if there are multiple non-instersecting ranges, this is
           // an approximation
-          approximation |= start.getRanges().size() > 1 || end.getRanges().size() > 1;
+          approximation |= (start.getRanges().size() > 1) || (end.getRanges().size() > 1);
 
           constraints.getConstraintsForRange(range[0], range[1]).add(
               new TemporalRange(

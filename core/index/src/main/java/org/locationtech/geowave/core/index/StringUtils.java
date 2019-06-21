@@ -34,7 +34,8 @@ public class StringUtils {
 
   public static Charset getGeoWaveCharset() {
     if (geowaveCharset == null) {
-      String charset = System.getProperty(GEOWAVE_CHARSET_PROPERTY_NAME, DEFAULT_GEOWAVE_CHARSET);
+      final String charset =
+          System.getProperty(GEOWAVE_CHARSET_PROPERTY_NAME, DEFAULT_GEOWAVE_CHARSET);
       geowaveCharset = Charset.forName(charset);
     }
     return geowaveCharset;
@@ -58,7 +59,7 @@ public class StringUtils {
    */
   public static byte[] stringsToBinary(final String strings[]) {
     int len = VarintUtils.unsignedIntByteLength(strings.length);
-    final List<byte[]> strsBytes = new ArrayList<byte[]>();
+    final List<byte[]> strsBytes = new ArrayList<>();
     for (final String str : strings) {
       final byte[] strByte = str.getBytes(getGeoWaveCharset());
       strsBytes.add(strByte);
@@ -95,8 +96,7 @@ public class StringUtils {
     final String[] result = new String[count];
     for (int i = 0; i < count; i++) {
       final int size = VarintUtils.readUnsignedInt(buf);
-      final byte[] strBytes = new byte[size];
-      buf.get(strBytes);
+      final byte[] strBytes = ByteArrayUtils.safeRead(buf, size);
       result[i] = new String(strBytes, getGeoWaveCharset());
     }
     return result;
@@ -114,7 +114,7 @@ public class StringUtils {
   }
 
   public static Map<String, String> parseParams(final String params) throws NullPointerException {
-    final Map<String, String> paramsMap = new HashMap<String, String>();
+    final Map<String, String> paramsMap = new HashMap<>();
     final String[] paramsSplit = params.split(";");
     for (final String param : paramsSplit) {
       final String[] keyValue = param.split("=");

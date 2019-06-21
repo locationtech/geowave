@@ -68,7 +68,7 @@ public class CountAggregation implements CommonIndexAggregation<Persistable, Lon
 
   @Override
   public byte[] resultToBinary(final Long result) {
-    ByteBuffer buffer = ByteBuffer.allocate(VarintUtils.unsignedLongByteLength(result));
+    final ByteBuffer buffer = ByteBuffer.allocate(VarintUtils.unsignedLongByteLength(result));
     VarintUtils.writeUnsignedLong(result, buffer);
     return buffer.array();
   }

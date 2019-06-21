@@ -8,6 +8,8 @@
  */
 package org.locationtech.geowave.datastore.kudu;
 
+import java.nio.ByteBuffer;
+import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Type;
@@ -17,19 +19,17 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.entities.MergeableGeoWaveRow;
-import java.nio.ByteBuffer;
-import java.util.List;
 
 public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
 
-  private byte[] partitionKey;
+  private final byte[] partitionKey;
   private final short adapterId;
   private final byte[] sortKey;
   private final byte[] dataId;
   private final byte[] fieldVisibility;
   private final byte[] nanoTime;
   private final byte[] fieldMask;
-  private byte[] value;
+  private final byte[] value;
   private final int numDuplicates;
 
   public enum KuduField {
@@ -64,28 +64,28 @@ public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
 
   public KuduRow(final RowResult row) {
     super(getFieldValues(row));
-    this.partitionKey = row.getBinaryCopy(KuduField.GW_PARTITION_ID_KEY.getFieldName());
-    this.adapterId = row.getShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName());
-    this.sortKey = row.getBinaryCopy(KuduField.GW_SORT_KEY.getFieldName());
-    this.dataId = row.getBinaryCopy(KuduField.GW_DATA_ID_KEY.getFieldName());
-    this.fieldVisibility = row.getBinaryCopy(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName());
-    this.nanoTime = row.getBinaryCopy(KuduField.GW_NANO_TIME_KEY.getFieldName());
-    this.fieldMask = row.getBinaryCopy(KuduField.GW_FIELD_MASK_KEY.getFieldName());
-    this.value = row.getBinaryCopy(KuduField.GW_VALUE_KEY.getFieldName());
-    this.numDuplicates = row.getByte(KuduField.GW_NUM_DUPLICATES_KEY.getFieldName());
+    partitionKey = row.getBinaryCopy(KuduField.GW_PARTITION_ID_KEY.getFieldName());
+    adapterId = row.getShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName());
+    sortKey = row.getBinaryCopy(KuduField.GW_SORT_KEY.getFieldName());
+    dataId = row.getBinaryCopy(KuduField.GW_DATA_ID_KEY.getFieldName());
+    fieldVisibility = row.getBinaryCopy(KuduField.GW_FIELD_VISIBILITY_KEY.getFieldName());
+    nanoTime = row.getBinaryCopy(KuduField.GW_NANO_TIME_KEY.getFieldName());
+    fieldMask = row.getBinaryCopy(KuduField.GW_FIELD_MASK_KEY.getFieldName());
+    value = row.getBinaryCopy(KuduField.GW_VALUE_KEY.getFieldName());
+    numDuplicates = row.getByte(KuduField.GW_NUM_DUPLICATES_KEY.getFieldName());
   }
 
-  public KuduRow(GeoWaveRow row, GeoWaveValue value) {
-    ByteBuffer nanoBuffer = ByteBuffer.allocate(8);
+  public KuduRow(final GeoWaveRow row, final GeoWaveValue value) {
+    final ByteBuffer nanoBuffer = ByteBuffer.allocate(8);
     nanoBuffer.putLong(0, Long.MAX_VALUE - System.nanoTime());
-    this.partitionKey = row.getPartitionKey();
-    this.adapterId = row.getAdapterId();
-    this.sortKey = row.getSortKey();
-    this.dataId = row.getDataId();
-    this.numDuplicates = row.getNumberOfDuplicates();
-    this.nanoTime = nanoBuffer.array();
-    this.fieldVisibility = value.getVisibility();
-    this.fieldMask = value.getFieldMask();
+    partitionKey = row.getPartitionKey();
+    adapterId = row.getAdapterId();
+    sortKey = row.getSortKey();
+    dataId = row.getDataId();
+    numDuplicates = row.getNumberOfDuplicates();
+    nanoTime = nanoBuffer.array();
+    fieldVisibility = value.getVisibility();
+    fieldMask = value.getFieldMask();
     this.value = value.getValue();
   }
 
@@ -123,7 +123,7 @@ public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
   }
 
   @Override
-  public void populatePartialRow(PartialRow partialRow) {
+  public void populatePartialRow(final PartialRow partialRow) {
     populatePartialRowPrimaryKey(partialRow);
     partialRow.addBinary(KuduField.GW_FIELD_MASK_KEY.getFieldName(), fieldMask);
     partialRow.addBinary(KuduField.GW_VALUE_KEY.getFieldName(), value);
@@ -131,7 +131,7 @@ public class KuduRow extends MergeableGeoWaveRow implements PersistentKuduRow {
   }
 
   @Override
-  public void populatePartialRowPrimaryKey(PartialRow partialRow) {
+  public void populatePartialRowPrimaryKey(final PartialRow partialRow) {
     partialRow.addBinary(KuduField.GW_PARTITION_ID_KEY.getFieldName(), partitionKey);
     partialRow.addShort(KuduField.GW_ADAPTER_ID_KEY.getFieldName(), adapterId);
     partialRow.addBinary(KuduField.GW_SORT_KEY.getFieldName(), sortKey);

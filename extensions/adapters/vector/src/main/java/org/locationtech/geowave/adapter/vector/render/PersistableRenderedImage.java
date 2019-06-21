@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.render;
 
-import ar.com.hjg.pngj.FilterType;
-import it.geosolutions.imageio.plugins.png.PNGWriter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,6 +16,8 @@ import javax.imageio.ImageIO;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ar.com.hjg.pngj.FilterType;
+import it.geosolutions.imageio.plugins.png.PNGWriter;
 
 /**
  * This class wraps a rendered image as a GeoWave Persistable object. It serializes and deserializes

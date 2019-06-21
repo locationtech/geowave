@@ -38,7 +38,7 @@ public class PropertyManagementConverter {
 
   final PropertyManagement properties;
 
-  public PropertyManagementConverter(PropertyManagement properties) {
+  public PropertyManagementConverter(final PropertyManagement properties) {
     this.properties = properties;
   }
 
@@ -51,25 +51,25 @@ public class PropertyManagementConverter {
    *
    * @param object
    */
-  public void readProperties(Object object) {
-    JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+  public void readProperties(final Object object) {
+    final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
     translator.addObject(object);
-    JCommanderTranslationMap map = translator.translate();
-    for (TranslationEntry entry : map.getEntries().values()) {
+    final JCommanderTranslationMap map = translator.translate();
+    for (final TranslationEntry entry : map.getEntries().values()) {
       // Has annotation?
-      AnnotatedElement element = entry.getMember();
-      CentroidParameter centroid = element.getAnnotation(CentroidParameter.class);
-      ClusteringParameter clustering = element.getAnnotation(ClusteringParameter.class);
-      CommonParameter common = element.getAnnotation(CommonParameter.class);
-      ExtractParameter extract = element.getAnnotation(ExtractParameter.class);
-      GlobalParameter global = element.getAnnotation(GlobalParameter.class);
-      HullParameter hull = element.getAnnotation(HullParameter.class);
-      InputParameter input = element.getAnnotation(InputParameter.class);
-      JumpParameter jump = element.getAnnotation(JumpParameter.class);
-      MapReduceParameter mapReduce = element.getAnnotation(MapReduceParameter.class);
-      OutputParameter output = element.getAnnotation(OutputParameter.class);
-      PartitionParameter partition = element.getAnnotation(PartitionParameter.class);
-      SampleParameter sample = element.getAnnotation(SampleParameter.class);
+      final AnnotatedElement element = entry.getMember();
+      final CentroidParameter centroid = element.getAnnotation(CentroidParameter.class);
+      final ClusteringParameter clustering = element.getAnnotation(ClusteringParameter.class);
+      final CommonParameter common = element.getAnnotation(CommonParameter.class);
+      final ExtractParameter extract = element.getAnnotation(ExtractParameter.class);
+      final GlobalParameter global = element.getAnnotation(GlobalParameter.class);
+      final HullParameter hull = element.getAnnotation(HullParameter.class);
+      final InputParameter input = element.getAnnotation(InputParameter.class);
+      final JumpParameter jump = element.getAnnotation(JumpParameter.class);
+      final MapReduceParameter mapReduce = element.getAnnotation(MapReduceParameter.class);
+      final OutputParameter output = element.getAnnotation(OutputParameter.class);
+      final PartitionParameter partition = element.getAnnotation(PartitionParameter.class);
+      final SampleParameter sample = element.getAnnotation(SampleParameter.class);
 
       if (centroid != null) {
         handleEnum(entry, centroid.value());
@@ -117,8 +117,8 @@ public class PropertyManagementConverter {
    * @param enumVal
    */
   @SuppressWarnings("unchecked")
-  private void handleEnum(TranslationEntry entry, ParameterEnum<?>[] enumVals) {
-    Object value = entry.getParam().get(entry.getObject());
+  private void handleEnum(final TranslationEntry entry, final ParameterEnum<?>[] enumVals) {
+    final Object value = entry.getParam().get(entry.getObject());
     if (value != null) {
       if (LOGGER.isDebugEnabled()) {
         LOGGER.debug(
@@ -127,7 +127,7 @@ public class PropertyManagementConverter {
                 entry.getAsPropertyName(),
                 value.toString()));
       }
-      for (ParameterEnum<?> enumVal : enumVals) {
+      for (final ParameterEnum<?> enumVal : enumVals) {
         ((ParameterEnum<Object>) enumVal).getHelper().setValue(properties, value);
       }
     }

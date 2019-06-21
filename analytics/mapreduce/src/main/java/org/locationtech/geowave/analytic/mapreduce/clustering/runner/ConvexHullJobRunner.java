@@ -104,7 +104,7 @@ public class ConvexHullJobRunner extends GeoWaveAnalyticJobRunner {
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(super.getParameters());
 
     params.addAll(

@@ -113,15 +113,15 @@ public class ResizeSparkCommand extends DefaultOperation implements Command {
     return outputStoreOptions;
   }
 
-  public void setAppName(String appName) {
+  public void setAppName(final String appName) {
     this.appName = appName;
   }
 
-  public void setHost(String host) {
+  public void setHost(final String host) {
     this.host = host;
   }
 
-  public void setMaster(String master) {
+  public void setMaster(final String master) {
     this.master = master;
   }
 }

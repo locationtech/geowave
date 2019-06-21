@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.core.store.adapter.statistics.histogram;
 
-import com.tdunning.math.stats.MergingDigest;
-import com.tdunning.math.stats.TDigest;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import com.tdunning.math.stats.MergingDigest;
+import com.tdunning.math.stats.TDigest;
 
 public class TDigestNumericHistogram implements NumericHistogram {
   private static final double DEFAULT_COMPRESSION = 100;

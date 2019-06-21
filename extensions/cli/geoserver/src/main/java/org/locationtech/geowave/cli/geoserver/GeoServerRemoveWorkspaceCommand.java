@@ -8,22 +8,22 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "rmws", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer workspace")
 public class GeoServerRemoveWorkspaceCommand extends GeoServerRemoveCommand<String> {
   @Parameter(description = "<workspace name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String wsName = null;
 
@@ -44,7 +44,7 @@ public class GeoServerRemoveWorkspaceCommand extends GeoServerRemoveCommand<Stri
     if (deleteWorkspaceResponse.getStatus() == Status.OK.getStatusCode()) {
       return "Delete workspace '" + wsName + "' from GeoServer: OK";
     }
-    String errorMessage =
+    final String errorMessage =
         "Error deleting workspace '"
             + wsName
             + "' from GeoServer: "

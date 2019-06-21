@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.core.store.entities;
 
-import com.google.common.base.Function;
 import java.util.Iterator;
+import com.google.common.base.Function;
 
 /**
  * Interface for a function that transforms an iterator of {@link GeoWaveRow}s to another type. The
@@ -24,7 +24,7 @@ public interface GeoWaveRowIteratorTransformer<T> extends
       new GeoWaveRowIteratorTransformer<GeoWaveRow>() {
 
         @Override
-        public Iterator<GeoWaveRow> apply(Iterator<GeoWaveRow> input) {
+        public Iterator<GeoWaveRow> apply(final Iterator<GeoWaveRow> input) {
           return input;
         }
       };

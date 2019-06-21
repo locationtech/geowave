@@ -39,7 +39,7 @@ import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QueryFilterIterator extends Filter {
+public class QueryFilterIterator extends ExceptionHandlingFilter {
   private static final Logger LOGGER = LoggerFactory.getLogger(QueryFilterIterator.class);
   public static final String QUERY_ITERATOR_NAME = "GEOWAVE_QUERY_FILTER";
   public static final int QUERY_ITERATOR_PRIORITY = 25;
@@ -129,7 +129,7 @@ public class QueryFilterIterator extends Filter {
   }
 
   @Override
-  public boolean accept(final Key key, final Value value) {
+  public boolean acceptInternal(final Key key, final Value value) {
     if (isSet()) {
       final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
 

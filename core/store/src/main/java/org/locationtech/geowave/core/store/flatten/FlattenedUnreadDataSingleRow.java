@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.flatten;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 
 public class FlattenedUnreadDataSingleRow implements FlattenedUnreadData {
@@ -34,8 +35,8 @@ public class FlattenedUnreadDataSingleRow implements FlattenedUnreadData {
       cachedRead = new ArrayList<>();
       for (int i = currentIndexInFieldPositions; i < fieldPositions.size(); i++) {
         final int fieldLength = VarintUtils.readUnsignedInt(partiallyConsumedBuffer);
-        final byte[] fieldValueBytes = new byte[fieldLength];
-        partiallyConsumedBuffer.get(fieldValueBytes);
+        final byte[] fieldValueBytes =
+            ByteArrayUtils.safeRead(partiallyConsumedBuffer, fieldLength);
         final Integer fieldPosition = fieldPositions.get(i);
         cachedRead.add(new FlattenedFieldInfo(fieldPosition, fieldValueBytes));
       }

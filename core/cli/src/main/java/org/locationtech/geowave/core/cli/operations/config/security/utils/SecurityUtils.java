@@ -30,14 +30,14 @@ public class SecurityUtils {
    *        resource location
    * @return decrypted value
    */
-  public static String decryptHexEncodedValue(String value, String resourceLocation)
+  public static String decryptHexEncodedValue(final String value, final String resourceLocation)
       throws Exception {
     LOGGER.trace("Decrypting hex-encoded value");
-    if (value != null && !"".equals(value.trim())) {
+    if ((value != null) && !"".equals(value.trim())) {
       if (BaseEncryption.isProperlyWrapped(value.trim())) {
         try {
           return getEncryptionService(resourceLocation).decryptHexEncoded(value);
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
           LOGGER.error(
               "Encountered exception during content decryption: " + t.getLocalizedMessage(),
               t);
@@ -63,14 +63,14 @@ public class SecurityUtils {
    * @return If encryption is successful, encrypted and hex-encoded string value is returned wrapped
    *         with ENC{}
    */
-  public static String encryptAndHexEncodeValue(String value, String resourceLocation)
+  public static String encryptAndHexEncodeValue(final String value, final String resourceLocation)
       throws Exception {
     LOGGER.debug("Encrypting and hex-encoding value");
-    if (value != null && !"".equals(value.trim())) {
+    if ((value != null) && !"".equals(value.trim())) {
       if (!BaseEncryption.isProperlyWrapped(value)) {
         try {
           return getEncryptionService(resourceLocation).encryptAndHexEncode(value);
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
           LOGGER.error(
               "Encountered exception during content encryption: " + t.getLocalizedMessage(),
               t);
@@ -98,10 +98,10 @@ public class SecurityUtils {
    * @return An initialized instance of the encryption service
    * @throws Exception
    */
-  private static synchronized BaseEncryption getEncryptionService(String resourceLocation)
+  private static synchronized BaseEncryption getEncryptionService(final String resourceLocation)
       throws Throwable {
     if (encService == null) {
-      if (resourceLocation != null && !"".equals(resourceLocation.trim())) {
+      if ((resourceLocation != null) && !"".equals(resourceLocation.trim())) {
         LOGGER.trace(
             "Setting resource location for encryption service: [" + resourceLocation + "]");
         encService = new GeoWaveEncryption(resourceLocation);
@@ -122,7 +122,7 @@ public class SecurityUtils {
    * @param configFile Location of config file that token key file is associated with
    * @return File for given config file
    */
-  public static File getFormattedTokenKeyFileForConfig(File configFile) {
+  public static File getFormattedTokenKeyFileForConfig(final File configFile) {
     return new File(
         // get the resource location
         configFile.getParentFile(),

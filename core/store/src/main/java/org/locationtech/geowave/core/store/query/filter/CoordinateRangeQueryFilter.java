@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.store.query.filter;
 
 import java.nio.ByteBuffer;
-import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
@@ -81,8 +81,7 @@ public class CoordinateRangeQueryFilter implements QueryFilter {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     try {
       final int indexStrategyLength = VarintUtils.readUnsignedInt(buf);
-      final byte[] indexStrategyBytes = new byte[indexStrategyLength];
-      buf.get(indexStrategyBytes);
+      final byte[] indexStrategyBytes = ByteArrayUtils.safeRead(buf, indexStrategyLength);
       indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(indexStrategyBytes);
       final byte[] coordRangeBytes = new byte[buf.remaining()];
       buf.get(coordRangeBytes);

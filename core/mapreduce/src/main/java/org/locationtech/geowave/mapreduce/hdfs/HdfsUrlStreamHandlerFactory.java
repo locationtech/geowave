@@ -31,7 +31,7 @@ public class HdfsUrlStreamHandlerFactory extends FsUrlStreamHandlerFactory {
   public URLStreamHandler createURLStreamHandler(final String protocol) {
 
     // FsUrlStreamHandlerFactory impl
-    URLStreamHandler urlStreamHandler = super.createURLStreamHandler(protocol);
+    final URLStreamHandler urlStreamHandler = super.createURLStreamHandler(protocol);
 
     // See if hadoop handled it
     if (urlStreamHandler != null) {

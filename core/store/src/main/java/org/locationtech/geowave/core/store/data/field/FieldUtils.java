@@ -42,8 +42,8 @@ public class FieldUtils {
   }
 
   private static synchronized void initRegistry() {
-    fieldReaderRegistry = new HashMap<Class<?>, FieldReader<?>>();
-    fieldWriterRegistry = new HashMap<Class<?>, FieldWriter<?, ?>>();
+    fieldReaderRegistry = new HashMap<>();
+    fieldWriterRegistry = new HashMap<>();
     final Iterator<FieldSerializationProviderSpi> serializationProviders =
         new SPIServiceRegistry(FieldSerializationProviderSpi.class).load(
             FieldSerializationProviderSpi.class);
@@ -115,8 +115,6 @@ public class FieldUtils {
   public static <RowType, FieldType> FieldWriter<RowType, FieldType> getDefaultWriterForClass(
       final Class<FieldType> myClass,
       final FieldVisibilityHandler<RowType, Object> visibilityHandler) {
-    return new BasicWriter<RowType, FieldType>(
-        getDefaultWriterForClass(myClass),
-        visibilityHandler);
+    return new BasicWriter<>(getDefaultWriterForClass(myClass), visibilityHandler);
   }
 }

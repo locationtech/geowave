@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.Range;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -73,13 +74,15 @@ public class BasicOrderedConstraintQuery extends BasicQuery {
     @Override
     public void fromBinary(final byte[] bytes) {
       final ByteBuffer buf = ByteBuffer.wrap(bytes);
-      rangesPerDimension = new Range[VarintUtils.readUnsignedInt(buf)];
-      final byte[] indexNameBinary = new byte[VarintUtils.readUnsignedInt(buf)];
+      final int numRanges = VarintUtils.readUnsignedInt(buf);
+      ByteArrayUtils.verifyBufferSize(buf, numRanges);
+      rangesPerDimension = new Range[numRanges];
+      final int indexNameBinaryLength = VarintUtils.readUnsignedInt(buf);
       for (int i = 0; i < rangesPerDimension.length; i++) {
         rangesPerDimension[i] = Range.between(buf.getDouble(), buf.getDouble());
       }
-      if (indexNameBinary.length > 0) {
-        buf.get(indexNameBinary);
+      if (indexNameBinaryLength > 0) {
+        final byte[] indexNameBinary = ByteArrayUtils.safeRead(buf, indexNameBinaryLength);
         indexName = StringUtils.stringFromBinary(indexNameBinary);
       } else {
         indexName = null;

@@ -21,7 +21,7 @@ public class AnalyticServiceClient {
     this(baseUrl, null, null);
   }
 
-  public AnalyticServiceClient(final String baseUrl, String user, String password) {
+  public AnalyticServiceClient(final String baseUrl, final String user, final String password) {
 
     analyticService =
         WebResourceFactory.newResource(

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.operations.options;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.analytic.param.CentroidParameters;
 import org.locationtech.geowave.analytic.param.ClusteringParameters;
 import org.locationtech.geowave.analytic.param.CommonParameters;
@@ -21,6 +20,7 @@ import org.locationtech.geowave.analytic.param.annotations.CommonParameter;
 import org.locationtech.geowave.analytic.param.annotations.ExtractParameter;
 import org.locationtech.geowave.analytic.param.annotations.GlobalParameter;
 import org.locationtech.geowave.analytic.param.annotations.HullParameter;
+import com.beust.jcommander.Parameter;
 
 public class KMeansCommonOptions {
   @CentroidParameter(CentroidParameters.Centroid.EXTRACTOR_CLASS)
@@ -139,7 +139,7 @@ public class KMeansCommonOptions {
     return centroidExtractorClass;
   }
 
-  public void setCentroidExtractorClass(String centroidExtractorClass) {
+  public void setCentroidExtractorClass(final String centroidExtractorClass) {
     this.centroidExtractorClass = centroidExtractorClass;
   }
 
@@ -147,7 +147,7 @@ public class KMeansCommonOptions {
     return centroidIndexId;
   }
 
-  public void setCentroidIndexId(String centroidIndexId) {
+  public void setCentroidIndexId(final String centroidIndexId) {
     this.centroidIndexId = centroidIndexId;
   }
 
@@ -155,7 +155,7 @@ public class KMeansCommonOptions {
     return centroidWrapperFactoryClass;
   }
 
-  public void setCentroidWrapperFactoryClass(String centroidWrapperFactoryClass) {
+  public void setCentroidWrapperFactoryClass(final String centroidWrapperFactoryClass) {
     this.centroidWrapperFactoryClass = centroidWrapperFactoryClass;
   }
 
@@ -163,7 +163,7 @@ public class KMeansCommonOptions {
     return centroidZoomLevel;
   }
 
-  public void setCentroidZoomLevel(String centroidZoomLevel) {
+  public void setCentroidZoomLevel(final String centroidZoomLevel) {
     this.centroidZoomLevel = centroidZoomLevel;
   }
 
@@ -171,7 +171,7 @@ public class KMeansCommonOptions {
     return clusteringConverganceTolerance;
   }
 
-  public void setClusteringConverganceTolerance(String clusteringConverganceTolerance) {
+  public void setClusteringConverganceTolerance(final String clusteringConverganceTolerance) {
     this.clusteringConverganceTolerance = clusteringConverganceTolerance;
   }
 
@@ -179,7 +179,7 @@ public class KMeansCommonOptions {
     return clusteringMaxIterations;
   }
 
-  public void setClusteringMaxIterations(String clusteringMaxIterations) {
+  public void setClusteringMaxIterations(final String clusteringMaxIterations) {
     this.clusteringMaxIterations = clusteringMaxIterations;
   }
 
@@ -187,7 +187,7 @@ public class KMeansCommonOptions {
     return clusteringMaxReducerCount;
   }
 
-  public void setClusteringMaxReducerCount(String clusteringMaxReducerCount) {
+  public void setClusteringMaxReducerCount(final String clusteringMaxReducerCount) {
     this.clusteringMaxReducerCount = clusteringMaxReducerCount;
   }
 
@@ -195,7 +195,7 @@ public class KMeansCommonOptions {
     return clusteringZoomLevels;
   }
 
-  public void setClusteringZoomLevels(String clusteringZoomLevels) {
+  public void setClusteringZoomLevels(final String clusteringZoomLevels) {
     this.clusteringZoomLevels = clusteringZoomLevels;
   }
 
@@ -203,7 +203,7 @@ public class KMeansCommonOptions {
     return commonDimensionExtractClass;
   }
 
-  public void setCommonDimensionExtractClass(String commonDimensionExtractClass) {
+  public void setCommonDimensionExtractClass(final String commonDimensionExtractClass) {
     this.commonDimensionExtractClass = commonDimensionExtractClass;
   }
 
@@ -211,7 +211,7 @@ public class KMeansCommonOptions {
     return extractDataNamespaceUri;
   }
 
-  public void setExtractDataNamespaceUri(String extractDataNamespaceUri) {
+  public void setExtractDataNamespaceUri(final String extractDataNamespaceUri) {
     this.extractDataNamespaceUri = extractDataNamespaceUri;
   }
 
@@ -219,7 +219,7 @@ public class KMeansCommonOptions {
     return extractDimensionExtractClass;
   }
 
-  public void setExtractDimensionExtractClass(String extractDimensionExtractClass) {
+  public void setExtractDimensionExtractClass(final String extractDimensionExtractClass) {
     this.extractDimensionExtractClass = extractDimensionExtractClass;
   }
 
@@ -227,7 +227,7 @@ public class KMeansCommonOptions {
     return extractOutputDataTypeId;
   }
 
-  public void setExtractOutputDataTypeId(String extractOutputDataTypeId) {
+  public void setExtractOutputDataTypeId(final String extractOutputDataTypeId) {
     this.extractOutputDataTypeId = extractOutputDataTypeId;
   }
 
@@ -235,7 +235,7 @@ public class KMeansCommonOptions {
     return extractReducerCount;
   }
 
-  public void setExtractReducerCount(String extractReducerCount) {
+  public void setExtractReducerCount(final String extractReducerCount) {
     this.extractReducerCount = extractReducerCount;
   }
 
@@ -243,7 +243,7 @@ public class KMeansCommonOptions {
     return globalBatchId;
   }
 
-  public void setGlobalBatchId(String globalBatchId) {
+  public void setGlobalBatchId(final String globalBatchId) {
     this.globalBatchId = globalBatchId;
   }
 
@@ -251,7 +251,7 @@ public class KMeansCommonOptions {
     return globalParentBatchId;
   }
 
-  public void setGlobalParentBatchId(String globalParentBatchId) {
+  public void setGlobalParentBatchId(final String globalParentBatchId) {
     this.globalParentBatchId = globalParentBatchId;
   }
 
@@ -259,7 +259,7 @@ public class KMeansCommonOptions {
     return hullDataNamespaceUri;
   }
 
-  public void setHullDataNamespaceUri(String hullDataNamespaceUri) {
+  public void setHullDataNamespaceUri(final String hullDataNamespaceUri) {
     this.hullDataNamespaceUri = hullDataNamespaceUri;
   }
 
@@ -267,7 +267,7 @@ public class KMeansCommonOptions {
     return hullDataTypeId;
   }
 
-  public void setHullDataTypeId(String hullDataTypeId) {
+  public void setHullDataTypeId(final String hullDataTypeId) {
     this.hullDataTypeId = hullDataTypeId;
   }
 
@@ -275,7 +275,7 @@ public class KMeansCommonOptions {
     return hullIndexId;
   }
 
-  public void setHullIndexId(String hullIndexId) {
+  public void setHullIndexId(final String hullIndexId) {
     this.hullIndexId = hullIndexId;
   }
 
@@ -283,7 +283,7 @@ public class KMeansCommonOptions {
     return hullProjectionClass;
   }
 
-  public void setHullProjectionClass(String hullProjectionClass) {
+  public void setHullProjectionClass(final String hullProjectionClass) {
     this.hullProjectionClass = hullProjectionClass;
   }
 
@@ -291,7 +291,7 @@ public class KMeansCommonOptions {
     return hullReducerCount;
   }
 
-  public void setHullReducerCount(String hullReducerCount) {
+  public void setHullReducerCount(final String hullReducerCount) {
     this.hullReducerCount = hullReducerCount;
   }
 
@@ -299,7 +299,7 @@ public class KMeansCommonOptions {
     return hullWrapperFactoryClass;
   }
 
-  public void setHullWrapperFactoryClass(String hullWrapperFactoryClass) {
+  public void setHullWrapperFactoryClass(final String hullWrapperFactoryClass) {
     this.hullWrapperFactoryClass = hullWrapperFactoryClass;
   }
 }

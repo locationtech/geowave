@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.core.store.entities;
 
-import com.google.common.primitives.UnsignedBytes;
 import java.util.Arrays;
+import com.google.common.primitives.UnsignedBytes;
 
 public class GeoWaveMetadata implements Comparable<GeoWaveMetadata> {
   protected byte[] primaryId;
@@ -50,14 +50,17 @@ public class GeoWaveMetadata implements Comparable<GeoWaveMetadata> {
     int result = 1;
     result =
         (prime * result)
-            + ((primaryId == null || primaryId.length == 0) ? 0 : Arrays.hashCode(primaryId));
+            + (((primaryId == null) || (primaryId.length == 0)) ? 0 : Arrays.hashCode(primaryId));
     result =
         (prime * result)
-            + ((secondaryId == null || secondaryId.length == 0) ? 0 : Arrays.hashCode(secondaryId));
-    result = (prime * result) + ((value == null || value.length == 0) ? 0 : Arrays.hashCode(value));
+            + (((secondaryId == null) || (secondaryId.length == 0)) ? 0
+                : Arrays.hashCode(secondaryId));
+    result =
+        (prime * result) + (((value == null) || (value.length == 0)) ? 0 : Arrays.hashCode(value));
     result =
         (prime * result)
-            + ((visibility == null || visibility.length == 0) ? 0 : Arrays.hashCode(visibility));
+            + (((visibility == null) || (visibility.length == 0)) ? 0
+                : Arrays.hashCode(visibility));
     return result;
   }
 
@@ -74,24 +77,25 @@ public class GeoWaveMetadata implements Comparable<GeoWaveMetadata> {
     }
     final GeoWaveMetadata other = (GeoWaveMetadata) obj;
     byte[] otherComp =
-        other.primaryId != null && other.primaryId.length == 0 ? null : other.primaryId;
-    byte[] thisComp = primaryId != null && primaryId.length == 0 ? null : primaryId;
+        (other.primaryId != null) && (other.primaryId.length == 0) ? null : other.primaryId;
+    byte[] thisComp = (primaryId != null) && (primaryId.length == 0) ? null : primaryId;
     if (!Arrays.equals(thisComp, otherComp)) {
       return false;
     }
     otherComp =
-        other.secondaryId != null && other.secondaryId.length == 0 ? null : other.secondaryId;
-    thisComp = secondaryId != null && secondaryId.length == 0 ? null : secondaryId;
+        (other.secondaryId != null) && (other.secondaryId.length == 0) ? null : other.secondaryId;
+    thisComp = (secondaryId != null) && (secondaryId.length == 0) ? null : secondaryId;
     if (!Arrays.equals(otherComp, thisComp)) {
       return false;
     }
-    otherComp = other.value != null && other.value.length == 0 ? null : other.value;
-    thisComp = value != null && value.length == 0 ? null : value;
+    otherComp = (other.value != null) && (other.value.length == 0) ? null : other.value;
+    thisComp = (value != null) && (value.length == 0) ? null : value;
     if (!Arrays.equals(otherComp, thisComp)) {
       return false;
     }
-    otherComp = other.visibility != null && other.visibility.length == 0 ? null : other.visibility;
-    thisComp = visibility != null && visibility.length == 0 ? null : visibility;
+    otherComp =
+        (other.visibility != null) && (other.visibility.length == 0) ? null : other.visibility;
+    thisComp = (visibility != null) && (visibility.length == 0) ? null : visibility;
     if (!Arrays.equals(otherComp, thisComp)) {
       return false;
     }
@@ -99,7 +103,7 @@ public class GeoWaveMetadata implements Comparable<GeoWaveMetadata> {
   }
 
   @Override
-  public int compareTo(GeoWaveMetadata obj) {
+  public int compareTo(final GeoWaveMetadata obj) {
     if (this == obj) {
       return 0;
     }
@@ -109,7 +113,7 @@ public class GeoWaveMetadata implements Comparable<GeoWaveMetadata> {
     if (getClass() != obj.getClass()) {
       return 1;
     }
-    final GeoWaveMetadata other = (GeoWaveMetadata) obj;
+    final GeoWaveMetadata other = obj;
     byte[] otherComp = other.primaryId == null ? new byte[0] : other.primaryId;
     byte[] thisComp = primaryId == null ? new byte[0] : primaryId;
     if (UnsignedBytes.lexicographicalComparator().compare(thisComp, otherComp) != 0) {

@@ -68,7 +68,7 @@ public class TrackPoint {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(final Long id) {
     this.id = id;
   }
 
@@ -76,7 +76,7 @@ public class TrackPoint {
     return uuid;
   }
 
-  public void setUuid(String uuid) {
+  public void setUuid(final String uuid) {
     this.uuid = uuid;
   }
 
@@ -84,7 +84,7 @@ public class TrackPoint {
     return security;
   }
 
-  public void setSecurity(Security security) {
+  public void setSecurity(final Security security) {
     this.security = security;
   }
 
@@ -92,7 +92,7 @@ public class TrackPoint {
     return eventTime;
   }
 
-  public void setEventTime(long eventTime) {
+  public void setEventTime(final long eventTime) {
     this.eventTime = eventTime;
   }
 
@@ -100,7 +100,7 @@ public class TrackPoint {
     return trackItemSource;
   }
 
-  public void setTrackItemSource(String trackItemSource) {
+  public void setTrackItemSource(final String trackItemSource) {
     this.trackItemSource = trackItemSource;
   }
 
@@ -108,7 +108,7 @@ public class TrackPoint {
     return trackItemComment;
   }
 
-  public void setTrackItemComment(String trackItemComment) {
+  public void setTrackItemComment(final String trackItemComment) {
     this.trackItemComment = trackItemComment;
   }
 
@@ -116,7 +116,7 @@ public class TrackPoint {
     return location;
   }
 
-  public void setLocation(GeodeticPosition location) {
+  public void setLocation(final GeodeticPosition location) {
     this.location = location;
   }
 
@@ -124,7 +124,7 @@ public class TrackPoint {
     return speed;
   }
 
-  public void setSpeed(Double speed) {
+  public void setSpeed(final Double speed) {
     this.speed = speed;
   }
 
@@ -132,7 +132,7 @@ public class TrackPoint {
     return course;
   }
 
-  public void setCourse(Double course) {
+  public void setCourse(final Double course) {
     this.course = course;
   }
 
@@ -140,7 +140,7 @@ public class TrackPoint {
     return trackPointType;
   }
 
-  public void setTrackPointType(TrackPointType trackPointType) {
+  public void setTrackPointType(final TrackPointType trackPointType) {
     this.trackPointType = trackPointType;
   }
 
@@ -148,7 +148,7 @@ public class TrackPoint {
     return trackPointSource;
   }
 
-  public void setTrackPointSource(ModalityType trackPointSource) {
+  public void setTrackPointSource(final ModalityType trackPointSource) {
     this.trackPointSource = trackPointSource;
   }
 
@@ -156,7 +156,7 @@ public class TrackPoint {
     return objectMask;
   }
 
-  public void setObjectMask(Area objectMask) {
+  public void setObjectMask(final Area objectMask) {
     this.objectMask = objectMask;
   }
 
@@ -164,7 +164,7 @@ public class TrackPoint {
     return detail;
   }
 
-  public void setDetail(TrackPointDetail detail) {
+  public void setDetail(final TrackPointDetail detail) {
     this.detail = detail;
   }
 
@@ -172,7 +172,7 @@ public class TrackPoint {
     return dotSources;
   }
 
-  public void setDotSources(List<TrackDotSource> dotSources) {
+  public void setDotSources(final List<TrackDotSource> dotSources) {
     this.dotSources = dotSources;
   }
 }

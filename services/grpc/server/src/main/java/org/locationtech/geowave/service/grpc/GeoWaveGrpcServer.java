@@ -8,23 +8,23 @@
  */
 package org.locationtech.geowave.service.grpc;
 
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import io.grpc.netty.NettyServerBuilder;
-import io.grpc.protobuf.services.ProtoReflectionService;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
+import io.grpc.netty.NettyServerBuilder;
+import io.grpc.protobuf.services.ProtoReflectionService;
 
 public class GeoWaveGrpcServer {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGrpcServer.class.getName());
   private Server server = null;
 
   private static GeoWaveGrpcServer instance;
-  private ServiceLoader<GeoWaveGrpcServiceSpi> serviceLoader;
+  private final ServiceLoader<GeoWaveGrpcServiceSpi> serviceLoader;
 
   private GeoWaveGrpcServer() {
     serviceLoader = ServiceLoader.load(GeoWaveGrpcServiceSpi.class);
@@ -38,13 +38,13 @@ public class GeoWaveGrpcServer {
   }
 
   /** Start serving requests. */
-  public void start(int port) throws IOException {
+  public void start(final int port) throws IOException {
     final ServerBuilder<?> builder = NettyServerBuilder.forPort(port);
     builder.addService(ProtoReflectionService.newInstance());
     try {
-      Iterator<GeoWaveGrpcServiceSpi> grpcServices = serviceLoader.iterator();
+      final Iterator<GeoWaveGrpcServiceSpi> grpcServices = serviceLoader.iterator();
       while (grpcServices.hasNext()) {
-        GeoWaveGrpcServiceSpi s = grpcServices.next();
+        final GeoWaveGrpcServiceSpi s = grpcServices.next();
         builder.addService(s.getBindableService());
       }
     } catch (final ServiceConfigurationError e) {

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.test.basic;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +44,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Lists;
 
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
@@ -113,15 +113,15 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
   @SuppressWarnings({"unchecked", "rawtypes"})
   private void ingestData(final Geometry[] geometries, final @Nullable Integer geometryPrecision) {
     dataStore = dataStorePluginOptions.createDataStore();
-    SpatialOptions spatialOptions = new SpatialOptions();
+    final SpatialOptions spatialOptions = new SpatialOptions();
     spatialOptions.setGeometryPrecision(geometryPrecision);
     spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(spatialOptions);
-    SpatialTemporalOptions spatialTemporalOptions = new SpatialTemporalOptions();
+    final SpatialTemporalOptions spatialTemporalOptions = new SpatialTemporalOptions();
     spatialTemporalOptions.setGeometryPrecision(geometryPrecision);
     spatialTemporalIndex =
         new SpatialTemporalDimensionalityTypeProvider().createIndex(spatialTemporalOptions);
     final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(featureType);
-    SimpleFeatureBuilder builder = new SimpleFeatureBuilder(featureType);
+    final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(featureType);
 
     final List<SimpleFeature> features = new ArrayList<>();
 
@@ -140,8 +140,8 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
   }
 
   private void testPrecision(
-      Geometry[] geometries,
-      Geometry[] expected,
+      final Geometry[] geometries,
+      final Geometry[] expected,
       final @Nullable Integer geometryPrecision) {
     ingestData(geometries, geometryPrecision);
     VectorQueryBuilder builder = VectorQueryBuilder.newBuilder();
@@ -150,10 +150,10 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
             builder.constraintsFactory().noConstraints()).build();
 
     try (CloseableIterator<SimpleFeature> features = dataStore.query(query)) {
-      List<SimpleFeature> results = Lists.newArrayList(features);
+      final List<SimpleFeature> results = Lists.newArrayList(features);
       Assert.assertEquals(3, results.size());
-      for (SimpleFeature feature : results) {
-        int geometryIndex = Integer.parseInt(feature.getID());
+      for (final SimpleFeature feature : results) {
+        final int geometryIndex = Integer.parseInt(feature.getID());
         Assert.assertEquals(expected[geometryIndex], feature.getDefaultGeometry());
       }
     }
@@ -165,10 +165,10 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
                 builder.constraintsFactory().noConstraints()).build();
 
     try (CloseableIterator<SimpleFeature> features = dataStore.query(query)) {
-      List<SimpleFeature> results = Lists.newArrayList(features);
+      final List<SimpleFeature> results = Lists.newArrayList(features);
       Assert.assertEquals(3, results.size());
-      for (SimpleFeature feature : results) {
-        int geometryIndex = Integer.parseInt(feature.getID());
+      for (final SimpleFeature feature : results) {
+        final int geometryIndex = Integer.parseInt(feature.getID());
         Assert.assertEquals(expected[geometryIndex], feature.getDefaultGeometry());
       }
     }
@@ -176,8 +176,8 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
 
   @Test
   public void testFullPrecision() {
-    GeometryFactory factory = GeometryUtils.GEOMETRY_FACTORY;
-    Geometry[] geometries =
+    final GeometryFactory factory = GeometryUtils.GEOMETRY_FACTORY;
+    final Geometry[] geometries =
         new Geometry[] {
             factory.createPoint(new Coordinate(12.123456789, -10.987654321)),
             factory.createLineString(
@@ -190,8 +190,8 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
 
   @Test
   public void testMaxPrecision() {
-    GeometryFactory factory = GeometryUtils.GEOMETRY_FACTORY;
-    Geometry[] geometries =
+    final GeometryFactory factory = GeometryUtils.GEOMETRY_FACTORY;
+    final Geometry[] geometries =
         new Geometry[] {
             factory.createPoint(new Coordinate(12.123456789, -10.987654321)),
             factory.createLineString(
@@ -199,7 +199,7 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
                     new Coordinate(123456789.987654321, -123456789.987654321),
                     new Coordinate(987654321.123456789, -987654321.123456789)}),
             factory.createPoint(new Coordinate(0, 0))};
-    Geometry[] expected =
+    final Geometry[] expected =
         new Geometry[] {
             factory.createPoint(new Coordinate(12.1234568, -10.9876543)),
             factory.createLineString(
@@ -212,8 +212,8 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
 
   @Test
   public void testPrecision3() {
-    GeometryFactory factory = GeometryUtils.GEOMETRY_FACTORY;
-    Geometry[] geometries =
+    final GeometryFactory factory = GeometryUtils.GEOMETRY_FACTORY;
+    final Geometry[] geometries =
         new Geometry[] {
             factory.createPoint(new Coordinate(12.123456789, -10.987654321)),
             factory.createLineString(
@@ -221,7 +221,7 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
                     new Coordinate(123456789.987654321, -123456789.987654321),
                     new Coordinate(987654321.123456789, -987654321.123456789)}),
             factory.createPoint(new Coordinate(0, 0))};
-    Geometry[] expected =
+    final Geometry[] expected =
         new Geometry[] {
             factory.createPoint(new Coordinate(12.123, -10.988)),
             factory.createLineString(
@@ -234,8 +234,8 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
 
   @Test
   public void testPrecision0() {
-    GeometryFactory factory = GeometryUtils.GEOMETRY_FACTORY;
-    Geometry[] geometries =
+    final GeometryFactory factory = GeometryUtils.GEOMETRY_FACTORY;
+    final Geometry[] geometries =
         new Geometry[] {
             factory.createPoint(new Coordinate(12.123456789, -10.987654321)),
             factory.createLineString(
@@ -243,7 +243,7 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
                     new Coordinate(123456789.987654321, -123456789.987654321),
                     new Coordinate(987654321.123456789, -987654321.123456789)}),
             factory.createPoint(new Coordinate(0, 0))};
-    Geometry[] expected =
+    final Geometry[] expected =
         new Geometry[] {
             factory.createPoint(new Coordinate(12, -11)),
             factory.createLineString(
@@ -256,8 +256,8 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
 
   @Test
   public void testNegativePrecision() {
-    GeometryFactory factory = GeometryUtils.GEOMETRY_FACTORY;
-    Geometry[] geometries =
+    final GeometryFactory factory = GeometryUtils.GEOMETRY_FACTORY;
+    final Geometry[] geometries =
         new Geometry[] {
             factory.createPoint(new Coordinate(12.123456789, -10.987654321)),
             factory.createLineString(
@@ -265,7 +265,7 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
                     new Coordinate(123456789.987654321, -123456789.987654321),
                     new Coordinate(987654321.123456789, -987654321.123456789)}),
             factory.createPoint(new Coordinate(0, 0))};
-    Geometry[] expected =
+    final Geometry[] expected =
         new Geometry[] {
             factory.createPoint(new Coordinate(0, 0)),
             factory.createLineString(

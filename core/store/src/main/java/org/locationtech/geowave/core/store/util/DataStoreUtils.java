@@ -22,6 +22,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import org.locationtech.geowave.core.index.IndexMetaData;
@@ -270,8 +271,7 @@ public class DataStoreUtils {
                   new FlattenedUnreadDataSingleRow(input, i, fieldPositions));
             }
             final int fieldLength = VarintUtils.readUnsignedInt(input);
-            final byte[] fieldValueBytes = new byte[fieldLength];
-            input.get(fieldValueBytes);
+            final byte[] fieldValueBytes = ByteArrayUtils.safeRead(input, fieldLength);
             fieldInfoList.add(new FlattenedFieldInfo(fieldPosition, fieldValueBytes));
           }
         } else {
@@ -283,8 +283,7 @@ public class DataStoreUtils {
         for (int i = 0; input.hasRemaining(); i++) {
           final Integer fieldPosition = i;
           final int fieldLength = VarintUtils.readUnsignedInt(input);
-          final byte[] fieldValueBytes = new byte[fieldLength];
-          input.get(fieldValueBytes);
+          final byte[] fieldValueBytes = ByteArrayUtils.safeRead(input, fieldLength);
           fieldInfoList.add(new FlattenedFieldInfo(fieldPosition, fieldValueBytes));
         }
       }

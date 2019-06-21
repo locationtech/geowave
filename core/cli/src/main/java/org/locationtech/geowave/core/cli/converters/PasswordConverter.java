@@ -9,7 +9,6 @@
 /** */
 package org.locationtech.geowave.core.cli.converters;
 
-import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,6 +16,7 @@ import java.util.Properties;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.utils.FileUtils;
 import org.locationtech.geowave.core.cli.utils.PropertiesUtils;
+import com.beust.jcommander.ParameterException;
 
 /**
  * This class will allow support for user's passing in passwords through a variety of ways. Current
@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.cli.utils.PropertiesUtils;
  * </ul>
  */
 public class PasswordConverter extends GeoWaveBaseConverter<String> {
-  public PasswordConverter(String optionName) {
+  public PasswordConverter(final String optionName) {
     super(optionName);
   }
 
@@ -49,25 +49,25 @@ public class PasswordConverter extends GeoWaveBaseConverter<String> {
   private enum KeyType {
     PASS("pass" + SEPARATOR) {
       @Override
-      String process(String password) {
+      String process(final String password) {
         return password;
       }
     },
     ENV("env" + SEPARATOR) {
       @Override
-      String process(String envVariable) {
+      String process(final String envVariable) {
         return System.getenv(envVariable);
       }
     },
     FILE("file" + SEPARATOR) {
       @Override
-      String process(String value) {
+      String process(final String value) {
         try {
-          String password = FileUtils.readFileContent(new File(value));
-          if (password != null && !"".equals(password.trim())) {
+          final String password = FileUtils.readFileContent(new File(value));
+          if ((password != null) && !"".equals(password.trim())) {
             return password;
           }
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
           throw new ParameterException(ex);
         }
         return null;
@@ -75,20 +75,20 @@ public class PasswordConverter extends GeoWaveBaseConverter<String> {
     },
     PROPFILE("propfile" + SEPARATOR) {
       @Override
-      String process(String value) {
-        if (value != null && !"".equals(value.trim())) {
+      String process(final String value) {
+        if ((value != null) && !"".equals(value.trim())) {
           if (value.indexOf(SEPARATOR) != -1) {
             String propertyFilePath = value.split(SEPARATOR)[0];
             String propertyKey = value.split(SEPARATOR)[1];
-            if (propertyFilePath != null && !"".equals(propertyFilePath.trim())) {
+            if ((propertyFilePath != null) && !"".equals(propertyFilePath.trim())) {
               propertyFilePath = propertyFilePath.trim();
-              File propsFile = new File(propertyFilePath);
-              if (propsFile != null && propsFile.exists()) {
-                Properties properties = PropertiesUtils.fromFile(propsFile);
-                if (propertyKey != null && !"".equals(propertyKey.trim())) {
+              final File propsFile = new File(propertyFilePath);
+              if ((propsFile != null) && propsFile.exists()) {
+                final Properties properties = PropertiesUtils.fromFile(propsFile);
+                if ((propertyKey != null) && !"".equals(propertyKey.trim())) {
                   propertyKey = propertyKey.trim();
                 }
-                if (properties != null && properties.containsKey(propertyKey)) {
+                if ((properties != null) && properties.containsKey(propertyKey)) {
                   return properties.getProperty(propertyKey);
                 }
               } else {
@@ -98,7 +98,7 @@ public class PasswordConverter extends GeoWaveBaseConverter<String> {
                           propsFile != null
                               ? "Properties file not found at path: " + propsFile.getCanonicalPath()
                               : "No properties file specified"));
-                } catch (IOException e) {
+                } catch (final IOException e) {
                   throw new ParameterException(e);
                 }
               }
@@ -119,12 +119,12 @@ public class PasswordConverter extends GeoWaveBaseConverter<String> {
       private String input = null;
 
       @Override
-      public boolean matches(String value) {
+      public boolean matches(final String value) {
         return prefix.equals(value);
       }
 
       @Override
-      String process(String value) {
+      String process(final String value) {
         if (input == null) {
           input = promptAndReadPassword("Enter password: ");
         }
@@ -133,33 +133,33 @@ public class PasswordConverter extends GeoWaveBaseConverter<String> {
     },
     DEFAULT("") {
       @Override
-      String process(String password) {
+      String process(final String password) {
         return password;
       }
     };
 
     String prefix;
 
-    private KeyType(String prefix) {
+    private KeyType(final String prefix) {
       this.prefix = prefix;
     }
 
-    public boolean matches(String value) {
+    public boolean matches(final String value) {
       return value.startsWith(prefix);
     }
 
-    public String convert(String value) {
+    public String convert(final String value) {
       return process(value.substring(prefix.length()));
     }
 
-    String process(String value) {
+    String process(final String value) {
       return value;
     }
   }
 
   @Override
-  public String convert(String value) {
-    for (KeyType keyType : KeyType.values()) {
+  public String convert(final String value) {
+    for (final KeyType keyType : KeyType.values()) {
       if (keyType.matches(value)) {
         return keyType.convert(value);
       }
@@ -178,7 +178,7 @@ public class PasswordConverter extends GeoWaveBaseConverter<String> {
   }
 
   protected Properties getGeoWaveConfigProperties() {
-    File geowaveConfigPropsFile = getGeoWaveConfigFile();
+    final File geowaveConfigPropsFile = getGeoWaveConfigFile();
     return ConfigOptions.loadProperties(geowaveConfigPropsFile);
   }
 

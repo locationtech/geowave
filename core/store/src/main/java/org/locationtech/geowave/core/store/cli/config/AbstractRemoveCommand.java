@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +17,8 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 /** Common code for removing an entry from the properties file. */
 public abstract class AbstractRemoveCommand extends ServiceEnabledCommand<String> {
@@ -29,7 +29,7 @@ public abstract class AbstractRemoveCommand extends ServiceEnabledCommand<String
   }
 
   @Parameter(description = "<name>", required = true, arity = 1)
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   protected String pattern = null;
 
@@ -48,14 +48,14 @@ public abstract class AbstractRemoveCommand extends ServiceEnabledCommand<String
     final Properties existingProps = getGeoWaveConfigProperties(params);
 
     // Find properties to remove
-    final Set<String> keysToRemove = new HashSet<String>();
+    final Set<String> keysToRemove = new HashSet<>();
     for (final String key : existingProps.stringPropertyNames()) {
       if (key.startsWith(pattern)) {
         keysToRemove.add(key);
       }
     }
 
-    int startSize = existingProps.size();
+    final int startSize = existingProps.size();
 
     // Remove each property.
     for (final String key : keysToRemove) {
@@ -64,7 +64,7 @@ public abstract class AbstractRemoveCommand extends ServiceEnabledCommand<String
 
     // Write properties file
     ConfigOptions.writeProperties(getGeoWaveConfigFile(params), existingProps);
-    int endSize = existingProps.size();
+    final int endSize = existingProps.size();
 
     if (endSize < startSize) {
       return patternPrefix + " successfully removed";
@@ -74,7 +74,7 @@ public abstract class AbstractRemoveCommand extends ServiceEnabledCommand<String
   }
 
   public void setEntryName(final String entryName) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(entryName);
   }
 }

@@ -8,10 +8,9 @@
  */
 package org.locationtech.geowave.adapter.vector.stats;
 
-import com.clearspring.analytics.stream.frequency.CountMinSketch;
-import com.clearspring.analytics.stream.frequency.FrequencyMergeException;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
@@ -20,6 +19,8 @@ import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsTyp
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.feature.simple.SimpleFeature;
+import com.clearspring.analytics.stream.frequency.CountMinSketch;
+import com.clearspring.analytics.stream.frequency.FrequencyMergeException;
 
 /**
  * Maintains an estimate of how may of each attribute value occurs in a set of data.
@@ -98,8 +99,7 @@ public class FeatureCountMinSketchStatistics extends
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buffer = super.binaryBuffer(bytes);
-    final byte[] data = new byte[VarintUtils.readUnsignedInt(buffer)];
-    buffer.get(data);
+    final byte[] data = ByteArrayUtils.safeRead(buffer, VarintUtils.readUnsignedInt(buffer));
     sketch = CountMinSketch.deserialize(data);
   }
 

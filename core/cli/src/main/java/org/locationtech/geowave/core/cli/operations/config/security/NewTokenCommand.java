@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.operations.config.security;
 
-import com.beust.jcommander.Parameters;
 import java.io.File;
 import java.util.Iterator;
 import java.util.Properties;
@@ -23,6 +22,7 @@ import org.locationtech.geowave.core.cli.operations.config.security.crypto.BaseE
 import org.locationtech.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "newcryptokey", parentOperation = ConfigSection.class)
 @Parameters(
@@ -31,15 +31,15 @@ public class NewTokenCommand extends DefaultOperation implements Command {
   private static final Logger sLog = LoggerFactory.getLogger(NewTokenCommand.class);
 
   @Override
-  public void execute(OperationParams params) {
+  public void execute(final OperationParams params) {
     sLog.trace("ENTER :: execute");
 
-    File geowaveDir = getGeoWaveDirectory();
-    if (geowaveDir != null && geowaveDir.exists()) {
-      File tokenFile = getSecurityTokenFile();
+    final File geowaveDir = getGeoWaveDirectory();
+    if ((geowaveDir != null) && geowaveDir.exists()) {
+      final File tokenFile = getSecurityTokenFile();
       // if token already exists, iterate through config props file and
       // re-encrypt any encrypted values against the new token
-      if (tokenFile != null && tokenFile.exists()) {
+      if ((tokenFile != null) && tokenFile.exists()) {
         try {
           sLog.info(
               "Existing encryption token file exists already at path ["
@@ -54,34 +54,34 @@ public class NewTokenCommand extends DefaultOperation implements Command {
             backupFile = new File(tokenFile.getCanonicalPath() + ".bak");
             tokenBackedUp = tokenFile.renameTo(backupFile);
             generateNewEncryptionToken(tokenFile);
-          } catch (Exception ex) {
+          } catch (final Exception ex) {
             sLog.error(
                 "An error occurred backing up existing token file. Please check directory and permissions and try again.",
                 ex);
           }
           if (tokenBackedUp) {
-            Properties configProps = getGeoWaveConfigProperties(params);
+            final Properties configProps = getGeoWaveConfigProperties(params);
             if (configProps != null) {
               boolean updated = false;
-              Set<Object> keySet = configProps.keySet();
-              Iterator<Object> keyIter = keySet.iterator();
+              final Set<Object> keySet = configProps.keySet();
+              final Iterator<Object> keyIter = keySet.iterator();
               if (keyIter != null) {
                 String configKey = null;
                 while (keyIter.hasNext()) {
                   configKey = (String) keyIter.next();
-                  String configValue = configProps.getProperty(configKey);
-                  if (configValue != null
+                  final String configValue = configProps.getProperty(configKey);
+                  if ((configValue != null)
                       && !"".equals(configValue.trim())
                       && BaseEncryption.isProperlyWrapped(configValue)) {
                     // HP Fortify "NULL Pointer Dereference"
                     // false positive
                     // Exception handling will catch if
                     // backupFile is null
-                    String decryptedValue =
+                    final String decryptedValue =
                         SecurityUtils.decryptHexEncodedValue(
                             configValue,
                             backupFile.getCanonicalPath());
-                    String encryptedValue =
+                    final String encryptedValue =
                         SecurityUtils.encryptAndHexEncodeValue(
                             decryptedValue,
                             tokenFile.getCanonicalPath());
@@ -98,7 +98,7 @@ public class NewTokenCommand extends DefaultOperation implements Command {
             // Exception handling will catch if backupFile is null
             backupFile.deleteOnExit();
           }
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
           sLog.error(
               "An error occurred creating a new encryption token: " + ex.getLocalizedMessage(),
               ex);

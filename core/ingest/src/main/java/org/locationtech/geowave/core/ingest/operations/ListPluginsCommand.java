@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.operations;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameters;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
@@ -21,6 +19,8 @@ import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeRegistry;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "listplugins", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "List supported data store types, index types, and ingest formats")
@@ -33,7 +33,7 @@ public class ListPluginsCommand extends ServiceEnabledCommand<String> {
 
   @Override
   public String computeResults(final OperationParams params) {
-    StringBuilder builder = new StringBuilder();
+    final StringBuilder builder = new StringBuilder();
 
     builder.append("Available index types currently registered as plugins:\n");
     for (final Entry<String, DimensionalityTypeProviderSpi> pluginProviderEntry : DimensionalityTypeRegistry.getRegisteredDimensionalityTypes().entrySet()) {

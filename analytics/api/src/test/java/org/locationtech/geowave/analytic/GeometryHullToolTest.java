@@ -312,7 +312,7 @@ public class GeometryHullToolTest {
       Geometry leftShape = it2.next();
 
       if (rightShape.intersects(leftShape)) {
-        Geometry inter = rightShape.intersection(leftShape);
+        final Geometry inter = rightShape.intersection(leftShape);
         rightShape = rightShape.difference(inter);
         leftShape = leftShape.difference(inter);
       }
@@ -532,12 +532,12 @@ public class GeometryHullToolTest {
         newCoords[i] = new Coordinate(rand.nextGaussian() * 0.01, rand.nextGaussian() * 0.01);
         newPoints[i] = factory.createPoint(newCoords[i]);
       }
-      ConvexHull hull = new ConvexHull(geoCoords, factory);
+      final ConvexHull hull = new ConvexHull(geoCoords, factory);
       final Geometry concaveHull =
           cg.createHullFromGeometry(hull.getConvexHull(), Arrays.asList(newCoords), true);
       assertTrue(concaveHull.isSimple());
       int error = 0;
-      for (Geometry newPoint : newPoints) {
+      for (final Geometry newPoint : newPoints) {
         error += concaveHull.intersects(newPoint) ? 0 : 1;
       }
       assertTrue(error < 3);
@@ -545,7 +545,7 @@ public class GeometryHullToolTest {
           cg.createHullFromGeometry(hull.getConvexHull(), Arrays.asList(newCoords), false);
       assertTrue(concaveHull2.isSimple());
       error = 0;
-      for (Geometry newPoint : newPoints) {
+      for (final Geometry newPoint : newPoints) {
         error += concaveHull2.intersects(newPoint) ? 0 : 1;
       }
       assertTrue(error < 1);

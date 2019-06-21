@@ -37,19 +37,20 @@ public class HBaseMetadataDeleter implements MetadataDeleter {
   public boolean delete(final MetadataQuery query) {
     // the nature of metadata deleter is that primary ID is always
     // well-defined and it is deleting a single entry at a time
-    TableName tableName = operations.getTableName(operations.getMetadataTableName(metadataType));
+    final TableName tableName =
+        operations.getTableName(operations.getMetadataTableName(metadataType));
 
     try {
-      BufferedMutator deleter = operations.getBufferedMutator(tableName);
+      final BufferedMutator deleter = operations.getBufferedMutator(tableName);
 
-      Delete delete = new Delete(query.getPrimaryId());
+      final Delete delete = new Delete(query.getPrimaryId());
       delete.addColumns(StringUtils.stringToBinary(metadataType.name()), query.getSecondaryId());
 
       deleter.mutate(delete);
       deleter.close();
 
       return true;
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.error("Error deleting metadata", e);
     }
 

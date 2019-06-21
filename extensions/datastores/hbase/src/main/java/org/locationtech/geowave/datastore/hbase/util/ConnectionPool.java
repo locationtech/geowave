@@ -26,7 +26,7 @@ public class ConnectionPool {
     return singletonInstance;
   }
 
-  private final Map<String, Connection> connectorCache = new HashMap<String, Connection>();
+  private final Map<String, Connection> connectorCache = new HashMap<>();
   private static final String HBASE_CONFIGURATION_TIMEOUT = "timeout";
   private static final String HBASE_CONFIGURATION_ZOOKEEPER_QUORUM = "hbase.zookeeper.quorum";
 

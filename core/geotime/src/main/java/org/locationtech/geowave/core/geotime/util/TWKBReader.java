@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.util;
 
-import com.clearspring.analytics.util.Varint;
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
@@ -24,28 +23,29 @@ import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.io.ParseException;
+import com.clearspring.analytics.util.Varint;
 
 public class TWKBReader {
   public TWKBReader() {}
 
-  public Geometry read(byte[] bytes) throws ParseException {
+  public Geometry read(final byte[] bytes) throws ParseException {
     try {
-      ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-      DataInput input = new DataInputStream(in);
+      final ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+      final DataInput input = new DataInputStream(in);
       return read(input);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new ParseException("Error reading TWKB geometry.", e);
     }
   }
 
-  public Geometry read(DataInput input) throws IOException {
-    byte typeAndPrecision = input.readByte();
-    byte type = (byte) (typeAndPrecision & 0x0F);
-    int basePrecision = TWKBUtils.zigZagDecode((typeAndPrecision & 0xF0) >> 4);
-    byte metadata = input.readByte();
+  public Geometry read(final DataInput input) throws IOException {
+    final byte typeAndPrecision = input.readByte();
+    final byte type = (byte) (typeAndPrecision & 0x0F);
+    final int basePrecision = TWKBUtils.zigZagDecode((typeAndPrecision & 0xF0) >> 4);
+    final byte metadata = input.readByte();
     PrecisionReader precision;
     if ((metadata & TWKBUtils.EXTENDED_DIMENSIONS) != 0) {
-      byte extendedDimensions = input.readByte();
+      final byte extendedDimensions = input.readByte();
       precision = new ExtendedPrecisionReader(basePrecision, extendedDimensions);
     } else {
       precision = new PrecisionReader(basePrecision);
@@ -69,73 +69,83 @@ public class TWKBReader {
     return null;
   }
 
-  private Point readPoint(PrecisionReader precision, byte metadata, DataInput input)
-      throws IOException {
+  private Point readPoint(
+      final PrecisionReader precision,
+      final byte metadata,
+      final DataInput input) throws IOException {
     if ((metadata & TWKBUtils.EMPTY_GEOMETRY) != 0) {
       return GeometryUtils.GEOMETRY_FACTORY.createPoint();
     }
 
-    Coordinate coordinate = precision.readPoint(input);
+    final Coordinate coordinate = precision.readPoint(input);
     return GeometryUtils.GEOMETRY_FACTORY.createPoint(coordinate);
   }
 
-  private LineString readLineString(PrecisionReader precision, byte metadata, DataInput input)
-      throws IOException {
+  private LineString readLineString(
+      final PrecisionReader precision,
+      final byte metadata,
+      final DataInput input) throws IOException {
     if ((metadata & TWKBUtils.EMPTY_GEOMETRY) != 0) {
       return GeometryUtils.GEOMETRY_FACTORY.createLineString();
     }
 
-    Coordinate[] coordinates = precision.readPointArray(input);
+    final Coordinate[] coordinates = precision.readPointArray(input);
     return GeometryUtils.GEOMETRY_FACTORY.createLineString(coordinates);
   }
 
-  private Polygon readPolygon(PrecisionReader precision, byte metadata, DataInput input)
-      throws IOException {
+  private Polygon readPolygon(
+      final PrecisionReader precision,
+      final byte metadata,
+      final DataInput input) throws IOException {
     if ((metadata & TWKBUtils.EMPTY_GEOMETRY) != 0) {
       return GeometryUtils.GEOMETRY_FACTORY.createPolygon();
     }
-    int numRings = Varint.readUnsignedVarInt(input);
-    LinearRing exteriorRing =
+    final int numRings = Varint.readUnsignedVarInt(input);
+    final LinearRing exteriorRing =
         GeometryUtils.GEOMETRY_FACTORY.createLinearRing(precision.readPointArray(input));
-    LinearRing[] interiorRings = new LinearRing[numRings - 1];
-    for (int i = 0; i < numRings - 1; i++) {
+    final LinearRing[] interiorRings = new LinearRing[numRings - 1];
+    for (int i = 0; i < (numRings - 1); i++) {
       interiorRings[i] =
           GeometryUtils.GEOMETRY_FACTORY.createLinearRing(precision.readPointArray(input));
     }
     return GeometryUtils.GEOMETRY_FACTORY.createPolygon(exteriorRing, interiorRings);
   }
 
-  private MultiPoint readMultiPoint(PrecisionReader precision, byte metadata, DataInput input)
-      throws IOException {
+  private MultiPoint readMultiPoint(
+      final PrecisionReader precision,
+      final byte metadata,
+      final DataInput input) throws IOException {
     if ((metadata & TWKBUtils.EMPTY_GEOMETRY) != 0) {
       return GeometryUtils.GEOMETRY_FACTORY.createMultiPoint();
     }
-    Coordinate[] points = precision.readPointArray(input);
+    final Coordinate[] points = precision.readPointArray(input);
     return GeometryUtils.GEOMETRY_FACTORY.createMultiPointFromCoords(points);
   }
 
   private MultiLineString readMultiLineString(
-      PrecisionReader precision,
-      byte metadata,
-      DataInput input) throws IOException {
+      final PrecisionReader precision,
+      final byte metadata,
+      final DataInput input) throws IOException {
     if ((metadata & TWKBUtils.EMPTY_GEOMETRY) != 0) {
       return GeometryUtils.GEOMETRY_FACTORY.createMultiLineString();
     }
-    int numLines = Varint.readUnsignedVarInt(input);
-    LineString[] lines = new LineString[numLines];
+    final int numLines = Varint.readUnsignedVarInt(input);
+    final LineString[] lines = new LineString[numLines];
     for (int i = 0; i < numLines; i++) {
       lines[i] = GeometryUtils.GEOMETRY_FACTORY.createLineString(precision.readPointArray(input));
     }
     return GeometryUtils.GEOMETRY_FACTORY.createMultiLineString(lines);
   }
 
-  private MultiPolygon readMultiPolygon(PrecisionReader precision, byte metadata, DataInput input)
-      throws IOException {
+  private MultiPolygon readMultiPolygon(
+      final PrecisionReader precision,
+      final byte metadata,
+      final DataInput input) throws IOException {
     if ((metadata & TWKBUtils.EMPTY_GEOMETRY) != 0) {
       return GeometryUtils.GEOMETRY_FACTORY.createMultiPolygon();
     }
-    int numPolygons = Varint.readUnsignedVarInt(input);
-    Polygon[] polygons = new Polygon[numPolygons];
+    final int numPolygons = Varint.readUnsignedVarInt(input);
+    final Polygon[] polygons = new Polygon[numPolygons];
     int numRings;
     for (int i = 0; i < numPolygons; i++) {
       numRings = Varint.readUnsignedVarInt(input);
@@ -143,10 +153,10 @@ public class TWKBReader {
         polygons[i] = GeometryUtils.GEOMETRY_FACTORY.createPolygon();
         continue;
       }
-      LinearRing exteriorRing =
+      final LinearRing exteriorRing =
           GeometryUtils.GEOMETRY_FACTORY.createLinearRing(precision.readPointArray(input));
-      LinearRing[] interiorRings = new LinearRing[numRings - 1];
-      for (int j = 0; j < numRings - 1; j++) {
+      final LinearRing[] interiorRings = new LinearRing[numRings - 1];
+      for (int j = 0; j < (numRings - 1); j++) {
         interiorRings[j] =
             GeometryUtils.GEOMETRY_FACTORY.createLinearRing(precision.readPointArray(input));
       }
@@ -155,13 +165,13 @@ public class TWKBReader {
     return GeometryUtils.GEOMETRY_FACTORY.createMultiPolygon(polygons);
   }
 
-  private GeometryCollection readGeometryCollection(DataInput input, byte metadata)
+  private GeometryCollection readGeometryCollection(final DataInput input, final byte metadata)
       throws IOException {
     if ((metadata & TWKBUtils.EMPTY_GEOMETRY) != 0) {
       return GeometryUtils.GEOMETRY_FACTORY.createGeometryCollection();
     }
-    int numGeometries = Varint.readUnsignedVarInt(input);
-    Geometry[] geometries = new Geometry[numGeometries];
+    final int numGeometries = Varint.readUnsignedVarInt(input);
+    final Geometry[] geometries = new Geometry[numGeometries];
     for (int i = 0; i < numGeometries; i++) {
       geometries[i] = read(input);
     }
@@ -171,28 +181,26 @@ public class TWKBReader {
   private static class PrecisionReader {
     protected double precisionMultiplier;
 
-    public PrecisionReader(int precision) {
+    public PrecisionReader(final int precision) {
       precisionMultiplier = Math.pow(10, precision);
     }
 
-    public Coordinate readPoint(DataInput input) throws IOException {
+    public Coordinate readPoint(final DataInput input) throws IOException {
       return new Coordinate(
-          ((double) Varint.readSignedVarLong(input)) / precisionMultiplier,
-          ((double) Varint.readSignedVarLong(input)) / precisionMultiplier);
+          (Varint.readSignedVarLong(input)) / precisionMultiplier,
+          (Varint.readSignedVarLong(input)) / precisionMultiplier);
     }
 
-    public Coordinate[] readPointArray(DataInput input) throws IOException {
-      int numCoordinates = Varint.readUnsignedVarInt(input);
-      Coordinate[] coordinates = new Coordinate[numCoordinates];
+    public Coordinate[] readPointArray(final DataInput input) throws IOException {
+      final int numCoordinates = Varint.readUnsignedVarInt(input);
+      final Coordinate[] coordinates = new Coordinate[numCoordinates];
       long lastX = 0;
       long lastY = 0;
       for (int i = 0; i < numCoordinates; i++) {
         lastX = Varint.readSignedVarLong(input) + lastX;
         lastY = Varint.readSignedVarLong(input) + lastY;
         coordinates[i] =
-            new Coordinate(
-                ((double) lastX) / precisionMultiplier,
-                ((double) lastY) / precisionMultiplier);
+            new Coordinate((lastX) / precisionMultiplier, (lastY) / precisionMultiplier);
       }
       return coordinates;
     }
@@ -204,7 +212,7 @@ public class TWKBReader {
     private boolean hasM = false;
     private double mPrecisionMultiplier = 0;
 
-    public ExtendedPrecisionReader(int precision, byte extendedDimensions) {
+    public ExtendedPrecisionReader(final int precision, final byte extendedDimensions) {
       super(precision);
       if ((extendedDimensions & 0x1) != 0) {
         hasZ = true;
@@ -213,14 +221,14 @@ public class TWKBReader {
       }
       if ((extendedDimensions & 0x2) != 0) {
         hasM = true;
-        zPrecisionMultiplier =
+        mPrecisionMultiplier =
             Math.pow(10, TWKBUtils.zigZagDecode((extendedDimensions >> 5) & 0x7));
       }
     }
 
     @Override
-    public Coordinate readPoint(DataInput input) throws IOException {
-      Coordinate coordinate = super.readPoint(input);
+    public Coordinate readPoint(final DataInput input) throws IOException {
+      final Coordinate coordinate = super.readPoint(input);
       if (hasZ) {
         coordinate.setZ(Varint.readSignedVarLong(input) / zPrecisionMultiplier);
       }
@@ -231,9 +239,9 @@ public class TWKBReader {
     }
 
     @Override
-    public Coordinate[] readPointArray(DataInput input) throws IOException {
-      int numCoordinates = Varint.readUnsignedVarInt(input);
-      Coordinate[] coordinates = new Coordinate[numCoordinates];
+    public Coordinate[] readPointArray(final DataInput input) throws IOException {
+      final int numCoordinates = Varint.readUnsignedVarInt(input);
+      final Coordinate[] coordinates = new Coordinate[numCoordinates];
       long lastX = 0;
       long lastY = 0;
       long lastZ = 0;
@@ -242,16 +250,14 @@ public class TWKBReader {
         lastX = Varint.readSignedVarLong(input) + lastX;
         lastY = Varint.readSignedVarLong(input) + lastY;
         coordinates[i] =
-            new Coordinate(
-                ((double) lastX) / precisionMultiplier,
-                ((double) lastY) / precisionMultiplier);
+            new Coordinate((lastX) / precisionMultiplier, (lastY) / precisionMultiplier);
         if (hasZ) {
           lastZ = Varint.readSignedVarLong(input) + lastZ;
-          coordinates[i].setZ(((double) lastZ) / zPrecisionMultiplier);
+          coordinates[i].setZ((lastZ) / zPrecisionMultiplier);
         }
         if (hasM) {
           lastM = Varint.readSignedVarLong(input) + lastM;
-          coordinates[i].setM(((double) lastM) / mPrecisionMultiplier);
+          coordinates[i].setM((lastM) / mPrecisionMultiplier);
         }
       }
       return coordinates;

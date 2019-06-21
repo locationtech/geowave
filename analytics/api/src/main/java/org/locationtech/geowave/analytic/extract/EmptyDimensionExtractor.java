@@ -12,11 +12,15 @@ import org.locationtech.jts.geom.Geometry;
 
 public abstract class EmptyDimensionExtractor<T> implements DimensionExtractor<T> {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private static final double[] EMPTY_VAL = new double[0];
   private static final String[] EMPTY_NAME = new String[0];
 
   @Override
-  public double[] getDimensions(T anObject) {
+  public double[] getDimensions(final T anObject) {
     return EMPTY_VAL;
   }
 

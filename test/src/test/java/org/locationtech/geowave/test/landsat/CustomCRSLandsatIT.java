@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.test.landsat;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import it.geosolutions.jaiext.JAIExt;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
@@ -52,6 +49,9 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreTyp
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import it.geosolutions.jaiext.JAIExt;
 
 @RunWith(GeoWaveITRunner.class)
 public class CustomCRSLandsatIT extends AbstractGeoWaveIT {

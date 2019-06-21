@@ -8,24 +8,24 @@
  */
 package org.locationtech.geowave.core.cli.prefix;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.annotations.PrefixParameter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class JCommanderPropertiesTransformerTest {
 
   @Test
   public void testWithoutDelegate() {
-    Args args = new Args();
+    final Args args = new Args();
     args.passWord = "blah";
     args.userName = "user";
-    JCommanderPropertiesTransformer transformer = new JCommanderPropertiesTransformer();
+    final JCommanderPropertiesTransformer transformer = new JCommanderPropertiesTransformer();
     transformer.addObject(args);
-    Map<String, String> props = new HashMap<String, String>();
+    final Map<String, String> props = new HashMap<>();
     transformer.transformToMap(props);
     Assert.assertEquals(2, props.size());
     Assert.assertEquals("blah", props.get("password"));
@@ -34,13 +34,13 @@ public class JCommanderPropertiesTransformerTest {
 
   @Test
   public void testWithDelegate() {
-    DelegateArgs args = new DelegateArgs();
+    final DelegateArgs args = new DelegateArgs();
     args.args.passWord = "blah";
     args.args.userName = "user";
     args.additional = "add";
-    JCommanderPropertiesTransformer transformer = new JCommanderPropertiesTransformer();
+    final JCommanderPropertiesTransformer transformer = new JCommanderPropertiesTransformer();
     transformer.addObject(args);
-    Map<String, String> props = new HashMap<String, String>();
+    final Map<String, String> props = new HashMap<>();
     transformer.transformToMap(props);
     Assert.assertEquals(3, props.size());
     Assert.assertEquals("blah", props.get("password"));
@@ -50,13 +50,13 @@ public class JCommanderPropertiesTransformerTest {
 
   @Test
   public void testWithPrefix() {
-    DelegatePrefixArgs args = new DelegatePrefixArgs();
+    final DelegatePrefixArgs args = new DelegatePrefixArgs();
     args.args.passWord = "blah";
     args.args.userName = "user";
     args.additional = "add";
-    JCommanderPropertiesTransformer transformer = new JCommanderPropertiesTransformer();
+    final JCommanderPropertiesTransformer transformer = new JCommanderPropertiesTransformer();
     transformer.addObject(args);
-    Map<String, String> props = new HashMap<String, String>();
+    final Map<String, String> props = new HashMap<>();
     transformer.transformToMap(props);
     Assert.assertEquals(3, props.size());
     Assert.assertEquals("blah", props.get("abc.password"));
@@ -74,7 +74,7 @@ public class JCommanderPropertiesTransformerTest {
 
   public class DelegateArgs {
     @ParametersDelegate
-    private Args args = new Args();
+    private final Args args = new Args();
 
     @Parameter(names = "--additional")
     private String additional;
@@ -83,7 +83,7 @@ public class JCommanderPropertiesTransformerTest {
   public class DelegatePrefixArgs {
     @ParametersDelegate
     @PrefixParameter(prefix = "abc")
-    private Args args = new Args();
+    private final Args args = new Args();
 
     @Parameter(names = "--additional")
     private String additional;

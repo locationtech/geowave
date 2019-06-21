@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.service.rest.field;
 
-import com.beust.jcommander.Parameter;
 import java.lang.reflect.Field;
+import com.beust.jcommander.Parameter;
 
 public class ParameterRestFieldValue extends ParameterRestField implements RestFieldValue {
   private final Object instance;
@@ -31,6 +31,7 @@ public class ParameterRestFieldValue extends ParameterRestField implements RestF
     field.set(instance, value);
   }
 
+  @Override
   public Field getField() {
     return super.getField();
   }

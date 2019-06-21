@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.analytic.kryo;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.Serializer;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -21,6 +17,10 @@ import org.locationtech.geowave.adapter.vector.FeatureWritable;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 public class FeatureSerializer extends Serializer<SimpleFeature> {
   static final Logger LOGGER = LoggerFactory.getLogger(FeatureSerializer.class);

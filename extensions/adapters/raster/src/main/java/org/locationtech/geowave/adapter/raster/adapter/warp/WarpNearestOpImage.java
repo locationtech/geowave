@@ -17,9 +17,6 @@
  */
 package org.locationtech.geowave.adapter.raster.adapter.warp;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.geosolutions.jaiext.iterators.RandomIterFactory;
-import it.geosolutions.jaiext.range.Range;
 import java.awt.image.ColorModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.IndexColorModel;
@@ -33,6 +30,9 @@ import javax.media.jai.ROI;
 import javax.media.jai.RasterAccessor;
 import javax.media.jai.Warp;
 import javax.media.jai.iterator.RandomIter;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import it.geosolutions.jaiext.iterators.RandomIterFactory;
+import it.geosolutions.jaiext.range.Range;
 
 /**
  * This is code entirely intended to get around an issue on line 265 of WarpOpImage in jai-ext. The
@@ -80,8 +80,8 @@ final class WarpNearestOpImage extends WarpOpImage {
       final Warp warp,
       final Interpolation interp,
       final ROI sourceROI,
-      Range noData,
-      double[] bkg) {
+      final Range noData,
+      final double[] bkg) {
     super(
         source,
         layout,
@@ -110,17 +110,17 @@ final class WarpNearestOpImage extends WarpOpImage {
     /*
      * Selection of a destinationNoData value for each datatype
      */
-    SampleModel sm = source.getSampleModel();
+    final SampleModel sm = source.getSampleModel();
     // Source image data Type
-    int srcDataType = sm.getDataType();
+    final int srcDataType = sm.getDataType();
 
     // Creation of a lookuptable containing the values to use for no data
-    if (srcDataType == DataBuffer.TYPE_BYTE && hasNoData) {
-      int numBands = getNumBands();
+    if ((srcDataType == DataBuffer.TYPE_BYTE) && hasNoData) {
+      final int numBands = getNumBands();
       byteLookupTable = new byte[numBands][256];
       for (int b = 0; b < numBands; b++) {
         for (int i = 0; i < byteLookupTable[0].length; i++) {
-          byte value = (byte) i;
+          final byte value = (byte) i;
           if (noDataRange.contains(value)) {
             byteLookupTable[b][i] = (byte) backgroundValues[b];
           } else {
@@ -131,11 +131,12 @@ final class WarpNearestOpImage extends WarpOpImage {
     }
   }
 
+  @Override
   protected void computeRectByte(
       final PlanarImage src,
       final RasterAccessor dst,
       final RandomIter roiIter,
-      boolean roiContainsTile) {
+      final boolean roiContainsTile) {
     // Random Iterator on the source image bounds
     final RandomIter iter = RandomIterFactory.create(src, src.getBounds(), TILE_CACHED, ARRAY_CALC);
     // Initial settings
@@ -174,7 +175,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
           // If the pixel is outside the input image bounds
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -207,7 +208,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -217,7 +218,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           } else {
             // SG if we falls outside the roi we use the background
             // value
-            if (!(roiBounds.contains(sx, sy) && roiIter.getSample(sx, sy, 0) > 0)) {
+            if (!(roiBounds.contains(sx, sy) && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -251,7 +252,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -284,7 +285,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -296,7 +297,7 @@ final class WarpNearestOpImage extends WarpOpImage {
             // value
             if (!(roiBounds.contains(sx, sy)
                 && roiBounds.contains(sx, sy)
-                && roiIter.getSample(sx, sy, 0) > 0)) {
+                && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -319,11 +320,12 @@ final class WarpNearestOpImage extends WarpOpImage {
     iter.done();
   }
 
+  @Override
   protected void computeRectUShort(
       final PlanarImage src,
       final RasterAccessor dst,
       final RandomIter roiIter,
-      boolean roiContainsTile) {
+      final boolean roiContainsTile) {
     // Random Iterator on the source image bounds
     final RandomIter iter = RandomIterFactory.create(src, src.getBounds(), TILE_CACHED, ARRAY_CALC);
     // Initial settings
@@ -362,7 +364,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
           // If the pixel is outside the input image bounds
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -395,7 +397,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -407,7 +409,7 @@ final class WarpNearestOpImage extends WarpOpImage {
             // value
             if (!(roiBounds.contains(sx, sy)
                 && roiBounds.contains(sx, sy)
-                && roiIter.getSample(sx, sy, 0) > 0)) {
+                && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -443,7 +445,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -483,7 +485,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -493,7 +495,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           } else {
             // SG if we falls outside the roi we use the background
             // value
-            if (!(roiBounds.contains(sx, sy) && roiIter.getSample(sx, sy, 0) > 0)) {
+            if (!(roiBounds.contains(sx, sy) && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -521,11 +523,12 @@ final class WarpNearestOpImage extends WarpOpImage {
     iter.done();
   }
 
+  @Override
   protected void computeRectShort(
       final PlanarImage src,
       final RasterAccessor dst,
       final RandomIter roiIter,
-      boolean roiContainsTile) {
+      final boolean roiContainsTile) {
     // Random Iterator on the source image bounds
     final RandomIter iter = RandomIterFactory.create(src, src.getBounds(), TILE_CACHED, ARRAY_CALC);
     // Initial settings
@@ -564,7 +567,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
           // If the pixel is outside the input image bounds
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -597,7 +600,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -607,7 +610,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           } else {
             // SG if we falls outside the roi we use the background
             // value
-            if (!(roiBounds.contains(sx, sy) && roiIter.getSample(sx, sy, 0) > 0)) {
+            if (!(roiBounds.contains(sx, sy) && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -642,7 +645,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -682,7 +685,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -692,7 +695,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           } else {
             // SG if we falls outside the roi we use the background
             // value
-            if (!(roiBounds.contains(sx, sy) && roiIter.getSample(sx, sy, 0) > 0)) {
+            if (!(roiBounds.contains(sx, sy) && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -720,11 +723,12 @@ final class WarpNearestOpImage extends WarpOpImage {
     iter.done();
   }
 
+  @Override
   protected void computeRectInt(
       final PlanarImage src,
       final RasterAccessor dst,
       final RandomIter roiIter,
-      boolean roiContainsTile) {
+      final boolean roiContainsTile) {
     // Random Iterator on the source image bounds
     final RandomIter iter = RandomIterFactory.create(src, src.getBounds(), TILE_CACHED, ARRAY_CALC);
     // Initial settings
@@ -763,7 +767,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
           // If the pixel is outside the input image bounds
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -796,7 +800,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -806,7 +810,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           } else {
             // SG if we falls outside the roi we use the background
             // value
-            if (!(roiBounds.contains(sx, sy) && roiIter.getSample(sx, sy, 0) > 0)) {
+            if (!(roiBounds.contains(sx, sy) && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -841,7 +845,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -881,7 +885,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -891,7 +895,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           } else {
             // SG if we falls outside the roi we use the background
             // value
-            if (!(roiBounds.contains(sx, sy) && roiIter.getSample(sx, sy, 0) > 0)) {
+            if (!(roiBounds.contains(sx, sy) && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -919,11 +923,12 @@ final class WarpNearestOpImage extends WarpOpImage {
     iter.done();
   }
 
+  @Override
   protected void computeRectFloat(
       final PlanarImage src,
       final RasterAccessor dst,
       final RandomIter roiIter,
-      boolean roiContainsTile) {
+      final boolean roiContainsTile) {
     // Random Iterator on the source image bounds
     final RandomIter iter = RandomIterFactory.create(src, src.getBounds(), TILE_CACHED, ARRAY_CALC);
     // Initial settings
@@ -962,7 +967,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
           // If the pixel is outside the input image bounds
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -995,7 +1000,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -1005,7 +1010,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           } else {
             // SG if we falls outside the roi we use the background
             // value
-            if (!(roiBounds.contains(sx, sy) && roiIter.getSample(sx, sy, 0) > 0)) {
+            if (!(roiBounds.contains(sx, sy) && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -1040,7 +1045,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -1080,7 +1085,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -1090,7 +1095,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           } else {
             // SG if we falls outside the roi we use the background
             // value
-            if (!(roiBounds.contains(sx, sy) && roiIter.getSample(sx, sy, 0) > 0)) {
+            if (!(roiBounds.contains(sx, sy) && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -1118,11 +1123,12 @@ final class WarpNearestOpImage extends WarpOpImage {
     iter.done();
   }
 
+  @Override
   protected void computeRectDouble(
       final PlanarImage src,
       final RasterAccessor dst,
       final RandomIter roiIter,
-      boolean roiContainsTile) {
+      final boolean roiContainsTile) {
     // Random Iterator on the source image bounds
     final RandomIter iter = RandomIterFactory.create(src, src.getBounds(), TILE_CACHED, ARRAY_CALC);
     // Initial settings
@@ -1161,7 +1167,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
           // If the pixel is outside the input image bounds
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -1194,7 +1200,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -1204,7 +1210,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           } else {
             // SG if we falls outside the roi we use the background
             // value
-            if (!(roiBounds.contains(sx, sy) && roiIter.getSample(sx, sy, 0) > 0)) {
+            if (!(roiBounds.contains(sx, sy) && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {
@@ -1239,7 +1245,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -1279,7 +1285,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           final int sx = round(warpData[count++]);
           final int sy = round(warpData[count++]);
 
-          if (sx < minX || sx >= maxX || sy < minY || sy >= maxY) {
+          if ((sx < minX) || (sx >= maxX) || (sy < minY) || (sy >= maxY)) {
             /* Fill with a background color. */
             if (setBackground) {
               for (int b = 0; b < dstBands; b++) {
@@ -1289,7 +1295,7 @@ final class WarpNearestOpImage extends WarpOpImage {
           } else {
             // SG if we falls outside the roi we use the background
             // value
-            if (!(roiBounds.contains(sx, sy) && roiIter.getSample(sx, sy, 0) > 0)) {
+            if (!(roiBounds.contains(sx, sy) && (roiIter.getSample(sx, sy, 0) > 0))) {
               /* Fill with a background color. */
               if (setBackground) {
                 for (int b = 0; b < dstBands; b++) {

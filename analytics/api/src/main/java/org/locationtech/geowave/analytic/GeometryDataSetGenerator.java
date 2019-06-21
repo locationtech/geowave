@@ -28,6 +28,11 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryType;
@@ -36,11 +41,6 @@ import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.Point;
 
 /** Generate clusters of geometries. */
 public class GeometryDataSetGenerator {

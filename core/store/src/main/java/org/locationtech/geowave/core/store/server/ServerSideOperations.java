@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.core.store.server;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.Map;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
+import com.google.common.collect.ImmutableSet;
 
 public interface ServerSideOperations extends DataStoreOperations {
   /**

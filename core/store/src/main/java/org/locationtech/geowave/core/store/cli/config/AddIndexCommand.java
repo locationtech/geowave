@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -25,6 +21,10 @@ import org.locationtech.geowave.core.store.operations.remote.options.BasicIndexO
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
@@ -32,7 +32,7 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
   private static final Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
 
   @Parameter(description = "<name>", required = true)
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @Parameter(
       names = {"-d", "--default"},
@@ -48,13 +48,13 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
   private IndexPluginOptions pluginOptions = new IndexPluginOptions();
 
   @ParametersDelegate
-  private final BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
+  private BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
 
   @ParametersDelegate
   DimensionalityTypeOptions opts;
 
   @Override
-  public boolean prepare(OperationParams params) {
+  public boolean prepare(final OperationParams params) {
     super.prepare(params);
 
     // Load SPI options for the given type into pluginOptions.
@@ -63,9 +63,9 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
       pluginOptions.setBasicIndexOptions(basicIndexOptions);
       opts = pluginOptions.getDimensionalityOptions();
     } else {
-      Properties existingProps = getGeoWaveConfigProperties(params);
+      final Properties existingProps = getGeoWaveConfigProperties(params);
 
-      String defaultIndex =
+      final String defaultIndex =
           existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
       // Load the default index.
@@ -75,10 +75,10 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
               existingProps,
               IndexPluginOptions.getIndexNamespace(defaultIndex))) {
             // Set the required type option.
-            this.type = pluginOptions.getType();
+            type = pluginOptions.getType();
             opts = pluginOptions.getDimensionalityOptions();
           }
-        } catch (ParameterException pe) {
+        } catch (final ParameterException pe) {
           // HP Fortify "Improper Output Neutralization" false
           // positive
           // What Fortify considers "user input" comes only
@@ -91,22 +91,22 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
   }
 
   @Override
-  public void execute(OperationParams params) {
+  public void execute(final OperationParams params) {
     computeResults(params);
   }
 
   @Override
-  public String computeResults(OperationParams params) {
+  public String computeResults(final OperationParams params) {
 
     // Ensure that a name is chosen.
     if (parameters.size() != 1) {
       throw new ParameterException("Must specify index name");
     }
 
-    Properties existingProps = getGeoWaveConfigProperties(params);
+    final Properties existingProps = getGeoWaveConfigProperties(params);
 
     // Make sure we're not already in the index.
-    IndexPluginOptions existPlugin = new IndexPluginOptions();
+    final IndexPluginOptions existPlugin = new IndexPluginOptions();
     if (existPlugin.load(existingProps, getNamespace())) {
       throw new ParameterException("That index already exists: " + getPluginName());
     }
@@ -122,9 +122,9 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
     // Write properties file
     ConfigOptions.writeProperties(getGeoWaveConfigFile(params), existingProps);
 
-    StringBuilder builder = new StringBuilder();
-    for (Object key : existingProps.keySet()) {
-      String[] split = key.toString().split("\\.");
+    final StringBuilder builder = new StringBuilder();
+    for (final Object key : existingProps.keySet()) {
+      final String[] split = key.toString().split("\\.");
       if (split.length > 1) {
         if (split[1].equals(parameters.get(0))) {
           builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
@@ -150,16 +150,16 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
     return parameters;
   }
 
-  public void setParameters(String indexName) {
-    this.parameters = new ArrayList<String>();
-    this.parameters.add(indexName);
+  public void setParameters(final String indexName) {
+    parameters = new ArrayList<>();
+    parameters.add(indexName);
   }
 
   public Boolean getMakeDefault() {
     return makeDefault;
   }
 
-  public void setMakeDefault(Boolean makeDefault) {
+  public void setMakeDefault(final Boolean makeDefault) {
     this.makeDefault = makeDefault;
   }
 
@@ -167,11 +167,11 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
     return type;
   }
 
-  public void setType(String type) {
+  public void setType(final String type) {
     this.type = type;
   }
 
-  public void setPluginOptions(IndexPluginOptions pluginOptions) {
+  public void setPluginOptions(final IndexPluginOptions pluginOptions) {
     this.pluginOptions = pluginOptions;
   }
 }

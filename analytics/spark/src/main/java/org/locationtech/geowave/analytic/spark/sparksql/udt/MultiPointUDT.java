@@ -12,6 +12,11 @@ import org.locationtech.jts.geom.MultiPoint;
 
 /** Created by jwileczek on 7/20/18. */
 public class MultiPointUDT extends AbstractGeometryUDT<MultiPoint> {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
   public Class<MultiPoint> userClass() {
     return MultiPoint.class;

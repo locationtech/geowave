@@ -48,8 +48,7 @@ public class MultiDimensionalCoordinateRangesArray implements Persistable {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     rangesArray = new MultiDimensionalCoordinateRanges[VarintUtils.readUnsignedInt(buf)];
     for (int i = 0; i < rangesArray.length; i++) {
-      final byte[] rangesBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(rangesBinary);
+      final byte[] rangesBinary = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       rangesArray[i] = new MultiDimensionalCoordinateRanges();
       rangesArray[i].fromBinary(rangesBinary);
     }
@@ -60,7 +59,7 @@ public class MultiDimensionalCoordinateRangesArray implements Persistable {
 
     public ArrayOfArrays() {}
 
-    public ArrayOfArrays(MultiDimensionalCoordinateRangesArray[] coordinateArrays) {
+    public ArrayOfArrays(final MultiDimensionalCoordinateRangesArray[] coordinateArrays) {
       this.coordinateArrays = coordinateArrays;
     }
 
@@ -88,13 +87,13 @@ public class MultiDimensionalCoordinateRangesArray implements Persistable {
     }
 
     @Override
-    public void fromBinary(byte[] bytes) {
+    public void fromBinary(final byte[] bytes) {
       final ByteBuffer buf = ByteBuffer.wrap(bytes);
-      coordinateArrays =
-          new MultiDimensionalCoordinateRangesArray[VarintUtils.readUnsignedInt(buf)];
-      for (int i = 0; i < coordinateArrays.length; i++) {
-        final byte[] rangesBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-        buf.get(rangesBinary);
+      final int coordinateArrayLength = VarintUtils.readUnsignedInt(buf);
+      ByteArrayUtils.verifyBufferSize(buf, coordinateArrayLength);
+      coordinateArrays = new MultiDimensionalCoordinateRangesArray[coordinateArrayLength];
+      for (int i = 0; i < coordinateArrayLength; i++) {
+        final byte[] rangesBinary = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
         coordinateArrays[i] = new MultiDimensionalCoordinateRangesArray();
         coordinateArrays[i].fromBinary(rangesBinary);
       }

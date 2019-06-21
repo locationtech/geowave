@@ -26,10 +26,10 @@ public class UDFRegistrySPI {
         new UDFNameAndConstructor(new String[] {"GeomWithinDistance"}, GeomWithinDistance::new)};
   }
 
-  public static UDFNameAndConstructor findFunctionByName(String udfName) {
-    UDFNameAndConstructor[] udfFunctions = UDFRegistrySPI.getSupportedUDFs();
+  public static UDFNameAndConstructor findFunctionByName(final String udfName) {
+    final UDFNameAndConstructor[] udfFunctions = UDFRegistrySPI.getSupportedUDFs();
     for (int iUDF = 0; iUDF < udfFunctions.length; iUDF += 1) {
-      UDFNameAndConstructor compare = udfFunctions[iUDF];
+      final UDFNameAndConstructor compare = udfFunctions[iUDF];
       if (compare.nameMatch(udfName)) {
         return compare;
       }
@@ -52,7 +52,7 @@ public class UDFRegistrySPI {
       return udfNames;
     }
 
-    public boolean nameMatch(String udfName) {
+    public boolean nameMatch(final String udfName) {
       for (int iName = 0; iName < udfNames.length; iName += 1) {
         if (Objects.equals(udfNames[iName], udfName)) {
           return true;

@@ -25,33 +25,33 @@ public class ImageWorkerPredefineStats extends ImageWorker {
     // TODO Auto-generated constructor stub
   }
 
-  public ImageWorkerPredefineStats(File input) throws IOException {
+  public ImageWorkerPredefineStats(final File input) throws IOException {
     super(input);
   }
 
-  public ImageWorkerPredefineStats(RenderedImage image) {
+  public ImageWorkerPredefineStats(final RenderedImage image) {
     super(image);
   }
 
-  public ImageWorkerPredefineStats(RenderingHints hints) {
+  public ImageWorkerPredefineStats(final RenderingHints hints) {
     super(hints);
   }
 
-  public ImageWorkerPredefineStats setStats(Pair<String, Object>[] nameValuePairs) {
+  public ImageWorkerPredefineStats setStats(final Pair<String, Object>[] nameValuePairs) {
     image = new RenderedImageAdapter(image);
-    for (Pair<String, Object> pair : nameValuePairs) {
+    for (final Pair<String, Object> pair : nameValuePairs) {
       ((PlanarImage) (image)).setProperty(pair.getLeft(), pair.getRight());
     }
     return this;
   }
 
-  public ImageWorkerPredefineStats setHistogram(Histogram histogram) {
+  public ImageWorkerPredefineStats setHistogram(final Histogram histogram) {
     image = new RenderedImageAdapter(image);
     ((PlanarImage) (image)).setProperty("histogram", histogram);
     return this;
   }
 
-  public ImageWorkerPredefineStats setExtrema(double[][] extrema) {
+  public ImageWorkerPredefineStats setExtrema(final double[][] extrema) {
     image = new RenderedImageAdapter(image);
     ((PlanarImage) (image)).setProperty("extrema", extrema);
     return this;

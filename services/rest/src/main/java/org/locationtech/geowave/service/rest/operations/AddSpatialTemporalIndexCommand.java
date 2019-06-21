@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.service.rest.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +20,16 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.operations.remote.options.BasicIndexOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
 public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String> {
   /** A REST Operation for the AddIndexCommand where --type=spatial_temporal */
   @Parameter(description = "<name>", required = true)
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @Parameter(
       names = {"-d", "--default"},
@@ -37,7 +37,7 @@ public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String
   private Boolean makeDefault;
 
   @ParametersDelegate
-  private final BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
+  private BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
 
   private IndexPluginOptions pluginOptions = new IndexPluginOptions();
 
@@ -86,7 +86,7 @@ public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String
   }
 
   public void setParameters(final String indexName) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(indexName);
   }
 
@@ -140,9 +140,9 @@ public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String
     // Write properties file
     ConfigOptions.writeProperties(propFile, existingProps);
 
-    StringBuilder builder = new StringBuilder();
-    for (Object key : existingProps.keySet()) {
-      String[] split = key.toString().split("\\.");
+    final StringBuilder builder = new StringBuilder();
+    for (final Object key : existingProps.keySet()) {
+      final String[] split = key.toString().split("\\.");
       if (split.length > 1) {
         if (split[1].equals(parameters.get(0))) {
           builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");

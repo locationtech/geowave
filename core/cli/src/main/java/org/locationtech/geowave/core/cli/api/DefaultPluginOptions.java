@@ -39,13 +39,13 @@ public abstract class DefaultPluginOptions {
    *
    * @return
    */
-  public void save(Properties properties, String namespace) {
-    JCommanderPropertiesTransformer jcpt =
+  public void save(final Properties properties, final String namespace) {
+    final JCommanderPropertiesTransformer jcpt =
         new JCommanderPropertiesTransformer(String.format("%s.%s", namespace, OPTS));
     jcpt.addObject(this);
     jcpt.transformToProperties(properties);
     // Add the entry for the type property.
-    String typeProperty = String.format("%s.%s", namespace, TYPE);
+    final String typeProperty = String.format("%s.%s", namespace, TYPE);
     properties.setProperty(typeProperty, getType());
   }
 
@@ -54,10 +54,10 @@ public abstract class DefaultPluginOptions {
    *
    * @param options
    */
-  public boolean load(Properties properties, String namespace) {
+  public boolean load(final Properties properties, final String namespace) {
     // Get the qualifier.
-    String typeProperty = String.format("%s.%s", namespace, TYPE);
-    String typeValue = properties.getProperty(typeProperty);
+    final String typeProperty = String.format("%s.%s", namespace, TYPE);
+    final String typeValue = properties.getProperty(typeProperty);
     if (typeValue == null) {
       return false;
     }
@@ -65,7 +65,7 @@ public abstract class DefaultPluginOptions {
     if (getType() == null) {
       selectPlugin(typeValue);
     }
-    JCommanderPropertiesTransformer jcpt =
+    final JCommanderPropertiesTransformer jcpt =
         new JCommanderPropertiesTransformer(String.format("%s.%s", namespace, OPTS));
     jcpt.addObject(this);
     jcpt.transformFromProperties(properties);

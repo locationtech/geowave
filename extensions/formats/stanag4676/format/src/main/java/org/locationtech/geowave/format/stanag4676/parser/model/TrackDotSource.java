@@ -19,7 +19,7 @@ public class TrackDotSource {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(final Long id) {
     this.id = id;
   }
 
@@ -27,7 +27,7 @@ public class TrackDotSource {
     return gmtiUuid;
   }
 
-  public void setGmtiUuid(UUID gmtiUuid) {
+  public void setGmtiUuid(final UUID gmtiUuid) {
     this.gmtiUuid = gmtiUuid;
   }
 
@@ -35,7 +35,7 @@ public class TrackDotSource {
     return distance;
   }
 
-  public void setDistance(Double distance) {
+  public void setDistance(final Double distance) {
     this.distance = distance;
   }
 }

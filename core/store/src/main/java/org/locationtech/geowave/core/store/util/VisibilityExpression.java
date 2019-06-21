@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.core.store.util;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import java.text.ParseException;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 public class VisibilityExpression {
   // Split before and after the delimiter character so that it gets
@@ -22,7 +22,7 @@ public class VisibilityExpression {
   private static final String TOKEN_SPLIT;
 
   static {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append(String.format(SPLIT_DELIMITER, "\\(")).append("|");
     sb.append(String.format(SPLIT_DELIMITER, "\\)")).append("|");
     sb.append(String.format(SPLIT_DELIMITER, "\\&")).append("|");
@@ -33,11 +33,11 @@ public class VisibilityExpression {
   private static LoadingCache<String, VisibilityNode> expressionCache =
       CacheBuilder.newBuilder().maximumSize(50).build(new VisibilityCacheLoader());
 
-  public static boolean evaluate(String expression, Set<String> auths) {
-    String trimmed = expression.replaceAll("\\s+", "");
+  public static boolean evaluate(final String expression, final Set<String> auths) {
+    final String trimmed = expression.replaceAll("\\s+", "");
     try {
       return expressionCache.get(trimmed).evaluate(auths);
-    } catch (ExecutionException e) {
+    } catch (final ExecutionException e) {
       throw new RuntimeException(e.getCause());
     }
   }
@@ -45,23 +45,25 @@ public class VisibilityExpression {
   private static class VisibilityCacheLoader extends CacheLoader<String, VisibilityNode> {
 
     @Override
-    public VisibilityNode load(String key) throws Exception {
-      String[] tokens = key.split(TOKEN_SPLIT);
-      if (tokens.length == 0 || (tokens.length == 1 && tokens[0].length() == 0)) {
+    public VisibilityNode load(final String key) throws Exception {
+      final String[] tokens = key.split(TOKEN_SPLIT);
+      if ((tokens.length == 0) || ((tokens.length == 1) && (tokens[0].length() == 0))) {
         return new NoAuthNode();
       }
       return parseTokens(0, tokens.length - 1, tokens);
     }
   }
 
-  private static VisibilityNode parseTokens(int startIndex, int endIndex, String[] tokens)
-      throws ParseException {
+  private static VisibilityNode parseTokens(
+      final int startIndex,
+      final int endIndex,
+      final String[] tokens) throws ParseException {
     VisibilityNode left = null;
     String operator = null;
     for (int i = startIndex; i <= endIndex; i++) {
       VisibilityNode newNode = null;
       if (tokens[i].equals("(")) {
-        int matchingParen = findMatchingParen(i, tokens);
+        final int matchingParen = findMatchingParen(i, tokens);
         if (matchingParen < 0) {
           throw new ParseException("Left parenthesis found with no matching right parenthesis.", i);
         }
@@ -102,7 +104,7 @@ public class VisibilityExpression {
     return left;
   }
 
-  private static int findMatchingParen(int start, String[] tokens) {
+  private static int findMatchingParen(final int start, final String[] tokens) {
     int match = -1;
     int parenDepth = 1;
     for (int i = start + 1; i < tokens.length; i++) {
@@ -126,7 +128,7 @@ public class VisibilityExpression {
   private static class NoAuthNode extends VisibilityNode {
 
     @Override
-    public boolean evaluate(Set<String> auths) {
+    public boolean evaluate(final Set<String> auths) {
       return true;
     }
   }
@@ -134,12 +136,12 @@ public class VisibilityExpression {
   private static class ValueNode extends VisibilityNode {
     private final String value;
 
-    public ValueNode(String value) {
+    public ValueNode(final String value) {
       this.value = value;
     }
 
     @Override
-    public boolean evaluate(Set<String> auths) {
+    public boolean evaluate(final Set<String> auths) {
       return auths.contains(value);
     }
   }
@@ -148,13 +150,13 @@ public class VisibilityExpression {
     private final VisibilityNode left;
     private final VisibilityNode right;
 
-    public AndNode(VisibilityNode left, VisibilityNode right) {
+    public AndNode(final VisibilityNode left, final VisibilityNode right) {
       this.left = left;
       this.right = right;
     }
 
     @Override
-    public boolean evaluate(Set<String> auths) {
+    public boolean evaluate(final Set<String> auths) {
       return left.evaluate(auths) && right.evaluate(auths);
     }
   }
@@ -163,13 +165,13 @@ public class VisibilityExpression {
     private final VisibilityNode left;
     private final VisibilityNode right;
 
-    public OrNode(VisibilityNode left, VisibilityNode right) {
+    public OrNode(final VisibilityNode left, final VisibilityNode right) {
       this.left = left;
       this.right = right;
     }
 
     @Override
-    public boolean evaluate(Set<String> auths) {
+    public boolean evaluate(final Set<String> auths) {
       return left.evaluate(auths) || right.evaluate(auths);
     }
   }

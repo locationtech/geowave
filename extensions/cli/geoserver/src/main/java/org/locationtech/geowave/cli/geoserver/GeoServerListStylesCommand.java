@@ -8,14 +8,14 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameters;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameters;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "liststyles", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "List GeoServer styles")
@@ -35,7 +35,7 @@ public class GeoServerListStylesCommand extends GeoServerCommand<String> {
       final JSONArray styles = jsonResponse.getJSONArray("styles");
       return "\nGeoServer styles list: " + styles.toString(2);
     }
-    String errorMessage =
+    final String errorMessage =
         "Error getting GeoServer styles list: "
             + listStylesResponse.readEntity(String.class)
             + "\nGeoServer Response Code = "

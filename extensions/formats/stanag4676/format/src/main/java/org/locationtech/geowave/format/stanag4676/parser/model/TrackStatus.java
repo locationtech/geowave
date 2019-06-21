@@ -18,14 +18,14 @@ public enum TrackStatus {
   private String value;
 
   TrackStatus() {
-    this.value = TrackStatus.values()[0].toString();
+    value = TrackStatus.values()[0].toString();
   }
 
   TrackStatus(final String value) {
     this.value = value;
   }
 
-  public static TrackStatus fromString(String value) {
+  public static TrackStatus fromString(final String value) {
     for (final TrackStatus item : TrackStatus.values()) {
       if (item.toString().equals(value)) {
         return item;

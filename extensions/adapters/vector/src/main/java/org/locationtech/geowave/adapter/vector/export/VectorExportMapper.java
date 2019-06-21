@@ -29,11 +29,9 @@ public class VectorExportMapper extends
     Mapper<GeoWaveInputKey, SimpleFeature, AvroKey<AvroSimpleFeatureCollection>, NullWritable> {
   private static final Logger LOGGER = LoggerFactory.getLogger(Logger.class);
   private int batchSize;
-  private final Map<Short, AvroSFCWriter> adapterIdToAvroWriterMap =
-      new HashMap<Short, AvroSFCWriter>();
+  private final Map<Short, AvroSFCWriter> adapterIdToAvroWriterMap = new HashMap<>();
   private final NullWritable outVal = NullWritable.get();
-  private final AvroKey<AvroSimpleFeatureCollection> outKey =
-      new AvroKey<AvroSimpleFeatureCollection>();
+  private final AvroKey<AvroSimpleFeatureCollection> outKey = new AvroKey<>();
 
   @Override
   protected void map(
@@ -121,7 +119,7 @@ public class VectorExportMapper extends
         // passed in
         LOGGER.warn("Unable to find classification", e);
       }
-      avList = new ArrayList<AvroAttributeValues>(batchSize);
+      avList = new ArrayList<>(batchSize);
     }
   }
 }

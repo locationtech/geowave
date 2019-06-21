@@ -84,7 +84,7 @@ public class TrackIdentity {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(final Long id) {
     this.id = id;
   }
 
@@ -92,7 +92,7 @@ public class TrackIdentity {
     return amplification;
   }
 
-  public void setAmplification(IdentityAmplification amplification) {
+  public void setAmplification(final IdentityAmplification amplification) {
     this.amplification = amplification;
   }
 
@@ -100,7 +100,7 @@ public class TrackIdentity {
     return identity;
   }
 
-  public void setIdentity(Identity identity) {
+  public void setIdentity(final Identity identity) {
     this.identity = identity;
   }
 
@@ -108,7 +108,7 @@ public class TrackIdentity {
     return source;
   }
 
-  public void setSource(ModalityType source) {
+  public void setSource(final ModalityType source) {
     this.source = source;
   }
 
@@ -116,7 +116,7 @@ public class TrackIdentity {
     return valueConfidence;
   }
 
-  public void setValueConfidence(int valueConfidence) {
+  public void setValueConfidence(final int valueConfidence) {
     this.valueConfidence = valueConfidence;
   }
 
@@ -124,7 +124,7 @@ public class TrackIdentity {
     return sourceReliability;
   }
 
-  public void setSourceReliability(int sourceReliability) {
+  public void setSourceReliability(final int sourceReliability) {
     this.sourceReliability = sourceReliability;
   }
 
@@ -132,7 +132,7 @@ public class TrackIdentity {
     return iffMode;
   }
 
-  public void setIffMode(IffMode iffMode) {
+  public void setIffMode(final IffMode iffMode) {
     this.iffMode = iffMode;
   }
 
@@ -140,7 +140,7 @@ public class TrackIdentity {
     return iffValue;
   }
 
-  public void setIffValue(String iffValue) {
+  public void setIffValue(final String iffValue) {
     this.iffValue = iffValue;
   }
 
@@ -148,7 +148,7 @@ public class TrackIdentity {
     return unitName;
   }
 
-  public void setUnitName(String unitName) {
+  public void setUnitName(final String unitName) {
     this.unitName = unitName;
   }
 
@@ -156,7 +156,7 @@ public class TrackIdentity {
     return unitSymbol;
   }
 
-  public void setUnitSymbol(String unitSymbol) {
+  public void setUnitSymbol(final String unitSymbol) {
     this.unitSymbol = unitSymbol;
   }
 }

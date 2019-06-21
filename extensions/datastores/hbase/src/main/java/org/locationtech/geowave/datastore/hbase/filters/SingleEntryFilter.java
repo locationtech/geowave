@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.filters;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -20,6 +19,7 @@ import org.apache.hadoop.hbase.filter.FilterBase;
 import org.apache.hadoop.hbase.shaded.com.google.protobuf.HBaseZeroCopyByteString;
 import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.FilterProtosClient;
 import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.FilterProtosServer;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 /**
  * This is a Filter which will run on Tablet Server during Scan. HBase uses these filters instead of

@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.datastore.hbase.config;
 
-import com.beust.jcommander.Parameter;
 import org.apache.hadoop.hbase.HConstants;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
+import com.beust.jcommander.Parameter;
 
 public class HBaseOptions extends BaseDataStoreOptions {
   public static final String COPROCESSOR_JAR_KEY = "coprocessorJar";

@@ -102,7 +102,7 @@ public interface Partitioner<T> extends Serializable {
       super();
       this.partitionKey = partitionKey;
       this.sortKey = sortKey;
-      this.isPrimary = primary;
+      isPrimary = primary;
     }
 
     @Override

@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.core.store.data.field.base;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class BooleanSerializationProvider implements FieldSerializationProviderSpi<Boolean> {
 

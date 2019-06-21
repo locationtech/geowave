@@ -20,18 +20,18 @@ public class Track {
   private TrackStatus status;
   private Security security;
   private String comment;
-  private List<TrackPoint> points = new ArrayList<TrackPoint>();
-  private List<TrackIdentity> identities = new ArrayList<TrackIdentity>();
-  private List<TrackClassification> classifications = new ArrayList<TrackClassification>();
-  private List<TrackManagement> managements = new ArrayList<TrackManagement>();
+  private List<TrackPoint> points = new ArrayList<>();
+  private List<TrackIdentity> identities = new ArrayList<>();
+  private List<TrackClassification> classifications = new ArrayList<>();
+  private List<TrackManagement> managements = new ArrayList<>();
   private List<MotionImagery> motionImages;
-  private List<LineageRelation> trackRelations = new ArrayList<LineageRelation>();
+  private List<LineageRelation> trackRelations = new ArrayList<>();
 
   public Long getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(final Long id) {
     this.id = id;
   }
 
@@ -49,7 +49,7 @@ public class Track {
    *
    * @param uuid
    */
-  public void setUuid(String uuid) {
+  public void setUuid(final String uuid) {
     this.uuid = uuid;
   }
 
@@ -57,7 +57,7 @@ public class Track {
     return trackNumber;
   }
 
-  public void setTrackNumber(String trackNumber) {
+  public void setTrackNumber(final String trackNumber) {
     this.trackNumber = trackNumber;
   }
 
@@ -65,7 +65,7 @@ public class Track {
     return status;
   }
 
-  public void setStatus(TrackStatus status) {
+  public void setStatus(final TrackStatus status) {
     this.status = status;
   }
 
@@ -73,7 +73,7 @@ public class Track {
     return security;
   }
 
-  public void setSecurity(Security security) {
+  public void setSecurity(final Security security) {
     this.security = security;
   }
 
@@ -81,7 +81,7 @@ public class Track {
     return comment;
   }
 
-  public void setComment(String comment) {
+  public void setComment(final String comment) {
     this.comment = comment;
   }
 
@@ -99,7 +99,7 @@ public class Track {
    *
    * @param points the list of TrackPoints which comprise this track
    */
-  public void setPoints(List<TrackPoint> points) {
+  public void setPoints(final List<TrackPoint> points) {
     this.points = points;
   }
 
@@ -108,11 +108,11 @@ public class Track {
    *
    * @param point the TrackPoint to add
    */
-  public void addPoint(TrackPoint point) {
-    if (this.points == null) {
-      this.points = new ArrayList<TrackPoint>();
+  public void addPoint(final TrackPoint point) {
+    if (points == null) {
+      points = new ArrayList<>();
     }
-    this.points.add(point);
+    points.add(point);
   }
 
   /**
@@ -126,7 +126,7 @@ public class Track {
     return identities;
   }
 
-  public void setIdentities(List<TrackIdentity> identities) {
+  public void setIdentities(final List<TrackIdentity> identities) {
     this.identities = identities;
   }
 
@@ -135,11 +135,11 @@ public class Track {
    *
    * @param identity {@link TrackIdentity}
    */
-  public void addIdentity(TrackIdentity identity) {
-    if (this.identities == null) {
-      this.identities = new ArrayList<TrackIdentity>();
+  public void addIdentity(final TrackIdentity identity) {
+    if (identities == null) {
+      identities = new ArrayList<>();
     }
-    this.identities.add(identity);
+    identities.add(identity);
   }
 
   /**
@@ -151,7 +151,7 @@ public class Track {
     return classifications;
   }
 
-  public void setClassifications(List<TrackClassification> classifications) {
+  public void setClassifications(final List<TrackClassification> classifications) {
     this.classifications = classifications;
   }
 
@@ -160,11 +160,11 @@ public class Track {
    *
    * @param classification {@link TrackClassificaion}
    */
-  public void addClassification(TrackClassification classification) {
-    if (this.classifications == null) {
-      this.classifications = new ArrayList<TrackClassification>();
+  public void addClassification(final TrackClassification classification) {
+    if (classifications == null) {
+      classifications = new ArrayList<>();
     }
-    this.classifications.add(classification);
+    classifications.add(classification);
   }
 
   /**
@@ -176,7 +176,7 @@ public class Track {
     return managements;
   }
 
-  public void setManagements(List<TrackManagement> managements) {
+  public void setManagements(final List<TrackManagement> managements) {
     this.managements = managements;
   }
 
@@ -185,11 +185,11 @@ public class Track {
    *
    * @param management {@link TrackManagement}
    */
-  public void addManagement(TrackManagement management) {
-    if (this.managements == null) {
-      this.managements = new ArrayList<TrackManagement>();
+  public void addManagement(final TrackManagement management) {
+    if (managements == null) {
+      managements = new ArrayList<>();
     }
-    this.managements.add(management);
+    managements.add(management);
   }
 
   /**
@@ -201,7 +201,7 @@ public class Track {
     return trackRelations;
   }
 
-  public void setTrackRelations(List<LineageRelation> trackRelations) {
+  public void setTrackRelations(final List<LineageRelation> trackRelations) {
     this.trackRelations = trackRelations;
   }
 
@@ -210,11 +210,11 @@ public class Track {
    *
    * @param trackRelations List<{@link LineageRelation}>
    */
-  public void addTrackRelation(LineageRelation relation) {
-    if (this.trackRelations == null) {
-      this.trackRelations = new ArrayList<LineageRelation>();
+  public void addTrackRelation(final LineageRelation relation) {
+    if (trackRelations == null) {
+      trackRelations = new ArrayList<>();
     }
-    this.trackRelations.add(relation);
+    trackRelations.add(relation);
   }
 
   /**
@@ -226,14 +226,14 @@ public class Track {
     return motionImages;
   }
 
-  public void setMotionImages(List<MotionImagery> motionImages) {
+  public void setMotionImages(final List<MotionImagery> motionImages) {
     this.motionImages = motionImages;
   }
 
-  public void addMotionImagery(MotionImagery image) {
-    if (this.motionImages == null) {
-      this.motionImages = new ArrayList<MotionImagery>();
+  public void addMotionImagery(final MotionImagery image) {
+    if (motionImages == null) {
+      motionImages = new ArrayList<>();
     }
-    this.motionImages.add(image);
+    motionImages.add(image);
   }
 }

@@ -97,7 +97,7 @@ public class CompoundHierarchicalIndexStrategyWrapper implements HierarchicalNum
   public void fromBinary(final byte[] bytes) {
     final CompoundIndexStrategy rootStrategy =
         (CompoundIndexStrategy) PersistenceUtils.fromBinary(bytes);
-    parentStrategies = new ArrayList<CompoundIndexStrategy>();
+    parentStrategies = new ArrayList<>();
     // discover hierarchy
     firstHierarchicalStrategy = findHierarchicalStrategy(rootStrategy, parentStrategies);
   }
@@ -159,7 +159,7 @@ public class CompoundHierarchicalIndexStrategyWrapper implements HierarchicalNum
 
   public static HierarchicalNumericIndexStrategy findHierarchicalStrategy(
       final NumericIndexStrategy indexStrategy) {
-    final List<CompoundIndexStrategy> parentStrategies = new ArrayList<CompoundIndexStrategy>();
+    final List<CompoundIndexStrategy> parentStrategies = new ArrayList<>();
     final HierarchicalNumericIndexStrategy firstHierarchicalStrategy =
         findHierarchicalStrategy(indexStrategy, parentStrategies);
     if (firstHierarchicalStrategy == null) {

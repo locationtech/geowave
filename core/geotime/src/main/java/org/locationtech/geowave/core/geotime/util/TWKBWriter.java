@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.util;
 
-import com.clearspring.analytics.util.Varint;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -23,38 +22,39 @@ import org.locationtech.jts.geom.MultiPoint;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
+import com.clearspring.analytics.util.Varint;
 
 public class TWKBWriter {
-  private int maxPrecision;
+  private final int maxPrecision;
 
   public TWKBWriter() {
     this(TWKBUtils.MAX_COORD_PRECISION);
   }
 
-  public TWKBWriter(int maxPrecision) {
+  public TWKBWriter(final int maxPrecision) {
     this.maxPrecision = Math.min(TWKBUtils.MAX_COORD_PRECISION, maxPrecision);
   }
 
-  public byte[] write(Geometry geom) {
+  public byte[] write(final Geometry geom) {
     try {
-      ByteArrayOutputStream out = new ByteArrayOutputStream();
-      DataOutput output = new DataOutputStream(out);
+      final ByteArrayOutputStream out = new ByteArrayOutputStream();
+      final DataOutput output = new DataOutputStream(out);
       write(geom, output);
       return out.toByteArray();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new RuntimeException("Error writing TWKB geometry.", e);
     }
   }
 
-  public void write(Geometry geom, DataOutput output) throws IOException {
-    byte type = getType(geom);
+  public void write(final Geometry geom, final DataOutput output) throws IOException {
+    final byte type = getType(geom);
     if (geom.isEmpty()) {
       output.writeByte(getTypeAndPrecisionByte(type, 0));
       output.writeByte(TWKBUtils.EMPTY_GEOMETRY);
       return;
     }
     byte metadata = 0;
-    Coordinate[] coordinates = geom.getCoordinates();
+    final Coordinate[] coordinates = geom.getCoordinates();
     PrecisionWriter precision;
     if (Double.isNaN(coordinates[0].getZ()) || Double.isNaN(coordinates[0].getM())) {
       metadata |= TWKBUtils.EXTENDED_DIMENSIONS;
@@ -93,18 +93,24 @@ public class TWKBWriter {
     }
   }
 
-  private void writePoint(Point point, PrecisionWriter precision, DataOutput output)
-      throws IOException {
+  private void writePoint(
+      final Point point,
+      final PrecisionWriter precision,
+      final DataOutput output) throws IOException {
     precision.writePoint(point.getCoordinate(), output);
   }
 
-  private void writeLineString(LineString line, PrecisionWriter precision, DataOutput output)
-      throws IOException {
+  private void writeLineString(
+      final LineString line,
+      final PrecisionWriter precision,
+      final DataOutput output) throws IOException {
     precision.writePointArray(line.getCoordinates(), output);
   }
 
-  private void writePolygon(Polygon polygon, PrecisionWriter precision, DataOutput output)
-      throws IOException {
+  private void writePolygon(
+      final Polygon polygon,
+      final PrecisionWriter precision,
+      final DataOutput output) throws IOException {
     Varint.writeUnsignedVarInt(polygon.getNumInteriorRing() + 1, output);
     precision.writePointArray(polygon.getExteriorRing().getCoordinates(), output);
     for (int i = 0; i < polygon.getNumInteriorRing(); i++) {
@@ -112,15 +118,17 @@ public class TWKBWriter {
     }
   }
 
-  private void writeMultiPoint(MultiPoint multiPoint, PrecisionWriter precision, DataOutput output)
-      throws IOException {
+  private void writeMultiPoint(
+      final MultiPoint multiPoint,
+      final PrecisionWriter precision,
+      final DataOutput output) throws IOException {
     precision.writePointArray(multiPoint.getCoordinates(), output);
   }
 
   private void writeMultiLineString(
-      MultiLineString multiLine,
-      PrecisionWriter precision,
-      DataOutput output) throws IOException {
+      final MultiLineString multiLine,
+      final PrecisionWriter precision,
+      final DataOutput output) throws IOException {
     Varint.writeUnsignedVarInt(multiLine.getNumGeometries(), output);
     for (int i = 0; i < multiLine.getNumGeometries(); i++) {
       precision.writePointArray(multiLine.getGeometryN(i).getCoordinates(), output);
@@ -128,12 +136,12 @@ public class TWKBWriter {
   }
 
   private void writeMultiPolygon(
-      MultiPolygon multiPolygon,
-      PrecisionWriter precision,
-      DataOutput output) throws IOException {
+      final MultiPolygon multiPolygon,
+      final PrecisionWriter precision,
+      final DataOutput output) throws IOException {
     Varint.writeUnsignedVarInt(multiPolygon.getNumGeometries(), output);
     for (int i = 0; i < multiPolygon.getNumGeometries(); i++) {
-      Polygon polygon = (Polygon) multiPolygon.getGeometryN(i);
+      final Polygon polygon = (Polygon) multiPolygon.getGeometryN(i);
       if (polygon.isEmpty()) {
         Varint.writeUnsignedVarInt(0, output);
         continue;
@@ -147,23 +155,23 @@ public class TWKBWriter {
   }
 
   private void writeGeometryCollection(
-      GeometryCollection geoms,
-      PrecisionWriter precision,
-      DataOutput output) throws IOException {
+      final GeometryCollection geoms,
+      final PrecisionWriter precision,
+      final DataOutput output) throws IOException {
     Varint.writeUnsignedVarInt(geoms.getNumGeometries(), output);
     for (int i = 0; i < geoms.getNumGeometries(); i++) {
-      Geometry geom = geoms.getGeometryN(i);
+      final Geometry geom = geoms.getGeometryN(i);
       write(geom, output);
     }
   }
 
-  private byte getTypeAndPrecisionByte(byte type, int precision) {
+  private byte getTypeAndPrecisionByte(final byte type, final int precision) {
     byte typeAndPrecision = type;
     typeAndPrecision |= TWKBUtils.zigZagEncode(precision) << 4;
     return typeAndPrecision;
   }
 
-  private byte getType(Geometry geom) {
+  private byte getType(final Geometry geom) {
     if (geom instanceof Point) {
       return TWKBUtils.POINT_TYPE;
     } else if (geom instanceof LineString) {
@@ -184,7 +192,7 @@ public class TWKBWriter {
     private int precision = TWKBUtils.MIN_COORD_PRECISION;
     protected double precisionMultiplier = 0;
 
-    public PrecisionWriter calculate(Coordinate[] coordinates, int maxPrecision) {
+    public PrecisionWriter calculate(final Coordinate[] coordinates, final int maxPrecision) {
       for (int i = 0; i < coordinates.length; i++) {
         checkCoordinate(coordinates[i]);
       }
@@ -192,34 +200,36 @@ public class TWKBWriter {
       return this;
     }
 
-    protected void checkCoordinate(Coordinate c) {
-      BigDecimal xCoord = new BigDecimal(Double.toString(c.getX())).stripTrailingZeros();
+    protected void checkCoordinate(final Coordinate c) {
+      final BigDecimal xCoord = new BigDecimal(Double.toString(c.getX())).stripTrailingZeros();
       precision = Math.max(xCoord.scale(), precision);
-      BigDecimal yCoord = new BigDecimal(Double.toString(c.getY())).stripTrailingZeros();
+      final BigDecimal yCoord = new BigDecimal(Double.toString(c.getY())).stripTrailingZeros();
       precision = Math.max(yCoord.scale(), precision);
     }
 
-    protected void finalize(int maxPrecision) {
+    protected void finalize(final int maxPrecision) {
       precision = Math.min(maxPrecision, precision);
       precisionMultiplier = Math.pow(10, precision);
     }
 
-    public void writeExtendedPrecision(DataOutput output) throws IOException {
+    public void writeExtendedPrecision(final DataOutput output) throws IOException {
       return;
     }
 
-    public void writePoint(Coordinate coordinate, DataOutput output) throws IOException {
+    public void writePoint(final Coordinate coordinate, final DataOutput output)
+        throws IOException {
       Varint.writeSignedVarLong(Math.round(coordinate.getX() * precisionMultiplier), output);
       Varint.writeSignedVarLong(Math.round(coordinate.getY() * precisionMultiplier), output);
     }
 
-    public void writePointArray(Coordinate[] coordinates, DataOutput output) throws IOException {
+    public void writePointArray(final Coordinate[] coordinates, final DataOutput output)
+        throws IOException {
       long lastX = 0;
       long lastY = 0;
       Varint.writeUnsignedVarInt(coordinates.length, output);
-      for (Coordinate c : coordinates) {
-        long x = Math.round(c.getX() * precisionMultiplier);
-        long y = Math.round(c.getY() * precisionMultiplier);
+      for (final Coordinate c : coordinates) {
+        final long x = Math.round(c.getX() * precisionMultiplier);
+        final long y = Math.round(c.getY() * precisionMultiplier);
         Varint.writeSignedVarLong(x - lastX, output);
         Varint.writeSignedVarLong(y - lastY, output);
         lastX = x;
@@ -237,28 +247,28 @@ public class TWKBWriter {
     private double mPrecisionMultiplier = 0;
 
     @Override
-    public PrecisionWriter calculate(Coordinate[] coordinates, int maxPrecision) {
-      this.hasZ = !Double.isNaN(coordinates[0].getZ());
-      this.hasM = !Double.isNaN(coordinates[0].getM());
+    public PrecisionWriter calculate(final Coordinate[] coordinates, final int maxPrecision) {
+      hasZ = !Double.isNaN(coordinates[0].getZ());
+      hasM = !Double.isNaN(coordinates[0].getM());
       super.calculate(coordinates, maxPrecision);
       return this;
     }
 
     @Override
-    protected void checkCoordinate(Coordinate c) {
+    protected void checkCoordinate(final Coordinate c) {
       super.checkCoordinate(c);
       if (hasZ) {
-        BigDecimal zCoord = new BigDecimal(Double.toString(c.getZ())).stripTrailingZeros();
+        final BigDecimal zCoord = new BigDecimal(Double.toString(c.getZ())).stripTrailingZeros();
         zPrecision = Math.max(zCoord.scale(), zPrecision);
       }
       if (hasM) {
-        BigDecimal mCoord = new BigDecimal(Double.toString(c.getM())).stripTrailingZeros();
+        final BigDecimal mCoord = new BigDecimal(Double.toString(c.getM())).stripTrailingZeros();
         mPrecision = Math.max(mCoord.scale(), mPrecision);
       }
     }
 
     @Override
-    protected void finalize(int maxPrecision) {
+    protected void finalize(final int maxPrecision) {
       super.finalize(maxPrecision);
       if (hasZ) {
         zPrecision = Math.min(TWKBUtils.MAX_EXTENDED_PRECISION, zPrecision);
@@ -271,7 +281,7 @@ public class TWKBWriter {
     }
 
     @Override
-    public void writeExtendedPrecision(DataOutput output) throws IOException {
+    public void writeExtendedPrecision(final DataOutput output) throws IOException {
       byte extendedDimensions = 0;
       if (hasZ) {
         extendedDimensions |= 0x1;
@@ -285,7 +295,8 @@ public class TWKBWriter {
     }
 
     @Override
-    public void writePoint(Coordinate coordinate, DataOutput output) throws IOException {
+    public void writePoint(final Coordinate coordinate, final DataOutput output)
+        throws IOException {
       super.writePoint(coordinate, output);
       if (hasZ) {
         Varint.writeSignedVarLong(Math.round(coordinate.getZ() * zPrecisionMultiplier), output);
@@ -296,26 +307,27 @@ public class TWKBWriter {
     }
 
     @Override
-    public void writePointArray(Coordinate[] coordinates, DataOutput output) throws IOException {
+    public void writePointArray(final Coordinate[] coordinates, final DataOutput output)
+        throws IOException {
       long lastX = 0;
       long lastY = 0;
       long lastZ = 0;
       long lastM = 0;
       Varint.writeUnsignedVarInt(coordinates.length, output);
-      for (Coordinate c : coordinates) {
-        long x = Math.round(c.getX() * precisionMultiplier);
-        long y = Math.round(c.getY() * precisionMultiplier);
+      for (final Coordinate c : coordinates) {
+        final long x = Math.round(c.getX() * precisionMultiplier);
+        final long y = Math.round(c.getY() * precisionMultiplier);
         Varint.writeSignedVarLong(x - lastX, output);
         Varint.writeSignedVarLong(y - lastY, output);
         lastX = x;
         lastY = y;
         if (hasZ) {
-          long z = Math.round(c.getZ() * zPrecisionMultiplier);
+          final long z = Math.round(c.getZ() * zPrecisionMultiplier);
           Varint.writeSignedVarLong(z - lastZ, output);
           lastZ = z;
         }
         if (hasM) {
-          long m = Math.round(c.getZ() * mPrecisionMultiplier);
+          final long m = Math.round(c.getZ() * mPrecisionMultiplier);
           Varint.writeSignedVarLong(m - lastM, output);
           lastM = m;
         }

@@ -46,6 +46,7 @@ import org.locationtech.geowave.test.spark.GeoWaveBasicSparkIT;
 import org.locationtech.geowave.test.spark.GeoWaveSparkKMeansIT;
 import org.locationtech.geowave.test.spark.GeoWaveSparkSQLIT;
 import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
+import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
@@ -64,6 +65,7 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
     DataIndexOnlyIT.class,
     MapReduceSecondaryIndexIT.class,
     VisibilitySecondaryIndexIT.class,
+    GeoWaveStabilityIT.class,
     // for now tests are taking too long in travis and landsatIT is a long test
     // LandsatIT.class,
     // these also help shave off some time

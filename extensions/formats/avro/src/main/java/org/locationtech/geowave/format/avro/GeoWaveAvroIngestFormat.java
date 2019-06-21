@@ -22,7 +22,7 @@ public class GeoWaveAvroIngestFormat extends
     AbstractSimpleFeatureIngestFormat<AvroSimpleFeatureCollection> {
   @Override
   protected AbstractSimpleFeatureIngestPlugin<AvroSimpleFeatureCollection> newPluginInstance(
-      IngestFormatOptions options) {
+      final IngestFormatOptions options) {
     return new GeoWaveAvroIngestPlugin();
   }
 

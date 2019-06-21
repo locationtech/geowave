@@ -39,11 +39,11 @@ public class TemporalRange {
     return endTime;
   }
 
-  public void setStartTime(Date startTime) {
+  public void setStartTime(final Date startTime) {
     this.startTime = startTime;
   }
 
-  public void setEndTime(Date endTime) {
+  public void setEndTime(final Date endTime) {
     this.endTime = endTime;
   }
 
@@ -60,23 +60,25 @@ public class TemporalRange {
     return (((st < rst) && (et > rst)) || ((st < ret) && (et > ret)) || ((st < rst) && (et > ret)));
   }
 
-  public TemporalRange intersect(TemporalRange range) {
-    Date start = startTime.after(range.getStartTime()) ? startTime : range.getStartTime();
-    Date end = endTime.before(range.getEndTime()) ? endTime : range.getEndTime();
-    if (start.after(end))
+  public TemporalRange intersect(final TemporalRange range) {
+    final Date start = startTime.after(range.getStartTime()) ? startTime : range.getStartTime();
+    final Date end = endTime.before(range.getEndTime()) ? endTime : range.getEndTime();
+    if (start.after(end)) {
       return new TemporalRange(START_TIME, START_TIME);
+    }
     return new TemporalRange(start, end);
   }
 
-  public TemporalRange union(TemporalRange range) {
-    Date start = startTime.before(range.getStartTime()) ? startTime : range.getStartTime();
-    Date end = endTime.after(range.getEndTime()) ? endTime : range.getEndTime();
-    if (start.after(end))
+  public TemporalRange union(final TemporalRange range) {
+    final Date start = startTime.before(range.getStartTime()) ? startTime : range.getStartTime();
+    final Date end = endTime.after(range.getEndTime()) ? endTime : range.getEndTime();
+    if (start.after(end)) {
       return new TemporalRange(START_TIME, START_TIME);
+    }
     return new TemporalRange(start, end);
   }
 
-  public void toBinary(ByteBuffer buffer) {
+  public void toBinary(final ByteBuffer buffer) {
     VarintUtils.writeTime(startTime.getTime(), buffer);
     VarintUtils.writeTime(endTime.getTime(), buffer);
   }
@@ -87,7 +89,7 @@ public class TemporalRange {
     return buf.array();
   }
 
-  public void fromBinary(ByteBuffer buffer) {
+  public void fromBinary(final ByteBuffer buffer) {
     startTime = new Date(VarintUtils.readTime(buffer));
     endTime = new Date(VarintUtils.readTime(buffer));
   }

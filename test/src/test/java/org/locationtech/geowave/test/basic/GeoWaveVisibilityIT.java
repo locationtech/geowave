@@ -109,7 +109,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     final int maxCellSize =
         TestUtils.getTestEnvironment(dataStoreOptions.getType()).getMaxCellSize();
     final int tileSize;
-    if (maxCellSize <= 64 * 1024) {
+    if (maxCellSize <= (64 * 1024)) {
       tileSize = 24;
     } else {
       tileSize = 64;
@@ -136,7 +136,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     final int maxCellSize =
         TestUtils.getTestEnvironment(dataStoreOptions.getType()).getMaxCellSize();
     final int tileSize;
-    if (maxCellSize <= 64 * 1024) {
+    if (maxCellSize <= (64 * 1024)) {
       tileSize = 24;
     } else {
       tileSize = 64;
@@ -530,7 +530,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
       final VisibilityWriter<SimpleFeature> visibilityWriter,
       final Consumer<DifferingFieldVisibilityEntryCount> verifyDifferingVisibilities,
       final QuadConsumer<DataStore, DataStatisticsStore, Short, Boolean> verifyQuery,
-      int totalFeatures) {
+      final int totalFeatures) {
     final SimpleFeatureBuilder bldr = new SimpleFeatureBuilder(getType());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(getType());
     final DataStore store = dataStoreOptions.createDataStore();

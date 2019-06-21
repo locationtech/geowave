@@ -8,22 +8,22 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "ingestvector", parentOperation = Sentinel2Section.class)
 @Parameters(
     commandDescription = "Ingest routine for searching Sentinel2 scenes that match certain criteria and ingesting the scene and band metadata into GeoWave's vector store.")
 public class Sentinel2IngestVectorCommand extends DefaultOperation implements Command {
   @Parameter(description = "<storename> <comma delimited index/group list>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   protected Sentinel2BasicCommandLineOptions analyzeOptions =

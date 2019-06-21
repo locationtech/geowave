@@ -66,7 +66,7 @@ public class ShapefileTool {
 
     final ShapefileDataStoreFactory dataStoreFactory = new ShapefileDataStoreFactory();
 
-    final Map<String, Serializable> params = new HashMap<String, Serializable>();
+    final Map<String, Serializable> params = new HashMap<>();
     params.put("url", new File(dir.getAbsolutePath() + "/" + typeName + ".shp").toURI().toURL());
     params.put("create spatial index", Boolean.TRUE);
 
@@ -115,7 +115,7 @@ public class ShapefileTool {
 
     final ShapefileDataStoreFactory dataStoreFactory = new ShapefileDataStoreFactory();
     final String typeName = shapes.get(0).getType().getTypeName();
-    final Map<String, Serializable> params = new HashMap<String, Serializable>();
+    final Map<String, Serializable> params = new HashMap<>();
     params.put("url", new File(dir.getAbsolutePath() + "/" + typeName + ".shp").toURI().toURL());
     params.put("create spatial index", Boolean.TRUE);
 

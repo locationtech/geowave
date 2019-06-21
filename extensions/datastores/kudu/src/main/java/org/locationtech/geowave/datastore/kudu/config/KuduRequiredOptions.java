@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.datastore.kudu.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.kudu.KuduStoreFactoryFamily;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class KuduRequiredOptions extends StoreFactoryOptions {
   @Parameter(
@@ -27,7 +27,10 @@ public class KuduRequiredOptions extends StoreFactoryOptions {
 
   public KuduRequiredOptions() {}
 
-  public KuduRequiredOptions(String kuduMaster, String gwNamespace, KuduOptions additionalOptions) {
+  public KuduRequiredOptions(
+      final String kuduMaster,
+      final String gwNamespace,
+      final KuduOptions additionalOptions) {
     super(gwNamespace);
     this.kuduMaster = kuduMaster;
     this.additionalOptions = additionalOptions;

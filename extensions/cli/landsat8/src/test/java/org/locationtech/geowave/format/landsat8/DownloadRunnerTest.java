@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.format.landsat8;
 
-import static org.junit.Assert.*;
-import it.geosolutions.jaiext.JAIExt;
+import static org.junit.Assert.assertTrue;
 import java.io.File;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
+import it.geosolutions.jaiext.JAIExt;
 
 public class DownloadRunnerTest {
   @Test
@@ -21,14 +21,15 @@ public class DownloadRunnerTest {
   public void testExecute() throws Exception {
     JAIExt.initJAIEXT();
 
-    Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
+    final Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
     analyzeOptions.setWorkspaceDir(Tests.WORKSPACE_DIR);
     analyzeOptions.setUseCachedScenes(true);
     analyzeOptions.setNBestScenes(1);
     analyzeOptions.setCqlFilter(
         "BBOX(shape,-76.6,42.34,-76.4,42.54) and band='BQA' and sizeMB < 1");
 
-    Landsat8DownloadCommandLineOptions downloadOptions = new Landsat8DownloadCommandLineOptions();
+    final Landsat8DownloadCommandLineOptions downloadOptions =
+        new Landsat8DownloadCommandLineOptions();
     downloadOptions.setOverwriteIfExists(false);
 
     new DownloadRunner(analyzeOptions, downloadOptions).runInternal(new ManualOperationParams());

@@ -184,8 +184,7 @@ public class SinglePartitionInsertionIds implements Persistable {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int pLength = VarintUtils.readUnsignedInt(buf);
     if (pLength > 0) {
-      final byte[] pBytes = new byte[pLength];
-      buf.get(pBytes);
+      final byte[] pBytes = ByteArrayUtils.safeRead(buf, pLength);
       partitionKey = pBytes;
     } else {
       partitionKey = null;
@@ -195,8 +194,7 @@ public class SinglePartitionInsertionIds implements Persistable {
       sortKeys = new ArrayList<>(sSize);
       for (int i = 0; i < sSize; i++) {
         final int keyLength = VarintUtils.readUnsignedInt(buf);
-        final byte[] sortKey = new byte[keyLength];
-        buf.get(sortKey);
+        final byte[] sortKey = ByteArrayUtils.safeRead(buf, keyLength);
         sortKeys.add(sortKey);
       }
     } else {

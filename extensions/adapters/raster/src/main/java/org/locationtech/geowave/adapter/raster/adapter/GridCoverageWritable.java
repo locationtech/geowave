@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.raster.adapter;
 
-import com.clearspring.analytics.util.Varint;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -20,6 +19,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.clearspring.analytics.util.Varint;
 
 /**
  * This class is used by GridCoverageDataAdapter to persist GridCoverages. The adapter has
@@ -87,15 +87,15 @@ public class GridCoverageWritable implements Writable {
     maxX = input.readDouble();
     minY = input.readDouble();
     maxY = input.readDouble();
-    int crsStrSize = Varint.readUnsignedVarInt(input);
+    final int crsStrSize = Varint.readUnsignedVarInt(input);
 
     if (crsStrSize > 0) {
-      byte[] crsStrBytes = new byte[crsStrSize];
+      final byte[] crsStrBytes = new byte[crsStrSize];
       input.readFully(crsStrBytes);
-      String crsStr = StringUtils.stringFromBinary(crsStrBytes);
+      final String crsStr = StringUtils.stringFromBinary(crsStrBytes);
       try {
         crs = CRS.decode(crsStr);
-      } catch (FactoryException e) {
+      } catch (final FactoryException e) {
         LOGGER.error("Unable to decode " + crsStr + " CRS", e);
         throw new RuntimeException("Unable to decode " + crsStr + " CRS", e);
       }
@@ -113,7 +113,8 @@ public class GridCoverageWritable implements Writable {
     output.writeDouble(maxX);
     output.writeDouble(minY);
     output.writeDouble(maxY);
-    String crsStr = crs == null || GeometryUtils.getDefaultCRS().equals(crs) ? "" : CRS.toSRS(crs);
+    final String crsStr =
+        (crs == null) || GeometryUtils.getDefaultCRS().equals(crs) ? "" : CRS.toSRS(crs);
     Varint.writeUnsignedVarInt(crsStr.length(), output);
     output.write(StringUtils.stringToBinary(crsStr));
   }

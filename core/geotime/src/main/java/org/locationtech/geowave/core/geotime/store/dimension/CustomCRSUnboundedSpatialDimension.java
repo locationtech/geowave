@@ -19,7 +19,7 @@ public class CustomCRSUnboundedSpatialDimension extends UnboundedDimensionDefini
     super();
   }
 
-  public CustomCRSUnboundedSpatialDimension(double interval, byte axis) {
+  public CustomCRSUnboundedSpatialDimension(final double interval, final byte axis) {
     super(new BasicBinningStrategy(interval));
     baseCustomCRS = new BaseCustomCRSSpatialDimension(axis);
   }
@@ -28,24 +28,29 @@ public class CustomCRSUnboundedSpatialDimension extends UnboundedDimensionDefini
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((baseCustomCRS == null) ? 0 : baseCustomCRS.hashCode());
+    result = (prime * result) + ((baseCustomCRS == null) ? 0 : baseCustomCRS.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (!super.equals(obj))
+    }
+    if (!super.equals(obj)) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    CustomCRSUnboundedSpatialDimension other = (CustomCRSUnboundedSpatialDimension) obj;
+    }
+    final CustomCRSUnboundedSpatialDimension other = (CustomCRSUnboundedSpatialDimension) obj;
     if (baseCustomCRS == null) {
-      if (other.baseCustomCRS != null)
+      if (other.baseCustomCRS != null) {
         return false;
-    } else if (!baseCustomCRS.equals(other.baseCustomCRS))
+      }
+    } else if (!baseCustomCRS.equals(other.baseCustomCRS)) {
       return false;
+    }
     return true;
   }
 
@@ -59,7 +64,7 @@ public class CustomCRSUnboundedSpatialDimension extends UnboundedDimensionDefini
   }
 
   @Override
-  public void fromBinary(byte[] bytes) {
+  public void fromBinary(final byte[] bytes) {
     // TODO future issue to investigate performance improvements associated
     // with excessive array/object allocations
     // deserialize axis
@@ -67,6 +72,7 @@ public class CustomCRSUnboundedSpatialDimension extends UnboundedDimensionDefini
     super.fromBinary(baseCustomCRS.getAxisFromBinaryAndRemove(bytes));
   }
 
+  @Override
   public byte getAxis() {
     return baseCustomCRS.getAxis();
   }

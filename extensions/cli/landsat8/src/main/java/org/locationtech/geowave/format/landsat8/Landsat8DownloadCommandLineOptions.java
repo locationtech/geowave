@@ -22,7 +22,7 @@ public class Landsat8DownloadCommandLineOptions {
     return overwriteIfExists;
   }
 
-  public void setOverwriteIfExists(boolean overwriteIfExists) {
+  public void setOverwriteIfExists(final boolean overwriteIfExists) {
     this.overwriteIfExists = overwriteIfExists;
   }
 }

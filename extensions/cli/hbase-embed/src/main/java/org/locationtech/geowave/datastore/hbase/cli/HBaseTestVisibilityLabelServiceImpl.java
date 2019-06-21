@@ -26,10 +26,10 @@ public class HBaseTestVisibilityLabelServiceImpl extends DefaultVisibilityLabelS
 
   @Override
   public List<Tag> createVisibilityExpTags(
-      String visExpression,
-      boolean withSerializationFormat,
-      boolean checkAuths) throws IOException {
-    if (visExpression != null && visExpression.isEmpty()) {
+      final String visExpression,
+      final boolean withSerializationFormat,
+      final boolean checkAuths) throws IOException {
+    if ((visExpression != null) && visExpression.isEmpty()) {
       return null;
     }
 

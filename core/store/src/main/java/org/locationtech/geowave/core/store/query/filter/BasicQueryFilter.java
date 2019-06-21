@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -265,12 +266,13 @@ public class BasicQueryFilter implements QueryFilter {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     compareOp = BasicQueryCompareOperation.values()[VarintUtils.readUnsignedInt(buf)];
     final int numDimensions = VarintUtils.readUnsignedInt(buf);
+    ByteArrayUtils.verifyBufferSize(buf, numDimensions);
     dimensionFields = new NumericDimensionField<?>[numDimensions];
     final NumericData[] data = new NumericData[numDimensions];
     for (int d = 0; d < numDimensions; d++) {
-      final byte[] field = new byte[VarintUtils.readUnsignedInt(buf)];
+      final int fieldLength = VarintUtils.readUnsignedInt(buf);
       data[d] = new NumericRange(buf.getDouble(), buf.getDouble());
-      buf.get(field);
+      final byte[] field = ByteArrayUtils.safeRead(buf, fieldLength);
       dimensionFields[d] = (NumericDimensionField<?>) PersistenceUtils.fromBinary(field);
     }
     constraints = new BasicNumericDataset(data);

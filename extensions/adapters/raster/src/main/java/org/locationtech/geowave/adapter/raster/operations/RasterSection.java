@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.adapter.raster.operations;
 
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "raster", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(commandDescription = "Operations to perform transformations on raster data in GeoWave")

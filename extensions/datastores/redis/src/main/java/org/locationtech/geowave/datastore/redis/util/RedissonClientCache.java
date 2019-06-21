@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.datastore.redis.util;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 public class RedissonClientCache {
   private static RedissonClientCache singletonInstance;

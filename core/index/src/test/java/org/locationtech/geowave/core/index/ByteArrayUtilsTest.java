@@ -38,9 +38,9 @@ public class ByteArrayUtilsTest {
     testVariableLengthValue(Long.MIN_VALUE);
   }
 
-  private void testVariableLengthValue(long value) {
-    byte[] encoded = ByteArrayUtils.variableLengthEncode(value);
-    long result = ByteArrayUtils.variableLengthDecode(encoded);
+  private void testVariableLengthValue(final long value) {
+    final byte[] encoded = ByteArrayUtils.variableLengthEncode(value);
+    final long result = ByteArrayUtils.variableLengthDecode(encoded);
     Assert.assertEquals(value, result);
   }
 }

@@ -15,11 +15,11 @@ import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
 
 public class GeoWaveMiniAccumuloClusterImpl extends MiniAccumuloClusterImpl {
 
-  public GeoWaveMiniAccumuloClusterImpl(MiniAccumuloConfigImpl config) throws IOException {
+  public GeoWaveMiniAccumuloClusterImpl(final MiniAccumuloConfigImpl config) throws IOException {
     super(config);
   }
 
-  public void setExternalShutdownExecutor(ExecutorService svc) {
+  public void setExternalShutdownExecutor(final ExecutorService svc) {
     setShutdownExecutor(svc);
   }
 }

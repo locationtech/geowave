@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.adapter.vector.ingest;
 
-import com.beust.jcommander.Parameter;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.simplify.DouglasPeuckerSimplifier;
+import com.beust.jcommander.Parameter;
 
 public class GeometrySimpOptionProvider implements Persistable {
   @Parameter(
@@ -31,15 +31,15 @@ public class GeometrySimpOptionProvider implements Persistable {
       description = "Maximum error tolerance in geometry simplification. Should range from 0.0 to 1.0 (i.e. .1 = 10%)")
   private double tolerance = 0.02;
 
-  public Geometry simplifyGeometry(Geometry geom) {
-    if (geom.getCoordinates().length > this.simpVertMin) {
-      return DouglasPeuckerSimplifier.simplify(geom, this.tolerance);
+  public Geometry simplifyGeometry(final Geometry geom) {
+    if (geom.getCoordinates().length > simpVertMin) {
+      return DouglasPeuckerSimplifier.simplify(geom, tolerance);
     }
     return geom;
   }
 
-  public boolean filterGeometry(Geometry geom) {
-    return (geom.getCoordinates().length < this.maxVertices && !geom.isEmpty() && geom.isValid());
+  public boolean filterGeometry(final Geometry geom) {
+    return ((geom.getCoordinates().length < maxVertices) && !geom.isEmpty() && geom.isValid());
   }
 
   @Override
@@ -48,7 +48,7 @@ public class GeometrySimpOptionProvider implements Persistable {
         new byte[VarintUtils.unsignedIntByteLength(maxVertices)
             + VarintUtils.unsignedIntByteLength(simpVertMin)
             + Double.BYTES];
-    ByteBuffer buf = ByteBuffer.wrap(backingBuffer);
+    final ByteBuffer buf = ByteBuffer.wrap(backingBuffer);
     VarintUtils.writeUnsignedInt(maxVertices, buf);
     VarintUtils.writeUnsignedInt(simpVertMin, buf);
     buf.putDouble(tolerance);
@@ -56,8 +56,8 @@ public class GeometrySimpOptionProvider implements Persistable {
   }
 
   @Override
-  public void fromBinary(byte[] bytes) {
-    ByteBuffer buf = ByteBuffer.wrap(bytes);
+  public void fromBinary(final byte[] bytes) {
+    final ByteBuffer buf = ByteBuffer.wrap(bytes);
     maxVertices = VarintUtils.readUnsignedInt(buf);
     simpVertMin = VarintUtils.readUnsignedInt(buf);
     tolerance = buf.getDouble();

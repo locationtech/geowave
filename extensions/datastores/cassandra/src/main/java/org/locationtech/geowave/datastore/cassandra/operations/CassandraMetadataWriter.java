@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.datastore.cassandra.operations;
 
-import com.datastax.driver.core.querybuilder.Insert;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
+import com.datastax.driver.core.querybuilder.Insert;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 
 public class CassandraMetadataWriter implements MetadataWriter {
   protected static final String PRIMARY_ID_KEY = "I";
@@ -40,7 +40,7 @@ public class CassandraMetadataWriter implements MetadataWriter {
     if (metadata.getSecondaryId() != null) {
       insert.value(SECONDARY_ID_KEY, ByteBuffer.wrap(metadata.getSecondaryId()));
       insert.value(TIMESTAMP_ID_KEY, QueryBuilder.now());
-      if (metadata.getVisibility() != null && metadata.getVisibility().length > 0) {
+      if ((metadata.getVisibility() != null) && (metadata.getVisibility().length > 0)) {
         insert.value(VISIBILITY_KEY, ByteBuffer.wrap(metadata.getVisibility()));
       }
     }

@@ -36,7 +36,7 @@ public class LineageRelation {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(final Long id) {
     this.id = id;
   }
 
@@ -44,7 +44,7 @@ public class LineageRelation {
     return uuid;
   }
 
-  public void setUuid(UUID uuid) {
+  public void setUuid(final UUID uuid) {
     this.uuid = uuid;
   }
 
@@ -52,7 +52,7 @@ public class LineageRelation {
     return relatedTrackNumber;
   }
 
-  public void setRelatedTrackNumber(String relatedTrackNumber) {
+  public void setRelatedTrackNumber(final String relatedTrackNumber) {
     this.relatedTrackNumber = relatedTrackNumber;
   }
 
@@ -60,7 +60,7 @@ public class LineageRelation {
     return relatedTrackUuid;
   }
 
-  public void setRelatedTrackUuid(UUID relatedTrackUuid) {
+  public void setRelatedTrackUuid(final UUID relatedTrackUuid) {
     this.relatedTrackUuid = relatedTrackUuid;
   }
 
@@ -68,7 +68,7 @@ public class LineageRelation {
     return relation;
   }
 
-  public void setRelation(LineageRelationType relation) {
+  public void setRelation(final LineageRelationType relation) {
     this.relation = relation;
   }
 }

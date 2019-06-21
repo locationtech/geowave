@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.parser;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -18,12 +16,14 @@ import org.locationtech.geowave.core.cli.prefix.PrefixedJCommander;
 import org.locationtech.geowave.core.cli.prefix.PrefixedJCommander.PrefixedJCommanderInitializer;
 import org.locationtech.geowave.core.cli.spi.OperationEntry;
 import org.locationtech.geowave.core.cli.spi.OperationRegistry;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 
 public class OperationParser {
   private final OperationRegistry registry;
-  private final Set<Object> additionalObjects = new HashSet<Object>();
+  private final Set<Object> additionalObjects = new HashSet<>();
 
-  public OperationParser(OperationRegistry registry) {
+  public OperationParser(final OperationRegistry registry) {
     this.registry = registry;
   }
 
@@ -39,9 +39,9 @@ public class OperationParser {
    * @param args
    * @return
    */
-  public CommandLineOperationParams parse(Operation operation, String[] args) {
-    CommandLineOperationParams params = new CommandLineOperationParams(args);
-    OperationEntry topLevelEntry = registry.getOperation(operation.getClass());
+  public CommandLineOperationParams parse(final Operation operation, final String[] args) {
+    final CommandLineOperationParams params = new CommandLineOperationParams(args);
+    final OperationEntry topLevelEntry = registry.getOperation(operation.getClass());
     // Populate the operation map.
     params.getOperationMap().put(topLevelEntry.getOperationName(), operation);
     parseInternal(params, topLevelEntry);
@@ -56,9 +56,11 @@ public class OperationParser {
    * @param args
    * @return
    */
-  public CommandLineOperationParams parse(Class<? extends Operation> topLevel, String[] args) {
-    CommandLineOperationParams params = new CommandLineOperationParams(args);
-    OperationEntry topLevelEntry = registry.getOperation(topLevel);
+  public CommandLineOperationParams parse(
+      final Class<? extends Operation> topLevel,
+      final String[] args) {
+    final CommandLineOperationParams params = new CommandLineOperationParams(args);
+    final OperationEntry topLevelEntry = registry.getOperation(topLevel);
     parseInternal(params, topLevelEntry);
     return params;
   }
@@ -68,13 +70,15 @@ public class OperationParser {
    *
    * @param params
    */
-  private void parseInternal(CommandLineOperationParams params, OperationEntry topLevelEntry) {
+  private void parseInternal(
+      final CommandLineOperationParams params,
+      final OperationEntry topLevelEntry) {
 
     try {
-      PrefixedJCommander pluginCommander = new PrefixedJCommander();
+      final PrefixedJCommander pluginCommander = new PrefixedJCommander();
       pluginCommander.setInitializer(new OperationContext(topLevelEntry, params));
       params.setCommander(pluginCommander);
-      for (Object obj : additionalObjects) {
+      for (final Object obj : additionalObjects) {
         params.getCommander().addPrefixedObject(obj);
       }
 
@@ -84,7 +88,7 @@ public class OperationParser {
       params.getCommander().parse(params.getArgs());
 
       // Prepare stage:
-      for (Operation operation : params.getOperationMap().values()) {
+      for (final Operation operation : params.getOperationMap().values()) {
         // Do not continue
         if (!operation.prepare(params)) {
           params.setSuccessCode(1);
@@ -93,16 +97,16 @@ public class OperationParser {
       }
 
       // Parse with validation
-      PrefixedJCommander finalCommander = new PrefixedJCommander();
+      final PrefixedJCommander finalCommander = new PrefixedJCommander();
       finalCommander.setInitializer(new OperationContext(topLevelEntry, params));
       params.setCommander(finalCommander);
-      for (Object obj : additionalObjects) {
+      for (final Object obj : additionalObjects) {
         params.getCommander().addPrefixedObject(obj);
       }
       params.getCommander().setAcceptUnknownOptions(params.isAllowUnknown());
       params.getCommander().setValidate(params.isValidate());
       params.getCommander().parse(params.getArgs());
-    } catch (ParameterException p) {
+    } catch (final ParameterException p) {
       params.setSuccessCode(-1);
       params.setSuccessMessage("Error: " + p.getMessage());
       params.setSuccessException(p);
@@ -117,19 +121,19 @@ public class OperationParser {
    *
    * @param args
    */
-  public CommandLineOperationParams parse(String[] args) {
+  public CommandLineOperationParams parse(final String[] args) {
 
-    CommandLineOperationParams params = new CommandLineOperationParams(args);
+    final CommandLineOperationParams params = new CommandLineOperationParams(args);
 
     try {
-      PrefixedJCommander pluginCommander = new PrefixedJCommander();
+      final PrefixedJCommander pluginCommander = new PrefixedJCommander();
       params.setCommander(pluginCommander);
-      for (Object obj : additionalObjects) {
+      for (final Object obj : additionalObjects) {
         params.getCommander().addPrefixedObject(obj);
       }
       params.getCommander().parse(params.getArgs());
 
-    } catch (ParameterException p) {
+    } catch (final ParameterException p) {
       params.setSuccessCode(-1);
       params.setSuccessMessage("Error: " + p.getMessage());
       params.setSuccessException(p);
@@ -142,7 +146,7 @@ public class OperationParser {
     return additionalObjects;
   }
 
-  public void addAdditionalObject(Object obj) {
+  public void addAdditionalObject(final Object obj) {
     additionalObjects.add(obj);
   }
 
@@ -161,13 +165,13 @@ public class OperationParser {
     private final CommandLineOperationParams params;
     private Operation operation;
 
-    public OperationContext(OperationEntry entry, CommandLineOperationParams params) {
-      this.operationEntry = entry;
+    public OperationContext(final OperationEntry entry, final CommandLineOperationParams params) {
+      operationEntry = entry;
       this.params = params;
     }
 
     @Override
-    public void initialize(PrefixedJCommander commander) {
+    public void initialize(final PrefixedJCommander commander) {
       commander.setCaseSensitiveOptions(false);
 
       // Add myself.
@@ -183,14 +187,14 @@ public class OperationParser {
       commander.addPrefixedObject(operation);
 
       // initialize the commander by adding child operations.
-      for (OperationEntry child : operationEntry.getChildren()) {
+      for (final OperationEntry child : operationEntry.getChildren()) {
         commander.addCommand(child.getOperationName(), null);
       }
 
       // Update each command to add an initializer.
-      Map<String, JCommander> childCommanders = commander.getCommands();
-      for (OperationEntry child : operationEntry.getChildren()) {
-        PrefixedJCommander pCommander =
+      final Map<String, JCommander> childCommanders = commander.getCommands();
+      for (final OperationEntry child : operationEntry.getChildren()) {
+        final PrefixedJCommander pCommander =
             (PrefixedJCommander) childCommanders.get(child.getOperationName());
         pCommander.setInitializer(new OperationContext(child, params));
       }

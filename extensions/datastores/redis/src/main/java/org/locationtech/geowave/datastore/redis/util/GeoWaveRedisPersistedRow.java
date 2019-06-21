@@ -31,7 +31,7 @@ public class GeoWaveRedisPersistedRow {
     return partitionKey;
   }
 
-  public void setPartitionKey(byte[] partitionKey) {
+  public void setPartitionKey(final byte[] partitionKey) {
     this.partitionKey = partitionKey;
   }
 

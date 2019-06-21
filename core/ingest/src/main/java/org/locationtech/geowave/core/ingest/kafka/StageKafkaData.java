@@ -11,12 +11,12 @@ package org.locationtech.geowave.core.ingest.kafka;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import kafka.javaapi.producer.Producer;
-import kafka.producer.ProducerConfig;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import kafka.javaapi.producer.Producer;
+import kafka.producer.ProducerConfig;
 
 /**
  * A class to hold intermediate stage data that must be used throughout the life of the Kafka stage
@@ -25,8 +25,7 @@ import org.slf4j.LoggerFactory;
 public class StageKafkaData<T extends SpecificRecordBase> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(StageKafkaData.class);
-  private final Map<String, Producer<String, T>> cachedProducers =
-      new HashMap<String, Producer<String, T>>();
+  private final Map<String, Producer<String, T>> cachedProducers = new HashMap<>();
   private final Properties properties;
 
   public StageKafkaData(final Properties properties) {
@@ -45,7 +44,7 @@ public class StageKafkaData<T extends SpecificRecordBase> {
     if (!cachedProducers.containsKey(typeName)) {
       final ProducerConfig producerConfig = new ProducerConfig(properties);
 
-      final Producer<String, T> producer = new Producer<String, T>(producerConfig);
+      final Producer<String, T> producer = new Producer<>(producerConfig);
 
       cachedProducers.put(typeName, producer);
     }

@@ -29,7 +29,7 @@ public class BigTableFactoryHelper implements StoreFactoryHelper {
   public DataStoreOperations createOperations(final StoreFactoryOptions options) {
     try {
       return BigTableOperations.createOperations((BigTableOptions) options);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.error("Unable to create BigTable operations from config options", e);
       return null;
     }

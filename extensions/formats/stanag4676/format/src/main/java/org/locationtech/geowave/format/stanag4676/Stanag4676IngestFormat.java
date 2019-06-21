@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.format.stanag4676;
 
-import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.avro.AvroWholeFile;
+import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
@@ -28,19 +28,19 @@ public class Stanag4676IngestFormat implements
 
   @Override
   public GeoWaveAvroFormatPlugin<AvroWholeFile, Object> createAvroFormatPlugin(
-      IngestFormatOptions options) throws UnsupportedOperationException {
+      final IngestFormatOptions options) throws UnsupportedOperationException {
     return getSingletonInstance();
   }
 
   @Override
   public IngestFromHdfsPlugin<AvroWholeFile, Object> createIngestFromHdfsPlugin(
-      IngestFormatOptions options) throws UnsupportedOperationException {
+      final IngestFormatOptions options) throws UnsupportedOperationException {
     return getSingletonInstance();
   }
 
   @Override
-  public LocalFileIngestPlugin<Object> createLocalFileIngestPlugin(IngestFormatOptions options)
-      throws UnsupportedOperationException {
+  public LocalFileIngestPlugin<Object> createLocalFileIngestPlugin(
+      final IngestFormatOptions options) throws UnsupportedOperationException {
     return getSingletonInstance();
   }
 

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.accumulo.iterators;
 
-import com.google.common.io.BaseEncoding;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.iterators.Filter;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
@@ -27,8 +25,9 @@ import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.io.BaseEncoding;
 
-public class SingleEntryFilterIterator extends Filter {
+public class SingleEntryFilterIterator extends ExceptionHandlingFilter {
   private static final Logger LOGGER = LoggerFactory.getLogger(SingleEntryFilterIterator.class);
   public static final String ENTRY_FILTER_ITERATOR_NAME = "GEOWAVE_ENTRY_FILTER_ITERATOR";
   public static final int ENTRY_FILTER_ITERATOR_PRIORITY = 25;
@@ -42,7 +41,7 @@ public class SingleEntryFilterIterator extends Filter {
   private List<byte[]> dataIds;
 
   @Override
-  public boolean accept(final Key k, final Value v) {
+  public boolean acceptInternal(final Key k, final Value v) {
 
     boolean accept = true;
 
@@ -55,7 +54,7 @@ public class SingleEntryFilterIterator extends Filter {
         return false;
       }
     } else {
-      entries = new HashMap<Key, Value>();
+      entries = new HashMap<>();
       entries.put(k, v);
     }
     if ((entries != null) && entries.isEmpty()) {
@@ -119,11 +118,11 @@ public class SingleEntryFilterIterator extends Filter {
 
   private static final List<byte[]> decodeIDs(final String dataIdsString) {
     final ByteBuffer buf = ByteBuffer.wrap(ByteArrayUtils.byteArrayFromString(dataIdsString));
-    final List<byte[]> list = new ArrayList<byte[]>();
+    final List<byte[]> list = new ArrayList<>();
     int count = VarintUtils.readUnsignedInt(buf);
+    ByteArrayUtils.verifyBufferSize(buf, count);
     while (count > 0) {
-      final byte[] tempByte = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(tempByte);
+      final byte[] tempByte = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       list.add(tempByte);
       count--;
     }
@@ -152,7 +151,7 @@ public class SingleEntryFilterIterator extends Filter {
     final String wholeRowEncodedStr = options.get(WHOLE_ROW_ENCODED_KEY);
     // default to whole row encoded if not specified
     wholeRowEncoded =
-        (wholeRowEncodedStr == null || !wholeRowEncodedStr.equals(Boolean.toString(false)));
+        ((wholeRowEncodedStr == null) || !wholeRowEncodedStr.equals(Boolean.toString(false)));
     super.init(source, options, env);
   }
 }

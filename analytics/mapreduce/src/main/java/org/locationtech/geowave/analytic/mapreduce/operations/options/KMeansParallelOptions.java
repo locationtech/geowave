@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.operations.options;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.analytic.param.SampleParameters;
 import org.locationtech.geowave.analytic.param.annotations.SampleParameter;
+import com.beust.jcommander.Parameter;
 
 public class KMeansParallelOptions {
   @SampleParameter(SampleParameters.Sample.MAX_SAMPLE_SIZE)
@@ -38,7 +38,7 @@ public class KMeansParallelOptions {
     return sampleMaxSampleSize;
   }
 
-  public void setSampleMaxSampleSize(String sampleMaxSampleSize) {
+  public void setSampleMaxSampleSize(final String sampleMaxSampleSize) {
     this.sampleMaxSampleSize = sampleMaxSampleSize;
   }
 
@@ -46,7 +46,7 @@ public class KMeansParallelOptions {
     return sampleMinSampleSize;
   }
 
-  public void setSampleMinSampleSize(String sampleMinSampleSize) {
+  public void setSampleMinSampleSize(final String sampleMinSampleSize) {
     this.sampleMinSampleSize = sampleMinSampleSize;
   }
 
@@ -54,7 +54,7 @@ public class KMeansParallelOptions {
     return sampleSampleIterations;
   }
 
-  public void setSampleSampleIterations(String sampleSampleIterations) {
+  public void setSampleSampleIterations(final String sampleSampleIterations) {
     this.sampleSampleIterations = sampleSampleIterations;
   }
 }

@@ -23,8 +23,8 @@ public class TimeReader implements FieldReader<Time> {
     Time retVal;
     // this is less generic than using the persistable interface but is a
     // little better for performance
-    ByteBuffer buf = ByteBuffer.wrap(bytes);
-    long value = VarintUtils.readTime(buf);
+    final ByteBuffer buf = ByteBuffer.wrap(bytes);
+    final long value = VarintUtils.readTime(buf);
     if (buf.hasRemaining()) {
       retVal = new TimeRange(value, VarintUtils.readTime(buf));
     } else {
@@ -38,7 +38,7 @@ public class TimeReader implements FieldReader<Time> {
     Time retVal;
     // this is less generic than using the persistable interface but is a
     // little better for performance
-    ByteBuffer buf = ByteBuffer.wrap(bytes);
+    final ByteBuffer buf = ByteBuffer.wrap(bytes);
     if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
       if (bytes.length > 8) {
         retVal = new TimeRange(buf.getLong(), buf.getLong());

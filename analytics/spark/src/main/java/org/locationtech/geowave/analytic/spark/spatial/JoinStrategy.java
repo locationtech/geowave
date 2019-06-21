@@ -11,6 +11,10 @@ package org.locationtech.geowave.analytic.spark.spatial;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDD;
 
 public abstract class JoinStrategy implements SpatialJoin {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   // Final joined pair RDDs
   protected GeoWaveRDD leftJoined = null;
   protected GeoWaveRDD rightJoined = null;
@@ -21,7 +25,7 @@ public abstract class JoinStrategy implements SpatialJoin {
     return leftJoined;
   }
 
-  public void setLeftResults(GeoWaveRDD leftJoined) {
+  public void setLeftResults(final GeoWaveRDD leftJoined) {
     this.leftJoined = leftJoined;
   }
 
@@ -29,7 +33,7 @@ public abstract class JoinStrategy implements SpatialJoin {
     return rightJoined;
   }
 
-  public void setRightResults(GeoWaveRDD rightJoined) {
+  public void setRightResults(final GeoWaveRDD rightJoined) {
     this.rightJoined = rightJoined;
   }
 
@@ -37,7 +41,7 @@ public abstract class JoinStrategy implements SpatialJoin {
     return joinOpts;
   }
 
-  public void setJoinOptions(JoinOptions joinOpts) {
+  public void setJoinOptions(final JoinOptions joinOpts) {
     this.joinOpts = joinOpts;
   }
 }

@@ -99,7 +99,7 @@ public abstract class AbstractGeoWaveJobRunner extends Configured implements Too
     this.minInputSplits = minInputSplits;
   }
 
-  public void setQuery(Query<?> query) {
+  public void setQuery(final Query<?> query) {
     setCommonQueryOptions(query.getCommonQueryOptions());
     setDataTypeQueryOptions(query.getDataTypeQueryOptions());
     setIndexQueryOptions(query.getIndexQueryOptions());

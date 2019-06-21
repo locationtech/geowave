@@ -12,4 +12,9 @@ import java.io.Serializable;
 import org.locationtech.geowave.core.geotime.util.TWKBWriter;
 
 public class GeomWriter extends TWKBWriter implements Serializable {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 }

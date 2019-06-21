@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -329,10 +330,11 @@ public class SpatialQueryFilter extends BasicQueryFilter {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     compareOperation = CompareOperation.values()[VarintUtils.readUnsignedInt(buf)];
-    final byte[] geometryBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    final byte[] geometryFieldNamesBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(geometryBinary);
-    buf.get(geometryFieldNamesBytes);
+    final int geometryBinaryLength = VarintUtils.readUnsignedInt(buf);
+    final int geometryFieldNamesByteLength = VarintUtils.readUnsignedInt(buf);
+    final byte[] geometryBinary = ByteArrayUtils.safeRead(buf, geometryBinaryLength);
+    final byte[] geometryFieldNamesBytes =
+        ByteArrayUtils.safeRead(buf, geometryFieldNamesByteLength);
     geometryFieldNames =
         new HashSet<>(Arrays.asList(StringUtils.stringsFromBinary(geometryFieldNamesBytes)));
     final byte[] theRest = new byte[buf.remaining()];

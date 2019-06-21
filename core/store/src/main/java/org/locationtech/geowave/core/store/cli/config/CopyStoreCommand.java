@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -22,13 +18,17 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "cpstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Copy and modify existing store configuration")
 public class CopyStoreCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<name> <new name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @Parameter(
       names = {"-d", "--default"},
@@ -39,10 +39,10 @@ public class CopyStoreCommand extends DefaultOperation implements Command {
   private DataStorePluginOptions newPluginOptions = new DataStorePluginOptions();
 
   @Override
-  public boolean prepare(OperationParams params) {
+  public boolean prepare(final OperationParams params) {
     super.prepare(params);
 
-    Properties existingProps = getGeoWaveConfigProperties(params);
+    final Properties existingProps = getGeoWaveConfigProperties(params);
 
     // Load the old store, so that we can override the values
     String oldStore = null;
@@ -60,20 +60,20 @@ public class CopyStoreCommand extends DefaultOperation implements Command {
   }
 
   @Override
-  public void execute(OperationParams params) {
+  public void execute(final OperationParams params) {
 
-    Properties existingProps = getGeoWaveConfigProperties(params);
+    final Properties existingProps = getGeoWaveConfigProperties(params);
 
     if (parameters.size() < 2) {
       throw new ParameterException("Must specify <existing store> <new store> names");
     }
 
     // This is the new store name.
-    String newStore = parameters.get(1);
-    String newStoreNamespace = DataStorePluginOptions.getStoreNamespace(newStore);
+    final String newStore = parameters.get(1);
+    final String newStoreNamespace = DataStorePluginOptions.getStoreNamespace(newStore);
 
     // Make sure we're not already in the index.
-    DataStorePluginOptions existPlugin = new DataStorePluginOptions();
+    final DataStorePluginOptions existPlugin = new DataStorePluginOptions();
     if (existPlugin.load(existingProps, newStoreNamespace)) {
       throw new ParameterException("That store already exists: " + newStore);
     }
@@ -94,9 +94,9 @@ public class CopyStoreCommand extends DefaultOperation implements Command {
     return parameters;
   }
 
-  public void setParameters(String existingStore, String newStore) {
-    this.parameters = new ArrayList<String>();
-    this.parameters.add(existingStore);
-    this.parameters.add(newStore);
+  public void setParameters(final String existingStore, final String newStore) {
+    parameters = new ArrayList<>();
+    parameters.add(existingStore);
+    parameters.add(newStore);
   }
 }

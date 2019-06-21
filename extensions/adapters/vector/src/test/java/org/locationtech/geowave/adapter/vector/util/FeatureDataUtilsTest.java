@@ -18,7 +18,7 @@ public class FeatureDataUtilsTest {
 
   @Test
   public void testWithSRID() throws SchemaException {
-    SimpleFeatureType type =
+    final SimpleFeatureType type =
         FeatureDataUtils.decodeType(
             "http://somens.org",
             "type1",
@@ -39,7 +39,7 @@ public class FeatureDataUtilsTest {
    */
   @Test
   public void testWithoutSRID() throws SchemaException {
-    SimpleFeatureType type =
+    final SimpleFeatureType type =
         FeatureDataUtils.decodeType(
             "http://somens.org",
             "type1",

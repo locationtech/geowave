@@ -41,19 +41,20 @@ public class GeoWaveEncryption extends BaseEncryption {
   }
 
   @Override
-  public byte[] encryptBytes(byte[] valueToEncrypt) throws Exception {
+  public byte[] encryptBytes(final byte[] valueToEncrypt) throws Exception {
     return Base64.encodeBase64(encryptValue(valueToEncrypt));
   }
 
   @Override
-  public byte[] decryptBytes(byte[] valueToDecrypt) throws Exception {
+  public byte[] decryptBytes(final byte[] valueToDecrypt) throws Exception {
     return decryptValue(Base64.decodeBase64(valueToDecrypt));
   }
 
-  private PaddedBufferedBlockCipher getCipher(boolean encrypt) {
-    PaddedBufferedBlockCipher cipher =
+  private PaddedBufferedBlockCipher getCipher(final boolean encrypt) {
+    final PaddedBufferedBlockCipher cipher =
         new PaddedBufferedBlockCipher(new CBCBlockCipher(new AESEngine()), new PKCS7Padding());
-    CipherParameters ivAndKey = new ParametersWithIV(new KeyParameter(getKey().getEncoded()), salt);
+    final CipherParameters ivAndKey =
+        new ParametersWithIV(new KeyParameter(getKey().getEncoded()), salt);
     cipher.init(encrypt, ivAndKey);
     return cipher;
   }
@@ -65,15 +66,15 @@ public class GeoWaveEncryption extends BaseEncryption {
    * @return Encrypted binary
    * @throws Exception
    */
-  private byte[] encryptValue(byte[] encodedValue) throws Exception {
+  private byte[] encryptValue(final byte[] encodedValue) throws Exception {
     LOGGER.trace("ENTER :: encyrpt");
 
-    PaddedBufferedBlockCipher cipher = getCipher(true);
-    byte output[] = new byte[cipher.getOutputSize(encodedValue.length)];
-    int length = cipher.processBytes(encodedValue, 0, encodedValue.length, output, 0);
+    final PaddedBufferedBlockCipher cipher = getCipher(true);
+    final byte output[] = new byte[cipher.getOutputSize(encodedValue.length)];
+    final int length = cipher.processBytes(encodedValue, 0, encodedValue.length, output, 0);
     try {
       cipher.doFinal(output, length);
-    } catch (CryptoException e) {
+    } catch (final CryptoException e) {
       LOGGER.error("An error occurred performing encryption: " + e.getLocalizedMessage(), e);
     }
     return output;
@@ -86,18 +87,18 @@ public class GeoWaveEncryption extends BaseEncryption {
    * @return
    * @throws Exception
    */
-  private byte[] decryptValue(byte[] decodedValue) throws Exception {
+  private byte[] decryptValue(final byte[] decodedValue) throws Exception {
 
-    StringBuffer result = new StringBuffer();
+    final StringBuffer result = new StringBuffer();
 
-    PaddedBufferedBlockCipher cipher = getCipher(false);
-    byte output[] = new byte[cipher.getOutputSize(decodedValue.length)];
-    int length = cipher.processBytes(decodedValue, 0, decodedValue.length, output, 0);
+    final PaddedBufferedBlockCipher cipher = getCipher(false);
+    final byte output[] = new byte[cipher.getOutputSize(decodedValue.length)];
+    final int length = cipher.processBytes(decodedValue, 0, decodedValue.length, output, 0);
     cipher.doFinal(output, length);
-    if (output != null && output.length != 0) {
-      String retval = new String(output, "UTF-8");
+    if ((output != null) && (output.length != 0)) {
+      final String retval = new String(output, "UTF-8");
       for (int i = 0; i < retval.length(); i++) {
-        char c = retval.charAt(i);
+        final char c = retval.charAt(i);
         if (c != 0) {
           result.append(c);
         }

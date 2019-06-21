@@ -23,9 +23,9 @@ public class VarintUtilsTest {
     testEncodeDecodeUnsignedIntReversed(Byte.MAX_VALUE);
     testEncodeDecodeUnsignedIntReversed(Integer.MAX_VALUE);
 
-    int length =
+    final int length =
         VarintUtils.unsignedIntByteLength(15) + VarintUtils.unsignedIntByteLength(Byte.MAX_VALUE);
-    ByteBuffer buffer = ByteBuffer.allocate(length);
+    final ByteBuffer buffer = ByteBuffer.allocate(length);
     VarintUtils.writeUnsignedIntReversed(15, buffer);
     VarintUtils.writeUnsignedIntReversed(Byte.MAX_VALUE, buffer);
     buffer.position(buffer.limit() - 1);
@@ -33,12 +33,12 @@ public class VarintUtilsTest {
     Assert.assertEquals(15, VarintUtils.readUnsignedIntReversed(buffer));
   }
 
-  private void testEncodeDecodeUnsignedIntReversed(int value) {
-    int length = VarintUtils.unsignedIntByteLength(value);
-    ByteBuffer buffer = ByteBuffer.allocate(length);
+  private void testEncodeDecodeUnsignedIntReversed(final int value) {
+    final int length = VarintUtils.unsignedIntByteLength(value);
+    final ByteBuffer buffer = ByteBuffer.allocate(length);
     VarintUtils.writeUnsignedIntReversed(value, buffer);
     buffer.position(buffer.limit() - 1);
-    int decoded = VarintUtils.readUnsignedIntReversed(buffer);
+    final int decoded = VarintUtils.readUnsignedIntReversed(buffer);
     Assert.assertEquals(value, decoded);
   }
 
@@ -53,9 +53,9 @@ public class VarintUtilsTest {
     testSignedUnsignedIntValue(Integer.MAX_VALUE);
   }
 
-  private void testSignedUnsignedIntValue(int value) {
-    int unsigned = VarintUtils.signedToUnsignedInt(value);
-    int signed = VarintUtils.unsignedToSignedInt(unsigned);
+  private void testSignedUnsignedIntValue(final int value) {
+    final int unsigned = VarintUtils.signedToUnsignedInt(value);
+    final int signed = VarintUtils.unsignedToSignedInt(unsigned);
     Assert.assertEquals(value, signed);
   }
 
@@ -73,14 +73,14 @@ public class VarintUtilsTest {
     testEncodeDecodeUnsignedIntValue(Integer.MIN_VALUE);
   }
 
-  private void testEncodeDecodeUnsignedIntValue(int value) {
-    int length = VarintUtils.unsignedIntByteLength(value);
+  private void testEncodeDecodeUnsignedIntValue(final int value) {
+    final int length = VarintUtils.unsignedIntByteLength(value);
     // should never use more than 5 bytes
     Assert.assertTrue(length <= 5);
-    ByteBuffer buffer = ByteBuffer.allocate(length);
+    final ByteBuffer buffer = ByteBuffer.allocate(length);
     VarintUtils.writeUnsignedInt(value, buffer);
     buffer.position(0);
-    int decoded = VarintUtils.readUnsignedInt(buffer);
+    final int decoded = VarintUtils.readUnsignedInt(buffer);
     Assert.assertEquals(value, decoded);
   }
 
@@ -98,14 +98,14 @@ public class VarintUtilsTest {
     testEncodeDecodeUnsignedShortValue(Short.MIN_VALUE);
   }
 
-  private void testEncodeDecodeUnsignedShortValue(short value) {
-    int length = VarintUtils.unsignedShortByteLength(value);
+  private void testEncodeDecodeUnsignedShortValue(final short value) {
+    final int length = VarintUtils.unsignedShortByteLength(value);
     // should never use more than 3 bytes
     Assert.assertTrue(length <= 3);
-    ByteBuffer buffer = ByteBuffer.allocate(length);
+    final ByteBuffer buffer = ByteBuffer.allocate(length);
     VarintUtils.writeUnsignedShort(value, buffer);
     buffer.position(0);
-    int decoded = VarintUtils.readUnsignedShort(buffer);
+    final int decoded = VarintUtils.readUnsignedShort(buffer);
     Assert.assertEquals(value, decoded);
   }
 
@@ -120,12 +120,12 @@ public class VarintUtilsTest {
     testEncodeDecodeSignedIntValue(Integer.MAX_VALUE);
   }
 
-  private void testEncodeDecodeSignedIntValue(int value) {
-    int length = VarintUtils.signedIntByteLength(value);
-    ByteBuffer buffer = ByteBuffer.allocate(length);
+  private void testEncodeDecodeSignedIntValue(final int value) {
+    final int length = VarintUtils.signedIntByteLength(value);
+    final ByteBuffer buffer = ByteBuffer.allocate(length);
     VarintUtils.writeSignedInt(value, buffer);
     buffer.position(0);
-    int decoded = VarintUtils.readSignedInt(buffer);
+    final int decoded = VarintUtils.readSignedInt(buffer);
     Assert.assertEquals(value, decoded);
   }
 
@@ -142,9 +142,9 @@ public class VarintUtilsTest {
     testSignedUnsignedLongValue(Long.MAX_VALUE);
   }
 
-  private void testSignedUnsignedLongValue(long value) {
-    long unsigned = VarintUtils.signedToUnsignedLong(value);
-    long signed = VarintUtils.unsignedToSignedLong(unsigned);
+  private void testSignedUnsignedLongValue(final long value) {
+    final long unsigned = VarintUtils.signedToUnsignedLong(value);
+    final long signed = VarintUtils.unsignedToSignedLong(unsigned);
     Assert.assertEquals(value, signed);
   }
 
@@ -164,12 +164,12 @@ public class VarintUtilsTest {
     testEncodeDecodeUnsignedLongValue(Long.MIN_VALUE);
   }
 
-  private void testEncodeDecodeUnsignedLongValue(long value) {
-    int length = VarintUtils.unsignedLongByteLength(value);
-    ByteBuffer buffer = ByteBuffer.allocate(length);
+  private void testEncodeDecodeUnsignedLongValue(final long value) {
+    final int length = VarintUtils.unsignedLongByteLength(value);
+    final ByteBuffer buffer = ByteBuffer.allocate(length);
     VarintUtils.writeUnsignedLong(value, buffer);
     buffer.position(0);
-    long decoded = VarintUtils.readUnsignedLong(buffer);
+    final long decoded = VarintUtils.readUnsignedLong(buffer);
     Assert.assertEquals(value, decoded);
   }
 
@@ -186,12 +186,12 @@ public class VarintUtilsTest {
     testEncodeDecodeSignedLongValue(Long.MAX_VALUE);
   }
 
-  private void testEncodeDecodeSignedLongValue(long value) {
-    int length = VarintUtils.signedLongByteLength(value);
-    ByteBuffer buffer = ByteBuffer.allocate(length);
+  private void testEncodeDecodeSignedLongValue(final long value) {
+    final int length = VarintUtils.signedLongByteLength(value);
+    final ByteBuffer buffer = ByteBuffer.allocate(length);
     VarintUtils.writeSignedLong(value, buffer);
     buffer.position(0);
-    long decoded = VarintUtils.readSignedLong(buffer);
+    final long decoded = VarintUtils.readSignedLong(buffer);
     Assert.assertEquals(value, decoded);
   }
 
@@ -212,12 +212,12 @@ public class VarintUtilsTest {
     testEncodeDecodeTimeValue(cal.getTime());
   }
 
-  private void testEncodeDecodeTimeValue(Date value) {
-    int length = VarintUtils.timeByteLength(value.getTime());
-    ByteBuffer buffer = ByteBuffer.allocate(length);
+  private void testEncodeDecodeTimeValue(final Date value) {
+    final int length = VarintUtils.timeByteLength(value.getTime());
+    final ByteBuffer buffer = ByteBuffer.allocate(length);
     VarintUtils.writeTime(value.getTime(), buffer);
     buffer.position(0);
-    Date decoded = new Date(VarintUtils.readTime(buffer));
+    final Date decoded = new Date(VarintUtils.readTime(buffer));
     Assert.assertEquals(value, decoded);
   }
 }

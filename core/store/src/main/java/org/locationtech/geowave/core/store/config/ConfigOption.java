@@ -30,7 +30,7 @@ public class ConfigOption {
     return type;
   }
 
-  public void setType(Class type) {
+  public void setType(final Class type) {
     this.type = type;
   }
 
@@ -50,7 +50,7 @@ public class ConfigOption {
     return password;
   }
 
-  public void setPassword(boolean password) {
+  public void setPassword(final boolean password) {
     this.password = password;
   }
 }

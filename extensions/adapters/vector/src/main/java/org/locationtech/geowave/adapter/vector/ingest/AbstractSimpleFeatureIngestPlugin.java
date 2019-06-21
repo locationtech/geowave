@@ -8,14 +8,13 @@
  */
 package org.locationtech.geowave.adapter.vector.ingest;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 import org.apache.commons.lang.ArrayUtils;
-import org.locationtech.geowave.adapter.vector.GeoWaveAvroFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
+import org.locationtech.geowave.adapter.vector.GeoWaveAvroFeatureDataAdapter;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
@@ -32,6 +31,8 @@ import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 
 public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
     LocalFileIngestPlugin<SimpleFeature>,
@@ -89,12 +90,10 @@ public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
     final byte[] kryoBytes = new byte[] {bytes[0]};
     final ByteBuffer buf = ByteBuffer.wrap(otherBytes);
     final int filterBinaryLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] filterBinary = new byte[filterBinaryLength];
-    buf.get(filterBinary);
+    final byte[] filterBinary = ByteArrayUtils.safeRead(buf, filterBinaryLength);
 
     final int typeNameBinaryLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] typeNameBinary = new byte[typeNameBinaryLength];
-    buf.get(typeNameBinary);
+    final byte[] typeNameBinary = ByteArrayUtils.safeRead(buf, typeNameBinaryLength);
 
     final byte[] geometrySimpBinary = new byte[buf.remaining()];
     buf.get(geometrySimpBinary);

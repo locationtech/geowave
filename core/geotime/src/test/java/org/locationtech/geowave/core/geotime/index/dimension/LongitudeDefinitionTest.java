@@ -15,7 +15,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 public class LongitudeDefinitionTest {
 
-  private double DELTA = 1e-15;
+  private final double DELTA = 1e-15;
 
   @Test
   public void testNormalizeWithinBoundsRanges() {
@@ -23,7 +23,7 @@ public class LongitudeDefinitionTest {
     final double minRange = 10;
     final double maxRange = 100;
 
-    BinRange[] binRange = getNormalizedRanges(minRange, maxRange);
+    final BinRange[] binRange = getNormalizedRanges(minRange, maxRange);
 
     Assert.assertEquals(minRange, binRange[0].getNormalizedMin(), DELTA);
 
@@ -55,7 +55,7 @@ public class LongitudeDefinitionTest {
     final BinRange[] expectedBinRanges =
         new BinRange[] {new BinRange(-180, -160), new BinRange(150, 180)};
 
-    BinRange[] binRange = getNormalizedRanges(minRange, maxRange);
+    final BinRange[] binRange = getNormalizedRanges(minRange, maxRange);
 
     Assert.assertEquals(expectedBinCount, binRange.length);
 
@@ -84,7 +84,7 @@ public class LongitudeDefinitionTest {
     final BinRange[] expectedBinRanges =
         new BinRange[] {new BinRange(-180, -170), new BinRange(160, 180)};
 
-    BinRange[] binRange = getNormalizedRanges(minRange, maxRange);
+    final BinRange[] binRange = getNormalizedRanges(minRange, maxRange);
 
     Assert.assertEquals(expectedBinCount, binRange.length);
 

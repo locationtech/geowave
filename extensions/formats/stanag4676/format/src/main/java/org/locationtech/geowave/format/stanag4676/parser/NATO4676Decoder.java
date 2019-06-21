@@ -65,7 +65,7 @@ import org.slf4j.LoggerFactory;
 
 public class NATO4676Decoder implements TrackDecoder {
 
-  HashMap<String, Track> trackMap = new HashMap<String, Track>();
+  HashMap<String, Track> trackMap = new HashMap<>();
   private int trackStatsNumTracks = 0;
   private int trackStatsNumDots = 0;
   private static final Logger LOGGER = LoggerFactory.getLogger(NATO4676Decoder.class);
@@ -96,7 +96,7 @@ public class NATO4676Decoder implements TrackDecoder {
         final Element rootEl = doc.getRootElement();
         final Namespace xmlns = rootEl.getNamespace();
 
-        String name = rootEl.getName();
+        final String name = rootEl.getName();
         if ("TrackMessage".equals(name)) {
           msg = readTrackMessage(rootEl, xmlns);
           LOGGER.info(
@@ -127,7 +127,7 @@ public class NATO4676Decoder implements TrackDecoder {
       final Element element,
       final Namespace xmlns) {
     final MissionSummaryMessage msg = new MissionSummaryMessage();
-    MissionSummary missionSummary = msg.getMissionSummary();
+    final MissionSummary missionSummary = msg.getMissionSummary();
     final List<Element> children = element.getChildren();
     final Iterator<Element> childIter = children.iterator();
     while (childIter.hasNext()) {
@@ -163,7 +163,7 @@ public class NATO4676Decoder implements TrackDecoder {
   private List<ObjectClassification> readObjectClassifications(
       final Element element,
       final Namespace xmlns) {
-    final List<ObjectClassification> objClassList = new ArrayList<ObjectClassification>();
+    final List<ObjectClassification> objClassList = new ArrayList<>();
     final List<Element> children = element.getChildren();
     final Iterator<Element> childIter = children.iterator();
     while (childIter.hasNext()) {
@@ -172,9 +172,10 @@ public class NATO4676Decoder implements TrackDecoder {
       final String childValue = child.getValue();
 
       if ("classification".equals(childName)) {
-        ObjectClassification classification = ObjectClassification.fromString(childValue);
-        if (classification != null)
+        final ObjectClassification classification = ObjectClassification.fromString(childValue);
+        if (classification != null) {
           objClassList.add(classification);
+        }
       }
     }
 
@@ -738,7 +739,7 @@ public class NATO4676Decoder implements TrackDecoder {
       final String childName = child.getName();
       final String childValue = child.getValue();
       if ("areaBoundaryPoints".equals(childName)) {
-        GeodeticPosition pos = readGeodeticPosition(child, xmlns);
+        final GeodeticPosition pos = readGeodeticPosition(child, xmlns);
         area.getPoints().add(pos);
       }
     }

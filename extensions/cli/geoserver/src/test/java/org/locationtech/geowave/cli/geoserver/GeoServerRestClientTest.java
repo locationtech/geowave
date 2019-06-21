@@ -16,6 +16,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 public class GeoServerRestClientTest {
@@ -28,15 +29,15 @@ public class GeoServerRestClientTest {
     final Invocation.Builder invBuilder = Mockito.mock(Invocation.Builder.class);
     final Response response = Mockito.mock(Response.class);
 
-    Mockito.when(webTarget.path(Mockito.anyString())).thenReturn(webTarget);
+    Mockito.when(webTarget.path(Matchers.anyString())).thenReturn(webTarget);
     Mockito.when(
-        webTarget.queryParam(Mockito.eq("quietOnNotFound"), Mockito.anyBoolean())).thenReturn(
+        webTarget.queryParam(Matchers.eq("quietOnNotFound"), Matchers.anyBoolean())).thenReturn(
             webTarget);
     Mockito.when(webTarget.request()).thenReturn(invBuilder);
 
     Mockito.when(invBuilder.get()).thenReturn(response);
     Mockito.when(invBuilder.delete()).thenReturn(response);
-    Mockito.when(invBuilder.post(Mockito.any(Entity.class))).thenReturn(response);
+    Mockito.when(invBuilder.post(Matchers.any(Entity.class))).thenReturn(response);
 
     return webTarget;
   }
@@ -52,7 +53,7 @@ public class GeoServerRestClientTest {
   // We want to start each test with a new instance
   @After
   public void cleanUp() {
-    client.invalidateInstance();
+    GeoServerRestClient.invalidateInstance();
   }
 
   @Test

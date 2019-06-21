@@ -21,8 +21,8 @@ public class ClientMergeableRasterTile<T extends Persistable> extends RasterTile
   public ClientMergeableRasterTile() {}
 
   public ClientMergeableRasterTile(
-      RasterTileMergeStrategy<T> mergeStrategy,
-      SampleModel sampleModel,
+      final RasterTileMergeStrategy<T> mergeStrategy,
+      final SampleModel sampleModel,
       final DataBuffer dataBuffer,
       final T metadata) {
     super(dataBuffer, metadata);

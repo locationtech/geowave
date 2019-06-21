@@ -65,13 +65,16 @@ public abstract class SimpleAbstractMergeStrategy<T extends Persistable> impleme
   protected abstract double getSample(int x, int y, int b, double thisSample, double nextSample);
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     return true;
   }
 

@@ -29,7 +29,7 @@ public class OsmPbfParserOptions {
     return extension;
   }
 
-  public void setExtension(String extension) {
+  public void setExtension(final String extension) {
     this.extension = extension;
   }
 
@@ -37,7 +37,7 @@ public class OsmPbfParserOptions {
     return ingestDirectory;
   }
 
-  public void setIngestDirectory(String ingestDirectory) {
+  public void setIngestDirectory(final String ingestDirectory) {
     this.ingestDirectory = ingestDirectory;
   }
 
@@ -45,7 +45,7 @@ public class OsmPbfParserOptions {
     return hdfsBasePath;
   }
 
-  public void setHdfsBasePath(String hdfsBasePath) {
+  public void setHdfsBasePath(final String hdfsBasePath) {
     this.hdfsBasePath = hdfsBasePath;
   }
 
@@ -53,7 +53,7 @@ public class OsmPbfParserOptions {
     return nameNode;
   }
 
-  public void setNameNode(String nameNode) {
+  public void setNameNode(final String nameNode) {
     this.nameNode = nameNode;
   }
 

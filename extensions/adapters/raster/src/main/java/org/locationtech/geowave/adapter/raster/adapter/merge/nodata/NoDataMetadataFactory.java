@@ -75,7 +75,7 @@ public class NoDataMetadataFactory {
       final int numBands = Math.min(noDataPerBand1.length, noDataPerBand2.length);
       final double[][] allNoDataValues = new double[numBands][];
       for (int b = 0; b < numBands; b++) {
-        final Set<Double> noDataValuesInBand = new HashSet<Double>();
+        final Set<Double> noDataValuesInBand = new HashSet<>();
         if (noDataPerBand1[b] != null) {
           for (final double noDataValue : noDataPerBand1[b]) {
             noDataValuesInBand.add(noDataValue);
@@ -174,7 +174,7 @@ public class NoDataMetadataFactory {
     final int width = Math.min(raster1.getWidth(), raster2.getWidth());
     final int height = Math.min(raster1.getHeight(), raster2.getHeight());
     final int numBands = Math.min(raster1.getNumBands(), raster2.getNumBands());
-    final Set<SampleIndex> indices = new HashSet<SampleIndex>();
+    final Set<SampleIndex> indices = new HashSet<>();
     for (int b = 0; b < numBands; b++) {
       for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
@@ -252,7 +252,7 @@ public class NoDataMetadataFactory {
     final Set<Double>[] noDataValuesPerBand;
     boolean skipNoData;
 
-    final Set<SampleIndex> indices = new HashSet<SampleIndex>();
+    final Set<SampleIndex> indices = new HashSet<>();
     if (allNoDataValues == null) {
       skipNoData = true;
       noDataValuesPerBand = null;
@@ -262,7 +262,7 @@ public class NoDataMetadataFactory {
     } else {
       noDataValuesPerBand = new Set[numBands];
       for (int b = 0; b < numBands; b++) {
-        noDataValuesPerBand[b] = new HashSet<Double>();
+        noDataValuesPerBand[b] = new HashSet<>();
       }
       skipNoData = false;
     }
@@ -298,7 +298,7 @@ public class NoDataMetadataFactory {
                 }
                 if (noData) {
                   indices.add(new SampleIndex(x, y, b));
-                  if (noDataValuesPerBand != null && noDataValuesPerBand[b] != null) {
+                  if ((noDataValuesPerBand != null) && (noDataValuesPerBand[b] != null)) {
                     noDataValuesPerBand[b].add(allNoDataValues[b][i]);
                   }
                 }
@@ -310,7 +310,7 @@ public class NoDataMetadataFactory {
     }
 
     final double[][] usedNoDataValues;
-    if (!skipNoData && noDataValuesPerBand != null) {
+    if (!skipNoData && (noDataValuesPerBand != null)) {
       usedNoDataValues = new double[noDataValuesPerBand.length][];
       for (int b = 0; b < noDataValuesPerBand.length; b++) {
         usedNoDataValues[b] = new double[noDataValuesPerBand[b].size()];

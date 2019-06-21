@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.mapreduce;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 public class JobContextInternalAdapterStore implements InternalAdapterStore {
   private static final Class<?> CLASS = JobContextInternalAdapterStore.class;

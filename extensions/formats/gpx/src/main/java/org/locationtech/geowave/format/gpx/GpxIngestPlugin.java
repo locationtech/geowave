@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.xml.stream.XMLStreamException;
-import jersey.repackaged.com.google.common.collect.Iterators;
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -41,6 +40,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+import jersey.repackaged.com.google.common.collect.Iterators;
 
 /**
  * This plugin is used for ingesting any GPX formatted data from a local file system into GeoWave as

@@ -8,14 +8,14 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.operations.options;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
 import org.locationtech.geowave.analytic.param.JumpParameters;
 import org.locationtech.geowave.analytic.param.SampleParameters;
 import org.locationtech.geowave.analytic.param.annotations.JumpParameter;
 import org.locationtech.geowave.analytic.param.annotations.SampleParameter;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 public class KMeansJumpOptions {
 
@@ -49,7 +49,7 @@ public class KMeansJumpOptions {
     return jumpKplusplusMin;
   }
 
-  public void setJumpKplusplusMin(String jumpKplusplusMin) {
+  public void setJumpKplusplusMin(final String jumpKplusplusMin) {
     this.jumpKplusplusMin = jumpKplusplusMin;
   }
 
@@ -57,7 +57,7 @@ public class KMeansJumpOptions {
     return jumpRangeOfCentroids;
   }
 
-  public void setJumpRangeOfCentroids(NumericRange jumpRangeOfCentroids) {
+  public void setJumpRangeOfCentroids(final NumericRange jumpRangeOfCentroids) {
     this.jumpRangeOfCentroids = jumpRangeOfCentroids;
   }
 
@@ -65,7 +65,7 @@ public class KMeansJumpOptions {
     return sampleSampleRankFunction;
   }
 
-  public void setSampleSampleRankFunction(String sampleSampleRankFunction) {
+  public void setSampleSampleRankFunction(final String sampleSampleRankFunction) {
     this.sampleSampleRankFunction = sampleSampleRankFunction;
   }
 
@@ -73,14 +73,14 @@ public class KMeansJumpOptions {
     return sampleSampleSize;
   }
 
-  public void setSampleSampleSize(String sampleSampleSize) {
+  public void setSampleSampleSize(final String sampleSampleSize) {
     this.sampleSampleSize = sampleSampleSize;
   }
 
   public static class NumericRangeConverter implements IStringConverter<NumericRange> {
 
     @Override
-    public NumericRange convert(String value) {
+    public NumericRange convert(final String value) {
       final String p = value.toString();
       final String[] parts = p.split(",");
       try {

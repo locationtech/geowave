@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "providers", parentOperation = Sentinel2Section.class)
 @Parameters(commandDescription = "Show info of supported Sentinel2 imagery providers.")
@@ -21,15 +21,15 @@ public class Sentinel2ImageryProvidersCommand extends DefaultOperation implement
   public Sentinel2ImageryProvidersCommand() {}
 
   @Override
-  public void execute(OperationParams params) throws Exception {
+  public void execute(final OperationParams params) throws Exception {
     System.out.print("Supported Sentinel2 providers:");
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
 
-    for (Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
+    for (final Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
       sb.append("\n - ").append(provider.providerName()).append(":").append(
           "\n   - Description: ").append(provider.description()).append("\n   - Collections: ");
 
-      for (String collection : provider.collections()) {
+      for (final String collection : provider.collections()) {
         sb.append(collection).append(", ");
       }
       sb.setLength(sb.length() - 2);

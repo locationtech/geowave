@@ -145,7 +145,7 @@ public class CovarianceMatrix {
     return covPosXPosX;
   }
 
-  public void setCovPosXPosX(Double covPosXPosX) {
+  public void setCovPosXPosX(final Double covPosXPosX) {
     this.covPosXPosX = covPosXPosX;
   }
 
@@ -153,7 +153,7 @@ public class CovarianceMatrix {
     return covPosYPosY;
   }
 
-  public void setCovPosYPosY(Double covPosYPosY) {
+  public void setCovPosYPosY(final Double covPosYPosY) {
     this.covPosYPosY = covPosYPosY;
   }
 
@@ -161,7 +161,7 @@ public class CovarianceMatrix {
     return covPosZPosZ;
   }
 
-  public void setCovPosZPosZ(Double covPosZPosZ) {
+  public void setCovPosZPosZ(final Double covPosZPosZ) {
     this.covPosZPosZ = covPosZPosZ;
   }
 
@@ -169,7 +169,7 @@ public class CovarianceMatrix {
     return covPosXPosY;
   }
 
-  public void setCovPosXPosY(Double covPosXPosY) {
+  public void setCovPosXPosY(final Double covPosXPosY) {
     this.covPosXPosY = covPosXPosY;
   }
 
@@ -177,7 +177,7 @@ public class CovarianceMatrix {
     return covPosXPosZ;
   }
 
-  public void setCovPosXPosZ(Double covPosXPosZ) {
+  public void setCovPosXPosZ(final Double covPosXPosZ) {
     this.covPosXPosZ = covPosXPosZ;
   }
 
@@ -185,7 +185,7 @@ public class CovarianceMatrix {
     return covPosYPosZ;
   }
 
-  public void setCovPosYPosZ(Double covPosYPosZ) {
+  public void setCovPosYPosZ(final Double covPosYPosZ) {
     this.covPosYPosZ = covPosYPosZ;
   }
 
@@ -193,7 +193,7 @@ public class CovarianceMatrix {
     return covVelXVelX;
   }
 
-  public void setCovVelXVelX(Double covVelXVelX) {
+  public void setCovVelXVelX(final Double covVelXVelX) {
     this.covVelXVelX = covVelXVelX;
   }
 
@@ -201,7 +201,7 @@ public class CovarianceMatrix {
     return covVelYVelY;
   }
 
-  public void setCovVelYVelY(Double covVelYVelY) {
+  public void setCovVelYVelY(final Double covVelYVelY) {
     this.covVelYVelY = covVelYVelY;
   }
 
@@ -209,7 +209,7 @@ public class CovarianceMatrix {
     return covVelZVelZ;
   }
 
-  public void setCovVelZVelZ(Double covVelZVelZ) {
+  public void setCovVelZVelZ(final Double covVelZVelZ) {
     this.covVelZVelZ = covVelZVelZ;
   }
 
@@ -217,7 +217,7 @@ public class CovarianceMatrix {
     return covPosXVelX;
   }
 
-  public void setCovPosXVelX(Double covPosXVelX) {
+  public void setCovPosXVelX(final Double covPosXVelX) {
     this.covPosXVelX = covPosXVelX;
   }
 
@@ -225,7 +225,7 @@ public class CovarianceMatrix {
     return covPosXVelY;
   }
 
-  public void setCovPosXVelY(Double covPosXVelY) {
+  public void setCovPosXVelY(final Double covPosXVelY) {
     this.covPosXVelY = covPosXVelY;
   }
 
@@ -233,7 +233,7 @@ public class CovarianceMatrix {
     return covPosXVelZ;
   }
 
-  public void setCovPosXVelZ(Double covPosXVelZ) {
+  public void setCovPosXVelZ(final Double covPosXVelZ) {
     this.covPosXVelZ = covPosXVelZ;
   }
 
@@ -241,7 +241,7 @@ public class CovarianceMatrix {
     return covPosYVelX;
   }
 
-  public void setCovPosYVelX(Double covPosYVelX) {
+  public void setCovPosYVelX(final Double covPosYVelX) {
     this.covPosYVelX = covPosYVelX;
   }
 
@@ -249,7 +249,7 @@ public class CovarianceMatrix {
     return covPosYVelY;
   }
 
-  public void setCovPosYVelY(Double covPosYVelY) {
+  public void setCovPosYVelY(final Double covPosYVelY) {
     this.covPosYVelY = covPosYVelY;
   }
 
@@ -257,7 +257,7 @@ public class CovarianceMatrix {
     return covPosYVelZ;
   }
 
-  public void setCovPosYVelZ(Double covPosYVelZ) {
+  public void setCovPosYVelZ(final Double covPosYVelZ) {
     this.covPosYVelZ = covPosYVelZ;
   }
 
@@ -265,7 +265,7 @@ public class CovarianceMatrix {
     return covPosZVelX;
   }
 
-  public void setCovPosZVelX(Double covPosZVelX) {
+  public void setCovPosZVelX(final Double covPosZVelX) {
     this.covPosZVelX = covPosZVelX;
   }
 
@@ -273,7 +273,7 @@ public class CovarianceMatrix {
     return covPosZVelY;
   }
 
-  public void setCovPosZVelY(Double covPosZVelY) {
+  public void setCovPosZVelY(final Double covPosZVelY) {
     this.covPosZVelY = covPosZVelY;
   }
 
@@ -281,7 +281,7 @@ public class CovarianceMatrix {
     return covPosZVelZ;
   }
 
-  public void setCovPosZVelZ(Double covPosZVelZ) {
+  public void setCovPosZVelZ(final Double covPosZVelZ) {
     this.covPosZVelZ = covPosZVelZ;
   }
 
@@ -289,7 +289,7 @@ public class CovarianceMatrix {
     return covVelXVelY;
   }
 
-  public void setCovVelXVelY(Double covVelXVelY) {
+  public void setCovVelXVelY(final Double covVelXVelY) {
     this.covVelXVelY = covVelXVelY;
   }
 
@@ -297,7 +297,7 @@ public class CovarianceMatrix {
     return covVelXVelZ;
   }
 
-  public void setCovVelXVelZ(Double covVelXVelZ) {
+  public void setCovVelXVelZ(final Double covVelXVelZ) {
     this.covVelXVelZ = covVelXVelZ;
   }
 
@@ -305,7 +305,7 @@ public class CovarianceMatrix {
     return covVelYVelZ;
   }
 
-  public void setCovVelYVelZ(Double covVelYVelZ) {
+  public void setCovVelYVelZ(final Double covVelYVelZ) {
     this.covVelYVelZ = covVelYVelZ;
   }
 }

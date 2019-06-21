@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.data.visibility;
 
-import com.google.common.collect.Sets;
 import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -29,6 +29,7 @@ import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.util.VisibilityExpression;
+import com.google.common.collect.Sets;
 
 public class FieldVisibilityCount<T> extends
     AbstractDataStatistics<T, Map<ByteArray, Long>, IndexStatisticsQueryBuilder<Map<ByteArray, Long>>>
@@ -89,11 +90,11 @@ public class FieldVisibilityCount<T> extends
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = super.binaryBuffer(bytes);
     final int size = VarintUtils.readUnsignedInt(buf);
+    ByteArrayUtils.verifyBufferSize(buf, size);
     countsPerVisibility.clear();
     for (int i = 0; i < size; i++) {
       final int idCount = VarintUtils.readUnsignedInt(buf);
-      final byte[] id = new byte[idCount];
-      buf.get(id);
+      final byte[] id = ByteArrayUtils.safeRead(buf, idCount);
       final long count = VarintUtils.readUnsignedLong(buf);
       if (count != 0) {
         countsPerVisibility.put(new ByteArray(id), count);

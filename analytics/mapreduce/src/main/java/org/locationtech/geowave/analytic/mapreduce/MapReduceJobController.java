@@ -74,7 +74,7 @@ public class MapReduceJobController implements MapReduceJobRunner, IndependentJo
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(MapReduceParameters.getParameters());
 
     for (int i = 0; i < runners.length; i++) {

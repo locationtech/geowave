@@ -36,7 +36,7 @@ public class CloseableIteratorWrapper<E> implements CloseableIterator<E> {
   public CloseableIteratorWrapper(
       final Closeable closable,
       final Iterator<E> iterator,
-      Integer limit) {
+      final Integer limit) {
     this.closeable = closable;
     this.iterator = iterator;
     this.limit = limit;
@@ -44,8 +44,9 @@ public class CloseableIteratorWrapper<E> implements CloseableIterator<E> {
 
   @Override
   public boolean hasNext() {
-    if (limit != null && limit > 0 && count > limit)
+    if ((limit != null) && (limit > 0) && (count > limit)) {
       return false;
+    }
     return iterator.hasNext();
   }
 

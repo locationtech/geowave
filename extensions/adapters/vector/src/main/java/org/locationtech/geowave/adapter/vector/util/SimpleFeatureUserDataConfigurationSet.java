@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -29,6 +28,8 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
  * Represents a set of configurations maintained within the user data of a simple feature type and
@@ -44,8 +45,7 @@ public class SimpleFeatureUserDataConfigurationSet implements java.io.Serializab
    * Name string accessed Map of SimpleFeatureUserDataConfiguration in this object. The name is the
    * SimpleFeatureType name that will have a configuration set.
    */
-  private Map<String, List<SimpleFeatureUserDataConfiguration>> configurations =
-      new HashMap<String, List<SimpleFeatureUserDataConfiguration>>();
+  private Map<String, List<SimpleFeatureUserDataConfiguration>> configurations = new HashMap<>();
 
   /**
    * Default Constructor<br>
@@ -59,7 +59,8 @@ public class SimpleFeatureUserDataConfigurationSet implements java.io.Serializab
    * @param type - SFT to be configured
    */
   public SimpleFeatureUserDataConfigurationSet(final SimpleFeatureType type) {
-    List<SimpleFeatureUserDataConfiguration> sfudc = getConfigurationsForType(type.getTypeName());
+    final List<SimpleFeatureUserDataConfiguration> sfudc =
+        getConfigurationsForType(type.getTypeName());
 
     for (final SimpleFeatureUserDataConfiguration configuration : sfudc) {
       configuration.configureFromType(type);
@@ -95,11 +96,11 @@ public class SimpleFeatureUserDataConfigurationSet implements java.io.Serializab
    * @return - List<SimpleFeatureUserDataConfigurations>
    */
   public synchronized List<SimpleFeatureUserDataConfiguration> getConfigurationsForType(
-      String typeName) {
+      final String typeName) {
     List<SimpleFeatureUserDataConfiguration> configList = configurations.get(typeName);
 
     if (configList == null) {
-      configList = new ArrayList<SimpleFeatureUserDataConfiguration>();
+      configList = new ArrayList<>();
       configurations.put(typeName, configList);
     }
 
@@ -112,7 +113,9 @@ public class SimpleFeatureUserDataConfigurationSet implements java.io.Serializab
    * @param typeName - name of type which will get an added configuration
    * @param config - configuration to be added
    */
-  public void addConfigurations(String typeName, final SimpleFeatureUserDataConfiguration config) {
+  public void addConfigurations(
+      final String typeName,
+      final SimpleFeatureUserDataConfiguration config) {
     getConfigurationsForType(typeName).add(config);
   }
 
@@ -123,7 +126,8 @@ public class SimpleFeatureUserDataConfigurationSet implements java.io.Serializab
    * @param type - SF type to be updated
    */
   public void configureFromType(final SimpleFeatureType type) {
-    List<SimpleFeatureUserDataConfiguration> sfudc = getConfigurationsForType(type.getTypeName());
+    final List<SimpleFeatureUserDataConfiguration> sfudc =
+        getConfigurationsForType(type.getTypeName());
 
     // Go through list of SFUD configurations and update each one with
     // information from the
@@ -140,7 +144,8 @@ public class SimpleFeatureUserDataConfigurationSet implements java.io.Serializab
    * @param type - SF type to be updated
    */
   public void updateType(final SimpleFeatureType type) {
-    List<SimpleFeatureUserDataConfiguration> sfudc = getConfigurationsForType(type.getTypeName());
+    final List<SimpleFeatureUserDataConfiguration> sfudc =
+        getConfigurationsForType(type.getTypeName());
 
     // Go through list of SFUD configurations and update each one in the
     // passed in SF type
@@ -187,60 +192,58 @@ public class SimpleFeatureUserDataConfigurationSet implements java.io.Serializab
   @Override
   public byte[] toBinary() {
     int size = 0;
-    List<byte[]> entries = new ArrayList<>(configurations.size());
-    for (Entry<String, List<SimpleFeatureUserDataConfiguration>> e : configurations.entrySet()) {
-      byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
-      List<byte[]> configs = new ArrayList<>(e.getValue().size());
+    final List<byte[]> entries = new ArrayList<>(configurations.size());
+    for (final Entry<String, List<SimpleFeatureUserDataConfiguration>> e : configurations.entrySet()) {
+      final byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
+      final List<byte[]> configs = new ArrayList<>(e.getValue().size());
       int entrySize =
           VarintUtils.unsignedIntByteLength(keyBytes.length)
               + keyBytes.length
               + VarintUtils.unsignedIntByteLength(configs.size());
-      for (SimpleFeatureUserDataConfiguration config : e.getValue()) {
-        byte[] confBytes = PersistenceUtils.toBinary(config);
+      for (final SimpleFeatureUserDataConfiguration config : e.getValue()) {
+        final byte[] confBytes = PersistenceUtils.toBinary(config);
         entrySize += VarintUtils.unsignedIntByteLength(confBytes.length);
         entrySize += confBytes.length;
         configs.add(confBytes);
       }
       size += entrySize;
-      ByteBuffer buf = ByteBuffer.allocate(entrySize);
+      final ByteBuffer buf = ByteBuffer.allocate(entrySize);
       VarintUtils.writeUnsignedInt(keyBytes.length, buf);
       buf.put(keyBytes);
       VarintUtils.writeUnsignedInt(configs.size(), buf);
-      for (byte[] confBytes : configs) {
+      for (final byte[] confBytes : configs) {
         VarintUtils.writeUnsignedInt(confBytes.length, buf);
         buf.put(confBytes);
       }
       entries.add(buf.array());
     }
     size += VarintUtils.unsignedIntByteLength(configurations.size());
-    ByteBuffer buf = ByteBuffer.allocate(size);
+    final ByteBuffer buf = ByteBuffer.allocate(size);
     VarintUtils.writeUnsignedInt(configurations.size(), buf);
-    for (byte[] e : entries) {
+    for (final byte[] e : entries) {
       buf.put(e);
     }
     return buf.array();
   }
 
   @Override
-  public void fromBinary(byte[] bytes) {
-    ByteBuffer buf = ByteBuffer.wrap(bytes);
-    int entrySize = VarintUtils.readUnsignedInt(buf);
-    Map<String, List<SimpleFeatureUserDataConfiguration>> internalConfigurations =
+  public void fromBinary(final byte[] bytes) {
+    final ByteBuffer buf = ByteBuffer.wrap(bytes);
+    final int entrySize = VarintUtils.readUnsignedInt(buf);
+    final Map<String, List<SimpleFeatureUserDataConfiguration>> internalConfigurations =
         new HashMap<>(entrySize);
     for (int i = 0; i < entrySize; i++) {
-      int keySize = VarintUtils.readUnsignedInt(buf);
-      byte[] keyBytes = new byte[keySize];
-      buf.get(keyBytes);
-      String key = StringUtils.stringFromBinary(keyBytes);
-      int numConfigs = VarintUtils.readUnsignedInt(buf);
-      List<SimpleFeatureUserDataConfiguration> confList = new ArrayList<>(numConfigs);
+      final int keySize = VarintUtils.readUnsignedInt(buf);
+      final byte[] keyBytes = ByteArrayUtils.safeRead(buf, keySize);
+      final String key = StringUtils.stringFromBinary(keyBytes);
+      final int numConfigs = VarintUtils.readUnsignedInt(buf);
+      final List<SimpleFeatureUserDataConfiguration> confList = new ArrayList<>(numConfigs);
       for (int c = 0; c < numConfigs; c++) {
-        byte[] entryBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-        buf.get(entryBytes);
+        final byte[] entryBytes = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
         confList.add((SimpleFeatureUserDataConfiguration) PersistenceUtils.fromBinary(entryBytes));
       }
       internalConfigurations.put(key, confList);
     }
-    this.configurations = internalConfigurations;
+    configurations = internalConfigurations;
   }
 }

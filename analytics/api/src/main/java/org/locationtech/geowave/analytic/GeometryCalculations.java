@@ -23,7 +23,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import si.uom.SI;
+import tec.uom.se.unit.Units;
 
 public class GeometryCalculations {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeometryCalculations.class);
@@ -32,7 +32,7 @@ public class GeometryCalculations {
   final CoordinateReferenceSystem crs;
   final double xMin, yMin, xMax, yMax;
 
-  public GeometryCalculations(CoordinateReferenceSystem crs) {
+  public GeometryCalculations(final CoordinateReferenceSystem crs) {
     factory = new GeometryFactory(new PrecisionModel(), 4326);
     this.crs = crs;
     xMin = crs.getCoordinateSystem().getAxis(0).getMinimumValue();
@@ -53,29 +53,29 @@ public class GeometryCalculations {
   public List<Geometry> buildSurroundingGeometries(
       final double[] distances,
       final Unit<Length> unit,
-      Coordinate coordinate) {
-    List<Geometry> geos = new LinkedList<Geometry>();
-    GeodeticCalculator geoCalc = new GeodeticCalculator();
+      final Coordinate coordinate) {
+    final List<Geometry> geos = new LinkedList<>();
+    final GeodeticCalculator geoCalc = new GeodeticCalculator();
     geoCalc.setStartingGeographicPoint(coordinate.x, coordinate.y);
     try {
-      geoCalc.setDirection(0, unit.getConverterTo(SI.METRE).convert(distances[1]));
-      DirectPosition north = geoCalc.getDestinationPosition();
-      geoCalc.setDirection(90, unit.getConverterTo(SI.METRE).convert(distances[0]));
-      DirectPosition east = geoCalc.getDestinationPosition();
+      geoCalc.setDirection(0, unit.getConverterTo(Units.METRE).convert(distances[1]));
+      final DirectPosition north = geoCalc.getDestinationPosition();
+      geoCalc.setDirection(90, unit.getConverterTo(Units.METRE).convert(distances[0]));
+      final DirectPosition east = geoCalc.getDestinationPosition();
       geoCalc.setStartingGeographicPoint(coordinate.x, coordinate.y);
-      geoCalc.setDirection(-90, unit.getConverterTo(SI.METRE).convert(distances[0]));
-      DirectPosition west = geoCalc.getDestinationPosition();
-      geoCalc.setDirection(180, unit.getConverterTo(SI.METRE).convert(distances[1]));
-      DirectPosition south = geoCalc.getDestinationPosition();
+      geoCalc.setDirection(-90, unit.getConverterTo(Units.METRE).convert(distances[0]));
+      final DirectPosition west = geoCalc.getDestinationPosition();
+      geoCalc.setDirection(180, unit.getConverterTo(Units.METRE).convert(distances[1]));
+      final DirectPosition south = geoCalc.getDestinationPosition();
 
-      double x1 = west.getOrdinate(0);
-      double x2 = east.getOrdinate(0);
-      double y1 = north.getOrdinate(1);
-      double y2 = south.getOrdinate(1);
+      final double x1 = west.getOrdinate(0);
+      final double x2 = east.getOrdinate(0);
+      final double y1 = north.getOrdinate(1);
+      final double y2 = south.getOrdinate(1);
 
       handleBoundaries(geos, coordinate, x1, x2, y1, y2);
       return geos;
-    } catch (TransformException ex) {
+    } catch (final TransformException ex) {
       LOGGER.error("Unable to build geometry", ex);
     }
 
@@ -83,12 +83,12 @@ public class GeometryCalculations {
   }
 
   private void handleBoundaries(
-      List<Geometry> geos,
-      Coordinate coordinate,
-      double x1,
-      double x2,
-      double y1,
-      double y2) {
+      final List<Geometry> geos,
+      final Coordinate coordinate,
+      final double x1,
+      final double x2,
+      final double y1,
+      final double y2) {
 
     if (Math.signum(x1) > Math.signum(coordinate.x)) {
       ReferencedEnvelope bounds =

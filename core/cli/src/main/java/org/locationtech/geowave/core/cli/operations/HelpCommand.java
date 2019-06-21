@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.operations;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,16 +24,18 @@ import org.locationtech.geowave.core.cli.prefix.JCommanderPrefixTranslator;
 import org.locationtech.geowave.core.cli.prefix.JCommanderTranslationMap;
 import org.locationtech.geowave.core.cli.spi.OperationEntry;
 import org.locationtech.geowave.core.cli.spi.OperationRegistry;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "help", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(commandDescription = "Get descriptions of arguments for " + "any GeoWave command")
 public class HelpCommand extends DefaultOperation implements Command {
 
   @Override
-  public boolean prepare(OperationParams inputParams) {
+  public boolean prepare(final OperationParams inputParams) {
     super.prepare(inputParams);
 
-    CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
+    final CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
     params.setValidate(false);
     params.setAllowUnknown(true);
     // Prepared successfully.
@@ -43,16 +43,16 @@ public class HelpCommand extends DefaultOperation implements Command {
   }
 
   @Override
-  public void execute(OperationParams inputParams) {
-    CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
+  public void execute(final OperationParams inputParams) {
+    final CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
 
-    List<String> nameArray = new ArrayList<String>();
-    OperationRegistry registry = OperationRegistry.getInstance();
+    final List<String> nameArray = new ArrayList<>();
+    final OperationRegistry registry = OperationRegistry.getInstance();
 
     StringBuilder builder = new StringBuilder();
 
     Operation lastOperation = null;
-    for (Map.Entry<String, Operation> entry : params.getOperationMap().entrySet()) {
+    for (final Map.Entry<String, Operation> entry : params.getOperationMap().entrySet()) {
       if (entry.getValue() == this) {
         continue;
       }
@@ -64,7 +64,7 @@ public class HelpCommand extends DefaultOperation implements Command {
       lastOperation = registry.getOperation(GeowaveTopLevelSection.class).createInstance();
     }
     if (lastOperation != null) {
-      String usage = lastOperation.usage();
+      final String usage = lastOperation.usage();
       if (usage != null) {
         System.out.println(usage);
       } else {
@@ -72,10 +72,10 @@ public class HelpCommand extends DefaultOperation implements Command {
         // consider the given parameters as the Default parameters.
         // It's also done so that we can parse prefix annotations
         // and special delegate processing.
-        JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+        final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
 
         translator.addObject(lastOperation);
-        JCommanderTranslationMap map = translator.translate();
+        final JCommanderTranslationMap map = translator.translate();
         map.createFacadeObjects();
 
         // Copy default parameters over for help display.
@@ -84,38 +84,38 @@ public class HelpCommand extends DefaultOperation implements Command {
         // Execute a prepare
 
         // Add processed objects
-        JCommander jc = new JCommander();
-        for (Object obj : map.getObjects()) {
+        final JCommander jc = new JCommander();
+        for (final Object obj : map.getObjects()) {
           jc.addObject(obj);
         }
 
-        String programName = StringUtils.join(nameArray, " ");
+        final String programName = StringUtils.join(nameArray, " ");
         jc.setProgramName(programName);
         jc.usage(builder);
 
         // Trim excess newlines.
-        String operations = builder.toString().trim();
+        final String operations = builder.toString().trim();
         builder = new StringBuilder();
         builder.append(operations);
         builder.append("\n\n");
 
         // Add sub-commands
-        OperationEntry lastEntry = registry.getOperation(lastOperation.getClass());
+        final OperationEntry lastEntry = registry.getOperation(lastOperation.getClass());
         // Cast to list so we can sort it based on operation name.
-        List<OperationEntry> children = new ArrayList<OperationEntry>(lastEntry.getChildren());
+        final List<OperationEntry> children = new ArrayList<>(lastEntry.getChildren());
         Collections.sort(children, getOperationComparator());
         if (children.size() > 0) {
           builder.append("  Commands:\n");
-          for (OperationEntry childEntry : children) {
+          for (final OperationEntry childEntry : children) {
 
             // Get description annotation
-            Parameters p = childEntry.getOperationClass().getAnnotation(Parameters.class);
+            final Parameters p = childEntry.getOperationClass().getAnnotation(Parameters.class);
 
             // If not hidden, then output it.
-            if (p == null || !p.hidden()) {
+            if ((p == null) || !p.hidden()) {
               builder.append(String.format("    %s%n", childEntry.getOperationName()));
               if (p != null) {
-                String description = p.commandDescription();
+                final String description = p.commandDescription();
                 builder.append(String.format("      %s%n", description));
               } else {
                 builder.append("      <no description>\n");
@@ -126,7 +126,7 @@ public class HelpCommand extends DefaultOperation implements Command {
         }
 
         // Trim excess newlines.
-        String output = builder.toString().trim();
+        final String output = builder.toString().trim();
 
         System.out.println(output);
       }
@@ -141,7 +141,7 @@ public class HelpCommand extends DefaultOperation implements Command {
   private Comparator<OperationEntry> getOperationComparator() {
     return new Comparator<OperationEntry>() {
       @Override
-      public int compare(OperationEntry o1, OperationEntry o2) {
+      public int compare(final OperationEntry o1, final OperationEntry o2) {
         return o1.getOperationName().compareTo(o2.getOperationName());
       }
     };

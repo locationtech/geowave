@@ -8,17 +8,17 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import net.sf.json.JSONObject;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "getcv", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Get a GeoServer coverage's info")
@@ -30,7 +30,7 @@ public class GeoServerGetCoverageCommand extends GeoServerCommand<String> {
   private String cvgstore = null;
 
   @Parameter(description = "<coverage name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String cvgName = null;
 

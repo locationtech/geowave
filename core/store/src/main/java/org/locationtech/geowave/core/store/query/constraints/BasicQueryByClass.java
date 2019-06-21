@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
@@ -255,8 +256,7 @@ public class BasicQueryByClass extends BasicQuery {
           new HashMap<>(numEntries);
       for (int i = 0; i < numEntries; i++) {
         final int classNameLength = VarintUtils.readUnsignedInt(buf);
-        final byte[] className = new byte[classNameLength];
-        buf.get(className);
+        final byte[] className = ByteArrayUtils.safeRead(buf, classNameLength);
         final double min = buf.getDouble();
         final double max = buf.getDouble();
         final boolean isDefault = buf.get() > 0;
@@ -512,8 +512,7 @@ public class BasicQueryByClass extends BasicQuery {
       final int numEntries = VarintUtils.readUnsignedInt(buf);
       final List<ConstraintSet> sets = new LinkedList<>();
       for (int i = 0; i < numEntries; i++) {
-        final byte[] d = new byte[VarintUtils.readUnsignedInt(buf)];
-        buf.get(d);
+        final byte[] d = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
         final ConstraintSet cs = new ConstraintSet();
         cs.fromBinary(d);
         sets.add(cs);

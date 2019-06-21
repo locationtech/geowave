@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.adapter.raster.util;
 
-import com.google.common.primitives.Ints;
-import com.google.protobuf.InvalidProtocolBufferException;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.image.BandedSampleModel;
 import java.awt.image.ComponentSampleModel;
 import java.awt.image.DataBuffer;
@@ -26,6 +23,9 @@ import java.awt.image.SampleModel;
 import java.awt.image.SinglePixelPackedSampleModel;
 import javax.media.jai.ComponentSampleModelJAI;
 import org.locationtech.geowave.adapter.raster.protobuf.SampleModelProtos;
+import com.google.common.primitives.Ints;
+import com.google.protobuf.InvalidProtocolBufferException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class SampleModelPersistenceUtils {
 
@@ -57,8 +57,8 @@ public class SampleModelPersistenceUtils {
         sampleModelType = TYPE_PIXEL_INTERLEAVED;
       } else if (sampleModel instanceof BandedSampleModel) {
         sampleModelType = TYPE_BANDED;
-      } else if ((sampleModel instanceof InternalComponentSampleModelJAI
-          || sampleModel instanceof ComponentSampleModelJAI)
+      } else if (((sampleModel instanceof InternalComponentSampleModelJAI)
+          || (sampleModel instanceof ComponentSampleModelJAI))
           || (transferType == DataBuffer.TYPE_FLOAT)
           || (transferType == DataBuffer.TYPE_DOUBLE)) {
         sampleModelType = TYPE_COMPONENT_JAI;
@@ -220,7 +220,7 @@ public class SampleModelPersistenceUtils {
     if ((pixelStride * width) > scanlineStride) {
       throw new IllegalArgumentException(
           "pixelStride*width ("
-              + pixelStride * width
+              + (pixelStride * width)
               + ") must be > scanline stride ("
               + scanlineStride
               + ")");
@@ -305,12 +305,12 @@ public class SampleModelPersistenceUtils {
      * @param bandOffsets The offsets of all bands.
      */
     public InternalComponentSampleModelJAI(
-        int dataType,
-        int w,
-        int h,
-        int pixelStride,
-        int scanlineStride,
-        int bandOffsets[]) {
+        final int dataType,
+        final int w,
+        final int h,
+        final int pixelStride,
+        final int scanlineStride,
+        final int bandOffsets[]) {
       super(dataType, w, h, pixelStride, scanlineStride, bandOffsets);
     }
 
@@ -328,13 +328,13 @@ public class SampleModelPersistenceUtils {
      * @param bandOffsets The band offsets of all bands.
      */
     public InternalComponentSampleModelJAI(
-        int dataType,
-        int w,
-        int h,
-        int pixelStride,
-        int scanlineStride,
-        int bankIndices[],
-        int bandOffsets[]) {
+        final int dataType,
+        final int w,
+        final int h,
+        final int pixelStride,
+        final int scanlineStride,
+        final int bankIndices[],
+        final int bandOffsets[]) {
       super(dataType, w, h, pixelStride, scanlineStride, bankIndices, bandOffsets);
     }
 
@@ -344,26 +344,31 @@ public class SampleModelPersistenceUtils {
      */
     private long getBufferSize() {
       int maxBandOff = bandOffsets[0];
-      for (int i = 1; i < bandOffsets.length; i++)
+      for (int i = 1; i < bandOffsets.length; i++) {
         maxBandOff = Math.max(maxBandOff, bandOffsets[i]);
+      }
 
       long size = 0;
-      if (maxBandOff >= 0)
+      if (maxBandOff >= 0) {
         size += maxBandOff + 1;
-      if (pixelStride > 0)
+      }
+      if (pixelStride > 0) {
         size += (long) pixelStride * (width - 1);
-      if (scanlineStride > 0)
+      }
+      if (scanlineStride > 0) {
         size += (long) scanlineStride * (height - 1);
+      }
       return size;
     }
 
     /** Preserves band ordering with new step factor... */
-    private int[] JAIorderBands(int orig[], int step) {
-      int map[] = new int[orig.length];
-      int ret[] = new int[orig.length];
+    private int[] JAIorderBands(final int orig[], final int step) {
+      final int map[] = new int[orig.length];
+      final int ret[] = new int[orig.length];
 
-      for (int i = 0; i < map.length; i++)
+      for (int i = 0; i < map.length; i++) {
         map[i] = i;
+      }
 
       for (int i = 0; i < ret.length; i++) {
         int index = i;
@@ -386,9 +391,10 @@ public class SampleModelPersistenceUtils {
      * @param w The width in pixels.
      * @param h The height in pixels
      */
-    public SampleModel createCompatibleSampleModel(int w, int h) {
-      SampleModel ret = null;
-      long size;
+    @Override
+    public SampleModel createCompatibleSampleModel(final int w, final int h) {
+      final SampleModel ret = null;
+      final long size;
       int minBandOff = bandOffsets[0];
       int maxBandOff = bandOffsets[0];
       for (int i = 1; i < bandOffsets.length; i++) {
@@ -397,18 +403,19 @@ public class SampleModelPersistenceUtils {
       }
       maxBandOff -= minBandOff;
 
-      int bands = bandOffsets.length;
+      final int bands = bandOffsets.length;
       int bandOff[];
       int pStride = Math.abs(pixelStride);
       int lStride = Math.abs(scanlineStride);
-      int bStride = Math.abs(maxBandOff);
+      final int bStride = Math.abs(maxBandOff);
 
       if (pStride > lStride) {
         if (pStride > bStride) {
           if (lStride > bStride) { // pix > line > band
             bandOff = new int[bandOffsets.length];
-            for (int i = 0; i < bands; i++)
+            for (int i = 0; i < bands; i++) {
               bandOff[i] = bandOffsets[i] - minBandOff;
+            }
             lStride = bStride + 1;
             pStride = lStride * h;
           } else { // pix > band > line
@@ -422,8 +429,9 @@ public class SampleModelPersistenceUtils {
       } else {
         if (pStride > bStride) { // line > pix > band
           bandOff = new int[bandOffsets.length];
-          for (int i = 0; i < bands; i++)
+          for (int i = 0; i < bands; i++) {
             bandOff[i] = bandOffsets[i] - minBandOff;
+          }
           pStride = bStride + 1;
           lStride = pStride * w;
         } else {
@@ -448,8 +456,9 @@ public class SampleModelPersistenceUtils {
         pStride *= -1;
       }
 
-      for (int i = 0; i < bands; i++)
+      for (int i = 0; i < bands; i++) {
         bandOff[i] += base;
+      }
       return new ComponentSampleModelJAI(dataType, w, h, pStride, lStride, bankIndices, bandOff);
     }
 
@@ -463,20 +472,21 @@ public class SampleModelPersistenceUtils {
      *
      * @param bands subset of bands of this <code>ComponentSampleModel</code>
      */
-    public SampleModel createSubsetSampleModel(int bands[]) {
-      int newBankIndices[] = new int[bands.length];
-      int newBandOffsets[] = new int[bands.length];
+    @Override
+    public SampleModel createSubsetSampleModel(final int bands[]) {
+      final int newBankIndices[] = new int[bands.length];
+      final int newBandOffsets[] = new int[bands.length];
       for (int i = 0; i < bands.length; i++) {
-        int b = bands[i];
+        final int b = bands[i];
         newBankIndices[i] = bankIndices[b];
         newBandOffsets[i] = bandOffsets[b];
       }
       return new ComponentSampleModelJAI(
-          this.dataType,
+          dataType,
           width,
           height,
-          this.pixelStride,
-          this.scanlineStride,
+          pixelStride,
+          scanlineStride,
           newBankIndices,
           newBandOffsets);
     }
@@ -486,10 +496,11 @@ public class SampleModelPersistenceUtils {
      * The <code>DataBuffer</code>'s data type, number of banks, and size will be consistent with
      * this <code>ComponentSampleModel</code>.
      */
+    @Override
     public DataBuffer createDataBuffer() {
       DataBuffer dataBuffer = null;
 
-      int size = (int) getBufferSize();
+      final int size = (int) getBufferSize();
       switch (dataType) {
         case DataBuffer.TYPE_BYTE:
           dataBuffer = new DataBufferByte(size, numBanks);
@@ -551,101 +562,108 @@ public class SampleModelPersistenceUtils {
      * @throws <code>ArrayIndexOutOfBoundsException</code> if the coordinates are not in bounds, or
      *         if obj is non-null and is not large enough to hold the pixel data.
      */
-    public Object getDataElements(int x, int y, Object obj, DataBuffer data) {
+    @Override
+    public Object getDataElements(final int x, final int y, Object obj, final DataBuffer data) {
 
-      int type = getTransferType();
-      int numDataElems = getNumDataElements();
-      int pixelOffset = y * scanlineStride + x * pixelStride;
+      final int type = getTransferType();
+      final int numDataElems = getNumDataElements();
+      final int pixelOffset = (y * scanlineStride) + (x * pixelStride);
 
       switch (type) {
         case DataBuffer.TYPE_BYTE:
           byte[] bdata;
 
-          if (obj == null)
+          if (obj == null) {
             bdata = new byte[numDataElems];
-          else
+          } else {
             bdata = (byte[]) obj;
+          }
 
           for (int i = 0; i < numDataElems; i++) {
             bdata[i] = (byte) data.getElem(bankIndices[i], pixelOffset + bandOffsets[i]);
           }
 
-          obj = (Object) bdata;
+          obj = bdata;
           break;
 
         case DataBuffer.TYPE_USHORT:
           short[] usdata;
 
-          if (obj == null)
+          if (obj == null) {
             usdata = new short[numDataElems];
-          else
+          } else {
             usdata = (short[]) obj;
+          }
 
           for (int i = 0; i < numDataElems; i++) {
             usdata[i] = (short) data.getElem(bankIndices[i], pixelOffset + bandOffsets[i]);
           }
 
-          obj = (Object) usdata;
+          obj = usdata;
           break;
 
         case DataBuffer.TYPE_INT:
           int[] idata;
 
-          if (obj == null)
+          if (obj == null) {
             idata = new int[numDataElems];
-          else
+          } else {
             idata = (int[]) obj;
+          }
 
           for (int i = 0; i < numDataElems; i++) {
             idata[i] = data.getElem(bankIndices[i], pixelOffset + bandOffsets[i]);
           }
 
-          obj = (Object) idata;
+          obj = idata;
           break;
 
         case DataBuffer.TYPE_SHORT:
           short[] sdata;
 
-          if (obj == null)
+          if (obj == null) {
             sdata = new short[numDataElems];
-          else
+          } else {
             sdata = (short[]) obj;
+          }
 
           for (int i = 0; i < numDataElems; i++) {
             sdata[i] = (short) data.getElem(bankIndices[i], pixelOffset + bandOffsets[i]);
           }
 
-          obj = (Object) sdata;
+          obj = sdata;
           break;
 
         case DataBuffer.TYPE_FLOAT:
           float[] fdata;
 
-          if (obj == null)
+          if (obj == null) {
             fdata = new float[numDataElems];
-          else
+          } else {
             fdata = (float[]) obj;
+          }
 
           for (int i = 0; i < numDataElems; i++) {
             fdata[i] = data.getElemFloat(bankIndices[i], pixelOffset + bandOffsets[i]);
           }
 
-          obj = (Object) fdata;
+          obj = fdata;
           break;
 
         case DataBuffer.TYPE_DOUBLE:
           double[] ddata;
 
-          if (obj == null)
+          if (obj == null) {
             ddata = new double[numDataElems];
-          else
+          } else {
             ddata = (double[]) obj;
+          }
 
           for (int i = 0; i < numDataElems; i++) {
             ddata[i] = data.getElemDouble(bankIndices[i], pixelOffset + bandOffsets[i]);
           }
 
-          obj = (Object) ddata;
+          obj = ddata;
           break;
 
         default:
@@ -696,10 +714,17 @@ public class SampleModelPersistenceUtils {
      * @throws <code>ArrayIndexOutOfBoundsException</code> if the coordinates are not in bounds, or
      *         if obj is non-null and is not large enough to hold the pixel data.
      */
-    public Object getDataElements(int x, int y, int w, int h, Object obj, DataBuffer data) {
+    @Override
+    public Object getDataElements(
+        final int x,
+        final int y,
+        final int w,
+        final int h,
+        Object obj,
+        final DataBuffer data) {
 
-      int type = getTransferType();
-      int numDataElems = getNumDataElements();
+      final int type = getTransferType();
+      final int numDataElems = getNumDataElements();
       int cnt = 0;
       Object o = null;
 
@@ -708,13 +733,14 @@ public class SampleModelPersistenceUtils {
           byte[] btemp;
           byte[] bdata;
 
-          if (obj == null)
+          if (obj == null) {
             bdata = new byte[numDataElems * w * h];
-          else
+          } else {
             bdata = (byte[]) obj;
+          }
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               o = getDataElements(j, i, o, data);
               btemp = (byte[]) o;
               for (int k = 0; k < numDataElems; k++) {
@@ -722,7 +748,7 @@ public class SampleModelPersistenceUtils {
               }
             }
           }
-          obj = (Object) bdata;
+          obj = bdata;
           break;
         }
 
@@ -730,13 +756,14 @@ public class SampleModelPersistenceUtils {
           short[] usdata;
           short[] ustemp;
 
-          if (obj == null)
+          if (obj == null) {
             usdata = new short[numDataElems * w * h];
-          else
+          } else {
             usdata = (short[]) obj;
+          }
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               o = getDataElements(j, i, o, data);
               ustemp = (short[]) o;
               for (int k = 0; k < numDataElems; k++) {
@@ -745,7 +772,7 @@ public class SampleModelPersistenceUtils {
             }
           }
 
-          obj = (Object) usdata;
+          obj = usdata;
           break;
         }
 
@@ -753,13 +780,14 @@ public class SampleModelPersistenceUtils {
           int[] idata;
           int[] itemp;
 
-          if (obj == null)
+          if (obj == null) {
             idata = new int[numDataElems * w * h];
-          else
+          } else {
             idata = (int[]) obj;
+          }
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               o = getDataElements(j, i, o, data);
               itemp = (int[]) o;
               for (int k = 0; k < numDataElems; k++) {
@@ -768,7 +796,7 @@ public class SampleModelPersistenceUtils {
             }
           }
 
-          obj = (Object) idata;
+          obj = idata;
           break;
         }
 
@@ -776,13 +804,14 @@ public class SampleModelPersistenceUtils {
           short[] sdata;
           short[] stemp;
 
-          if (obj == null)
+          if (obj == null) {
             sdata = new short[numDataElems * w * h];
-          else
+          } else {
             sdata = (short[]) obj;
+          }
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               o = getDataElements(j, i, o, data);
               stemp = (short[]) o;
               for (int k = 0; k < numDataElems; k++) {
@@ -791,7 +820,7 @@ public class SampleModelPersistenceUtils {
             }
           }
 
-          obj = (Object) sdata;
+          obj = sdata;
           break;
         }
 
@@ -799,13 +828,14 @@ public class SampleModelPersistenceUtils {
           float[] fdata;
           float[] ftemp;
 
-          if (obj == null)
+          if (obj == null) {
             fdata = new float[numDataElems * w * h];
-          else
+          } else {
             fdata = (float[]) obj;
+          }
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               o = getDataElements(j, i, o, data);
               ftemp = (float[]) o;
               for (int k = 0; k < numDataElems; k++) {
@@ -814,7 +844,7 @@ public class SampleModelPersistenceUtils {
             }
           }
 
-          obj = (Object) fdata;
+          obj = fdata;
           break;
         }
 
@@ -822,13 +852,14 @@ public class SampleModelPersistenceUtils {
           double[] ddata;
           double[] dtemp;
 
-          if (obj == null)
+          if (obj == null) {
             ddata = new double[numDataElems * w * h];
-          else
+          } else {
             ddata = (double[]) obj;
+          }
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               o = getDataElements(j, i, o, data);
               dtemp = (double[]) o;
               for (int k = 0; k < numDataElems; k++) {
@@ -837,7 +868,7 @@ public class SampleModelPersistenceUtils {
             }
           }
 
-          obj = (Object) ddata;
+          obj = ddata;
           break;
         }
 
@@ -881,31 +912,32 @@ public class SampleModelPersistenceUtils {
      * @throws <code>ArrayIndexOutOfBoundsException</code> if the coordinates are not in bounds, or
      *         if obj is non-null and is not large enough to hold the pixel data.
      */
-    public void setDataElements(int x, int y, Object obj, DataBuffer data) {
+    @Override
+    public void setDataElements(final int x, final int y, final Object obj, final DataBuffer data) {
 
-      int type = getTransferType();
-      int numDataElems = getNumDataElements();
-      int pixelOffset = y * scanlineStride + x * pixelStride;
+      final int type = getTransferType();
+      final int numDataElems = getNumDataElements();
+      final int pixelOffset = (y * scanlineStride) + (x * pixelStride);
 
       switch (type) {
         case DataBuffer.TYPE_BYTE:
-          byte[] barray = (byte[]) obj;
+          final byte[] barray = (byte[]) obj;
 
           for (int i = 0; i < numDataElems; i++) {
-            data.setElem(bankIndices[i], pixelOffset + bandOffsets[i], ((int) barray[i]) & 0xff);
+            data.setElem(bankIndices[i], pixelOffset + bandOffsets[i], (barray[i]) & 0xff);
           }
           break;
 
         case DataBuffer.TYPE_USHORT:
-          short[] usarray = (short[]) obj;
+          final short[] usarray = (short[]) obj;
 
           for (int i = 0; i < numDataElems; i++) {
-            data.setElem(bankIndices[i], pixelOffset + bandOffsets[i], ((int) usarray[i]) & 0xffff);
+            data.setElem(bankIndices[i], pixelOffset + bandOffsets[i], (usarray[i]) & 0xffff);
           }
           break;
 
         case DataBuffer.TYPE_INT:
-          int[] iarray = (int[]) obj;
+          final int[] iarray = (int[]) obj;
 
           for (int i = 0; i < numDataElems; i++) {
             data.setElem(bankIndices[i], pixelOffset + bandOffsets[i], iarray[i]);
@@ -913,7 +945,7 @@ public class SampleModelPersistenceUtils {
           break;
 
         case DataBuffer.TYPE_SHORT:
-          short[] sarray = (short[]) obj;
+          final short[] sarray = (short[]) obj;
 
           for (int i = 0; i < numDataElems; i++) {
             data.setElem(bankIndices[i], pixelOffset + bandOffsets[i], sarray[i]);
@@ -921,7 +953,7 @@ public class SampleModelPersistenceUtils {
           break;
 
         case DataBuffer.TYPE_FLOAT:
-          float[] farray = (float[]) obj;
+          final float[] farray = (float[]) obj;
 
           for (int i = 0; i < numDataElems; i++) {
             data.setElemFloat(bankIndices[i], pixelOffset + bandOffsets[i], farray[i]);
@@ -929,7 +961,7 @@ public class SampleModelPersistenceUtils {
           break;
 
         case DataBuffer.TYPE_DOUBLE:
-          double[] darray = (double[]) obj;
+          final double[] darray = (double[]) obj;
 
           for (int i = 0; i < numDataElems; i++) {
             data.setElemDouble(bankIndices[i], pixelOffset + bandOffsets[i], darray[i]);
@@ -980,19 +1012,26 @@ public class SampleModelPersistenceUtils {
      * @see #getTransferType
      * @see java.awt.image.DataBuffer
      */
-    public void setDataElements(int x, int y, int w, int h, Object obj, DataBuffer data) {
+    @Override
+    public void setDataElements(
+        final int x,
+        final int y,
+        final int w,
+        final int h,
+        final Object obj,
+        final DataBuffer data) {
       int cnt = 0;
-      Object o = null;
-      int type = getTransferType();
-      int numDataElems = getNumDataElements();
+      final Object o = null;
+      final int type = getTransferType();
+      final int numDataElems = getNumDataElements();
 
       switch (type) {
         case DataBuffer.TYPE_BYTE: {
-          byte[] barray = (byte[]) obj;
-          byte[] btemp = new byte[numDataElems];
+          final byte[] barray = (byte[]) obj;
+          final byte[] btemp = new byte[numDataElems];
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               for (int k = 0; k < numDataElems; k++) {
                 btemp[k] = barray[cnt++];
               }
@@ -1004,11 +1043,11 @@ public class SampleModelPersistenceUtils {
         }
 
         case DataBuffer.TYPE_USHORT: {
-          short[] usarray = (short[]) obj;
-          short[] ustemp = new short[numDataElems];
+          final short[] usarray = (short[]) obj;
+          final short[] ustemp = new short[numDataElems];
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               for (int k = 0; k < numDataElems; k++) {
                 ustemp[k] = usarray[cnt++];
               }
@@ -1019,11 +1058,11 @@ public class SampleModelPersistenceUtils {
         }
 
         case DataBuffer.TYPE_INT: {
-          int[] iArray = (int[]) obj;
-          int[] itemp = new int[numDataElems];
+          final int[] iArray = (int[]) obj;
+          final int[] itemp = new int[numDataElems];
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               for (int k = 0; k < numDataElems; k++) {
                 itemp[k] = iArray[cnt++];
               }
@@ -1035,11 +1074,11 @@ public class SampleModelPersistenceUtils {
         }
 
         case DataBuffer.TYPE_SHORT: {
-          short[] sArray = (short[]) obj;
-          short[] stemp = new short[numDataElems];
+          final short[] sArray = (short[]) obj;
+          final short[] stemp = new short[numDataElems];
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               for (int k = 0; k < numDataElems; k++) {
                 stemp[k] = sArray[cnt++];
               }
@@ -1051,11 +1090,11 @@ public class SampleModelPersistenceUtils {
         }
 
         case DataBuffer.TYPE_FLOAT: {
-          float[] fArray = (float[]) obj;
-          float[] ftemp = new float[numDataElems];
+          final float[] fArray = (float[]) obj;
+          final float[] ftemp = new float[numDataElems];
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               for (int k = 0; k < numDataElems; k++) {
                 ftemp[k] = fArray[cnt++];
               }
@@ -1067,11 +1106,11 @@ public class SampleModelPersistenceUtils {
         }
 
         case DataBuffer.TYPE_DOUBLE: {
-          double[] dArray = (double[]) obj;
-          double[] dtemp = new double[numDataElems];
+          final double[] dArray = (double[]) obj;
+          final double[] dtemp = new double[numDataElems];
 
-          for (int i = y; i < y + h; i++) {
-            for (int j = x; j < x + w; j++) {
+          for (int i = y; i < (y + h); i++) {
+            for (int j = x; j < (x + w); j++) {
               for (int k = 0; k < numDataElems; k++) {
                 dtemp[k] = dArray[cnt++];
               }
@@ -1099,8 +1138,17 @@ public class SampleModelPersistenceUtils {
      * @param data The <code>DataBuffer</code> containing the image data.
      * @throws <code>ArrayIndexOutOfBoundsException</code> if coordinates are not in bounds
      */
-    public void setSample(int x, int y, int b, float s, DataBuffer data) {
-      data.setElemFloat(bankIndices[b], y * scanlineStride + x * pixelStride + bandOffsets[b], s);
+    @Override
+    public void setSample(
+        final int x,
+        final int y,
+        final int b,
+        final float s,
+        final DataBuffer data) {
+      data.setElemFloat(
+          bankIndices[b],
+          (y * scanlineStride) + (x * pixelStride) + bandOffsets[b],
+          s);
     }
 
     /**
@@ -1115,9 +1163,12 @@ public class SampleModelPersistenceUtils {
      * @return sample The floating point sample value
      * @throws <code>ArrayIndexOutOfBoundsException</code> if coordinates are not in bounds
      */
-    public float getSampleFloat(int x, int y, int b, DataBuffer data) {
-      float sample =
-          data.getElemFloat(bankIndices[b], y * scanlineStride + x * pixelStride + bandOffsets[b]);
+    @Override
+    public float getSampleFloat(final int x, final int y, final int b, final DataBuffer data) {
+      final float sample =
+          data.getElemFloat(
+              bankIndices[b],
+              (y * scanlineStride) + (x * pixelStride) + bandOffsets[b]);
       return sample;
     }
 
@@ -1133,8 +1184,17 @@ public class SampleModelPersistenceUtils {
      * @param data The <code>DataBuffer</code> containing the image data.
      * @throws <code>ArrayIndexOutOfBoundsException</code> if coordinates are not in bounds
      */
-    public void setSample(int x, int y, int b, double s, DataBuffer data) {
-      data.setElemDouble(bankIndices[b], y * scanlineStride + x * pixelStride + bandOffsets[b], s);
+    @Override
+    public void setSample(
+        final int x,
+        final int y,
+        final int b,
+        final double s,
+        final DataBuffer data) {
+      data.setElemDouble(
+          bankIndices[b],
+          (y * scanlineStride) + (x * pixelStride) + bandOffsets[b],
+          s);
     }
 
     /**
@@ -1149,9 +1209,12 @@ public class SampleModelPersistenceUtils {
      * @return sample The <code>double</code> sample value
      * @throws <code>ArrayIndexOutOfBoundsException</code> if coordinates are not in bounds
      */
-    public double getSampleDouble(int x, int y, int b, DataBuffer data) {
-      double sample =
-          data.getElemDouble(bankIndices[b], y * scanlineStride + x * pixelStride + bandOffsets[b]);
+    @Override
+    public double getSampleDouble(final int x, final int y, final int b, final DataBuffer data) {
+      final double sample =
+          data.getElemDouble(
+              bankIndices[b],
+              (y * scanlineStride) + (x * pixelStride) + bandOffsets[b]);
       return sample;
     }
 
@@ -1168,14 +1231,22 @@ public class SampleModelPersistenceUtils {
      * @param data The <code>DataBuffer</code> containing the image data.
      * @throws <code>ArrayIndexOutOfBoundsException</code> if coordinates are not in bounds
      */
-    public double[] getPixels(int x, int y, int w, int h, double dArray[], DataBuffer data) {
+    @Override
+    public double[] getPixels(
+        final int x,
+        final int y,
+        final int w,
+        final int h,
+        final double dArray[],
+        final DataBuffer data) {
       double pixels[];
       int Offset = 0;
 
-      if (dArray != null)
+      if (dArray != null) {
         pixels = dArray;
-      else
+      } else {
         pixels = new double[numBands * w * h];
+      }
 
       for (int i = y; i < (h + y); i++) {
         for (int j = x; j < (w + x); j++) {
@@ -1189,21 +1260,22 @@ public class SampleModelPersistenceUtils {
     }
 
     /** Returns a <code>String</code> containing the values of all valid fields. */
+    @Override
     @SuppressFBWarnings
     public String toString() {
       String ret =
           "ComponentSampleModelJAI: "
               + "  dataType="
-              + this.getDataType()
+              + getDataType()
               + "  numBands="
-              + this.getNumBands()
+              + getNumBands()
               + "  width="
-              + this.getWidth()
+              + getWidth()
               + "  height="
-              + this.getHeight()
+              + getHeight()
               + "  bandOffsets=[ ";
       for (int i = 0; i < numBands; i++) {
-        ret += this.getBandOffsets()[i] + " ";
+        ret += getBandOffsets()[i] + " ";
       }
       ret += "]";
       return ret;

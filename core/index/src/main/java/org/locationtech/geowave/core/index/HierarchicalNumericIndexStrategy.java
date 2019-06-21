@@ -38,27 +38,33 @@ public interface HierarchicalNumericIndexStrategy extends NumericIndexStrategy {
     public int hashCode() {
       final int prime = 31;
       int result = 1;
-      result = prime * result + ((indexStrategy == null) ? 0 : indexStrategy.hashCode());
-      result = prime * result + Arrays.hashCode(prefix);
+      result = (prime * result) + ((indexStrategy == null) ? 0 : indexStrategy.hashCode());
+      result = (prime * result) + Arrays.hashCode(prefix);
       return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
+    public boolean equals(final Object obj) {
+      if (this == obj) {
         return true;
-      if (obj == null)
+      }
+      if (obj == null) {
         return false;
-      if (getClass() != obj.getClass())
+      }
+      if (getClass() != obj.getClass()) {
         return false;
-      SubStrategy other = (SubStrategy) obj;
+      }
+      final SubStrategy other = (SubStrategy) obj;
       if (indexStrategy == null) {
-        if (other.indexStrategy != null)
+        if (other.indexStrategy != null) {
           return false;
-      } else if (!indexStrategy.equals(other.indexStrategy))
+        }
+      } else if (!indexStrategy.equals(other.indexStrategy)) {
         return false;
-      if (!Arrays.equals(prefix, other.prefix))
+      }
+      if (!Arrays.equals(prefix, other.prefix)) {
         return false;
+      }
       return true;
     }
   }

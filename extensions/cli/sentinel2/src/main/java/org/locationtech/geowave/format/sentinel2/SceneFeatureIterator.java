@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -33,6 +31,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 
 public class SceneFeatureIterator implements SimpleFeatureIterator {
   private static final Logger LOGGER = LoggerFactory.getLogger(SceneFeatureIterator.class);
@@ -72,7 +72,7 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
    * @throws NoSuchAuthorityCodeException
    * @throws FactoryException
    */
-  public static SimpleFeatureTypeBuilder defaultSceneFeatureTypeBuilder(String typeName)
+  public static SimpleFeatureTypeBuilder defaultSceneFeatureTypeBuilder(final String typeName)
       throws NoSuchAuthorityCodeException, FactoryException {
     final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
     typeBuilder.setName(typeName);

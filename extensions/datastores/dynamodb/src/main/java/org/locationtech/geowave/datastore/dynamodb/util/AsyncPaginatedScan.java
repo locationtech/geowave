@@ -8,11 +8,6 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.util;
 
-import com.amazonaws.handlers.AsyncHandler;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,6 +15,11 @@ import java.util.Map;
 import org.apache.commons.collections4.iterators.LazyIteratorChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.amazonaws.handlers.AsyncHandler;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 
 public class AsyncPaginatedScan extends LazyIteratorChain<Map<String, AttributeValue>> {
   private static final Logger LOGGER = LoggerFactory.getLogger(AsyncPaginatedScan.class);

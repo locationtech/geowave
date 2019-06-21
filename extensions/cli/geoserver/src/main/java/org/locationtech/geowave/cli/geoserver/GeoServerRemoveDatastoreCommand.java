@@ -8,16 +8,16 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "rmds", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer DataStore")
@@ -26,7 +26,7 @@ public class GeoServerRemoveDatastoreCommand extends GeoServerRemoveCommand<Stri
   private String workspace;
 
   @Parameter(description = "<datastore name>")
-  private final List<String> parameters = new ArrayList<String>();
+  private final List<String> parameters = new ArrayList<>();
 
   private String datastoreName = null;
 
@@ -56,7 +56,7 @@ public class GeoServerRemoveDatastoreCommand extends GeoServerRemoveCommand<Stri
           + workspace
           + "' on GeoServer: OK";
     }
-    String errorMessage =
+    final String errorMessage =
         "Error deleting store '"
             + datastoreName
             + "' from workspace '"

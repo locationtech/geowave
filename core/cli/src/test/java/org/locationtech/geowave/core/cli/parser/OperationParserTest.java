@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.parser;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -20,25 +18,27 @@ import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.spi.OperationEntry;
 import org.locationtech.geowave.core.cli.spi.OperationRegistry;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class OperationParserTest {
   @Test
   public void testParseTopLevel() {
 
-    OperationEntry op1Entry = new OperationEntry(Op1.class);
-    OperationEntry op2Entry = new OperationEntry(Op2.class);
+    final OperationEntry op1Entry = new OperationEntry(Op1.class);
+    final OperationEntry op2Entry = new OperationEntry(Op2.class);
     op1Entry.addChild(op2Entry);
 
-    List<OperationEntry> entries = new ArrayList<OperationEntry>();
+    final List<OperationEntry> entries = new ArrayList<>();
     entries.add(op1Entry);
     entries.add(op2Entry);
 
-    OperationParser parser = new OperationParser(new OperationRegistry(entries));
+    final OperationParser parser = new OperationParser(new OperationRegistry(entries));
 
-    CommandLineOperationParams params =
+    final CommandLineOperationParams params =
         parser.parse(Op1.class, new String[] {"op", "--username", "user", "--password", "blah"});
 
-    Op2 op2 = (Op2) params.getOperationMap().get("op");
+    final Op2 op2 = (Op2) params.getOperationMap().get("op");
 
     Assert.assertEquals("blah", op2.args.passWord);
     Assert.assertEquals("user", op2.args.userName);
@@ -46,8 +46,8 @@ public class OperationParserTest {
 
   @Test
   public void testParseArgs() {
-    OperationParser parser = new OperationParser();
-    Args args = new Args();
+    final OperationParser parser = new OperationParser();
+    final Args args = new Args();
     parser.addAdditionalObject(args);
     parser.parse(new String[] {"--username", "user", "--password", "blah"});
     Assert.assertEquals("blah", args.passWord);
@@ -57,17 +57,17 @@ public class OperationParserTest {
   @Test
   public void testParseOperation() {
 
-    OperationEntry op1Entry = new OperationEntry(Op1.class);
-    OperationEntry op2Entry = new OperationEntry(Op2.class);
+    final OperationEntry op1Entry = new OperationEntry(Op1.class);
+    final OperationEntry op2Entry = new OperationEntry(Op2.class);
     op1Entry.addChild(op2Entry);
 
-    List<OperationEntry> entries = new ArrayList<OperationEntry>();
+    final List<OperationEntry> entries = new ArrayList<>();
     entries.add(op1Entry);
     entries.add(op2Entry);
 
-    OperationParser parser = new OperationParser(new OperationRegistry(entries));
+    final OperationParser parser = new OperationParser(new OperationRegistry(entries));
 
-    Op2 op2 = new Op2();
+    final Op2 op2 = new Op2();
 
     parser.parse(op2, new String[] {"--username", "user", "--password", "blah"});
 
@@ -91,9 +91,9 @@ public class OperationParserTest {
   public static class Op2 extends DefaultOperation implements Command {
 
     @ParametersDelegate
-    private Args args = new Args();
+    private final Args args = new Args();
 
     @Override
-    public void execute(OperationParams params) throws Exception {}
+    public void execute(final OperationParams params) throws Exception {}
   }
 }

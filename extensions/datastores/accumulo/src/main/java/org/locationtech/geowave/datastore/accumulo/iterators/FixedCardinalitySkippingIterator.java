@@ -17,7 +17,6 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
-import org.apache.accumulo.core.iterators.SkippingIterator;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.system.InterruptibleIterator;
 import org.apache.hadoop.io.Text;
@@ -27,7 +26,7 @@ import org.locationtech.geowave.core.index.IndexUtils;
  * This class is an Accumulo Iterator that can support skipping by a fixed cardinality on a Space
  * Filling Curve (skipping by incrementing a fixed bit position of the row ID).
  */
-public class FixedCardinalitySkippingIterator extends SkippingIterator implements
+public class FixedCardinalitySkippingIterator extends ExceptionHandlingSkippingIterator implements
     InterruptibleIterator {
   public static final String CARDINALITY_SKIPPING_ITERATOR_NAME = "CARDINALITY_SKIPPING_ITERATOR";
   public static final int CARDINALITY_SKIPPING_ITERATOR_PRIORITY = 35;
@@ -118,7 +117,7 @@ public class FixedCardinalitySkippingIterator extends SkippingIterator implement
   }
 
   @Override
-  protected void consume() throws IOException {
+  protected void consumeInternal() throws IOException {
     while (getSource().hasTop()
         && ((nextRow != null) && (getSource().getTopKey().getRow().compareTo(nextRow) < 0))) {
       // seek to the next column family in the sorted list of
@@ -130,8 +129,8 @@ public class FixedCardinalitySkippingIterator extends SkippingIterator implement
   private void reseek(final Key key) throws IOException {
     if (range.afterEndKey(key)) {
       if (!columnFamilies.isEmpty()) {
-        ByteSequence cf = columnFamilies.iterator().next();
-        Key endKeyWithCf = new Key(range.getEndKey().getRow(), new Text(cf.toArray()));
+        final ByteSequence cf = columnFamilies.iterator().next();
+        final Key endKeyWithCf = new Key(range.getEndKey().getRow(), new Text(cf.toArray()));
         range = new Range(endKeyWithCf, true, endKeyWithCf, range.isEndKeyInclusive());
       } else {
         range = new Range(range.getEndKey(), true, range.getEndKey(), range.isEndKeyInclusive());

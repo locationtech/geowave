@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.format.stanag4676;
 
-import com.google.common.io.BaseEncoding;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -44,13 +43,14 @@ import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.io.WKBWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.io.BaseEncoding;
 
 public class IngestMessageHandler implements ProcessMessage {
   private static final Logger LOGGER = LoggerFactory.getLogger(IngestMessageHandler.class);
   private final WKBWriter wkbWriter = new WKBWriter(3);
   private static final String DEFAULT_IMAGE_FORMAT = "jpg";
   private final List<KeyValueData<Text, Stanag4676EventWritable>> intermediateData =
-      new ArrayList<KeyValueData<Text, Stanag4676EventWritable>>();
+      new ArrayList<>();
 
   public IngestMessageHandler() {}
 
@@ -70,7 +70,7 @@ public class IngestMessageHandler implements ProcessMessage {
     }
 
     if (msg instanceof TrackMessage) {
-      TrackMessage trackMessage = (TrackMessage) msg;
+      final TrackMessage trackMessage = (TrackMessage) msg;
       for (final TrackEvent evt : trackMessage.getTracks()) {
         if (evt.getPoints().size() > 0) {
           final String trackUuid = evt.getUuid().toString();
@@ -97,8 +97,7 @@ public class IngestMessageHandler implements ProcessMessage {
             trackClassification = evt.getSecurity().getClassification().name();
           }
 
-          final TreeMap<Long, ImageChipInfo> timesWithImageChips =
-              new TreeMap<Long, ImageChipInfo>();
+          final TreeMap<Long, ImageChipInfo> timesWithImageChips = new TreeMap<>();
           final List<MotionImagery> images = evt.getMotionImages();
 
           // keep track of the minimum image size and use that to size
@@ -107,9 +106,9 @@ public class IngestMessageHandler implements ProcessMessage {
           int height = -1;
           for (final MotionImagery imagery : images) {
             try {
-              String imageChip = imagery.getImageChip();
+              final String imageChip = imagery.getImageChip();
               BufferedImage img = null;
-              if (imageChip != null && imageChip.length() > 0) {
+              if ((imageChip != null) && (imageChip.length() > 0)) {
                 final byte[] binary = BaseEncoding.base64().decode(imageChip);
                 final ImageInputStream stream =
                     ImageIO.createImageInputStream(new ByteArrayInputStream(binary));
@@ -161,7 +160,7 @@ public class IngestMessageHandler implements ProcessMessage {
             if ((pt.getSecurity() != null) && (pt.getSecurity().getClassification() != null)) {
               trackItemClassification = pt.getSecurity().getClassification().name();
             }
-            ModalityType mt = pt.getTrackPointSource();
+            final ModalityType mt = pt.getTrackPointSource();
             final String trackPointSource = (mt != null) ? mt.toString() : "";
             final double latitude = pt.getLocation().latitude;
             final double longitude = pt.getLocation().longitude;
@@ -176,7 +175,7 @@ public class IngestMessageHandler implements ProcessMessage {
             double detailLongitude = Stanag4676EventWritable.NO_DETAIL;
             double detailElevation = Stanag4676EventWritable.NO_DETAIL;
             byte[] detailGeometry = null;
-            if (pt.getDetail() != null && pt.getDetail().getLocation() != null) {
+            if ((pt.getDetail() != null) && (pt.getDetail().getLocation() != null)) {
               detailLatitude = pt.getDetail().getLocation().latitude;
               detailLongitude = pt.getDetail().getLocation().longitude;
               detailElevation = pt.getDetail().getLocation().elevation;
@@ -197,7 +196,7 @@ public class IngestMessageHandler implements ProcessMessage {
               frameNumber = chipInfo.getFrameNumber();
               imageBytes = chipInfo.getImageBytes();
             }
-            Stanag4676EventWritable sw = new Stanag4676EventWritable();
+            final Stanag4676EventWritable sw = new Stanag4676EventWritable();
             sw.setTrackPointData(
                 geometry,
                 detailGeometry,
@@ -224,8 +223,7 @@ public class IngestMessageHandler implements ProcessMessage {
                 pixelColumn,
                 frameNumber);
 
-            intermediateData.add(
-                new KeyValueData<Text, Stanag4676EventWritable>(new Text(trackUuid), sw));
+            intermediateData.add(new KeyValueData<>(new Text(trackUuid), sw));
           }
 
           for (final MotionEventPoint pt : evt.getMotionPoints().values()) {
@@ -245,7 +243,7 @@ public class IngestMessageHandler implements ProcessMessage {
             final double latitude = pt.getLocation().latitude;
             final double longitude = pt.getLocation().longitude;
             final double elevation = pt.getLocation().elevation;
-            ModalityType mt = pt.getTrackPointSource();
+            final ModalityType mt = pt.getTrackPointSource();
             final String trackPointSource = (mt != null) ? mt.toString() : "";
             final ImageChipInfo chipInfo = timesWithImageChips.get(timeStamp);
             int pixelRow = -1;
@@ -260,7 +258,7 @@ public class IngestMessageHandler implements ProcessMessage {
             }
             final String motionEvent = pt.motionEvent;
 
-            Stanag4676EventWritable sw = new Stanag4676EventWritable();
+            final Stanag4676EventWritable sw = new Stanag4676EventWritable();
             sw.setMotionPointData(
                 geometry,
                 imageBytes,
@@ -285,50 +283,49 @@ public class IngestMessageHandler implements ProcessMessage {
                 motionEvent);
 
             // motion events emitted, grouped by track
-            intermediateData.add(
-                new KeyValueData<Text, Stanag4676EventWritable>(new Text(trackUuid), sw));
+            intermediateData.add(new KeyValueData<>(new Text(trackUuid), sw));
           }
 
-          for (TrackClassification tc : evt.getClassifications()) {
-            long objectClassTime = tc.getTime();
-            String objectClass = tc.classification.toString();
-            int objectClassConf = tc.credibility.getValueConfidence();
-            int objectClassRel = tc.credibility.getSourceReliability();
+          for (final TrackClassification tc : evt.getClassifications()) {
+            final long objectClassTime = tc.getTime();
+            final String objectClass = tc.classification.toString();
+            final int objectClassConf = tc.credibility.getValueConfidence();
+            final int objectClassRel = tc.credibility.getSourceReliability();
 
-            Stanag4676EventWritable sw = new Stanag4676EventWritable();
+            final Stanag4676EventWritable sw = new Stanag4676EventWritable();
             sw.setTrackObjectClassData(
                 objectClassTime,
                 objectClass,
                 objectClassConf,
                 objectClassRel);
 
-            intermediateData.add(
-                new KeyValueData<Text, Stanag4676EventWritable>(new Text(trackUuid), sw));
+            intermediateData.add(new KeyValueData<>(new Text(trackUuid), sw));
           }
         }
       }
     }
 
     if (msg instanceof MissionSummaryMessage) {
-      MissionSummaryMessage missionSummaryMessage = (MissionSummaryMessage) msg;
-      MissionSummary missionSummary = missionSummaryMessage.getMissionSummary();
-      if (missionSummary != null && missionSummary.getCoverageArea() != null) {
-        Polygon missionPolygon = missionSummary.getCoverageArea().getPolygon();
+      final MissionSummaryMessage missionSummaryMessage = (MissionSummaryMessage) msg;
+      final MissionSummary missionSummary = missionSummaryMessage.getMissionSummary();
+      if ((missionSummary != null) && (missionSummary.getCoverageArea() != null)) {
+        final Polygon missionPolygon = missionSummary.getCoverageArea().getPolygon();
         final byte[] missionGeometry = wkbWriter.write(missionPolygon);
-        String missionUUID = missionSummary.getMissionId();
-        String missionName = missionSummary.getName();
-        int missionNumFrames = missionSummary.getFrames().size();
-        long missionStartTime = missionSummary.getStartTime();
-        long missionEndTime = missionSummary.getEndTime();
-        String missionClassification = missionSummary.getSecurity();
-        StringBuilder sb = new StringBuilder();
+        final String missionUUID = missionSummary.getMissionId();
+        final String missionName = missionSummary.getName();
+        final int missionNumFrames = missionSummary.getFrames().size();
+        final long missionStartTime = missionSummary.getStartTime();
+        final long missionEndTime = missionSummary.getEndTime();
+        final String missionClassification = missionSummary.getSecurity();
+        final StringBuilder sb = new StringBuilder();
         for (final ObjectClassification oc : missionSummary.getClassifications()) {
-          if (sb.length() > 0)
+          if (sb.length() > 0) {
             sb.append(",");
+          }
           sb.append(oc.toString());
         }
-        String activeObjectClass = sb.toString();
-        Stanag4676EventWritable msw = new Stanag4676EventWritable();
+        final String activeObjectClass = sb.toString();
+        final Stanag4676EventWritable msw = new Stanag4676EventWritable();
         msw.setMissionSummaryData(
             missionGeometry,
             missionUUID,
@@ -339,19 +336,17 @@ public class IngestMessageHandler implements ProcessMessage {
             missionClassification,
             activeObjectClass);
 
-        intermediateData.add(
-            new KeyValueData<Text, Stanag4676EventWritable>(new Text(missionUUID), msw));
+        intermediateData.add(new KeyValueData<>(new Text(missionUUID), msw));
 
-        for (MissionFrame frame : missionSummary.getFrames()) {
-          if (frame != null && frame.getCoverageArea() != null) {
-            Polygon framePolygon = frame.getCoverageArea().getPolygon();
+        for (final MissionFrame frame : missionSummary.getFrames()) {
+          if ((frame != null) && (frame.getCoverageArea() != null)) {
+            final Polygon framePolygon = frame.getCoverageArea().getPolygon();
             final byte[] frameGeometry = wkbWriter.write(framePolygon);
-            long frameTimeStamp = frame.getFrameTime();
-            int frameNumber = frame.getFrameNumber();
-            Stanag4676EventWritable fsw = new Stanag4676EventWritable();
+            final long frameTimeStamp = frame.getFrameTime();
+            final int frameNumber = frame.getFrameNumber();
+            final Stanag4676EventWritable fsw = new Stanag4676EventWritable();
             fsw.setMissionFrameData(frameGeometry, missionUUID, frameNumber, frameTimeStamp);
-            intermediateData.add(
-                new KeyValueData<Text, Stanag4676EventWritable>(new Text(missionUUID), fsw));
+            intermediateData.add(new KeyValueData<>(new Text(missionUUID), fsw));
           }
         }
       }

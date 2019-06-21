@@ -29,7 +29,7 @@ public class SwaggerResource extends ServerResource {
         (ServletContext) getContext().getAttributes().get("org.restlet.ext.servlet.ServletContext");
     final String realPath = servlet.getRealPath("/");
     final JacksonRepresentation<ApiDeclaration> result =
-        new JacksonRepresentation<ApiDeclaration>(
+        new JacksonRepresentation<>(
             new FileRepresentation(realPath + "swagger.json", MediaType.APPLICATION_JSON),
             ApiDeclaration.class);
     try {

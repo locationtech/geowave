@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.core.store.entities;
 
-import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import com.google.common.collect.Lists;
 
 public abstract class MergeableGeoWaveRow implements GeoWaveRow {
 

@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.adapter.vector.export;
 
-import com.beust.jcommander.Parameter;
 import java.io.File;
+import com.beust.jcommander.Parameter;
 
 public class VectorLocalExportOptions extends VectorExportOptions {
   @Parameter(names = "--outputFile", required = true)
@@ -19,7 +19,7 @@ public class VectorLocalExportOptions extends VectorExportOptions {
     return outputFile;
   }
 
-  public void setOutputFile(File outputFile) {
+  public void setOutputFile(final File outputFile) {
     this.outputFile = outputFile;
   }
 }

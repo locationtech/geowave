@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin.visibility;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 public class VisibilityManagementHelperTest {

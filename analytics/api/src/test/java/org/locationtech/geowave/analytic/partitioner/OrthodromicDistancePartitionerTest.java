@@ -89,7 +89,7 @@ public class OrthodromicDistancePartitionerTest {
     propertyManagement.store(PartitionParameters.Partition.GEOMETRIC_DISTANCE_UNIT, "m");
 
     final OrthodromicDistancePartitioner<SimpleFeature> partitioner =
-        new OrthodromicDistancePartitioner<SimpleFeature>();
+        new OrthodromicDistancePartitioner<>();
     final Configuration configuration = new Configuration();
     final Class<?> scope = OrthodromicDistancePartitionerTest.class;
     propertyManagement.setJobConfiguration(configuration, scope);

@@ -50,7 +50,7 @@ public class TestObjectSerialization implements Serialization<TestObject> {
     public TestObject deserialize(final TestObject t) throws IOException {
       final TestObjectWritable fw = new TestObjectWritable();
       fw.readFields(dataInput);
-      return (TestObject) fw.getObj();
+      return fw.getObj();
     }
 
     @Override

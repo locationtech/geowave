@@ -33,7 +33,7 @@ import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
 import org.locationtech.geowave.core.index.ByteArray;
 
 public class NNProcessorTest {
-  static Map<Integer, List<Integer>> expectedResults = new HashMap<Integer, List<Integer>>();
+  static Map<Integer, List<Integer>> expectedResults = new HashMap<>();
 
   @Before
   public void setupResults() {
@@ -48,7 +48,7 @@ public class NNProcessorTest {
   }
 
   NNProcessor<Integer, Integer> buildProcessor() {
-    return new NNProcessor<Integer, Integer>(new Partitioner<Object>() {
+    return new NNProcessor<>(new Partitioner<Object>() {
 
       /** */
       private static final long serialVersionUID = 1L;
@@ -95,9 +95,7 @@ public class NNProcessorTest {
 
       @Override
       public DistanceProfile<Integer> computeProfile(final Integer item1, final Integer item2) {
-        return new DistanceProfile<Integer>(
-            Math.abs(item1.doubleValue() - item2.doubleValue()),
-            item1);
+        return new DistanceProfile<>(Math.abs(item1.doubleValue() - item2.doubleValue()), item1);
       }
     }, 200, new PartitionData(new ByteArray(new byte[] {}), new ByteArray("123"), true));
   }
@@ -113,7 +111,7 @@ public class NNProcessorTest {
           final Integer value,
           final NeighborList<Integer> list) throws IOException, InterruptedException {
         final Iterator<Entry<ByteArray, Integer>> it = list.iterator();
-        final List<Integer> expectedResultSet = new ArrayList<Integer>(expectedResults.get(value));
+        final List<Integer> expectedResultSet = new ArrayList<>(expectedResults.get(value));
         assertNotNull(expectedResultSet);
         while (it.hasNext()) {
           final Integer result = it.next().getValue();
@@ -157,7 +155,7 @@ public class NNProcessorTest {
       public NeighborList<Integer> buildNeighborList(
           final ByteArray cnterId,
           final Integer center) {
-        return new DefaultNeighborList<Integer>();
+        return new DefaultNeighborList<>();
       }
     }, new CompleteNotifier<Integer>() {
 
@@ -190,7 +188,7 @@ public class NNProcessorTest {
       public NeighborList<Integer> buildNeighborList(
           final ByteArray cnterId,
           final Integer center) {
-        return new DefaultNeighborList<Integer>();
+        return new DefaultNeighborList<>();
       }
     }, notifier);
   }

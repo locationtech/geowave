@@ -21,7 +21,7 @@ public class TrackItem {
     return uuid;
   }
 
-  public void setUuid(UUID uuid) {
+  public void setUuid(final UUID uuid) {
     this.uuid = uuid;
   }
 
@@ -29,7 +29,7 @@ public class TrackItem {
     return security;
   }
 
-  public void setSecurity(Security security) {
+  public void setSecurity(final Security security) {
     this.security = security;
   }
 
@@ -37,7 +37,7 @@ public class TrackItem {
     return time;
   }
 
-  public void setTime(long time) {
+  public void setTime(final long time) {
     this.time = time;
   }
 
@@ -45,7 +45,7 @@ public class TrackItem {
     return source;
   }
 
-  public void setSource(String source) {
+  public void setSource(final String source) {
     this.source = source;
   }
 
@@ -53,7 +53,7 @@ public class TrackItem {
     return comment;
   }
 
-  public void setComment(String comment) {
+  public void setComment(final String comment) {
     this.comment = comment;
   }
 }

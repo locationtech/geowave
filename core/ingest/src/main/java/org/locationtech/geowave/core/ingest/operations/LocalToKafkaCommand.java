@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +20,17 @@ import org.locationtech.geowave.core.ingest.kafka.StageToKafkaDriver;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "localToKafka", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Stage supported files in local file system to a Kafka topic")
 public class LocalToKafkaCommand extends ServiceEnabledCommand<Void> {
 
   @Parameter(description = "<file or directory>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private KafkaProducerCommandLineOptions kafkaOptions = new KafkaProducerCommandLineOptions();
@@ -72,7 +72,7 @@ public class LocalToKafkaCommand extends ServiceEnabledCommand<Void> {
   }
 
   public void setParameters(final String fileOrDirectory) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(fileOrDirectory);
   }
 
@@ -118,7 +118,7 @@ public class LocalToKafkaCommand extends ServiceEnabledCommand<Void> {
         new StageToKafkaDriver(kafkaOptions, ingestPlugins, localInputOptions);
 
     // Config file
-    File configFile = getGeoWaveConfigFile(params);
+    final File configFile = getGeoWaveConfigFile(params);
 
     // Execute
     if (!driver.runOperation(inputPath, configFile)) {

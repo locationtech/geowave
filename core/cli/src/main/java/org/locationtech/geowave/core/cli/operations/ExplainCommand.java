@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.operations;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterDescription;
-import com.beust.jcommander.Parameters;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -22,6 +19,9 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterDescription;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "explain", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(
@@ -32,9 +32,9 @@ public class ExplainCommand extends DefaultOperation implements Command {
   private static Logger LOGGER = LoggerFactory.getLogger(ExplainCommand.class);
 
   @Override
-  public boolean prepare(OperationParams inputParams) {
+  public boolean prepare(final OperationParams inputParams) {
     super.prepare(inputParams);
-    CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
+    final CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
     params.setValidate(false);
     params.setAllowUnknown(true);
     // Prepared successfully.
@@ -42,17 +42,17 @@ public class ExplainCommand extends DefaultOperation implements Command {
   }
 
   @Override
-  public void execute(OperationParams inputParams) {
+  public void execute(final OperationParams inputParams) {
 
-    CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
+    final CommandLineOperationParams params = (CommandLineOperationParams) inputParams;
 
-    StringBuilder builder = new StringBuilder();
+    final StringBuilder builder = new StringBuilder();
 
     // Sort first
     String nextCommand = "geowave";
     JCommander commander = params.getCommander();
     while (commander != null) {
-      if (commander.getParameters() != null && commander.getParameters().size() > 0) {
+      if ((commander.getParameters() != null) && (commander.getParameters().size() > 0)) {
         builder.append("Command: ");
         builder.append(nextCommand);
         builder.append(" [options]");
@@ -84,9 +84,9 @@ public class ExplainCommand extends DefaultOperation implements Command {
    *
    * @param commander
    */
-  public static StringBuilder explainCommander(JCommander commander) {
+  public static StringBuilder explainCommander(final JCommander commander) {
 
-    StringBuilder builder = new StringBuilder();
+    final StringBuilder builder = new StringBuilder();
 
     builder.append(" ");
     builder.append(String.format("%1$20s", "VALUE"));
@@ -97,21 +97,20 @@ public class ExplainCommand extends DefaultOperation implements Command {
     builder.append("----------------------------------------------\n");
 
     // Sort first
-    SortedMap<String, ParameterDescription> parameterDescs =
-        new TreeMap<String, ParameterDescription>();
-    List<ParameterDescription> parameters = commander.getParameters();
-    for (ParameterDescription pd : parameters) {
+    final SortedMap<String, ParameterDescription> parameterDescs = new TreeMap<>();
+    final List<ParameterDescription> parameters = commander.getParameters();
+    for (final ParameterDescription pd : parameters) {
       parameterDescs.put(pd.getLongestName(), pd);
     }
 
     // Then output
-    for (ParameterDescription pd : parameterDescs.values()) {
+    for (final ParameterDescription pd : parameterDescs.values()) {
 
       Object value = null;
       try {
         // value = tEntry.getParam().get(tEntry.getObject());
         value = pd.getParameterized().get(pd.getObject());
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.warn("Unable to set value", e);
       }
 
@@ -122,8 +121,8 @@ public class ExplainCommand extends DefaultOperation implements Command {
         required = pd.getParameter().getDynamicParameter().required();
       }
 
-      String names = pd.getNames();
-      boolean assigned = pd.isAssigned();
+      final String names = pd.getNames();
+      final boolean assigned = pd.isAssigned();
 
       // Data we have:
       // required, assigned, value, names.
@@ -157,24 +156,25 @@ public class ExplainCommand extends DefaultOperation implements Command {
    * @return
    */
   @SuppressWarnings("unchecked")
-  public static StringBuilder explainMainParameter(JCommander commander) {
-    StringBuilder builder = new StringBuilder();
+  public static StringBuilder explainMainParameter(final JCommander commander) {
+    final StringBuilder builder = new StringBuilder();
 
-    ParameterDescription mainParameter = commander.getMainParameter();
+    final ParameterDescription mainParameter = commander.getMainParameter();
 
     // Output the main parameter.
     if (mainParameter != null) {
-      if (mainParameter.getDescription() != null && mainParameter.getDescription().length() > 0) {
+      if ((mainParameter.getDescription() != null)
+          && (mainParameter.getDescription().length() > 0)) {
         builder.append("Expects: ");
         builder.append(mainParameter.getDescription());
         builder.append("\n");
       }
 
-      boolean assigned = mainParameter.isAssigned();
+      final boolean assigned = mainParameter.isAssigned();
       builder.append("Specified: ");
-      List<String> mP =
+      final List<String> mP =
           (List<String>) mainParameter.getParameterized().get(mainParameter.getObject());
-      if (!assigned || mP.size() == 0) {
+      if (!assigned || (mP.size() == 0)) {
         builder.append("<none specified>");
       } else {
         builder.append(String.format("%n%s", StringUtils.join(mP, " ")));

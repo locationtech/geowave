@@ -8,19 +8,20 @@
  */
 package org.locationtech.geowave.core.store.query.options;
 
-import com.google.common.primitives.Bytes;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.primitives.Bytes;
 
 public class CommonQueryOptions implements Persistable {
   private static final Logger LOGGER = LoggerFactory.getLogger(CommonQueryOptions.class);
@@ -107,7 +108,7 @@ public class CommonQueryOptions implements Persistable {
       int i = 0;
       for (final Entry<HintKey<?>, Object> e : hints.entrySet()) {
         final byte[] keyBinary = e.getKey().toBinary();
-        ByteBuffer lengthBytes =
+        final ByteBuffer lengthBytes =
             ByteBuffer.allocate(VarintUtils.unsignedIntByteLength(keyBinary.length));
         VarintUtils.writeUnsignedInt(keyBinary.length, lengthBytes);
         hintsBinary[i] =
@@ -153,24 +154,21 @@ public class CommonQueryOptions implements Persistable {
     } else {
       this.limit = limit;
     }
-    int authLength = VarintUtils.readUnsignedInt(buf);
+    final int authLength = VarintUtils.readUnsignedInt(buf);
     if (authLength > 0) {
-      final byte[] authBytes = new byte[authLength];
-
-      buf.get(authBytes);
+      final byte[] authBytes = ByteArrayUtils.safeRead(buf, authLength);
       authorizations = StringUtils.stringsFromBinary(authBytes);
     } else {
       authorizations = new String[0];
     }
     final int hintsLength = VarintUtils.readUnsignedInt(buf);
+    ByteArrayUtils.verifyBufferSize(buf, hintsLength);
     final Map<HintKey<?>, Object> hints = new HashMap<>(hintsLength);
     for (int i = 0; i < hintsLength; i++) {
       final int l = VarintUtils.readUnsignedInt(buf);
-      final byte[] hBytes = new byte[l];
-      buf.get(hBytes);
+      final byte[] hBytes = ByteArrayUtils.safeRead(buf, l);
       final ByteBuffer hBuf = ByteBuffer.wrap(hBytes);
-      final byte[] keyBytes = new byte[VarintUtils.readUnsignedInt(hBuf)];
-      hBuf.get(keyBytes);
+      final byte[] keyBytes = ByteArrayUtils.safeRead(hBuf, VarintUtils.readUnsignedInt(hBuf));
       final HintKey<?> key = new HintKey<>();
       key.fromBinary(keyBytes);
       final byte[] vBytes = new byte[hBuf.remaining()];
@@ -184,33 +182,41 @@ public class CommonQueryOptions implements Persistable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + Arrays.hashCode(authorizations);
-    result = prime * result + ((hints == null) ? 0 : hints.hashCode());
-    result = prime * result + ((limit == null) ? 0 : limit.hashCode());
+    result = (prime * result) + Arrays.hashCode(authorizations);
+    result = (prime * result) + ((hints == null) ? 0 : hints.hashCode());
+    result = (prime * result) + ((limit == null) ? 0 : limit.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    CommonQueryOptions other = (CommonQueryOptions) obj;
-    if (!Arrays.equals(authorizations, other.authorizations))
+    }
+    final CommonQueryOptions other = (CommonQueryOptions) obj;
+    if (!Arrays.equals(authorizations, other.authorizations)) {
       return false;
+    }
     if (hints == null) {
-      if (other.hints != null)
+      if (other.hints != null) {
         return false;
-    } else if (!hints.equals(other.hints))
+      }
+    } else if (!hints.equals(other.hints)) {
       return false;
+    }
     if (limit == null) {
-      if (other.limit != null)
+      if (other.limit != null) {
         return false;
-    } else if (!limit.equals(other.limit))
+      }
+    } else if (!limit.equals(other.limit)) {
       return false;
+    }
     return true;
   }
 }

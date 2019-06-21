@@ -49,7 +49,7 @@ public class HBaseCellGenerator<T> {
     if ((rows != null) && (rows.length > 0)) {
       for (final GeoWaveRow row : rows) {
         for (final GeoWaveValue value : row.getFieldValues()) {
-          Cell cell =
+          final Cell cell =
               CellUtil.createCell(
                   GeoWaveKey.getCompositeId(row),
                   adapterId,

@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.server;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +19,10 @@ import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Function;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableSet;
 
 public class ServerSideOperationStore {
   private static final Logger LOGGER = LoggerFactory.getLogger(ServerSideOperationStore.class);
@@ -88,8 +88,8 @@ public class ServerSideOperationStore {
 
   private static class ServerSideOperationValue {
     private final ImmutableSet<ServerOpScope> scopes;
-    private byte[] classId;
-    private Map<String, String> options;
+    private final byte[] classId;
+    private final Map<String, String> options;
     private HBaseServerOp operation;
 
     public ServerSideOperationValue(

@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.core.geotime.ingest;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.Bias;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.BiasConverter;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.UnitConverter;
+import com.beust.jcommander.Parameter;
 
 public class SpatialTemporalOptions extends CommonSpatialOptions {
   protected static Unit DEFAULT_PERIODICITY = Unit.YEAR;
@@ -38,10 +38,10 @@ public class SpatialTemporalOptions extends CommonSpatialOptions {
   protected long maxDuplicates = -1;
 
   public Bias getBias() {
-    return this.bias;
+    return bias;
   }
 
   public long getMaxDuplicates() {
-    return this.maxDuplicates;
+    return maxDuplicates;
   }
 }

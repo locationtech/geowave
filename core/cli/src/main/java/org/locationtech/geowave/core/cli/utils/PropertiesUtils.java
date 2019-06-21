@@ -25,6 +25,10 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 public class PropertiesUtils implements Serializable {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesUtils.class);
 
   public static Properties fromFile(final String propertyFilePath) {
@@ -33,23 +37,24 @@ public class PropertiesUtils implements Serializable {
 
   public static Properties fromFile(final File propsFile) {
     Properties properties = null;
-    if (propsFile != null && propsFile.exists()) {
+    if ((propsFile != null) && propsFile.exists()) {
       properties = new Properties();
       try {
         // HP Fortify "Improper Resource Shutdown or Release" false
         // positive
         // FileInputStream is closed automatically below as a result of
         // isr.close();
-        InputStreamReader isr = new InputStreamReader(new FileInputStream(propsFile), "UTF-8");
+        final InputStreamReader isr =
+            new InputStreamReader(new FileInputStream(propsFile), "UTF-8");
         if (isr != null) {
           properties.load(isr);
           isr.close();
         }
-      } catch (FileNotFoundException fnfEx) {
+      } catch (final FileNotFoundException fnfEx) {
         LOGGER.error(
             "Specified properties file was not found: [" + fnfEx.getLocalizedMessage() + "]",
             fnfEx);
-      } catch (IOException ioEx) {
+      } catch (final IOException ioEx) {
         LOGGER.error(
             "Exception occurred loading specified properties file: ["
                 + ioEx.getLocalizedMessage()
@@ -83,8 +88,13 @@ public class PropertiesUtils implements Serializable {
   @SuppressWarnings({"rawtypes"})
   public PropertiesUtils(final Map properties) {
     this(new Getter() {
+      /**
+       *
+       */
+      private static final long serialVersionUID = 1L;
+
       @Override
-      public Object get(String name) {
+      public Object get(final String name) {
         return properties.get(name);
       }
     });
@@ -97,8 +107,13 @@ public class PropertiesUtils implements Serializable {
    */
   public PropertiesUtils(final Properties properties) {
     this(new Getter() {
+      /**
+       *
+       */
+      private static final long serialVersionUID = 1L;
+
       @Override
-      public Object get(String name) {
+      public Object get(final String name) {
         return properties != null ? properties.get(name) : null;
       }
     });
@@ -130,18 +145,19 @@ public class PropertiesUtils implements Serializable {
    * @param req Is this property required?
    * @return Value for property
    */
-  private Object getPropertyValue(String name, boolean req) throws IllegalArgumentException {
+  private Object getPropertyValue(final String name, final boolean req)
+      throws IllegalArgumentException {
     Object val = null;
     if (getter != null) {
       val = getter.get(name);
       // Treat empty strings as null
-      if (val != null && val instanceof String && ((String) val).isEmpty()) {
+      if ((val != null) && (val instanceof String) && ((String) val).isEmpty()) {
         val = null;
       }
       // HP Fortify "Privacy Violation" false positive
       // The information in the Properties file is not private or
       // sensitive
-      if (val == null && req) {
+      if ((val == null) && req) {
         throw new IllegalArgumentException("Missing required property: " + name);
       }
     }
@@ -158,8 +174,8 @@ public class PropertiesUtils implements Serializable {
    * @return Value from the property map
    * @throws IllegalArgumentException Thrown if no value is found
    */
-  public final <X> X get(String name, Class<X> clazz) throws IllegalArgumentException {
-    Object val = getPropertyValue(name, true);
+  public final <X> X get(final String name, final Class<X> clazz) throws IllegalArgumentException {
+    final Object val = getPropertyValue(name, true);
     return ValueConverter.convert(val, clazz);
   }
 
@@ -173,8 +189,8 @@ public class PropertiesUtils implements Serializable {
    * @param clazz Class for type X
    * @return Value from the property map
    */
-  public final <X> X get(String name, X def, Class<X> clazz) {
-    Object val = getPropertyValue(name, false);
+  public final <X> X get(final String name, final X def, final Class<X> clazz) {
+    final Object val = getPropertyValue(name, false);
     return (val == null) ? def : (X) ValueConverter.convert(val, clazz);
   }
 
@@ -193,7 +209,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to a string
    * @throws IllegalArgumentException
    */
-  public final String getString(String name) throws IllegalArgumentException {
+  public final String getString(final String name) throws IllegalArgumentException {
     return get(name, String.class);
   }
 
@@ -204,7 +220,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to a string
    */
-  public final String getString(String name, String def) {
+  public final String getString(final String name, final String def) {
     return get(name, def, String.class);
   }
 
@@ -215,7 +231,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to an integer
    * @throws IllegalArgumentException
    */
-  public final Integer getInt(String name) throws IllegalArgumentException {
+  public final Integer getInt(final String name) throws IllegalArgumentException {
     return get(name, Integer.class);
   }
 
@@ -226,7 +242,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to an integer
    */
-  public final Integer getInt(String name, Integer def) {
+  public final Integer getInt(final String name, final Integer def) {
     return get(name, def, Integer.class);
   }
 
@@ -237,7 +253,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to a long
    * @throws IllegalArgumentException
    */
-  public final Long getLong(String name) throws IllegalArgumentException {
+  public final Long getLong(final String name) throws IllegalArgumentException {
     return get(name, Long.class);
   }
 
@@ -248,7 +264,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to a long
    */
-  public final Long getLong(String name, Long def) {
+  public final Long getLong(final String name, final Long def) {
     return get(name, def, Long.class);
   }
 
@@ -259,7 +275,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to a float
    * @throws IllegalArgumentException
    */
-  public final Float getFloat(String name) throws IllegalArgumentException {
+  public final Float getFloat(final String name) throws IllegalArgumentException {
     return get(name, Float.class);
   }
 
@@ -270,7 +286,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to a float
    */
-  public final Float getFloat(String name, Float def) {
+  public final Float getFloat(final String name, final Float def) {
     return get(name, def, Float.class);
   }
 
@@ -281,7 +297,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to a double
    * @throws IllegalArgumentException
    */
-  public final Double getDouble(String name) throws IllegalArgumentException {
+  public final Double getDouble(final String name) throws IllegalArgumentException {
     return get(name, Double.class);
   }
 
@@ -292,7 +308,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to a double
    */
-  public final Double getDouble(String name, Double def) {
+  public final Double getDouble(final String name, final Double def) {
     return get(name, def, Double.class);
   }
 
@@ -303,7 +319,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to a BigInteger
    * @throws IllegalArgumentException
    */
-  public final BigInteger getBigInteger(String name) throws IllegalArgumentException {
+  public final BigInteger getBigInteger(final String name) throws IllegalArgumentException {
     return get(name, BigInteger.class);
   }
 
@@ -314,7 +330,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to a big integer
    */
-  public final BigInteger getBigInteger(String name, BigInteger def) {
+  public final BigInteger getBigInteger(final String name, final BigInteger def) {
     return get(name, def, BigInteger.class);
   }
 
@@ -325,7 +341,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to a big decimal
    * @throws IllegalArgumentException
    */
-  public final BigDecimal getBigDecimal(String name) throws IllegalArgumentException {
+  public final BigDecimal getBigDecimal(final String name) throws IllegalArgumentException {
     return get(name, BigDecimal.class);
   }
 
@@ -336,7 +352,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to a big decimal
    */
-  public final BigDecimal getBigDecimal(String name, BigDecimal def) {
+  public final BigDecimal getBigDecimal(final String name, final BigDecimal def) {
     return get(name, def, BigDecimal.class);
   }
 
@@ -347,7 +363,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to binary
    * @throws IllegalArgumentException
    */
-  public final Byte getByte(String name) throws IllegalArgumentException {
+  public final Byte getByte(final String name) throws IllegalArgumentException {
     return get(name, Byte.class);
   }
 
@@ -358,7 +374,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to binary
    */
-  public final Byte getByte(String name, Byte def) {
+  public final Byte getByte(final String name, final Byte def) {
     return get(name, def, Byte.class);
   }
 
@@ -369,7 +385,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to a boolean
    * @throws IllegalArgumentException
    */
-  public final Boolean getBoolean(String name) throws IllegalArgumentException {
+  public final Boolean getBoolean(final String name) throws IllegalArgumentException {
     return get(name, Boolean.class);
   }
 
@@ -380,7 +396,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to a boolean
    */
-  public final Boolean getBoolean(String name, Boolean def) {
+  public final Boolean getBoolean(final String name, final Boolean def) {
     return get(name, def, Boolean.class);
   }
 
@@ -391,7 +407,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to a URI
    * @throws IllegalArgumentException
    */
-  public final URI getURI(String name) throws IllegalArgumentException {
+  public final URI getURI(final String name) throws IllegalArgumentException {
     return get(name, URI.class);
   }
 
@@ -402,7 +418,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to a URI
    */
-  public final URI getURI(String name, URI def) {
+  public final URI getURI(final String name, final URI def) {
     return get(name, def, URI.class);
   }
 
@@ -413,7 +429,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to a URL
    * @throws IllegalArgumentException
    */
-  public final URL getURL(String name) throws IllegalArgumentException {
+  public final URL getURL(final String name) throws IllegalArgumentException {
     return get(name, URL.class);
   }
 
@@ -424,7 +440,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to a URL
    */
-  public final URL getURI(String name, URL def) {
+  public final URL getURI(final String name, final URL def) {
     return get(name, def, URL.class);
   }
 
@@ -435,7 +451,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to an array of strings
    * @throws IllegalArgumentException
    */
-  public final String[] getStringArray(String name) throws IllegalArgumentException {
+  public final String[] getStringArray(final String name) throws IllegalArgumentException {
     return get(name, String[].class);
   }
 
@@ -446,7 +462,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to an array of strings
    */
-  public final String[] getStringArray(String name, String[] def) {
+  public final String[] getStringArray(final String name, final String[] def) {
     return get(name, def, String[].class);
   }
 
@@ -457,7 +473,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to an array of integers
    * @throws IllegalArgumentException
    */
-  public final Integer[] getIntArray(String name) throws IllegalArgumentException {
+  public final Integer[] getIntArray(final String name) throws IllegalArgumentException {
     return get(name, Integer[].class);
   }
 
@@ -468,7 +484,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to an array of integers
    */
-  public final Integer[] getIntArray(String name, Integer[] def) {
+  public final Integer[] getIntArray(final String name, final Integer[] def) {
     return get(name, def, Integer[].class);
   }
 
@@ -479,7 +495,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to an array of long values
    * @throws IllegalArgumentException
    */
-  public final Long[] getLongArray(String name) throws IllegalArgumentException {
+  public final Long[] getLongArray(final String name) throws IllegalArgumentException {
     return get(name, Long[].class);
   }
 
@@ -490,7 +506,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to an array of long values
    */
-  public final Long[] getLongArray(String name, Long[] def) {
+  public final Long[] getLongArray(final String name, final Long[] def) {
     return get(name, def, Long[].class);
   }
 
@@ -501,7 +517,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to an array of float values
    * @throws IllegalArgumentException
    */
-  public final Float[] getFloatArray(String name) throws IllegalArgumentException {
+  public final Float[] getFloatArray(final String name) throws IllegalArgumentException {
     return get(name, Float[].class);
   }
 
@@ -512,7 +528,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to an array of float values
    */
-  public final Float[] getFloatArray(String name, Float[] def) {
+  public final Float[] getFloatArray(final String name, final Float[] def) {
     return get(name, def, Float[].class);
   }
 
@@ -523,7 +539,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to an array of double values
    * @throws IllegalArgumentException
    */
-  public final Double[] getDoubleArray(String name) throws IllegalArgumentException {
+  public final Double[] getDoubleArray(final String name) throws IllegalArgumentException {
     return get(name, Double[].class);
   }
 
@@ -534,7 +550,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to an array of double values
    */
-  public final Double[] getDoubleArray(String name, Double[] def) {
+  public final Double[] getDoubleArray(final String name, final Double[] def) {
     return get(name, def, Double[].class);
   }
 
@@ -545,7 +561,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to an array of big integers
    * @throws IllegalArgumentException
    */
-  public final BigInteger[] getBigIntegerArray(String name) throws IllegalArgumentException {
+  public final BigInteger[] getBigIntegerArray(final String name) throws IllegalArgumentException {
     return get(name, BigInteger[].class);
   }
 
@@ -557,7 +573,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to an array of big integers
    */
-  public final BigInteger[] getBigIntegerArray(String name, BigInteger[] def) {
+  public final BigInteger[] getBigIntegerArray(final String name, final BigInteger[] def) {
     return get(name, def, BigInteger[].class);
   }
 
@@ -568,7 +584,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to an array of big decimals
    * @throws IllegalArgumentException
    */
-  public final BigDecimal[] getBigDecimalArray(String name) throws IllegalArgumentException {
+  public final BigDecimal[] getBigDecimalArray(final String name) throws IllegalArgumentException {
     return get(name, BigDecimal[].class);
   }
 
@@ -580,7 +596,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to an array of big decimals
    */
-  public final BigDecimal[] getBigDecimalArray(String name, BigDecimal[] def) {
+  public final BigDecimal[] getBigDecimalArray(final String name, final BigDecimal[] def) {
     return get(name, def, BigDecimal[].class);
   }
 
@@ -591,7 +607,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to an array of URI's
    * @throws IllegalArgumentException
    */
-  public final URI[] getURIArray(String name) throws IllegalArgumentException {
+  public final URI[] getURIArray(final String name) throws IllegalArgumentException {
     return get(name, URI[].class);
   }
 
@@ -602,7 +618,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to an array of URI's
    */
-  public final URI[] getURIArray(String name, URI[] def) {
+  public final URI[] getURIArray(final String name, final URI[] def) {
     return get(name, def, URI[].class);
   }
 
@@ -613,7 +629,7 @@ public class PropertiesUtils implements Serializable {
    * @return Property value converted to an array of URI's
    * @throws IllegalArgumentException
    */
-  public final URI[] getURLArray(String name) throws IllegalArgumentException {
+  public final URI[] getURLArray(final String name) throws IllegalArgumentException {
     return get(name, URI[].class);
   }
 
@@ -624,7 +640,7 @@ public class PropertiesUtils implements Serializable {
    * @param def Default value to return if the map does not include the value
    * @return Property value converted to an array of URI's
    */
-  public final URI[] getURLArray(String name, URI[] def) {
+  public final URI[] getURLArray(final String name, final URI[] def) {
     return get(name, def, URI[].class);
   }
 }

@@ -33,7 +33,7 @@ public class SparkCommandLineOptions {
     return appName;
   }
 
-  public void setAppName(String appName) {
+  public void setAppName(final String appName) {
     this.appName = appName;
   }
 
@@ -41,7 +41,7 @@ public class SparkCommandLineOptions {
     return host;
   }
 
-  public void setHost(String host) {
+  public void setHost(final String host) {
     this.host = host;
   }
 
@@ -49,7 +49,7 @@ public class SparkCommandLineOptions {
     return master;
   }
 
-  public void setMaster(String master) {
+  public void setMaster(final String master) {
     this.master = master;
   }
 
@@ -57,7 +57,7 @@ public class SparkCommandLineOptions {
     return numExecutors;
   }
 
-  public void setNumExecutors(int numExecutors) {
+  public void setNumExecutors(final int numExecutors) {
     this.numExecutors = numExecutors;
   }
 
@@ -65,7 +65,7 @@ public class SparkCommandLineOptions {
     return numCores;
   }
 
-  public void setNumCores(int numCores) {
+  public void setNumCores(final int numCores) {
     this.numCores = numCores;
   }
 }

@@ -36,6 +36,7 @@ public class ClusterUnionList extends DBScanClusterList implements Cluster {
     super(center.getGeometry(), (int) center.getCount(), centerId, index);
   }
 
+  @Override
   protected long addAndFetchCount(
       final ByteArray id,
       final ClusterItem newInstance,
@@ -51,10 +52,12 @@ public class ClusterUnionList extends DBScanClusterList implements Cluster {
     }
   }
 
+  @Override
   public boolean isCompressed() {
     return true;
   }
 
+  @Override
   protected Geometry compress() {
     return clusterGeo;
   }
@@ -67,6 +70,7 @@ public class ClusterUnionList extends DBScanClusterList implements Cluster {
       this.index = index;
     }
 
+    @Override
     public NeighborList<ClusterItem> buildNeighborList(
         final ByteArray centerId,
         final ClusterItem center) {

@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.export;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +21,17 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "mrexport", parentOperation = VectorSection.class)
 @Parameters(commandDescription = "Export data using map-reduce")
 public class VectorMRExportCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<path to base directory to write to> <store name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private VectorMRExportOptions mrOptions = new VectorMRExportOptions();
@@ -39,35 +39,35 @@ public class VectorMRExportCommand extends DefaultOperation implements Command {
   private DataStorePluginOptions storeOptions = null;
 
   @Override
-  public void execute(OperationParams params) throws Exception {
+  public void execute(final OperationParams params) throws Exception {
     createRunner(params).runJob();
   }
 
-  public VectorMRExportJobRunner createRunner(OperationParams params) {
+  public VectorMRExportJobRunner createRunner(final OperationParams params) {
     // Ensure we have all the required arguments
     if (parameters.size() != 2) {
       throw new ParameterException(
           "Requires arguments: <path to base directory to write to> <store name>");
     }
 
-    String hdfsPath = parameters.get(0);
-    String storeName = parameters.get(1);
+    final String hdfsPath = parameters.get(0);
+    final String storeName = parameters.get(1);
 
     // Config file
-    File configFile = getGeoWaveConfigFile(params);
-    Properties configProperties = ConfigOptions.loadProperties(configFile);
-    String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
+    final File configFile = getGeoWaveConfigFile(params);
+    final Properties configProperties = ConfigOptions.loadProperties(configFile);
+    final String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
     // Attempt to load store.
     if (storeOptions == null) {
-      StoreLoader storeLoader = new StoreLoader(storeName);
+      final StoreLoader storeLoader = new StoreLoader(storeName);
       if (!storeLoader.loadFromConfig(configFile)) {
         throw new ParameterException("Cannot find store name: " + storeLoader.getStoreName());
       }
       storeOptions = storeLoader.getDataStorePlugin();
     }
 
-    VectorMRExportJobRunner vectorRunner =
+    final VectorMRExportJobRunner vectorRunner =
         new VectorMRExportJobRunner(storeOptions, mrOptions, hdfsHostPort, hdfsPath);
     return vectorRunner;
   }
@@ -76,17 +76,17 @@ public class VectorMRExportCommand extends DefaultOperation implements Command {
     return parameters;
   }
 
-  public void setParameters(String hdfsPath, String storeName) {
-    this.parameters = new ArrayList<String>();
-    this.parameters.add(hdfsPath);
-    this.parameters.add(storeName);
+  public void setParameters(final String hdfsPath, final String storeName) {
+    parameters = new ArrayList<>();
+    parameters.add(hdfsPath);
+    parameters.add(storeName);
   }
 
   public VectorMRExportOptions getMrOptions() {
     return mrOptions;
   }
 
-  public void setMrOptions(VectorMRExportOptions mrOptions) {
+  public void setMrOptions(final VectorMRExportOptions mrOptions) {
     this.mrOptions = mrOptions;
   }
 
@@ -94,7 +94,7 @@ public class VectorMRExportCommand extends DefaultOperation implements Command {
     return storeOptions;
   }
 
-  public void setStoreOptions(DataStorePluginOptions storeOptions) {
+  public void setStoreOptions(final DataStorePluginOptions storeOptions) {
     this.storeOptions = storeOptions;
   }
 }

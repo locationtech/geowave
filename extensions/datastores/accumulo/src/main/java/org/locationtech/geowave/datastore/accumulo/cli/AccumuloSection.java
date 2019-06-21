@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.datastore.accumulo.cli;
 
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "accumulo", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(commandDescription = "Utility operations to set accumulo splits and run a test server")

@@ -16,7 +16,7 @@ import java.util.List;
 import org.locationtech.geowave.core.index.VarintUtils;
 
 public class TemporalConstraints {
-  private LinkedList<TemporalRange> constraints = new LinkedList<TemporalRange>();
+  private LinkedList<TemporalRange> constraints = new LinkedList<>();
   private String name;
 
   public static final TemporalRange FULL_RANGE =
@@ -32,17 +32,17 @@ public class TemporalConstraints {
     constraints.clear();
   }
 
-  public TemporalConstraints(String name) {
+  public TemporalConstraints(final String name) {
     this.name = name;
   }
 
-  public TemporalConstraints(List<TemporalRange> ranges, String name) {
-    this.constraints.addAll(ranges);
+  public TemporalConstraints(final List<TemporalRange> ranges, final String name) {
+    constraints.addAll(ranges);
     this.name = name;
   }
 
-  public TemporalConstraints(TemporalRange range, String name) {
-    this.constraints.add(range);
+  public TemporalConstraints(final TemporalRange range, final String name) {
+    constraints.add(range);
     this.name = name;
   }
 
@@ -93,13 +93,13 @@ public class TemporalConstraints {
     return one.before(two) ? one : two;
   }
 
-  public Date getMinOr(final Date min, int exclusivityIncrement) {
+  public Date getMinOr(final Date min, final int exclusivityIncrement) {
     return (constraints.isEmpty()) ? min
         : exclusivityIncrement == 0 ? constraints.getFirst().getStartTime()
             : new Date(constraints.getFirst().getStartTime().getTime() + exclusivityIncrement);
   }
 
-  public Date getMaxOr(final Date max, int exclusivityIncrement) {
+  public Date getMaxOr(final Date max, final int exclusivityIncrement) {
     return (constraints.isEmpty()) ? max
         : exclusivityIncrement == 0 ? constraints.getLast().getEndTime()
             : new Date(constraints.getLast().getEndTime().getTime() + exclusivityIncrement);

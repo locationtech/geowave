@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.datastore.accumulo.cli.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import org.locationtech.geowave.core.cli.converters.PasswordConverter;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 /** Default, required options needed in order to execute any command for Accumulo. */
 public class AccumuloRequiredOptions extends StoreFactoryOptions {
@@ -58,12 +58,12 @@ public class AccumuloRequiredOptions extends StoreFactoryOptions {
   public AccumuloRequiredOptions() {}
 
   public AccumuloRequiredOptions(
-      String zookeeper,
-      String instance,
-      String user,
-      String password,
-      String gwNamespace,
-      AccumuloOptions additionalOptions) {
+      final String zookeeper,
+      final String instance,
+      final String user,
+      final String password,
+      final String gwNamespace,
+      final AccumuloOptions additionalOptions) {
     super(gwNamespace);
     this.zookeeper = zookeeper;
     this.instance = instance;

@@ -23,7 +23,7 @@ public class TrackMessage extends NATO4676Message {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(final Long id) {
     this.id = id;
   }
 
@@ -31,7 +31,7 @@ public class TrackMessage extends NATO4676Message {
     return uuid;
   }
 
-  public void setUuid(UUID uuid) {
+  public void setUuid(final UUID uuid) {
     this.uuid = uuid;
   }
 
@@ -39,22 +39,22 @@ public class TrackMessage extends NATO4676Message {
     return tracks;
   }
 
-  public void setTracks(List<TrackEvent> tracks) {
+  public void setTracks(final List<TrackEvent> tracks) {
     this.tracks = tracks;
   }
 
-  public void addTrackEvent(TrackEvent trkEvnt) {
+  public void addTrackEvent(final TrackEvent trkEvnt) {
     if (tracks == null) {
-      tracks = new ArrayList<TrackEvent>();
+      tracks = new ArrayList<>();
     }
     tracks.add(trkEvnt);
   }
 
-  public void setMissionId(String missionId) {
+  public void setMissionId(final String missionId) {
     this.missionId = missionId;
   }
 
   public String getMissionId() {
-    return this.missionId;
+    return missionId;
   }
 }

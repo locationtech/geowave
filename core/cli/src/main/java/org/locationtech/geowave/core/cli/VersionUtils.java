@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.cli;
 
-import com.beust.jcommander.JCommander;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.JCommander;
 
 public class VersionUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(VersionUtils.class);

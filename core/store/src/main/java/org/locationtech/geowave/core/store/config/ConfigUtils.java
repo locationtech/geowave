@@ -52,14 +52,14 @@ public class ConfigUtils {
    */
   public static ConfigOption[] createConfigOptionsFromJCommander(
       final Object createOptionsInstance,
-      boolean includeHidden) {
+      final boolean includeHidden) {
     ConfigOption[] opts = null;
     if (createOptionsInstance != null) {
       final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
       translator.addObject(createOptionsInstance);
       final JCommanderTranslationMap map = translator.translate();
       final Collection<TranslationEntry> entries = map.getEntries().values();
-      final List<ConfigOption> options = new ArrayList<ConfigOption>();
+      final List<ConfigOption> options = new ArrayList<>();
       for (final TranslationEntry entry : entries) {
         if (includeHidden || !entry.isHidden()) {
           final ConfigOption opt =
@@ -94,7 +94,7 @@ public class ConfigUtils {
   /** Take the given options and populate the given options list. This is JCommander specific. */
   public static Map<String, String> populateListFromOptions(
       final StoreFactoryOptions optionsObject) {
-    final Map<String, String> mapOptions = new HashMap<String, String>();
+    final Map<String, String> mapOptions = new HashMap<>();
     if (optionsObject != null) {
       final JCommanderPropertiesTransformer translator = new JCommanderPropertiesTransformer();
       translator.addObject(optionsObject);

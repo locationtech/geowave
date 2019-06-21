@@ -48,7 +48,7 @@ public class NoDataBySampleIndex implements NoDataMetadata {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int size = VarintUtils.readUnsignedInt(buf);
-    noDataIndexSet = new HashSet<SampleIndex>(size);
+    noDataIndexSet = new HashSet<>(size);
     for (int i = 0; i < size; i++) {
       final int x = VarintUtils.readUnsignedInt(buf);
       final int y = VarintUtils.readUnsignedInt(buf);

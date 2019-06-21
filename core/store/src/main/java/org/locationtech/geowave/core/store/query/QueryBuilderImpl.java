@@ -42,7 +42,7 @@ public class QueryBuilderImpl<T, R extends QueryBuilder<T, R>> extends
         return allTypes();
       }
       this.typeNames = typeNames;
-    } else if (typeNames == null || typeNames.length != 1) {
+    } else if ((typeNames == null) || (typeNames.length != 1)) {
       throw new IllegalStateException("Subsetting fields only allows for a single type name");
     } else {
       // we assume the user knows what they're doing and is choosing to

@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.service.rest;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.converters.NoConverter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -53,6 +49,10 @@ import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.converters.NoConverter;
 
 public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
   private static final Logger LOGGER =
@@ -100,8 +100,8 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
   }
 
   private Representation handleRequestWithPayload(
-      HttpMethod requiredMethod,
-      Representation request) {
+      final HttpMethod requiredMethod,
+      final Representation request) {
     // First check that the request is the requiredMethod, return 405 if
     // not.
     if (requiredMethod.equals(operation.getMethod())) {
@@ -111,7 +111,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
       if (checkMediaType(MediaType.APPLICATION_JSON, request)) {
         try {
           requestParameters = new RequestParametersJson(request);
-        } catch (IOException e) {
+        } catch (final IOException e) {
           setStatus(Status.SERVER_ERROR_INTERNAL);
           return null;
         }
@@ -150,18 +150,18 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
     for (final RestFieldValue f : fields) {
 
       Object objValue = null;
-      Class<?> type = f.getType();
-      Field field = f.getField();
-      final String strValue = (String) requestParameters.getString(f.getName());
+      final Class<?> type = f.getType();
+      final Field field = f.getField();
+      final String strValue = requestParameters.getString(f.getName());
 
       if (field.isAnnotationPresent(Parameter.class)) {
-        Class<? extends IStringConverter<?>> converter =
+        final Class<? extends IStringConverter<?>> converter =
             field.getAnnotation(Parameter.class).converter();
         if (converter != null) {
-          if (converter != NoConverter.class && strValue != null) {
+          if ((converter != NoConverter.class) && (strValue != null)) {
             try {
               objValue = converter.newInstance().convert(strValue);
-            } catch (InstantiationException e) {
+            } catch (final InstantiationException e) {
               LOGGER.warn(
                   "Cannot convert parameter since converter does not have zero argument constructor");
             }
@@ -236,8 +236,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
       rm.status = RestOperationStatusMessage.StatusType.ERROR;
       rm.message = "exception occurred";
       rm.data = e;
-      final JacksonRepresentation<RestOperationStatusMessage> rep =
-          new JacksonRepresentation<RestOperationStatusMessage>(rm);
+      final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<>(rm);
       return rep;
     }
 
@@ -254,7 +253,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
         rm.message = "exception occurred";
         rm.data = e;
         final JacksonRepresentation<RestOperationStatusMessage> rep =
-            new JacksonRepresentation<RestOperationStatusMessage>(rm);
+            new JacksonRepresentation<>(rm);
         return rep;
       }
 
@@ -268,8 +267,8 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
             (ConcurrentHashMap<String, Future>) appContext.getAttributes().get(
                 "asyncOperationStatuses");
 
-        Callable<T> task = () -> {
-          T res = operation.computeResults(params);
+        final Callable<T> task = () -> {
+          final T res = operation.computeResults(params);
           return res;
         };
         final Future<T> futureResult = opPool.submit(task);
@@ -285,8 +284,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
         rm.status = RestOperationStatusMessage.StatusType.COMPLETE;
         rm.data = result;
       }
-      final JacksonRepresentation<RestOperationStatusMessage> rep =
-          new JacksonRepresentation<RestOperationStatusMessage>(rm);
+      final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<>(rm);
       if (operation.successStatusIs200()) {
         setStatus(Status.SUCCESS_OK);
       } else {
@@ -299,8 +297,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
       rm.status = RestOperationStatusMessage.StatusType.ERROR;
       rm.message = e.getMessage();
       setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
-      final JacksonRepresentation<RestOperationStatusMessage> rep =
-          new JacksonRepresentation<RestOperationStatusMessage>(rm);
+      final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<>(rm);
       return rep;
     } catch (final ForbiddenException e) {
       LOGGER.error("Entered an error handling a request.", e);
@@ -308,8 +305,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
       rm.status = RestOperationStatusMessage.StatusType.ERROR;
       rm.message = e.getMessage();
       setStatus(Status.CLIENT_ERROR_FORBIDDEN);
-      final JacksonRepresentation<RestOperationStatusMessage> rep =
-          new JacksonRepresentation<RestOperationStatusMessage>(rm);
+      final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<>(rm);
       return rep;
     } catch (final TargetNotFoundException e) {
       LOGGER.error("Entered an error handling a request.", e);
@@ -317,8 +313,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
       rm.status = RestOperationStatusMessage.StatusType.ERROR;
       rm.message = e.getMessage();
       setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-      final JacksonRepresentation<RestOperationStatusMessage> rep =
-          new JacksonRepresentation<RestOperationStatusMessage>(rm);
+      final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<>(rm);
       return rep;
     } catch (final DuplicateEntryException | ParameterException e) {
       LOGGER.error("Entered an error handling a request.", e);
@@ -326,8 +321,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
       rm.status = RestOperationStatusMessage.StatusType.ERROR;
       rm.message = e.getMessage();
       setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-      final JacksonRepresentation<RestOperationStatusMessage> rep =
-          new JacksonRepresentation<RestOperationStatusMessage>(rm);
+      final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<>(rm);
       return rep;
     } catch (final Exception e) {
       LOGGER.error("Entered an error handling a request.", e);
@@ -336,8 +330,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
       rm.message = "exception occurred";
       rm.data = e;
       setStatus(Status.SERVER_ERROR_INTERNAL);
-      final JacksonRepresentation<RestOperationStatusMessage> rep =
-          new JacksonRepresentation<RestOperationStatusMessage>(rm);
+      final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<>(rm);
       return rep;
     }
   }
@@ -350,7 +343,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
    * @return true, if the MediaTypes match. --- OR false, if the MediaTypes do not match, or the
    *         request is null.
    */
-  private boolean checkMediaType(MediaType expectedType, Representation request) {
+  private boolean checkMediaType(final MediaType expectedType, final Representation request) {
     if (request == null) {
       return false;
     }

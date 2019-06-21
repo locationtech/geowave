@@ -29,7 +29,7 @@ public class HBaseFactoryHelper implements StoreFactoryHelper {
   public DataStoreOperations createOperations(final StoreFactoryOptions options) {
     try {
       return HBaseOperations.createOperations((HBaseRequiredOptions) options);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.error("Unable to create HBase operations from config options", e);
       return null;
     }

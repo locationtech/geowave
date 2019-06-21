@@ -28,7 +28,7 @@ public class ClusterNeighborList implements NeighborList<ClusterItem> {
       final Map<ByteArray, Cluster> index) {
     super();
     this.index = index;
-    this.id = centerId;
+    id = centerId;
     this.factory = factory;
     Cluster cluster = getCluster();
     if (cluster == null) {
@@ -48,7 +48,7 @@ public class ClusterNeighborList implements NeighborList<ClusterItem> {
 
   @Override
   public boolean add(
-      DistanceProfile<?> distanceProfile,
+      final DistanceProfile<?> distanceProfile,
       final ByteArray id,
       final ClusterItem value) {
     Cluster cluster = index.get(id);
@@ -84,8 +84,8 @@ public class ClusterNeighborList implements NeighborList<ClusterItem> {
     final NeighborListFactory<ClusterItem> factory;
 
     public ClusterNeighborListFactory(
-        NeighborListFactory<ClusterItem> factory,
-        Map<ByteArray, Cluster> index) {
+        final NeighborListFactory<ClusterItem> factory,
+        final Map<ByteArray, Cluster> index) {
       super();
       this.index = index;
       this.factory = factory;
@@ -96,7 +96,9 @@ public class ClusterNeighborList implements NeighborList<ClusterItem> {
     }
 
     @Override
-    public NeighborList<ClusterItem> buildNeighborList(ByteArray centerId, ClusterItem center) {
+    public NeighborList<ClusterItem> buildNeighborList(
+        final ByteArray centerId,
+        final ClusterItem center) {
       return new ClusterNeighborList(centerId, center, factory, index);
     }
   }

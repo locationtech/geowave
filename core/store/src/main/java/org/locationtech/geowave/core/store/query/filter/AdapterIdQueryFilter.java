@@ -25,8 +25,7 @@ public class AdapterIdQueryFilter implements QueryFilter {
   public boolean accept(
       final CommonIndexModel indexModel,
       final IndexedPersistenceEncoding persistenceEncoding) {
-    return (adapterId == null)
-        || adapterId.equals((Short) persistenceEncoding.getInternalAdapterId());
+    return (adapterId == null) || adapterId.equals(persistenceEncoding.getInternalAdapterId());
   }
 
   @Override

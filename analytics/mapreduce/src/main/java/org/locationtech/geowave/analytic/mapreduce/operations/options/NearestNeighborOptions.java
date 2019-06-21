@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.operations.options;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.analytic.param.OutputParameters;
 import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.analytic.param.annotations.OutputParameter;
 import org.locationtech.geowave.analytic.param.annotations.PartitionParameter;
+import com.beust.jcommander.Parameter;
 
 public class NearestNeighborOptions {
 
@@ -68,7 +68,7 @@ public class NearestNeighborOptions {
     return outputHdfsOutputPath;
   }
 
-  public void setOutputHdfsOutputPath(String outputHdfsOutputPath) {
+  public void setOutputHdfsOutputPath(final String outputHdfsOutputPath) {
     this.outputHdfsOutputPath = outputHdfsOutputPath;
   }
 
@@ -76,7 +76,7 @@ public class NearestNeighborOptions {
     return partitionMaxMemberSelection;
   }
 
-  public void setPartitionMaxMemberSelection(String partitionMaxMemberSelection) {
+  public void setPartitionMaxMemberSelection(final String partitionMaxMemberSelection) {
     this.partitionMaxMemberSelection = partitionMaxMemberSelection;
   }
 
@@ -84,7 +84,7 @@ public class NearestNeighborOptions {
     return partitionPartitionerClass;
   }
 
-  public void setPartitionPartitionerClass(String partitionPartitionerClass) {
+  public void setPartitionPartitionerClass(final String partitionPartitionerClass) {
     this.partitionPartitionerClass = partitionPartitionerClass;
   }
 
@@ -92,7 +92,7 @@ public class NearestNeighborOptions {
     return partitionMaxDistance;
   }
 
-  public void setPartitionMaxDistance(String partitionMaxDistance) {
+  public void setPartitionMaxDistance(final String partitionMaxDistance) {
     this.partitionMaxDistance = partitionMaxDistance;
   }
 
@@ -100,7 +100,8 @@ public class NearestNeighborOptions {
     return partitionSecondaryPartitionerClass;
   }
 
-  public void setPartitionSecondaryPartitionerClass(String partitionSecondaryPartitionerClass) {
+  public void setPartitionSecondaryPartitionerClass(
+      final String partitionSecondaryPartitionerClass) {
     this.partitionSecondaryPartitionerClass = partitionSecondaryPartitionerClass;
   }
 
@@ -108,7 +109,7 @@ public class NearestNeighborOptions {
     return partitionPartitionPrecision;
   }
 
-  public void setPartitionPartitionPrecision(String partitionPartitionPrecision) {
+  public void setPartitionPartitionPrecision(final String partitionPartitionPrecision) {
     this.partitionPartitionPrecision = partitionPartitionPrecision;
   }
 
@@ -116,7 +117,7 @@ public class NearestNeighborOptions {
     return partitioningDistanceThresholds;
   }
 
-  public void setPartitioningDistanceThresholds(String partitioningDistanceThresholds) {
+  public void setPartitioningDistanceThresholds(final String partitioningDistanceThresholds) {
     this.partitioningDistanceThresholds = partitioningDistanceThresholds;
   }
 
@@ -124,7 +125,7 @@ public class NearestNeighborOptions {
     return partitioningGeometricDistanceUnit;
   }
 
-  public void setPartitioningGeometricDistanceUnit(String partitioningGeometricDistanceUnit) {
+  public void setPartitioningGeometricDistanceUnit(final String partitioningGeometricDistanceUnit) {
     this.partitioningGeometricDistanceUnit = partitioningGeometricDistanceUnit;
   }
 }

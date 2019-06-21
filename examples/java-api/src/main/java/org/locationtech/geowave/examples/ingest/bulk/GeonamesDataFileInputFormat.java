@@ -26,8 +26,8 @@ public class GeonamesDataFileInputFormat extends FileInputFormat<LongWritable, T
 
   @Override
   public RecordReader<LongWritable, Text> createRecordReader(
-      InputSplit split,
-      TaskAttemptContext context) throws IOException, InterruptedException {
+      final InputSplit split,
+      final TaskAttemptContext context) throws IOException, InterruptedException {
     return new LineRecordReader();
   }
 }

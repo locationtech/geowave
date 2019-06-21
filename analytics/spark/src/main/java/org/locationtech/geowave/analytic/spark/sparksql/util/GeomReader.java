@@ -12,4 +12,9 @@ import java.io.Serializable;
 import org.locationtech.jts.io.WKBReader;
 
 public class GeomReader extends WKBReader implements Serializable {
+
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 }

@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.service.grpc.services;
 
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import io.grpc.BindableService;
-import io.grpc.stub.StreamObserver;
 import java.io.File;
 import java.util.Map;
 import org.locationtech.geowave.core.cli.api.OperationParams;
@@ -23,6 +20,9 @@ import org.locationtech.geowave.service.grpc.protobuf.CoreMapreduceGrpc.CoreMapr
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import io.grpc.BindableService;
+import io.grpc.stub.StreamObserver;
 
 public class GeoWaveGrpcCoreMapreduceService extends CoreMapreduceImplBase implements
     GeoWaveGrpcServiceSpi {
@@ -32,16 +32,16 @@ public class GeoWaveGrpcCoreMapreduceService extends CoreMapreduceImplBase imple
 
   @Override
   public BindableService getBindableService() {
-    return (BindableService) this;
+    return this;
   }
 
   @Override
   public void configHDFSCommand(
-      org.locationtech.geowave.service.grpc.protobuf.ConfigHDFSCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.ConfigHDFSCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos> responseObserver) {
 
-    ConfigHDFSCommand cmd = new ConfigHDFSCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final ConfigHDFSCommand cmd = new ConfigHDFSCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;

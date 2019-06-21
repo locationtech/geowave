@@ -63,7 +63,7 @@ public class GroupAssignmentMapReduce {
     protected ObjectWritable outputValWritable = new ObjectWritable();
     protected CentroidExtractor<Object> centroidExtractor;
     protected AnalyticItemWrapperFactory<Object> itemWrapperFactory;
-    private final Map<String, AtomicInteger> logCounts = new HashMap<String, AtomicInteger>();
+    private final Map<String, AtomicInteger> logCounts = new HashMap<>();
 
     @Override
     protected void mapNativeValue(
@@ -128,7 +128,7 @@ public class GroupAssignmentMapReduce {
 
       try {
         nestedGroupCentroidAssigner =
-            new NestedGroupCentroidAssignment<Object>(
+            new NestedGroupCentroidAssignment<>(
                 context,
                 GroupAssignmentMapReduce.class,
                 GroupAssignmentMapReduce.LOGGER);

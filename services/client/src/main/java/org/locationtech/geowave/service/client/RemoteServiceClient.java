@@ -21,7 +21,7 @@ public class RemoteServiceClient {
     this(baseUrl, null, null);
   }
 
-  public RemoteServiceClient(final String baseUrl, String user, String password) {
+  public RemoteServiceClient(final String baseUrl, final String user, final String password) {
 
     remoteService =
         WebResourceFactory.newResource(

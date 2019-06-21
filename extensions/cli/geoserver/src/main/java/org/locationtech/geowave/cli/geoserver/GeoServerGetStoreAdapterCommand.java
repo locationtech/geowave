@@ -8,26 +8,26 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "getsa", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Get GeoWave store adapters")
 public class GeoServerGetStoreAdapterCommand extends GeoServerCommand<List<String>> {
   @Parameter(description = "<store name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String storeName = null;
 
   @Override
   public void execute(final OperationParams params) throws Exception {
-    List<String> adapterList = computeResults(params);
+    final List<String> adapterList = computeResults(params);
 
     JCommander.getConsole().println("Store " + storeName + " has these adapters:");
     for (final String adapterId : adapterList) {

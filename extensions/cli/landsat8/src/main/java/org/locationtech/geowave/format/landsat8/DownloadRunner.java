@@ -89,7 +89,7 @@ public class DownloadRunner extends AnalyzeRunner {
   protected static File getDownloadTempFile(
       final SimpleFeature band,
       final String workspaceDirectory) {
-    File file = getDownloadFile(band, workspaceDirectory);
+    final File file = getDownloadFile(band, workspaceDirectory);
     return new File(file.getParentFile(), file.getName() + ".download");
   }
 

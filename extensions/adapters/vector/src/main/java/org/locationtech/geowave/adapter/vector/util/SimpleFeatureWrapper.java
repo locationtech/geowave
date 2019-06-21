@@ -48,131 +48,163 @@ public class SimpleFeatureWrapper implements SimpleFeature {
     return subStratIdx;
   }
 
+  @Override
   public FeatureId getIdentifier() {
     return simpleFeature.getIdentifier();
   }
 
+  @Override
   public AttributeDescriptor getDescriptor() {
     return simpleFeature.getDescriptor();
   }
 
+  @Override
   public BoundingBox getBounds() {
     return simpleFeature.getBounds();
   }
 
+  @Override
   public String getID() {
     return simpleFeature.getID();
   }
 
+  @Override
   public SimpleFeatureType getType() {
     return simpleFeature.getType();
   }
 
+  @Override
   public SimpleFeatureType getFeatureType() {
     return simpleFeature.getFeatureType();
   }
 
-  public void setValue(Object newValue) {
+  @Override
+  public void setValue(final Object newValue) {
     simpleFeature.setValue(newValue);
   }
 
+  @Override
   public List<Object> getAttributes() {
     return simpleFeature.getAttributes();
   }
 
+  @Override
   public GeometryAttribute getDefaultGeometryProperty() {
     return simpleFeature.getDefaultGeometryProperty();
   }
 
-  public void setValue(Collection<Property> values) {
+  @Override
+  public void setValue(final Collection<Property> values) {
     simpleFeature.setValue(values);
   }
 
-  public void setAttributes(List<Object> values) {
+  @Override
+  public void setAttributes(final List<Object> values) {
     simpleFeature.setAttributes(values);
   }
 
-  public void setDefaultGeometryProperty(GeometryAttribute geometryAttribute) {
+  @Override
+  public void setDefaultGeometryProperty(final GeometryAttribute geometryAttribute) {
     simpleFeature.setDefaultGeometryProperty(geometryAttribute);
   }
 
+  @Override
   public Collection<? extends Property> getValue() {
     return simpleFeature.getValue();
   }
 
-  public Collection<Property> getProperties(Name name) {
+  @Override
+  public Collection<Property> getProperties(final Name name) {
     return simpleFeature.getProperties(name);
   }
 
-  public void setAttributes(Object[] values) {
+  @Override
+  public void setAttributes(final Object[] values) {
     simpleFeature.setAttributes(values);
   }
 
+  @Override
   public Name getName() {
     return simpleFeature.getName();
   }
 
-  public Property getProperty(Name name) {
+  @Override
+  public Property getProperty(final Name name) {
     return simpleFeature.getProperty(name);
   }
 
-  public Object getAttribute(String name) {
+  @Override
+  public Object getAttribute(final String name) {
     return simpleFeature.getAttribute(name);
   }
 
+  @Override
   public boolean isNillable() {
     return simpleFeature.isNillable();
   }
 
+  @Override
   public Map<Object, Object> getUserData() {
     return simpleFeature.getUserData();
   }
 
-  public void setAttribute(String name, Object value) {
+  @Override
+  public void setAttribute(final String name, final Object value) {
     simpleFeature.setAttribute(name, value);
   }
 
-  public Collection<Property> getProperties(String name) {
+  @Override
+  public Collection<Property> getProperties(final String name) {
     return simpleFeature.getProperties(name);
   }
 
-  public Object getAttribute(Name name) {
+  @Override
+  public Object getAttribute(final Name name) {
     return simpleFeature.getAttribute(name);
   }
 
-  public void setAttribute(Name name, Object value) {
+  @Override
+  public void setAttribute(final Name name, final Object value) {
     simpleFeature.setAttribute(name, value);
   }
 
+  @Override
   public Collection<Property> getProperties() {
     return simpleFeature.getProperties();
   }
 
-  public Property getProperty(String name) {
+  @Override
+  public Property getProperty(final String name) {
     return simpleFeature.getProperty(name);
   }
 
-  public Object getAttribute(int index) throws IndexOutOfBoundsException {
+  @Override
+  public Object getAttribute(final int index) throws IndexOutOfBoundsException {
     return simpleFeature.getAttribute(index);
   }
 
-  public void setAttribute(int index, Object value) throws IndexOutOfBoundsException {
+  @Override
+  public void setAttribute(final int index, final Object value) throws IndexOutOfBoundsException {
     simpleFeature.setAttribute(index, value);
   }
 
+  @Override
   public void validate() throws IllegalAttributeException {
     simpleFeature.validate();
   }
 
+  @Override
   public int getAttributeCount() {
     return simpleFeature.getAttributeCount();
   }
 
+  @Override
   public Object getDefaultGeometry() {
     return simpleFeature.getDefaultGeometry();
   }
 
-  public void setDefaultGeometry(Object geometry) {
+  @Override
+  public void setDefaultGeometry(final Object geometry) {
     simpleFeature.setDefaultGeometry(geometry);
   }
 }

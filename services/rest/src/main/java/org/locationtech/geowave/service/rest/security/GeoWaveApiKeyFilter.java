@@ -28,12 +28,14 @@ public class GeoWaveApiKeyFilter extends GenericFilterBean {
    * to the API.
    */
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-      throws IOException, ServletException {
+  public void doFilter(
+      final ServletRequest request,
+      final ServletResponse response,
+      final FilterChain chain) throws IOException, ServletException {
 
     boolean validKeyFound = true;
     try {
-      final ServletContext servletContext = this.getServletContext();
+      final ServletContext servletContext = getServletContext();
       final ApplicationContext ac =
           WebApplicationContextUtils.getWebApplicationContext(servletContext);
       final GeoWaveBaseApiKeyDB dbBean = (GeoWaveBaseApiKeyDB) ac.getBean("apiKeyDB");
@@ -47,12 +49,13 @@ public class GeoWaveApiKeyFilter extends GenericFilterBean {
         LOGGER.error("apiKey is invalid");
         validKeyFound = false;
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Error: ", e.getMessage());
     }
 
-    if (!validKeyFound)
+    if (!validKeyFound) {
       return;
+    }
 
     chain.doFilter(request, response);
   }

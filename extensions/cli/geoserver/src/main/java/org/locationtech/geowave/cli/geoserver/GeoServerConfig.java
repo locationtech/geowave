@@ -8,7 +8,10 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.*;
+import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_PASS;
+import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_URL;
+import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_USER;
+import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_WORKSPACE;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -45,10 +48,10 @@ public class GeoServerConfig {
    *
    * @param propFile
    */
-  public GeoServerConfig(File propFile) {
+  public GeoServerConfig(final File propFile) {
     this.propFile = propFile;
 
-    if (propFile != null && propFile.exists()) {
+    if ((propFile != null) && propFile.exists()) {
       gsConfigProperties = ConfigOptions.loadProperties(propFile);
     } else {
       gsConfigProperties = new Properties();
@@ -79,7 +82,7 @@ public class GeoServerConfig {
         final File resourceTokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(propFile);
         // if password in config props is encrypted, need to decrypt it
         pass = SecurityUtils.decryptHexEncodedValue(pass, resourceTokenFile.getCanonicalPath());
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.error("An error occurred decrypting password: " + e.getLocalizedMessage(), e);
       }
     }
@@ -118,7 +121,7 @@ public class GeoServerConfig {
     }
   }
 
-  public void setUrl(String url) {
+  public void setUrl(final String url) {
     this.url = url;
   }
 
@@ -126,7 +129,7 @@ public class GeoServerConfig {
     return user;
   }
 
-  public void setUser(String user) {
+  public void setUser(final String user) {
     this.user = user;
   }
 
@@ -134,7 +137,7 @@ public class GeoServerConfig {
     return pass;
   }
 
-  public void setPass(String pass) {
+  public void setPass(final String pass) {
     this.pass = pass;
   }
 
@@ -142,7 +145,7 @@ public class GeoServerConfig {
     return workspace;
   }
 
-  public void setWorkspace(String workspace) {
+  public void setWorkspace(final String workspace) {
     this.workspace = workspace;
   }
 

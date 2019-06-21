@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.core.store.entities;
 
+import java.util.Iterator;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
-import java.util.Iterator;
 
 public class GeoWaveRowMergingIterator<T extends MergeableGeoWaveRow> implements Iterator<T> {
 

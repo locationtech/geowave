@@ -15,6 +15,11 @@ import org.locationtech.geowave.core.store.index.CommonIndexModel;
 /** Builds an index model with longitude and latitude. */
 public class SpatialIndexModelBuilder implements IndexModelBuilder {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
   public CommonIndexModel buildModel() {
     return new SpatialDimensionalityTypeProvider().createIndex(

@@ -8,11 +8,6 @@
  */
 package org.locationtech.geowave.cli.osm.operations;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +25,18 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "ingest", parentOperation = OSMSection.class)
 @Parameters(commandDescription = "Ingest and convert OSM data from HDFS to GeoWave")
 public class IngestOSMToGeoWaveCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<path to base directory to read from> <store name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private OSMIngestCommandArgs ingestOptions = new OSMIngestCommandArgs();
@@ -96,7 +96,7 @@ public class IngestOSMToGeoWaveCommand extends DefaultOperation implements Comma
   }
 
   public void setParameters(final String hdfsPath, final String storeName) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(hdfsPath);
     parameters.add(storeName);
   }
@@ -114,13 +114,13 @@ public class IngestOSMToGeoWaveCommand extends DefaultOperation implements Comma
   }
 
   public List<String> computeResults(final OperationParams params) throws Exception {
-    String basePath = parameters.get(0);
-    String inputStoreName = parameters.get(1);
+    final String basePath = parameters.get(0);
+    final String inputStoreName = parameters.get(1);
 
     // Config file
-    File configFile = getGeoWaveConfigFile(params);
-    Properties configProperties = ConfigOptions.loadProperties(configFile);
-    String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
+    final File configFile = getGeoWaveConfigFile(params);
+    final Properties configProperties = ConfigOptions.loadProperties(configFile);
+    final String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
     if (!inputStoreLoader.loadFromConfig(configFile)) {

@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.cli.debug;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.lang3.time.StopWatch;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
@@ -25,6 +23,8 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "bbox", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "bbox query")
@@ -44,7 +44,7 @@ public class BBOXQuery extends AbstractGeoWaveQuery {
   private Double south;
 
   @Parameter(names = {"--useAggregation", "-agg"}, description = "Compute count on the server side")
-  private final Boolean useAggregation = Boolean.FALSE;
+  private Boolean useAggregation = Boolean.FALSE;
 
   private Geometry geom;
 
@@ -59,7 +59,7 @@ public class BBOXQuery extends AbstractGeoWaveQuery {
       final String indexName,
       final DataStore dataStore,
       final boolean debug,
-      DataStorePluginOptions pluginOptions) {
+      final DataStorePluginOptions pluginOptions) {
     final StopWatch stopWatch = new StopWatch();
 
     getBoxGeom();

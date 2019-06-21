@@ -11,6 +11,7 @@ package org.locationtech.geowave.adapter.raster.adapter;
 import java.awt.image.DataBuffer;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.adapter.raster.util.DataBufferPersistenceUtils;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -66,8 +67,7 @@ public class RasterTile<T extends Persistable> implements Mergeable {
       final ByteBuffer buf = ByteBuffer.wrap(bytes);
       final int metadataLength = VarintUtils.readUnsignedInt(buf);
       if (metadataLength > 0) {
-        final byte[] metadataBytes = new byte[metadataLength];
-        buf.get(metadataBytes);
+        final byte[] metadataBytes = ByteArrayUtils.safeRead(buf, metadataLength);
         metadata = (T) PersistenceUtils.fromBinary(metadataBytes);
       }
       final byte[] dataBufferBytes = new byte[buf.remaining()];

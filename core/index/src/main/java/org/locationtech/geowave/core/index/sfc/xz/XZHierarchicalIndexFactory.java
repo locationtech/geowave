@@ -38,8 +38,8 @@ public class XZHierarchicalIndexFactory {
       final NumericDimensionDefinition[] baseDefinitions,
       final int[] maxBitsPerDimension,
       final SFCType sfcType,
-      Long maxEstimatedDuplicatedIds) {
-    TieredSFCIndexStrategy rasterStrategy =
+      final Long maxEstimatedDuplicatedIds) {
+    final TieredSFCIndexStrategy rasterStrategy =
         TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
             baseDefinitions,
             maxBitsPerDimension,

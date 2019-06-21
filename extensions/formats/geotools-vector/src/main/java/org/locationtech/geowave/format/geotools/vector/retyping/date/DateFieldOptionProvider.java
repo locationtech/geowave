@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.format.geotools.vector.retyping.date;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
 
 public class DateFieldOptionProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(DateFieldOptionProvider.class);
@@ -32,11 +32,11 @@ public class DateFieldOptionProvider {
   public static class StringToDateFieldConverter implements IStringConverter<Map<String, String>> {
     @Override
     public Map<String, String> convert(final String arg) {
-      Map<String, String> fieldToFormatMap = new HashMap<>();
+      final Map<String, String> fieldToFormatMap = new HashMap<>();
       if (arg != null) {
-        String[] values = arg.split(",");
+        final String[] values = arg.split(",");
         StringBuilder escapedStrs = new StringBuilder();
-        for (String entryRaw : values) {
+        for (final String entryRaw : values) {
           if (entryRaw.endsWith("\\")) {
             escapedStrs.append(entryRaw.substring(0, entryRaw.length() - 1) + ",");
           } else {

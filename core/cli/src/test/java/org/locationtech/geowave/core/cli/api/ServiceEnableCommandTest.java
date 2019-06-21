@@ -18,17 +18,17 @@ public class ServiceEnableCommandTest {
 
   private class ServiceEnabledCommand_TESTING extends ServiceEnabledCommand {
 
-    private HttpMethod method;
+    private final HttpMethod method;
 
-    public ServiceEnabledCommand_TESTING(HttpMethod method) {
+    public ServiceEnabledCommand_TESTING(final HttpMethod method) {
       this.method = method;
     }
 
     @Override
-    public void execute(OperationParams params) throws Exception {}
+    public void execute(final OperationParams params) throws Exception {}
 
     @Override
-    public Object computeResults(OperationParams params) throws Exception {
+    public Object computeResults(final OperationParams params) throws Exception {
       return null;
     }
 
@@ -47,7 +47,7 @@ public class ServiceEnableCommandTest {
   @Test
   public void defaultSuccessStatusIs200ForGET() {
 
-    ServiceEnabledCommand_TESTING classUnderTest =
+    final ServiceEnabledCommand_TESTING classUnderTest =
         new ServiceEnabledCommand_TESTING(HttpMethod.GET);
 
     Assert.assertEquals(true, classUnderTest.successStatusIs200());
@@ -56,7 +56,7 @@ public class ServiceEnableCommandTest {
   @Test
   public void defaultSuccessStatusIs201ForPOST() {
 
-    ServiceEnabledCommand_TESTING classUnderTest =
+    final ServiceEnabledCommand_TESTING classUnderTest =
         new ServiceEnabledCommand_TESTING(HttpMethod.POST);
 
     Assert.assertEquals(false, classUnderTest.successStatusIs200());

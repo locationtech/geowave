@@ -19,7 +19,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import jersey.repackaged.com.google.common.collect.Iterators;
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -47,6 +46,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jersey.repackaged.com.google.common.collect.Iterators;
 
 /*
  */

@@ -30,7 +30,13 @@ public class AccumuloRow implements GeoWaveRow {
   private GeoWaveValue[] fieldValues;
 
   private static class LatestFirstComparator implements Comparator<Long>, Serializable {
-    public int compare(Long ts1, Long ts2) {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public int compare(final Long ts1, final Long ts2) {
       return ts2.compareTo(ts1);
     }
   }
@@ -52,8 +58,8 @@ public class AccumuloRow implements GeoWaveRow {
     }
   }
 
-  private void setFieldValues(List<Map<Key, Value>> fieldValueMapList) {
-    List<GeoWaveValue> fieldValueList = new ArrayList();
+  private void setFieldValues(final List<Map<Key, Value>> fieldValueMapList) {
+    final List<GeoWaveValue> fieldValueList = new ArrayList();
 
     for (final Map<Key, Value> kvMap : fieldValueMapList) {
       for (final Entry<Key, Value> kv : kvMap.entrySet()) {
@@ -68,13 +74,14 @@ public class AccumuloRow implements GeoWaveRow {
     fieldValues = new GeoWaveValue[fieldValueList.size()];
     int i = 0;
 
-    for (GeoWaveValue gwValue : fieldValueList) {
+    for (final GeoWaveValue gwValue : fieldValueList) {
       fieldValues[i++] = gwValue;
     }
   }
 
   private void setTimeSortedFieldValues(final List<Map<Key, Value>> fieldValueMapList) {
-    SortedMap<Long, GeoWaveValue> fieldValueSortedMap = new TreeMap(new LatestFirstComparator());
+    final SortedMap<Long, GeoWaveValue> fieldValueSortedMap =
+        new TreeMap(new LatestFirstComparator());
 
     for (final Map<Key, Value> kvMap : fieldValueMapList) {
       for (final Entry<Key, Value> kv : kvMap.entrySet()) {
@@ -87,14 +94,14 @@ public class AccumuloRow implements GeoWaveRow {
       }
     }
 
-    Iterator it = fieldValueSortedMap.entrySet().iterator();
+    final Iterator it = fieldValueSortedMap.entrySet().iterator();
 
     fieldValues = new GeoWaveValue[fieldValueSortedMap.size()];
     int i = 0;
 
     while (it.hasNext()) {
-      Map.Entry entry = (Map.Entry) it.next();
-      GeoWaveValue gwValue = (GeoWaveValue) entry.getValue();
+      final Map.Entry entry = (Map.Entry) it.next();
+      final GeoWaveValue gwValue = (GeoWaveValue) entry.getValue();
       fieldValues[i++] = gwValue;
     }
   }

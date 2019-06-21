@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +30,10 @@ import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "localToMrGW", parentOperation = IngestSection.class)
 @Parameters(
@@ -42,7 +42,7 @@ public class LocalToMapReduceToGeowaveCommand extends ServiceEnabledCommand<Void
 
   @Parameter(
       description = "<file or directory> <path to base directory to write to> <store name> <comma delimited index/group list>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private VisibilityOptions ingestOptions = new VisibilityOptions();
@@ -102,7 +102,7 @@ public class LocalToMapReduceToGeowaveCommand extends ServiceEnabledCommand<Void
       final String pathToBaseDirectory,
       final String storeName,
       final String indexList) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(fileOrDirectory);
     parameters.add(pathToBaseDirectory);
     parameters.add(storeName);
@@ -157,14 +157,14 @@ public class LocalToMapReduceToGeowaveCommand extends ServiceEnabledCommand<Void
     }
 
     final String inputPath = parameters.get(0);
-    String basePath = parameters.get(1);
-    String inputStoreName = parameters.get(2);
-    String indexList = parameters.get(3);
+    final String basePath = parameters.get(1);
+    final String inputStoreName = parameters.get(2);
+    final String indexList = parameters.get(3);
 
     // Config file
-    File configFile = getGeoWaveConfigFile(params);
-    Properties configProperties = ConfigOptions.loadProperties(configFile);
-    String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
+    final File configFile = getGeoWaveConfigFile(params);
+    final Properties configProperties = ConfigOptions.loadProperties(configFile);
+    final String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
     if (!inputStoreLoader.loadFromConfig(configFile)) {

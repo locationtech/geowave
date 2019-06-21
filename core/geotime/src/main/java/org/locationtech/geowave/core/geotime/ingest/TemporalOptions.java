@@ -47,15 +47,15 @@ public class TemporalOptions implements DimensionalityTypeOptions {
     return !noTimeRanges;
   }
 
-  public void setPeriodicity(Unit periodicity) {
+  public void setPeriodicity(final Unit periodicity) {
     this.periodicity = periodicity;
   }
 
-  public void setNoTimeRanges(boolean noTimeRanges) {
+  public void setNoTimeRanges(final boolean noTimeRanges) {
     this.noTimeRanges = noTimeRanges;
   }
 
-  public void setMaxDuplicates(long maxDuplicates) {
+  public void setMaxDuplicates(final long maxDuplicates) {
     this.maxDuplicates = maxDuplicates;
   }
 }

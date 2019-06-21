@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -21,6 +19,8 @@ import org.locationtech.geowave.core.store.ingest.AbstractLocalFileDriver;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
 
 /**
  * This class actually executes the staging of data to a Kafka topic based on the available type
@@ -34,9 +34,9 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
   private final KafkaProducerCommandLineOptions kafkaOptions;
 
   public StageToKafkaDriver(
-      KafkaProducerCommandLineOptions kafkaOptions,
-      Map<String, GeoWaveAvroFormatPlugin<?, ?>> ingestPlugins,
-      LocalInputCommandLineOptions localOptions) {
+      final KafkaProducerCommandLineOptions kafkaOptions,
+      final Map<String, GeoWaveAvroFormatPlugin<?, ?>> ingestPlugins,
+      final LocalInputCommandLineOptions localOptions) {
     super(localOptions);
     this.kafkaOptions = kafkaOptions;
     this.ingestPlugins = ingestPlugins;
@@ -55,8 +55,7 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
       try (final CloseableIterator<?> avroRecords = plugin.toAvroObjects(file)) {
         while (avroRecords.hasNext()) {
           final Object avroRecord = avroRecords.next();
-          final KeyedMessage<String, Object> data =
-              new KeyedMessage<String, Object>(typeName, avroRecord);
+          final KeyedMessage<String, Object> data = new KeyedMessage<>(typeName, avroRecord);
           producer.send(data);
         }
       }
@@ -67,12 +66,12 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
     }
   }
 
-  public boolean runOperation(String inputPath, File configFile) {
+  public boolean runOperation(final String inputPath, final File configFile) {
 
     final Map<String, GeoWaveAvroFormatPlugin<?, ?>> stageToKafkaPlugins = ingestPlugins;
 
     try {
-      final StageKafkaData<T> runData = new StageKafkaData<T>(kafkaOptions.getProperties());
+      final StageKafkaData<T> runData = new StageKafkaData<>(kafkaOptions.getProperties());
       processInput(inputPath, configFile, stageToKafkaPlugins, runData);
       runData.close();
       return true;

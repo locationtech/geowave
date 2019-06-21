@@ -82,7 +82,7 @@ public class FilterToCQLToolTest {
     testFilter(FilterToCQLTool.toFilter("DWITHIN(geom, POINT(-122.7668 0.4979), 233.7, meters)"));
   }
 
-  public void testFilter(Filter gtFilter) {
+  public void testFilter(final Filter gtFilter) {
 
     final SimpleFeature newFeature =
         FeatureDataUtils.buildFeature(

@@ -30,14 +30,14 @@ import org.openstreetmap.osmosis.xml.v0_6.XmlReader;
 public class OsmXmlLoader implements Sink {
 
   /** All nodes in this OSM XML */
-  protected final List<Node> nodes = new LinkedList<Node>();
+  protected final List<Node> nodes = new LinkedList<>();
   /** All ways in this OSM XML */
-  protected final List<Way> ways = new LinkedList<Way>();
+  protected final List<Way> ways = new LinkedList<>();
   /** All relations in this OSM XML */
-  protected final List<Relation> relations = new LinkedList<Relation>();
+  protected final List<Relation> relations = new LinkedList<>();
 
   /** Mapping: Node ID -> Node object. Useful to resolve Way -> Node dependencies */
-  protected Map<Long, Node> nodeById = new HashMap<Long, Node>();
+  protected Map<Long, Node> nodeById = new HashMap<>();
 
   // getters
 
@@ -53,18 +53,18 @@ public class OsmXmlLoader implements Sink {
     return relations;
   }
 
-  public Node getNodeById(long id) {
+  public Node getNodeById(final long id) {
     return nodeById.get(id);
   }
 
-  public Node getNodeById(WayNode wayNode) {
+  public Node getNodeById(final WayNode wayNode) {
     return nodeById.get(wayNode.getNodeId());
   }
 
-  public List<Node> getNodesById(Way way) throws IOException {
-    List<Node> wayNodes = new ArrayList<Node>(way.getWayNodes().size());
-    for (WayNode wn : way.getWayNodes()) {
-      Node n = getNodeById(wn);
+  public List<Node> getNodesById(final Way way) throws IOException {
+    final List<Node> wayNodes = new ArrayList<>(way.getWayNodes().size());
+    for (final WayNode wn : way.getWayNodes()) {
+      final Node n = getNodeById(wn);
       if (n == null) {
         throw new IOException(
             String.format(
@@ -81,17 +81,17 @@ public class OsmXmlLoader implements Sink {
   // Sink implementation
 
   @Override
-  public void process(EntityContainer entityContainer) {
-    Entity entity = entityContainer.getEntity();
+  public void process(final EntityContainer entityContainer) {
+    final Entity entity = entityContainer.getEntity();
     if (entity instanceof Node) {
-      Node node = (Node) entity;
-      this.nodes.add(node);
-      this.nodeById.put(node.getId(), node);
+      final Node node = (Node) entity;
+      nodes.add(node);
+      nodeById.put(node.getId(), node);
     } else if (entity instanceof Way) {
-      Way way = (Way) entity;
+      final Way way = (Way) entity;
       ways.add(way);
     } else if (entity instanceof Relation) {
-      Relation rel = (Relation) entity;
+      final Relation rel = (Relation) entity;
       relations.add(rel);
     }
   }
@@ -104,7 +104,7 @@ public class OsmXmlLoader implements Sink {
   }
 
   @Override
-  public void initialize(Map<String, Object> metaData) {
+  public void initialize(final Map<String, Object> metaData) {
     /* unused */
   }
 
@@ -120,10 +120,10 @@ public class OsmXmlLoader implements Sink {
 
   // Instantiation
 
-  public static OsmXmlLoader readOsmXml(File osmxml) {
+  public static OsmXmlLoader readOsmXml(final File osmxml) {
 
     // Defines the interface for tasks consuming OSM data types.
-    OsmXmlLoader sink = new OsmXmlLoader();
+    final OsmXmlLoader sink = new OsmXmlLoader();
 
     // compression (if any)
     CompressionMethod compression = CompressionMethod.None;
@@ -134,7 +134,7 @@ public class OsmXmlLoader implements Sink {
     }
 
     // read source file (into sink)
-    XmlReader reader = new XmlReader(osmxml, false, compression);
+    final XmlReader reader = new XmlReader(osmxml, false, compression);
     reader.setSink(sink);
     reader.run(); // just run, no threading
 
@@ -143,7 +143,7 @@ public class OsmXmlLoader implements Sink {
 
   // print helpers
 
-  public static void print(Node node) {
+  public static void print(final Node node) {
     System.out.format(
         "%s: %10s (%-10s, %-10s), version %2s by %s%n",
         "Node",
@@ -155,7 +155,7 @@ public class OsmXmlLoader implements Sink {
     printTags(node.getTags());
   }
 
-  public static void print(Way way) {
+  public static void print(final Way way) {
     System.out.format(
         "%s: %10s, version %2s by %s with %s waypoints%n",
         "Way",
@@ -166,15 +166,15 @@ public class OsmXmlLoader implements Sink {
     printTags(way.getTags());
   }
 
-  public static void printTags(Collection<Tag> tags) {
+  public static void printTags(final Collection<Tag> tags) {
     if (tags.size() > 0) {
       System.out.format("\tTags: %s%n", formatTags(tags));
     }
   }
 
-  public static String formatTags(Collection<Tag> tags) {
-    StringBuilder sb = new StringBuilder(tags.size() * 20);
-    for (Tag tag : tags) {
+  public static String formatTags(final Collection<Tag> tags) {
+    final StringBuilder sb = new StringBuilder(tags.size() * 20);
+    for (final Tag tag : tags) {
       sb.append(", ");
       sb.append(tag.getKey());
       sb.append('=');

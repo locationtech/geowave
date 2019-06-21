@@ -32,14 +32,14 @@ public enum TrackEnvironment {
   private String value;
 
   TrackEnvironment() {
-    this.value = TrackEnvironment.values()[0].toString();
+    value = TrackEnvironment.values()[0].toString();
   }
 
   TrackEnvironment(final String value) {
     this.value = value;
   }
 
-  public static TrackEnvironment fromString(String value) {
+  public static TrackEnvironment fromString(final String value) {
     for (final TrackEnvironment item : TrackEnvironment.values()) {
       if (item.toString().equals(value)) {
         return item;

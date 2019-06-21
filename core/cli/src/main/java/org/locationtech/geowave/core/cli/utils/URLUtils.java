@@ -25,7 +25,7 @@ public class URLUtils {
       if (isValidURL(url)) {
         return url;
       }
-      boolean valid = isValidScheme(url);
+      final boolean valid = isValidScheme(url);
 
       if (!valid) {
         url = HTTP + "://" + url;
@@ -74,31 +74,31 @@ public class URLUtils {
    * @param url url to validate
    * @return true if valid, false otherwise
    */
-  private static boolean isValidURL(String url) {
+  private static boolean isValidURL(final String url) {
     URL targetURL = null;
     try {
       targetURL = new URL(url);
-    } catch (MalformedURLException e) {
+    } catch (final MalformedURLException e) {
       return false;
     }
 
     try {
       targetURL.toURI();
-    } catch (URISyntaxException e) {
+    } catch (final URISyntaxException e) {
       return false;
     }
     return true;
   }
 
-  private static boolean isValidScheme(String url) {
-    int ix = url.indexOf("://");
+  private static boolean isValidScheme(final String url) {
+    final int ix = url.indexOf("://");
     if (ix == -1) {
       return false;
     }
 
-    String inputScheme = url.substring(0, ix);
+    final String inputScheme = url.substring(0, ix);
 
-    for (String scheme : getSchemes()) {
+    for (final String scheme : getSchemes()) {
       if (inputScheme.equalsIgnoreCase(scheme)) {
         return true;
       }
@@ -113,7 +113,7 @@ public class URLUtils {
   }
 
   /** @param schemes the schemes to set */
-  public static void setSchemes(String[] schemes) {
+  public static void setSchemes(final String[] schemes) {
     URLUtils.schemes = schemes;
   }
 }

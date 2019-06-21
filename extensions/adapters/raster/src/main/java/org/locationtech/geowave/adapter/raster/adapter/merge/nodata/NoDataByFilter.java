@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
@@ -64,7 +65,7 @@ public class NoDataByFilter implements NoDataMetadata {
     final byte[] noDataBinary;
     if ((noDataPerBand != null) && (noDataPerBand.length > 0)) {
       int totalBytes = 0;
-      final List<byte[]> noDataValuesBytes = new ArrayList<byte[]>(noDataPerBand.length);
+      final List<byte[]> noDataValuesBytes = new ArrayList<>(noDataPerBand.length);
       for (final double[] noDataValues : noDataPerBand) {
         final int thisBytes =
             VarintUtils.unsignedIntByteLength(noDataValues.length) + (noDataValues.length * 8);
@@ -107,23 +108,25 @@ public class NoDataByFilter implements NoDataMetadata {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int noDataBinaryLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] geometryBinary =
-        new byte[bytes.length
-            - noDataBinaryLength
-            - VarintUtils.unsignedIntByteLength(noDataBinaryLength)];
+    final int geometryBinaryLength =
+        bytes.length - noDataBinaryLength - VarintUtils.unsignedIntByteLength(noDataBinaryLength);
     if (noDataBinaryLength == 0) {
       noDataPerBand = new double[][] {};
     } else {
-      noDataPerBand = new double[VarintUtils.readUnsignedInt(buf)][];
+      final int numBands = VarintUtils.readUnsignedInt(buf);
+      ByteArrayUtils.verifyBufferSize(buf, numBands);
+      noDataPerBand = new double[numBands][];
       for (int b = 0; b < noDataPerBand.length; b++) {
-        noDataPerBand[b] = new double[VarintUtils.readUnsignedInt(buf)];
+        final int bandLength = VarintUtils.readUnsignedInt(buf);
+        ByteArrayUtils.verifyBufferSize(buf, bandLength);
+        noDataPerBand[b] = new double[bandLength];
         for (int i = 0; i < noDataPerBand[b].length; i++) {
           noDataPerBand[b][i] = buf.getDouble();
         }
       }
     }
-    if (geometryBinary.length > 0) {
-      buf.get(geometryBinary);
+    if (geometryBinaryLength > 0) {
+      final byte[] geometryBinary = ByteArrayUtils.safeRead(buf, geometryBinaryLength);
       shape =
           GeometryUtils.geometryFromBinary(geometryBinary, GeometryUtils.MAX_GEOMETRY_PRECISION);
     } else {

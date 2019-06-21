@@ -21,7 +21,7 @@ public class GeoServerServiceClient {
     this(baseUrl, null, null);
   }
 
-  public GeoServerServiceClient(final String baseUrl, String user, String password) {
+  public GeoServerServiceClient(final String baseUrl, final String user, final String password) {
     // ClientBuilder bldr = ClientBuilder.newBuilder();
     // if (user != null && password != null) {
     // HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(

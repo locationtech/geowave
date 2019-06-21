@@ -70,8 +70,7 @@ public class CompoundIndexStrategy implements NumericIndexStrategy {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int delegateBinary1Length = VarintUtils.readUnsignedInt(buf);
-    final byte[] delegateBinary1 = new byte[delegateBinary1Length];
-    buf.get(delegateBinary1);
+    final byte[] delegateBinary1 = ByteArrayUtils.safeRead(buf, delegateBinary1Length);
     final byte[] delegateBinary2 = new byte[buf.remaining()];
     buf.get(delegateBinary2);
     subStrategy1 = (PartitionIndexStrategy) PersistenceUtils.fromBinary(delegateBinary1);

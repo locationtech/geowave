@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.data.field.base;
 
 import java.nio.ByteBuffer;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.ArrayReader;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -32,12 +33,13 @@ public class IntegerArraySerializationProvider implements FieldSerializationProv
   // @see PrimitiveIntArraySerializationProvider#PrimitiveIntArrayReader
   private static class IntegerArrayReader implements FieldReader<Integer[]> {
     @Override
-    public Integer[] readField(byte[] fieldData) {
+    public Integer[] readField(final byte[] fieldData) {
       if ((fieldData == null) || (fieldData.length == 0)) {
         return null;
       }
       final ByteBuffer buff = ByteBuffer.wrap(fieldData);
-      int count = VarintUtils.readUnsignedInt(buff);
+      final int count = VarintUtils.readUnsignedInt(buff);
+      ByteArrayUtils.verifyBufferSize(buff, count);
       final Integer[] result = new Integer[count];
       for (int i = 0; i < count; i++) {
         if (buff.get() > 0) {
@@ -50,11 +52,9 @@ public class IntegerArraySerializationProvider implements FieldSerializationProv
     }
 
     @Override
-    public Integer[] readField(byte[] fieldData, byte serializationVersion) {
+    public Integer[] readField(final byte[] fieldData, final byte serializationVersion) {
       if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
-        return new ArrayReader<Integer>(new IntegerReader()).readField(
-            fieldData,
-            serializationVersion);
+        return new ArrayReader<>(new IntegerReader()).readField(fieldData, serializationVersion);
       } else {
         return readField(fieldData);
       }
@@ -64,7 +64,7 @@ public class IntegerArraySerializationProvider implements FieldSerializationProv
   // @see PrimitiveIntArraySerializationProvider.PrimitiveIntArrayWriter
   private static class IntegerArrayWriter implements FieldWriter<Object, Integer[]> {
     @Override
-    public byte[] writeField(Integer[] fieldValue) {
+    public byte[] writeField(final Integer[] fieldValue) {
       if (fieldValue == null) {
         return new byte[] {};
       }

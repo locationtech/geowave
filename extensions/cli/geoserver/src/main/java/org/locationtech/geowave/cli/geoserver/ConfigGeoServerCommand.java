@@ -13,11 +13,6 @@ import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstant
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_URL;
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_USER;
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_WORKSPACE;
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +29,11 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.cli.prefix.JCommanderPrefixTranslator;
 import org.locationtech.geowave.core.cli.prefix.JCommanderTranslationMap;
 import org.locationtech.geowave.core.cli.prefix.TranslationEntry;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "geoserver", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a local configuration for GeoServer")
@@ -104,6 +104,7 @@ public class ConfigGeoServerCommand extends ServiceEnabledCommand<String> {
     JCommander.getConsole().println(computeResults(params));
   }
 
+  @Override
   public String getName() {
     return username;
   }
@@ -141,7 +142,7 @@ public class ConfigGeoServerCommand extends ServiceEnabledCommand<String> {
   public String usage() {
     StringBuilder builder = new StringBuilder();
 
-    final List<String> nameArray = new ArrayList<String>();
+    final List<String> nameArray = new ArrayList<>();
     final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
     translator.addObject(this);
     final JCommanderTranslationMap map = translator.translate();
@@ -239,8 +240,8 @@ public class ConfigGeoServerCommand extends ServiceEnabledCommand<String> {
     GeoServerRestClient.invalidateInstance();
 
     // generate a return for rest calls
-    StringBuilder builder = new StringBuilder();
-    for (Object key : existingProps.keySet()) {
+    final StringBuilder builder = new StringBuilder();
+    for (final Object key : existingProps.keySet()) {
       if (key.toString().startsWith("geoserver")) {
         builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
       }

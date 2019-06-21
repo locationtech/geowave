@@ -8,11 +8,6 @@
  */
 package org.locationtech.geowave.format.landsat8;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.MinMaxPriorityQueue;
-import com.google.common.io.LineReader;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +22,6 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +47,11 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.MinMaxPriorityQueue;
+import com.google.common.io.LineReader;
 
 public class SceneFeatureIterator implements SimpleFeatureIterator {
   protected static class BestCloudCoverComparator implements
@@ -323,7 +322,7 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
         }
         queue.offer(feature);
       }
-      final List<Iterator<SimpleFeature>> iterators = new ArrayList<Iterator<SimpleFeature>>();
+      final List<Iterator<SimpleFeature>> iterators = new ArrayList<>();
       for (final MinMaxPriorityQueue<SimpleFeature> queue : bestScenes.values()) {
         iterators.add(queue.iterator());
       }

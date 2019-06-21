@@ -25,7 +25,7 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 
   @Override
   public GeoWaveAvroFormatPlugin<Object, GridCoverage> createAvroFormatPlugin(
-      IngestFormatOptions options) throws UnsupportedOperationException {
+      final IngestFormatOptions options) throws UnsupportedOperationException {
     // unsupported right now
     throw new UnsupportedOperationException(
         "GeoTools raster files cannot be ingested using intermediate avro files");
@@ -33,14 +33,14 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 
   @Override
   public IngestFromHdfsPlugin<Object, GridCoverage> createIngestFromHdfsPlugin(
-      IngestFormatOptions options) throws UnsupportedOperationException {
+      final IngestFormatOptions options) throws UnsupportedOperationException {
     // unsupported right now
     throw new UnsupportedOperationException("GeoTools raster files cannot be ingested from HDFS");
   }
 
   @Override
   public LocalFileIngestPlugin<GridCoverage> createLocalFileIngestPlugin(
-      IngestFormatOptions options) throws UnsupportedOperationException {
+      final IngestFormatOptions options) throws UnsupportedOperationException {
     return new GeoToolsRasterDataStoreIngestPlugin(optionProvider);
   }
 

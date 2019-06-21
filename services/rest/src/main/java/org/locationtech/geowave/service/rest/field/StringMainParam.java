@@ -13,17 +13,17 @@ import java.lang.reflect.Field;
 public class StringMainParam extends AbstractMainParam<String> {
 
   public StringMainParam(
-      int ordinal,
-      int totalMainParams,
-      Field listMainParamField,
-      RestField<String> delegateField,
-      Object instance) {
+      final int ordinal,
+      final int totalMainParams,
+      final Field listMainParamField,
+      final RestField<String> delegateField,
+      final Object instance) {
     super(ordinal, totalMainParams, listMainParamField, delegateField, instance);
     // TODO Auto-generated constructor stub
   }
 
   @Override
-  protected String valueToString(String value) {
+  protected String valueToString(final String value) {
     return value;
   }
 }

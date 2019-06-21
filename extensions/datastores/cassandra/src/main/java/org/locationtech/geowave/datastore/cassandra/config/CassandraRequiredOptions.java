@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.datastore.cassandra.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.cassandra.CassandraStoreFactoryFamily;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class CassandraRequiredOptions extends StoreFactoryOptions {
   @Parameter(
@@ -28,9 +28,9 @@ public class CassandraRequiredOptions extends StoreFactoryOptions {
   public CassandraRequiredOptions() {}
 
   public CassandraRequiredOptions(
-      String contactPoints,
-      String gwNamespace,
-      CassandraOptions additionalOptions) {
+      final String contactPoints,
+      final String gwNamespace,
+      final CassandraOptions additionalOptions) {
     super(gwNamespace);
     this.contactPoints = contactPoints;
     this.additionalOptions = additionalOptions;

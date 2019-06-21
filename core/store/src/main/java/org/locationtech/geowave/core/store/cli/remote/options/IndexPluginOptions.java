@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.remote.options;
 
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.ParametersDelegate;
 import org.locationtech.geowave.core.cli.api.DefaultPluginOptions;
 import org.locationtech.geowave.core.cli.api.PluginOptions;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
@@ -23,6 +21,8 @@ import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.ParametersDelegate;
 
 /**
  * This class is responsible for loading index SPI plugins and populating parameters delegate with

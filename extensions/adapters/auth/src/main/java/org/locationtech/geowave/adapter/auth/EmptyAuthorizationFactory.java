@@ -11,7 +11,8 @@ package org.locationtech.geowave.adapter.auth;
 import java.net.URL;
 
 public class EmptyAuthorizationFactory implements AuthorizationFactorySPI {
-  public AuthorizationSPI create(URL url) {
+  @Override
+  public AuthorizationSPI create(final URL url) {
     return new EmptyAuthorizationProvider();
   }
 

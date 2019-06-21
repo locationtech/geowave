@@ -39,7 +39,7 @@ public class RowMergingAdapterOptionProvider implements OptionProvider {
 
     if ((existingOptions != null) && existingOptions.containsKey(ADAPTER_IDS_OPTION)) {
       final String existingAdapterIds = existingOptions.get(ADAPTER_IDS_OPTION);
-      final Set<String> nextAdapters = new HashSet<String>();
+      final Set<String> nextAdapters = new HashSet<>();
       for (final String id : nextAdapterIdsValue.split(",")) {
         nextAdapters.add(id);
       }

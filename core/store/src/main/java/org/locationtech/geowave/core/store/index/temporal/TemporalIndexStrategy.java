@@ -11,7 +11,6 @@ package org.locationtech.geowave.core.store.index.temporal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;

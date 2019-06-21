@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.datastore.hbase.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.hbase.HBaseStoreFactoryFamily;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class HBaseRequiredOptions extends StoreFactoryOptions {
 
@@ -31,9 +31,9 @@ public class HBaseRequiredOptions extends StoreFactoryOptions {
   public HBaseRequiredOptions() {}
 
   public HBaseRequiredOptions(
-      String zookeeper,
-      String gwNamespace,
-      HBaseOptions additionalOptions) {
+      final String zookeeper,
+      final String gwNamespace,
+      final HBaseOptions additionalOptions) {
     super(gwNamespace);
     this.zookeeper = zookeeper;
     this.additionalOptions = additionalOptions;

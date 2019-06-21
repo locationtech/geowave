@@ -35,24 +35,24 @@ public class MemoryLockManagerTest {
     final Transaction t1 = Transaction.AUTO_COMMIT;
     final DefaultTransaction t2 = new DefaultTransaction();
     t2.addAuthorization("auth5");
-    FeatureLock lock = new FeatureLock("auth5", 1 /* minute */);
+    final FeatureLock lock = new FeatureLock("auth5", 1 /* minute */);
     memoryLockManager.lockFeatureID("sometime", "f5", t1, lock);
-    Thread commiter = new Thread(new Runnable() {
+    final Thread commiter = new Thread(new Runnable() {
       @Override
       public void run() {
         try {
           Thread.sleep(4000);
           memoryLockManager.release("auth5", t1);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           e.printStackTrace();
           throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
           e.printStackTrace();
           throw new RuntimeException(e);
         }
       }
     });
-    long currentTime = System.currentTimeMillis();
+    final long currentTime = System.currentTimeMillis();
     commiter.start();
     memoryLockManager.lock(t2, "f5");
     assertTrue((System.currentTimeMillis() - currentTime) < 4000);
@@ -65,7 +65,7 @@ public class MemoryLockManagerTest {
     final Transaction t1 = Transaction.AUTO_COMMIT;
     final DefaultTransaction t2 = new DefaultTransaction();
     t2.addAuthorization("auth1");
-    FeatureLock lock = new FeatureLock("auth1", 1 /* minute */);
+    final FeatureLock lock = new FeatureLock("auth1", 1 /* minute */);
     memoryLockManager.lockFeatureID("sometime", "f4", t1, lock);
     memoryLockManager.lock(t2, "f4");
     t2.commit();
@@ -80,7 +80,7 @@ public class MemoryLockManagerTest {
   public void testReset() throws InterruptedException, IOException {
     final LockingManagement memoryLockManager = new MemoryLockManager("default");
     final Transaction t1 = Transaction.AUTO_COMMIT;
-    FeatureLock lock = new FeatureLock("auth2", 1 /* minute */);
+    final FeatureLock lock = new FeatureLock("auth2", 1 /* minute */);
     memoryLockManager.lockFeatureID("sometime", "f2", t1, lock);
     memoryLockManager.refresh("auth2", t1);
     assertTrue(memoryLockManager.exists("auth2"));
@@ -95,24 +95,24 @@ public class MemoryLockManagerTest {
     memoryLockManager.lock(t1, "f3");
     final DefaultTransaction t2 = new DefaultTransaction();
 
-    Thread commiter = new Thread(new Runnable() {
+    final Thread commiter = new Thread(new Runnable() {
       @Override
       public void run() {
         try {
           Thread.sleep(4000);
           // System.out.println("commit");
           t1.commit();
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           e.printStackTrace();
           throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
           e.printStackTrace();
           throw new RuntimeException(e);
         }
       }
     });
 
-    long currentTime = System.currentTimeMillis();
+    final long currentTime = System.currentTimeMillis();
     commiter.start();
     // will block\
     // System.out.println("t2");

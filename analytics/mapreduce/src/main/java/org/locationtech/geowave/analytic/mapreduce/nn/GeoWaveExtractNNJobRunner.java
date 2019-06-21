@@ -29,14 +29,14 @@ public class GeoWaveExtractNNJobRunner extends NNJobRunner {
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(super.getParameters());
     params.addAll(MapReduceParameters.getParameters());
     return params;
   }
 
   @Override
-  public int run(PropertyManagement runTimeProperties) throws Exception {
+  public int run(final PropertyManagement runTimeProperties) throws Exception {
     return this.run(MapReduceJobController.getConfiguration(runTimeProperties), runTimeProperties);
   }
 }

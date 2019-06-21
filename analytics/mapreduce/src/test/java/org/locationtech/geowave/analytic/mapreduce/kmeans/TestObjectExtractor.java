@@ -13,7 +13,7 @@ import org.locationtech.jts.geom.Point;
 
 public class TestObjectExtractor implements CentroidExtractor<TestObject> {
   @Override
-  public Point getCentroid(TestObject anObject) {
+  public Point getCentroid(final TestObject anObject) {
     return anObject.geo.getCentroid();
   }
 }

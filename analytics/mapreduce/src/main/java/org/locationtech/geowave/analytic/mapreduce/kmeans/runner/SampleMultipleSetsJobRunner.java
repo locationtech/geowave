@@ -58,9 +58,9 @@ public class SampleMultipleSetsJobRunner<T> extends MapReduceJobController imple
   private final UpdateCentroidCostJobRunner updateCostRunner = new UpdateCentroidCostJobRunner();
   private final RankSamplerJobRunner jobGrowSampleRunner = new RankSamplerJobRunner();
   private final StripWeakCentroidsRunner<T> stripWeakCentroidsRunner =
-      new StripWeakCentroidsRunner<T>();
+      new StripWeakCentroidsRunner<>();
   private final IterationCountCalculateRunner<T> iterationCountCalculateRunner =
-      new IterationCountCalculateRunner<T>();
+      new IterationCountCalculateRunner<>();
   private int iterations = 1;
   private int zoomLevel = 1;
 
@@ -159,7 +159,7 @@ public class SampleMultipleSetsJobRunner<T> extends MapReduceJobController imple
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(
         Arrays.asList(
             new ParameterEnum<?>[] {

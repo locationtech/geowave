@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.format.gpx;
 
-import com.beust.jcommander.Parameter;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.jts.geom.Geometry;
+import com.beust.jcommander.Parameter;
 
 public class MaxExtentOptProvider implements Persistable {
   @Parameter(
@@ -22,13 +22,13 @@ public class MaxExtentOptProvider implements Persistable {
   @Override
   public byte[] toBinary() {
     final byte[] backingBuffer = new byte[Double.BYTES];
-    ByteBuffer buf = ByteBuffer.wrap(backingBuffer);
+    final ByteBuffer buf = ByteBuffer.wrap(backingBuffer);
     buf.putDouble(maxExtent);
     return backingBuffer;
   }
 
   @Override
-  public void fromBinary(byte[] bytes) {
+  public void fromBinary(final byte[] bytes) {
     maxExtent = ByteBuffer.wrap(bytes).getDouble();
   }
 
@@ -36,7 +36,7 @@ public class MaxExtentOptProvider implements Persistable {
     return maxExtent;
   }
 
-  public boolean filterMaxExtent(Geometry geom) {
+  public boolean filterMaxExtent(final Geometry geom) {
     return (geom.getEnvelopeInternal().maxExtent() < maxExtent);
   }
 }

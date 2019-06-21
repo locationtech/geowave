@@ -35,9 +35,9 @@ public class PersistableStore implements Persistable {
   @Override
   public byte[] toBinary() {
     // Persist
-    Properties strOptions = new Properties();
+    final Properties strOptions = new Properties();
     pluginOptions.save(strOptions, null);
-    final List<byte[]> strOptionsBinary = new ArrayList<byte[]>(strOptions.size());
+    final List<byte[]> strOptionsBinary = new ArrayList<>(strOptions.size());
     int optionsLength = 0;
     for (final String key : strOptions.stringPropertyNames()) {
       final byte[] keyBinary = StringUtils.stringToBinary(key);

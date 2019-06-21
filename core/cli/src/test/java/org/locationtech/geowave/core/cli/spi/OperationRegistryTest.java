@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.cli.spi;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -18,10 +18,10 @@ public class OperationRegistryTest {
 
   @Test
   public void testGetOperation() {
-    OperationEntry optentry = new OperationEntry(ExplainCommand.class);
-    List<OperationEntry> entries = new ArrayList<OperationEntry>();
+    final OperationEntry optentry = new OperationEntry(ExplainCommand.class);
+    final List<OperationEntry> entries = new ArrayList<>();
     entries.add(optentry);
-    OperationRegistry optreg = new OperationRegistry(entries);
+    final OperationRegistry optreg = new OperationRegistry(entries);
 
     assertEquals("explain", optreg.getOperation(ExplainCommand.class).getOperationName());
     assertEquals(true, optreg.getAllOperations().contains(optentry));

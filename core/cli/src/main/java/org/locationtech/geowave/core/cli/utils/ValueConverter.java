@@ -9,11 +9,11 @@
 /** */
 package org.locationtech.geowave.core.cli.utils;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /** Used for general purpose value conversion via appache commons ConvertUtils */
 public class ValueConverter {
@@ -31,7 +31,7 @@ public class ValueConverter {
    * @return The converted value
    */
   @SuppressWarnings("unchecked")
-  public static <X> X convert(Object value, Class<X> targetType) {
+  public static <X> X convert(final Object value, final Class<X> targetType) {
     // HP Fortify "Improper Output Neutralization" false positive
     // What Fortify considers "user input" comes only
     // from users with OS-level access anyway
@@ -43,13 +43,13 @@ public class ValueConverter {
         return (X) value;
       }
 
-      if (value.getClass() == JSONObject.class || value.getClass() == JSONArray.class) {
+      if ((value.getClass() == JSONObject.class) || (value.getClass() == JSONArray.class)) {
         return (X) value;
       }
     }
 
-    String strValue = String.valueOf(value);
-    Object retval = ConvertUtils.convert(strValue, targetType);
+    final String strValue = String.valueOf(value);
+    final Object retval = ConvertUtils.convert(strValue, targetType);
     return (X) retval;
   }
 }

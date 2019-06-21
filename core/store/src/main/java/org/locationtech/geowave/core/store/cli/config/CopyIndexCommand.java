@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -22,13 +18,17 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "cpindex", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Copy and modify existing index configuration")
 public class CopyIndexCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<name> <new name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @Parameter(
       names = {"-d", "--default"},
@@ -39,10 +39,10 @@ public class CopyIndexCommand extends DefaultOperation implements Command {
   private IndexPluginOptions newPluginOptions = new IndexPluginOptions();
 
   @Override
-  public boolean prepare(OperationParams params) {
+  public boolean prepare(final OperationParams params) {
     super.prepare(params);
 
-    Properties existingProps = getGeoWaveConfigProperties(params);
+    final Properties existingProps = getGeoWaveConfigProperties(params);
 
     // Load the old index, so that we can override the values
     String oldIndex = null;
@@ -58,20 +58,20 @@ public class CopyIndexCommand extends DefaultOperation implements Command {
   }
 
   @Override
-  public void execute(OperationParams params) {
+  public void execute(final OperationParams params) {
 
-    Properties existingProps = getGeoWaveConfigProperties(params);
+    final Properties existingProps = getGeoWaveConfigProperties(params);
 
     if (parameters.size() < 2) {
       throw new ParameterException("Must specify <existing index> <new index> names");
     }
 
     // This is the new index name.
-    String newIndex = parameters.get(1);
-    String newIndexNamespace = IndexPluginOptions.getIndexNamespace(newIndex);
+    final String newIndex = parameters.get(1);
+    final String newIndexNamespace = IndexPluginOptions.getIndexNamespace(newIndex);
 
     // Make sure we're not already in the index.
-    IndexPluginOptions existPlugin = new IndexPluginOptions();
+    final IndexPluginOptions existPlugin = new IndexPluginOptions();
     if (existPlugin.load(existingProps, newIndexNamespace)) {
       throw new ParameterException("That index already exists: " + newIndex);
     }
@@ -92,9 +92,9 @@ public class CopyIndexCommand extends DefaultOperation implements Command {
     return parameters;
   }
 
-  public void setParameters(String existingIndex, String newIndex) {
-    this.parameters = new ArrayList<String>();
-    this.parameters.add(existingIndex);
-    this.parameters.add(newIndex);
+  public void setParameters(final String existingIndex, final String newIndex) {
+    parameters = new ArrayList<>();
+    parameters.add(existingIndex);
+    parameters.add(newIndex);
   }
 }

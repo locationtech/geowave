@@ -8,22 +8,22 @@
  */
 package org.locationtech.geowave.analytic.kryo;
 
+import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 
 public class PersistableSerializer extends Serializer<Persistable> {
 
   @Override
-  public Persistable read(Kryo kryo, Input input, Class<Persistable> classTag) {
+  public Persistable read(final Kryo kryo, final Input input, final Class<Persistable> classTag) {
 
     // Read object byte count and allocate buffer to read object data
-    int byteCount = input.readInt();
-    byte[] bytes = new byte[byteCount];
-    int bytesRead = input.read(bytes);
+    final int byteCount = input.readInt();
+    final byte[] bytes = new byte[byteCount];
+    final int bytesRead = input.read(bytes);
     // TODO: This was only added for findbugs warning, not really necessary
     // check
     if (bytesRead < 0) {
@@ -34,12 +34,12 @@ public class PersistableSerializer extends Serializer<Persistable> {
   }
 
   @Override
-  public void write(Kryo kryo, Output output, Persistable object) {
+  public void write(final Kryo kryo, final Output output, final Persistable object) {
 
     // Persistence utils includes classId as short in front of persistable
     // object.
-    byte[] serializedObj = PersistenceUtils.toBinary(object);
-    int objLength = serializedObj.length;
+    final byte[] serializedObj = PersistenceUtils.toBinary(object);
+    final int objLength = serializedObj.length;
     output.writeInt(objLength);
     output.write(serializedObj);
   }

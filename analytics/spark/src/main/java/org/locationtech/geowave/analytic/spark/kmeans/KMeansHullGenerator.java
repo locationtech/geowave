@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.analytic.spark.kmeans;
 
-import com.google.common.collect.Iterables;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.clustering.KMeansModel;
@@ -19,6 +18,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterables;
 
 public class KMeansHullGenerator {
   private static final Logger LOGGER = LoggerFactory.getLogger(KMeansHullGenerator.class);

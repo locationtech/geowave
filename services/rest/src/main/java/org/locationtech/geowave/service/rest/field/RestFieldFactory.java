@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.service.rest.field;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -24,6 +20,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.service.rest.GeoWaveOperationServiceWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 public class RestFieldFactory {
   private static final Logger LOGGER =
@@ -89,7 +89,7 @@ public class RestFieldFactory {
                     subfieldOrdinal,
                     totalSize,
                     mainParamField,
-                    new BasicRestField<List>(name, List.class, "main parameter", true),
+                    new BasicRestField<>(name, List.class, "main parameter", true),
                     instance)
                 : new StringMainParam(
                     subfieldOrdinal,
@@ -134,7 +134,7 @@ public class RestFieldFactory {
           } else {
             delegateInstanceType = delegateInstance.getClass();
             if (delegateInstance instanceof Map) {
-              for (Object mapValueInstance : ((Map) delegateInstance).values()) {
+              for (final Object mapValueInstance : ((Map) delegateInstance).values()) {
                 final Class<?> mapValueInstanceType = mapValueInstance.getClass();
                 retVal.addAll(
                     internalCreateRestFields(

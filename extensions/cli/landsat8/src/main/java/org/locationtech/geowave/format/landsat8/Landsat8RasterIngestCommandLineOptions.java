@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.format.landsat8;
 
+import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.IntegerConverter;
-import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 
 public class Landsat8RasterIngestCommandLineOptions {
   @Parameter(
@@ -152,7 +152,7 @@ public class Landsat8RasterIngestCommandLineOptions {
     return skipMerge;
   }
 
-  public void setSkipMerge(boolean skipMerge) {
+  public void setSkipMerge(final boolean skipMerge) {
     this.skipMerge = skipMerge;
   }
 }

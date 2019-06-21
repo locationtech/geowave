@@ -20,7 +20,7 @@ public class FloatCompareUtils {
    * @param y
    * @return true if the double are equal, false if they are not
    */
-  public static boolean checkDoublesEqual(double x, double y) {
+  public static boolean checkDoublesEqual(final double x, final double y) {
     return checkDoublesEqual(x, y, COMP_EPSILON);
   }
 
@@ -33,10 +33,10 @@ public class FloatCompareUtils {
    * @param epsilon
    * @return true if the double are equal, false if they are not
    */
-  public static boolean checkDoublesEqual(double x, double y, double epsilon) {
+  public static boolean checkDoublesEqual(final double x, final double y, final double epsilon) {
     boolean xNeg = false;
     boolean yNeg = false;
-    double diff = (Math.abs(x) - Math.abs(y));
+    final double diff = (Math.abs(x) - Math.abs(y));
 
     if (x < 0.0) {
       xNeg = true;
@@ -44,6 +44,6 @@ public class FloatCompareUtils {
     if (y < 0.0) {
       yNeg = true;
     }
-    return (diff <= epsilon && diff >= -epsilon && xNeg == yNeg);
+    return ((diff <= epsilon) && (diff >= -epsilon) && (xNeg == yNeg));
   }
 }

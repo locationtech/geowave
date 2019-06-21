@@ -21,7 +21,9 @@ public final class ExtractGeometryFilterVisitorResult {
   private final Geometry geometry;
   private final CompareOperation compareOp;
 
-  public ExtractGeometryFilterVisitorResult(Geometry geometry, CompareOperation compareOp) {
+  public ExtractGeometryFilterVisitorResult(
+      final Geometry geometry,
+      final CompareOperation compareOp) {
     this.geometry = geometry;
     this.compareOp = compareOp;
   }
@@ -41,6 +43,6 @@ public final class ExtractGeometryFilterVisitorResult {
    * @return True if predicates of both ExtractGeometryFilterVisitorResult objects are same
    */
   public boolean matchPredicate(final ExtractGeometryFilterVisitorResult otherResult) {
-    return (this.compareOp == otherResult.getCompareOp());
+    return (compareOp == otherResult.getCompareOp());
   }
 }

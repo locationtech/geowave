@@ -147,7 +147,7 @@ public class BoundaryDistancePartitionerTest {
     assertTrue(hasNPrimary(partitions, 4));
   }
 
-  private boolean hasNPrimary(final List<PartitionData> data, int expected) {
+  private boolean hasNPrimary(final List<PartitionData> data, final int expected) {
     int count = 0;
     for (final PartitionData dataitem : data) {
       count += (dataitem.isPrimary() ? 1 : 0);

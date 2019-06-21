@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.index.text;
 
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -82,8 +83,7 @@ public class TextExactMatchFilter implements QueryFilter {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer bb = ByteBuffer.wrap(bytes);
     caseSensitive = bb.get() > 0 ? true : false;
-    final byte[] fieldNameBytes = new byte[VarintUtils.readUnsignedInt(bb)];
-    bb.get(fieldNameBytes);
+    final byte[] fieldNameBytes = ByteArrayUtils.safeRead(bb, VarintUtils.readUnsignedInt(bb));
     fieldName = StringUtils.stringFromBinary(fieldNameBytes);
     final byte[] matchValueBytes = new byte[bb.remaining()];
     bb.get(matchValueBytes);

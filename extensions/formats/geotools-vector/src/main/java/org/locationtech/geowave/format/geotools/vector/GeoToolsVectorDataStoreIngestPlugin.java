@@ -61,7 +61,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
   public GeoToolsVectorDataStoreIngestPlugin(
       final RetypingVectorDataPlugin retypingPlugin,
       final Filter filter,
-      List<String> featureTypeNames) {
+      final List<String> featureTypeNames) {
     // this constructor can be used directly as an extension point for
     // retyping the original feature data, if the retyping plugin is null,
     // the data will be ingested as the original type
@@ -78,7 +78,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
   @Override
   public void init(final URL baseDirectory) {}
 
-  private static boolean isPropertiesFile(URL file) {
+  private static boolean isPropertiesFile(final URL file) {
     return FilenameUtils.getName(file.getPath()).toLowerCase(Locale.ENGLISH).endsWith(
         PROPERTIES_EXTENSION);
   }
@@ -87,7 +87,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
     final Map<Object, Object> map = new HashMap<>();
     if (isPropertiesFile(file)) {
       try (InputStream fis = file.openStream()) {
-        Properties prop = new Properties();
+        final Properties prop = new Properties();
         prop.load(fis);
         map.putAll(prop);
         final DataStore dataStore = DataStoreFinder.getDataStore(map);
@@ -131,25 +131,24 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
     DataStore dataStore = null;
     try {
       dataStore = getDataStore(input);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Exception getting a datastore instance", e);
     }
     if (dataStore != null) {
       List<Name> names = null;
       try {
         names = dataStore.getNames();
-      } catch (IOException e) {
+      } catch (final IOException e) {
         LOGGER.error("Unable to get feature tpes from datastore '" + input.getPath() + "'", e);
       }
       if (names == null) {
         LOGGER.error("Unable to get datatore name");
         return null;
       }
-      final List<SimpleFeatureCollection> featureCollections =
-          new ArrayList<SimpleFeatureCollection>();
+      final List<SimpleFeatureCollection> featureCollections = new ArrayList<>();
       for (final Name name : names) {
         try {
-          if (featureTypeNames != null
+          if ((featureTypeNames != null)
               && !featureTypeNames.isEmpty()
               && !featureTypeNames.contains(name.getLocalPart())) {
             continue;

@@ -15,7 +15,7 @@ import org.junit.Test;
 public class BinValueTest {
 
   final double BIN_VALUE = 100;
-  private double DELTA = 1e-15;
+  private final double DELTA = 1e-15;
 
   @Test
   public void testBinValue() {
@@ -23,7 +23,7 @@ public class BinValueTest {
     final int binIdValue = 2;
     final byte[] binID = ByteBuffer.allocate(4).putInt(binIdValue).array();
 
-    BinValue binValue = new BinValue(binID, BIN_VALUE);
+    final BinValue binValue = new BinValue(binID, BIN_VALUE);
 
     Assert.assertEquals(BIN_VALUE, binValue.getNormalizedValue(), DELTA);
   }

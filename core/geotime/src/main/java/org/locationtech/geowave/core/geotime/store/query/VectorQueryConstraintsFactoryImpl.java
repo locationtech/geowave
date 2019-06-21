@@ -27,12 +27,14 @@ public class VectorQueryConstraintsFactoryImpl extends QueryConstraintsFactoryIm
   public static final VectorQueryConstraintsFactoryImpl SINGLETON_INSTANCE =
       new VectorQueryConstraintsFactoryImpl();
 
+  @Override
   public SpatialTemporalConstraintsBuilder spatialTemporalConstraints() {
     return new SpatialTemporalConstraintsBuilderImpl();
   }
 
   // these cql expressions should always attempt to use
   // CQLQuery.createOptimalQuery() which requires adapter and index
+  @Override
   public QueryConstraints cqlConstraints(final String cqlExpression) {
 
     try {
@@ -49,6 +51,7 @@ public class VectorQueryConstraintsFactoryImpl extends QueryConstraintsFactoryIm
     return null;
   }
 
+  @Override
   public QueryConstraints filterConstraints(final Filter filter) {
     return new OptimalCQLQuery(filter);
   }

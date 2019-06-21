@@ -8,11 +8,6 @@
  */
 package org.locationtech.geowave.service.rest;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -21,6 +16,11 @@ import java.io.Writer;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 public class SwaggerApiParser {
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerApiParser.class);
@@ -142,11 +142,11 @@ public class SwaggerApiParser {
     return true;
   }
 
-  public static void safeClose(Writer writer) {
+  public static void safeClose(final Writer writer) {
     if (writer != null) {
       try {
         writer.close();
-      } catch (IOException e) {
+      } catch (final IOException e) {
         LOGGER.warn("Unable to close Writer", e);
       }
     }

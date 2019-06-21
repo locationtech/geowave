@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.filter.CQLQueryFilter;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -100,8 +101,7 @@ public class ExplicitCQLQuery implements QueryConstraints, TypeConstraintQuery {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int filterBytesLength = VarintUtils.readUnsignedInt(buf);
     if (filterBytesLength > 0) {
-      final byte[] filterBytes = new byte[filterBytesLength];
-      buf.get(filterBytes);
+      final byte[] filterBytes = ByteArrayUtils.safeRead(buf, filterBytesLength);
       filter = new CQLQueryFilter();
       filter.fromBinary(filterBytes);
     } else {
@@ -111,8 +111,7 @@ public class ExplicitCQLQuery implements QueryConstraints, TypeConstraintQuery {
 
     final int baseQueryBytesLength = buf.remaining();
     if (baseQueryBytesLength > 0) {
-      final byte[] baseQueryBytes = new byte[baseQueryBytesLength];
-      buf.get(baseQueryBytes);
+      final byte[] baseQueryBytes = ByteArrayUtils.safeRead(buf, baseQueryBytesLength);
       try {
         baseQuery = (QueryConstraints) PersistenceUtils.fromBinary(baseQueryBytes);
       } catch (final Exception e) {
