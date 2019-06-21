@@ -56,7 +56,7 @@ image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]
 
 To properly run and access GeoWave classes from the Zeppelin notebook we must configure the Zeppelin installation on emr before running. We've created a bootstrap script to do that for you that can be found here:
 
-- Zeppelin Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/zeppelin/bootstrap-zeppelin.sh
+- Zeppelin Bootstrap: http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/zeppelin/bootstrap-zeppelin.sh
 
 This bootstrap script will configure Zeppelin to access GeoWave classes, install the correct GeoWave jar file (more information in appendices), and setup other spark settings for Zeppelin. This script needs to be run as a bootstrap action when creating the EMR cluster.
 
@@ -64,7 +64,7 @@ This bootstrap script will configure Zeppelin to access GeoWave classes, install
 ====
 It is recommended to use the Accumulo bootstrap script as the first bootstrap script to setup your cluster. Doing so will let you use both HBase and Accumulo as long as you select HBase as a default application (backed by S3) to add to your cluster from AWS. 
 
-- Accumulo Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh
+- Accumulo Bootstrap: http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/accumulo/bootstrap-geowave.sh
 
 For more information on setting up bootstrap actions visit this link:aws-env.html#[Amazon Web Services EMR, window="_blank"]
 ====

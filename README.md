@@ -13,7 +13,7 @@
 GeoWave is an open source set of software that:
 
 * Capabilities
-  * Adds multi-dimensional indexing capability to key-value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](http://cassandra.apache.org/), [AmazonDynamoDB](https://aws.amazon.com/dynamodb/), [Cloud BigTable](https://cloud.google.com/bigtable/), [Redis](https://redis.io/), and [RocksDB](https://rocksdb.org/))
+  * Adds multi-dimensional indexing capability to key-value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](http://cassandra.apache.org/), [AmazonDynamoDB](https://aws.amazon.com/dynamodb/), [Cloud BigTable](https://cloud.google.com/bigtable/), [Redis](https://redis.io/), [RocksDB](https://rocksdb.org/)), and [Apache Kudu](https://kudu.apache.org/)
   * Adds support for geographic objects and geospatial operators to these stores
   * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 * Geospatial software plugins
@@ -29,7 +29,10 @@ Basically, GeoWave is working to bridge geospatial software with modern key-valu
 * The underlying principles employed in GeoWave are outlined in recent academic publications to include largely the background theory in [Advances in Spatial and Temporal Databases 2017](https://link.springer.com/chapter/10.1007/978-3-319-64367-0_6) and a derivative, more applied paper in [FOSS4G Conference Proceedings 2017](http://scholarworks.umass.edu/cgi/viewcontent.cgi?article=1027&context=foss4g).
 
 ## The Software
+* We have [multi-platform standalone installers](http://locationtech.github.io/geowave/devguide.html#standalone-installers) for the GeoWave's commandline tools to help get started
+  * This is often the quickest and easiest way to get started using GeoWave on your own machine
 * We have a [RPM repository](http://locationtech.github.io/geowave/packages.html)
+  * This contains various packages including puppet modules, best used for distributed environments.
   * See [Documentation: Installation from RPM](http://locationtech.github.io/geowave/devguide.html#installation-from-rpm) for more info.
   * Deb packages if enough people request them
 * We have [Maven artifact repositories](http://locationtech.github.io/geowave/devguide.html#maven-pom-fragments) (indexes not enabled, but it works in a maven repo fragment)

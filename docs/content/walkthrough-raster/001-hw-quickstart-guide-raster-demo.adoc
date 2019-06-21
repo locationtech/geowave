@@ -24,7 +24,7 @@ This script defines a number of the variables that will be used in future comman
 ----
 cd /mnt
 
-sudo wget s3.amazonaws.com/geowave/latest/scripts/sandbox/quickstart/geowave-env.sh
+sudo wget s3.amazonaws.com/geowave/${version_url}/scripts/sandbox/quickstart/geowave-env.sh
 
 source /mnt/geowave-env.sh
 ----
@@ -35,7 +35,7 @@ source /mnt/geowave-env.sh
 ----
 cd /mnt
 
-sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/geowave-env.sh
+sudo wget s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/geowave-env.sh
 
 source /mnt/geowave-env.sh
 ----
