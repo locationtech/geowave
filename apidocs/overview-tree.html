@@ -3151,6 +3151,11 @@
 </li>
 <li type="circle">org.locationtech.geowave.analytic.clustering.exception.<a href="org/locationtech/geowave/analytic/clustering/exception/MatchingCentroidNotFoundException.html" title="class in org.locationtech.geowave.analytic.clustering.exception"><span class="typeNameLink">MatchingCentroidNotFoundException</span></a></li>
 <li type="circle">org.locationtech.geowave.service.rest.exceptions.<a href="org/locationtech/geowave/service/rest/exceptions/MissingArgumentException.html" title="class in org.locationtech.geowave.service.rest.exceptions"><span class="typeNameLink">MissingArgumentException</span></a></li>
+<li type="circle">java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/RuntimeException.html?is-external=true" title="class or interface in java.lang"><span class="typeNameLink">RuntimeException</span></a>
+<ul>
+<li type="circle">org.locationtech.geowave.core.index.<a href="org/locationtech/geowave/core/index/GeoWaveSerializationException.html" title="class in org.locationtech.geowave.core.index"><span class="typeNameLink">GeoWaveSerializationException</span></a></li>
+</ul>
+</li>
 <li type="circle">org.locationtech.geowave.core.cli.exceptions.<a href="org/locationtech/geowave/core/cli/exceptions/TargetNotFoundException.html" title="class in org.locationtech.geowave.core.cli.exceptions"><span class="typeNameLink">TargetNotFoundException</span></a></li>
 </ul>
 </li>
@@ -3294,9 +3299,13 @@
 </li>
 <li type="circle">org.apache.accumulo.core.iterators.Filter (implements org.apache.accumulo.core.iterators.OptionDescriber)
 <ul>
+<li type="circle">org.locationtech.geowave.datastore.accumulo.iterators.<a href="org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingFilter.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">ExceptionHandlingFilter</span></a>
+<ul>
 <li type="circle">org.locationtech.geowave.datastore.accumulo.iterators.<a href="org/locationtech/geowave/datastore/accumulo/iterators/AggregationIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">AggregationIterator</span></a></li>
 <li type="circle">org.locationtech.geowave.datastore.accumulo.iterators.<a href="org/locationtech/geowave/datastore/accumulo/iterators/QueryFilterIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">QueryFilterIterator</span></a></li>
 <li type="circle">org.locationtech.geowave.datastore.accumulo.iterators.<a href="org/locationtech/geowave/datastore/accumulo/iterators/SingleEntryFilterIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">SingleEntryFilterIterator</span></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li type="circle">org.apache.accumulo.core.iterators.user.RowFilter
@@ -3306,15 +3315,23 @@
 </li>
 <li type="circle">org.apache.accumulo.core.iterators.SkippingIterator
 <ul>
+<li type="circle">org.locationtech.geowave.datastore.accumulo.iterators.<a href="org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingSkippingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">ExceptionHandlingSkippingIterator</span></a>
+<ul>
 <li type="circle">org.locationtech.geowave.datastore.accumulo.iterators.<a href="org/locationtech/geowave/datastore/accumulo/iterators/FixedCardinalitySkippingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">FixedCardinalitySkippingIterator</span></a> (implements org.apache.accumulo.core.iterators.system.InterruptibleIterator)</li>
 </ul>
 </li>
+</ul>
+</li>
 <li type="circle">org.apache.accumulo.core.iterators.user.TransformingIterator (implements org.apache.accumulo.core.iterators.OptionDescriber)
+<ul>
+<li type="circle">org.locationtech.geowave.datastore.accumulo.iterators.<a href="org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingTransformingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">ExceptionHandlingTransformingIterator</span></a>
 <ul>
 <li type="circle">org.locationtech.geowave.datastore.accumulo.iterators.<a href="org/locationtech/geowave/datastore/accumulo/iterators/AttributeSubsettingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">AttributeSubsettingIterator</span></a></li>
 <li type="circle">org.locationtech.geowave.datastore.accumulo.<a href="org/locationtech/geowave/datastore/accumulo/MergingVisibilityCombiner.html" title="class in org.locationtech.geowave.datastore.accumulo"><span class="typeNameLink">MergingVisibilityCombiner</span></a>
 <ul>
 <li type="circle">org.locationtech.geowave.datastore.accumulo.<a href="org/locationtech/geowave/datastore/accumulo/RowMergingVisibilityCombiner.html" title="class in org.locationtech.geowave.datastore.accumulo"><span class="typeNameLink">RowMergingVisibilityCombiner</span></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

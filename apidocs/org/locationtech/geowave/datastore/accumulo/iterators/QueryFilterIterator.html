@@ -106,7 +106,12 @@ var activeTableTab = "activeTableTab";
 <li>org.apache.accumulo.core.iterators.Filter</li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingFilter.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators">org.locationtech.geowave.datastore.accumulo.iterators.ExceptionHandlingFilter</a></li>
+<li>
+<ul class="inheritance">
 <li>org.locationtech.geowave.datastore.accumulo.iterators.QueryFilterIterator</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -124,7 +129,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">QueryFilterIterator</span>
-extends org.apache.accumulo.core.iterators.Filter</pre>
+extends <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingFilter.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators">ExceptionHandlingFilter</a></pre>
 </li>
 </ul>
 </div>
@@ -231,8 +236,8 @@ extends org.apache.accumulo.core.iterators.Filter</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/QueryFilterIterator.html#accept-org.apache.accumulo.core.data.Key-org.apache.accumulo.core.data.Value-">accept</a></span>(org.apache.accumulo.core.data.Key&nbsp;key,
-      org.apache.accumulo.core.data.Value&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/QueryFilterIterator.html#acceptInternal-org.apache.accumulo.core.data.Key-org.apache.accumulo.core.data.Value-">acceptInternal</a></span>(org.apache.accumulo.core.data.Key&nbsp;key,
+              org.apache.accumulo.core.data.Value&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in org.locationtech.geowave.core.store.flatten">FlattenedUnreadData</a></code></td>
@@ -286,11 +291,18 @@ extends org.apache.accumulo.core.iterators.Filter</pre>
 </tr>
 </table>
 <ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.datastore.accumulo.iterators.ExceptionHandlingFilter">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.datastore.accumulo.iterators.<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingFilter.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators">ExceptionHandlingFilter</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingFilter.html#accept-org.apache.accumulo.core.data.Key-org.apache.accumulo.core.data.Value-">accept</a>, <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingFilter.html#next--">next</a>, <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingFilter.html#seek-org.apache.accumulo.core.data.Range-java.util.Collection-boolean-">seek</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.apache.accumulo.core.iterators.Filter">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.apache.accumulo.core.iterators.Filter</h3>
-<code>describeOptions, next, seek, setNegate, validateOptions</code></li>
+<code>describeOptions, setNegate, validateOptions</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.apache.accumulo.core.iterators.WrappingIterator">
@@ -460,17 +472,17 @@ extends org.apache.accumulo.core.iterators.Filter</pre>
                                       org.apache.accumulo.core.iterators.Filter&nbsp;filter)</pre>
 </li>
 </ul>
-<a name="accept-org.apache.accumulo.core.data.Key-org.apache.accumulo.core.data.Value-">
+<a name="acceptInternal-org.apache.accumulo.core.data.Key-org.apache.accumulo.core.data.Value-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>accept</h4>
-<pre>public&nbsp;boolean&nbsp;accept(org.apache.accumulo.core.data.Key&nbsp;key,
-                      org.apache.accumulo.core.data.Value&nbsp;value)</pre>
+<h4>acceptInternal</h4>
+<pre>public&nbsp;boolean&nbsp;acceptInternal(org.apache.accumulo.core.data.Key&nbsp;key,
+                              org.apache.accumulo.core.data.Value&nbsp;value)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>accept</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.Filter</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingFilter.html#acceptInternal-org.apache.accumulo.core.data.Key-org.apache.accumulo.core.data.Value-">acceptInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingFilter.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators">ExceptionHandlingFilter</a></code></dd>
 </dl>
 </li>
 </ul>

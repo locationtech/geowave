@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/AttributeSubsettingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingTransformingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/NumericIndexStrategyFilterIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -106,7 +106,12 @@ var activeTableTab = "activeTableTab";
 <li>org.apache.accumulo.core.iterators.SkippingIterator</li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingSkippingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators">org.locationtech.geowave.datastore.accumulo.iterators.ExceptionHandlingSkippingIterator</a></li>
+<li>
+<ul class="inheritance">
 <li>org.locationtech.geowave.datastore.accumulo.iterators.FixedCardinalitySkippingIterator</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -124,7 +129,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">FixedCardinalitySkippingIterator</span>
-extends org.apache.accumulo.core.iterators.SkippingIterator
+extends <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingSkippingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators">ExceptionHandlingSkippingIterator</a>
 implements org.apache.accumulo.core.iterators.system.InterruptibleIterator</pre>
 <div class="block">This class is an Accumulo Iterator that can support skipping by a fixed cardinality on a Space
  Filling Curve (skipping by incrementing a fixed bit position of the row ID).</div>
@@ -225,7 +230,7 @@ implements org.apache.accumulo.core.iterators.system.InterruptibleIterator</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/FixedCardinalitySkippingIterator.html#consume--">consume</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/FixedCardinalitySkippingIterator.html#consumeInternal--">consumeInternal</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></td>
@@ -264,6 +269,13 @@ implements org.apache.accumulo.core.iterators.system.InterruptibleIterator</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/FixedCardinalitySkippingIterator.html#setInterruptFlag-java.util.concurrent.atomic.AtomicBoolean-">setInterruptFlag</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicBoolean.html?is-external=true" title="class or interface in java.util.concurrent.atomic">AtomicBoolean</a>&nbsp;flag)</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.datastore.accumulo.iterators.ExceptionHandlingSkippingIterator">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.datastore.accumulo.iterators.<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingSkippingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators">ExceptionHandlingSkippingIterator</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingSkippingIterator.html#consume--">consume</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.apache.accumulo.core.iterators.WrappingIterator">
 <!--   -->
@@ -505,17 +517,17 @@ implements org.apache.accumulo.core.iterators.system.InterruptibleIterator</pre>
 </dl>
 </li>
 </ul>
-<a name="consume--">
+<a name="consumeInternal--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>consume</h4>
-<pre>protected&nbsp;void&nbsp;consume()
-                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<h4>consumeInternal</h4>
+<pre>protected&nbsp;void&nbsp;consumeInternal()
+                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>consume</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.SkippingIterator</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingSkippingIterator.html#consumeInternal--">consumeInternal</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingSkippingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators">ExceptionHandlingSkippingIterator</a></code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>
@@ -597,7 +609,7 @@ implements org.apache.accumulo.core.iterators.system.InterruptibleIterator</pre>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/AttributeSubsettingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/ExceptionHandlingTransformingIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/iterators/NumericIndexStrategyFilterIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
