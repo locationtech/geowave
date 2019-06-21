@@ -7,9 +7,9 @@
 === Standalone Installers
 GeoWave provides installers to access the commandline tools.  It uses a multi-platform installer builder, https://www.ej-technologies.com/products/install4j/overview.html[Install4J]. The installers can be downloaded here:
 
-* link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_windows-x64_${tag.version}.dmg[Windows]
+* link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_windows-x64_${tag.version}.exe[Windows]
 * link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_macos_${tag.version}.dmg[Mac]
-* link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_unix_${tag.version}.dmg[Linux]
+* link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_unix_${tag.version}.sh[Linux]
 
 === Installation from RPM
 
